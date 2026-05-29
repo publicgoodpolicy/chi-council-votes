@@ -186,9 +186,9 @@
       "flags": [
         {
           "type": "federal-pac-donor",
+          "source": "override",
           "source_url": "https://www.fec.gov/data/",
-          "note": "DEMO: illustrative override entry. Real version requires FEC verification.",
-          "source": "override"
+          "note": "DEMO: illustrative override entry. Real version requires FEC verification."
         }
       ],
       "notes": "DEMO: example of a donor with editor-added flag.",
@@ -213,9 +213,9 @@
       "flags": [
         {
           "type": "aipac-donor",
+          "source": "override",
           "source_url": "https://www.fec.gov/data/",
-          "note": "DEMO: illustrative — real entry requires FEC verification.",
-          "source": "override"
+          "note": "DEMO: illustrative — real entry requires FEC verification."
         }
       ],
       "notes": null,
@@ -291,9 +291,9 @@
       "flags": [
         {
           "type": "federal-pac-donor",
+          "source": "override",
           "source_url": "https://www.fec.gov/data/committee/C00282335/",
-          "note": "DEMO: JPMorgan Chase & Co PAC is registered with the FEC.",
-          "source": "override"
+          "note": "DEMO: JPMorgan Chase & Co PAC is registered with the FEC."
         }
       ],
       "notes": null,
@@ -358,9 +358,9 @@
       "flags": [
         {
           "type": "developer-zoning",
+          "source": "override",
           "source_url": "https://www.chicago.gov/city/en/depts/dcd/supp_info/zoning_map.html",
-          "note": "DEMO: example flag — Illinois Realtors PAC frequently has zoning matters pending in funded wards.",
-          "source": "override"
+          "note": "DEMO: example flag — Illinois Realtors PAC frequently has zoning matters pending in funded wards."
         }
       ],
       "notes": null,
@@ -375,9 +375,9 @@
       "flags": [
         {
           "type": "anti-1fw",
+          "source": "override",
           "source_url": "https://www.illinoisrestaurants.org/",
-          "note": "DEMO: IRMA publicly opposed the One Fair Wage phase-out and lobbied for the 2026 repeal effort.",
-          "source": "override"
+          "note": "DEMO: IRMA publicly opposed the One Fair Wage phase-out and lobbied for the 2026 repeal effort."
         }
       ],
       "notes": null,
@@ -1902,6 +1902,14 @@
     {
       "ward": 1,
       "name": "Daniel La Spata",
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "West Town, Logan Square",
+      "bio": "Represents the 1st Ward, covering West Town, Logan Square, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -1911,19 +1919,19 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Affirmative"
-      },
-      "firstElected": 2019,
-      "party": "Democratic",
-      "neighborhoods": "West Town, Logan Square",
-      "bio": "Represents the 1st Ward, covering West Town, Logan Square, and first took office in 2019 (about 7 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 2,
       "name": "Brian Hopkins",
+      "firstElected": 2015,
+      "party": "Democratic",
+      "neighborhoods": "Near North Side, Lincoln Park",
+      "bio": "Represents the 2nd Ward, covering Near North Side, Lincoln Park, and first took office in 2015 (about 11 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Oppositional",
         "Ceasefire": "Oppositional",
@@ -1933,19 +1941,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2015,
-      "party": "Democratic",
-      "neighborhoods": "Near North Side, Lincoln Park",
-      "bio": "Represents the 2nd Ward, covering Near North Side, Lincoln Park, and first took office in 2015 (about 11 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 3,
       "name": "Pat Dowell",
+      "firstElected": 2007,
+      "party": "Democratic",
+      "neighborhoods": "Grand Boulevard, Near South Side, Douglas",
+      "bio": "Represents the 3rd Ward, covering Grand Boulevard, Near South Side, Douglas, and first took office in 2007 (about 19 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Neutral",
         "Ceasefire": "Neutral",
@@ -1955,19 +1963,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2007,
-      "party": "Democratic",
-      "neighborhoods": "Grand Boulevard, Near South Side, Douglas",
-      "bio": "Represents the 3rd Ward, covering Grand Boulevard, Near South Side, Douglas, and first took office in 2007 (about 19 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 4,
       "name": "Lamont Robinson",
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Douglas, Kenwood, Near South Side",
+      "bio": "Represents the 4th Ward, covering Douglas, Kenwood, Near South Side, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -1977,19 +1985,19 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Affirmative"
-      },
-      "firstElected": 2023,
-      "party": "Democratic",
-      "neighborhoods": "Douglas, Kenwood, Near South Side",
-      "bio": "Represents the 4th Ward, covering Douglas, Kenwood, Near South Side, and first took office in 2023 (about 3 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 5,
       "name": "Desmon C Yancy",
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Hyde Park, South Shore, Woodlawn",
+      "bio": "Represents the 5th Ward, covering Hyde Park, South Shore, Woodlawn, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -1999,19 +2007,19 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2023,
-      "party": "Democratic",
-      "neighborhoods": "Hyde Park, South Shore, Woodlawn",
-      "bio": "Represents the 5th Ward, covering Hyde Park, South Shore, Woodlawn, and first took office in 2023 (about 3 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 6,
       "name": "William E Hall",
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Greater Grand Crossing, Chatham",
+      "bio": "Represents the 6th Ward, covering Greater Grand Crossing, Chatham, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -2021,19 +2029,19 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Affirmative"
-      },
-      "firstElected": 2023,
-      "party": "Democratic",
-      "neighborhoods": "Greater Grand Crossing, Chatham",
-      "bio": "Represents the 6th Ward, covering Greater Grand Crossing, Chatham, and first took office in 2023 (about 3 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 7,
       "name": "Gregory I Mitchell",
+      "firstElected": 2015,
+      "party": "Democratic",
+      "neighborhoods": "South Deering, South Chicago, South Shore",
+      "bio": "Represents the 7th Ward, covering South Deering, South Chicago, South Shore, and first took office in 2015 (about 11 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Oppositional",
         "Ceasefire": "Oppositional",
@@ -2043,19 +2051,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Affirmative",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2015,
-      "party": "Democratic",
-      "neighborhoods": "South Deering, South Chicago, South Shore",
-      "bio": "Represents the 7th Ward, covering South Deering, South Chicago, South Shore, and first took office in 2015 (about 11 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 8,
       "name": "Michelle A Harris",
+      "firstElected": 2006,
+      "party": "Democratic",
+      "neighborhoods": "Avalon Park, Pullman",
+      "bio": "Represents the 8th Ward, covering Avalon Park, Pullman, and first took office in 2006 (about 20 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Oppositional",
         "Ceasefire": "Oppositional",
@@ -2065,19 +2073,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Affirmative",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2006,
-      "party": "Democratic",
-      "neighborhoods": "Avalon Park, Pullman",
-      "bio": "Represents the 8th Ward, covering Avalon Park, Pullman, and first took office in 2006 (about 20 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 9,
       "name": "Anthony A Beale",
+      "firstElected": 1999,
+      "party": "Democratic",
+      "neighborhoods": "Roseland, West Pullman, Riverdale",
+      "bio": "Represents the 9th Ward, covering Roseland, West Pullman, Riverdale, and first took office in 1999 (about 27 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Oppositional",
         "Ceasefire": "Oppositional",
@@ -2087,19 +2095,19 @@
         "Snap Curfew": "Neutral",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 1999,
-      "party": "Democratic",
-      "neighborhoods": "Roseland, West Pullman, Riverdale",
-      "bio": "Represents the 9th Ward, covering Roseland, West Pullman, Riverdale, and first took office in 1999 (about 27 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 10,
       "name": "Peter Chico",
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "South Deering, Hegewisch",
+      "bio": "Represents the 10th Ward, covering South Deering, Hegewisch, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Oppositional",
         "Ceasefire": "Oppositional",
@@ -2109,19 +2117,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2023,
-      "party": "Democratic",
-      "neighborhoods": "South Deering, Hegewisch",
-      "bio": "Represents the 10th Ward, covering South Deering, Hegewisch, and first took office in 2023 (about 3 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 11,
       "name": "Nicole Lee",
+      "firstElected": 2022,
+      "party": "Democratic",
+      "neighborhoods": "Bridgeport, New City, Armour Square",
+      "bio": "Represents the 11th Ward, covering Bridgeport, New City, Armour Square, and first took office in 2022 (about 4 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -2131,19 +2139,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Affirmative",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2022,
-      "party": "Democratic",
-      "neighborhoods": "Bridgeport, New City, Armour Square",
-      "bio": "Represents the 11th Ward, covering Bridgeport, New City, Armour Square, and first took office in 2022 (about 4 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 12,
       "name": "Julia M Ramirez",
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Brighton Park, McKinley Park, New City",
+      "bio": "Represents the 12th Ward, covering Brighton Park, McKinley Park, New City, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -2153,19 +2161,19 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Affirmative"
-      },
-      "firstElected": 2023,
-      "party": "Democratic",
-      "neighborhoods": "Brighton Park, McKinley Park, New City",
-      "bio": "Represents the 12th Ward, covering Brighton Park, McKinley Park, New City, and first took office in 2023 (about 3 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 13,
       "name": "Marty Quinn",
+      "firstElected": 2011,
+      "party": "Democratic",
+      "neighborhoods": "Clearing, Garfield Ridge",
+      "bio": "Represents the 13th Ward, covering Clearing, Garfield Ridge, and first took office in 2011 (about 15 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Oppositional",
         "Ceasefire": "Oppositional",
@@ -2175,19 +2183,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2011,
-      "party": "Democratic",
-      "neighborhoods": "Clearing, Garfield Ridge",
-      "bio": "Represents the 13th Ward, covering Clearing, Garfield Ridge, and first took office in 2011 (about 15 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 14,
       "name": "Jeylu B Gutierrez",
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Archer Heights, Gage Park",
+      "bio": "Represents the 14th Ward, covering Archer Heights, Gage Park, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -2197,19 +2205,19 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Affirmative"
-      },
-      "firstElected": 2023,
-      "party": "Democratic",
-      "neighborhoods": "Archer Heights, Gage Park",
-      "bio": "Represents the 14th Ward, covering Archer Heights, Gage Park, and first took office in 2023 (about 3 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 15,
       "name": "Raymond A Lopez",
+      "firstElected": 2015,
+      "party": "Democratic",
+      "neighborhoods": "New City, Gage Park, West Englewood",
+      "bio": "Represents the 15th Ward, covering New City, Gage Park, West Englewood, and first took office in 2015 (about 11 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Oppositional",
         "Ceasefire": "Oppositional",
@@ -2219,19 +2227,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2015,
-      "party": "Democratic",
-      "neighborhoods": "New City, Gage Park, West Englewood",
-      "bio": "Represents the 15th Ward, covering New City, Gage Park, West Englewood, and first took office in 2015 (about 11 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 16,
       "name": "Stephanie D Coleman",
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "West Englewood, Englewood, Chicago Lawn",
+      "bio": "Represents the 16th Ward, covering West Englewood, Englewood, Chicago Lawn, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Neutral",
         "Ceasefire": "Neutral",
@@ -2241,19 +2249,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2019,
-      "party": "Democratic",
-      "neighborhoods": "West Englewood, Englewood, Chicago Lawn",
-      "bio": "Represents the 16th Ward, covering West Englewood, Englewood, Chicago Lawn, and first took office in 2019 (about 7 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 17,
       "name": "David H Moore",
+      "firstElected": 2015,
+      "party": "Democratic",
+      "neighborhoods": "Auburn Gresham, West Englewood, Chicago Lawn",
+      "bio": "Represents the 17th Ward, covering Auburn Gresham, West Englewood, Chicago Lawn, and first took office in 2015 (about 11 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "-",
         "Ceasefire": "Affirmative",
@@ -2263,19 +2271,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Affirmative",
         "1FW Repeal": "Affirmative"
-      },
-      "firstElected": 2015,
-      "party": "Democratic",
-      "neighborhoods": "Auburn Gresham, West Englewood, Chicago Lawn",
-      "bio": "Represents the 17th Ward, covering Auburn Gresham, West Englewood, Chicago Lawn, and first took office in 2015 (about 11 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 18,
       "name": "Derrick G Curtis",
+      "firstElected": 2015,
+      "party": "Democratic",
+      "neighborhoods": "Ashburn",
+      "bio": "Represents the 18th Ward, covering Ashburn, and first took office in 2015 (about 11 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "-",
         "Ceasefire": "Oppositional",
@@ -2285,19 +2293,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2015,
-      "party": "Democratic",
-      "neighborhoods": "Ashburn",
-      "bio": "Represents the 18th Ward, covering Ashburn, and first took office in 2015 (about 11 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 19,
       "name": "Matthew J O Shea",
+      "firstElected": 2011,
+      "party": "Democratic",
+      "neighborhoods": "Beverly, Mount Greenwood, Morgan Park",
+      "bio": "Represents the 19th Ward, covering Beverly, Mount Greenwood, Morgan Park, and first took office in 2011 (about 15 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "-",
         "Ceasefire": "Oppositional",
@@ -2307,19 +2315,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2011,
-      "party": "Democratic",
-      "neighborhoods": "Beverly, Mount Greenwood, Morgan Park",
-      "bio": "Represents the 19th Ward, covering Beverly, Mount Greenwood, Morgan Park, and first took office in 2011 (about 15 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 20,
       "name": "Jeanette B Taylor",
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "New City, Washington Park, Woodlawn",
+      "bio": "Represents the 20th Ward, covering New City, Washington Park, Woodlawn, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -2329,19 +2337,19 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Neutral"
-      },
-      "firstElected": 2019,
-      "party": "Democratic",
-      "neighborhoods": "New City, Washington Park, Woodlawn",
-      "bio": "Represents the 20th Ward, covering New City, Washington Park, Woodlawn, and first took office in 2019 (about 7 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 21,
       "name": "Ronnie L Mosley",
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Washington Heights, West Pullman, Morgan Park",
+      "bio": "Represents the 21st Ward, covering Washington Heights, West Pullman, Morgan Park, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -2351,19 +2359,19 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2023,
-      "party": "Democratic",
-      "neighborhoods": "Washington Heights, West Pullman, Morgan Park",
-      "bio": "Represents the 21st Ward, covering Washington Heights, West Pullman, Morgan Park, and first took office in 2023 (about 3 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 22,
       "name": "Michael D Rodriguez",
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "South Lawndale, Garfield Ridge",
+      "bio": "Represents the 22nd Ward, covering South Lawndale, Garfield Ridge, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -2373,19 +2381,19 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Affirmative"
-      },
-      "firstElected": 2019,
-      "party": "Democratic",
-      "neighborhoods": "South Lawndale, Garfield Ridge",
-      "bio": "Represents the 22nd Ward, covering South Lawndale, Garfield Ridge, and first took office in 2019 (about 7 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 23,
       "name": "Silvana Tabares",
+      "firstElected": 2018,
+      "party": "Democratic",
+      "neighborhoods": "Garfield Ridge, West Lawn, West Elsdon",
+      "bio": "Represents the 23rd Ward, covering Garfield Ridge, West Lawn, West Elsdon, and first took office in 2018 (about 8 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "-",
         "Ceasefire": "Oppositional",
@@ -2395,19 +2403,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Neutral",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2018,
-      "party": "Democratic",
-      "neighborhoods": "Garfield Ridge, West Lawn, West Elsdon",
-      "bio": "Represents the 23rd Ward, covering Garfield Ridge, West Lawn, West Elsdon, and first took office in 2018 (about 8 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 24,
       "name": "Monique L Scott",
+      "firstElected": 2022,
+      "party": "Democratic",
+      "neighborhoods": "North Lawndale",
+      "bio": "Represents the 24th Ward, covering North Lawndale, and first took office in 2022 (about 4 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Oppositional",
@@ -2417,29 +2425,11 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2022,
-      "party": "Democratic",
-      "neighborhoods": "North Lawndale",
-      "bio": "Represents the 24th Ward, covering North Lawndale, and first took office in 2022 (about 4 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 25,
       "name": "Byron Sigcho Lopez",
-      "votes": {
-        "BCH": "Affirmative",
-        "Ceasefire": "Affirmative",
-        "Cancel Shotspotter": "Affirmative",
-        "Southshore CBA": "Affirmative",
-        "Paid PTO": "Affirmative",
-        "Snap Curfew": "Affirmative",
-        "GSH": "Affirmative",
-        "1FW Repeal": "Affirmative"
-      },
       "firstElected": 2019,
       "party": "Democratic",
       "neighborhoods": "Lower West Side, South Lawndale",
@@ -2447,11 +2437,7 @@
       "tenureNote": null,
       "email": null,
       "website": null,
-      "committees": null
-    },
-    {
-      "ward": 26,
-      "name": "Jessica Jessie Fuentes",
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -2461,7 +2447,11 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Affirmative"
-      },
+      }
+    },
+    {
+      "ward": 26,
+      "name": "Jessica Jessie Fuentes",
       "firstElected": 2023,
       "party": "Democratic",
       "neighborhoods": "Humboldt Park, West Town, Logan Square",
@@ -2469,11 +2459,29 @@
       "tenureNote": null,
       "email": null,
       "website": null,
-      "committees": null
+      "committees": null,
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Affirmative",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      }
     },
     {
       "ward": 27,
       "name": "Walter Burnett Jr",
+      "firstElected": 1995,
+      "party": "Democratic",
+      "neighborhoods": "Near West Side, West Town, Humboldt Park, Near North Side",
+      "bio": "Represents the 27th Ward, covering Near West Side, West Town, Humboldt Park, Near North Side. The seat was held for 30 years by Walter Burnett Jr.; his son Walter 'Red' Burnett III was appointed in September 2025. The record shown reflects votes cast under this ward's representation. Party: Democratic.",
+      "tenureNote": "Walter Burnett Jr. held the seat 1995–2025; Walter Burnett III appointed Sept. 2025.",
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "-",
         "Ceasefire": "-",
@@ -2483,19 +2491,19 @@
         "Snap Curfew": "-",
         "GSH": "Affirmative",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 1995,
-      "party": "Democratic",
-      "neighborhoods": "Near West Side, West Town, Humboldt Park, Near North Side",
-      "bio": "Represents the 27th Ward, covering Near West Side, West Town, Humboldt Park, Near North Side. The seat was held for 30 years by Walter Burnett Jr.; his son Walter 'Red' Burnett III was appointed in September 2025. The record shown reflects votes cast under this ward's representation. Party: Democratic.",
-      "tenureNote": "Walter Burnett Jr. held the seat 1995–2025; Walter Burnett III appointed Sept. 2025.",
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 28,
       "name": "Jason C Ervin",
+      "firstElected": 2011,
+      "party": "Democratic",
+      "neighborhoods": "Near West Side, East Garfield Park, West Garfield Park",
+      "bio": "Represents the 28th Ward, covering Near West Side, East Garfield Park, West Garfield Park, and first took office in 2011 (about 15 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Oppositional",
@@ -2505,19 +2513,19 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Neutral"
-      },
-      "firstElected": 2011,
-      "party": "Democratic",
-      "neighborhoods": "Near West Side, East Garfield Park, West Garfield Park",
-      "bio": "Represents the 28th Ward, covering Near West Side, East Garfield Park, West Garfield Park, and first took office in 2011 (about 15 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 29,
       "name": "Chris Taliaferro",
+      "firstElected": 2015,
+      "party": "Democratic",
+      "neighborhoods": "Austin",
+      "bio": "Represents the 29th Ward, covering Austin, and first took office in 2015 (about 11 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "-",
         "Ceasefire": "Affirmative",
@@ -2527,19 +2535,19 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Affirmative"
-      },
-      "firstElected": 2015,
-      "party": "Democratic",
-      "neighborhoods": "Austin",
-      "bio": "Represents the 29th Ward, covering Austin, and first took office in 2015 (about 11 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 30,
       "name": "Ruth Cruz",
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Portage Park, Belmont Cragin, Irving Park",
+      "bio": "Represents the 30th Ward, covering Portage Park, Belmont Cragin, Irving Park, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -2549,19 +2557,19 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Affirmative"
-      },
-      "firstElected": 2023,
-      "party": "Democratic",
-      "neighborhoods": "Portage Park, Belmont Cragin, Irving Park",
-      "bio": "Represents the 30th Ward, covering Portage Park, Belmont Cragin, Irving Park, and first took office in 2023 (about 3 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 31,
       "name": "Felix Cardona Jr",
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "Belmont Cragin, Hermosa",
+      "bio": "Represents the 31st Ward, covering Belmont Cragin, Hermosa, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Oppositional",
@@ -2571,19 +2579,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2019,
-      "party": "Democratic",
-      "neighborhoods": "Belmont Cragin, Hermosa",
-      "bio": "Represents the 31st Ward, covering Belmont Cragin, Hermosa, and first took office in 2019 (about 7 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 32,
       "name": "Scott Waguespack",
+      "firstElected": 2007,
+      "party": "Democratic",
+      "neighborhoods": "Logan Square, Lincoln Park, North Center",
+      "bio": "Represents the 32nd Ward, covering Logan Square, Lincoln Park, North Center, and first took office in 2007 (about 19 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Oppositional",
         "Ceasefire": "Oppositional",
@@ -2593,19 +2601,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2007,
-      "party": "Democratic",
-      "neighborhoods": "Logan Square, Lincoln Park, North Center",
-      "bio": "Represents the 32nd Ward, covering Logan Square, Lincoln Park, North Center, and first took office in 2007 (about 19 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 33,
       "name": "Rossana Rodriguez Sanchez",
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "Albany Park, Irving Park",
+      "bio": "Represents the 33rd Ward, covering Albany Park, Irving Park, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -2615,19 +2623,19 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Affirmative"
-      },
-      "firstElected": 2019,
-      "party": "Democratic",
-      "neighborhoods": "Albany Park, Irving Park",
-      "bio": "Represents the 33rd Ward, covering Albany Park, Irving Park, and first took office in 2019 (about 7 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 34,
       "name": "Bill Conway",
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Near West Side, Loop",
+      "bio": "Represents the 34th Ward, covering Near West Side, Loop, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "-",
         "Ceasefire": "Oppositional",
@@ -2637,19 +2645,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2023,
-      "party": "Democratic",
-      "neighborhoods": "Near West Side, Loop",
-      "bio": "Represents the 34th Ward, covering Near West Side, Loop, and first took office in 2023 (about 3 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 35,
       "name": "Anthony Quezada",
+      "firstElected": 2025,
+      "party": "Democratic",
+      "neighborhoods": "Avondale, Logan Square",
+      "bio": "Represents the 35th Ward, covering Avondale, Logan Square. Anthony Quezada, a Democratic Socialist and former Cook County commissioner, was appointed in April 2025 to succeed Carlos Ramirez-Rosa (who served 2015–2025). Party: Democratic.",
+      "tenureNote": "Appointed April 2025, succeeding Carlos Ramirez-Rosa (2015–2025).",
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -2659,19 +2667,19 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Affirmative"
-      },
-      "firstElected": 2025,
-      "party": "Democratic",
-      "neighborhoods": "Avondale, Logan Square",
-      "bio": "Represents the 35th Ward, covering Avondale, Logan Square. Anthony Quezada, a Democratic Socialist and former Cook County commissioner, was appointed in April 2025 to succeed Carlos Ramirez-Rosa (who served 2015–2025). Party: Democratic.",
-      "tenureNote": "Appointed April 2025, succeeding Carlos Ramirez-Rosa (2015–2025).",
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 36,
       "name": "Gilbert Gil Villegas",
+      "firstElected": 2015,
+      "party": "Democratic",
+      "neighborhoods": "Belmont Cragin, West Town, Montclare",
+      "bio": "Represents the 36th Ward, covering Belmont Cragin, West Town, Montclare, and first took office in 2015 (about 11 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "-",
         "Ceasefire": "Oppositional",
@@ -2681,19 +2689,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Neutral",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2015,
-      "party": "Democratic",
-      "neighborhoods": "Belmont Cragin, West Town, Montclare",
-      "bio": "Represents the 36th Ward, covering Belmont Cragin, West Town, Montclare, and first took office in 2015 (about 11 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 37,
       "name": "Emma M Mitts",
+      "firstElected": 2000,
+      "party": "Democratic",
+      "neighborhoods": "Austin, Humboldt Park",
+      "bio": "Represents the 37th Ward, covering Austin, Humboldt Park, and first took office in 2000 (about 26 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Neutral",
         "Ceasefire": "Neutral",
@@ -2703,19 +2711,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Affirmative",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2000,
-      "party": "Democratic",
-      "neighborhoods": "Austin, Humboldt Park",
-      "bio": "Represents the 37th Ward, covering Austin, Humboldt Park, and first took office in 2000 (about 26 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 38,
       "name": "Nicholas Sposato",
+      "firstElected": 2011,
+      "party": "Independent",
+      "neighborhoods": "Dunning, O'Hare, Portage Park",
+      "bio": "Represents the 38th Ward, covering Dunning, O'Hare, Portage Park, and first took office in 2011 (about 15 years on the Council). Sits as an Independent rather than a Democrat.",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "-",
         "Ceasefire": "Oppositional",
@@ -2725,19 +2733,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2011,
-      "party": "Independent",
-      "neighborhoods": "Dunning, O'Hare, Portage Park",
-      "bio": "Represents the 38th Ward, covering Dunning, O'Hare, Portage Park, and first took office in 2011 (about 15 years on the Council). Sits as an Independent rather than a Democrat.",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 39,
       "name": "Samantha Sam Nugent",
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "North Park, Forest Glen",
+      "bio": "Represents the 39th Ward, covering North Park, Forest Glen, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "-",
         "Ceasefire": "Oppositional",
@@ -2747,19 +2755,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Affirmative",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2019,
-      "party": "Democratic",
-      "neighborhoods": "North Park, Forest Glen",
-      "bio": "Represents the 39th Ward, covering North Park, Forest Glen, and first took office in 2019 (about 7 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 40,
       "name": "Andre Vasquez",
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "Lincoln Square, West Ridge",
+      "bio": "Represents the 40th Ward, covering Lincoln Square, West Ridge, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -2769,29 +2777,11 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Affirmative"
-      },
-      "firstElected": 2019,
-      "party": "Democratic",
-      "neighborhoods": "Lincoln Square, West Ridge",
-      "bio": "Represents the 40th Ward, covering Lincoln Square, West Ridge, and first took office in 2019 (about 7 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 41,
       "name": "Anthony V Napolitano",
-      "votes": {
-        "BCH": "Oppositional",
-        "Ceasefire": "Oppositional",
-        "Cancel Shotspotter": "Oppositional",
-        "Southshore CBA": "Affirmative",
-        "Paid PTO": "Oppositional",
-        "Snap Curfew": "Oppositional",
-        "GSH": "Oppositional",
-        "1FW Repeal": "Oppositional"
-      },
       "firstElected": 2015,
       "party": "Independent",
       "neighborhoods": "O'Hare, Norwood Park",
@@ -2799,11 +2789,7 @@
       "tenureNote": null,
       "email": null,
       "website": null,
-      "committees": null
-    },
-    {
-      "ward": 42,
-      "name": "Brendan Reilly",
+      "committees": null,
       "votes": {
         "BCH": "Oppositional",
         "Ceasefire": "Oppositional",
@@ -2813,7 +2799,11 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
+      }
+    },
+    {
+      "ward": 42,
+      "name": "Brendan Reilly",
       "firstElected": 2007,
       "party": "Democratic",
       "neighborhoods": "Near North Side, Loop",
@@ -2821,11 +2811,29 @@
       "tenureNote": null,
       "email": null,
       "website": null,
-      "committees": null
+      "committees": null,
+      "votes": {
+        "BCH": "Oppositional",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Oppositional",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      }
     },
     {
       "ward": 43,
       "name": "Timmy Knudsen",
+      "firstElected": 2022,
+      "party": "Democratic",
+      "neighborhoods": "Lincoln Park",
+      "bio": "Represents the 43rd Ward, covering Lincoln Park, and first took office in 2022 (about 4 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "-",
         "Ceasefire": "Oppositional",
@@ -2835,19 +2843,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Affirmative",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2022,
-      "party": "Democratic",
-      "neighborhoods": "Lincoln Park",
-      "bio": "Represents the 43rd Ward, covering Lincoln Park, and first took office in 2022 (about 4 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 44,
       "name": "Bennett R Lawson",
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Lake View",
+      "bio": "Represents the 44th Ward, covering Lake View, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Oppositional",
         "Ceasefire": "Oppositional",
@@ -2857,19 +2865,19 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Affirmative",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2023,
-      "party": "Democratic",
-      "neighborhoods": "Lake View",
-      "bio": "Represents the 44th Ward, covering Lake View, and first took office in 2023 (about 3 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 45,
       "name": "James Jim Gardiner",
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "Jefferson Park, Forest Glen, Portage Park",
+      "bio": "Represents the 45th Ward, covering Jefferson Park, Forest Glen, Portage Park, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Oppositional",
         "Ceasefire": "Affirmative",
@@ -2879,29 +2887,11 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2019,
-      "party": "Democratic",
-      "neighborhoods": "Jefferson Park, Forest Glen, Portage Park",
-      "bio": "Represents the 45th Ward, covering Jefferson Park, Forest Glen, Portage Park, and first took office in 2019 (about 7 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     },
     {
       "ward": 46,
       "name": "Angela Clay",
-      "votes": {
-        "BCH": "Affirmative",
-        "Ceasefire": "Affirmative",
-        "Cancel Shotspotter": "Affirmative",
-        "Southshore CBA": "Affirmative",
-        "Paid PTO": "Affirmative",
-        "Snap Curfew": "Affirmative",
-        "GSH": "Affirmative",
-        "1FW Repeal": "Affirmative"
-      },
       "firstElected": 2023,
       "party": "Democratic",
       "neighborhoods": "Uptown, Lake View",
@@ -2909,11 +2899,7 @@
       "tenureNote": null,
       "email": null,
       "website": null,
-      "committees": null
-    },
-    {
-      "ward": 47,
-      "name": "Matt Martin",
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -2923,7 +2909,11 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Affirmative"
-      },
+      }
+    },
+    {
+      "ward": 47,
+      "name": "Matt Martin",
       "firstElected": 2019,
       "party": "Democratic",
       "neighborhoods": "North Center, Lincoln Square, Lake View, Uptown",
@@ -2931,11 +2921,7 @@
       "tenureNote": null,
       "email": null,
       "website": null,
-      "committees": null
-    },
-    {
-      "ward": 48,
-      "name": "Leni Manaa Hoppenworth",
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -2945,7 +2931,11 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Affirmative"
-      },
+      }
+    },
+    {
+      "ward": 48,
+      "name": "Leni Manaa Hoppenworth",
       "firstElected": 2023,
       "party": "Democratic",
       "neighborhoods": "Edgewater, Uptown",
@@ -2953,11 +2943,7 @@
       "tenureNote": null,
       "email": null,
       "website": null,
-      "committees": null
-    },
-    {
-      "ward": 49,
-      "name": "Maria Hadden",
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Affirmative",
@@ -2967,7 +2953,11 @@
         "Snap Curfew": "Affirmative",
         "GSH": "Affirmative",
         "1FW Repeal": "Affirmative"
-      },
+      }
+    },
+    {
+      "ward": 49,
+      "name": "Maria Hadden",
       "firstElected": 2019,
       "party": "Democratic",
       "neighborhoods": "Rogers Park",
@@ -2975,11 +2965,29 @@
       "tenureNote": null,
       "email": null,
       "website": null,
-      "committees": null
+      "committees": null,
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Affirmative",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      }
     },
     {
       "ward": 50,
       "name": "Debra Silverstein",
+      "firstElected": 2011,
+      "party": "Democratic",
+      "neighborhoods": "West Ridge",
+      "bio": "Represents the 50th Ward, covering West Ridge, and first took office in 2011 (about 15 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null,
       "votes": {
         "BCH": "Affirmative",
         "Ceasefire": "Oppositional",
@@ -2989,15 +2997,7 @@
         "Snap Curfew": "Oppositional",
         "GSH": "Oppositional",
         "1FW Repeal": "Oppositional"
-      },
-      "firstElected": 2011,
-      "party": "Democratic",
-      "neighborhoods": "West Ridge",
-      "bio": "Represents the 50th Ward, covering West Ridge, and first took office in 2011 (about 15 years on the Council).",
-      "tenureNote": null,
-      "email": null,
-      "website": null,
-      "committees": null
+      }
     }
   ],
   "votemeta": [
@@ -3006,72 +3006,72 @@
       "full": "Bring Chicago Home",
       "tag": "Housing",
       "year": "2023",
-      "desc": "A measure to place a binding referendum on the March 2024 ballot asking voters to convert the city's flat real-estate transfer tax into a graduated 'mansion tax,' raising rates on property sales above $1 million to fund homelessness services. The Council voted 32-17 to put it on the ballot; voters narrowly rejected the referendum in March 2024.",
       "reverse_coded": false,
-      "source_url": null
+      "source_url": null,
+      "desc": "A measure to place a binding referendum on the March 2024 ballot asking voters to convert the city's flat real-estate transfer tax into a graduated 'mansion tax,' raising rates on property sales above $1 million to fund homelessness services. The Council voted 32-17 to put it on the ballot; voters narrowly rejected the referendum in March 2024."
     },
     {
       "code": "Ceasefire",
       "full": "Gaza Ceasefire Resolution",
       "tag": "Affordability",
       "year": "2024",
-      "desc": "A non-binding resolution calling for a permanent ceasefire in the Israel-Hamas war in Gaza. Mayor Brandon Johnson cast a rare tie-breaking vote in favor in January 2024, making Chicago the largest U.S. city at the time to pass such a resolution.",
       "reverse_coded": false,
-      "source_url": null
+      "source_url": null,
+      "desc": "A non-binding resolution calling for a permanent ceasefire in the Israel-Hamas war in Gaza. Mayor Brandon Johnson cast a rare tie-breaking vote in favor in January 2024, making Chicago the largest U.S. city at the time to pass such a resolution."
     },
     {
       "code": "Cancel Shotspotter",
       "full": "ShotSpotter / Gunshot Detection Contract",
       "tag": "Public Safety",
       "year": "2024",
-      "desc": "A series of Council actions over the city's ShotSpotter (SoundThinking) gunshot-detection contract, which Mayor Johnson moved to cancel as a campaign promise. The Council repeatedly pushed back, voting 34-14 in May 2024 and again in September 2024 to limit the mayor's ability to end the contract. ('Affirmative' here reflects support for ending/canceling the contract.)",
       "reverse_coded": true,
-      "source_url": null
+      "source_url": null,
+      "desc": "A series of Council actions over the city's ShotSpotter (SoundThinking) gunshot-detection contract, which Mayor Johnson moved to cancel as a campaign promise. The Council repeatedly pushed back, voting 34-14 in May 2024 and again in September 2024 to limit the mayor's ability to end the contract. ('Affirmative' here reflects support for ending/canceling the contract.)"
     },
     {
       "code": "Southshore CBA",
       "full": "South Shore Community Benefits Agreement",
       "tag": "Housing",
       "year": "2025",
-      "desc": "Anti-displacement housing protections for South Shore and the area around the future Obama Presidential Center, the product of a decade-long community campaign. The Jackson Park Housing Pilot — drawing on the South Shore Housing Preservation Ordinance — passed in September 2025, offering affordable set-asides, a right to return, and home-repair funds.",
       "reverse_coded": false,
-      "source_url": null
+      "source_url": null,
+      "desc": "Anti-displacement housing protections for South Shore and the area around the future Obama Presidential Center, the product of a decade-long community campaign. The Jackson Park Housing Pilot — drawing on the South Shore Housing Preservation Ordinance — passed in September 2025, offering affordable set-asides, a right to return, and home-repair funds."
     },
     {
       "code": "Paid PTO",
       "full": "Paid Leave & Paid Sick Leave Ordinance",
       "tag": "Workers Rights",
       "year": "2023",
-      "desc": "An ordinance requiring most Chicago employers to give workers 10 paid days off a year — five sick days and five for any reason — among the most expansive municipal paid-leave laws in the nation. The Council passed it 36-12 in November 2023; implementation was later delayed to July 2024.",
       "reverse_coded": false,
-      "source_url": null
+      "source_url": null,
+      "desc": "An ordinance requiring most Chicago employers to give workers 10 paid days off a year — five sick days and five for any reason — among the most expansive municipal paid-leave laws in the nation. The Council passed it 36-12 in November 2023; implementation was later delayed to July 2024."
     },
     {
       "code": "Snap Curfew",
       "full": "Teen 'Snap' Curfew Ordinance",
       "tag": "Public Safety",
       "year": "2025",
-      "desc": "An ordinance championed by Ald. Brian Hopkins (2nd) in response to downtown 'teen takeovers,' letting the police superintendent declare a curfew anywhere in the city with 30 minutes' notice. The Council passed it 27-22 in June 2025, but Mayor Johnson vetoed it — his first veto — and the Council failed to override in July 2025.",
       "reverse_coded": false,
-      "source_url": null
+      "source_url": null,
+      "desc": "An ordinance championed by Ald. Brian Hopkins (2nd) in response to downtown 'teen takeovers,' letting the police superintendent declare a curfew anywhere in the city with 30 minutes' notice. The Council passed it 27-22 in June 2025, but Mayor Johnson vetoed it — his first veto — and the Council failed to override in July 2025."
     },
     {
       "code": "GSH",
       "full": "Green Social Housing Ordinance",
       "tag": "Housing",
       "year": "2025",
-      "desc": "A signature Johnson housing initiative creating a city-backed nonprofit (the Residential Investment Corporation) to run a $135 million revolving loan fund for permanently affordable, mixed-income, sustainable housing. The Council approved it 30-18 in May 2025, making Chicago the first major U.S. city to adopt the model.",
       "reverse_coded": false,
-      "source_url": null
+      "source_url": null,
+      "desc": "A signature Johnson housing initiative creating a city-backed nonprofit (the Residential Investment Corporation) to run a $135 million revolving loan fund for permanently affordable, mixed-income, sustainable housing. The Council approved it 30-18 in May 2025, making Chicago the first major U.S. city to adopt the model."
     },
     {
       "code": "1FW Repeal",
       "full": "Tipped 'Subminimum' Wage — Repeal of Phase-Out",
       "tag": "Workers Rights",
       "year": "2026",
-      "desc": "A 2026 effort to halt the 'One Fair Wage' phase-out of the tipped subminimum wage that the Council adopted in 2023 (which was raising tipped pay toward the full minimum wage by 2028). The Council voted 30-18 in March 2026 to freeze the phase-out; Mayor Johnson vetoed the freeze, and in April 2026 the Council fell short of overriding it, so the phase-out continued. ('Affirmative' here reflects support for repealing/freezing the phase-out.)",
       "reverse_coded": true,
-      "source_url": null
+      "source_url": null,
+      "desc": "A 2026 effort to halt the 'One Fair Wage' phase-out of the tipped subminimum wage that the Council adopted in 2023 (which was raising tipped pay toward the full minimum wage by 2028). The Council voted 30-18 in March 2026 to freeze the phase-out; Mayor Johnson vetoed the freeze, and in April 2026 the Council fell short of overriding it, so the phase-out continued. ('Affirmative' here reflects support for repealing/freezing the phase-out.)"
     }
   ]
 }
