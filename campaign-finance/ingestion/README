@@ -1,0 +1,240 @@
+# SBE Ingestion Pipeline
+
+This folder contains `ingest.py` — the script that processes Illinois State
+Board of Elections receipts files and merges real campaign-finance data into
+`council-data.json`.
+
+## How it fits with the rest of the pipeline
+
+```
+                    SBE bulk data (manual download)
+                              │
+                              ▼
+   Editor places file in raw/receipts/ and runs ingest.py
+                              │
+                              ▼
+                    council-data.json (committed to repo)
+                              │
+                              │ (nightly cron)
+                              ▼
+   sync_overrides.py + sync_votes.py apply Sheet edits
+                              │
+                              ▼
+                    council-data.json (final)
+                              │
+                              ▼
+                    Squarespace embed
+```
+
+Ingestion is a **manual quarterly step**, not automated. Filings come out on
+predictable cadence (Apr 15, Jul 15, Oct 15, Jan 15), so a few minutes of
+editor attention after each deadline is enough.
+
+## What ingestion does
+
+For each receipts file:
+1. **Validates schema** — fails loudly if SBE has changed their file format
+2. **Parses contributions** — handles all 5 D2Part types (Individual,
+   Transfer In, In-kind, Loan Received, Other)
+3. **Auto-classifies donors** by name pattern (CTU → labor-teachers, etc.)
+4. **Detects self-funding** — candidate giving to their own committee
+5. **Aggregates small-dollar** — under-$150 contributions roll up into one
+   pseudo-donor per committee per cycle
+6. **Merges into council-data.json** — preserves editor overrides from the
+   Sheet (industries, flags, notes, cash-on-hand)
+
+## One-time setup
+
+### Download a sample to confirm the format works for you
+
+The first time you run this, do a single committee end-to-end before
+attempting multiple. Pick a known committee — La Spata (34616) is a good
+test case.
+
+1. Go to https://www.elections.il.gov
+2. Campaign Disclosure → Search Committees → search for the committee
+3. On the committee's page, find the **Receipts** export
+4. Download as **CSV** (the `Receipts.csv` format)
+5. Save the file to `raw/receipts/Receipts-ward1-laspata.csv` (the filename
+   is arbitrary — the script reads `CommitteeID` from inside the file)
+
+### Build the ward map
+
+`ward-map.json` translates SBE committee IDs to ward numbers. As you ingest
+each ward, add to this file. The included file has La Spata's mapping as a
+starting point:
+
+```json
+{
+  "34616": 1
+}
+```
+
+Add new entries as you ingest new committees. You can also let the script
+prompt for the ward number interactively if you skip the ward-map argument.
+
+### Install dependencies
+
+```bash
+pip install --user  # nothing needed — pure stdlib
+```
+
+The script uses only Python 3.8+ standard library. No pip install required.
+
+## Usage
+
+```bash
+# Process all files in raw/receipts/
+python ingestion/ingest.py --data-file council-data.json --ward-map ingestion/ward-map.json
+
+# Single file
+python ingestion/ingest.py --file raw/receipts/Receipts-ward1.csv --ward-map ingestion/ward-map.json --data-file council-data.json
+
+# Dry run (report changes, don't write)
+python ingestion/ingest.py --file raw/receipts/Receipts-ward1.csv --ward-map ingestion/ward-map.json --data-file council-data.json --dry-run
+```
+
+After ingestion succeeds:
+1. **Commit the updated council-data.json** to the repo
+2. Push to GitHub
+3. The live site reflects the new data within a few minutes
+4. Any Sheet edits (flags, industry overrides) get re-applied by the
+   nightly sync, so your editorial work survives
+
+## Quarterly workflow (after first setup)
+
+After each filing deadline (Apr 15, Jul 15, Oct 15, Jan 15):
+
+1. **Download receipts files** for each committee you're tracking. SBE makes
+   filings available within hours of submission.
+2. **Place them in `raw/receipts/`**. Filenames don't matter — the script
+   reads the committee ID from inside each file.
+3. **Run ingestion:**
+   ```bash
+   python ingestion/ingest.py --data-file council-data.json --ward-map ingestion/ward-map.json
+   ```
+4. **Review the output** — the script reports row counts, total amounts,
+   classification breakdowns. Check for warnings.
+5. **Commit and push.**
+
+For 50 wards × 4 quarters = 200 downloads/year. Realistically, you'd start
+with the most-watched wards (probably the 8 we already have demo data for)
+and expand from there. Even 8 wards × 4 quarters = 32 downloads/year is
+manageable.
+
+## What's auto-classified vs. what needs editor review
+
+The script's classification rules cover the obvious patterns:
+
+| Pattern in donor name | Classified as |
+|---|---|
+| CTU, Chicago Teachers Union, federation of teachers | labor-teachers |
+| SEIU, hospital workers, nurses | labor-service |
+| AFSCME, public employees union | labor-public |
+| Carpenters, ironworkers, operating engineers, etc. | labor-trades |
+| Union, Local N, Council N, brotherhood (generic) | labor-trades |
+| United Working Families, UWF, IPO, grassroots | progressive-pol |
+| Real estate, realty, developers, properties, BOMA | real-estate |
+| Restaurant, cafe, brewery, Illinois Restaurant | restaurant |
+| Bank, JPMorgan, Chase, credit union | finance |
+| FOP, fraternal order of police | police-fop |
+| Charter schools, KIPP, Noble Network | charter-schools |
+| ComEd, Peoples Gas, Chevron, BP | fossil-fuels |
+| Cannabis, dispensary, Cresco | cannabis |
+| Hospital, medical center, pharmaceutical | healthcare |
+| "PAC" (catch-all) | establishment-pol |
+| Names with comma (Last, First format) | individual |
+
+Anything that doesn't match these rules → **unclassified**. Editors review
+these in the Google Sheet's Donor Overrides tab and set `primary_industry`.
+
+The first run will surface a lot of unclassifieds (companies the rules don't
+recognize). Expect ~20-30% of organizational donors to need editor review
+on first pass. After classification stabilizes, new filings should be
+mostly auto-classified.
+
+## When SBE changes the file format
+
+This is the failure mode to watch for. The script has three defenses:
+
+1. **Schema validation.** Required columns (`CommitteeID`, `CommitteeName`,
+   `ContributedBy`, `RcvdDate`, `Amount`, `D2Part`) are checked at the
+   start. If any are missing, the script fails with a clear message:
+   ```
+   Receipts.csv: missing required columns: {'D2Part'}.
+     Got: ['CommitteeID', 'CommitteeName', ...]
+     This usually means SBE changed their export format.
+   ```
+
+2. **Empty file detection.** If the file has no data rows, the script
+   fails before touching anything.
+
+3. **Sanity logs.** The script reports parsed/skipped row counts and total
+   amount. If these look wrong (e.g., $0 total or way fewer rows than
+   expected), don't commit the result.
+
+If SBE adds new columns (forward-compatible), the script silently ignores
+them. If they rename columns (breaking change), update `REQUIRED_COLUMNS`
+in `ingest.py` and the row-parsing logic accordingly.
+
+## What ingestion does NOT do (and why)
+
+- **Doesn't fetch from SBE directly.** No public API exists for SBE bulk
+  data; downloads require manual interaction with the SBE website. We
+  could add a scraper, but it would be brittle. Manual download takes 30
+  seconds per committee and is more robust.
+
+- **Doesn't calculate cash-on-hand.** That field requires expenditures
+  data (which we're not ingesting) plus prior balance. Editor enters it
+  manually in the Sheet, where it's preserved across ingestion runs.
+
+- **Doesn't fix name variants.** "United Working Families" and "United
+  Working Families PAC" become separate donor records because they
+  produce different slugs. Editor can merge via the Sheet (note in the
+  override row) or just accept the small duplication.
+
+- **Doesn't run on a schedule.** Filings happen quarterly; running nightly
+  would waste resources and download the same data 90 times. Manual
+  quarterly runs after each deadline is the right cadence.
+
+## Cleanup: removing the original DEMO data
+
+When you finish ingesting Ward 1 (or any ward), the script automatically
+replaces that ward's demo contributions with real data. But cross-alder
+demo data (UWF donating to Wards 25, 33, etc.) stays until you ingest
+those wards.
+
+Until you've ingested all 50 wards, the donor leaderboard will mix real
+and demo data. If you want a clean slate immediately (only real data shown),
+manually delete the remaining DEMO committee records from `council-data.json`
+or add a future `--wipe-demo` flag to ingest.py. For now, the mixed state
+is informative — it shows what the leaderboard will look like once full
+ingestion happens.
+
+## Common issues
+
+**"missing required columns: {'D2Part'}"**
+SBE changed their export format. Check the column header row of your
+downloaded file and update `REQUIRED_COLUMNS` in ingest.py.
+
+**"file is empty (no data rows)"**
+The committee has no receipts in the filing period you downloaded, OR
+the file didn't download correctly. Re-download and check the file size.
+
+**Auto-classification surprises**
+Look at the donor in `council-data.json`. The `industries` array shows
+what was classified. To override, add a row to the Sheet's Donor Overrides
+tab with `primary_industry` set to the correct value. The override
+persists across future ingestions.
+
+**Duplicate donors with similar names**
+"Chicago Teachers Union" and "Chicago Teachers Union PAC" produce
+different slugs. The current best practice: pick one as canonical (usually
+the PAC version, since that's what SBE uses), add a note to the other
+saying "see [canonical-slug]", and let editors gradually merge via the
+Sheet. Future enhancement: add an `aliases` column to the override sheet.
+
+**SBE bulk download is huge (over 10MB)**
+For some committees, the file may exceed GitHub's commit size warnings.
+Compress with gzip before committing, or use git-lfs. The script reads
+.csv and .txt; if needed, decompress before running ingest.
