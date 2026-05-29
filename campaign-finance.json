@@ -1,7 +1,7 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "generated_at": "2026-05-29T00:00:00Z",
-  "source": "DEMO DATA — see committee notes for provenance",
+  "source": "DEMO DATA — Ward 1 current cycle from Sunshine public record; cross-alder demo from publicly known alignments",
   "itemization_threshold": 150,
   "cycles": {
     "2015": {
@@ -235,14 +235,6 @@
       "flags": [],
       "notes": null
     },
-    "_small-dollar-2027": {
-      "id": "_small-dollar-2027",
-      "name": "Small-dollar donors (under $150 each)",
-      "type": "Aggregate",
-      "industry": "small-dollar",
-      "flags": [],
-      "notes": null
-    },
     "united-working-families": {
       "id": "united-working-families",
       "name": "United Working Families",
@@ -283,51 +275,151 @@
       "flags": [],
       "notes": null
     },
-    "_small-dollar-2023": {
-      "id": "_small-dollar-2023",
-      "name": "Small-dollar donors (under $150 each)",
-      "type": "Aggregate",
-      "industry": "small-dollar",
+    "illinois-realtors-pac": {
+      "id": "illinois-realtors-pac",
+      "name": "Illinois REALTORS PAC",
+      "type": "PAC",
+      "industry": "real-estate",
       "flags": [],
       "notes": null
     },
-    "_small-dollar-2019": {
-      "id": "_small-dollar-2019",
+    "illinois-restaurant-association-pac": {
+      "id": "illinois-restaurant-association-pac",
+      "name": "Illinois Restaurant Association PAC",
+      "type": "PAC",
+      "industry": "restaurant",
+      "flags": [],
+      "notes": null
+    },
+    "boma-chicago-pac": {
+      "id": "boma-chicago-pac",
+      "name": "BOMA/Chicago PAC",
+      "type": "PAC",
+      "industry": "real-estate",
+      "flags": [],
+      "notes": null
+    },
+    "_small-dollar-donors": {
+      "id": "_small-dollar-donors",
       "name": "Small-dollar donors (under $150 each)",
       "type": "Aggregate",
       "industry": "small-dollar",
       "flags": [],
-      "notes": null
+      "notes": "Aggregate row: donors below the SBE itemization threshold ($150). Names not disclosed in the public record."
     }
   },
   "committees": {
-    "ward-1-la-spata": {
-      "id": "ward-1-la-spata",
+    "ward-1-daniel-la-spata": {
+      "id": "ward-1-daniel-la-spata",
       "ward": 1,
       "alder_name": "Daniel La Spata",
       "committee_name": "Neighbors for Daniel La Spata",
       "sbe_committee_id": "34616",
       "il_sunshine_url": "https://illinoissunshine.org/committees/34616/",
-      "founded": "2018-06-07",
+      "founded": null,
       "data_quality": "DEMO",
       "last_updated": "2026-05-29",
       "cash_on_hand": 111344.82,
       "cash_on_hand_as_of": "2026-03-31",
-      "notes": "DEMO. Current-cycle donor names and amounts taken from Illinois Sunshine public records (March-May 2026 reports). Historical cycles use placeholder amounts attached to publicly known PAC supporters. Real ingestion via ingest.py will replace all data."
+      "notes": "DEMO. Current-cycle donor names and amounts from public SBE/Sunshine record (Mar-May 2026); older cycles use placeholder amounts attached to publicly known PAC supporters."
     },
-    "ward-2": {
-      "id": "ward-2",
+    "ward-2-brian-hopkins": {
+      "id": "ward-2-brian-hopkins",
       "ward": 2,
       "alder_name": "Brian Hopkins",
-      "committee_name": null,
+      "committee_name": "Friends of Brian Hopkins",
       "sbe_committee_id": null,
       "il_sunshine_url": null,
       "founded": null,
-      "data_quality": "EMPTY",
-      "last_updated": null,
+      "data_quality": "DEMO",
+      "last_updated": "2026-05-29",
       "cash_on_hand": null,
       "cash_on_hand_as_of": null,
-      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+      "notes": "DEMO. PAC donors reflect publicly known endorsements / alignment for this ward; amounts are illustrative placeholders. Will be replaced by ingest.py."
+    },
+    "ward-25-byron-sigcho-lopez": {
+      "id": "ward-25-byron-sigcho-lopez",
+      "ward": 25,
+      "alder_name": "Byron Sigcho Lopez",
+      "committee_name": "Friends of Byron Sigcho Lopez",
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "DEMO",
+      "last_updated": "2026-05-29",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "DEMO. PAC donors reflect publicly known endorsements / alignment for this ward; amounts are illustrative placeholders. Will be replaced by ingest.py."
+    },
+    "ward-33-rossana-rodriguez-sanchez": {
+      "id": "ward-33-rossana-rodriguez-sanchez",
+      "ward": 33,
+      "alder_name": "Rossana Rodriguez Sanchez",
+      "committee_name": "33rd Ward Working Families",
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "DEMO",
+      "last_updated": "2026-05-29",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "DEMO. PAC donors reflect publicly known endorsements / alignment for this ward; amounts are illustrative placeholders. Will be replaced by ingest.py."
+    },
+    "ward-35-anthony-quezada": {
+      "id": "ward-35-anthony-quezada",
+      "ward": 35,
+      "alder_name": "Anthony Quezada",
+      "committee_name": "Friends of Anthony Quezada",
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "DEMO",
+      "last_updated": "2026-05-29",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "DEMO. PAC donors reflect publicly known endorsements / alignment for this ward; amounts are illustrative placeholders. Will be replaced by ingest.py."
+    },
+    "ward-40-andre-vasquez": {
+      "id": "ward-40-andre-vasquez",
+      "ward": 40,
+      "alder_name": "Andre Vasquez",
+      "committee_name": "40th Ward for All",
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "DEMO",
+      "last_updated": "2026-05-29",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "DEMO. PAC donors reflect publicly known endorsements / alignment for this ward; amounts are illustrative placeholders. Will be replaced by ingest.py."
+    },
+    "ward-42-brendan-reilly": {
+      "id": "ward-42-brendan-reilly",
+      "ward": 42,
+      "alder_name": "Brendan Reilly",
+      "committee_name": "Citizens for Reilly",
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "DEMO",
+      "last_updated": "2026-05-29",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "DEMO. PAC donors reflect publicly known endorsements / alignment for this ward; amounts are illustrative placeholders. Will be replaced by ingest.py."
+    },
+    "ward-49-maria-hadden": {
+      "id": "ward-49-maria-hadden",
+      "ward": 49,
+      "alder_name": "Maria Hadden",
+      "committee_name": "Maria Hadden for 49th Ward",
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "DEMO",
+      "last_updated": "2026-05-29",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "DEMO. PAC donors reflect publicly known endorsements / alignment for this ward; amounts are illustrative placeholders. Will be replaced by ingest.py."
     },
     "ward-3": {
       "id": "ward-3",
@@ -637,20 +729,6 @@
       "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
-    "ward-25": {
-      "id": "ward-25",
-      "ward": 25,
-      "alder_name": "Byron Sigcho Lopez",
-      "committee_name": null,
-      "sbe_committee_id": null,
-      "il_sunshine_url": null,
-      "founded": null,
-      "data_quality": "EMPTY",
-      "last_updated": null,
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
-      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
-    },
     "ward-26": {
       "id": "ward-26",
       "ward": 26,
@@ -749,38 +827,10 @@
       "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
-    "ward-33": {
-      "id": "ward-33",
-      "ward": 33,
-      "alder_name": "Rossana Rodriguez Sanchez",
-      "committee_name": null,
-      "sbe_committee_id": null,
-      "il_sunshine_url": null,
-      "founded": null,
-      "data_quality": "EMPTY",
-      "last_updated": null,
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
-      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
-    },
     "ward-34": {
       "id": "ward-34",
       "ward": 34,
       "alder_name": "Bill Conway",
-      "committee_name": null,
-      "sbe_committee_id": null,
-      "il_sunshine_url": null,
-      "founded": null,
-      "data_quality": "EMPTY",
-      "last_updated": null,
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
-      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
-    },
-    "ward-35": {
-      "id": "ward-35",
-      "ward": 35,
-      "alder_name": "Anthony Quezada",
       "committee_name": null,
       "sbe_committee_id": null,
       "il_sunshine_url": null,
@@ -847,38 +897,10 @@
       "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
-    "ward-40": {
-      "id": "ward-40",
-      "ward": 40,
-      "alder_name": "Andre Vasquez",
-      "committee_name": null,
-      "sbe_committee_id": null,
-      "il_sunshine_url": null,
-      "founded": null,
-      "data_quality": "EMPTY",
-      "last_updated": null,
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
-      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
-    },
     "ward-41": {
       "id": "ward-41",
       "ward": 41,
       "alder_name": "Anthony V Napolitano",
-      "committee_name": null,
-      "sbe_committee_id": null,
-      "il_sunshine_url": null,
-      "founded": null,
-      "data_quality": "EMPTY",
-      "last_updated": null,
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
-      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
-    },
-    "ward-42": {
-      "id": "ward-42",
-      "ward": 42,
-      "alder_name": "Brendan Reilly",
       "committee_name": null,
       "sbe_committee_id": null,
       "il_sunshine_url": null,
@@ -973,20 +995,6 @@
       "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
-    "ward-49": {
-      "id": "ward-49",
-      "ward": 49,
-      "alder_name": "Maria Hadden",
-      "committee_name": null,
-      "sbe_committee_id": null,
-      "il_sunshine_url": null,
-      "founded": null,
-      "data_quality": "EMPTY",
-      "last_updated": null,
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
-      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
-    },
     "ward-50": {
       "id": "ward-50",
       "ward": 50,
@@ -1004,243 +1012,792 @@
   },
   "contributions": [
     {
-      "id": "c-laspata-0001",
+      "id": "c-00001",
       "donor_id": "chicago-bike-pac",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 1500,
       "date": "2026-05-15",
       "cycle": "2027",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0001"
+      "source_filing": "DEMO-00001"
     },
     {
-      "id": "c-laspata-0002",
+      "id": "c-00002",
       "donor_id": "committee-to-expand-the-middle-class",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 1500,
       "date": "2026-05-15",
       "cycle": "2027",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0002"
+      "source_filing": "DEMO-00002"
     },
     {
-      "id": "c-laspata-0003",
+      "id": "c-00003",
       "donor_id": "brian-goldberg",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 1500,
       "date": "2026-03-16",
       "cycle": "2027",
       "contribution_type": "Individual",
-      "source_filing": "DEMO-0003"
+      "source_filing": "DEMO-00003"
     },
     {
-      "id": "c-laspata-0004",
+      "id": "c-00004",
       "donor_id": "jack-wuest",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 1000,
       "date": "2026-03-16",
       "cycle": "2027",
       "contribution_type": "Individual",
-      "source_filing": "DEMO-0004"
+      "source_filing": "DEMO-00004"
     },
     {
-      "id": "c-laspata-0005",
+      "id": "c-00005",
       "donor_id": "peter-ternes",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 600,
       "date": "2026-03-16",
       "cycle": "2027",
       "contribution_type": "Individual",
-      "source_filing": "DEMO-0005"
+      "source_filing": "DEMO-00005"
     },
     {
-      "id": "c-laspata-0006",
+      "id": "c-00006",
       "donor_id": "rolando-acosta",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 500,
       "date": "2026-03-31",
       "cycle": "2027",
       "contribution_type": "Individual",
-      "source_filing": "DEMO-0006"
+      "source_filing": "DEMO-00006"
     },
     {
-      "id": "c-laspata-0007",
+      "id": "c-00007",
       "donor_id": "michael-shenouda",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 500,
       "date": "2026-03-16",
       "cycle": "2027",
       "contribution_type": "Individual",
-      "source_filing": "DEMO-0007"
+      "source_filing": "DEMO-00007"
     },
     {
-      "id": "c-laspata-0008",
+      "id": "c-00008",
       "donor_id": "awais-khan",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 500,
       "date": "2026-03-16",
       "cycle": "2027",
       "contribution_type": "Individual",
-      "source_filing": "DEMO-0008"
+      "source_filing": "DEMO-00008"
     },
     {
-      "id": "c-laspata-0009",
+      "id": "c-00009",
       "donor_id": "chris--paul-deleeuw",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 500,
       "date": "2026-03-16",
       "cycle": "2027",
       "contribution_type": "Individual",
-      "source_filing": "DEMO-0009"
+      "source_filing": "DEMO-00009"
     },
     {
-      "id": "c-laspata-0010",
+      "id": "c-00010",
       "donor_id": "matthew-brown",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 500,
       "date": "2026-03-16",
       "cycle": "2027",
       "contribution_type": "Individual",
-      "source_filing": "DEMO-0010"
+      "source_filing": "DEMO-00010"
     },
     {
-      "id": "c-laspata-0011",
+      "id": "c-00011",
       "donor_id": "shadi-ramli",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 500,
       "date": "2026-03-16",
       "cycle": "2027",
       "contribution_type": "Individual",
-      "source_filing": "DEMO-0011"
+      "source_filing": "DEMO-00011"
     },
     {
-      "id": "c-laspata-0012",
+      "id": "c-00012",
       "donor_id": "jpmorgan-chase--co-pac",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 250,
       "date": "2026-03-25",
       "cycle": "2027",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0012"
+      "source_filing": "DEMO-00012"
     },
     {
-      "id": "c-laspata-0013",
-      "donor_id": "_small-dollar-2027",
-      "committee_id": "ward-1-la-spata",
+      "id": "c-00013",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 2475,
       "date": "2026-03-31",
       "cycle": "2027",
       "contribution_type": "Aggregate",
-      "source_filing": "DEMO-0013",
+      "source_filing": "DEMO-00013",
       "is_aggregate": true,
       "donor_count": 47,
       "contribution_count": 58
     },
     {
-      "id": "c-laspata-0014",
+      "id": "c-00014",
       "donor_id": "united-working-families",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 15000,
       "date": "2023-02-12",
       "cycle": "2023",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0014"
+      "source_filing": "DEMO-00014"
     },
     {
-      "id": "c-laspata-0015",
+      "id": "c-00015",
       "donor_id": "chicago-teachers-union-pac",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 12500,
       "date": "2023-02-08",
       "cycle": "2023",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0015"
+      "source_filing": "DEMO-00015"
     },
     {
-      "id": "c-laspata-0016",
+      "id": "c-00016",
       "donor_id": "seiu-healthcare-illinois-indiana",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 10000,
       "date": "2023-01-30",
       "cycle": "2023",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0016"
+      "source_filing": "DEMO-00016"
     },
     {
-      "id": "c-laspata-0017",
+      "id": "c-00017",
       "donor_id": "afscme-council-31-pac",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 7500,
       "date": "2023-02-14",
       "cycle": "2023",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0017"
+      "source_filing": "DEMO-00017"
     },
     {
-      "id": "c-laspata-0018",
+      "id": "c-00018",
       "donor_id": "35th-ward-ipo-united-neighbors",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 5000,
       "date": "2023-02-20",
       "cycle": "2023",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0018"
+      "source_filing": "DEMO-00018"
     },
     {
-      "id": "c-laspata-0019",
-      "donor_id": "_small-dollar-2023",
-      "committee_id": "ward-1-la-spata",
+      "id": "c-00019",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 24950,
       "date": "2023-05-14",
       "cycle": "2023",
       "contribution_type": "Aggregate",
-      "source_filing": "DEMO-0019",
+      "source_filing": "DEMO-00019",
       "is_aggregate": true,
       "donor_count": 287,
       "contribution_count": 312
     },
     {
-      "id": "c-laspata-0020",
+      "id": "c-00020",
       "donor_id": "united-working-families",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 10000,
       "date": "2019-02-15",
       "cycle": "2019",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0020"
+      "source_filing": "DEMO-00020"
     },
     {
-      "id": "c-laspata-0021",
+      "id": "c-00021",
       "donor_id": "chicago-teachers-union-pac",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 8000,
       "date": "2019-01-22",
       "cycle": "2019",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0021"
+      "source_filing": "DEMO-00021"
     },
     {
-      "id": "c-laspata-0022",
+      "id": "c-00022",
       "donor_id": "35th-ward-ipo-united-neighbors",
-      "committee_id": "ward-1-la-spata",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 5000,
       "date": "2019-02-10",
       "cycle": "2019",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0022"
+      "source_filing": "DEMO-00022"
     },
     {
-      "id": "c-laspata-0023",
-      "donor_id": "_small-dollar-2019",
-      "committee_id": "ward-1-la-spata",
+      "id": "c-00023",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-1-daniel-la-spata",
       "amount": 24100,
       "date": "2019-05-19",
       "cycle": "2019",
       "contribution_type": "Aggregate",
-      "source_filing": "DEMO-0023",
+      "source_filing": "DEMO-00023",
       "is_aggregate": true,
       "donor_count": 312,
       "contribution_count": 344
+    },
+    {
+      "id": "c-00024",
+      "donor_id": "illinois-realtors-pac",
+      "committee_id": "ward-2-brian-hopkins",
+      "amount": 10000,
+      "date": "2023-02-10",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00024"
+    },
+    {
+      "id": "c-00025",
+      "donor_id": "illinois-restaurant-association-pac",
+      "committee_id": "ward-2-brian-hopkins",
+      "amount": 7500,
+      "date": "2023-02-05",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00025"
+    },
+    {
+      "id": "c-00026",
+      "donor_id": "boma-chicago-pac",
+      "committee_id": "ward-2-brian-hopkins",
+      "amount": 5000,
+      "date": "2023-01-25",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00026"
+    },
+    {
+      "id": "c-00027",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-2-brian-hopkins",
+      "amount": 9500,
+      "date": "2023-05-14",
+      "cycle": "2023",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00027",
+      "is_aggregate": true,
+      "donor_count": 76,
+      "contribution_count": 88
+    },
+    {
+      "id": "c-00028",
+      "donor_id": "illinois-realtors-pac",
+      "committee_id": "ward-2-brian-hopkins",
+      "amount": 5000,
+      "date": "2025-04-15",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00028"
+    },
+    {
+      "id": "c-00029",
+      "donor_id": "illinois-restaurant-association-pac",
+      "committee_id": "ward-2-brian-hopkins",
+      "amount": 3500,
+      "date": "2025-04-10",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00029"
+    },
+    {
+      "id": "c-00030",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-2-brian-hopkins",
+      "amount": 4200,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00030",
+      "is_aggregate": true,
+      "donor_count": 34,
+      "contribution_count": 40
+    },
+    {
+      "id": "c-00031",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 15000,
+      "date": "2023-02-12",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00031"
+    },
+    {
+      "id": "c-00032",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 12000,
+      "date": "2023-02-08",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00032"
+    },
+    {
+      "id": "c-00033",
+      "donor_id": "35th-ward-ipo-united-neighbors",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 5000,
+      "date": "2023-02-20",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00033"
+    },
+    {
+      "id": "c-00034",
+      "donor_id": "seiu-healthcare-illinois-indiana",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 7500,
+      "date": "2023-01-30",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00034"
+    },
+    {
+      "id": "c-00035",
+      "donor_id": "afscme-council-31-pac",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 5000,
+      "date": "2023-02-14",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00035"
+    },
+    {
+      "id": "c-00036",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 18500,
+      "date": "2023-05-14",
+      "cycle": "2023",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00036",
+      "is_aggregate": true,
+      "donor_count": 215,
+      "contribution_count": 244
+    },
+    {
+      "id": "c-00037",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 4000,
+      "date": "2025-04-20",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00037"
+    },
+    {
+      "id": "c-00038",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 3000,
+      "date": "2025-03-12",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00038"
+    },
+    {
+      "id": "c-00039",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 3800,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00039",
+      "is_aggregate": true,
+      "donor_count": 62,
+      "contribution_count": 78
+    },
+    {
+      "id": "c-00040",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 12000,
+      "date": "2023-02-12",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00040"
+    },
+    {
+      "id": "c-00041",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 10000,
+      "date": "2023-02-08",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00041"
+    },
+    {
+      "id": "c-00042",
+      "donor_id": "seiu-healthcare-illinois-indiana",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 7500,
+      "date": "2023-01-30",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00042"
+    },
+    {
+      "id": "c-00043",
+      "donor_id": "35th-ward-ipo-united-neighbors",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 3000,
+      "date": "2023-02-20",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00043"
+    },
+    {
+      "id": "c-00044",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 16200,
+      "date": "2023-05-14",
+      "cycle": "2023",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00044",
+      "is_aggregate": true,
+      "donor_count": 189,
+      "contribution_count": 210
+    },
+    {
+      "id": "c-00045",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 3500,
+      "date": "2025-04-22",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00045"
+    },
+    {
+      "id": "c-00046",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 2500,
+      "date": "2025-03-12",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00046"
+    },
+    {
+      "id": "c-00047",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 3100,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00047",
+      "is_aggregate": true,
+      "donor_count": 54,
+      "contribution_count": 71
+    },
+    {
+      "id": "c-00048",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-35-anthony-quezada",
+      "amount": 3500,
+      "date": "2025-08-15",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00048"
+    },
+    {
+      "id": "c-00049",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-35-anthony-quezada",
+      "amount": 2500,
+      "date": "2025-08-12",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00049"
+    },
+    {
+      "id": "c-00050",
+      "donor_id": "35th-ward-ipo-united-neighbors",
+      "committee_id": "ward-35-anthony-quezada",
+      "amount": 4000,
+      "date": "2025-07-10",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00050"
+    },
+    {
+      "id": "c-00051",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-35-anthony-quezada",
+      "amount": 2800,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00051",
+      "is_aggregate": true,
+      "donor_count": 48,
+      "contribution_count": 62
+    },
+    {
+      "id": "c-00052",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 10000,
+      "date": "2023-02-12",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00052"
+    },
+    {
+      "id": "c-00053",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 7500,
+      "date": "2023-02-08",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00053"
+    },
+    {
+      "id": "c-00054",
+      "donor_id": "seiu-healthcare-illinois-indiana",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 5000,
+      "date": "2023-01-30",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00054"
+    },
+    {
+      "id": "c-00055",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 12500,
+      "date": "2023-05-14",
+      "cycle": "2023",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00055",
+      "is_aggregate": true,
+      "donor_count": 156,
+      "contribution_count": 172
+    },
+    {
+      "id": "c-00056",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 3000,
+      "date": "2025-04-20",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00056"
+    },
+    {
+      "id": "c-00057",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 2400,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00057",
+      "is_aggregate": true,
+      "donor_count": 42,
+      "contribution_count": 51
+    },
+    {
+      "id": "c-00058",
+      "donor_id": "illinois-realtors-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 15000,
+      "date": "2023-02-10",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00058"
+    },
+    {
+      "id": "c-00059",
+      "donor_id": "boma-chicago-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 10000,
+      "date": "2023-01-25",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00059"
+    },
+    {
+      "id": "c-00060",
+      "donor_id": "illinois-restaurant-association-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 7500,
+      "date": "2023-02-05",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00060"
+    },
+    {
+      "id": "c-00061",
+      "donor_id": "jpmorgan-chase--co-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 5000,
+      "date": "2023-02-15",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00061"
+    },
+    {
+      "id": "c-00062",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 12500,
+      "date": "2023-05-14",
+      "cycle": "2023",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00062",
+      "is_aggregate": true,
+      "donor_count": 85,
+      "contribution_count": 92
+    },
+    {
+      "id": "c-00063",
+      "donor_id": "illinois-realtors-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 7500,
+      "date": "2025-04-15",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00063"
+    },
+    {
+      "id": "c-00064",
+      "donor_id": "boma-chicago-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 5000,
+      "date": "2025-03-20",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00064"
+    },
+    {
+      "id": "c-00065",
+      "donor_id": "illinois-restaurant-association-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 5000,
+      "date": "2025-04-10",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00065"
+    },
+    {
+      "id": "c-00066",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 6800,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00066",
+      "is_aggregate": true,
+      "donor_count": 42,
+      "contribution_count": 48
+    },
+    {
+      "id": "c-00067",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-49-maria-hadden",
+      "amount": 12500,
+      "date": "2023-02-12",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00067"
+    },
+    {
+      "id": "c-00068",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-49-maria-hadden",
+      "amount": 10000,
+      "date": "2023-02-08",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00068"
+    },
+    {
+      "id": "c-00069",
+      "donor_id": "seiu-healthcare-illinois-indiana",
+      "committee_id": "ward-49-maria-hadden",
+      "amount": 7500,
+      "date": "2023-01-30",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00069"
+    },
+    {
+      "id": "c-00070",
+      "donor_id": "afscme-council-31-pac",
+      "committee_id": "ward-49-maria-hadden",
+      "amount": 5000,
+      "date": "2023-02-14",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00070"
+    },
+    {
+      "id": "c-00071",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-49-maria-hadden",
+      "amount": 19500,
+      "date": "2023-05-14",
+      "cycle": "2023",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00071",
+      "is_aggregate": true,
+      "donor_count": 234,
+      "contribution_count": 268
+    },
+    {
+      "id": "c-00072",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-49-maria-hadden",
+      "amount": 4500,
+      "date": "2025-04-20",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00072"
+    },
+    {
+      "id": "c-00073",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-49-maria-hadden",
+      "amount": 3000,
+      "date": "2025-03-12",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00073"
+    },
+    {
+      "id": "c-00074",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-49-maria-hadden",
+      "amount": 4200,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00074",
+      "is_aggregate": true,
+      "donor_count": 68,
+      "contribution_count": 82
     }
   ]
 }
