@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.3",
+  "schema_version": "1.4",
   "generated_at": "2026-05-29T00:00:00Z",
   "source": "DEMO DATA — Ward 1 current cycle from Sunshine public record; cross-alder demo from publicly known alignments",
   "itemization_threshold": 150,
@@ -136,6 +136,26 @@
     "indicted": {
       "label": "Indicted or convicted in public-corruption case",
       "severity": "critical"
+    },
+    "federal-pac-donor": {
+      "label": "Federal PAC donor",
+      "severity": "watch"
+    },
+    "aipac-donor": {
+      "label": "AIPAC-affiliated giving",
+      "severity": "watch"
+    },
+    "trump-aligned": {
+      "label": "Trump-aligned giving",
+      "severity": "watch"
+    },
+    "real-estate-donor": {
+      "label": "Major real-estate industry donor",
+      "severity": "watch"
+    },
+    "fossil-fuel-donor": {
+      "label": "Fossil fuel industry donor",
+      "severity": "watch"
     }
   },
   "donors": {
@@ -143,169 +163,218 @@
       "id": "chicago-bike-pac",
       "name": "Chicago Bike PAC",
       "type": "PAC",
-      "industry": "progressive-pol",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "progressive-pol"
+      ]
     },
     "committee-to-expand-the-middle-class": {
       "id": "committee-to-expand-the-middle-class",
       "name": "Committee to Expand the Middle Class",
       "type": "PAC",
-      "industry": "progressive-pol",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "progressive-pol"
+      ]
     },
     "brian-goldberg": {
       "id": "brian-goldberg",
       "name": "Brian Goldberg",
       "type": "Individual",
-      "industry": "individual",
-      "flags": [],
-      "notes": null
+      "flags": [
+        {
+          "type": "federal-pac-donor",
+          "source_url": "https://www.fec.gov/data/",
+          "note": "DEMO: illustrative override entry. Real version requires FEC verification.",
+          "source": "override"
+        }
+      ],
+      "notes": "DEMO: example of a donor with editor-added flag.",
+      "industries": [
+        "individual"
+      ]
     },
     "jack-wuest": {
       "id": "jack-wuest",
       "name": "Jack Wuest",
       "type": "Individual",
-      "industry": "individual",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "individual"
+      ]
     },
     "peter-ternes": {
       "id": "peter-ternes",
       "name": "Peter Ternes",
       "type": "Individual",
-      "industry": "individual",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "individual"
+      ]
     },
     "rolando-acosta": {
       "id": "rolando-acosta",
       "name": "Rolando Acosta",
       "type": "Individual",
-      "industry": "individual",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "individual"
+      ]
     },
     "michael-shenouda": {
       "id": "michael-shenouda",
       "name": "Michael Shenouda",
       "type": "Individual",
-      "industry": "individual",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "individual"
+      ]
     },
     "awais-khan": {
       "id": "awais-khan",
       "name": "Awais Khan",
       "type": "Individual",
-      "industry": "individual",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "individual"
+      ]
     },
     "chris--paul-deleeuw": {
       "id": "chris--paul-deleeuw",
       "name": "Chris & Paul DeLeeuw",
       "type": "Individual",
-      "industry": "individual",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "individual"
+      ]
     },
     "matthew-brown": {
       "id": "matthew-brown",
       "name": "Matthew Brown",
       "type": "Individual",
-      "industry": "individual",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "individual"
+      ]
     },
     "shadi-ramli": {
       "id": "shadi-ramli",
       "name": "Shadi Ramli",
       "type": "Individual",
-      "industry": "individual",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "individual"
+      ]
     },
     "jpmorgan-chase--co-pac": {
       "id": "jpmorgan-chase--co-pac",
       "name": "JPMorgan Chase & Co PAC",
       "type": "PAC",
-      "industry": "finance",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "finance"
+      ]
     },
     "united-working-families": {
       "id": "united-working-families",
       "name": "United Working Families",
       "type": "PAC",
-      "industry": "progressive-pol",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "progressive-pol"
+      ]
     },
     "chicago-teachers-union-pac": {
       "id": "chicago-teachers-union-pac",
       "name": "Chicago Teachers Union PAC",
       "type": "PAC",
-      "industry": "labor-teachers",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "labor-teachers"
+      ]
     },
     "seiu-healthcare-illinois-indiana": {
       "id": "seiu-healthcare-illinois-indiana",
       "name": "SEIU Healthcare Illinois Indiana",
       "type": "PAC",
-      "industry": "labor-service",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "labor-service"
+      ]
     },
     "afscme-council-31-pac": {
       "id": "afscme-council-31-pac",
       "name": "AFSCME Council 31 PAC",
       "type": "PAC",
-      "industry": "labor-public",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "labor-public"
+      ]
     },
     "35th-ward-ipo-united-neighbors": {
       "id": "35th-ward-ipo-united-neighbors",
       "name": "35th Ward IPO (United Neighbors)",
       "type": "PAC",
-      "industry": "progressive-pol",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "progressive-pol"
+      ]
     },
     "illinois-realtors-pac": {
       "id": "illinois-realtors-pac",
       "name": "Illinois REALTORS PAC",
       "type": "PAC",
-      "industry": "real-estate",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "real-estate"
+      ]
     },
     "illinois-restaurant-association-pac": {
       "id": "illinois-restaurant-association-pac",
       "name": "Illinois Restaurant Association PAC",
       "type": "PAC",
-      "industry": "restaurant",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "restaurant"
+      ]
     },
     "boma-chicago-pac": {
       "id": "boma-chicago-pac",
       "name": "BOMA/Chicago PAC",
       "type": "PAC",
-      "industry": "real-estate",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "industries": [
+        "real-estate"
+      ]
     },
     "_small-dollar-donors": {
       "id": "_small-dollar-donors",
       "name": "Small-dollar donors (under $150 each)",
       "type": "Aggregate",
-      "industry": "small-dollar",
       "flags": [],
-      "notes": "Aggregate row: donors below the SBE itemization threshold ($150). Names not disclosed in the public record."
+      "notes": "Aggregate row: donors below the SBE itemization threshold ($150). Names not disclosed in the public record.",
+      "industries": [
+        "small-dollar"
+      ]
     }
   },
   "committees": {
