@@ -1,0 +1,21 @@
+{
+  "labor-teachers":     {"label":"Labor — Teachers","color":"#508F88"},
+  "labor-service":      {"label":"Labor — Service Workers","color":"#508F88"},
+  "labor-trades":       {"label":"Labor — Building Trades","color":"#7a9a73"},
+  "labor-public":       {"label":"Labor — Public Sector","color":"#508F88"},
+  "individual-resident":{"label":"Individual — Ward Resident","color":"#9a8e7e"},
+  "individual-other":   {"label":"Individual — Other","color":"#a89c8a"},
+  "real-estate":        {"label":"Real Estate / Developers","color":"#a23a2e"},
+  "restaurant":         {"label":"Restaurant Industry","color":"#c97a3a"},
+  "police-fop":         {"label":"Police / FOP","color":"#1f3a5f"},
+  "charter-schools":    {"label":"Charter Schools","color":"#7a4a2e"},
+  "fossil-fuels":       {"label":"Fossil Fuels / Utilities","color":"#5a3a1a"},
+  "tech":               {"label":"Tech","color":"#3a5fa2"},
+  "cannabis":           {"label":"Cannabis Industry","color":"#5a8a3a"},
+  "healthcare":         {"label":"Healthcare","color":"#3a7a8a"},
+  "carceral":           {"label":"Carceral / Surveillance Contractors","color":"#7a2e2e"},
+  "progressive-pol":    {"label":"Progressive Political Org","color":"#508F88"},
+  "establishment-pol":  {"label":"Establishment Political Org","color":"#7a6a4e"},
+  "self-funding":       {"label":"Self-Funding / Candidate Loan","color":"#9a8e7e"},
+  "unclassified":       {"label":"Not Yet Classified","color":"#cfc5b5"}
+}

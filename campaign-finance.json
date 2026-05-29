@@ -1,0 +1,963 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-05-29T00:00:00Z",
+  "source": "DEMO DATA — production replaces this with output of scripts/ingest.py",
+  "cycles_included": [
+    "2023",
+    "2025"
+  ],
+  "industry_tags": {
+    "labor-teachers": {
+      "label": "Labor — Teachers",
+      "color": "#508F88"
+    },
+    "labor-service": {
+      "label": "Labor — Service Workers",
+      "color": "#508F88"
+    },
+    "labor-trades": {
+      "label": "Labor — Building Trades",
+      "color": "#7a9a73"
+    },
+    "labor-public": {
+      "label": "Labor — Public Sector",
+      "color": "#508F88"
+    },
+    "individual-resident": {
+      "label": "Individual — Ward Resident",
+      "color": "#9a8e7e"
+    },
+    "individual-other": {
+      "label": "Individual — Other",
+      "color": "#a89c8a"
+    },
+    "real-estate": {
+      "label": "Real Estate / Developers",
+      "color": "#a23a2e"
+    },
+    "restaurant": {
+      "label": "Restaurant Industry",
+      "color": "#c97a3a"
+    },
+    "police-fop": {
+      "label": "Police / FOP",
+      "color": "#1f3a5f"
+    },
+    "charter-schools": {
+      "label": "Charter Schools",
+      "color": "#7a4a2e"
+    },
+    "fossil-fuels": {
+      "label": "Fossil Fuels / Utilities",
+      "color": "#5a3a1a"
+    },
+    "tech": {
+      "label": "Tech",
+      "color": "#3a5fa2"
+    },
+    "cannabis": {
+      "label": "Cannabis Industry",
+      "color": "#5a8a3a"
+    },
+    "healthcare": {
+      "label": "Healthcare",
+      "color": "#3a7a8a"
+    },
+    "carceral": {
+      "label": "Carceral / Surveillance Contractors",
+      "color": "#7a2e2e"
+    },
+    "progressive-pol": {
+      "label": "Progressive Political Org",
+      "color": "#508F88"
+    },
+    "establishment-pol": {
+      "label": "Establishment Political Org",
+      "color": "#7a6a4e"
+    },
+    "self-funding": {
+      "label": "Self-Funding / Candidate Loan",
+      "color": "#9a8e7e"
+    },
+    "unclassified": {
+      "label": "Not Yet Classified",
+      "color": "#cfc5b5"
+    }
+  },
+  "flag_types": {
+    "anti-bch": {
+      "label": "Opposed Bring Chicago Home (2024)",
+      "severity": "watch"
+    },
+    "pro-shotspotter": {
+      "label": "Funded ShotSpotter retention effort",
+      "severity": "watch"
+    },
+    "anti-1fw": {
+      "label": "Funded tipped-wage repeal effort (2026)",
+      "severity": "watch"
+    },
+    "developer-zoning": {
+      "label": "Active zoning matter pending with sponsor's ward",
+      "severity": "alert"
+    },
+    "ethics": {
+      "label": "Subject of ethics complaint / investigation",
+      "severity": "alert"
+    },
+    "indicted": {
+      "label": "Indicted or convicted in public-corruption case",
+      "severity": "critical"
+    }
+  },
+  "donors": {
+    "united-working-families": {
+      "id": "united-working-families",
+      "name": "United Working Families",
+      "type": "PAC",
+      "industry": "progressive-pol",
+      "flags": [],
+      "notes": null
+    },
+    "chicago-teachers-union-pac": {
+      "id": "chicago-teachers-union-pac",
+      "name": "Chicago Teachers Union PAC",
+      "type": "PAC",
+      "industry": "labor-teachers",
+      "flags": [],
+      "notes": null
+    },
+    "seiu-healthcare-illinois-indiana": {
+      "id": "seiu-healthcare-illinois-indiana",
+      "name": "SEIU Healthcare Illinois Indiana",
+      "type": "PAC",
+      "industry": "labor-service",
+      "flags": [],
+      "notes": null
+    },
+    "afscme-council-31-pac": {
+      "id": "afscme-council-31-pac",
+      "name": "AFSCME Council 31 PAC",
+      "type": "PAC",
+      "industry": "labor-public",
+      "flags": [],
+      "notes": null
+    },
+    "35th-ward-ipo-united-neighbors": {
+      "id": "35th-ward-ipo-united-neighbors",
+      "name": "35th Ward IPO (United Neighbors)",
+      "type": "PAC",
+      "industry": "progressive-pol",
+      "flags": [],
+      "notes": null
+    },
+    "ibew-local-134-pac": {
+      "id": "ibew-local-134-pac",
+      "name": "IBEW Local 134 PAC",
+      "type": "PAC",
+      "industry": "labor-trades",
+      "flags": [],
+      "notes": null
+    },
+    "individual-contributor-logan-square": {
+      "id": "individual-contributor-logan-square",
+      "name": "Individual contributor (Logan Square)",
+      "type": "Individual",
+      "industry": "individual-resident",
+      "flags": [],
+      "notes": null
+    },
+    "individual-contributor-west-town": {
+      "id": "individual-contributor-west-town",
+      "name": "Individual contributor (West Town)",
+      "type": "Individual",
+      "industry": "individual-resident",
+      "flags": [],
+      "notes": null
+    },
+    "individual-contributor-wicker-park": {
+      "id": "individual-contributor-wicker-park",
+      "name": "Individual contributor (Wicker Park)",
+      "type": "Individual",
+      "industry": "individual-resident",
+      "flags": [],
+      "notes": null
+    },
+    "individual-contributor-bucktown": {
+      "id": "individual-contributor-bucktown",
+      "name": "Individual contributor (Bucktown)",
+      "type": "Individual",
+      "industry": "individual-resident",
+      "flags": [],
+      "notes": null
+    },
+    "individual-contributor-humboldt-park": {
+      "id": "individual-contributor-humboldt-park",
+      "name": "Individual contributor (Humboldt Park)",
+      "type": "Individual",
+      "industry": "individual-resident",
+      "flags": [],
+      "notes": null
+    },
+    "individual-contributor-lincoln-park": {
+      "id": "individual-contributor-lincoln-park",
+      "name": "Individual contributor (Lincoln Park)",
+      "type": "Individual",
+      "industry": "individual-other",
+      "flags": [],
+      "notes": null
+    },
+    "friends-of-bernie-2020": {
+      "id": "friends-of-bernie-2020",
+      "name": "Friends of Bernie 2020",
+      "type": "PAC",
+      "industry": "progressive-pol",
+      "flags": [],
+      "notes": null
+    }
+  },
+  "committees": {
+    "ward-1-la-spata": {
+      "id": "ward-1-la-spata",
+      "ward": 1,
+      "alder_name": "Daniel La Spata",
+      "committee_name": "Neighbors for Daniel La Spata",
+      "sbe_committee_id": "34616",
+      "il_sunshine_url": "https://illinoissunshine.org/committees/34616/",
+      "founded": "2018-06-07",
+      "data_quality": "DEMO",
+      "last_updated": "2026-05-29",
+      "notes": "Demo data. Donor names reflect La Spata's publicly known fundraising profile (CTU/UWF-aligned unions and individual neighborhood donors). Amounts and dates are illustrative placeholders until ingestion pipeline runs against the SBE source."
+    },
+    "ward-2": {
+      "id": "ward-2",
+      "ward": 2,
+      "alder_name": "Brian Hopkins",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-3": {
+      "id": "ward-3",
+      "ward": 3,
+      "alder_name": "Pat Dowell",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-4": {
+      "id": "ward-4",
+      "ward": 4,
+      "alder_name": "Lamont Robinson",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-5": {
+      "id": "ward-5",
+      "ward": 5,
+      "alder_name": "Desmon C Yancy",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-6": {
+      "id": "ward-6",
+      "ward": 6,
+      "alder_name": "William E Hall",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-7": {
+      "id": "ward-7",
+      "ward": 7,
+      "alder_name": "Raymond A Lopez",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-8": {
+      "id": "ward-8",
+      "ward": 8,
+      "alder_name": "Michelle A Harris",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-9": {
+      "id": "ward-9",
+      "ward": 9,
+      "alder_name": "Anthony A Beale",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-10": {
+      "id": "ward-10",
+      "ward": 10,
+      "alder_name": "Peter Chico",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-11": {
+      "id": "ward-11",
+      "ward": 11,
+      "alder_name": "Nicole Lee",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-12": {
+      "id": "ward-12",
+      "ward": 12,
+      "alder_name": "Julia M Ramirez",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-13": {
+      "id": "ward-13",
+      "ward": 13,
+      "alder_name": "Marty Quinn",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-14": {
+      "id": "ward-14",
+      "ward": 14,
+      "alder_name": "Jeylu B Gutierrez",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-15": {
+      "id": "ward-15",
+      "ward": 15,
+      "alder_name": "Raymond Lopez",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-16": {
+      "id": "ward-16",
+      "ward": 16,
+      "alder_name": "Stephanie D Coleman",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-17": {
+      "id": "ward-17",
+      "ward": 17,
+      "alder_name": "David H Moore",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-18": {
+      "id": "ward-18",
+      "ward": 18,
+      "alder_name": "Derrick G Curtis",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-19": {
+      "id": "ward-19",
+      "ward": 19,
+      "alder_name": "Matthew J O Shea",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-20": {
+      "id": "ward-20",
+      "ward": 20,
+      "alder_name": "Jeanette B Taylor",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-21": {
+      "id": "ward-21",
+      "ward": 21,
+      "alder_name": "Ronnie L Mosley",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-22": {
+      "id": "ward-22",
+      "ward": 22,
+      "alder_name": "Michael D Rodriguez",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-23": {
+      "id": "ward-23",
+      "ward": 23,
+      "alder_name": "Silvana Tabares",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-24": {
+      "id": "ward-24",
+      "ward": 24,
+      "alder_name": "Monique L Scott",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-25": {
+      "id": "ward-25",
+      "ward": 25,
+      "alder_name": "Byron Sigcho Lopez",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-26": {
+      "id": "ward-26",
+      "ward": 26,
+      "alder_name": "Jessica Jessie Fuentes",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-27": {
+      "id": "ward-27",
+      "ward": 27,
+      "alder_name": "Walter Burnett Jr",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-28": {
+      "id": "ward-28",
+      "ward": 28,
+      "alder_name": "Jason C Ervin",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-29": {
+      "id": "ward-29",
+      "ward": 29,
+      "alder_name": "Chris Taliaferro",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-30": {
+      "id": "ward-30",
+      "ward": 30,
+      "alder_name": "Ruth Cruz",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-31": {
+      "id": "ward-31",
+      "ward": 31,
+      "alder_name": "Felix Cardona Jr",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-32": {
+      "id": "ward-32",
+      "ward": 32,
+      "alder_name": "Scott Waguespack",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-33": {
+      "id": "ward-33",
+      "ward": 33,
+      "alder_name": "Rossana Rodriguez Sanchez",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-34": {
+      "id": "ward-34",
+      "ward": 34,
+      "alder_name": "Bill Conway",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-35": {
+      "id": "ward-35",
+      "ward": 35,
+      "alder_name": "Anthony Quezada",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-36": {
+      "id": "ward-36",
+      "ward": 36,
+      "alder_name": "Gilbert Gil Villegas",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-37": {
+      "id": "ward-37",
+      "ward": 37,
+      "alder_name": "Emma M Mitts",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-38": {
+      "id": "ward-38",
+      "ward": 38,
+      "alder_name": "Nicholas Sposato",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-39": {
+      "id": "ward-39",
+      "ward": 39,
+      "alder_name": "Samantha Sam Nugent",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-40": {
+      "id": "ward-40",
+      "ward": 40,
+      "alder_name": "Andre Vasquez",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-41": {
+      "id": "ward-41",
+      "ward": 41,
+      "alder_name": "Anthony V Napolitano",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-42": {
+      "id": "ward-42",
+      "ward": 42,
+      "alder_name": "Brendan Reilly",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-43": {
+      "id": "ward-43",
+      "ward": 43,
+      "alder_name": "Timmy Knudsen",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-44": {
+      "id": "ward-44",
+      "ward": 44,
+      "alder_name": "Bennett R Lawson",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-45": {
+      "id": "ward-45",
+      "ward": 45,
+      "alder_name": "James Jim Gardiner",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-46": {
+      "id": "ward-46",
+      "ward": 46,
+      "alder_name": "Angela Clay",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-47": {
+      "id": "ward-47",
+      "ward": 47,
+      "alder_name": "Matt Martin",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-48": {
+      "id": "ward-48",
+      "ward": 48,
+      "alder_name": "Leni Manaa Hoppenworth",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-49": {
+      "id": "ward-49",
+      "ward": 49,
+      "alder_name": "Maria Hadden",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-50": {
+      "id": "ward-50",
+      "ward": 50,
+      "alder_name": "Debra Silverstein",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    }
+  },
+  "contributions": [
+    {
+      "id": "c-laspata-0001",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-1-la-spata",
+      "amount": 15000,
+      "date": "2023-02-12",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-A1-001"
+    },
+    {
+      "id": "c-laspata-0002",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-1-la-spata",
+      "amount": 12500,
+      "date": "2023-02-08",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-A1-002"
+    },
+    {
+      "id": "c-laspata-0003",
+      "donor_id": "seiu-healthcare-illinois-indiana",
+      "committee_id": "ward-1-la-spata",
+      "amount": 10000,
+      "date": "2023-01-30",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-A1-003"
+    },
+    {
+      "id": "c-laspata-0004",
+      "donor_id": "afscme-council-31-pac",
+      "committee_id": "ward-1-la-spata",
+      "amount": 7500,
+      "date": "2023-02-14",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-A1-004"
+    },
+    {
+      "id": "c-laspata-0005",
+      "donor_id": "35th-ward-ipo-united-neighbors",
+      "committee_id": "ward-1-la-spata",
+      "amount": 5000,
+      "date": "2023-02-20",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-A1-005"
+    },
+    {
+      "id": "c-laspata-0006",
+      "donor_id": "ibew-local-134-pac",
+      "committee_id": "ward-1-la-spata",
+      "amount": 3500,
+      "date": "2024-09-15",
+      "cycle": "2025",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-D2-006"
+    },
+    {
+      "id": "c-laspata-0007",
+      "donor_id": "individual-contributor-logan-square",
+      "committee_id": "ward-1-la-spata",
+      "amount": 2500,
+      "date": "2023-02-05",
+      "cycle": "2023",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-D2-007"
+    },
+    {
+      "id": "c-laspata-0008",
+      "donor_id": "individual-contributor-west-town",
+      "committee_id": "ward-1-la-spata",
+      "amount": 1500,
+      "date": "2023-01-28",
+      "cycle": "2023",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-D2-008"
+    },
+    {
+      "id": "c-laspata-0009",
+      "donor_id": "individual-contributor-wicker-park",
+      "committee_id": "ward-1-la-spata",
+      "amount": 1500,
+      "date": "2024-06-10",
+      "cycle": "2025",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-D2-009"
+    },
+    {
+      "id": "c-laspata-0010",
+      "donor_id": "individual-contributor-bucktown",
+      "committee_id": "ward-1-la-spata",
+      "amount": 1000,
+      "date": "2023-02-18",
+      "cycle": "2023",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-D2-010"
+    },
+    {
+      "id": "c-laspata-0011",
+      "donor_id": "individual-contributor-humboldt-park",
+      "committee_id": "ward-1-la-spata",
+      "amount": 1000,
+      "date": "2025-04-22",
+      "cycle": "2025",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-D2-011"
+    },
+    {
+      "id": "c-laspata-0012",
+      "donor_id": "individual-contributor-lincoln-park",
+      "committee_id": "ward-1-la-spata",
+      "amount": 750,
+      "date": "2024-11-05",
+      "cycle": "2025",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-D2-012"
+    },
+    {
+      "id": "c-laspata-0013",
+      "donor_id": "friends-of-bernie-2020",
+      "committee_id": "ward-1-la-spata",
+      "amount": 500,
+      "date": "2023-03-02",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-D2-013"
+    },
+    {
+      "id": "c-laspata-0014",
+      "donor_id": "individual-contributor-logan-square",
+      "committee_id": "ward-1-la-spata",
+      "amount": 500,
+      "date": "2025-09-18",
+      "cycle": "2025",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-D2-014"
+    }
+  ]
+}

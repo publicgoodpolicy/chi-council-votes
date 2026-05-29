@@ -1,0 +1,8 @@
+{
+  "anti-bch":          {"label":"Opposed Bring Chicago Home (2024)","severity":"watch"},
+  "pro-shotspotter":   {"label":"Funded ShotSpotter retention effort","severity":"watch"},
+  "anti-1fw":          {"label":"Funded tipped-wage repeal effort (2026)","severity":"watch"},
+  "developer-zoning":  {"label":"Active zoning matter pending with sponsor's ward","severity":"alert"},
+  "ethics":            {"label":"Subject of ethics complaint / investigation","severity":"alert"},
+  "indicted":          {"label":"Indicted or convicted in public-corruption case","severity":"critical"}
+}
