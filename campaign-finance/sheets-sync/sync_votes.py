@@ -188,6 +188,7 @@ def read_alder_bios(sheet) -> dict[int, dict]:
             'email': (row.get('email') or '').strip() or None,
             'website': (row.get('website') or '').strip() or None,
             'committees': (row.get('committees') or '').strip() or None,
+            'photoUrl': (row.get('photo_url') or '').strip() or None,
         }
     return out
 
