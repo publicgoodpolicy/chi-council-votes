@@ -1,0 +1,3077 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-05-29T00:00:00Z",
+  "source": "DEMO data — see notes per committee for provenance. Votes and bios sourced from IPG compilation.",
+  "itemization_threshold": 150,
+  "cycles": {
+    "2015": {
+      "label": "2011 – 2015 cycle",
+      "start": "2011-05-17",
+      "end": "2015-05-17",
+      "election_date": "2015-02-24"
+    },
+    "2019": {
+      "label": "2015 – 2019 cycle",
+      "start": "2015-05-18",
+      "end": "2019-05-19",
+      "election_date": "2019-02-26"
+    },
+    "2023": {
+      "label": "2019 – 2023 cycle",
+      "start": "2019-05-20",
+      "end": "2023-05-14",
+      "election_date": "2023-02-28"
+    },
+    "2027": {
+      "label": "Current cycle (2023 – 2027)",
+      "start": "2023-05-15",
+      "end": "2027-05-17",
+      "election_date": "2027-02-23"
+    }
+  },
+  "current_cycle": "2027",
+  "industry_tags": {
+    "labor-teachers": {
+      "label": "Labor — Teachers",
+      "color": "#508F88"
+    },
+    "labor-service": {
+      "label": "Labor — Service Workers",
+      "color": "#508F88"
+    },
+    "labor-trades": {
+      "label": "Labor — Building Trades",
+      "color": "#7a9a73"
+    },
+    "labor-public": {
+      "label": "Labor — Public Sector",
+      "color": "#508F88"
+    },
+    "individual": {
+      "label": "Individual Donor",
+      "color": "#9a8e7e"
+    },
+    "small-dollar": {
+      "label": "Small-Dollar Donors",
+      "color": "#b5a995"
+    },
+    "real-estate": {
+      "label": "Real Estate / Developers",
+      "color": "#a23a2e"
+    },
+    "restaurant": {
+      "label": "Restaurant Industry",
+      "color": "#c97a3a"
+    },
+    "police-fop": {
+      "label": "Police / FOP",
+      "color": "#1f3a5f"
+    },
+    "charter-schools": {
+      "label": "Charter Schools",
+      "color": "#7a4a2e"
+    },
+    "fossil-fuels": {
+      "label": "Fossil Fuels / Utilities",
+      "color": "#5a3a1a"
+    },
+    "tech": {
+      "label": "Tech",
+      "color": "#3a5fa2"
+    },
+    "cannabis": {
+      "label": "Cannabis Industry",
+      "color": "#5a8a3a"
+    },
+    "healthcare": {
+      "label": "Healthcare",
+      "color": "#3a7a8a"
+    },
+    "carceral": {
+      "label": "Carceral / Surveillance Contractors",
+      "color": "#7a2e2e"
+    },
+    "progressive-pol": {
+      "label": "Progressive Political Org",
+      "color": "#508F88"
+    },
+    "establishment-pol": {
+      "label": "Establishment Political Org",
+      "color": "#7a6a4e"
+    },
+    "finance": {
+      "label": "Finance / Banking",
+      "color": "#4a6080"
+    },
+    "self-funding": {
+      "label": "Self-Funding / Candidate Loan",
+      "color": "#9a8e7e"
+    },
+    "unclassified": {
+      "label": "Not Yet Classified",
+      "color": "#cfc5b5"
+    }
+  },
+  "flag_types": {
+    "anti-bch": {
+      "label": "Opposed Bring Chicago Home (2024)",
+      "severity": "watch"
+    },
+    "pro-shotspotter": {
+      "label": "Funded ShotSpotter retention effort",
+      "severity": "watch"
+    },
+    "anti-1fw": {
+      "label": "Funded tipped-wage repeal effort (2026)",
+      "severity": "watch"
+    },
+    "developer-zoning": {
+      "label": "Active zoning matter pending with sponsor's ward",
+      "severity": "alert"
+    },
+    "ethics": {
+      "label": "Subject of ethics complaint / investigation",
+      "severity": "alert"
+    },
+    "indicted": {
+      "label": "Indicted or convicted in public-corruption case",
+      "severity": "critical"
+    },
+    "federal-pac-donor": {
+      "label": "Federal PAC donor",
+      "severity": "watch"
+    },
+    "aipac-donor": {
+      "label": "AIPAC-affiliated giving",
+      "severity": "watch"
+    },
+    "trump-aligned": {
+      "label": "Trump-aligned giving",
+      "severity": "watch"
+    },
+    "real-estate-donor": {
+      "label": "Major real-estate industry donor",
+      "severity": "watch"
+    },
+    "fossil-fuel-donor": {
+      "label": "Fossil fuel industry donor",
+      "severity": "watch"
+    }
+  },
+  "donors": {
+    "chicago-bike-pac": {
+      "id": "chicago-bike-pac",
+      "name": "Chicago Bike PAC",
+      "type": "PAC",
+      "flags": [],
+      "notes": null,
+      "industries": [
+        "progressive-pol"
+      ]
+    },
+    "committee-to-expand-the-middle-class": {
+      "id": "committee-to-expand-the-middle-class",
+      "name": "Committee to Expand the Middle Class",
+      "type": "PAC",
+      "flags": [],
+      "notes": null,
+      "industries": [
+        "progressive-pol"
+      ]
+    },
+    "brian-goldberg": {
+      "id": "brian-goldberg",
+      "name": "Brian Goldberg",
+      "type": "Individual",
+      "flags": [
+        {
+          "type": "federal-pac-donor",
+          "source_url": "https://www.fec.gov/data/",
+          "note": "DEMO: illustrative override entry. Real version requires FEC verification.",
+          "source": "override"
+        }
+      ],
+      "notes": "DEMO: example of a donor with editor-added flag.",
+      "industries": [
+        "individual"
+      ]
+    },
+    "jack-wuest": {
+      "id": "jack-wuest",
+      "name": "Jack Wuest",
+      "type": "Individual",
+      "flags": [],
+      "notes": null,
+      "industries": [
+        "individual"
+      ]
+    },
+    "peter-ternes": {
+      "id": "peter-ternes",
+      "name": "Peter Ternes",
+      "type": "Individual",
+      "flags": [
+        {
+          "type": "aipac-donor",
+          "source_url": "https://www.fec.gov/data/",
+          "note": "DEMO: illustrative — real entry requires FEC verification.",
+          "source": "override"
+        }
+      ],
+      "notes": null,
+      "industries": [
+        "individual",
+        "aipac-aligned"
+      ]
+    },
+    "rolando-acosta": {
+      "id": "rolando-acosta",
+      "name": "Rolando Acosta",
+      "type": "Individual",
+      "flags": [],
+      "notes": null,
+      "industries": [
+        "individual"
+      ]
+    },
+    "michael-shenouda": {
+      "id": "michael-shenouda",
+      "name": "Michael Shenouda",
+      "type": "Individual",
+      "flags": [],
+      "notes": null,
+      "industries": [
+        "individual"
+      ]
+    },
+    "awais-khan": {
+      "id": "awais-khan",
+      "name": "Awais Khan",
+      "type": "Individual",
+      "flags": [],
+      "notes": null,
+      "industries": [
+        "individual"
+      ]
+    },
+    "chris--paul-deleeuw": {
+      "id": "chris--paul-deleeuw",
+      "name": "Chris & Paul DeLeeuw",
+      "type": "Individual",
+      "flags": [],
+      "notes": null,
+      "industries": [
+        "individual"
+      ]
+    },
+    "matthew-brown": {
+      "id": "matthew-brown",
+      "name": "Matthew Brown",
+      "type": "Individual",
+      "flags": [],
+      "notes": null,
+      "industries": [
+        "individual"
+      ]
+    },
+    "shadi-ramli": {
+      "id": "shadi-ramli",
+      "name": "Shadi Ramli",
+      "type": "Individual",
+      "flags": [],
+      "notes": null,
+      "industries": [
+        "individual"
+      ]
+    },
+    "jpmorgan-chase--co-pac": {
+      "id": "jpmorgan-chase--co-pac",
+      "name": "JPMorgan Chase & Co PAC",
+      "type": "PAC",
+      "flags": [
+        {
+          "type": "federal-pac-donor",
+          "source_url": "https://www.fec.gov/data/committee/C00282335/",
+          "note": "DEMO: JPMorgan Chase & Co PAC is registered with the FEC.",
+          "source": "override"
+        }
+      ],
+      "notes": null,
+      "industries": [
+        "finance"
+      ]
+    },
+    "united-working-families": {
+      "id": "united-working-families",
+      "name": "United Working Families",
+      "type": "PAC",
+      "flags": [],
+      "notes": null,
+      "industries": [
+        "progressive-pol"
+      ]
+    },
+    "chicago-teachers-union-pac": {
+      "id": "chicago-teachers-union-pac",
+      "name": "Chicago Teachers Union PAC",
+      "type": "PAC",
+      "flags": [],
+      "notes": null,
+      "industries": [
+        "labor-teachers"
+      ]
+    },
+    "seiu-healthcare-illinois-indiana": {
+      "id": "seiu-healthcare-illinois-indiana",
+      "name": "SEIU Healthcare Illinois Indiana",
+      "type": "PAC",
+      "flags": [],
+      "notes": null,
+      "industries": [
+        "labor-service"
+      ]
+    },
+    "afscme-council-31-pac": {
+      "id": "afscme-council-31-pac",
+      "name": "AFSCME Council 31 PAC",
+      "type": "PAC",
+      "flags": [],
+      "notes": null,
+      "industries": [
+        "labor-public"
+      ]
+    },
+    "35th-ward-ipo-united-neighbors": {
+      "id": "35th-ward-ipo-united-neighbors",
+      "name": "35th Ward IPO (United Neighbors)",
+      "type": "PAC",
+      "flags": [],
+      "notes": null,
+      "industries": [
+        "progressive-pol"
+      ]
+    },
+    "illinois-realtors-pac": {
+      "id": "illinois-realtors-pac",
+      "name": "Illinois REALTORS PAC",
+      "type": "PAC",
+      "flags": [
+        {
+          "type": "developer-zoning",
+          "source_url": "https://www.chicago.gov/city/en/depts/dcd/supp_info/zoning_map.html",
+          "note": "DEMO: example flag — Illinois Realtors PAC frequently has zoning matters pending in funded wards.",
+          "source": "override"
+        }
+      ],
+      "notes": null,
+      "industries": [
+        "real-estate"
+      ]
+    },
+    "illinois-restaurant-association-pac": {
+      "id": "illinois-restaurant-association-pac",
+      "name": "Illinois Restaurant Association PAC",
+      "type": "PAC",
+      "flags": [
+        {
+          "type": "anti-1fw",
+          "source_url": "https://www.illinoisrestaurants.org/",
+          "note": "DEMO: IRMA publicly opposed the One Fair Wage phase-out and lobbied for the 2026 repeal effort.",
+          "source": "override"
+        }
+      ],
+      "notes": null,
+      "industries": [
+        "restaurant"
+      ]
+    },
+    "boma-chicago-pac": {
+      "id": "boma-chicago-pac",
+      "name": "BOMA/Chicago PAC",
+      "type": "PAC",
+      "flags": [],
+      "notes": null,
+      "industries": [
+        "real-estate"
+      ]
+    },
+    "_small-dollar-donors": {
+      "id": "_small-dollar-donors",
+      "name": "Small-dollar donors (under $150 each)",
+      "type": "Aggregate",
+      "flags": [],
+      "notes": "Aggregate row: donors below the SBE itemization threshold ($150). Names not disclosed in the public record.",
+      "industries": [
+        "small-dollar"
+      ]
+    }
+  },
+  "committees": {
+    "ward-1-daniel-la-spata": {
+      "id": "ward-1-daniel-la-spata",
+      "ward": 1,
+      "alder_name": "Daniel La Spata",
+      "committee_name": "Neighbors for Daniel La Spata",
+      "sbe_committee_id": "34616",
+      "il_sunshine_url": "https://illinoissunshine.org/committees/34616/",
+      "founded": null,
+      "data_quality": "DEMO",
+      "last_updated": "2026-05-29",
+      "cash_on_hand": 111344.82,
+      "cash_on_hand_as_of": "2026-03-31",
+      "notes": "DEMO. Current-cycle donor names and amounts from public SBE/Sunshine record (Mar-May 2026); older cycles use placeholder amounts attached to publicly known PAC supporters."
+    },
+    "ward-2-brian-hopkins": {
+      "id": "ward-2-brian-hopkins",
+      "ward": 2,
+      "alder_name": "Brian Hopkins",
+      "committee_name": "Friends of Brian Hopkins",
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "DEMO",
+      "last_updated": "2026-05-29",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "DEMO. PAC donors reflect publicly known endorsements / alignment for this ward; amounts are illustrative placeholders. Will be replaced by ingest.py."
+    },
+    "ward-25-byron-sigcho-lopez": {
+      "id": "ward-25-byron-sigcho-lopez",
+      "ward": 25,
+      "alder_name": "Byron Sigcho Lopez",
+      "committee_name": "Friends of Byron Sigcho Lopez",
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "DEMO",
+      "last_updated": "2026-05-29",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "DEMO. PAC donors reflect publicly known endorsements / alignment for this ward; amounts are illustrative placeholders. Will be replaced by ingest.py."
+    },
+    "ward-33-rossana-rodriguez-sanchez": {
+      "id": "ward-33-rossana-rodriguez-sanchez",
+      "ward": 33,
+      "alder_name": "Rossana Rodriguez Sanchez",
+      "committee_name": "33rd Ward Working Families",
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "DEMO",
+      "last_updated": "2026-05-29",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "DEMO. PAC donors reflect publicly known endorsements / alignment for this ward; amounts are illustrative placeholders. Will be replaced by ingest.py."
+    },
+    "ward-35-anthony-quezada": {
+      "id": "ward-35-anthony-quezada",
+      "ward": 35,
+      "alder_name": "Anthony Quezada",
+      "committee_name": "Friends of Anthony Quezada",
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "DEMO",
+      "last_updated": "2026-05-29",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "DEMO. PAC donors reflect publicly known endorsements / alignment for this ward; amounts are illustrative placeholders. Will be replaced by ingest.py."
+    },
+    "ward-40-andre-vasquez": {
+      "id": "ward-40-andre-vasquez",
+      "ward": 40,
+      "alder_name": "Andre Vasquez",
+      "committee_name": "40th Ward for All",
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "DEMO",
+      "last_updated": "2026-05-29",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "DEMO. PAC donors reflect publicly known endorsements / alignment for this ward; amounts are illustrative placeholders. Will be replaced by ingest.py."
+    },
+    "ward-42-brendan-reilly": {
+      "id": "ward-42-brendan-reilly",
+      "ward": 42,
+      "alder_name": "Brendan Reilly",
+      "committee_name": "Citizens for Reilly",
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "DEMO",
+      "last_updated": "2026-05-29",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "DEMO. PAC donors reflect publicly known endorsements / alignment for this ward; amounts are illustrative placeholders. Will be replaced by ingest.py."
+    },
+    "ward-49-maria-hadden": {
+      "id": "ward-49-maria-hadden",
+      "ward": 49,
+      "alder_name": "Maria Hadden",
+      "committee_name": "Maria Hadden for 49th Ward",
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "DEMO",
+      "last_updated": "2026-05-29",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "DEMO. PAC donors reflect publicly known endorsements / alignment for this ward; amounts are illustrative placeholders. Will be replaced by ingest.py."
+    },
+    "ward-3": {
+      "id": "ward-3",
+      "ward": 3,
+      "alder_name": "Pat Dowell",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-4": {
+      "id": "ward-4",
+      "ward": 4,
+      "alder_name": "Lamont Robinson",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-5": {
+      "id": "ward-5",
+      "ward": 5,
+      "alder_name": "Desmon C Yancy",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-6": {
+      "id": "ward-6",
+      "ward": 6,
+      "alder_name": "William E Hall",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-7": {
+      "id": "ward-7",
+      "ward": 7,
+      "alder_name": "Gregory I Mitchell",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-8": {
+      "id": "ward-8",
+      "ward": 8,
+      "alder_name": "Michelle A Harris",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-9": {
+      "id": "ward-9",
+      "ward": 9,
+      "alder_name": "Anthony A Beale",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-10": {
+      "id": "ward-10",
+      "ward": 10,
+      "alder_name": "Peter Chico",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-11": {
+      "id": "ward-11",
+      "ward": 11,
+      "alder_name": "Nicole Lee",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-12": {
+      "id": "ward-12",
+      "ward": 12,
+      "alder_name": "Julia M Ramirez",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-13": {
+      "id": "ward-13",
+      "ward": 13,
+      "alder_name": "Marty Quinn",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-14": {
+      "id": "ward-14",
+      "ward": 14,
+      "alder_name": "Jeylu B Gutierrez",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-15": {
+      "id": "ward-15",
+      "ward": 15,
+      "alder_name": "Raymond A Lopez",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-16": {
+      "id": "ward-16",
+      "ward": 16,
+      "alder_name": "Stephanie D Coleman",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-17": {
+      "id": "ward-17",
+      "ward": 17,
+      "alder_name": "David H Moore",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-18": {
+      "id": "ward-18",
+      "ward": 18,
+      "alder_name": "Derrick G Curtis",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-19": {
+      "id": "ward-19",
+      "ward": 19,
+      "alder_name": "Matthew J O Shea",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-20": {
+      "id": "ward-20",
+      "ward": 20,
+      "alder_name": "Jeanette B Taylor",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-21": {
+      "id": "ward-21",
+      "ward": 21,
+      "alder_name": "Ronnie L Mosley",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-22": {
+      "id": "ward-22",
+      "ward": 22,
+      "alder_name": "Michael D Rodriguez",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-23": {
+      "id": "ward-23",
+      "ward": 23,
+      "alder_name": "Silvana Tabares",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-24": {
+      "id": "ward-24",
+      "ward": 24,
+      "alder_name": "Monique L Scott",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-26": {
+      "id": "ward-26",
+      "ward": 26,
+      "alder_name": "Jessica Jessie Fuentes",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-27": {
+      "id": "ward-27",
+      "ward": 27,
+      "alder_name": "Walter Burnett Jr",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-28": {
+      "id": "ward-28",
+      "ward": 28,
+      "alder_name": "Jason C Ervin",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-29": {
+      "id": "ward-29",
+      "ward": 29,
+      "alder_name": "Chris Taliaferro",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-30": {
+      "id": "ward-30",
+      "ward": 30,
+      "alder_name": "Ruth Cruz",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-31": {
+      "id": "ward-31",
+      "ward": 31,
+      "alder_name": "Felix Cardona Jr",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-32": {
+      "id": "ward-32",
+      "ward": 32,
+      "alder_name": "Scott Waguespack",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-34": {
+      "id": "ward-34",
+      "ward": 34,
+      "alder_name": "Bill Conway",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-36": {
+      "id": "ward-36",
+      "ward": 36,
+      "alder_name": "Gilbert Gil Villegas",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-37": {
+      "id": "ward-37",
+      "ward": 37,
+      "alder_name": "Emma M Mitts",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-38": {
+      "id": "ward-38",
+      "ward": 38,
+      "alder_name": "Nicholas Sposato",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-39": {
+      "id": "ward-39",
+      "ward": 39,
+      "alder_name": "Samantha Sam Nugent",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-41": {
+      "id": "ward-41",
+      "ward": 41,
+      "alder_name": "Anthony V Napolitano",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-43": {
+      "id": "ward-43",
+      "ward": 43,
+      "alder_name": "Timmy Knudsen",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-44": {
+      "id": "ward-44",
+      "ward": 44,
+      "alder_name": "Bennett R Lawson",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-45": {
+      "id": "ward-45",
+      "ward": 45,
+      "alder_name": "James Jim Gardiner",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-46": {
+      "id": "ward-46",
+      "ward": 46,
+      "alder_name": "Angela Clay",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-47": {
+      "id": "ward-47",
+      "ward": 47,
+      "alder_name": "Matt Martin",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-48": {
+      "id": "ward-48",
+      "ward": 48,
+      "alder_name": "Leni Manaa Hoppenworth",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    },
+    "ward-50": {
+      "id": "ward-50",
+      "ward": 50,
+      "alder_name": "Debra Silverstein",
+      "committee_name": null,
+      "sbe_committee_id": null,
+      "il_sunshine_url": null,
+      "founded": null,
+      "data_quality": "EMPTY",
+      "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
+    }
+  },
+  "contributions": [
+    {
+      "id": "c-00001",
+      "donor_id": "chicago-bike-pac",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 1500,
+      "date": "2026-05-15",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00001"
+    },
+    {
+      "id": "c-00002",
+      "donor_id": "committee-to-expand-the-middle-class",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 1500,
+      "date": "2026-05-15",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00002"
+    },
+    {
+      "id": "c-00003",
+      "donor_id": "brian-goldberg",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 1500,
+      "date": "2026-03-16",
+      "cycle": "2027",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-00003"
+    },
+    {
+      "id": "c-00004",
+      "donor_id": "jack-wuest",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 1000,
+      "date": "2026-03-16",
+      "cycle": "2027",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-00004"
+    },
+    {
+      "id": "c-00005",
+      "donor_id": "peter-ternes",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 600,
+      "date": "2026-03-16",
+      "cycle": "2027",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-00005"
+    },
+    {
+      "id": "c-00006",
+      "donor_id": "rolando-acosta",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 500,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-00006"
+    },
+    {
+      "id": "c-00007",
+      "donor_id": "michael-shenouda",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 500,
+      "date": "2026-03-16",
+      "cycle": "2027",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-00007"
+    },
+    {
+      "id": "c-00008",
+      "donor_id": "awais-khan",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 500,
+      "date": "2026-03-16",
+      "cycle": "2027",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-00008"
+    },
+    {
+      "id": "c-00009",
+      "donor_id": "chris--paul-deleeuw",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 500,
+      "date": "2026-03-16",
+      "cycle": "2027",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-00009"
+    },
+    {
+      "id": "c-00010",
+      "donor_id": "matthew-brown",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 500,
+      "date": "2026-03-16",
+      "cycle": "2027",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-00010"
+    },
+    {
+      "id": "c-00011",
+      "donor_id": "shadi-ramli",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 500,
+      "date": "2026-03-16",
+      "cycle": "2027",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-00011"
+    },
+    {
+      "id": "c-00012",
+      "donor_id": "jpmorgan-chase--co-pac",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 250,
+      "date": "2026-03-25",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00012"
+    },
+    {
+      "id": "c-00013",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 2475,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00013",
+      "is_aggregate": true,
+      "donor_count": 47,
+      "contribution_count": 58
+    },
+    {
+      "id": "c-00014",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 15000,
+      "date": "2023-02-12",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00014"
+    },
+    {
+      "id": "c-00015",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 12500,
+      "date": "2023-02-08",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00015"
+    },
+    {
+      "id": "c-00016",
+      "donor_id": "seiu-healthcare-illinois-indiana",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 10000,
+      "date": "2023-01-30",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00016"
+    },
+    {
+      "id": "c-00017",
+      "donor_id": "afscme-council-31-pac",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 7500,
+      "date": "2023-02-14",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00017"
+    },
+    {
+      "id": "c-00018",
+      "donor_id": "35th-ward-ipo-united-neighbors",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 5000,
+      "date": "2023-02-20",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00018"
+    },
+    {
+      "id": "c-00019",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 24950,
+      "date": "2023-05-14",
+      "cycle": "2023",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00019",
+      "is_aggregate": true,
+      "donor_count": 287,
+      "contribution_count": 312
+    },
+    {
+      "id": "c-00020",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 10000,
+      "date": "2019-02-15",
+      "cycle": "2019",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00020"
+    },
+    {
+      "id": "c-00021",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 8000,
+      "date": "2019-01-22",
+      "cycle": "2019",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00021"
+    },
+    {
+      "id": "c-00022",
+      "donor_id": "35th-ward-ipo-united-neighbors",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 5000,
+      "date": "2019-02-10",
+      "cycle": "2019",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00022"
+    },
+    {
+      "id": "c-00023",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 24100,
+      "date": "2019-05-19",
+      "cycle": "2019",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00023",
+      "is_aggregate": true,
+      "donor_count": 312,
+      "contribution_count": 344
+    },
+    {
+      "id": "c-00024",
+      "donor_id": "illinois-realtors-pac",
+      "committee_id": "ward-2-brian-hopkins",
+      "amount": 10000,
+      "date": "2023-02-10",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00024"
+    },
+    {
+      "id": "c-00025",
+      "donor_id": "illinois-restaurant-association-pac",
+      "committee_id": "ward-2-brian-hopkins",
+      "amount": 7500,
+      "date": "2023-02-05",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00025"
+    },
+    {
+      "id": "c-00026",
+      "donor_id": "boma-chicago-pac",
+      "committee_id": "ward-2-brian-hopkins",
+      "amount": 5000,
+      "date": "2023-01-25",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00026"
+    },
+    {
+      "id": "c-00027",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-2-brian-hopkins",
+      "amount": 9500,
+      "date": "2023-05-14",
+      "cycle": "2023",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00027",
+      "is_aggregate": true,
+      "donor_count": 76,
+      "contribution_count": 88
+    },
+    {
+      "id": "c-00028",
+      "donor_id": "illinois-realtors-pac",
+      "committee_id": "ward-2-brian-hopkins",
+      "amount": 5000,
+      "date": "2025-04-15",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00028"
+    },
+    {
+      "id": "c-00029",
+      "donor_id": "illinois-restaurant-association-pac",
+      "committee_id": "ward-2-brian-hopkins",
+      "amount": 3500,
+      "date": "2025-04-10",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00029"
+    },
+    {
+      "id": "c-00030",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-2-brian-hopkins",
+      "amount": 4200,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00030",
+      "is_aggregate": true,
+      "donor_count": 34,
+      "contribution_count": 40
+    },
+    {
+      "id": "c-00031",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 15000,
+      "date": "2023-02-12",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00031"
+    },
+    {
+      "id": "c-00032",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 12000,
+      "date": "2023-02-08",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00032"
+    },
+    {
+      "id": "c-00033",
+      "donor_id": "35th-ward-ipo-united-neighbors",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 5000,
+      "date": "2023-02-20",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00033"
+    },
+    {
+      "id": "c-00034",
+      "donor_id": "seiu-healthcare-illinois-indiana",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 7500,
+      "date": "2023-01-30",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00034"
+    },
+    {
+      "id": "c-00035",
+      "donor_id": "afscme-council-31-pac",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 5000,
+      "date": "2023-02-14",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00035"
+    },
+    {
+      "id": "c-00036",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 18500,
+      "date": "2023-05-14",
+      "cycle": "2023",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00036",
+      "is_aggregate": true,
+      "donor_count": 215,
+      "contribution_count": 244
+    },
+    {
+      "id": "c-00037",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 4000,
+      "date": "2025-04-20",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00037"
+    },
+    {
+      "id": "c-00038",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 3000,
+      "date": "2025-03-12",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00038"
+    },
+    {
+      "id": "c-00039",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 3800,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00039",
+      "is_aggregate": true,
+      "donor_count": 62,
+      "contribution_count": 78
+    },
+    {
+      "id": "c-00040",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 12000,
+      "date": "2023-02-12",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00040"
+    },
+    {
+      "id": "c-00041",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 10000,
+      "date": "2023-02-08",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00041"
+    },
+    {
+      "id": "c-00042",
+      "donor_id": "seiu-healthcare-illinois-indiana",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 7500,
+      "date": "2023-01-30",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00042"
+    },
+    {
+      "id": "c-00043",
+      "donor_id": "35th-ward-ipo-united-neighbors",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 3000,
+      "date": "2023-02-20",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00043"
+    },
+    {
+      "id": "c-00044",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 16200,
+      "date": "2023-05-14",
+      "cycle": "2023",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00044",
+      "is_aggregate": true,
+      "donor_count": 189,
+      "contribution_count": 210
+    },
+    {
+      "id": "c-00045",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 3500,
+      "date": "2025-04-22",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00045"
+    },
+    {
+      "id": "c-00046",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 2500,
+      "date": "2025-03-12",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00046"
+    },
+    {
+      "id": "c-00047",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 3100,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00047",
+      "is_aggregate": true,
+      "donor_count": 54,
+      "contribution_count": 71
+    },
+    {
+      "id": "c-00048",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-35-anthony-quezada",
+      "amount": 3500,
+      "date": "2025-08-15",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00048"
+    },
+    {
+      "id": "c-00049",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-35-anthony-quezada",
+      "amount": 2500,
+      "date": "2025-08-12",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00049"
+    },
+    {
+      "id": "c-00050",
+      "donor_id": "35th-ward-ipo-united-neighbors",
+      "committee_id": "ward-35-anthony-quezada",
+      "amount": 4000,
+      "date": "2025-07-10",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00050"
+    },
+    {
+      "id": "c-00051",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-35-anthony-quezada",
+      "amount": 2800,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00051",
+      "is_aggregate": true,
+      "donor_count": 48,
+      "contribution_count": 62
+    },
+    {
+      "id": "c-00052",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 10000,
+      "date": "2023-02-12",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00052"
+    },
+    {
+      "id": "c-00053",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 7500,
+      "date": "2023-02-08",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00053"
+    },
+    {
+      "id": "c-00054",
+      "donor_id": "seiu-healthcare-illinois-indiana",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 5000,
+      "date": "2023-01-30",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00054"
+    },
+    {
+      "id": "c-00055",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 12500,
+      "date": "2023-05-14",
+      "cycle": "2023",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00055",
+      "is_aggregate": true,
+      "donor_count": 156,
+      "contribution_count": 172
+    },
+    {
+      "id": "c-00056",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 3000,
+      "date": "2025-04-20",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00056"
+    },
+    {
+      "id": "c-00057",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 2400,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00057",
+      "is_aggregate": true,
+      "donor_count": 42,
+      "contribution_count": 51
+    },
+    {
+      "id": "c-00058",
+      "donor_id": "illinois-realtors-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 15000,
+      "date": "2023-02-10",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00058"
+    },
+    {
+      "id": "c-00059",
+      "donor_id": "boma-chicago-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 10000,
+      "date": "2023-01-25",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00059"
+    },
+    {
+      "id": "c-00060",
+      "donor_id": "illinois-restaurant-association-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 7500,
+      "date": "2023-02-05",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00060"
+    },
+    {
+      "id": "c-00061",
+      "donor_id": "jpmorgan-chase--co-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 5000,
+      "date": "2023-02-15",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00061"
+    },
+    {
+      "id": "c-00062",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 12500,
+      "date": "2023-05-14",
+      "cycle": "2023",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00062",
+      "is_aggregate": true,
+      "donor_count": 85,
+      "contribution_count": 92
+    },
+    {
+      "id": "c-00063",
+      "donor_id": "illinois-realtors-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 7500,
+      "date": "2025-04-15",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00063"
+    },
+    {
+      "id": "c-00064",
+      "donor_id": "boma-chicago-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 5000,
+      "date": "2025-03-20",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00064"
+    },
+    {
+      "id": "c-00065",
+      "donor_id": "illinois-restaurant-association-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 5000,
+      "date": "2025-04-10",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00065"
+    },
+    {
+      "id": "c-00066",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 6800,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00066",
+      "is_aggregate": true,
+      "donor_count": 42,
+      "contribution_count": 48
+    },
+    {
+      "id": "c-00067",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-49-maria-hadden",
+      "amount": 12500,
+      "date": "2023-02-12",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00067"
+    },
+    {
+      "id": "c-00068",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-49-maria-hadden",
+      "amount": 10000,
+      "date": "2023-02-08",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00068"
+    },
+    {
+      "id": "c-00069",
+      "donor_id": "seiu-healthcare-illinois-indiana",
+      "committee_id": "ward-49-maria-hadden",
+      "amount": 7500,
+      "date": "2023-01-30",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00069"
+    },
+    {
+      "id": "c-00070",
+      "donor_id": "afscme-council-31-pac",
+      "committee_id": "ward-49-maria-hadden",
+      "amount": 5000,
+      "date": "2023-02-14",
+      "cycle": "2023",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00070"
+    },
+    {
+      "id": "c-00071",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-49-maria-hadden",
+      "amount": 19500,
+      "date": "2023-05-14",
+      "cycle": "2023",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00071",
+      "is_aggregate": true,
+      "donor_count": 234,
+      "contribution_count": 268
+    },
+    {
+      "id": "c-00072",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-49-maria-hadden",
+      "amount": 4500,
+      "date": "2025-04-20",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00072"
+    },
+    {
+      "id": "c-00073",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-49-maria-hadden",
+      "amount": 3000,
+      "date": "2025-03-12",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-00073"
+    },
+    {
+      "id": "c-00074",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "ward-49-maria-hadden",
+      "amount": 4200,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-00074",
+      "is_aggregate": true,
+      "donor_count": 68,
+      "contribution_count": 82
+    }
+  ],
+  "alders": [
+    {
+      "ward": 1,
+      "name": "Daniel La Spata",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Affirmative",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "West Town, Logan Square",
+      "bio": "Represents the 1st Ward, covering West Town, Logan Square, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 2,
+      "name": "Brian Hopkins",
+      "votes": {
+        "BCH": "Oppositional",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Oppositional",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2015,
+      "party": "Democratic",
+      "neighborhoods": "Near North Side, Lincoln Park",
+      "bio": "Represents the 2nd Ward, covering Near North Side, Lincoln Park, and first took office in 2015 (about 11 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 3,
+      "name": "Pat Dowell",
+      "votes": {
+        "BCH": "Neutral",
+        "Ceasefire": "Neutral",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2007,
+      "party": "Democratic",
+      "neighborhoods": "Grand Boulevard, Near South Side, Douglas",
+      "bio": "Represents the 3rd Ward, covering Grand Boulevard, Near South Side, Douglas, and first took office in 2007 (about 19 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 4,
+      "name": "Lamont Robinson",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Douglas, Kenwood, Near South Side",
+      "bio": "Represents the 4th Ward, covering Douglas, Kenwood, Near South Side, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 5,
+      "name": "Desmon C Yancy",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Hyde Park, South Shore, Woodlawn",
+      "bio": "Represents the 5th Ward, covering Hyde Park, South Shore, Woodlawn, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 6,
+      "name": "William E Hall",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Affirmative",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Greater Grand Crossing, Chatham",
+      "bio": "Represents the 6th Ward, covering Greater Grand Crossing, Chatham, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 7,
+      "name": "Gregory I Mitchell",
+      "votes": {
+        "BCH": "Oppositional",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Neutral",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Oppositional",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2015,
+      "party": "Democratic",
+      "neighborhoods": "South Deering, South Chicago, South Shore",
+      "bio": "Represents the 7th Ward, covering South Deering, South Chicago, South Shore, and first took office in 2015 (about 11 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 8,
+      "name": "Michelle A Harris",
+      "votes": {
+        "BCH": "Oppositional",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2006,
+      "party": "Democratic",
+      "neighborhoods": "Avalon Park, Pullman",
+      "bio": "Represents the 8th Ward, covering Avalon Park, Pullman, and first took office in 2006 (about 20 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 9,
+      "name": "Anthony A Beale",
+      "votes": {
+        "BCH": "Oppositional",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Oppositional",
+        "Snap Curfew": "Neutral",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 1999,
+      "party": "Democratic",
+      "neighborhoods": "Roseland, West Pullman, Riverdale",
+      "bio": "Represents the 9th Ward, covering Roseland, West Pullman, Riverdale, and first took office in 1999 (about 27 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 10,
+      "name": "Peter Chico",
+      "votes": {
+        "BCH": "Oppositional",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "South Deering, Hegewisch",
+      "bio": "Represents the 10th Ward, covering South Deering, Hegewisch, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 11,
+      "name": "Nicole Lee",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2022,
+      "party": "Democratic",
+      "neighborhoods": "Bridgeport, New City, Armour Square",
+      "bio": "Represents the 11th Ward, covering Bridgeport, New City, Armour Square, and first took office in 2022 (about 4 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 12,
+      "name": "Julia M Ramirez",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Affirmative",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Brighton Park, McKinley Park, New City",
+      "bio": "Represents the 12th Ward, covering Brighton Park, McKinley Park, New City, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 13,
+      "name": "Marty Quinn",
+      "votes": {
+        "BCH": "Oppositional",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2011,
+      "party": "Democratic",
+      "neighborhoods": "Clearing, Garfield Ridge",
+      "bio": "Represents the 13th Ward, covering Clearing, Garfield Ridge, and first took office in 2011 (about 15 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 14,
+      "name": "Jeylu B Gutierrez",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Archer Heights, Gage Park",
+      "bio": "Represents the 14th Ward, covering Archer Heights, Gage Park, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 15,
+      "name": "Raymond A Lopez",
+      "votes": {
+        "BCH": "Oppositional",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Oppositional",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2015,
+      "party": "Democratic",
+      "neighborhoods": "New City, Gage Park, West Englewood",
+      "bio": "Represents the 15th Ward, covering New City, Gage Park, West Englewood, and first took office in 2015 (about 11 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 16,
+      "name": "Stephanie D Coleman",
+      "votes": {
+        "BCH": "Neutral",
+        "Ceasefire": "Neutral",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "West Englewood, Englewood, Chicago Lawn",
+      "bio": "Represents the 16th Ward, covering West Englewood, Englewood, Chicago Lawn, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 17,
+      "name": "David H Moore",
+      "votes": {
+        "BCH": "-",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Oppositional",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2015,
+      "party": "Democratic",
+      "neighborhoods": "Auburn Gresham, West Englewood, Chicago Lawn",
+      "bio": "Represents the 17th Ward, covering Auburn Gresham, West Englewood, Chicago Lawn, and first took office in 2015 (about 11 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 18,
+      "name": "Derrick G Curtis",
+      "votes": {
+        "BCH": "-",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Neutral",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2015,
+      "party": "Democratic",
+      "neighborhoods": "Ashburn",
+      "bio": "Represents the 18th Ward, covering Ashburn, and first took office in 2015 (about 11 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 19,
+      "name": "Matthew J O Shea",
+      "votes": {
+        "BCH": "-",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Oppositional",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2011,
+      "party": "Democratic",
+      "neighborhoods": "Beverly, Mount Greenwood, Morgan Park",
+      "bio": "Represents the 19th Ward, covering Beverly, Mount Greenwood, Morgan Park, and first took office in 2011 (about 15 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 20,
+      "name": "Jeanette B Taylor",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Neutral"
+      },
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "New City, Washington Park, Woodlawn",
+      "bio": "Represents the 20th Ward, covering New City, Washington Park, Woodlawn, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 21,
+      "name": "Ronnie L Mosley",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Washington Heights, West Pullman, Morgan Park",
+      "bio": "Represents the 21st Ward, covering Washington Heights, West Pullman, Morgan Park, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 22,
+      "name": "Michael D Rodriguez",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Affirmative",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "South Lawndale, Garfield Ridge",
+      "bio": "Represents the 22nd Ward, covering South Lawndale, Garfield Ridge, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 23,
+      "name": "Silvana Tabares",
+      "votes": {
+        "BCH": "-",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Oppositional",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Neutral",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2018,
+      "party": "Democratic",
+      "neighborhoods": "Garfield Ridge, West Lawn, West Elsdon",
+      "bio": "Represents the 23rd Ward, covering Garfield Ridge, West Lawn, West Elsdon, and first took office in 2018 (about 8 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 24,
+      "name": "Monique L Scott",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2022,
+      "party": "Democratic",
+      "neighborhoods": "North Lawndale",
+      "bio": "Represents the 24th Ward, covering North Lawndale, and first took office in 2022 (about 4 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 25,
+      "name": "Byron Sigcho Lopez",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Affirmative",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "Lower West Side, South Lawndale",
+      "bio": "Represents the 25th Ward, covering Lower West Side, South Lawndale, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 26,
+      "name": "Jessica Jessie Fuentes",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Affirmative",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Humboldt Park, West Town, Logan Square",
+      "bio": "Represents the 26th Ward, covering Humboldt Park, West Town, Logan Square, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 27,
+      "name": "Walter Burnett Jr",
+      "votes": {
+        "BCH": "-",
+        "Ceasefire": "-",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "-",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 1995,
+      "party": "Democratic",
+      "neighborhoods": "Near West Side, West Town, Humboldt Park, Near North Side",
+      "bio": "Represents the 27th Ward, covering Near West Side, West Town, Humboldt Park, Near North Side. The seat was held for 30 years by Walter Burnett Jr.; his son Walter 'Red' Burnett III was appointed in September 2025. The record shown reflects votes cast under this ward's representation. Party: Democratic.",
+      "tenureNote": "Walter Burnett Jr. held the seat 1995–2025; Walter Burnett III appointed Sept. 2025.",
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 28,
+      "name": "Jason C Ervin",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Affirmative",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Neutral"
+      },
+      "firstElected": 2011,
+      "party": "Democratic",
+      "neighborhoods": "Near West Side, East Garfield Park, West Garfield Park",
+      "bio": "Represents the 28th Ward, covering Near West Side, East Garfield Park, West Garfield Park, and first took office in 2011 (about 15 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 29,
+      "name": "Chris Taliaferro",
+      "votes": {
+        "BCH": "-",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2015,
+      "party": "Democratic",
+      "neighborhoods": "Austin",
+      "bio": "Represents the 29th Ward, covering Austin, and first took office in 2015 (about 11 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 30,
+      "name": "Ruth Cruz",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Portage Park, Belmont Cragin, Irving Park",
+      "bio": "Represents the 30th Ward, covering Portage Park, Belmont Cragin, Irving Park, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 31,
+      "name": "Felix Cardona Jr",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "Belmont Cragin, Hermosa",
+      "bio": "Represents the 31st Ward, covering Belmont Cragin, Hermosa, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 32,
+      "name": "Scott Waguespack",
+      "votes": {
+        "BCH": "Oppositional",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Neutral",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2007,
+      "party": "Democratic",
+      "neighborhoods": "Logan Square, Lincoln Park, North Center",
+      "bio": "Represents the 32nd Ward, covering Logan Square, Lincoln Park, North Center, and first took office in 2007 (about 19 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 33,
+      "name": "Rossana Rodriguez Sanchez",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Affirmative",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "Albany Park, Irving Park",
+      "bio": "Represents the 33rd Ward, covering Albany Park, Irving Park, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 34,
+      "name": "Bill Conway",
+      "votes": {
+        "BCH": "-",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Oppositional",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Near West Side, Loop",
+      "bio": "Represents the 34th Ward, covering Near West Side, Loop, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 35,
+      "name": "Anthony Quezada",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "-",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "-",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2025,
+      "party": "Democratic",
+      "neighborhoods": "Avondale, Logan Square",
+      "bio": "Represents the 35th Ward, covering Avondale, Logan Square. Anthony Quezada, a Democratic Socialist and former Cook County commissioner, was appointed in April 2025 to succeed Carlos Ramirez-Rosa (who served 2015–2025). Party: Democratic.",
+      "tenureNote": "Appointed April 2025, succeeding Carlos Ramirez-Rosa (2015–2025).",
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 36,
+      "name": "Gilbert Gil Villegas",
+      "votes": {
+        "BCH": "-",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Neutral",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2015,
+      "party": "Democratic",
+      "neighborhoods": "Belmont Cragin, West Town, Montclare",
+      "bio": "Represents the 36th Ward, covering Belmont Cragin, West Town, Montclare, and first took office in 2015 (about 11 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 37,
+      "name": "Emma M Mitts",
+      "votes": {
+        "BCH": "Neutral",
+        "Ceasefire": "Neutral",
+        "Cancel Shotspotter": "Neutral",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2000,
+      "party": "Democratic",
+      "neighborhoods": "Austin, Humboldt Park",
+      "bio": "Represents the 37th Ward, covering Austin, Humboldt Park, and first took office in 2000 (about 26 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 38,
+      "name": "Nicholas Sposato",
+      "votes": {
+        "BCH": "-",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Oppositional",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2011,
+      "party": "Independent",
+      "neighborhoods": "Dunning, O'Hare, Portage Park",
+      "bio": "Represents the 38th Ward, covering Dunning, O'Hare, Portage Park, and first took office in 2011 (about 15 years on the Council). Sits as an Independent rather than a Democrat.",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 39,
+      "name": "Samantha Sam Nugent",
+      "votes": {
+        "BCH": "-",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "North Park, Forest Glen",
+      "bio": "Represents the 39th Ward, covering North Park, Forest Glen, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 40,
+      "name": "Andre Vasquez",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Affirmative",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "Lincoln Square, West Ridge",
+      "bio": "Represents the 40th Ward, covering Lincoln Square, West Ridge, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 41,
+      "name": "Anthony V Napolitano",
+      "votes": {
+        "BCH": "Oppositional",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Oppositional",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2015,
+      "party": "Independent",
+      "neighborhoods": "O'Hare, Norwood Park",
+      "bio": "Represents the 41st Ward, covering O'Hare, Norwood Park, and first took office in 2015 (about 11 years on the Council). Sits as an Independent rather than a Democrat.",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 42,
+      "name": "Brendan Reilly",
+      "votes": {
+        "BCH": "Oppositional",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Oppositional",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2007,
+      "party": "Democratic",
+      "neighborhoods": "Near North Side, Loop",
+      "bio": "Represents the 42nd Ward, covering Near North Side, Loop, and first took office in 2007 (about 19 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 43,
+      "name": "Timmy Knudsen",
+      "votes": {
+        "BCH": "-",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2022,
+      "party": "Democratic",
+      "neighborhoods": "Lincoln Park",
+      "bio": "Represents the 43rd Ward, covering Lincoln Park, and first took office in 2022 (about 4 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 44,
+      "name": "Bennett R Lawson",
+      "votes": {
+        "BCH": "Oppositional",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Oppositional",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Lake View",
+      "bio": "Represents the 44th Ward, covering Lake View, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 45,
+      "name": "James Jim Gardiner",
+      "votes": {
+        "BCH": "Oppositional",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Neutral",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "Jefferson Park, Forest Glen, Portage Park",
+      "bio": "Represents the 45th Ward, covering Jefferson Park, Forest Glen, Portage Park, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 46,
+      "name": "Angela Clay",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Affirmative",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Uptown, Lake View",
+      "bio": "Represents the 46th Ward, covering Uptown, Lake View, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 47,
+      "name": "Matt Martin",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Affirmative",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "North Center, Lincoln Square, Lake View, Uptown",
+      "bio": "Represents the 47th Ward, covering North Center, Lincoln Square, Lake View, Uptown, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 48,
+      "name": "Leni Manaa Hoppenworth",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Affirmative",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2023,
+      "party": "Democratic",
+      "neighborhoods": "Edgewater, Uptown",
+      "bio": "Represents the 48th Ward, covering Edgewater, Uptown, and first took office in 2023 (about 3 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 49,
+      "name": "Maria Hadden",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Affirmative",
+        "Cancel Shotspotter": "Affirmative",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Affirmative",
+        "GSH": "Affirmative",
+        "1FW Repeal": "Affirmative"
+      },
+      "firstElected": 2019,
+      "party": "Democratic",
+      "neighborhoods": "Rogers Park",
+      "bio": "Represents the 49th Ward, covering Rogers Park, and first took office in 2019 (about 7 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    },
+    {
+      "ward": 50,
+      "name": "Debra Silverstein",
+      "votes": {
+        "BCH": "Affirmative",
+        "Ceasefire": "Oppositional",
+        "Cancel Shotspotter": "Oppositional",
+        "Southshore CBA": "Affirmative",
+        "Paid PTO": "Affirmative",
+        "Snap Curfew": "Oppositional",
+        "GSH": "Oppositional",
+        "1FW Repeal": "Oppositional"
+      },
+      "firstElected": 2011,
+      "party": "Democratic",
+      "neighborhoods": "West Ridge",
+      "bio": "Represents the 50th Ward, covering West Ridge, and first took office in 2011 (about 15 years on the Council).",
+      "tenureNote": null,
+      "email": null,
+      "website": null,
+      "committees": null
+    }
+  ],
+  "votemeta": [
+    {
+      "code": "BCH",
+      "full": "Bring Chicago Home",
+      "tag": "Housing",
+      "year": "2023",
+      "desc": "A measure to place a binding referendum on the March 2024 ballot asking voters to convert the city's flat real-estate transfer tax into a graduated 'mansion tax,' raising rates on property sales above $1 million to fund homelessness services. The Council voted 32-17 to put it on the ballot; voters narrowly rejected the referendum in March 2024.",
+      "reverse_coded": false,
+      "source_url": null
+    },
+    {
+      "code": "Ceasefire",
+      "full": "Gaza Ceasefire Resolution",
+      "tag": "Affordability",
+      "year": "2024",
+      "desc": "A non-binding resolution calling for a permanent ceasefire in the Israel-Hamas war in Gaza. Mayor Brandon Johnson cast a rare tie-breaking vote in favor in January 2024, making Chicago the largest U.S. city at the time to pass such a resolution.",
+      "reverse_coded": false,
+      "source_url": null
+    },
+    {
+      "code": "Cancel Shotspotter",
+      "full": "ShotSpotter / Gunshot Detection Contract",
+      "tag": "Public Safety",
+      "year": "2024",
+      "desc": "A series of Council actions over the city's ShotSpotter (SoundThinking) gunshot-detection contract, which Mayor Johnson moved to cancel as a campaign promise. The Council repeatedly pushed back, voting 34-14 in May 2024 and again in September 2024 to limit the mayor's ability to end the contract. ('Affirmative' here reflects support for ending/canceling the contract.)",
+      "reverse_coded": true,
+      "source_url": null
+    },
+    {
+      "code": "Southshore CBA",
+      "full": "South Shore Community Benefits Agreement",
+      "tag": "Housing",
+      "year": "2025",
+      "desc": "Anti-displacement housing protections for South Shore and the area around the future Obama Presidential Center, the product of a decade-long community campaign. The Jackson Park Housing Pilot — drawing on the South Shore Housing Preservation Ordinance — passed in September 2025, offering affordable set-asides, a right to return, and home-repair funds.",
+      "reverse_coded": false,
+      "source_url": null
+    },
+    {
+      "code": "Paid PTO",
+      "full": "Paid Leave & Paid Sick Leave Ordinance",
+      "tag": "Workers Rights",
+      "year": "2023",
+      "desc": "An ordinance requiring most Chicago employers to give workers 10 paid days off a year — five sick days and five for any reason — among the most expansive municipal paid-leave laws in the nation. The Council passed it 36-12 in November 2023; implementation was later delayed to July 2024.",
+      "reverse_coded": false,
+      "source_url": null
+    },
+    {
+      "code": "Snap Curfew",
+      "full": "Teen 'Snap' Curfew Ordinance",
+      "tag": "Public Safety",
+      "year": "2025",
+      "desc": "An ordinance championed by Ald. Brian Hopkins (2nd) in response to downtown 'teen takeovers,' letting the police superintendent declare a curfew anywhere in the city with 30 minutes' notice. The Council passed it 27-22 in June 2025, but Mayor Johnson vetoed it — his first veto — and the Council failed to override in July 2025.",
+      "reverse_coded": false,
+      "source_url": null
+    },
+    {
+      "code": "GSH",
+      "full": "Green Social Housing Ordinance",
+      "tag": "Housing",
+      "year": "2025",
+      "desc": "A signature Johnson housing initiative creating a city-backed nonprofit (the Residential Investment Corporation) to run a $135 million revolving loan fund for permanently affordable, mixed-income, sustainable housing. The Council approved it 30-18 in May 2025, making Chicago the first major U.S. city to adopt the model.",
+      "reverse_coded": false,
+      "source_url": null
+    },
+    {
+      "code": "1FW Repeal",
+      "full": "Tipped 'Subminimum' Wage — Repeal of Phase-Out",
+      "tag": "Workers Rights",
+      "year": "2026",
+      "desc": "A 2026 effort to halt the 'One Fair Wage' phase-out of the tipped subminimum wage that the Council adopted in 2023 (which was raising tipped pay toward the full minimum wage by 2028). The Council voted 30-18 in March 2026 to freeze the phase-out; Mayor Johnson vetoed the freeze, and in April 2026 the Council fell short of overriding it, so the phase-out continued. ('Affirmative' here reflects support for repealing/freezing the phase-out.)",
+      "reverse_coded": true,
+      "source_url": null
+    }
+  ]
+}
