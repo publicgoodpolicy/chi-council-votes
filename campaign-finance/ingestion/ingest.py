@@ -1,0 +1,678 @@
+#!/usr/bin/env python3
+"""
+IPG Campaign-Finance Ingestion
+================================
+Reads SBE bulk-data receipts files (CSV/TSV) and updates council-data.json
+with real contribution data.
+
+WORKFLOW
+--------
+1. Editor downloads receipts files for one or more committees from
+   elections.il.gov, saving CSV (or TXT/TSV) format.
+2. Editor places downloaded files in `raw/receipts/` directory.
+3. Editor runs `python ingest.py` to process all files there.
+4. Script merges results into council-data.json, preserving donor IDs across
+   runs so editor overrides in the Google Sheet stay attached to the right
+   records.
+5. Editor commits and pushes; the sync_overrides.py workflow then applies
+   Sheet-based tags/flags on top.
+
+SCHEMA EXPECTATIONS (validated at runtime)
+------------------------------------------
+SBE Receipts files have these columns (case-sensitive):
+  CommitteeID, CommitteeName, ContributedBy, RcvdDate, Amount, LoanAmount,
+  Occupation, Employer, Address1, Address2, City, State, Zip, D2Part,
+  Description, VendorName, VendorAddress1, VendorAddress2, VendorCity,
+  VendorState, VendorZip, DocName, Election, RptPdBegDate, RptPdEndDate,
+  FiledRcvdDate
+
+If any REQUIRED column is missing, the script fails loudly. If new columns
+appear, they're silently ignored (forward-compatible).
+
+CONTRIBUTION TYPES (D2Part)
+---------------------------
+  Individual Contribution → itemized as 'Individual'
+  Transfer In             → itemized as 'PAC' (committee-to-committee)
+  In-kind Contribution    → itemized as Individual or Other (non-cash)
+  Loan Received           → flagged separately; included in totals
+  Other Receipt           → rare, classified as Other
+
+USAGE
+-----
+    python ingest.py                              # process all files in raw/receipts/
+    python ingest.py --file raw/receipts/x.csv   # single file
+    python ingest.py --dry-run                    # report changes, don't write
+    python ingest.py --data-file path.json        # alternate data file location
+"""
+
+from __future__ import annotations
+import argparse
+import csv
+import json
+import re
+import sys
+from collections import defaultdict
+from datetime import datetime
+from pathlib import Path
+from typing import Optional
+
+# ============================================================
+# CONFIG
+# ============================================================
+DEFAULT_RAW_DIR = Path('raw/receipts')
+DEFAULT_DATA_FILE = Path('council-data.json')
+ITEMIZATION_THRESHOLD = 150  # amounts below this aggregated as "small-dollar"
+
+REQUIRED_COLUMNS = {
+    'CommitteeID', 'CommitteeName', 'ContributedBy',
+    'RcvdDate', 'Amount', 'D2Part',
+}
+
+# Election-cycle boundaries (Chicago municipal). Used to assign each
+# contribution to a cycle based on RcvdDate.
+CYCLES = {
+    '2015': {'start': '2011-05-17', 'end': '2015-05-17'},
+    '2019': {'start': '2015-05-18', 'end': '2019-05-19'},
+    '2023': {'start': '2019-05-20', 'end': '2023-05-14'},
+    '2027': {'start': '2023-05-15', 'end': '2027-05-17'},
+}
+
+# ============================================================
+# DONOR AUTO-CLASSIFICATION
+# ============================================================
+# Patterns are matched against the donor name (lowercased). First match wins,
+# so order matters: more specific patterns should come before general ones.
+# Editors can override any classification via the Google Sheet's Donor
+# Overrides tab — the `primary_industry` column wins over these rules.
+INDUSTRY_RULES = [
+    # Labor — most specific first
+    (r'\b(ctu|chicago teachers union|cook county college teachers|teachers? union|federation of teachers|education association)\b', 'labor-teachers'),
+    (r'\b(seiu|hospital workers|nurses?|healthcare workers?)\b', 'labor-service'),
+    (r'\b(afscme|public employees? union)\b', 'labor-public'),
+    (r'\b(carpenters|laborers|ironworkers|electricians|operating engineers|operators? joint|pipe(?:fitters?|trades?)|sheet metal|plasterers|painters|teamsters|building trades)\b', 'labor-trades'),
+    (r'\b(union|local \d+|council \d+|brotherhood|cope|ibew|atu|cwa)\b', 'labor-trades'),  # generic union fallback
+
+    # Progressive political orgs
+    (r'\b(united working families|uwf|ipo|independent political org|reclaim chicago|grassroots|justice democrats)\b', 'progressive-pol'),
+
+    # Real estate / developers
+    (r'\b(real estate|realty|realtors?|developers?|properties|building owners|apartment association|boma)\b', 'real-estate'),
+    (r'\b(construction|builders|contractors? association)\b', 'real-estate'),
+
+    # Restaurant industry (relevant given 1FW vote)
+    (r'\b(restaurant|cafe|brewery|hospitality|bar association|illinois restaurant)\b', 'restaurant'),
+
+    # Finance / banking — require specific finance-context words, not bare "financial"
+    (r'\b(bank|jpmorgan|chase|citigroup|wells fargo|credit union|investment management|hedge fund|private equity)\b', 'finance'),
+
+    # Tech
+    (r'\b(google|microsoft|amazon|tech|software|ai|cloud)\b', 'tech'),
+
+    # Police / FOP
+    (r'\b(fop|fraternal order of police|police union)\b', 'police-fop'),
+
+    # Charter schools
+    (r'\b(charter|kipp|noble network|illinois network of charter schools)\b', 'charter-schools'),
+
+    # Fossil fuels / utilities
+    (r'\b(comed|peoples gas|nicor|chevron|exxon|bp |conoco|petroleum)\b', 'fossil-fuels'),
+
+    # Cannabis
+    (r'\b(cannabis|dispensary|cresco|green thumb|verano)\b', 'cannabis'),
+
+    # Healthcare (non-labor)
+    (r'\b(hospital|medical center|pharmaceutical|pharma|advocate health)\b', 'healthcare'),
+
+    # Establishment political (catch-all for PACs not matched above)
+    (r'\bpac\b', 'establishment-pol'),
+]
+
+
+def classify_donor(name: str, is_individual: bool) -> str:
+    """Return the primary industry tag for a donor based on name.
+
+    is_individual: True for "Last, First" style names; False for orgs.
+    """
+    if is_individual:
+        return 'individual'
+    name_lower = name.lower()
+    for pattern, industry in INDUSTRY_RULES:
+        if re.search(pattern, name_lower):
+            return industry
+    return 'unclassified'
+
+
+# ============================================================
+# NORMALIZATION HELPERS
+# ============================================================
+def slug(name: str) -> str:
+    """Stable donor ID from name.
+
+    The same input always produces the same slug, which means donor records
+    persist across ingestion runs. This is critical for editor overrides:
+    if "United Working Families" gets slug 'united-working-families' on every
+    run, editor overrides keyed by that slug remain attached.
+    """
+    s = re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')
+    return s[:80]  # cap length to keep keys readable
+
+
+def parse_sbe_date(date_str: str) -> Optional[str]:
+    """Convert SBE's M/D/YYYY format to ISO YYYY-MM-DD.
+
+    Returns None if the date is unparseable (rare but possible)."""
+    if not date_str or not date_str.strip():
+        return None
+    try:
+        dt = datetime.strptime(date_str.strip(), '%m/%d/%Y')
+        return dt.strftime('%Y-%m-%d')
+    except ValueError:
+        return None
+
+
+def determine_cycle(iso_date: Optional[str]) -> Optional[str]:
+    """Which Chicago municipal election cycle does this date fall into?"""
+    if not iso_date:
+        return None
+    for code, span in CYCLES.items():
+        if span['start'] <= iso_date <= span['end']:
+            return code
+    return None  # outside any defined cycle (very old or future)
+
+
+def is_individual_name(name: str) -> bool:
+    """SBE convention: individuals are 'Last, First'; orgs are 'Org Name'.
+
+    Not perfect — some orgs have commas, some individuals don't — but it's a
+    reasonable starting heuristic. Editors can correct via the Sheet."""
+    return ',' in name and not any(
+        x in name.lower() for x in ['inc.', 'llc', 'ltd', 'corp', 'pac', 'union', 'committee', 'group']
+    )
+
+
+def normalize_zip(zip_str: str) -> Optional[str]:
+    """Strip whitespace, keep first 5 digits."""
+    if not zip_str:
+        return None
+    z = re.sub(r'\D', '', zip_str.strip())
+    return z[:5] if z else None
+
+
+# ============================================================
+# PARSE ONE RECEIPTS FILE
+# ============================================================
+def parse_receipts_file(path: Path) -> dict:
+    """Read one SBE receipts file. Returns dict with parsed data.
+
+    Returns:
+        {
+            'committee_id': '34616',
+            'committee_name': 'Neighbors for Daniel La Spata',
+            'donors': {slug: donor_dict, ...},
+            'contributions': [contribution_dict, ...],
+            'row_count': int,
+            'total_amount': float,
+        }
+    """
+    if not path.exists():
+        raise SystemExit(f"File not found: {path}")
+
+    print(f"  Reading {path.name}…")
+
+    # Try comma-delimited first, fall back to tab-delimited
+    with open(path, encoding='utf-8') as f:
+        sample = f.read(2048)
+        f.seek(0)
+        try:
+            dialect = csv.Sniffer().sniff(sample, delimiters=',\t')
+        except csv.Error:
+            dialect = csv.excel  # default to comma
+        reader = csv.DictReader(f, dialect=dialect)
+        rows = [r for r in reader if any(v.strip() for v in r.values() if v)]
+
+    if not rows:
+        raise SystemExit(f"{path}: file is empty (no data rows)")
+
+    # Schema validation — fail loudly if expected columns are missing
+    actual_columns = set(rows[0].keys())
+    missing = REQUIRED_COLUMNS - actual_columns
+    if missing:
+        raise SystemExit(
+            f"{path}: missing required columns: {missing}.\n"
+            f"  Got: {sorted(actual_columns)}\n"
+            f"  This usually means SBE changed their export format.\n"
+            f"  Check elections.il.gov for the current file structure."
+        )
+
+    # First-pass: identify the committee
+    committee_id = rows[0].get('CommitteeID', '').strip()
+    committee_name = rows[0].get('CommitteeName', '').strip()
+    if not committee_id:
+        raise SystemExit(f"{path}: first row has no CommitteeID")
+
+    # Sanity: verify all rows are for the same committee
+    other_committees = {r.get('CommitteeID', '').strip() for r in rows} - {committee_id}
+    if other_committees:
+        print(f"  ! Warning: file contains multiple committees: "
+              f"{committee_id} + {other_committees}")
+
+    donors: dict[str, dict] = {}
+    contributions: list[dict] = []
+    skipped = 0
+    total_amount = 0.0
+
+    for i, row in enumerate(rows, start=2):  # row 1 is header
+        try:
+            amount = float(row.get('Amount', '0') or 0)
+        except ValueError:
+            skipped += 1
+            continue
+
+        if amount <= 0:
+            # Some rows have zero amount (e.g., voided entries). Skip.
+            skipped += 1
+            continue
+
+        donor_name_raw = (row.get('ContributedBy') or '').strip()
+        if not donor_name_raw:
+            skipped += 1
+            continue
+
+        iso_date = parse_sbe_date(row.get('RcvdDate', ''))
+        cycle = determine_cycle(iso_date)
+        d2_part = (row.get('D2Part') or '').strip()
+        loan_amount = float(row.get('LoanAmount', '0') or 0)
+        is_loan = loan_amount > 0 or d2_part == 'Loan Received'
+
+        # Detect self-funding: candidate giving to their own committee
+        # Pattern: donor name matches a portion of the committee name
+        # Crude but catches most cases (La Spata, Daniel → Neighbors for Daniel La Spata)
+        is_self_funding = self_funding_check(donor_name_raw, committee_name)
+
+        is_indiv = is_individual_name(donor_name_raw) and not is_self_funding
+        donor_id = slug(donor_name_raw)
+
+        # Determine donor type for display
+        if is_self_funding:
+            donor_type = 'Candidate'
+        elif d2_part == 'Individual Contribution':
+            donor_type = 'Individual'
+        elif d2_part == 'Transfer In':
+            donor_type = 'PAC'
+        elif d2_part == 'In-kind Contribution':
+            donor_type = 'Individual' if is_indiv else 'Other'
+        elif d2_part == 'Loan Received':
+            donor_type = 'Candidate' if is_self_funding else 'Individual'
+        else:
+            donor_type = 'Other'
+
+        # Build/update donor record
+        if donor_id not in donors:
+            # Classify industry. Self-funding gets its own category.
+            if is_self_funding:
+                primary_industry = 'self-funding'
+            else:
+                primary_industry = classify_donor(donor_name_raw, is_indiv)
+
+            donor = {
+                'id': donor_id,
+                'name': donor_name_raw,
+                'type': donor_type,
+                'industries': [primary_industry],
+                'flags': [],
+                'notes': None,
+            }
+            # Optional fields if present
+            occ = (row.get('Occupation') or '').strip()
+            emp = (row.get('Employer') or '').strip()
+            city = (row.get('City') or '').strip()
+            state = (row.get('State') or '').strip()
+            if occ:
+                donor['occupation'] = occ
+            if emp:
+                donor['employer'] = emp
+            if city:
+                donor['city'] = f"{city}, {state}" if state else city
+            donors[donor_id] = donor
+
+        # Build contribution record
+        contribution = {
+            'id': f"c-{committee_id}-{i:05d}",
+            'donor_id': donor_id,
+            'committee_id': f"ward-x-{committee_id}",  # placeholder; mapped to ward later
+            'amount': round(amount, 2),
+            'date': iso_date,
+            'cycle': cycle,
+            'contribution_type': d2_part or 'Other',
+            'source_filing': (row.get('DocName') or '').strip() or 'Quarterly',
+        }
+        if is_loan:
+            contribution['is_loan'] = True
+        if d2_part == 'In-kind Contribution':
+            contribution['is_in_kind'] = True
+            desc = (row.get('Description') or '').strip()
+            if desc:
+                contribution['in_kind_description'] = desc
+
+        contributions.append(contribution)
+        total_amount += amount
+
+    return {
+        'committee_id': committee_id,
+        'committee_name': committee_name,
+        'donors': donors,
+        'contributions': contributions,
+        'row_count': len(rows),
+        'parsed_count': len(contributions),
+        'skipped_count': skipped,
+        'total_amount': round(total_amount, 2),
+    }
+
+
+def self_funding_check(donor_name: str, committee_name: str) -> bool:
+    """Detect candidate giving to their own committee.
+
+    Heuristic: if any 2+ chars of the donor's last name appear as a word in
+    the committee name, treat as self-funding. False positives possible but
+    rare; editors can override via Sheet.
+    """
+    if not donor_name or not committee_name:
+        return False
+    # Donor name format: "Last, First" — extract last name
+    if ',' in donor_name:
+        last = donor_name.split(',')[0].strip()
+    else:
+        return False  # only individuals self-fund typically
+    if len(last) < 3:
+        return False
+    # Check if last name appears in committee name (case-insensitive, word boundary)
+    return bool(re.search(r'\b' + re.escape(last) + r'\b', committee_name, re.I))
+
+
+# ============================================================
+# AGGREGATION (small-dollar tail)
+# ============================================================
+def aggregate_small_dollar(parsed: dict) -> dict:
+    """Replace under-$150 itemized contributions with one aggregate row per
+    (committee, cycle). Matches the existing council-data.json convention.
+
+    The aggregate donor is the shared global ID '_small-dollar-donors' so
+    cross-alder rollups work correctly.
+    """
+    out_contributions = []
+    aggregates: dict = defaultdict(lambda: {
+        'total': 0.0, 'donor_count': 0, 'contribution_count': 0,
+    })
+
+    # Track unique donors per (committee, cycle) for accurate donor counts
+    seen_small_donors: dict = defaultdict(set)
+
+    for c in parsed['contributions']:
+        if c['amount'] >= ITEMIZATION_THRESHOLD or c.get('is_in_kind') or c.get('is_loan'):
+            # Itemize this one
+            out_contributions.append(c)
+        else:
+            # Aggregate this one. Key by (committee, cycle).
+            key = (c['committee_id'], c['cycle'])
+            aggregates[key]['total'] += c['amount']
+            aggregates[key]['contribution_count'] += 1
+            seen_small_donors[key].add(c['donor_id'])
+
+    # Update donor counts
+    for key, agg in aggregates.items():
+        agg['donor_count'] = len(seen_small_donors[key])
+
+    # Build aggregate contribution rows
+    for (committee_id, cycle), agg in aggregates.items():
+        if agg['total'] <= 0:
+            continue
+        out_contributions.append({
+            'id': f"c-agg-{committee_id}-{cycle or 'unknown'}",
+            'donor_id': '_small-dollar-donors',
+            'committee_id': committee_id,
+            'amount': round(agg['total'], 2),
+            'date': None,  # not a single date
+            'cycle': cycle,
+            'contribution_type': 'Aggregate',
+            'source_filing': 'SBE Bulk (aggregated)',
+            'is_aggregate': True,
+            'donor_count': agg['donor_count'],
+            'contribution_count': agg['contribution_count'],
+        })
+
+    # Filter donors: drop those whose contributions were all aggregated
+    # (we don't want to keep records for small-dollar individuals)
+    itemized_donor_ids = {c['donor_id'] for c in out_contributions}
+    out_donors = {
+        did: d for did, d in parsed['donors'].items()
+        if did in itemized_donor_ids
+    }
+
+    # Ensure the global small-dollar donor exists if we have aggregates
+    if any(c.get('is_aggregate') for c in out_contributions):
+        if '_small-dollar-donors' not in out_donors:
+            out_donors['_small-dollar-donors'] = {
+                'id': '_small-dollar-donors',
+                'name': 'Small-dollar donors (under $150 each)',
+                'type': 'Aggregate',
+                'industries': ['small-dollar'],
+                'flags': [],
+                'notes': 'Aggregate row: donors below the SBE itemization threshold ($150). '
+                         'Names not disclosed in the public record.',
+            }
+
+    return {
+        **parsed,
+        'donors': out_donors,
+        'contributions': out_contributions,
+    }
+
+
+# ============================================================
+# MERGE INTO COUNCIL-DATA.JSON
+# ============================================================
+def merge_into_data(data: dict, parsed: dict, ward: int) -> dict:
+    """Merge one committee's parsed data into council-data.json.
+
+    Strategy:
+    - Look up the existing committee record by ward number; reuse its
+      committee_id so editor-set fields (cash-on-hand, notes) and the donor
+      lookup join keys remain valid.
+    - If no existing record, create one with a generated ID.
+    - Donors: union by ID. Editor-set industries[]/flags/notes win.
+    - Contributions: full replacement for this committee (deletes old demo
+      data, adds new ingested data).
+    - Orphaned donors (zero contributions left in any committee) are removed.
+    """
+    today = datetime.now().strftime('%Y-%m-%d')
+
+    # 1. Find existing committee record by ward number
+    existing_cmt_id = None
+    for cid, cm in data['committees'].items():
+        if cm.get('ward') == ward:
+            existing_cmt_id = cid
+            break
+
+    # 2. Determine the canonical committee_id to use
+    if existing_cmt_id:
+        committee_id_str = existing_cmt_id
+        cm = data['committees'][committee_id_str]
+        # Update factual fields from SBE, preserve editor fields
+        cm['sbe_committee_id'] = parsed['committee_id']
+        cm['committee_name'] = parsed['committee_name']
+        cm['data_quality'] = 'REAL'
+        cm['last_updated'] = today
+        cm['il_sunshine_url'] = f"https://illinoissunshine.org/committees/{parsed['committee_id']}/"
+        # Clear demo notes if present; preserve cash_on_hand (editor-entered)
+        if cm.get('notes') and 'DEMO' in (cm.get('notes') or '').upper():
+            cm['notes'] = f"Ingested from SBE on {today}."
+    else:
+        committee_id_str = f"ward-{ward}-{slug(parsed['committee_name'])}"
+        data['committees'][committee_id_str] = {
+            'id': committee_id_str,
+            'ward': ward,
+            'alder_name': None,
+            'committee_name': parsed['committee_name'],
+            'sbe_committee_id': parsed['committee_id'],
+            'il_sunshine_url': f"https://illinoissunshine.org/committees/{parsed['committee_id']}/",
+            'founded': None,
+            'data_quality': 'REAL',
+            'last_updated': today,
+            'cash_on_hand': None,
+            'cash_on_hand_as_of': None,
+            'notes': f"Ingested from SBE on {today}.",
+        }
+
+    # 3. Rewrite contribution committee_ids to the canonical ID
+    for c in parsed['contributions']:
+        c['committee_id'] = committee_id_str
+
+    # 4. Union donors (preserve editor-set industries/flags/notes)
+    for did, donor in parsed['donors'].items():
+        if did in data['donors']:
+            existing = data['donors'][did]
+            existing_industries = existing.get('industries') or [existing.get('industry', 'unclassified')]
+            if existing_industries and existing_industries != ['unclassified']:
+                donor['industries'] = existing_industries
+            if existing.get('flags'):
+                donor['flags'] = existing['flags']
+            if existing.get('notes') and 'DEMO' not in existing['notes'].upper():
+                donor['notes'] = existing['notes']
+        data['donors'][did] = donor
+
+    # 5. Replace all contributions for this committee
+    data['contributions'] = [
+        c for c in data['contributions']
+        if c.get('committee_id') != committee_id_str
+    ]
+    data['contributions'].extend(parsed['contributions'])
+
+    # 6. Remove orphaned donors (zero contributions in any committee)
+    contrib_donor_ids = {c['donor_id'] for c in data['contributions']}
+    orphans = [did for did in list(data['donors'].keys())
+               if did not in contrib_donor_ids and not did.startswith('_')]
+    for did in orphans:
+        del data['donors'][did]
+    if orphans:
+        print(f"  Removed {len(orphans)} orphaned donor record(s).")
+
+    return data
+
+
+# ============================================================
+# MAIN
+# ============================================================
+def main():
+    ap = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    ap.add_argument('--raw-dir', type=Path, default=DEFAULT_RAW_DIR,
+                    help='Directory containing SBE receipts files')
+    ap.add_argument('--file', type=Path, action='append', default=[],
+                    help='Single file (can be specified multiple times)')
+    ap.add_argument('--data-file', type=Path, default=DEFAULT_DATA_FILE,
+                    help='Path to council-data.json')
+    ap.add_argument('--ward-map', type=Path,
+                    help='JSON file mapping SBE committee IDs to ward numbers. '
+                         'If not provided, prompts for each unknown committee.')
+    ap.add_argument('--dry-run', action='store_true',
+                    help="Report changes but don't write")
+    args = ap.parse_args()
+
+    # Resolve file list
+    if args.file:
+        files = list(args.file)
+    elif args.raw_dir.exists():
+        files = sorted(args.raw_dir.glob('Receipts*.csv')) \
+                + sorted(args.raw_dir.glob('Receipts*.txt'))
+    else:
+        raise SystemExit(f"No --file specified and {args.raw_dir} doesn't exist.")
+
+    if not files:
+        raise SystemExit(f"No receipts files found in {args.raw_dir}.")
+
+    print(f"Found {len(files)} receipts file(s) to process.")
+
+    # Load existing data
+    if not args.data_file.exists():
+        raise SystemExit(f"Data file not found: {args.data_file}")
+    data = json.load(open(args.data_file))
+    print(f"Loaded {args.data_file}: {len(data.get('alders', []))} alders, "
+          f"{len(data.get('committees', {}))} committees, "
+          f"{len(data.get('donors', {}))} donors, "
+          f"{len(data.get('contributions', []))} contributions")
+
+    # Load committee-to-ward mapping if available
+    ward_map: dict = {}
+    if args.ward_map and args.ward_map.exists():
+        ward_map = {str(k): int(v) for k, v in json.load(open(args.ward_map)).items()}
+        print(f"Loaded ward map: {len(ward_map)} mappings")
+
+    # Process each file
+    total_changes = {'committees': 0, 'donors': 0, 'contributions': 0}
+    for file_path in files:
+        print(f"\n--- {file_path.name} ---")
+        parsed = parse_receipts_file(file_path)
+        print(f"  Committee: {parsed['committee_id']} — {parsed['committee_name']}")
+        print(f"  Rows parsed: {parsed['parsed_count']} / {parsed['row_count']} "
+              f"({parsed['skipped_count']} skipped)")
+        print(f"  Total amount: ${parsed['total_amount']:,.2f}")
+        print(f"  Distinct donors: {len(parsed['donors'])}")
+
+        # Determine ward
+        ward = ward_map.get(parsed['committee_id'])
+        if ward is None:
+            # Prompt for it
+            print(f"  ! No ward mapping for committee {parsed['committee_id']}")
+            answer = input(f"  Which ward does this committee represent? (1-50, or 'skip'): ").strip()
+            if answer.lower() in ('skip', 's', ''):
+                print("  Skipping.")
+                continue
+            try:
+                ward = int(answer)
+                if not 1 <= ward <= 50:
+                    raise ValueError
+            except ValueError:
+                print("  Invalid ward number. Skipping.")
+                continue
+
+        # Aggregate small-dollar tail
+        parsed = aggregate_small_dollar(parsed)
+        print(f"  After small-dollar aggregation: "
+              f"{len(parsed['donors'])} donors, "
+              f"{len(parsed['contributions'])} contribution rows")
+
+        # Merge
+        merge_into_data(data, parsed, ward)
+        total_changes['committees'] += 1
+        total_changes['donors'] += len(parsed['donors'])
+        total_changes['contributions'] += len(parsed['contributions'])
+
+    # Sanity check
+    print(f"\n=== Merge summary ===")
+    print(f"  Committees touched:  {total_changes['committees']}")
+    print(f"  Donors written:      {total_changes['donors']}")
+    print(f"  Contributions written: {total_changes['contributions']}")
+    print(f"  Final state: {len(data['donors'])} donors, "
+          f"{len(data['contributions'])} contributions")
+
+    if args.dry_run:
+        print("\nDry run — not writing.")
+        return
+
+    # Update metadata
+    data['generated_at'] = datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
+    data['source'] = (
+        'Ingested from Illinois State Board of Elections bulk data. '
+        'Editorial tags/flags applied via Google Sheet sync.'
+    )
+
+    # Write
+    with open(args.data_file, 'w') as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+    print(f"\nWrote {args.data_file}")
+
+
+if __name__ == '__main__':
+    main()
