@@ -1,7 +1,8 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "generated_at": "2026-05-29T00:00:00Z",
-  "source": "DEMO DATA — production replaces this with output of scripts/ingest.py",
+  "source": "DEMO DATA — see committee notes for provenance",
+  "itemization_threshold": 150,
   "cycles": {
     "2015": {
       "label": "2011 – 2015 cycle",
@@ -98,6 +99,10 @@
       "label": "Establishment Political Org",
       "color": "#7a6a4e"
     },
+    "finance": {
+      "label": "Finance / Banking",
+      "color": "#4a6080"
+    },
     "self-funding": {
       "label": "Self-Funding / Candidate Loan",
       "color": "#9a8e7e"
@@ -134,11 +139,107 @@
     }
   },
   "donors": {
-    "ibew-local-134-pac": {
-      "id": "ibew-local-134-pac",
-      "name": "IBEW Local 134 PAC",
+    "chicago-bike-pac": {
+      "id": "chicago-bike-pac",
+      "name": "Chicago Bike PAC",
       "type": "PAC",
-      "industry": "labor-trades",
+      "industry": "progressive-pol",
+      "flags": [],
+      "notes": null
+    },
+    "committee-to-expand-the-middle-class": {
+      "id": "committee-to-expand-the-middle-class",
+      "name": "Committee to Expand the Middle Class",
+      "type": "PAC",
+      "industry": "progressive-pol",
+      "flags": [],
+      "notes": null
+    },
+    "brian-goldberg": {
+      "id": "brian-goldberg",
+      "name": "Brian Goldberg",
+      "type": "Individual",
+      "industry": "individual",
+      "flags": [],
+      "notes": null
+    },
+    "jack-wuest": {
+      "id": "jack-wuest",
+      "name": "Jack Wuest",
+      "type": "Individual",
+      "industry": "individual",
+      "flags": [],
+      "notes": null
+    },
+    "peter-ternes": {
+      "id": "peter-ternes",
+      "name": "Peter Ternes",
+      "type": "Individual",
+      "industry": "individual",
+      "flags": [],
+      "notes": null
+    },
+    "rolando-acosta": {
+      "id": "rolando-acosta",
+      "name": "Rolando Acosta",
+      "type": "Individual",
+      "industry": "individual",
+      "flags": [],
+      "notes": null
+    },
+    "michael-shenouda": {
+      "id": "michael-shenouda",
+      "name": "Michael Shenouda",
+      "type": "Individual",
+      "industry": "individual",
+      "flags": [],
+      "notes": null
+    },
+    "awais-khan": {
+      "id": "awais-khan",
+      "name": "Awais Khan",
+      "type": "Individual",
+      "industry": "individual",
+      "flags": [],
+      "notes": null
+    },
+    "chris--paul-deleeuw": {
+      "id": "chris--paul-deleeuw",
+      "name": "Chris & Paul DeLeeuw",
+      "type": "Individual",
+      "industry": "individual",
+      "flags": [],
+      "notes": null
+    },
+    "matthew-brown": {
+      "id": "matthew-brown",
+      "name": "Matthew Brown",
+      "type": "Individual",
+      "industry": "individual",
+      "flags": [],
+      "notes": null
+    },
+    "shadi-ramli": {
+      "id": "shadi-ramli",
+      "name": "Shadi Ramli",
+      "type": "Individual",
+      "industry": "individual",
+      "flags": [],
+      "notes": null
+    },
+    "jpmorgan-chase--co-pac": {
+      "id": "jpmorgan-chase--co-pac",
+      "name": "JPMorgan Chase & Co PAC",
+      "type": "PAC",
+      "industry": "finance",
+      "flags": [],
+      "notes": null
+    },
+    "_small-dollar-2027": {
+      "id": "_small-dollar-2027",
+      "name": "Small-dollar donors (under $150 each)",
+      "type": "Aggregate",
+      "industry": "small-dollar",
       "flags": [],
       "notes": null
     },
@@ -155,44 +256,6 @@
       "name": "Chicago Teachers Union PAC",
       "type": "PAC",
       "industry": "labor-teachers",
-      "flags": [],
-      "notes": null
-    },
-    "maria-l": {
-      "id": "maria-l",
-      "name": "Maria L.",
-      "type": "Individual",
-      "industry": "individual",
-      "flags": [],
-      "notes": null,
-      "city": "Chicago, IL",
-      "occupation": "nurse"
-    },
-    "robert-m": {
-      "id": "robert-m",
-      "name": "Robert M.",
-      "type": "Individual",
-      "industry": "individual",
-      "flags": [],
-      "notes": null,
-      "city": "Chicago, IL",
-      "occupation": "consultant"
-    },
-    "jennifer-s": {
-      "id": "jennifer-s",
-      "name": "Jennifer S.",
-      "type": "Individual",
-      "industry": "individual",
-      "flags": [],
-      "notes": null,
-      "city": "Chicago, IL",
-      "occupation": "architect"
-    },
-    "_small-dollar-2027": {
-      "id": "_small-dollar-2027",
-      "name": "Small-dollar donors (under $1,000 each)",
-      "type": "Aggregate",
-      "industry": "small-dollar",
       "flags": [],
       "notes": null
     },
@@ -220,49 +283,9 @@
       "flags": [],
       "notes": null
     },
-    "sarah-j": {
-      "id": "sarah-j",
-      "name": "Sarah J.",
-      "type": "Individual",
-      "industry": "individual",
-      "flags": [],
-      "notes": null,
-      "city": "Chicago, IL",
-      "occupation": "attorney"
-    },
-    "marcus-t": {
-      "id": "marcus-t",
-      "name": "Marcus T.",
-      "type": "Individual",
-      "industry": "individual",
-      "flags": [],
-      "notes": null,
-      "city": "Chicago, IL",
-      "occupation": "teacher"
-    },
-    "patricia-w": {
-      "id": "patricia-w",
-      "name": "Patricia W.",
-      "type": "Individual",
-      "industry": "individual",
-      "flags": [],
-      "notes": null,
-      "city": "Chicago, IL",
-      "occupation": "architect"
-    },
-    "david-k": {
-      "id": "david-k",
-      "name": "David K.",
-      "type": "Individual",
-      "industry": "individual",
-      "flags": [],
-      "notes": null,
-      "city": "Chicago, IL",
-      "occupation": "engineer"
-    },
     "_small-dollar-2023": {
       "id": "_small-dollar-2023",
-      "name": "Small-dollar donors (under $1,000 each)",
+      "name": "Small-dollar donors (under $150 each)",
       "type": "Aggregate",
       "industry": "small-dollar",
       "flags": [],
@@ -270,7 +293,7 @@
     },
     "_small-dollar-2019": {
       "id": "_small-dollar-2019",
-      "name": "Small-dollar donors (under $1,000 each)",
+      "name": "Small-dollar donors (under $150 each)",
       "type": "Aggregate",
       "industry": "small-dollar",
       "flags": [],
@@ -290,7 +313,7 @@
       "last_updated": "2026-05-29",
       "cash_on_hand": 111344.82,
       "cash_on_hand_as_of": "2026-03-31",
-      "notes": "Demo data. PAC names reflect La Spata's publicly known donor profile (CTU/UWF-aligned labor). Individual donor names are illustrative placeholders (first name + last initial). Amounts and dates are not verified. Cash-on-hand figure matches the public Illinois Sunshine record for the Mar 31, 2026 quarterly report."
+      "notes": "DEMO. Current-cycle donor names and amounts taken from Illinois Sunshine public records (March-May 2026 reports). Historical cycles use placeholder amounts attached to publicly known PAC supporters. Real ingestion via ingest.py will replace all data."
     },
     "ward-2": {
       "id": "ward-2",
@@ -982,219 +1005,242 @@
   "contributions": [
     {
       "id": "c-laspata-0001",
-      "donor_id": "ibew-local-134-pac",
+      "donor_id": "chicago-bike-pac",
       "committee_id": "ward-1-la-spata",
-      "amount": 3500,
-      "date": "2024-09-15",
+      "amount": 1500,
+      "date": "2026-05-15",
       "cycle": "2027",
       "contribution_type": "PAC/Transfer",
       "source_filing": "DEMO-0001"
     },
     {
       "id": "c-laspata-0002",
-      "donor_id": "united-working-families",
+      "donor_id": "committee-to-expand-the-middle-class",
       "committee_id": "ward-1-la-spata",
-      "amount": 5000,
-      "date": "2025-11-08",
+      "amount": 1500,
+      "date": "2026-05-15",
       "cycle": "2027",
       "contribution_type": "PAC/Transfer",
       "source_filing": "DEMO-0002"
     },
     {
       "id": "c-laspata-0003",
-      "donor_id": "chicago-teachers-union-pac",
+      "donor_id": "brian-goldberg",
       "committee_id": "ward-1-la-spata",
-      "amount": 2500,
-      "date": "2025-03-21",
+      "amount": 1500,
+      "date": "2026-03-16",
       "cycle": "2027",
-      "contribution_type": "PAC/Transfer",
+      "contribution_type": "Individual",
       "source_filing": "DEMO-0003"
     },
     {
       "id": "c-laspata-0004",
-      "donor_id": "maria-l",
+      "donor_id": "jack-wuest",
       "committee_id": "ward-1-la-spata",
-      "amount": 1500,
-      "date": "2024-06-10",
+      "amount": 1000,
+      "date": "2026-03-16",
       "cycle": "2027",
       "contribution_type": "Individual",
       "source_filing": "DEMO-0004"
     },
     {
       "id": "c-laspata-0005",
-      "donor_id": "robert-m",
+      "donor_id": "peter-ternes",
       "committee_id": "ward-1-la-spata",
-      "amount": 1000,
-      "date": "2025-04-22",
+      "amount": 600,
+      "date": "2026-03-16",
       "cycle": "2027",
       "contribution_type": "Individual",
       "source_filing": "DEMO-0005"
     },
     {
       "id": "c-laspata-0006",
-      "donor_id": "jennifer-s",
+      "donor_id": "rolando-acosta",
       "committee_id": "ward-1-la-spata",
-      "amount": 1000,
-      "date": "2025-09-18",
+      "amount": 500,
+      "date": "2026-03-31",
       "cycle": "2027",
       "contribution_type": "Individual",
       "source_filing": "DEMO-0006"
     },
     {
       "id": "c-laspata-0007",
-      "donor_id": "_small-dollar-2027",
+      "donor_id": "michael-shenouda",
       "committee_id": "ward-1-la-spata",
-      "amount": 9275,
-      "date": "2026-03-31",
+      "amount": 500,
+      "date": "2026-03-16",
       "cycle": "2027",
-      "contribution_type": "Aggregate",
-      "source_filing": "DEMO-0007",
-      "is_aggregate": true,
-      "donor_count": 94
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-0007"
     },
     {
       "id": "c-laspata-0008",
+      "donor_id": "awais-khan",
+      "committee_id": "ward-1-la-spata",
+      "amount": 500,
+      "date": "2026-03-16",
+      "cycle": "2027",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-0008"
+    },
+    {
+      "id": "c-laspata-0009",
+      "donor_id": "chris--paul-deleeuw",
+      "committee_id": "ward-1-la-spata",
+      "amount": 500,
+      "date": "2026-03-16",
+      "cycle": "2027",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-0009"
+    },
+    {
+      "id": "c-laspata-0010",
+      "donor_id": "matthew-brown",
+      "committee_id": "ward-1-la-spata",
+      "amount": 500,
+      "date": "2026-03-16",
+      "cycle": "2027",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-0010"
+    },
+    {
+      "id": "c-laspata-0011",
+      "donor_id": "shadi-ramli",
+      "committee_id": "ward-1-la-spata",
+      "amount": 500,
+      "date": "2026-03-16",
+      "cycle": "2027",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-0011"
+    },
+    {
+      "id": "c-laspata-0012",
+      "donor_id": "jpmorgan-chase--co-pac",
+      "committee_id": "ward-1-la-spata",
+      "amount": 250,
+      "date": "2026-03-25",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-0012"
+    },
+    {
+      "id": "c-laspata-0013",
+      "donor_id": "_small-dollar-2027",
+      "committee_id": "ward-1-la-spata",
+      "amount": 2475,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-0013",
+      "is_aggregate": true,
+      "donor_count": 47,
+      "contribution_count": 58
+    },
+    {
+      "id": "c-laspata-0014",
       "donor_id": "united-working-families",
       "committee_id": "ward-1-la-spata",
       "amount": 15000,
       "date": "2023-02-12",
       "cycle": "2023",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0008"
+      "source_filing": "DEMO-0014"
     },
     {
-      "id": "c-laspata-0009",
+      "id": "c-laspata-0015",
       "donor_id": "chicago-teachers-union-pac",
       "committee_id": "ward-1-la-spata",
       "amount": 12500,
       "date": "2023-02-08",
       "cycle": "2023",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0009"
+      "source_filing": "DEMO-0015"
     },
     {
-      "id": "c-laspata-0010",
+      "id": "c-laspata-0016",
       "donor_id": "seiu-healthcare-illinois-indiana",
       "committee_id": "ward-1-la-spata",
       "amount": 10000,
       "date": "2023-01-30",
       "cycle": "2023",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0010"
+      "source_filing": "DEMO-0016"
     },
     {
-      "id": "c-laspata-0011",
+      "id": "c-laspata-0017",
       "donor_id": "afscme-council-31-pac",
       "committee_id": "ward-1-la-spata",
       "amount": 7500,
       "date": "2023-02-14",
       "cycle": "2023",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0011"
+      "source_filing": "DEMO-0017"
     },
     {
-      "id": "c-laspata-0012",
+      "id": "c-laspata-0018",
       "donor_id": "35th-ward-ipo-united-neighbors",
       "committee_id": "ward-1-la-spata",
       "amount": 5000,
       "date": "2023-02-20",
       "cycle": "2023",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0012"
+      "source_filing": "DEMO-0018"
     },
     {
-      "id": "c-laspata-0013",
-      "donor_id": "sarah-j",
-      "committee_id": "ward-1-la-spata",
-      "amount": 2500,
-      "date": "2023-02-05",
-      "cycle": "2023",
-      "contribution_type": "Individual",
-      "source_filing": "DEMO-0013"
-    },
-    {
-      "id": "c-laspata-0014",
-      "donor_id": "marcus-t",
-      "committee_id": "ward-1-la-spata",
-      "amount": 1500,
-      "date": "2023-01-28",
-      "cycle": "2023",
-      "contribution_type": "Individual",
-      "source_filing": "DEMO-0014"
-    },
-    {
-      "id": "c-laspata-0015",
-      "donor_id": "patricia-w",
-      "committee_id": "ward-1-la-spata",
-      "amount": 1500,
-      "date": "2023-02-10",
-      "cycle": "2023",
-      "contribution_type": "Individual",
-      "source_filing": "DEMO-0015"
-    },
-    {
-      "id": "c-laspata-0016",
-      "donor_id": "david-k",
-      "committee_id": "ward-1-la-spata",
-      "amount": 1000,
-      "date": "2023-02-18",
-      "cycle": "2023",
-      "contribution_type": "Individual",
-      "source_filing": "DEMO-0016"
-    },
-    {
-      "id": "c-laspata-0017",
+      "id": "c-laspata-0019",
       "donor_id": "_small-dollar-2023",
       "committee_id": "ward-1-la-spata",
-      "amount": 18450,
+      "amount": 24950,
       "date": "2023-05-14",
       "cycle": "2023",
       "contribution_type": "Aggregate",
-      "source_filing": "DEMO-0017",
+      "source_filing": "DEMO-0019",
       "is_aggregate": true,
-      "donor_count": 187
+      "donor_count": 287,
+      "contribution_count": 312
     },
     {
-      "id": "c-laspata-0018",
+      "id": "c-laspata-0020",
       "donor_id": "united-working-families",
       "committee_id": "ward-1-la-spata",
       "amount": 10000,
       "date": "2019-02-15",
       "cycle": "2019",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0018"
+      "source_filing": "DEMO-0020"
     },
     {
-      "id": "c-laspata-0019",
+      "id": "c-laspata-0021",
       "donor_id": "chicago-teachers-union-pac",
       "committee_id": "ward-1-la-spata",
       "amount": 8000,
       "date": "2019-01-22",
       "cycle": "2019",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0019"
+      "source_filing": "DEMO-0021"
     },
     {
-      "id": "c-laspata-0020",
+      "id": "c-laspata-0022",
       "donor_id": "35th-ward-ipo-united-neighbors",
       "committee_id": "ward-1-la-spata",
       "amount": 5000,
       "date": "2019-02-10",
       "cycle": "2019",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-0020"
+      "source_filing": "DEMO-0022"
     },
     {
-      "id": "c-laspata-0021",
+      "id": "c-laspata-0023",
       "donor_id": "_small-dollar-2019",
       "committee_id": "ward-1-la-spata",
       "amount": 24100,
       "date": "2019-05-19",
       "cycle": "2019",
       "contribution_type": "Aggregate",
-      "source_filing": "DEMO-0021",
+      "source_filing": "DEMO-0023",
       "is_aggregate": true,
-      "donor_count": 312
+      "donor_count": 312,
+      "contribution_count": 344
     }
   ]
 }
