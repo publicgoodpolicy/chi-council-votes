@@ -1,11 +1,34 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "generated_at": "2026-05-29T00:00:00Z",
   "source": "DEMO DATA — production replaces this with output of scripts/ingest.py",
-  "cycles_included": [
-    "2023",
-    "2025"
-  ],
+  "cycles": {
+    "2015": {
+      "label": "2011 – 2015 cycle",
+      "start": "2011-05-17",
+      "end": "2015-05-17",
+      "election_date": "2015-02-24"
+    },
+    "2019": {
+      "label": "2015 – 2019 cycle",
+      "start": "2015-05-18",
+      "end": "2019-05-19",
+      "election_date": "2019-02-26"
+    },
+    "2023": {
+      "label": "2019 – 2023 cycle",
+      "start": "2019-05-20",
+      "end": "2023-05-14",
+      "election_date": "2023-02-28"
+    },
+    "2027": {
+      "label": "Current cycle (2023 – 2027)",
+      "start": "2023-05-15",
+      "end": "2027-05-17",
+      "election_date": "2027-02-23"
+    }
+  },
+  "current_cycle": "2027",
   "industry_tags": {
     "labor-teachers": {
       "label": "Labor — Teachers",
@@ -23,13 +46,13 @@
       "label": "Labor — Public Sector",
       "color": "#508F88"
     },
-    "individual-resident": {
-      "label": "Individual — Ward Resident",
+    "individual": {
+      "label": "Individual Donor",
       "color": "#9a8e7e"
     },
-    "individual-other": {
-      "label": "Individual — Other",
-      "color": "#a89c8a"
+    "small-dollar": {
+      "label": "Small-Dollar Donors",
+      "color": "#b5a995"
     },
     "real-estate": {
       "label": "Real Estate / Developers",
@@ -111,6 +134,14 @@
     }
   },
   "donors": {
+    "ibew-local-134-pac": {
+      "id": "ibew-local-134-pac",
+      "name": "IBEW Local 134 PAC",
+      "type": "PAC",
+      "industry": "labor-trades",
+      "flags": [],
+      "notes": null
+    },
     "united-working-families": {
       "id": "united-working-families",
       "name": "United Working Families",
@@ -124,6 +155,44 @@
       "name": "Chicago Teachers Union PAC",
       "type": "PAC",
       "industry": "labor-teachers",
+      "flags": [],
+      "notes": null
+    },
+    "maria-l": {
+      "id": "maria-l",
+      "name": "Maria L.",
+      "type": "Individual",
+      "industry": "individual",
+      "flags": [],
+      "notes": null,
+      "city": "Chicago, IL",
+      "occupation": "nurse"
+    },
+    "robert-m": {
+      "id": "robert-m",
+      "name": "Robert M.",
+      "type": "Individual",
+      "industry": "individual",
+      "flags": [],
+      "notes": null,
+      "city": "Chicago, IL",
+      "occupation": "consultant"
+    },
+    "jennifer-s": {
+      "id": "jennifer-s",
+      "name": "Jennifer S.",
+      "type": "Individual",
+      "industry": "individual",
+      "flags": [],
+      "notes": null,
+      "city": "Chicago, IL",
+      "occupation": "architect"
+    },
+    "_small-dollar-2027": {
+      "id": "_small-dollar-2027",
+      "name": "Small-dollar donors (under $1,000 each)",
+      "type": "Aggregate",
+      "industry": "small-dollar",
       "flags": [],
       "notes": null
     },
@@ -151,67 +220,59 @@
       "flags": [],
       "notes": null
     },
-    "ibew-local-134-pac": {
-      "id": "ibew-local-134-pac",
-      "name": "IBEW Local 134 PAC",
-      "type": "PAC",
-      "industry": "labor-trades",
-      "flags": [],
-      "notes": null
-    },
-    "individual-contributor-logan-square": {
-      "id": "individual-contributor-logan-square",
-      "name": "Individual contributor (Logan Square)",
+    "sarah-j": {
+      "id": "sarah-j",
+      "name": "Sarah J.",
       "type": "Individual",
-      "industry": "individual-resident",
+      "industry": "individual",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "city": "Chicago, IL",
+      "occupation": "attorney"
     },
-    "individual-contributor-west-town": {
-      "id": "individual-contributor-west-town",
-      "name": "Individual contributor (West Town)",
+    "marcus-t": {
+      "id": "marcus-t",
+      "name": "Marcus T.",
       "type": "Individual",
-      "industry": "individual-resident",
+      "industry": "individual",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "city": "Chicago, IL",
+      "occupation": "teacher"
     },
-    "individual-contributor-wicker-park": {
-      "id": "individual-contributor-wicker-park",
-      "name": "Individual contributor (Wicker Park)",
+    "patricia-w": {
+      "id": "patricia-w",
+      "name": "Patricia W.",
       "type": "Individual",
-      "industry": "individual-resident",
+      "industry": "individual",
       "flags": [],
-      "notes": null
+      "notes": null,
+      "city": "Chicago, IL",
+      "occupation": "architect"
     },
-    "individual-contributor-bucktown": {
-      "id": "individual-contributor-bucktown",
-      "name": "Individual contributor (Bucktown)",
+    "david-k": {
+      "id": "david-k",
+      "name": "David K.",
       "type": "Individual",
-      "industry": "individual-resident",
+      "industry": "individual",
+      "flags": [],
+      "notes": null,
+      "city": "Chicago, IL",
+      "occupation": "engineer"
+    },
+    "_small-dollar-2023": {
+      "id": "_small-dollar-2023",
+      "name": "Small-dollar donors (under $1,000 each)",
+      "type": "Aggregate",
+      "industry": "small-dollar",
       "flags": [],
       "notes": null
     },
-    "individual-contributor-humboldt-park": {
-      "id": "individual-contributor-humboldt-park",
-      "name": "Individual contributor (Humboldt Park)",
-      "type": "Individual",
-      "industry": "individual-resident",
-      "flags": [],
-      "notes": null
-    },
-    "individual-contributor-lincoln-park": {
-      "id": "individual-contributor-lincoln-park",
-      "name": "Individual contributor (Lincoln Park)",
-      "type": "Individual",
-      "industry": "individual-other",
-      "flags": [],
-      "notes": null
-    },
-    "friends-of-bernie-2020": {
-      "id": "friends-of-bernie-2020",
-      "name": "Friends of Bernie 2020",
-      "type": "PAC",
-      "industry": "progressive-pol",
+    "_small-dollar-2019": {
+      "id": "_small-dollar-2019",
+      "name": "Small-dollar donors (under $1,000 each)",
+      "type": "Aggregate",
+      "industry": "small-dollar",
       "flags": [],
       "notes": null
     }
@@ -227,7 +288,9 @@
       "founded": "2018-06-07",
       "data_quality": "DEMO",
       "last_updated": "2026-05-29",
-      "notes": "Demo data. Donor names reflect La Spata's publicly known fundraising profile (CTU/UWF-aligned unions and individual neighborhood donors). Amounts and dates are illustrative placeholders until ingestion pipeline runs against the SBE source."
+      "cash_on_hand": 111344.82,
+      "cash_on_hand_as_of": "2026-03-31",
+      "notes": "Demo data. PAC names reflect La Spata's publicly known donor profile (CTU/UWF-aligned labor). Individual donor names are illustrative placeholders (first name + last initial). Amounts and dates are not verified. Cash-on-hand figure matches the public Illinois Sunshine record for the Mar 31, 2026 quarterly report."
     },
     "ward-2": {
       "id": "ward-2",
@@ -239,6 +302,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-3": {
@@ -251,6 +316,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-4": {
@@ -263,6 +330,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-5": {
@@ -275,6 +344,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-6": {
@@ -287,18 +358,22 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-7": {
       "id": "ward-7",
       "ward": 7,
-      "alder_name": "Raymond A Lopez",
+      "alder_name": "Gregory I Mitchell",
       "committee_name": null,
       "sbe_committee_id": null,
       "il_sunshine_url": null,
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-8": {
@@ -311,6 +386,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-9": {
@@ -323,6 +400,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-10": {
@@ -335,6 +414,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-11": {
@@ -347,6 +428,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-12": {
@@ -359,6 +442,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-13": {
@@ -371,6 +456,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-14": {
@@ -383,18 +470,22 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-15": {
       "id": "ward-15",
       "ward": 15,
-      "alder_name": "Raymond Lopez",
+      "alder_name": "Raymond A Lopez",
       "committee_name": null,
       "sbe_committee_id": null,
       "il_sunshine_url": null,
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-16": {
@@ -407,6 +498,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-17": {
@@ -419,6 +512,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-18": {
@@ -431,6 +526,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-19": {
@@ -443,6 +540,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-20": {
@@ -455,6 +554,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-21": {
@@ -467,6 +568,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-22": {
@@ -479,6 +582,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-23": {
@@ -491,6 +596,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-24": {
@@ -503,6 +610,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-25": {
@@ -515,6 +624,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-26": {
@@ -527,6 +638,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-27": {
@@ -539,6 +652,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-28": {
@@ -551,6 +666,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-29": {
@@ -563,6 +680,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-30": {
@@ -575,6 +694,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-31": {
@@ -587,6 +708,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-32": {
@@ -599,6 +722,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-33": {
@@ -611,6 +736,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-34": {
@@ -623,6 +750,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-35": {
@@ -635,6 +764,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-36": {
@@ -647,6 +778,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-37": {
@@ -659,6 +792,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-38": {
@@ -671,6 +806,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-39": {
@@ -683,6 +820,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-40": {
@@ -695,6 +834,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-41": {
@@ -707,6 +848,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-42": {
@@ -719,6 +862,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-43": {
@@ -731,6 +876,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-44": {
@@ -743,6 +890,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-45": {
@@ -755,6 +904,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-46": {
@@ -767,6 +918,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-47": {
@@ -779,6 +932,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-48": {
@@ -791,6 +946,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-49": {
@@ -803,6 +960,8 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     },
     "ward-50": {
@@ -815,149 +974,227 @@
       "founded": null,
       "data_quality": "EMPTY",
       "last_updated": null,
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE."
     }
   },
   "contributions": [
     {
       "id": "c-laspata-0001",
+      "donor_id": "ibew-local-134-pac",
+      "committee_id": "ward-1-la-spata",
+      "amount": 3500,
+      "date": "2024-09-15",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-0001"
+    },
+    {
+      "id": "c-laspata-0002",
+      "donor_id": "united-working-families",
+      "committee_id": "ward-1-la-spata",
+      "amount": 5000,
+      "date": "2025-11-08",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-0002"
+    },
+    {
+      "id": "c-laspata-0003",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-1-la-spata",
+      "amount": 2500,
+      "date": "2025-03-21",
+      "cycle": "2027",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-0003"
+    },
+    {
+      "id": "c-laspata-0004",
+      "donor_id": "maria-l",
+      "committee_id": "ward-1-la-spata",
+      "amount": 1500,
+      "date": "2024-06-10",
+      "cycle": "2027",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-0004"
+    },
+    {
+      "id": "c-laspata-0005",
+      "donor_id": "robert-m",
+      "committee_id": "ward-1-la-spata",
+      "amount": 1000,
+      "date": "2025-04-22",
+      "cycle": "2027",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-0005"
+    },
+    {
+      "id": "c-laspata-0006",
+      "donor_id": "jennifer-s",
+      "committee_id": "ward-1-la-spata",
+      "amount": 1000,
+      "date": "2025-09-18",
+      "cycle": "2027",
+      "contribution_type": "Individual",
+      "source_filing": "DEMO-0006"
+    },
+    {
+      "id": "c-laspata-0007",
+      "donor_id": "_small-dollar-2027",
+      "committee_id": "ward-1-la-spata",
+      "amount": 9275,
+      "date": "2026-03-31",
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-0007",
+      "is_aggregate": true,
+      "donor_count": 94
+    },
+    {
+      "id": "c-laspata-0008",
       "donor_id": "united-working-families",
       "committee_id": "ward-1-la-spata",
       "amount": 15000,
       "date": "2023-02-12",
       "cycle": "2023",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-A1-001"
+      "source_filing": "DEMO-0008"
     },
     {
-      "id": "c-laspata-0002",
+      "id": "c-laspata-0009",
       "donor_id": "chicago-teachers-union-pac",
       "committee_id": "ward-1-la-spata",
       "amount": 12500,
       "date": "2023-02-08",
       "cycle": "2023",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-A1-002"
+      "source_filing": "DEMO-0009"
     },
     {
-      "id": "c-laspata-0003",
+      "id": "c-laspata-0010",
       "donor_id": "seiu-healthcare-illinois-indiana",
       "committee_id": "ward-1-la-spata",
       "amount": 10000,
       "date": "2023-01-30",
       "cycle": "2023",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-A1-003"
+      "source_filing": "DEMO-0010"
     },
     {
-      "id": "c-laspata-0004",
+      "id": "c-laspata-0011",
       "donor_id": "afscme-council-31-pac",
       "committee_id": "ward-1-la-spata",
       "amount": 7500,
       "date": "2023-02-14",
       "cycle": "2023",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-A1-004"
+      "source_filing": "DEMO-0011"
     },
     {
-      "id": "c-laspata-0005",
+      "id": "c-laspata-0012",
       "donor_id": "35th-ward-ipo-united-neighbors",
       "committee_id": "ward-1-la-spata",
       "amount": 5000,
       "date": "2023-02-20",
       "cycle": "2023",
       "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-A1-005"
+      "source_filing": "DEMO-0012"
     },
     {
-      "id": "c-laspata-0006",
-      "donor_id": "ibew-local-134-pac",
-      "committee_id": "ward-1-la-spata",
-      "amount": 3500,
-      "date": "2024-09-15",
-      "cycle": "2025",
-      "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-D2-006"
-    },
-    {
-      "id": "c-laspata-0007",
-      "donor_id": "individual-contributor-logan-square",
+      "id": "c-laspata-0013",
+      "donor_id": "sarah-j",
       "committee_id": "ward-1-la-spata",
       "amount": 2500,
       "date": "2023-02-05",
       "cycle": "2023",
       "contribution_type": "Individual",
-      "source_filing": "DEMO-D2-007"
+      "source_filing": "DEMO-0013"
     },
     {
-      "id": "c-laspata-0008",
-      "donor_id": "individual-contributor-west-town",
+      "id": "c-laspata-0014",
+      "donor_id": "marcus-t",
       "committee_id": "ward-1-la-spata",
       "amount": 1500,
       "date": "2023-01-28",
       "cycle": "2023",
       "contribution_type": "Individual",
-      "source_filing": "DEMO-D2-008"
+      "source_filing": "DEMO-0014"
     },
     {
-      "id": "c-laspata-0009",
-      "donor_id": "individual-contributor-wicker-park",
+      "id": "c-laspata-0015",
+      "donor_id": "patricia-w",
       "committee_id": "ward-1-la-spata",
       "amount": 1500,
-      "date": "2024-06-10",
-      "cycle": "2025",
+      "date": "2023-02-10",
+      "cycle": "2023",
       "contribution_type": "Individual",
-      "source_filing": "DEMO-D2-009"
+      "source_filing": "DEMO-0015"
     },
     {
-      "id": "c-laspata-0010",
-      "donor_id": "individual-contributor-bucktown",
+      "id": "c-laspata-0016",
+      "donor_id": "david-k",
       "committee_id": "ward-1-la-spata",
       "amount": 1000,
       "date": "2023-02-18",
       "cycle": "2023",
       "contribution_type": "Individual",
-      "source_filing": "DEMO-D2-010"
+      "source_filing": "DEMO-0016"
     },
     {
-      "id": "c-laspata-0011",
-      "donor_id": "individual-contributor-humboldt-park",
+      "id": "c-laspata-0017",
+      "donor_id": "_small-dollar-2023",
       "committee_id": "ward-1-la-spata",
-      "amount": 1000,
-      "date": "2025-04-22",
-      "cycle": "2025",
-      "contribution_type": "Individual",
-      "source_filing": "DEMO-D2-011"
-    },
-    {
-      "id": "c-laspata-0012",
-      "donor_id": "individual-contributor-lincoln-park",
-      "committee_id": "ward-1-la-spata",
-      "amount": 750,
-      "date": "2024-11-05",
-      "cycle": "2025",
-      "contribution_type": "Individual",
-      "source_filing": "DEMO-D2-012"
-    },
-    {
-      "id": "c-laspata-0013",
-      "donor_id": "friends-of-bernie-2020",
-      "committee_id": "ward-1-la-spata",
-      "amount": 500,
-      "date": "2023-03-02",
+      "amount": 18450,
+      "date": "2023-05-14",
       "cycle": "2023",
-      "contribution_type": "PAC/Transfer",
-      "source_filing": "DEMO-D2-013"
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-0017",
+      "is_aggregate": true,
+      "donor_count": 187
     },
     {
-      "id": "c-laspata-0014",
-      "donor_id": "individual-contributor-logan-square",
+      "id": "c-laspata-0018",
+      "donor_id": "united-working-families",
       "committee_id": "ward-1-la-spata",
-      "amount": 500,
-      "date": "2025-09-18",
-      "cycle": "2025",
-      "contribution_type": "Individual",
-      "source_filing": "DEMO-D2-014"
+      "amount": 10000,
+      "date": "2019-02-15",
+      "cycle": "2019",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-0018"
+    },
+    {
+      "id": "c-laspata-0019",
+      "donor_id": "chicago-teachers-union-pac",
+      "committee_id": "ward-1-la-spata",
+      "amount": 8000,
+      "date": "2019-01-22",
+      "cycle": "2019",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-0019"
+    },
+    {
+      "id": "c-laspata-0020",
+      "donor_id": "35th-ward-ipo-united-neighbors",
+      "committee_id": "ward-1-la-spata",
+      "amount": 5000,
+      "date": "2019-02-10",
+      "cycle": "2019",
+      "contribution_type": "PAC/Transfer",
+      "source_filing": "DEMO-0020"
+    },
+    {
+      "id": "c-laspata-0021",
+      "donor_id": "_small-dollar-2019",
+      "committee_id": "ward-1-la-spata",
+      "amount": 24100,
+      "date": "2019-05-19",
+      "cycle": "2019",
+      "contribution_type": "Aggregate",
+      "source_filing": "DEMO-0021",
+      "is_aggregate": true,
+      "donor_count": 312
     }
   ]
 }
