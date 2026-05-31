@@ -584,8 +584,11 @@ def main():
     if args.file:
         files = list(args.file)
     elif args.raw_dir.exists():
-        files = sorted(args.raw_dir.glob('Receipts*.csv')) \
-                + sorted(args.raw_dir.glob('Receipts*.txt'))
+    	# Match any .csv, .txt, or .tsv file. Filename doesn't matter —
+   	 # the script reads CommitteeID from inside each file.
+    	files = sorted(args.raw_dir.glob('*.csv')) \
+            	+ sorted(args.raw_dir.glob('*.txt')) \
+            	+ sorted(args.raw_dir.glob('*.tsv'))
     else:
         raise SystemExit(f"No --file specified and {args.raw_dir} doesn't exist.")
 
