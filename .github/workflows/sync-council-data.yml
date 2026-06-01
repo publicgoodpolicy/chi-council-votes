@@ -1,61 +1,65 @@
-name: Sync council data from Google Sheet
+# Nightly sync of Chicago City Council roll-call data into council-data.json.
+#
+# Runs ingest_votes.py against DataMade's Councilmatic Datasette and commits the
+# refreshed council-data.json if (and only if) it changed.
+#
+# IMPORTANT — bot detection on the data host:
+#   puddle.datamade.us uses bot detection that tends to block DATACENTER IPs,
+#   which is exactly what GitHub-hosted runners use. If this job starts failing
+#   at the "SELECT 1" connectivity check, that's the cause. Two fixes, in order
+#   of preference:
+#     1. Run ingest_votes.py on a self-hosted runner (a small always-on box on a
+#        residential/business IP). Change `runs-on:` below to your runner label.
+#     2. Point the sync at Legistar's API directly instead of the Datasette
+#        (same upstream data); this needs a ingest_votes.py source switch we can
+#        add later. Until then, the sync can also just be run by hand monthly
+#        after council meetings — the data only changes when the Council votes.
+#
+# The campaign-finance ingest (ingest.py / SBE) is intentionally NOT in this
+# workflow — it has a different (quarterly) cadence. Add it as a separate job
+# or workflow if you want them automated together.
 
-# Runs nightly at 02:00 UTC (9 PM Central) and on manual trigger.
-# Reads two sets of tabs from the Google Sheet and updates council-data.json:
-#   - sync_votes.py:     Alder Bios, Votes, Vote Metadata
-#   - sync_overrides.py: Donor Overrides, Industry Tags, Flag Types
-# Any changes are committed back to the repo. The Squarespace embed reads
-# council-data.json from the raw GitHub URL, so changes go live within
-# minutes of the commit.
+name: Sync council votes
 
 on:
   schedule:
-    - cron: '0 2 * * *'   # nightly at 02:00 UTC
-  workflow_dispatch:       # also allow manual runs from the Actions tab
+    - cron: "30 9 * * *"     # 09:30 UTC daily (~early morning Chicago)
+  workflow_dispatch: {}        # allow manual runs from the Actions tab
 
 permissions:
-  contents: write          # needed to commit the updated JSON back
+  contents: write              # needed to commit the refreshed data file
+
+concurrency:
+  group: sync-council-votes
+  cancel-in-progress: false
 
 jobs:
   sync:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest     # see bot-detection note above; swap for a self-hosted label if blocked
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.12"
 
-      - name: Install dependencies
-        run: pip install gspread google-auth
-
-      - name: Sync votes & alder bios
-        env:
-          GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
-          SHEET_ID: ${{ secrets.SHEET_ID }}
+      - name: Run vote sync
+        working-directory: campaign-finance
         run: |
-          python campaign-finance/sheets-sync/sync_votes.py \
-            --data-file campaign-finance/council-data.json
+          python3 ingest_votes.py \
+            --data ./council-data.json \
+            --map ./featured_vote_map.json
 
-      - name: Sync donor overrides
-        env:
-          GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
-          SHEET_ID: ${{ secrets.SHEET_ID }}
+      - name: Commit if changed
         run: |
-          python campaign-finance/sheets-sync/sync_overrides.py \
-            --data-file campaign-finance/council-data.json
-
-      - name: Commit and push if changed
-        run: |
-          git config user.name "ipg-sheets-sync[bot]"
-          git config user.email "actions@github.com"
-          git add campaign-finance/council-data.json
-          if git diff --staged --quiet; then
-            echo "No changes to commit."
-          else
-            git commit -m "chore: sync council data from Google Sheet"
-            git pull --rebase origin main
+          if [ -n "$(git status --porcelain campaign-finance/council-data.json)" ]; then
+            git config user.name  "ipg-vote-sync[bot]"
+            git config user.email "actions@users.noreply.github.com"
+            git add campaign-finance/council-data.json
+            git commit -m "Nightly council vote sync ($(date -u +%Y-%m-%d))"
             git push
+          else
+            echo "No changes in council-data.json — nothing to commit."
           fi
