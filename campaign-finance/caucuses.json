@@ -1,0 +1,55 @@
+{
+  "_note": "Caucuses are NOT tracked in the Councilmatic/OCD feed (confirmed by probe_memberships.py — no caucus organizations or classification exist). They are informal blocs, so membership is sourced and maintained HERE by IPG editorial, from public rosters (each caucus's own announcements, press, Wikipedia). sync_votes.py does not touch this file; if present, the embed can read council-data.json's 'caucuses' key. Fill 'members' with ward numbers. Leave a caucus's members empty until verified — do not publish unverified membership.",
+  "_source_guidance": "Verify against the caucus's own public statements or recent reporting before adding a ward. Record where you confirmed it in 'source'.",
+  "updated": "",
+  "caucuses": [
+    {
+      "id": "progressive-reform",
+      "name": "Progressive Reform Caucus",
+      "abbrev": "PRC",
+      "chair": "",
+      "members": [],
+      "source": ""
+    },
+    {
+      "id": "democratic-socialist",
+      "name": "Democratic Socialist Caucus",
+      "abbrev": "DSC",
+      "chair": "",
+      "members": [],
+      "source": ""
+    },
+    {
+      "id": "black-caucus",
+      "name": "Chicago Aldermanic Black Caucus",
+      "abbrev": "CABC",
+      "chair": "",
+      "members": [],
+      "source": ""
+    },
+    {
+      "id": "latino-caucus",
+      "name": "Latino Caucus",
+      "abbrev": "LC",
+      "chair": "",
+      "members": [],
+      "source": ""
+    },
+    {
+      "id": "lgbt-caucus",
+      "name": "LGBT Caucus",
+      "abbrev": "LGBTC",
+      "chair": "",
+      "members": [],
+      "source": ""
+    },
+    {
+      "id": "common-sense",
+      "name": "Common Sense Caucus",
+      "abbrev": "CSC",
+      "chair": "",
+      "members": [],
+      "source": ""
+    }
+  ]
+}
