@@ -17,6 +17,15 @@
     "confirmed": "sheet",
     "matched_on": "all-votes-tab"
   },
+  "Green Social Housing": {
+    "vote_id": "ocd-vote/a3635b70-a536-4a54-aa9e-42bf8ee72e0b",
+    "bill": "SO2025-0015560",
+    "title": "Amendment of Municipal Code Chapter 2-44 by adding new Section 2-44-170 establishing not-for-profit residential investment corporation with the City's participation in the financing structure, acquisition, ownership, and on-going operations of affordable, mixed-income, environmentally sustainable housing",
+    "date": "2025-05-07",
+    "divided": true,
+    "confirmed": "sheet",
+    "matched_on": "all-votes-tab"
+  },
   "Cancel Shotspotter": {
     "vote_id": "ocd-vote/99c06ba4-911b-40ca-b10a-bfae125e152c",
     "bill": "O2024-0011032",
