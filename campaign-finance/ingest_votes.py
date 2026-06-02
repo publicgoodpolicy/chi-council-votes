@@ -159,12 +159,12 @@ def resolve_ward(cw, pid, vote_date):
     return pool[-1]["ward"]
 
 
-def divided_votes(base, org, sess):
+def divided_votes(base, org, sess_start, sess_end):
     rows, err = sql(base,
         f"SELECT ve.id AS id, ve.start_date AS date, ve.motion_text AS motion, "
         f"ve.result AS result, b.identifier AS bill, b.title AS title, b.classification AS clazz "
         f"FROM voteevent ve LEFT JOIN bill b ON ve.bill_id=b.id "
-        f"WHERE ve.organization_id='{esc(org)}' AND ve.legislative_session_id='{esc(sess)}' "
+        f"WHERE ve.organization_id='{esc(org)}' AND ve.start_date >= '{sess_start}' AND ve.start_date <= '{sess_end}' "
         f"AND ve.id IN (SELECT vote_event_id FROM personvote WHERE option IN ('no','abstain')) "
         f"ORDER BY ve.start_date DESC", "divided votes")
     if err:
@@ -302,7 +302,7 @@ def run(data_path, map_path, base, org, term, dry_run):
     print(f"    {len(cw)} people with ward seats.")
 
     print("  Pulling divided votes for the term...")
-    votes = divided_votes(base, org, sess)
+    votes = divided_votes(base, org, term_start, term_end)
     print(f"    {len(votes)} divided votes.")
 
     # personvotes for divided votes + any featured vote not already in that set

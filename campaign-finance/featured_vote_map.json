@@ -1,90 +1,56 @@
 {
-  "BCH": {
-    "vote_id": "ocd-vote/d38690dd-12a6-405e-9823-0cba6cad69ed",
-    "bill": "R2023-0004166",
-    "title": "Submission of public question by referendum to Chicago voters for increase in Chicago real estate transfer tax rates",
-    "date": "2023-11-07",
-    "result": "pass",
-    "tally": {
-      "no": 17,
-      "not voting": 1,
-      "yes": 32
-    },
+  "1FW Repeal": {
+    "vote_id": "ocd-vote/0b340de0-d77f-4f7d-b7bf-bf1fa821b3bc",
+    "bill": "SO2025-0017549",
+    "title": "Amendment of Municipal Code Section 6-105-030 entitling employers of occupations where gratuities are customary to an allowance for gratuities as part of hourly wage rate not to exceed 24 percent of minimum wage rate",
+    "date": "2026-03-18",
     "divided": true,
-    "confirmed": "editor"
-  },
-  "Cancel Shotspotter": {
-    "vote_id": "ocd-vote/99c06ba4-911b-40ca-b10a-bfae125e152c",
-    "bill": "O2024-0011032",
-    "title": "Superintendent of Police directed to enter into and execute new contract or contract extension or renewal for acoustic gunshot detection technology services",
-    "date": "2024-09-18",
-    "result": "pass",
-    "tally": {
-      "absent": 2,
-      "no": 14,
-      "not voting": 1,
-      "yes": 33
-    },
-    "divided": true,
-    "confirmed": "editor"
-  },
-  "Paid PTO": {
-    "vote_id": "ocd-vote/ba63a6bf-3ef0-4894-89d7-188cdcbf499f",
-    "bill": "SO2023-0002980",
-    "title": "Amendment of Municipal Code Titles 2, 4 and 6 by modifying various sections and adding new Chapter 6-130 entitled \"Chicago Paid Leave and Paid Sick and Safe Leave Ordinance\" (Final)",
-    "date": "2023-11-09",
-    "result": "pass",
-    "tally": {
-      "absent": 1,
-      "no": 12,
-      "not voting": 1,
-      "yes": 36
-    },
-    "divided": true,
-    "confirmed": "editor"
+    "confirmed": "sheet",
+    "matched_on": "all-votes-tab"
   },
   "Snap Curfew": {
     "vote_id": "ocd-vote/88e398ff-9991-4a63-9707-317f0910e769",
     "bill": "SO2025-0016732",
     "title": "Amendment of Municipal Code Sections 8-16-021 and 8-16-022 regarding Declaration of Curfew for Mass Gatherings and Custody Procedure (Vetoed)",
     "date": "2025-06-18",
-    "result": "pass",
-    "tally": {
-      "no": 22,
-      "not voting": 1,
-      "yes": 27
-    },
     "divided": true,
-    "confirmed": "editor"
+    "confirmed": "sheet",
+    "matched_on": "all-votes-tab"
+  },
+  "Cancel Shotspotter": {
+    "vote_id": "ocd-vote/99c06ba4-911b-40ca-b10a-bfae125e152c",
+    "bill": "O2024-0011032",
+    "title": "Superintendent of Police directed to enter into and execute new contract or contract extension or renewal for acoustic gunshot detection technology services",
+    "date": "2024-09-18",
+    "divided": true,
+    "confirmed": "sheet",
+    "matched_on": "all-votes-tab"
   },
   "Ceasefire": {
     "vote_id": "ocd-vote/f60ebe28-a2d3-453c-bcf4-242cf60d8adb",
     "bill": "SR2023-0006422",
     "title": "Expression of support for United Nations Resolution 377 known as \"Uniting for Peace\"",
     "date": "2024-01-31",
-    "result": "pass",
-    "tally": {
-      "no": 23,
-      "not voting": 4,
-      "yes": 23
-    },
     "divided": true,
-    "confirmed": "editor",
-    "matched_on": "date"
+    "confirmed": "sheet",
+    "matched_on": "all-votes-tab"
   },
-  "1FW Repeal": {
-    "vote_id": "ocd-vote/0b340de0-d77f-4f7d-b7bf-bf1fa821b3bc",
-    "bill": "SO2025-0017549",
-    "title": "Amendment of Municipal Code Section 6-105-030 entitling employers of occupations where gratuities are customary to an allowance for gratuities as part of hourly wage rate not to exceed 24 percent of minimum wage rate",
-    "date": "2026-03-18",
-    "result": "pass",
-    "tally": {
-      "no": 18,
-      "not voting": 2,
-      "yes": 30
-    },
+  "Paid PTO": {
+    "vote_id": "ocd-vote/ba63a6bf-3ef0-4894-89d7-188cdcbf499f",
+    "bill": "SO2023-0002980",
+    "title": "Amendment of Municipal Code Titles 2, 4 and 6 by modifying various sections and adding new Chapter 6-130 entitled \"Chicago Paid Leave and Paid Sick and Safe Leave Ordinance\" (Final)",
+    "date": "2023-11-09",
     "divided": true,
-    "confirmed": "editor",
-    "matched_on": "date"
+    "confirmed": "sheet",
+    "matched_on": "all-votes-tab"
+  },
+  "BCH": {
+    "vote_id": "ocd-vote/d38690dd-12a6-405e-9823-0cba6cad69ed",
+    "bill": "R2023-0004166",
+    "title": "Submission of public question by referendum to Chicago voters for increase in Chicago real estate transfer tax rates",
+    "date": "2023-11-07",
+    "divided": true,
+    "confirmed": "sheet",
+    "matched_on": "all-votes-tab"
   }
 }
