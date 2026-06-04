@@ -8,6 +8,15 @@
     "confirmed": "sheet",
     "matched_on": "all-votes-tab"
   },
+  "2026 City Budget": {
+    "vote_id": "ocd-vote/ac598751-14f7-43fd-93af-e5a9f1ec8c0c",
+    "bill": "SO2025-0020516",
+    "title": "Annual Appropriation Ordinance Year 2026, as amended",
+    "date": "2025-12-20",
+    "divided": true,
+    "confirmed": "sheet",
+    "matched_on": "all-votes-tab"
+  },
   "Snap Curfew": {
     "vote_id": "ocd-vote/88e398ff-9991-4a63-9707-317f0910e769",
     "bill": "SO2025-0016732",
@@ -35,7 +44,16 @@
     "confirmed": "sheet",
     "matched_on": "all-votes-tab"
   },
-  "Ceasefire": {
+  "$1.5Bn Housing & Economic Development Bond": {
+    "vote_id": "ocd-vote/f9f4ac0f-6a0f-4c17-a8d7-a4c692cce9da",
+    "bill": "SO2024-0007838",
+    "title": "Issuance of general obligation and/or sales tax securitization corporation bonds for economic development and affordable housing programs",
+    "date": "2024-04-19",
+    "divided": true,
+    "confirmed": "sheet",
+    "matched_on": "all-votes-tab"
+  },
+  "Ceasefire Resolution": {
     "vote_id": "ocd-vote/f60ebe28-a2d3-453c-bcf4-242cf60d8adb",
     "bill": "SR2023-0006422",
     "title": "Expression of support for United Nations Resolution 377 known as \"Uniting for Peace\"",
