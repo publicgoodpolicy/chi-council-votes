@@ -11,20 +11,31 @@ TABS THIS SCRIPT READS
                         flags | notes | last_edited_by
   2. "Industry Tags"    key | label | color
   3. "Flag Types"       key | label | severity
-  4. "Donor Merges"     alias_id | canonical_id        (NEW — same-entity dedupe)
-  5. "Donor Clusters"   cluster_id | cluster_name | donor_id | relationship (NEW — related entities)
+  4. "Donor Merges"     alias_id | canonical_id        (same-entity dedupe / exact dups)
+  5. "Donor Clusters"   cluster_id | cluster_name | canonical_id | donor_id |
+                        role | relationship            (ROLLUPS — parent + members)
 
-ENTITY RESOLUTION (new)
------------------------
+ENTITY RESOLUTION
+-----------------
 MERGE  (Donor Merges tab): collapse duplicate records of the SAME entity. Every
        contribution from an alias is reassigned to the canonical donor, the
        alias's industries/flags are folded into the canonical record, and the
-       alias donor is removed. Applied BEFORE overrides so editor tags on the
-       canonical land correctly; override rows keyed to an alias are remapped.
-       (Suggestions come from probe_donor_dupes.py -> donor_merges_suggested.csv.)
-CLUSTER (Donor Clusters tab): link DISTINCT-but-related entities (e.g. a person,
-       their spouse, and a PAC they fund). Not merged — annotated with a shared
-       cluster id and surfaced as a top-level `donor_clusters` map for the embed.
+       alias donor is removed. Reserved for genuine same-SBE-record duplicates
+       (a re-ingest, a trailing space) — the rollup builder flags these as
+       "exact-dup → merge". Applied BEFORE overrides and clusters.
+
+ROLLUP (Donor Clusters tab): group a donor's variants under one PARENT
+       (canonical_id) WITHOUT deleting anything. Every member record stays in
+       the data, traceable to its SBE source; the cluster adds a display layer.
+       This script:
+         - resolves members + the canonical through any merges, de-dupes,
+         - tags each member donor with cluster_id / cluster_name / cluster_role
+           / cluster_is_parent,
+         - precomputes the rolled-up total (sum of every member's contributions)
+           and a per-member breakdown, so the embed can show "Parent gave $X"
+           with an expandable, auditable breakdown.
+       Rollups are annotation + aggregation only — no record is removed.
+       'role' values: parent | alt-name | affiliated-pac | subsidiary | related.
 
 Idempotent: ingest.py recreates raw donors each run; this script re-applies the
 merge/cluster maps on top every night.
@@ -39,12 +50,16 @@ DEPENDENCIES
 
 from __future__ import annotations
 import argparse, json, os, sys
+from collections import defaultdict
 from pathlib import Path
 from typing import Optional
 
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 DEFAULT_DATA_PATH = Path(__file__).parent.parent / 'council-data.json'
+
+# Recognized rollup roles; anything else falls back to 'related'.
+VALID_ROLES = {'parent', 'alt-name', 'affiliated-pac', 'subsidiary', 'related'}
 
 
 # ============================================================
@@ -80,13 +95,12 @@ def open_sheet(sheet_id: str, creds_file: Optional[str] = None,
 
 
 def _worksheet_records(sheet, name):
-    """Return get_all_records() for a tab, or [] if the tab is absent."""
+    """Return get_all_records() for a tab, or None if the tab is absent."""
     try:
         import gspread
         ws = sheet.worksheet(name)
     except Exception as e:  # gspread.WorksheetNotFound, or gspread not imported in tests
         if e.__class__.__name__ != 'WorksheetNotFound':
-            # re-raise anything that isn't a missing-tab situation
             try:
                 import gspread as _g
                 if not isinstance(e, _g.WorksheetNotFound):
@@ -186,7 +200,16 @@ def read_donor_merges(sheet) -> list[tuple]:
 
 
 def read_donor_clusters(sheet) -> dict[str, dict]:
-    """Read the Donor Clusters tab -> {cluster_id: {name, relationship, members[]}}."""
+    """Read the Donor Clusters (rollup) tab.
+
+    Returns {cluster_id: {name, relationship, canonical_id, members[], roles{}}}.
+
+    Columns: cluster_id | cluster_name | canonical_id | donor_id | role | relationship
+    Backward compatible with the old (canonical_id/role-less) shape:
+      - if 'canonical_id' is absent, the member whose role == 'parent' is used;
+        failing that, apply_clusters falls back to the first surviving member.
+      - if 'role' is absent, members default to 'related'.
+    """
     rows = _worksheet_records(sheet, 'Donor Clusters')
     if rows is None:
         return {}
@@ -196,15 +219,27 @@ def read_donor_clusters(sheet) -> dict[str, dict]:
         did = (str(row.get('donor_id') or '')).strip()
         if not cid or not did:
             continue
-        g = groups.setdefault(cid, {'name': '', 'relationship': '', 'members': []})
+        g = groups.setdefault(cid, {'name': '', 'relationship': '',
+                                    'canonical_id': '', 'members': [], 'roles': {}})
         nm = (str(row.get('cluster_name') or '')).strip()
         if nm:
             g['name'] = nm
         rel = (str(row.get('relationship') or '')).strip()
         if rel:
             g['relationship'] = rel
+        can = (str(row.get('canonical_id') or '')).strip()
+        if can:
+            g['canonical_id'] = can
+        role = (str(row.get('role') or '')).strip().lower()
         if did not in g['members']:
             g['members'].append(did)
+        if role:
+            if role not in VALID_ROLES:
+                role = 'related'
+            g['roles'][did] = role
+            # a 'parent' row nominates the canonical when the column is missing
+            if role == 'parent' and not g['canonical_id']:
+                g['canonical_id'] = did
     return groups
 
 
@@ -235,34 +270,28 @@ def apply_merges(data: dict, pairs: list[tuple]) -> dict:
     changes = {'merged': 0, 'contributions_reassigned': 0, 'skipped': 0}
 
     mapfinal = resolve_merge_map(pairs)
-    # Only act on pairs where BOTH endpoints exist after resolution.
     valid = {a: c for a, c in mapfinal.items()
              if a in donors and c in donors and a != c}
     skipped = {a for a in mapfinal if a not in valid}
     changes['skipped'] = len(skipped)
 
-    # 1) reassign contributions
     for c in contribs:
         did = c.get('donor_id')
         if did in valid:
             c['donor_id'] = valid[did]
             changes['contributions_reassigned'] += 1
 
-    # 2) fold alias metadata into canonical, then delete alias
     for alias, canon in valid.items():
         if alias not in donors or canon not in donors:
             continue
         a, c = donors[alias], donors[canon]
-        # union industries (canonical first)
         ci = c.get('industries') or ([c['industry']] if c.get('industry') else [])
         ai = a.get('industries') or ([a['industry']] if a.get('industry') else [])
         merged = list(dict.fromkeys([*ci, *ai]))
         if merged:
             c['industries'] = merged
-        # concat flags
         if a.get('flags'):
             c.setdefault('flags', []).extend(a['flags'])
-        # remember the alias name so the embed can note "also seen as…"
         c.setdefault('aka', [])
         if a.get('name') and a['name'] != c.get('name') and a['name'] not in c['aka']:
             c['aka'].append(a['name'])
@@ -272,27 +301,85 @@ def apply_merges(data: dict, pairs: list[tuple]) -> dict:
     return changes, valid
 
 
+def _contribution_totals(contribs: list) -> dict:
+    """Sum contribution amounts by (post-merge) donor_id."""
+    totals = defaultdict(float)
+    for c in contribs:
+        totals[c.get('donor_id')] += c.get('amount', 0) or 0
+    return totals
+
+
 def apply_clusters(data: dict, clusters: dict, mergemap: dict) -> dict:
-    """Annotate related (distinct) donors with a shared cluster id."""
+    """Build ROLLUPS: parent + members, with per-member roles and a precomputed
+    rolled-up total. Records are kept (not merged); this only annotates.
+
+    Output written to data['donor_clusters'][cluster_id] =
+        {name, relationship, canonical_id,
+         members:[ordered ids, parent first],
+         roles:{id: role},
+         member_totals:{id: dollars},
+         total: dollars}                      # sum across all members
+    and each member donor is tagged with cluster_id / cluster_name /
+    cluster_role / cluster_is_parent for quick lookup in the embed.
+    """
     donors = data.get('donors', {})
+    totals = _contribution_totals(data.get('contributions', []))
     out = {}
-    changes = {'clusters': 0, 'members': 0}
+    changes = {'clusters': 0, 'members': 0, 'rolled_up_dollars': 0.0,
+               'missing_members': 0}
+
     for cid, info in clusters.items():
-        members = []
+        # resolve members through any merges, drop unknowns, de-dupe (keep order)
+        members, seen = [], set()
         for m in info.get('members', []):
-            m2 = mergemap.get(m, m)   # resolve through any merges
-            if m2 in donors and m2 not in members:
+            m2 = mergemap.get(m, m)
+            if m2 not in donors:
+                changes['missing_members'] += 1
+                continue
+            if m2 not in seen:
+                seen.add(m2)
                 members.append(m2)
-        if len(members) >= 2:
-            out[cid] = {'name': info.get('name', ''),
-                        'relationship': info.get('relationship', ''),
-                        'members': members}
-            for m in members:
-                donors[m]['cluster_id'] = cid
-                if info.get('name'):
-                    donors[m]['cluster_name'] = info['name']
-            changes['clusters'] += 1
-            changes['members'] += len(members)
+        if len(members) < 2:
+            continue
+
+        # resolve the nominated parent; fall back to first surviving member
+        canon = mergemap.get(info.get('canonical_id', ''), info.get('canonical_id', ''))
+        if canon not in seen:
+            canon = members[0]
+
+        # order members with the parent first
+        ordered = [canon] + [m for m in members if m != canon]
+
+        roles_in = info.get('roles', {})
+        roles, member_totals, cluster_total = {}, {}, 0.0
+        for m in ordered:
+            role = 'parent' if m == canon else (roles_in.get(m) or 'related')
+            if role not in VALID_ROLES:
+                role = 'related'
+            roles[m] = role
+            t = float(totals.get(m, 0.0))
+            member_totals[m] = t
+            cluster_total += t
+            # annotate the donor record
+            donors[m]['cluster_id'] = cid
+            if info.get('name'):
+                donors[m]['cluster_name'] = info['name']
+            donors[m]['cluster_role'] = role
+            donors[m]['cluster_is_parent'] = (m == canon)
+
+        out[cid] = {
+            'name': info.get('name', ''),
+            'relationship': info.get('relationship', '') or 'affiliated entities',
+            'canonical_id': canon,
+            'members': ordered,
+            'roles': roles,
+            'member_totals': member_totals,
+            'total': round(cluster_total, 2),
+        }
+        changes['clusters'] += 1
+        changes['members'] += len(ordered)
+        changes['rolled_up_dollars'] = round(changes['rolled_up_dollars'] + cluster_total, 2)
+
     data['donor_clusters'] = out
     return changes
 
@@ -316,7 +403,7 @@ def merge_overrides(data: dict, overrides: dict[str, dict],
             changes['vocab_updated'] += 1
 
     for did, override in overrides.items():
-        did = mergemap.get(did, did)   # an override keyed to a merged alias lands on canonical
+        did = mergemap.get(did, did)
         if did not in data.get('donors', {}):
             print(f"  ! Override for unknown donor '{did}' — skipping.")
             changes['donors_skipped'] += 1
@@ -375,7 +462,7 @@ def main():
     merges = read_donor_merges(sheet)
     print(f"  {len(merges)} donor-merge pairs")
     clusters = read_donor_clusters(sheet)
-    print(f"  {len(clusters)} donor clusters")
+    print(f"  {len(clusters)} donor clusters (rollups)")
 
     print("Applying merges (dedupe)…")
     merge_changes, mergemap = apply_merges(data, merges)
@@ -385,7 +472,7 @@ def main():
     changes = merge_overrides(data, overrides, industry_vocab, flag_vocab, mergemap)
     print(f"  {changes}")
 
-    print("Applying clusters (relate)…")
+    print("Applying rollups (clusters)…")
     cluster_changes = apply_clusters(data, clusters, mergemap)
     print(f"  {cluster_changes}")
 
