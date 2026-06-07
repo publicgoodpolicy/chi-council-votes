@@ -324635,7 +324635,9 @@
       "sbe_committee_id": "22729",
       "ward": null,
       "alder_name": null,
-      "industry_tags": [],
+      "industry_tags": [
+        "corporate"
+      ],
       "donor_id": null,
       "data_quality": "INGESTED_IE"
     },
@@ -324646,7 +324648,9 @@
       "sbe_committee_id": "18574",
       "ward": null,
       "alder_name": null,
-      "industry_tags": [],
+      "industry_tags": [
+        "labor-service"
+      ],
       "donor_id": "seiu-illinois-council-pac",
       "data_quality": "INGESTED_IE"
     },
@@ -324657,7 +324661,9 @@
       "sbe_committee_id": "25782",
       "ward": null,
       "alder_name": null,
-      "industry_tags": [],
+      "industry_tags": [
+        "labor-teachers"
+      ],
       "donor_id": null,
       "data_quality": "INGESTED_IE"
     },
@@ -324668,7 +324674,9 @@
       "sbe_committee_id": "25901",
       "ward": null,
       "alder_name": null,
-      "industry_tags": [],
+      "industry_tags": [
+        "charter-schools"
+      ],
       "donor_id": null,
       "data_quality": "INGESTED_IE"
     },
@@ -324679,7 +324687,9 @@
       "sbe_committee_id": "26066",
       "ward": null,
       "alder_name": null,
-      "industry_tags": [],
+      "industry_tags": [
+        "charter-schools"
+      ],
       "donor_id": null,
       "data_quality": "INGESTED_IE"
     },
@@ -324690,7 +324700,9 @@
       "sbe_committee_id": "25960",
       "ward": null,
       "alder_name": null,
-      "industry_tags": [],
+      "industry_tags": [
+        "establishment-pol"
+      ],
       "donor_id": null,
       "data_quality": "INGESTED_IE"
     },
@@ -324701,7 +324713,9 @@
       "sbe_committee_id": "530",
       "ward": null,
       "alder_name": null,
-      "industry_tags": [],
+      "industry_tags": [
+        "labor-public"
+      ],
       "donor_id": "afscme-illinois-council-31-pac",
       "data_quality": "INGESTED_IE"
     },
@@ -324712,7 +324726,9 @@
       "sbe_committee_id": "25064",
       "ward": null,
       "alder_name": null,
-      "industry_tags": [],
+      "industry_tags": [
+        "real-estate"
+      ],
       "donor_id": null,
       "data_quality": "INGESTED_IE"
     },
@@ -324723,7 +324739,9 @@
       "sbe_committee_id": "25109",
       "ward": null,
       "alder_name": null,
-      "industry_tags": [],
+      "industry_tags": [
+        "real-estate"
+      ],
       "donor_id": "hacia-pac",
       "data_quality": "INGESTED_IE"
     },
@@ -324734,7 +324752,9 @@
       "sbe_committee_id": "38979",
       "ward": null,
       "alder_name": null,
-      "industry_tags": [],
+      "industry_tags": [
+        "corporate"
+      ],
       "donor_id": null,
       "data_quality": "INGESTED_IE"
     },
@@ -324756,7 +324776,9 @@
       "sbe_committee_id": "39122",
       "ward": null,
       "alder_name": null,
-      "industry_tags": [],
+      "industry_tags": [
+        "labor-service"
+      ],
       "donor_id": null,
       "data_quality": "INGESTED_IE"
     }
@@ -602343,7 +602365,8 @@
       },
       "labor-public": {
         "all": {
-          "direct": 483899.08
+          "direct": 483899.08,
+          "independent": 7943.32
         },
         "by_cycle": {
           "2027": {
@@ -602353,7 +602376,8 @@
             "direct": 142199.08
           },
           "2019": {
-            "direct": 209700.0
+            "direct": 209700.0,
+            "independent": 7943.32
           },
           "2015": {
             "direct": 75500.0
@@ -602362,7 +602386,8 @@
       },
       "establishment-pol": {
         "all": {
-          "direct": 3418621.22
+          "direct": 3418621.22,
+          "independent": 310166.04
         },
         "by_cycle": {
           "2023": {
@@ -602372,26 +602397,31 @@
             "direct": 720228.9
           },
           "2015": {
-            "direct": 469552.56
+            "direct": 469552.56,
+            "independent": 131635.21
           },
           "2019": {
-            "direct": 1048577.36
+            "direct": 1048577.36,
+            "independent": 178530.83
           }
         }
       },
       "real-estate": {
         "all": {
-          "direct": 12413604.62
+          "direct": 12413604.62,
+          "independent": 644507.08
         },
         "by_cycle": {
           "2023": {
-            "direct": 5728248.43
+            "direct": 5728248.43,
+            "independent": 500342.08
           },
           "2027": {
             "direct": 1979390.78
           },
           "2019": {
-            "direct": 3594252.79
+            "direct": 3594252.79,
+            "independent": 144165.0
           },
           "2015": {
             "direct": 1111712.62
@@ -602400,14 +602430,16 @@
       },
       "corporate": {
         "all": {
-          "direct": 988298.4
+          "direct": 988298.4,
+          "independent": 878073.49
         },
         "by_cycle": {
           "2027": {
             "direct": 297025.0
           },
           "2023": {
-            "direct": 304081.72
+            "direct": 304081.72,
+            "independent": 878073.49
           },
           "2019": {
             "direct": 242245.06
@@ -602457,7 +602489,8 @@
       },
       "labor-teachers": {
         "all": {
-          "direct": 1419774.03
+          "direct": 1419774.03,
+          "independent": 31499.88
         },
         "by_cycle": {
           "2023": {
@@ -602470,7 +602503,8 @@
             "direct": 299953.67
           },
           "2015": {
-            "direct": 412922.0
+            "direct": 412922.0,
+            "independent": 31499.88
           }
         }
       },
@@ -602628,20 +602662,23 @@
       },
       "labor-service": {
         "all": {
-          "direct": 2493407.37
+          "direct": 2493407.37,
+          "independent": 635192.42
         },
         "by_cycle": {
           "2027": {
             "direct": 183750.0
           },
           "2023": {
-            "direct": 1667091.22
+            "direct": 1667091.22,
+            "independent": 420494.84
           },
           "2019": {
             "direct": 411220.01
           },
           "2015": {
-            "direct": 231346.14
+            "direct": 231346.14,
+            "independent": 214697.58
           }
         }
       },
@@ -602844,14 +602881,22 @@
       },
       "charter-schools": {
         "all": {
-          "direct": 3076.8
+          "direct": 3076.8,
+          "independent": 531433.97
         },
         "by_cycle": {
           "2027": {
             "direct": 1500.0
           },
           "2023": {
-            "direct": 1576.8
+            "direct": 1576.8,
+            "independent": 288576.56
+          },
+          "2015": {
+            "independent": 30490.3
+          },
+          "2019": {
+            "independent": 212367.11
           }
         }
       }
