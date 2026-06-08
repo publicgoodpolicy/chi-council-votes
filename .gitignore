@@ -221,3 +221,4 @@ raw/
 *.textClipping
 
 .DS_Store
+campaign-finance/sheets-sync/creds.json

@@ -176,6 +176,48 @@ def read_vocab(sheet, tab_name: str, key_field: str) -> dict[str, dict]:
     return out
 
 
+def read_committee_tags(sheet) -> dict:
+    """Read the 'Committee Tags' tab -> {committee_id: [industry_tag, ...]}.
+    Columns: committee_id | committee_name | industry_tags (comma-separated).
+    committee_name is for the editor's reference only; matching is by id."""
+    rows = _worksheet_records(sheet, 'Committee Tags')
+    if rows is None:
+        return {}
+    out = {}
+    for row in rows:
+        cid = (row.get('committee_id') or '').strip()
+        if not cid:
+            continue
+        out[cid] = parse_list_cell(row.get('industry_tags', ''))
+    return out
+
+
+def apply_committee_tags(data: dict, ctags: dict, industry_vocab: dict) -> dict:
+    """Set each committee's industry_tags from the Committee Tags tab, validating
+    every tag against the known vocabulary (the Industry Tags tab plus whatever is
+    already in the data). Unknown tags are skipped and reported, so a typo can't
+    silently spawn a junk industry that fragments the By-industry lens."""
+    known = set(industry_vocab or {}) | set(data.get('industry_tags', {}))
+    comms = data.get('committees', {})
+    stats = {'committees_tagged': 0, 'tags_applied': 0,
+             'unknown_tags': [], 'missing_committees': []}
+    for cid, tags in ctags.items():
+        if cid not in comms:
+            stats['missing_committees'].append(cid)
+            continue
+        valid = []
+        for t in tags:
+            if known and t not in known:
+                stats['unknown_tags'].append(f'{cid}:{t}')
+            else:
+                valid.append(t)
+        comms[cid]['industry_tags'] = valid
+        if valid:
+            stats['committees_tagged'] += 1
+            stats['tags_applied'] += len(valid)
+    return stats
+
+
 def read_donor_merges(sheet) -> list[tuple]:
     """Read the Donor Merges tab -> list of (alias_id, canonical_id) pairs.
 
@@ -471,6 +513,11 @@ def main():
     print("Merging overrides + vocab…")
     changes = merge_overrides(data, overrides, industry_vocab, flag_vocab, mergemap)
     print(f"  {changes}")
+
+    print("Tagging committees (industry)…")
+    committee_tags = read_committee_tags(sheet)
+    ctag_changes = apply_committee_tags(data, committee_tags, industry_vocab)
+    print(f"  {ctag_changes}")
 
     print("Applying rollups (clusters)…")
     cluster_changes = apply_clusters(data, clusters, mergemap)
