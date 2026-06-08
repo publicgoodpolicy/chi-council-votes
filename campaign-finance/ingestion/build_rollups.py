@@ -2,6 +2,7 @@
 # (direct-only) now, and fills the independent layer once ingest_ie has run.
 import json, os, sys
 from collections import Counter
+from datetime import datetime, timezone
 
 EXCLUDED_CYCLES={'pre-2011','undated'}
 
@@ -67,6 +68,10 @@ def build(d):
     d['rollups']['by_parent']=by_parent
     d['rollups']['by_industry']=by_industry
     d['rollups']['by_alder']=by_alder
+    # build_rollups runs last in both the build_all derived step and ingest_ie, so
+    # this is the single place that always fires on a (re)build. Stamp real build
+    # time — the field was previously static and falsely read as "stale".
+    d['generated_at']=datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
     return {'by_parent':len(by_parent),'by_industry':len(by_industry),
             'by_alder':len(by_alder),'ies':len(ies)}
 

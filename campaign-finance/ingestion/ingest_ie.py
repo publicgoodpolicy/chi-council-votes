@@ -180,9 +180,17 @@ if __name__=='__main__':
     ap=argparse.ArgumentParser()
     ap.add_argument('--council',required=True); ap.add_argument('--expenditures',required=True)
     ap.add_argument('--receipts'); ap.add_argument('--out'); ap.add_argument('--dry-run',action='store_true')
+    ap.add_argument('--shards',help='shards dir; if given, rebuild shards from --out after IE '
+                    '(keeps shards in sync — build_all builds shards BEFORE this step, so '
+                    'without this the shards miss IE/dues data)')
     a=ap.parse_args()
     d=json.load(open(a.council))
     s=ingest(d,a.expenditures,a.receipts,dry_run=a.dry_run)
     print('[ingest_ie]',json.dumps(s,indent=2))
     if not a.dry_run and a.out:
         json.dump(d,open(a.out,'w'),indent=2,ensure_ascii=True); print('[write]',a.out)
+        if a.shards:
+            import subprocess, os
+            bs=os.path.join(os.path.dirname(os.path.abspath(__file__)),'build_shards.py')
+            print('[ingest_ie] rebuilding shards from',a.out,'->',a.shards)
+            subprocess.run([sys.executable,bs,a.out,a.shards],check=True)
