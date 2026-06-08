@@ -97,28 +97,28 @@
   },
   "afscme-council-31": {
     "2027": {
-      "direct": 1485000.0,
+      "direct": 48000.0,
       "independent": 0.0,
-      "total": 1485000.0,
-      "count": 84
+      "total": 48000.0,
+      "count": 68
     },
     "2023": {
-      "direct": 1512962.89,
+      "direct": 152962.89,
       "independent": 0.0,
-      "total": 1512962.89,
-      "count": 134
+      "total": 152962.89,
+      "count": 98
     },
     "2019": {
-      "direct": 7226119.88,
+      "direct": 194700.0,
       "independent": 0.0,
-      "total": 7226119.88,
-      "count": 114
+      "total": 194700.0,
+      "count": 64
     },
     "2015": {
-      "direct": 3584000.0,
+      "direct": 161500.0,
       "independent": 0.0,
-      "total": 3584000.0,
-      "count": 72
+      "total": 161500.0,
+      "count": 24
     }
   },
   "ailes-elena": {
@@ -1229,10 +1229,10 @@
       "count": 44
     },
     "2015": {
-      "direct": 542317.85,
+      "direct": 509317.85,
       "independent": 0.0,
-      "total": 542317.85,
-      "count": 39
+      "total": 509317.85,
+      "count": 38
     },
     "2027": {
       "direct": 119250.0,
@@ -5279,28 +5279,28 @@
   },
   "seiu-il-council": {
     "2027": {
-      "direct": 3132300.0,
+      "direct": 96750.0,
       "independent": 0.0,
-      "total": 3132300.0,
-      "count": 55
+      "total": 96750.0,
+      "count": 31
     },
     "2023": {
-      "direct": 9458694.95,
+      "direct": 1446194.95,
       "independent": 0.0,
-      "total": 9458694.95,
-      "count": 93
+      "total": 1446194.95,
+      "count": 71
     },
     "2015": {
-      "direct": 6063157.65,
+      "direct": 149371.37,
       "independent": 0.0,
-      "total": 6063157.65,
-      "count": 44
+      "total": 149371.37,
+      "count": 19
     },
     "2019": {
-      "direct": 5316900.0,
+      "direct": 91400.0,
       "independent": 0.0,
-      "total": 5316900.0,
-      "count": 44
+      "total": 91400.0,
+      "count": 15
     }
   },
   "seiu-local-73": {
@@ -28901,18 +28901,12 @@
       "count": 1
     }
   },
-  "friends-of-edgar-gonzalez": {
+  "euro-collision-inc": {
     "2023": {
-      "direct": 13837.5,
+      "direct": 2000.0,
       "independent": 0.0,
-      "total": 13837.5,
-      "count": 7
-    },
-    "2027": {
-      "direct": 5128.8,
-      "independent": 0.0,
-      "total": 5128.8,
-      "count": 4
+      "total": 2000.0,
+      "count": 1
     },
     "2015": {
       "direct": 1000.0,
@@ -69737,6 +69731,14 @@
       "count": 1
     }
   },
+  "friends-of-edgar-gonzalez-jr": {
+    "2023": {
+      "direct": 5000.0,
+      "independent": 0.0,
+      "total": 5000.0,
+      "count": 1
+    }
+  },
   "fuentes-phil": {
     "2027": {
       "direct": 1250.0,
@@ -93735,6 +93737,20 @@
       "independent": 0.0,
       "total": 300.0,
       "count": 1
+    }
+  },
+  "friends-of-edgar-gonzalez": {
+    "2027": {
+      "direct": 5128.8,
+      "independent": 0.0,
+      "total": 5128.8,
+      "count": 4
+    },
+    "2023": {
+      "direct": 6837.5,
+      "independent": 0.0,
+      "total": 6837.5,
+      "count": 5
     }
   },
   "cruz-ruth": {
@@ -191608,14 +191624,6 @@
       "direct": 200.0,
       "independent": 0.0,
       "total": 200.0,
-      "count": 1
-    }
-  },
-  "service-employees-international-union-member-contributions": {
-    "2015": {
-      "direct": 1250000.0,
-      "independent": 0.0,
-      "total": 1250000.0,
       "count": 1
     }
   },
