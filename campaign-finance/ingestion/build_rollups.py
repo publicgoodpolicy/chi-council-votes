@@ -25,6 +25,9 @@ def build(d):
     for c in contribs:
         if c.get('is_aggregate'): continue
         if c['cycle'] in EXCLUDED_CYCLES: continue
+        # Internal union-dues transfers into a committee's own PAC fund the PAC; they
+        # are not giving/spend on the Council. ingest_ie types them distinctly.
+        if c.get('contribution_type')=='IE Committee Dues Transfer': continue
         dv=donors.get(c.get('donor_id'))
         if dv is None or c['donor_id'] in agg: continue
         amt=c.get('amount') or 0.0; cyc=c['cycle']

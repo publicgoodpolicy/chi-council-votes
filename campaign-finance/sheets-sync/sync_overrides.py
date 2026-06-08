@@ -271,6 +271,10 @@ def read_donor_clusters(sheet) -> dict[str, dict]:
             g['relationship'] = rel
         can = (str(row.get('canonical_id') or '')).strip()
         if can:
+            if g['canonical_id'] and g['canonical_id'] != can:
+                print(f"  !! cluster_id '{cid}' has conflicting canonical_id rows: "
+                      f"'{g['canonical_id']}' vs '{can}' — duplicate cluster_id in the "
+                      f"sheet? (last one wins; fix the sheet)", file=sys.stderr)
             g['canonical_id'] = can
         role = (str(row.get('role') or '')).strip().lower()
         if did not in g['members']:
@@ -347,6 +351,8 @@ def _contribution_totals(contribs: list) -> dict:
     """Sum contribution amounts by (post-merge) donor_id."""
     totals = defaultdict(float)
     for c in contribs:
+        if c.get('contribution_type') == 'IE Committee Dues Transfer':
+            continue  # internal union-dues transfer, not Council spend
         totals[c.get('donor_id')] += c.get('amount', 0) or 0
     return totals
 
@@ -365,10 +371,30 @@ def apply_clusters(data: dict, clusters: dict, mergemap: dict) -> dict:
     cluster_role / cluster_is_parent for quick lookup in the embed.
     """
     donors = data.get('donors', {})
+
+    # RESET stale cluster state before re-applying from the sheet.
+    # apply_clusters only SETS tags on donors that appear in the Clusters tab; it
+    # never cleared them. So a donor removed from the sheet kept its old cluster_id
+    # / parent_id baked into the committed base file, and the derived-layer step
+    # ([1]/[1b]) re-consumed those stale tags every build — which is how a cleaned
+    # sheet still produced the corrupt rollup-130. Wiping first makes "remove from
+    # the sheet" actually un-cluster a donor, and the re-tag loop below restores
+    # tags only for donors the sheet still places. Idempotent.
+    reset = 0
+    for did, dv in donors.items():
+        if any(k in dv for k in ('cluster_id', 'cluster_name', 'cluster_role',
+                                 'cluster_is_parent')) or dv.get('parent_id') != did:
+            reset += 1
+        dv.pop('cluster_id', None)
+        dv.pop('cluster_name', None)
+        dv.pop('cluster_role', None)
+        dv.pop('cluster_is_parent', None)
+        dv['parent_id'] = did      # singleton until a cluster claims it below
+
     totals = _contribution_totals(data.get('contributions', []))
     out = {}
     changes = {'clusters': 0, 'members': 0, 'rolled_up_dollars': 0.0,
-               'missing_members': 0}
+               'missing_members': 0, 'stale_tags_reset': reset}
 
     for cid, info in clusters.items():
         # resolve members through any merges, drop unknowns, de-dupe (keep order)
@@ -404,6 +430,7 @@ def apply_clusters(data: dict, clusters: dict, mergemap: dict) -> dict:
             cluster_total += t
             # annotate the donor record
             donors[m]['cluster_id'] = cid
+            donors[m]['parent_id'] = canon
             if info.get('name'):
                 donors[m]['cluster_name'] = info['name']
             donors[m]['cluster_role'] = role

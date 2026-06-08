@@ -127,24 +127,52 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
            'matched_total':round(sum(spenders.values()),2)}
     if dry_run: return stats
 
+    # IDEMPOTENCY: drop any IE-committee receipt rows from a previous run before
+    # re-adding this run's. ingest_ie APPENDS receipts, so without this a re-run
+    # (or running on a base that already carries IE data, e.g. the committed file)
+    # silently doubles/triples them. The IE committees (promote) and funder donors
+    # (resolve_donor) are reused by sbe/name, so they don't multiply — only these
+    # contributions do. 'independent_expenditures' is reassigned below, not appended.
+    _before=len(d['contributions'])
+    d['contributions']=[c for c in d['contributions']
+                        if not str(c.get('contribution_type','')).startswith('IE Committee')]
+    stats['prior_ie_receipts_cleared']=_before-len(d['contributions'])
+
     d['independent_expenditures']=ies
     # pull IE committees' OWN funders -> contributions rows
     G=FIELD_MAP['rec']; want={comms[k]['sbe_committee_id']:k for k in
         {ie['spender_committee_id'] for ie in ies} if comms[k].get('sbe_committee_id')}
-    added=0
+    # A union transferring its OWN member dues into its OWN PAC is internal funding,
+    # not Council spend. The SBE labels these with a descriptor ("dues"/"membership"/
+    # "member contributions"). We keep the rows (auditable, and some are cluster
+    # members) but TYPE them distinctly so build_rollups + the embed can exclude them
+    # from spend/donor totals. We do NOT use org-name overlap to detect self-funding:
+    # that pulls in surname collisions (e.g. "Peter Villegas" -> a Gilbert Villegas
+    # committee) and would wrongly drop genuine third-party IE funders (James Frank
+    # -> INCS, the Sacks -> Chicago Forward), which are exactly the money we surface.
+    DUES_RE=re.compile(r'\b(dues|membership|member\s+contributions?)\b',re.I)
+    added=0; dues_rows=0
     for i,row in enumerate(read_tsv(rec_path)):
         if progress and i%1000000==0 and i: sys.stderr.write(f'  ..rec {i:,}\n')
         sbe=row.get(G['committee_id'])
         if sbe not in want: continue
         if truthy(row.get(G['archived'])): continue
         nm=((row.get(G['first']) or '')+' '+(row.get(G['last']) or '')).strip()
+        is_dues=bool(DUES_RE.search(nm))
         did=resolve_donor(nm,'Other'); date=(row.get(G['date']) or '')[:10]
+        if is_dues:
+            dues_rows+=1
+            dn=donors[did]; dn['ie_funding']='dues'   # downstream-exclusion marker
+            if not any(f.get('type')=='pac_dues_funding' for f in dn.get('flags',[])):
+                dn.setdefault('flags',[]).append({'type':'pac_dues_funding',
+                    'note':"Member-dues transfer into the committee's own PAC; not Council spend."})
         d['contributions'].append({'id':'ie-rec-'+str(sbe)+'-'+str(added),'donor_id':did,
             'committee_id':want[sbe],'amount':float(row.get(G['amount']) or 0),'date':date,
-            'cycle':cycle_for(date,cycles),'contribution_type':'IE Committee Receipt',
+            'cycle':cycle_for(date,cycles),
+            'contribution_type':'IE Committee Dues Transfer' if is_dues else 'IE Committee Receipt',
             'source_filing':'Receipts'})
         added+=1
-    stats['funder_receipts_added']=added
+    stats['funder_receipts_added']=added; stats['dues_transfer_rows']=dues_rows
     build_rollups.build(d)
     return stats
 
