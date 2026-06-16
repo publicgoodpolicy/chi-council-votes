@@ -3,6 +3,9 @@ from collections import Counter
 
 SRC=sys.argv[1] if len(sys.argv)>1 else 'council-data.json'; OUT=sys.argv[2] if len(sys.argv)>2 else SRC
 d=json.load(open(SRC)); donors=d['donors']; comms=d['committees']
+# Election artifacts carry races[]+candidates[]; council data does not. Same
+# detection the other pipeline scripts use. Gates only the n_cand>=50 floor below.
+election_mode=bool(d.get('races')) and bool(d.get('candidates'))
 rep=[]; log=lambda *a:(rep.append(' '.join(map(str,a))), print(*a))
 
 def norm(s):
@@ -59,7 +62,10 @@ n_cand=sum(1 for c in comms.values() if c.get('type')=='candidate')
 log(f'[validate] committees={len(comms)} (candidate={n_cand}, others incl. IE={len(comms)-n_cand}) | '
     f'bridge integrity errors: {len(errs)}')
 if errs: log('   ', errs[:10])
-assert n_cand>=50 and not errs
+if election_mode:
+    assert not errs              # election: bridge integrity only (no 50-alder floor)
+else:
+    assert n_cand>=50 and not errs   # council unchanged
 
 json.dump(d,open(OUT,'w'),indent=2,ensure_ascii=True)
 log(f'[write] {OUT} ({os.path.getsize(OUT)/1e6:.1f} MB)')
