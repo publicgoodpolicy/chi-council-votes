@@ -13,6 +13,8 @@ Scoping decisions baked in (flag to change):
 import json, re, csv, sys, os, argparse
 from collections import defaultdict
 import build_rollups
+from ingest import slug  # shared donor-id slug ([:80] cap) — keeps election donor_ids
+                         # identical to council so one Sheet classification feeds both.
 csv.field_size_limit(min(sys.maxsize, 2**31-1))
 
 FIELD_MAP={
@@ -41,7 +43,7 @@ def read_tsv(path):
         r=csv.DictReader((line.replace('\r\n','\n') for line in f),delimiter='\t')
         for row in r: yield row
 
-# ---- matcher: candidate name -> current alder (ward disambiguates) ----
+# ---- COUNCIL matcher: candidate name -> current alder (ward disambiguates) ----
 def build_matcher(comms):
     alders=[]
     for k,c in comms.items():
@@ -65,9 +67,59 @@ def match_target(cand,office,alders):
     if len(strong)==1: return str(strong[0]['ward']),strong[0]['key']
     return None,None
 
+# ---- ELECTION matcher: target -> candidate registry (candidates[]+races[]) ----
+# SBE expenditure rows carry NO target committee identifier (only the SPENDER's
+# CommitteeID); the target is free-text CandidateName + Office. So the authority
+# is a controlled name match against the known candidate registry — per race the
+# candidate set is small, so Office/ward disambiguates collisions. A defensive
+# committee-id index is built too in case a target committee id ever appears.
+def build_target_index(d):
+    races_by_id={r['id']:r for r in d.get('races',[])}
+    by_committee={}; by_name=defaultdict(list)
+    for cand in d.get('candidates',[]):
+        r=races_by_id.get(cand.get('race_id'),{})
+        w=r.get('ward'); ward=int(w) if w not in (None,'') else None
+        entry={'candidate_id':cand.get('id'),'race_id':cand.get('race_id'),
+               'office':r.get('office'),'ward':ward,'district':r.get('district'),
+               'committee_id':cand.get('committee_id')}
+        nm=norm(cand.get('name'))
+        if nm: by_name[nm].append(entry)
+        if cand.get('committee_id'): by_committee[str(cand['committee_id'])]=entry
+    return by_committee,by_name
+def _tgt(e,method,needs_review):
+    return {'target_committee_id':e['committee_id'],'target_candidate_id':e['candidate_id'],
+            'target_race_id':e['race_id'],'target_ward':e['ward'],
+            'match_method':method,'needs_review':needs_review}
+def match_target_registry(row,by_committee,by_name):
+    F=FIELD_MAP['exp']
+    # 1) committee-id (deterministic) — only if SBE exp rows ever carry a target id
+    tcid=row.get('CandidateID') or row.get('TargetCommitteeID')
+    if tcid and str(tcid) in by_committee:
+        return _tgt(by_committee[str(tcid)],'committee_id',False)
+    # 2) controlled name match against the candidate registry
+    cand=row.get(F['candidate']); office=row.get(F['office'])
+    n=norm(cand)
+    if not n: return None
+    hits=by_name.get(n)
+    if not hits: return None
+    if len(hits)==1: return _tgt(hits[0],'registry_name',False)
+    # ambiguous: same name in multiple races -> disambiguate by ward in Office text
+    blob=(office or '')+' '+(cand or ''); ward=extract_ward(blob)
+    if ward is not None:
+        w=[e for e in hits if e['ward']==ward]
+        if len(w)==1: return _tgt(w[0],'registry_name',False)
+    # still ambiguous -> record best guess, flag for human review
+    return _tgt(hits[0],'name_fallback',True)
+
 def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
     cycles=d['cycles']; comms=d['committees']; donors=d['donors']
-    alders=build_matcher(comms)
+    # Election mode (races[]+candidates[] present) resolves IE targets against the
+    # candidate registry; council mode keeps the current-50-alders matcher unchanged.
+    election_mode=bool(d.get('races')) and bool(d.get('candidates'))
+    if election_mode:
+        by_committee,by_name=build_target_index(d)
+    else:
+        alders=build_matcher(comms)
     # precomputed indexes (built once)
     sbe_idx={c['sbe_committee_id']:k for k,c in comms.items() if c.get('sbe_committee_id')}
     cname_idx={norm(c.get('committee_name') or ''):k for k,c in comms.items()}
@@ -90,7 +142,10 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
     def resolve_donor(name,dtype):
         n=norm(name)
         if n in dname_idx: return dname_idx[n]
-        did=re.sub(r'[^a-z0-9]+','-',n).strip('-') or 'donor'
+        # Shared donor-id: use ingest.slug (with its [:80] cap) so long-name donors
+        # get the SAME id the council ingest would assign — that's what lets one
+        # Sheet classification key both tools. (Was a local slug lacking the cap.)
+        did=slug(name) or 'donor'
         b=did; i=2
         while did in donors: did=b+'-'+str(i); i+=1
         donors[did]={'id':did,'name':name,'type':dtype or 'Other','industries':[],'flags':[],
@@ -98,7 +153,8 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
         dname_idx[n]=did
         return did
 
-    F=FIELD_MAP['exp']; seen={}; raw=0; matched=0; dups=0; spenders={}
+    F=FIELD_MAP['exp']; seen={}; raw=0; matched=0; dups=0; unmatched=0; spenders={}
+    method_counts=defaultdict(int); review_n=0
     ies=[]
     for i,row in enumerate(read_tsv(exp_path)):
         if progress and i%500000==0 and i: sys.stderr.write(f'  ..exp {i:,}\n')
@@ -106,25 +162,48 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
         sup=truthy(row.get(F['supporting'])); opp=truthy(row.get(F['opposing']))
         if not (sup or opp): continue
         raw+=1
-        ward,tcmte=match_target(row.get(F['candidate']),row.get(F['office']),alders)
-        if ward is None: continue
+        if election_mode:
+            tgt=match_target_registry(row,by_committee,by_name)
+        else:
+            ward,tcmte=match_target(row.get(F['candidate']),row.get(F['office']),alders)
+            tgt=None if ward is None else {'target_committee_id':tcmte,'target_candidate_id':None,
+                'target_race_id':None,'target_ward':ward,'match_method':'alder_ward','needs_review':False}
+        if tgt is None: unmatched+=1; continue
         amt=float(row.get(F['amount']) or 0); date=(row.get(F['date']) or '')[:10]
         payee=norm((row.get(F['payee_first']) or '')+' '+(row.get(F['payee_last']) or ''))
         sbe=row.get(F['committee_id'])
         dk=(sbe,payee,norm(row.get(F['candidate'])),round(amt,2),date,norm(row.get(F['purpose'])))
         if dk in seen: dups+=1; continue
         seen[dk]=1; matched+=1
+        method_counts[tgt['match_method']]+=1
+        if tgt['needs_review']: review_n+=1
         spenders.setdefault(sbe,0); spenders[sbe]+=amt
         if not dry_run:
             spk=promote(sbe,'IE committee '+str(sbe))
-            ies.append({'id':'ie-'+str(sbe)+'-'+str(row.get(F['filed_doc_id']))+'-'+str(matched),
-                'spender_committee_id':spk,'target_ward':ward,'target_committee_id':tcmte,
-                'stance':'support' if sup else 'oppose','amount':amt,'date':date,
+            base={'id':'ie-'+str(sbe)+'-'+str(row.get(F['filed_doc_id']))+'-'+str(matched),
+                'spender_committee_id':spk}
+            if election_mode:
+                base.update({'target_committee_id':tgt['target_committee_id'],
+                    'target_candidate_id':tgt['target_candidate_id'],
+                    'target_race_id':tgt['target_race_id'],'target_ward':tgt['target_ward'],
+                    'match_method':tgt['match_method'],'needs_review':tgt['needs_review']})
+            else:
+                # council shape unchanged: target_ward + target_committee_id only
+                base.update({'target_ward':tgt['target_ward'],
+                    'target_committee_id':tgt['target_committee_id']})
+            base.update({'stance':'support' if sup else 'oppose','amount':amt,'date':date,
                 'cycle':cycle_for(date,cycles),'source_filing':row.get(F['d2part']),
                 'filed_doc_id':row.get(F['filed_doc_id']),'purpose':row.get(F['purpose'])})
+            ies.append(base)
     stats={'exp_ie_nonarchived':raw,'matched_to_current_alders':matched,
            'exact_dups_collapsed':dups,'ie_committees':len(spenders),
            'matched_total':round(sum(spenders.values()),2)}
+    if election_mode:
+        stats.update({'mode':'election','unmatched':unmatched,
+            'matched_by_committee_id':method_counts.get('committee_id',0),
+            'matched_by_registry_name':method_counts.get('registry_name',0),
+            'matched_by_name_fallback':method_counts.get('name_fallback',0),
+            'flagged_needs_review':review_n})
     if dry_run: return stats
 
     # IDEMPOTENCY: drop any IE-committee receipt rows from a previous run before

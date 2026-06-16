@@ -471,14 +471,34 @@ def aggregate_small_dollar(parsed: dict) -> dict:
 # ============================================================
 # MERGE INTO COUNCIL-DATA.JSON
 # ============================================================
-def merge_into_data(data: dict, parsed: dict, ward: int) -> dict:
-    """Merge one committee's parsed data into council-data.json.
+def _apply_linkage(cm: dict, linkage: dict) -> None:
+    """Write election candidate/race linkage fields onto a committee record.
+
+    Extends (does not replace) the committee record produced for the council
+    tool. `ward` comes from the linkage and may be None (school-board / mayoral
+    races have no ward). `type='candidate'` is set so build_rollups treats the
+    committee as a candidate recipient (by_candidate / by_race buckets).
+    """
+    cm['candidate_id'] = linkage.get('candidate_id')
+    cm['race_id'] = linkage.get('race_id')
+    cm['office'] = linkage.get('office')
+    cm['district'] = linkage.get('district')
+    cm['ward'] = linkage.get('ward')  # nullable
+    cm.setdefault('type', 'candidate')
+    cm.setdefault('industry_tags', [])
+
+
+def merge_into_data(data: dict, parsed: dict, ward, linkage: dict = None) -> dict:
+    """Merge one committee's parsed data into the data file.
 
     Strategy:
-    - Look up the existing committee record by ward number; reuse its
-      committee_id so editor-set fields (cash-on-hand, notes) and the donor
-      lookup join keys remain valid.
+    - Look up the existing committee record. In council mode, the join key is
+      the ward number. In election mode (linkage given), ward may be None, so we
+      join on sbe_committee_id instead — this also avoids colliding with the many
+      ward=None independent-expenditure committees.
     - If no existing record, create one with a generated ID.
+    - In election mode, write the candidate/race linkage (candidate_id, race_id,
+      office, district, nullable ward) onto the committee record.
     - Donors: union by ID. Editor-set industries[]/flags/notes win.
     - Contributions: full replacement for this committee (deletes old demo
       data, adds new ingested data).
@@ -486,12 +506,20 @@ def merge_into_data(data: dict, parsed: dict, ward: int) -> dict:
     """
     today = datetime.now().strftime('%Y-%m-%d')
 
-    # 1. Find existing committee record by ward number
+    # 1. Find existing committee record.
+    #    Election mode (linkage) joins on sbe_committee_id (ward may be None);
+    #    council mode joins on ward number, exactly as before.
     existing_cmt_id = None
-    for cid, cm in data['committees'].items():
-        if cm.get('ward') == ward:
-            existing_cmt_id = cid
-            break
+    if linkage is not None:
+        for cid, cm in data['committees'].items():
+            if cm.get('sbe_committee_id') == parsed['committee_id']:
+                existing_cmt_id = cid
+                break
+    else:
+        for cid, cm in data['committees'].items():
+            if cm.get('ward') == ward:
+                existing_cmt_id = cid
+                break
 
     # 2. Determine the canonical committee_id to use
     if existing_cmt_id:
@@ -506,9 +534,15 @@ def merge_into_data(data: dict, parsed: dict, ward: int) -> dict:
         # Clear demo notes if present; preserve cash_on_hand (editor-entered)
         if cm.get('notes') and 'DEMO' in (cm.get('notes') or '').upper():
             cm['notes'] = f"Ingested from SBE on {today}."
+        if linkage is not None:
+            _apply_linkage(cm, linkage)
     else:
-        committee_id_str = f"ward-{ward}-{slug(parsed['committee_name'])}"
-        data['committees'][committee_id_str] = {
+        if linkage is not None:
+            committee_id_str = f"cand-{linkage['candidate_id']}" if linkage.get('candidate_id') \
+                else f"cmte-{parsed['committee_id']}"
+        else:
+            committee_id_str = f"ward-{ward}-{slug(parsed['committee_name'])}"
+        cm = {
             'id': committee_id_str,
             'ward': ward,
             'alder_name': None,
@@ -522,6 +556,9 @@ def merge_into_data(data: dict, parsed: dict, ward: int) -> dict:
             'cash_on_hand_as_of': None,
             'notes': f"Ingested from SBE on {today}.",
         }
+        if linkage is not None:
+            _apply_linkage(cm, linkage)
+        data['committees'][committee_id_str] = cm
 
     # 3. Rewrite contribution committee_ids to the canonical ID
     for c in parsed['contributions']:
@@ -606,6 +643,29 @@ def main():
           f"{len(data.get('donors', {}))} donors, "
           f"{len(data.get('contributions', []))} contributions")
 
+    # Election mode: the data file carries races[] + candidates[]. Build the
+    # committee->candidate/race linkage from the data itself (no interactive
+    # prompt, ward may be None for school-board / mayoral committees).
+    election_mode = bool(data.get('races')) and bool(data.get('candidates'))
+    linkage_map: dict = {}
+    if election_mode:
+        races_by_id = {r['id']: r for r in data['races']}
+        for cand in data['candidates']:
+            cmte = cand.get('committee_id')
+            if not cmte:
+                continue
+            r = races_by_id.get(cand.get('race_id'), {})
+            w = r.get('ward')
+            linkage_map[str(cmte)] = {
+                'candidate_id': cand.get('id'),
+                'race_id': cand.get('race_id'),
+                'office': r.get('office'),
+                'ward': int(w) if w not in (None, '') else None,
+                'district': r.get('district'),
+            }
+        print(f"Election mode: {len(data['races'])} races, {len(data['candidates'])} "
+              f"candidates, {len(linkage_map)} committee linkages")
+
     # Load committee-to-ward mapping if available
     ward_map: dict = {}
     if args.ward_map and args.ward_map.exists():
@@ -623,22 +683,34 @@ def main():
         print(f"  Total amount: ${parsed['total_amount']:,.2f}")
         print(f"  Distinct donors: {len(parsed['donors'])}")
 
-        # Determine ward
-        ward = ward_map.get(parsed['committee_id'])
-        if ward is None:
-            # Prompt for it
-            print(f"  ! No ward mapping for committee {parsed['committee_id']}")
-            answer = input(f"  Which ward does this committee represent? (1-50, or 'skip'): ").strip()
-            if answer.lower() in ('skip', 's', ''):
-                print("  Skipping.")
+        # Determine ward / linkage
+        link = None
+        if election_mode:
+            # Election committees are linked from the data, never prompted.
+            link = linkage_map.get(str(parsed['committee_id']))
+            if link is None:
+                print(f"  ! No candidate linkage for committee {parsed['committee_id']} "
+                      f"in election data; skipping.")
                 continue
-            try:
-                ward = int(answer)
-                if not 1 <= ward <= 50:
-                    raise ValueError
-            except ValueError:
-                print("  Invalid ward number. Skipping.")
-                continue
+            ward = link['ward']  # may be None (school-board / mayoral)
+            print(f"  Linked → candidate {link['candidate_id']} / race {link['race_id']} "
+                  f"(office={link['office']}, ward={ward})")
+        else:
+            ward = ward_map.get(parsed['committee_id'])
+            if ward is None:
+                # Prompt for it
+                print(f"  ! No ward mapping for committee {parsed['committee_id']}")
+                answer = input(f"  Which ward does this committee represent? (1-50, or 'skip'): ").strip()
+                if answer.lower() in ('skip', 's', ''):
+                    print("  Skipping.")
+                    continue
+                try:
+                    ward = int(answer)
+                    if not 1 <= ward <= 50:
+                        raise ValueError
+                except ValueError:
+                    print("  Invalid ward number. Skipping.")
+                    continue
 
         # Aggregate small-dollar tail
         parsed = aggregate_small_dollar(parsed)
@@ -647,7 +719,7 @@ def main():
               f"{len(parsed['contributions'])} contribution rows")
 
         # Merge
-        merge_into_data(data, parsed, ward)
+        merge_into_data(data, parsed, ward, linkage=link)
         total_changes['committees'] += 1
         total_changes['donors'] += len(parsed['donors'])
         total_changes['contributions'] += len(parsed['contributions'])

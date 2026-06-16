@@ -18,7 +18,11 @@ def build(d):
         c=b['by_cycle'].setdefault(cyc,{})
         c[field]=rnd(c.get(field,0)+amt)
 
-    by_parent={}; by_industry={}; by_alder={}
+    by_parent={}; by_industry={}; by_alder={}; by_candidate={}; by_race={}
+    # Election artifacts carry races[]/candidates[]; council data does not. The new
+    # by_candidate/by_race buckets are attached only when those exist, so the
+    # council rollup shape (by_parent/by_industry/by_alder) stays identical.
+    election_mode=bool(d.get('candidates')) or bool(d.get('races'))
     members=Counter(v['parent_id'] for v in donors.values() if v.get('type')!='Aggregate')
     pcom={}  # parent_id -> set of recipient committee_ids
 
@@ -45,10 +49,16 @@ def build(d):
         # by_industry direct: count under EACH of the donor's tags ("associated with")
         for tag in dv.get('industries',[]):
             add(by_industry,tag,cyc,'direct',amt)
-        # by_alder direct: only contributions to candidate committees
+        # by_alder direct: only contributions to candidate committees with a ward
         rc=comms.get(c['committee_id'])
         if rc and rc.get('type')=='candidate' and rc.get('ward') is not None:
             add(by_alder,str(rc['ward']),cyc,'direct',amt)
+        # by_candidate / by_race direct: ward-less (school-board / mayoral) money
+        # lands here, so it is never dropped just because the recipient has no ward.
+        if rc and rc.get('candidate_id'):
+            add(by_candidate,rc['candidate_id'],cyc,'direct',amt)
+        if rc and rc.get('race_id'):
+            add(by_race,rc['race_id'],cyc,'direct',amt)
 
     # ---- independent expenditures (the independent layer) ----
     for ie in ies:
@@ -58,9 +68,15 @@ def build(d):
         # by_industry independent: editorial tag on the SPENDER (decision 4), count under each
         for tag in (sp.get('industry_tags',[]) if sp else []):
             add(by_industry,tag,cyc,'independent',amt)
-        # by_alder: support/oppose split
+        # by_alder: support/oppose split (only when the IE targets a ward)
         field='ie_support' if ie.get('stance')=='support' else 'ie_oppose'
-        add(by_alder,str(ie['target_ward']),cyc,field,amt)
+        if ie.get('target_ward') is not None:
+            add(by_alder,str(ie['target_ward']),cyc,field,amt)
+        # by_candidate / by_race: ward-less IEs (school-board / mayoral) bucket here.
+        if ie.get('target_candidate_id'):
+            add(by_candidate,ie['target_candidate_id'],cyc,field,amt)
+        if ie.get('target_race_id'):
+            add(by_race,ie['target_race_id'],cyc,field,amt)
 
     for pid,r in by_parent.items():
         r['committees']=len(pcom.get(pid,()))
@@ -68,12 +84,16 @@ def build(d):
     d['rollups']['by_parent']=by_parent
     d['rollups']['by_industry']=by_industry
     d['rollups']['by_alder']=by_alder
+    if election_mode:
+        d['rollups']['by_candidate']=by_candidate
+        d['rollups']['by_race']=by_race
     # build_rollups runs last in both the build_all derived step and ingest_ie, so
     # this is the single place that always fires on a (re)build. Stamp real build
     # time — the field was previously static and falsely read as "stale".
     d['generated_at']=datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
     return {'by_parent':len(by_parent),'by_industry':len(by_industry),
-            'by_alder':len(by_alder),'ies':len(ies)}
+            'by_alder':len(by_alder),'ies':len(ies),
+            'by_candidate':len(by_candidate),'by_race':len(by_race)}
 
 if __name__=='__main__':
     SRC=sys.argv[1] if len(sys.argv)>1 else 'council-data.json'; OUT=sys.argv[2] if len(sys.argv)>2 else SRC
