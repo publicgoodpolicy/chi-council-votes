@@ -222,3 +222,6 @@ raw/
 
 .DS_Store
 campaign-finance/sheets-sync/creds.json
+
+# Generated election artifact (built by the elections run order; not source)
+campaign-finance/election-data.json
