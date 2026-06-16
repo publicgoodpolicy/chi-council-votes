@@ -48,7 +48,8 @@ for c in contribs:
     if c.get('cycle') and c.get('date'):
         if assign(c['date'])==c['cycle']: m+=1
         else: mm+=1
-log(f'[2-validate] rule matches existing on {m}/{m+mm} dated rows ({100*m/(m+mm):.2f}%)  mismatches={mm}')
+pct=f'{100*m/(m+mm):.2f}%' if (m+mm) else 'n/a'  # zero dated rows (fresh election file) -> no denominator
+log(f'[2-validate] rule matches existing on {m}/{m+mm} dated rows ({pct})  mismatches={mm}')
 fills=Counter()
 for c in contribs:
     if not c.get('cycle'):
