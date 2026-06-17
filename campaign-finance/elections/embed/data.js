@@ -27,9 +27,39 @@
     // among the three Code Blocks (flagged in HALT 1) — intentionally unmapped.
   };
 
+  // How each office page groups its races (sub-tabs / pickers).
+  var OFFICE_GROUPS = {
+    school_board: [
+      { label: 'Board President', offices: ['school_board_president'] },
+      { label: 'Districts', offices: ['school_board_member'] }
+    ],
+    city_council: [{ label: 'Wards', offices: ['alderperson'] }],
+    mayor: [{ label: 'Mayor', offices: ['mayor'] }]
+  };
+
   // Cycles never shown (out of SBE range / unattributable). Always excluded.
   var EXCLUDED_CYCLES = { 'pre-2011': 1, 'undated': 1 };
   var DUES_TYPE = 'IE Committee Dues Transfer';
+
+  // ---- stable, URL-safe slugs (locked scheme: e.g. "bruce-leon-district-2a") ----
+  // Pure + deterministic so the browser app and the future SEO pre-render derive
+  // identical paths from the same data.
+  function kebab(s) {
+    return String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+  function raceSlug(race) {
+    if (race.district) return kebab(race.district);              // "District 2A" -> "district-2a"
+    if (race.ward) return 'ward-' + race.ward;                   // ward "23"      -> "ward-23"
+    return kebab({ school_board_president: 'school-board-president', mayor: 'mayor',
+                   city_clerk: 'city-clerk', city_treasurer: 'city-treasurer' }[race.office] || race.office);
+  }
+  function candidateSlug(cand, race) { return kebab(cand.name) + '-' + raceSlug(race); }
+  function raceCode(race) {           // short chip label
+    if (race.district) return String(race.district).replace(/^District\s+/i, '');  // "2A"
+    if (race.ward) return 'Ward ' + race.ward;
+    return ({ school_board_president: 'President', mayor: 'Mayor',
+              city_clerk: 'Clerk', city_treasurer: 'Treasurer' }[race.office]) || race.label;
+  }
 
   function round2(n) { return Math.round((n + Number.EPSILON) * 100) / 100; }
 
@@ -144,6 +174,14 @@
       }
     }
 
+    // slug -> id resolvers (for app navigation + SEO paths)
+    var raceBySlug = {}, candidateBySlug = {};
+    for (var ri = 0; ri < races.length; ri++) raceBySlug[raceSlug(races[ri])] = races[ri].id;
+    for (var ci = 0; ci < candidates.length; ci++) {
+      var cc = candidates[ci], rr = raceById[cc.race_id];
+      if (rr) candidateBySlug[candidateSlug(cc, rr)] = cc.id;
+    }
+
     return {
       races: races, candidates: candidates, committees: committees, donors: donors,
       raceById: raceById, candidateById: candidateById, candidatesByRace: candidatesByRace,
@@ -151,40 +189,42 @@
       directByCandidate: directByCandidate, ieByCandidate: ieByCandidate,
       fundersBySpender: fundersBySpender, parentRollup: parentRollup,
       industryByCandidate: industryByCandidate, flagByCandidate: flagByCandidate,
+      raceBySlug: raceBySlug, candidateBySlug: candidateBySlug,
       cyclesSeen: cyclesSeen, _stats: stats, _memo: {}
     };
   }
 
   function sumIE(list, cycle) {
-    var s = 0;
+    var s = 0, n = 0;
     for (var i = 0; i < list.length; i++) {
       var ie = list[i];
       if (EXCLUDED_CYCLES[ie.cycle]) continue;
       if (cycle != null && ie.cycle !== cycle) continue;
-      s += ie.amount || 0;
+      s += ie.amount || 0; n++;
     }
-    return s;
+    return { amount: s, count: n };
   }
 
   // The three money figures, kept SEPARATE — never summed into one number.
   // cycle = null -> all-time (all non-excluded cycles); else a specific cycle code.
   function candidateFigures(index, candidateId, cycle) {
     var direct = index.directByCandidate[candidateId] || [];
-    var total = 0, self = 0;
+    var total = 0, self = 0, count = 0;
     for (var i = 0; i < direct.length; i++) {
       var c = direct[i];
       if (EXCLUDED_CYCLES[c.cycle]) continue;
       if (c.contribution_type === DUES_TYPE) continue;
       if (cycle != null && c.cycle !== cycle) continue;
       var a = c.amount || 0;
-      total += a;
+      total += a; count++;
       if (isSelfFunded(index.donors, c)) self += a;
     }
     var ieB = index.ieByCandidate[candidateId] || { support: [], oppose: [] };
+    var sup = sumIE(ieB.support, cycle), opp = sumIE(ieB.oppose, cycle);
     return {
-      contributions: { total: round2(total), selfFunded: round2(self), thirdParty: round2(total - self) },
-      independentSupport: round2(sumIE(ieB.support, cycle)),
-      independentOpposition: round2(sumIE(ieB.oppose, cycle))
+      contributions: { total: round2(total), selfFunded: round2(self), thirdParty: round2(total - self), count: count },
+      independentSupport: round2(sup.amount), independentSupportCount: sup.count,
+      independentOpposition: round2(opp.amount), independentOppositionCount: opp.count
     };
   }
 
@@ -217,23 +257,53 @@
   }
 
   // ---- view models ----
+  function hasAnyFinance(index, raceId) {
+    var cs = index.candidatesByRace[raceId] || [];
+    for (var i = 0; i < cs.length; i++) if (cs[i].committee_id) return true;
+    return false;
+  }
+
   function raceView(index, raceId, cycle) {
     var race = index.raceById[raceId];
     if (!race) return null;
     var cands = (index.candidatesByRace[raceId] || []).slice().sort(byNameNeutral);
     return {
       race: {
-        id: race.id, label: race.label, office: race.office, status: race.status,
-        district: race.district || null, ward: race.ward || null, election_id: race.election_id
+        id: race.id, slug: raceSlug(race), code: raceCode(race),
+        label: race.label, office: race.office, status: race.status,
+        district: race.district || null, ward: race.ward || null, election_id: race.election_id,
+        hasFinance: hasAnyFinance(index, race.id)
       },
       cycle: cycle || null,
       candidates: cands.map(function (c) {
         var hasFinance = !!c.committee_id;
         return {
-          id: c.id, name: c.name, incumbent: !!c.incumbent, status: c.status,
+          id: c.id, slug: candidateSlug(c, race), name: c.name,
+          incumbent: !!c.incumbent, status: c.status,
           hasFinance: hasFinance, stillPopulating: !hasFinance,
           committee: hasFinance ? committeeMeta(index, c.id) : null,
           figures: hasFinance ? candidateFigures(index, c.id, cycle) : null
+        };
+      })
+    };
+  }
+
+  // Grouped race list for the office nav + picker (browse layer).
+  function officeRaces(index, office) {
+    var groups = OFFICE_GROUPS[office] || [];
+    return {
+      office: office,
+      groups: groups.map(function (g) {
+        var rs = index.races.filter(function (r) { return g.offices.indexOf(r.office) >= 0; }).sort(byRaceOrder);
+        return {
+          label: g.label,
+          races: rs.map(function (r) {
+            return {
+              id: r.id, slug: raceSlug(r), code: raceCode(r), label: r.label,
+              status: r.status, hasFinance: hasAnyFinance(index, r.id),
+              candidateCount: (index.candidatesByRace[r.id] || []).length
+            };
+          })
         };
       })
     };
@@ -265,12 +335,14 @@
 
   return {
     OFFICE_RACE_OFFICES: OFFICE_RACE_OFFICES,
+    OFFICE_GROUPS: OFFICE_GROUPS,
     EXCLUDED_CYCLES: EXCLUDED_CYCLES,
     loadData: loadData,
     candidateFigures: candidateFigures,
     committeeMeta: committeeMeta,
     availableCycles: availableCycles,
     isSelfFunded: isSelfFunded,
-    viewModels: { raceBrowse: raceBrowse, raceView: raceView }
+    kebab: kebab, raceSlug: raceSlug, candidateSlug: candidateSlug, raceCode: raceCode,
+    viewModels: { raceBrowse: raceBrowse, raceView: raceView, officeRaces: officeRaces }
   };
 });

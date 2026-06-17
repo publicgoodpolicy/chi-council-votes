@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chicago School Board 2026 — who's running &amp; who funds them</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Poppins (body). Recoleta (display) is named in CSS with a serif fallback;
+     the real Recoleta @font-face source is wired at B5. -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body style="margin:0">
+
+<!-- Squarespace Code Block mount.
+     OFFICE per page: data-office = school_board | city_council | mayor.
+     data-src (optional) overrides the data URL; default is the GitHub raw CDN.
+     For local testing, serve this folder and add data-src to a local copy of
+     election-data.json (the CDN copy requires the artifact be published — see B5).
+     B5 inlines data.js / render.js / app.js + styles into a single Code Block. -->
+<div id="ipg-elect-root" data-office="school_board"></div>
+
+<script src="./data.js"></script>
+<script src="./render.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>
