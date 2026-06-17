@@ -60,6 +60,7 @@ Requires $REPO (same convention as the council scripts).
 
 import json
 import os
+import re
 import sys
 import datetime
 
@@ -140,6 +141,10 @@ def generate_races(repo_root):
         src["school"] = "schoolboard.geojson"
         for d in sb:
             label = d["long"] or ("District %d" % d["key"])
+            # Display only: ballot uppercases the subdistrict letter ("1a" -> "1A").
+            # Touches the label/district string ONLY; race_id and geo_key are
+            # derived from d["key"] and are unaffected.
+            label = re.sub(r'(\d+)([ab])\b', lambda m: m.group(1) + m.group(2).upper(), label)
             races.append({"id": "sb-d%02d" % d["key"], "election_id": "2026-school-board",
                           "office": "school_board_member", "district": label,
                           "label": "School Board, %s" % label,
