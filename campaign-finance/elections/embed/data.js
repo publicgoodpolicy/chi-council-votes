@@ -1,0 +1,276 @@
+/* Elections embed — DATA layer (pure, dual-runtime).
+ *
+ * No window / document / fetch / localStorage. Node can require() this for the
+ * future SEO pre-render; the browser app layer (B2+) loads it as a global.
+ *
+ *   loadData(parsedJson) -> ONE memoized single-pass index
+ *   candidateFigures(index, candidateId, cycle)  // cycle=null => all-time
+ *   viewModels.raceBrowse(index, office, cycle)
+ *   viewModels.raceView(index, raceId, cycle)
+ *
+ * The index is built in a single pass over contributions and a single pass over
+ * IEs (O(C+I)); view models read pre-bucketed rows (no donors x contributions
+ * nested scan — that was the council Compare-by-Donor regression).
+ */
+(function (root, factory) {
+  if (typeof module !== 'undefined' && module.exports) module.exports = factory();
+  else root.ElectData = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  // Office page -> the race.office values it owns.
+  var OFFICE_RACE_OFFICES = {
+    school_board: ['school_board_president', 'school_board_member'],
+    city_council: ['alderperson'],
+    mayor: ['mayor']
+    // NOTE: city_clerk / city_treasurer races exist in the data but have no page
+    // among the three Code Blocks (flagged in HALT 1) — intentionally unmapped.
+  };
+
+  // Cycles never shown (out of SBE range / unattributable). Always excluded.
+  var EXCLUDED_CYCLES = { 'pre-2011': 1, 'undated': 1 };
+  var DUES_TYPE = 'IE Committee Dues Transfer';
+
+  function round2(n) { return Math.round((n + Number.EPSILON) * 100) / 100; }
+
+  // A contribution is self-funded if it is a loan OR comes from the candidate
+  // themselves (donor typed Candidate / self-funding). Small-dollar aggregate
+  // and third-party donors are NOT self.
+  function isSelfFunded(donors, c) {
+    var d = donors[c.donor_id] || {};
+    return !!(c.is_loan || c.contribution_type === 'Loan Received' ||
+              d.type === 'Candidate' ||
+              (d.industries || []).indexOf('self-funding') >= 0);
+  }
+
+  function loadData(json) {
+    var races = json.races || [];
+    var candidates = json.candidates || [];
+    var committees = json.committees || {};
+    var donors = json.donors || {};
+    var contributions = json.contributions || [];
+    var ies = json.independent_expenditures || [];
+
+    var raceById = {}, candidateById = {}, candidatesByRace = {};
+    for (var i = 0; i < races.length; i++) raceById[races[i].id] = races[i];
+    for (var j = 0; j < candidates.length; j++) {
+      var cnd = candidates[j];
+      candidateById[cnd.id] = cnd;
+      (candidatesByRace[cnd.race_id] || (candidatesByRace[cnd.race_id] = [])).push(cnd);
+    }
+
+    // committee key <-> candidate_id, and the committee meta lookup
+    var candByCommittee = {};            // committee key -> candidate_id
+    var committeeKeyByCandidate = {};    // candidate_id  -> committee key
+    for (var key in committees) {
+      if (!committees.hasOwnProperty(key)) continue;
+      var cid = committees[key].candidate_id;
+      if (cid) { candByCommittee[key] = cid; committeeKeyByCandidate[cid] = key; }
+    }
+
+    var directByCandidate = {};    // candidate_id -> [contrib rows]
+    var fundersBySpender = {};     // spender committee key -> [contrib rows]  (second hop)
+    var parentRollup = {};         // parent_id -> { parent_id, name, rows:[] }
+    var industryByCandidate = {};  // candidate_id -> { industry -> {direct, support, oppose} }  (B4)
+    var flagByCandidate = {};      // candidate_id -> { flagType -> {amount, count} }            (B4)
+    var cyclesSeen = {};
+    var stats = { contributionRowsVisited: 0, ieRowsVisited: 0 };
+
+    // ---- single pass over contributions ----
+    for (var k = 0; k < contributions.length; k++) {
+      stats.contributionRowsVisited++;
+      var ct = contributions[k];
+      var ck = ct.committee_id;
+      var candId = candByCommittee[ck];
+      var donor = donors[ct.donor_id];
+      var inScope = !EXCLUDED_CYCLES[ct.cycle] && ct.contribution_type !== DUES_TYPE;
+      if (inScope && ct.cycle) cyclesSeen[ct.cycle] = 1;
+
+      if (candId) {
+        (directByCandidate[candId] || (directByCandidate[candId] = [])).push(ct);
+        if (inScope) {
+          var amt = ct.amount || 0;
+          var inds = (donor && donor.industries && donor.industries.length) ? donor.industries : ['uncategorized'];
+          var ibc = industryByCandidate[candId] || (industryByCandidate[candId] = {});
+          for (var a = 0; a < inds.length; a++) {
+            var slot = ibc[inds[a]] || (ibc[inds[a]] = { direct: 0, support: 0, oppose: 0 });
+            slot.direct = round2(slot.direct + amt);
+          }
+          var flags = (donor && donor.flags) || [];
+          if (flags.length) {
+            var fbc = flagByCandidate[candId] || (flagByCandidate[candId] = {});
+            for (var f = 0; f < flags.length; f++) {
+              var ft = (flags[f] && flags[f].type) || String(flags[f]);
+              var fslot = fbc[ft] || (fbc[ft] = { amount: 0, count: 0 });
+              fslot.amount = round2(fslot.amount + amt); fslot.count++;
+            }
+          }
+        }
+      } else {
+        var cm = committees[ck];
+        if (cm && cm.type === 'independent_expenditure') {
+          (fundersBySpender[ck] || (fundersBySpender[ck] = [])).push(ct);
+        }
+      }
+
+      // parent rollup (browse-donors / contributor drill-down) — all contributions
+      if (donor) {
+        var pid = donor.parent_id || ct.donor_id;
+        var pr = parentRollup[pid] ||
+          (parentRollup[pid] = { parent_id: pid, name: (donors[pid] && donors[pid].name) || donor.name, rows: [] });
+        pr.rows.push(ct);
+      }
+    }
+
+    // ---- single pass over IEs ----
+    var ieByCandidate = {};  // candidate_id -> {support:[], oppose:[]}
+    for (var m = 0; m < ies.length; m++) {
+      stats.ieRowsVisited++;
+      var ie = ies[m];
+      var tcand = ie.target_candidate_id;
+      if (!tcand) continue;
+      var bucket = ieByCandidate[tcand] || (ieByCandidate[tcand] = { support: [], oppose: [] });
+      (ie.stance === 'oppose' ? bucket.oppose : bucket.support).push(ie);
+      if (!EXCLUDED_CYCLES[ie.cycle]) {
+        if (ie.cycle) cyclesSeen[ie.cycle] = 1;
+        var sp = committees[ie.spender_committee_id];
+        var tags = (sp && sp.industry_tags) || [];
+        var ibc2 = industryByCandidate[tcand] || (industryByCandidate[tcand] = {});
+        var field = ie.stance === 'oppose' ? 'oppose' : 'support';
+        for (var t = 0; t < tags.length; t++) {
+          var s2 = ibc2[tags[t]] || (ibc2[tags[t]] = { direct: 0, support: 0, oppose: 0 });
+          s2[field] = round2(s2[field] + (ie.amount || 0));
+        }
+      }
+    }
+
+    return {
+      races: races, candidates: candidates, committees: committees, donors: donors,
+      raceById: raceById, candidateById: candidateById, candidatesByRace: candidatesByRace,
+      candByCommittee: candByCommittee, committeeKeyByCandidate: committeeKeyByCandidate,
+      directByCandidate: directByCandidate, ieByCandidate: ieByCandidate,
+      fundersBySpender: fundersBySpender, parentRollup: parentRollup,
+      industryByCandidate: industryByCandidate, flagByCandidate: flagByCandidate,
+      cyclesSeen: cyclesSeen, _stats: stats, _memo: {}
+    };
+  }
+
+  function sumIE(list, cycle) {
+    var s = 0;
+    for (var i = 0; i < list.length; i++) {
+      var ie = list[i];
+      if (EXCLUDED_CYCLES[ie.cycle]) continue;
+      if (cycle != null && ie.cycle !== cycle) continue;
+      s += ie.amount || 0;
+    }
+    return s;
+  }
+
+  // The three money figures, kept SEPARATE — never summed into one number.
+  // cycle = null -> all-time (all non-excluded cycles); else a specific cycle code.
+  function candidateFigures(index, candidateId, cycle) {
+    var direct = index.directByCandidate[candidateId] || [];
+    var total = 0, self = 0;
+    for (var i = 0; i < direct.length; i++) {
+      var c = direct[i];
+      if (EXCLUDED_CYCLES[c.cycle]) continue;
+      if (c.contribution_type === DUES_TYPE) continue;
+      if (cycle != null && c.cycle !== cycle) continue;
+      var a = c.amount || 0;
+      total += a;
+      if (isSelfFunded(index.donors, c)) self += a;
+    }
+    var ieB = index.ieByCandidate[candidateId] || { support: [], oppose: [] };
+    return {
+      contributions: { total: round2(total), selfFunded: round2(self), thirdParty: round2(total - self) },
+      independentSupport: round2(sumIE(ieB.support, cycle)),
+      independentOpposition: round2(sumIE(ieB.oppose, cycle))
+    };
+  }
+
+  function committeeMeta(index, candidateId) {
+    var ckey = index.committeeKeyByCandidate[candidateId];
+    if (!ckey) return null;
+    var cm = index.committees[ckey];
+    var sbe = cm.sbe_committee_id || null;
+    return {
+      key: ckey, name: cm.committee_name || null, sbe_committee_id: sbe,
+      sunshineUrl: sbe ? ('https://illinoissunshine.org/committees/' + sbe + '/') : null
+    };
+  }
+
+  // Neutral order = alphabetical by SURNAME (ballot convention), never by amount.
+  // Strip a trailing generational suffix, then key on the last token.
+  function surnameKey(name) {
+    var n = String(name || '').replace(/,?\s*(jr|sr|ii|iii|iv)\.?$/i, '').trim();
+    var toks = n.split(/\s+/);
+    return (toks[toks.length - 1] || n).toLowerCase();
+  }
+  function byNameNeutral(a, b) {
+    var s = surnameKey(a.name).localeCompare(surnameKey(b.name));
+    return s !== 0 ? s : String(a.name).localeCompare(String(b.name));
+  }
+  function byRaceOrder(a, b) {
+    var ak = (a.geo_key == null) ? 0 : 1, bk = (b.geo_key == null) ? 0 : 1; // citywide first
+    if (ak !== bk) return ak - bk;
+    return (a.geo_key || 0) - (b.geo_key || 0);
+  }
+
+  // ---- view models ----
+  function raceView(index, raceId, cycle) {
+    var race = index.raceById[raceId];
+    if (!race) return null;
+    var cands = (index.candidatesByRace[raceId] || []).slice().sort(byNameNeutral);
+    return {
+      race: {
+        id: race.id, label: race.label, office: race.office, status: race.status,
+        district: race.district || null, ward: race.ward || null, election_id: race.election_id
+      },
+      cycle: cycle || null,
+      candidates: cands.map(function (c) {
+        var hasFinance = !!c.committee_id;
+        return {
+          id: c.id, name: c.name, incumbent: !!c.incumbent, status: c.status,
+          hasFinance: hasFinance, stillPopulating: !hasFinance,
+          committee: hasFinance ? committeeMeta(index, c.id) : null,
+          figures: hasFinance ? candidateFigures(index, c.id, cycle) : null
+        };
+      })
+    };
+  }
+
+  function raceBrowse(index, office, cycle) {
+    var offices = OFFICE_RACE_OFFICES[office] || [];
+    var races = index.races.filter(function (r) { return offices.indexOf(r.office) >= 0; }).sort(byRaceOrder);
+    return {
+      office: office, cycle: cycle || null,
+      races: races.map(function (r) {
+        return {
+          id: r.id, label: r.label, status: r.status, district: r.district || null, ward: r.ward || null,
+          candidates: (index.candidatesByRace[r.id] || []).slice().sort(byNameNeutral).map(function (c) {
+            return {
+              id: c.id, name: c.name, incumbent: !!c.incumbent, hasFinance: !!c.committee_id,
+              contributions: c.committee_id ? candidateFigures(index, c.id, cycle).contributions.total : null
+            };
+          })
+        };
+      })
+    };
+  }
+
+  // Selectable cycles (non-excluded), newest-ish first; for the B5 year filter.
+  function availableCycles(index) {
+    return Object.keys(index.cyclesSeen).sort().reverse();
+  }
+
+  return {
+    OFFICE_RACE_OFFICES: OFFICE_RACE_OFFICES,
+    EXCLUDED_CYCLES: EXCLUDED_CYCLES,
+    loadData: loadData,
+    candidateFigures: candidateFigures,
+    committeeMeta: committeeMeta,
+    availableCycles: availableCycles,
+    isSelfFunded: isSelfFunded,
+    viewModels: { raceBrowse: raceBrowse, raceView: raceView }
+  };
+});
