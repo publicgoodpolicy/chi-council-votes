@@ -92,9 +92,11 @@ governing rule below). Export `$REPO`; paths are relative to the repo root.
 5.  ingest_ie.py --council campaign-finance/election-data.json \
         --expenditures <SBE Expenditures> --receipts <SBE Receipts> \
         --out campaign-finance/election-data.json            # IE layer; internal build_rollups now safe
-6.  build_rollups.py     campaign-finance/election-data.json # standalone, idempotent
-7.  sync_overrides.py    --data-file campaign-finance/election-data.json \
-        --sheet-id <ID> --creds-file <path>                  # shared classification
+6.  sync_overrides.py    --data-file campaign-finance/election-data.json \
+        --sheet-id <ID> --creds-file <path>                  # shared classification + clusters
+                                                            #   + IE-committee industry tags
+7.  build_rollups.py     campaign-finance/election-data.json # LAST: rollups reflect the synced
+                                                            #   tags/classifications (see below)
 8.  validate_council_data.py  campaign-finance/election-data.json   # shared gate (positional arg)
 ```
 
@@ -103,6 +105,15 @@ governing rule below). Export `$REPO`; paths are relative to the repo root.
 lacks `parent_id`. `transform_slice1` (step 3) guarantees that, so it sits before
 `ingest_ie` here. This is the one difference from the council `build_all.sh`, where
 slice1/slice2 run *after* a prior full build has already assigned `parent_id`.
+
+**`build_rollups` runs LAST, after `sync_overrides`** (mirroring `build_all.sh`,
+where rollups run last). Only then do the rollups reflect the Sheet: `by_industry`'s
+`independent`/IE layer is keyed off the IE committees' `industry_tags` (set by
+`sync_overrides`), and `by_*` direct totals reflect the synced donor classifications.
+A `build_rollups` run *before* `sync_overrides` produces a rollup with an empty IE/
+industry layer and pre-Sheet classification counts — so the step-5 internal
+`build_rollups` is intermediate only and is overwritten by step 7. (`sync_overrides`
+sets `parent_id` on clustered donors directly, so no slice1 re-run is needed.)
 
 - **`transform_slice1`** self-parents donors on election data (no clusters →
   `parent_id = id` for every donor) and tolerates a zero-contribution seed.

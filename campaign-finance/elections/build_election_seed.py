@@ -46,14 +46,22 @@ CANONICAL RUN ORDER (full election build)
   5. ingest_ie.py --council election-data.json --expenditures <SBE Exp> \
         --receipts <SBE Rec> --out election-data.json
         IE layer; its internal build_rollups is now safe (every donor has parent_id).
-  6. build_rollups.py     election-data.json     (standalone, idempotent)
-  7. sync_overrides.py    --data-file election-data.json --sheet-id <ID> --creds-file <path>
+  6. sync_overrides.py    --data-file election-data.json --sheet-id <ID> --creds-file <path>
+        Shared classification + clusters + IE-committee industry tags (sets parent_id
+        on clustered donors directly).
+  7. build_rollups.py     election-data.json     (standalone, idempotent)
+        Runs LAST so the rollups reflect the Sheet: by_industry's independent/IE layer
+        (keyed off IE-committee industry_tags) and direct totals reflect the synced
+        donor classifications — which a pre-sync build_rollups would miss.
   8. validate_council_data.py  election-data.json     (positional arg; shared gate)
 
 GOVERNING RULE: build_rollups — INCLUDING the copy ingest_ie calls at its end — must
 never run while any donor lacks parent_id. transform_slice1 (step 3) guarantees this,
-which is why slice1/slice2 sit BEFORE ingest_ie here. This differs from the council
-build_all.sh, where slice1/slice2 run AFTER a prior full build has already set parent_id.
+which is why slice1/slice2 sit BEFORE ingest_ie here. And build_rollups runs AFTER
+sync_overrides (mirroring build_all.sh, where rollups run last) so the IE/industry
+layer reflects the synced tags; the copy inside ingest_ie at step 5 is just
+intermediate and is overwritten by step 7. This differs from the council build_all.sh
+only in that slice1/slice2 sit before ingest_ie here.
 
 Requires $REPO (same convention as the council scripts).
 """
