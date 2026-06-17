@@ -267,12 +267,14 @@ def main():
     data["races"] = races
     data["candidates"] = candidates
     # Finance keys must match the council-data.json shape the reused pipeline
-    # expects: committees/donors/rollups are DICTS (keyed by id), the rest LISTS.
+    # expects: committees/donors/rollups/industry_tags are DICTS (keyed by id),
+    # while contributions/independent_expenditures are LISTS. (industry_tags is a
+    # dict — sync_overrides does industry_tags[k]=... ; a list breaks it.)
     # `cur if cur else default` coerces an empty/wrong-typed seed value to the
     # right type while preserving any already-ingested finance data on re-runs.
     for k, default in (("committees", {}), ("donors", {}), ("contributions", []),
                        ("independent_expenditures", []), ("rollups", {}),
-                       ("industry_tags", [])):
+                       ("industry_tags", {})):
         cur = existing.get(k)
         data[k] = cur if cur else default
     # ingest_ie reads d['cycles']; preserve any existing override, else seed it.
