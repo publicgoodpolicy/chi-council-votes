@@ -3,46 +3,77 @@
   "_status_values": "declared | filed | certified | withdrawn | disqualified | incumbent-pending",
   "_example_remove_before_use": true,
   "mappings": {
-    "_EXAMPLE_SB_COMMITTEE_ID_1": {
-      "candidate_id": "sample-rivera-sb-d12",
-      "name": "A. Rivera (PLACEHOLDER)",
-      "race_id": "sb-d12",
+    "39881": {
+      "candidate_id": "biggs-sb-president",
+      "name": "Jessica Biggs",
+      "race_id": "sb-president",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {}
+    },
+    "39805": {
+      "candidate_id": "custer-sb-president",
+      "name": "Jennifer Custer",
+      "race_id": "sb-president",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {}
+    },
+    "40912": {
+      "candidate_id": "revuluri-sb-president",
+      "name": "Sendhil Revuluri",
+      "race_id": "sb-president",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {}
+    },
+    "41112": {
+      "candidate_id": "henderson-sb-president",
+      "name": "Victor Henderson",
+      "race_id": "sb-president",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {}
+    },
+    "38810": {
+      "candidate_id": "bannon-sb-d01",
+      "name": "Ed Bannon",
+      "race_id": "sb-d01",
       "incumbent": true,
       "status": "filed",
-      "bio": {
-        "occupation": "Teacher",
-        "neighborhood": "Brighton Park",
-        "current_roles": [
-          "Appointed board member, District 12"
-        ],
-        "links": {}
-      }
+      "bio": {}
     },
-    "_EXAMPLE_SB_COMMITTEE_ID_2": {
-      "candidate_id": "sample-okafor-sb-d12",
-      "name": "B. Okafor (PLACEHOLDER)",
-      "race_id": "sb-d12",
+    "41087": {
+      "candidate_id": "peralta-sb-d02",
+      "name": "Claudia Peralta",
+      "race_id": "sb-d02",
       "incumbent": false,
       "status": "filed",
-      "bio": {
-        "occupation": "Nonprofit director",
-        "neighborhood": "Gage Park",
-        "current_roles": [],
-        "links": {}
-      }
+      "bio": {}
     },
-    "_EXAMPLE_MAYOR_COMMITTEE_ID": {
-      "candidate_id": "sample-declared-mayor",
-      "name": "Sample Declared Candidate (PLACEHOLDER)",
-      "race_id": "mayor",
+    "39783": {
+      "candidate_id": "pierre-sb-d02",
+      "name": "Michelle Pierre",
+      "race_id": "sb-d02",
       "incumbent": false,
-      "status": "declared",
-      "bio": {
-        "occupation": "",
-        "neighborhood": "",
-        "current_roles": [],
-        "links": {}
-      }
+      "status": "filed",
+      "bio": {}
+    },
+    "39821": {
+      "candidate_id": "deberry-sb-d03",
+      "name": "Ebony DeBerry",
+      "race_id": "sb-d03",
+      "incumbent": true,
+      "status": "filed",
+      "bio": {}
+    },
+    "39903": {
+      "candidate_id": "leon-sb-d03",
+      "name": "Bruce Leon",
+      "race_id": "sb-d03",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {}
     }
   },
   "incumbent_stubs": {
