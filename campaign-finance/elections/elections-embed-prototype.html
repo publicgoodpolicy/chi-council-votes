@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chicago School Board 2026 — who's running & who funds them</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- PROTOTYPE FONTS: Fraunces stands in for Recoleta (display). Swap to Recoleta in production. -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6EFE9; --paper:#FCF8F3; --ink:#342828; --ink-soft:#6E5F58;
+    --tan:#EBDAC6; --line:#E0CDB6;
+    --teal:#044127; --sage:#508F88; --coral:#B0553A;
+    --display:'Fraunces',Georgia,serif; --body:'Poppins',system-ui,sans-serif; --r:14px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--cream); color:var(--ink); font-family:var(--body);
+    font-weight:400; line-height:1.55; -webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px; margin:0 auto; padding:0 20px}
+
+  header.masthead{padding:38px 0 20px}
+  .eyebrow{font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--teal);
+    font-weight:600; margin:0 0 14px; display:flex; align-items:center; gap:10px}
+  .eyebrow .box{width:14px; height:14px; border:2px solid var(--teal); border-radius:3px; position:relative; flex:none}
+  .eyebrow .box::after{content:""; position:absolute; left:2px; top:-3px; width:6px; height:10px;
+    border:solid var(--teal); border-width:0 2px 2px 0; transform:rotate(40deg)}
+  h1{font-family:var(--display); font-weight:500; font-size:clamp(28px,5vw,44px); line-height:1.05;
+    letter-spacing:-.01em; margin:0 0 14px; max-width:16ch}
+  .lede{font-size:16px; color:var(--ink-soft); max-width:60ch; margin:0}
+  .lede strong{color:var(--ink); font-weight:500}
+
+  /* top-level segmented nav */
+  .topnav{display:inline-flex; background:var(--tan); border-radius:30px; padding:4px; margin:24px 0 0; gap:2px}
+  .topnav button{appearance:none; border:0; background:none; cursor:pointer; font-family:var(--body);
+    font-size:14px; font-weight:500; color:var(--ink-soft); padding:9px 20px; border-radius:26px}
+  .topnav button[aria-selected="true"]{background:var(--teal); color:#fff}
+  .topnav button:focus-visible{outline:2px solid var(--sage); outline-offset:2px}
+
+  nav.offices{display:flex; gap:6px; margin:22px 0 0; border-bottom:2px solid var(--line)}
+  .office{appearance:none; border:0; background:none; cursor:pointer; font-family:var(--body);
+    font-size:15px; font-weight:500; color:var(--ink-soft); padding:12px 16px;
+    border-bottom:3px solid transparent; margin-bottom:-2px; border-radius:6px 6px 0 0}
+  .office[aria-selected="true"]{color:var(--teal); border-bottom-color:var(--teal)}
+  .office:focus-visible{outline:2px solid var(--sage); outline-offset:2px}
+  .office .tag{font-size:11px; color:var(--ink-soft); font-weight:400}
+
+  .districts{display:flex; flex-wrap:wrap; gap:8px; padding:20px 0 4px}
+  .chip{appearance:none; cursor:pointer; font-family:var(--body); font-size:13px; font-weight:500;
+    padding:7px 13px; border-radius:20px; border:1px solid var(--line); background:var(--paper); color:var(--ink-soft)}
+  .chip[aria-pressed="true"]{background:var(--teal); border-color:var(--teal); color:#fff}
+  .chip[data-status="soon"]{opacity:.55}
+  .chip:focus-visible{outline:2px solid var(--sage); outline-offset:2px}
+  .picker-note{font-size:12.5px; color:var(--ink-soft); margin:8px 0 0}
+
+  .race-head{display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; margin:26px 0 4px}
+  .race-head h2{font-family:var(--display); font-weight:500; font-size:26px; margin:0}
+  .race-meta{font-size:13px; color:var(--ink-soft)}
+  .field-note{font-size:13px; color:var(--ink-soft); background:var(--tan); border-radius:10px;
+    padding:10px 14px; margin:14px 0 22px; display:flex; gap:9px; align-items:flex-start}
+  .field-note b{color:var(--ink); font-weight:500}
+
+  .card{background:var(--paper); border:1px solid var(--line); border-radius:var(--r); padding:22px 24px; margin:0 0 16px}
+  .card-top{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:4px}
+  .cand-name{font-family:var(--display); font-weight:500; font-size:21px; margin:0}
+  .chip-inc{font-size:11px; font-weight:500; color:var(--teal); background:#E5EFE9; border-radius:20px; padding:2px 10px}
+  .chip-self{font-size:11px; font-weight:500; color:var(--coral); background:#F4E3DC; border-radius:20px; padding:2px 10px}
+  .committee{font-size:12.5px; color:var(--ink-soft); margin:0 0 18px}
+
+  .bars{display:flex; flex-direction:column; gap:13px}
+  .barrow{display:grid; grid-template-columns:148px 1fr 134px; align-items:center; gap:12px}
+  .barrow.click{cursor:pointer; appearance:none; border:0; background:none; text-align:left;
+    font-family:var(--body); padding:6px 8px; margin:-6px -8px; border-radius:8px; width:calc(100% + 16px)}
+  .barrow.click:hover{background:#F2E8DC}
+  .barrow.click:focus-visible{outline:2px solid var(--sage); outline-offset:1px}
+  .barlabel{font-size:12.5px; color:var(--ink-soft); display:flex; align-items:center; gap:6px}
+  .barlabel .caret{font-size:10px; color:var(--teal); transition:transform .2s}
+  .barrow.click[aria-expanded="true"] .caret{transform:rotate(90deg)}
+  .bartrack{height:18px; background:#EFE6DC; border-radius:5px; overflow:hidden; position:relative}
+  .barfill{height:100%; display:flex; transition:width .8s cubic-bezier(.2,.7,.2,1)}
+  .seg{height:100%}
+  .seg.third{background:var(--teal)}
+  .seg.self{background:repeating-linear-gradient(135deg,#3E6B53 0 5px,#9DBBA9 5px 10px)}
+  .seg.support{background:var(--sage)}
+  .seg.oppose{background:var(--coral)}
+  .barval{font-size:13px; font-weight:500; text-align:right}
+  .barval .sub{display:block; font-size:11px; font-weight:400; color:var(--ink-soft)}
+  .zero{color:#A99B91; font-weight:400}
+
+  .selfline{font-size:12px; color:var(--coral); margin:11px 0 0; padding-left:160px}
+  .selfline b{font-weight:500}
+  .caption{font-size:11.5px; color:var(--ink-soft); margin:14px 0 0; padding-top:13px; border-top:1px solid var(--line)}
+
+  /* contributor drill-down panel */
+  .contrib{max-height:0; overflow:hidden; transition:max-height .3s ease; margin-top:0}
+  .contrib.open{max-height:1400px; margin-top:12px}
+  .contrib-inner{background:var(--cream); border:1px solid var(--line); border-radius:10px; padding:14px 16px}
+  .contrib-h{font-size:12px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 10px}
+  .crow{display:grid; grid-template-columns:1fr auto; gap:10px; padding:7px 0; border-bottom:1px solid var(--line); font-size:13px}
+  .crow:last-child{border-bottom:0}
+  .crow .who{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+  .crow .amt{font-weight:500; white-space:nowrap}
+  .crow .n{font-size:11px; color:var(--ink-soft)}
+  .tagchip{font-size:10.5px; padding:1px 8px; border-radius:14px; background:var(--tan); color:var(--ink-soft)}
+  .tagchip.self{background:#F4E3DC; color:var(--coral)}
+  .contrib-note{font-size:12px; color:var(--ink-soft); margin:2px 0 0}
+
+  .legend{display:flex; flex-wrap:wrap; gap:14px 20px; margin:6px 0 0; font-size:12px; color:var(--ink-soft)}
+  .legend span{display:flex; align-items:center; gap:7px}
+  .sw{width:15px; height:13px; border-radius:3px; flex:none}
+  .sw.third{background:var(--teal)} .sw.self{background:repeating-linear-gradient(135deg,#3E6B53 0 4px,#9DBBA9 4px 8px)}
+  .sw.support{background:var(--sage)} .sw.oppose{background:var(--coral)}
+
+  /* election spend view */
+  .preview-banner{font-size:12.5px; color:var(--ink-soft); background:var(--tan); border-radius:10px;
+    padding:11px 15px; margin:22px 0 18px; display:flex; gap:9px; align-items:flex-start}
+  .preview-banner b{color:var(--ink); font-weight:500}
+  .srow{display:grid; grid-template-columns:30px 1fr auto; gap:14px; align-items:center;
+    background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:14px 18px; margin:0 0 10px}
+  .srank{font-family:var(--display); font-size:18px; color:var(--ink-soft)}
+  .sname{font-size:15px; font-weight:500}
+  .sdetail{font-size:12.5px; color:var(--ink-soft); margin-top:2px}
+  .samt{text-align:right; font-size:16px; font-weight:500}
+  .samt .k{display:block; font-size:11px; font-weight:400; color:var(--ink-soft)}
+  .stance{font-size:10.5px; padding:1px 9px; border-radius:14px; margin-left:8px}
+  .stance.support{background:#E4EEEB; color:var(--sage)}
+  .stance.oppose{background:#F4E3DC; color:var(--coral)}
+  .stance.self{background:#F4E3DC; color:var(--coral)}
+  .stance.pac{background:var(--tan); color:var(--ink-soft)}
+
+  .soon{text-align:center; padding:54px 24px; background:var(--paper); border:1px dashed var(--line);
+    border-radius:var(--r); color:var(--ink-soft)}
+  .soon h2{font-family:var(--display); font-weight:500; color:var(--ink); font-size:22px; margin:0 0 8px}
+  .soon p{margin:0 auto; max-width:46ch; font-size:14px}
+
+  footer{margin:34px 0 60px; padding-top:22px; border-top:2px solid var(--line); font-size:12.5px; color:var(--ink-soft)}
+  footer h3{font-family:var(--display); font-weight:500; color:var(--ink); font-size:15px; margin:0 0 8px}
+  footer p{margin:0 0 12px; max-width:74ch}
+  footer .src{font-size:11.5px}
+
+  @media (max-width:560px){
+    .barrow{grid-template-columns:1fr; gap:4px}
+    .barval{text-align:left} .selfline{padding-left:0}
+    .srow{grid-template-columns:24px 1fr; } .samt{grid-column:2; text-align:left; margin-top:6px}
+  }
+  @media (prefers-reduced-motion:reduce){ .barfill,.contrib{transition:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow"><span class="box" aria-hidden="true"></span>Chicago School Board · November 3, 2026</p>
+    <h1>Who's running, and who's funding them</h1>
+    <p class="lede">A nonpartisan guide to the money behind the 2026 Chicago Board of Education election. We show what campaigns raise and what outside groups spend — <strong>not who to vote for.</strong></p>
+    <div class="topnav" role="tablist" aria-label="View">
+      <button role="tab" id="t-byrace" aria-selected="true">By race</button>
+      <button role="tab" id="t-spend" aria-selected="false">Election spend</button>
+    </div>
+  </header>
+
+  <section id="byrace">
+    <nav class="offices" role="tablist" aria-label="Office">
+      <button class="office" role="tab" id="tab-pres" aria-selected="false">Board President</button>
+      <button class="office" role="tab" id="tab-dist" aria-selected="true">Districts <span class="tag">20 seats</span></button>
+    </nav>
+    <div id="picker" class="districts" role="group" aria-label="District"></div>
+    <p class="picker-note" id="picker-note">One race is live below as we build out the tool; the rest fill in as candidates file and finance is processed.</p>
+    <div id="view" aria-live="polite"></div>
+  </section>
+
+  <section id="spend" hidden></section>
+
+  <footer>
+    <h3>How to read this</h3>
+    <p>The three figures for each candidate — money from contributors, independent support, and independent opposition — are shown <strong>separately and never added together</strong>. Money a campaign raises goes to that campaign. Independent spending is made by outside groups; it is reported by the group that spent it, is not coordinated with the candidate, and does not go to their campaign. Where a candidate has loaned or given money to their own campaign, that is shown apart from money raised from other people.</p>
+    <p>Showing who funds a candidate is not a claim about how they would act in office. This tool reports disclosed money; it does not draw conclusions from it.</p>
+    <p class="src">Source: Illinois State Board of Elections filings, via Illinois Sunshine (Reform for Illinois). Donor classification is in progress (about 17% of this election's donors categorized so far); uncategorized donors are shown as not-yet-categorized. Independent expenditures reflect filings matched to candidates in this tool.</p>
+  </footer>
+
+</div>
+
+<script>
+/* ============================================================================
+   DATA — prototype slice; replace with fetch(ELECTION_DATA_URL) in production.
+   Per-candidate "contributors" are the donor-rollup (by parent) for the drill-down.
+   sb-d03 + the SPEND figures are the real first-ingest numbers; contributor NAMES
+   are only included where confirmed (Leon's 7 rows, dumped read-only). DeBerry's
+   181 contributors and the IE spender NAMES are not inlined — see contributorsNote
+   / nameKnown:false — those come from the live data.
+   ============================================================================ */
+const SCALE = 650000;
+const DATA = {
+  races: [
+    { id:"sb-president", office:"pres", label:"Board President", status:"soon" },
+    { id:"sb-d01", office:"dist", code:"1A", label:"District 1A", status:"soon" },
+    { id:"sb-d02", office:"dist", code:"1B", label:"District 1B", status:"soon" },
+    { id:"sb-d03", office:"dist", code:"2A", label:"District 2A", status:"live",
+      fieldNote:"Two candidates with registered committees are shown; others may appear as they file.",
+      candidates:[
+        { name:"Ebony DeBerry", incumbent:true, committee:"Ebony DeBerry for School Board",
+          contributions:533610, contributors:181, selfFunded:0, thirdParty:533610,
+          support:0, supportN:0, oppose:126078, opposeN:3,
+          contributorList:[],
+          contributorsNote:"181 contributions totaling $533,610. The itemized contributor list loads from the live filings data — in the published tool this expands to every donor, rolled up and sorted largest first." },
+        { name:"Bruce Leon", incumbent:false, committee:"Bruce Leon for Education",
+          contributions:620403, contributors:7, selfFunded:620025, thirdParty:378,
+          support:24766, supportN:5, oppose:0, opposeN:0,
+          contributorList:[
+            { who:"Bruce Leon", tag:"Candidate's own money / loans", self:true, amount:620025, n:6 },
+            { who:"Z to A Research", tag:"Not yet categorized", self:false, amount:378, n:1 }
+          ] }
+      ]
+    },
+    { id:"sb-d04", office:"dist", code:"2B", label:"District 2B", status:"soon" },
+    { id:"sb-d05", office:"dist", code:"3A", label:"District 3A", status:"soon" },
+    { id:"sb-d06", office:"dist", code:"3B", label:"District 3B", status:"soon" },
+    { id:"sb-d07", office:"dist", code:"4A", label:"District 4A", status:"soon" },
+    { id:"sb-d08", office:"dist", code:"4B", label:"District 4B", status:"soon" },
+    { id:"sb-d09", office:"dist", code:"5A", label:"District 5A", status:"soon" },
+    { id:"sb-d10", office:"dist", code:"5B", label:"District 5B", status:"soon" },
+    { id:"sb-d11", office:"dist", code:"6A", label:"District 6A", status:"soon" },
+    { id:"sb-d12", office:"dist", code:"6B", label:"District 6B", status:"soon" },
+    { id:"sb-d13", office:"dist", code:"7A", label:"District 7A", status:"soon" },
+    { id:"sb-d14", office:"dist", code:"7B", label:"District 7B", status:"soon" },
+    { id:"sb-d15", office:"dist", code:"8A", label:"District 8A", status:"soon" },
+    { id:"sb-d16", office:"dist", code:"8B", label:"District 8B", status:"soon" },
+    { id:"sb-d17", office:"dist", code:"9A", label:"District 9A", status:"soon" },
+    { id:"sb-d18", office:"dist", code:"9B", label:"District 9B", status:"soon" },
+    { id:"sb-d19", office:"dist", code:"10A", label:"District 10A", status:"soon" },
+    { id:"sb-d20", office:"dist", code:"10B", label:"District 10B", status:"soon" }
+  ],
+  // Election spend — ranked largest first. Real figures; IE committee names withheld
+  // (nameKnown:false) until the live data pull. Self-funding shown as its own kind.
+  spend:[
+    { name:"Bruce Leon", kind:"self", nameKnown:true, amount:620025,
+      detail:"Self-funded his own campaign — loans and personal contributions (District 2A)" },
+    { name:"Independent expenditure committee", kind:"support", nameKnown:false, amount:367781,
+      detail:"Spent supporting Michelle Pierre (District 1B)" },
+    { name:"Independent expenditure committee", kind:"oppose", nameKnown:false, amount:126078,
+      detail:"Spent opposing Ebony DeBerry (District 2A)" },
+    { name:"Independent expenditure committee", kind:"support", nameKnown:false, amount:24766,
+      detail:"Spent supporting Bruce Leon (District 2A)" },
+    { name:"Z to A Research", kind:"donor", nameKnown:true, amount:378,
+      detail:"Contributed to Bruce Leon (District 2A)" }
+  ]
+};
+
+const $ = s => document.querySelector(s);
+const usd = n => "$" + Math.round(n).toLocaleString();
+const pct = v => Math.max(v>0 ? 0.8 : 0, (v/SCALE)*100);
+let topView = "byrace", office = "dist", activeRace = "sb-d03", uid = 0;
+
+function bar(label, segs, count, clickId){
+  const sum = segs.reduce((a,s)=>a+s.v,0);
+  const fill = segs.filter(s=>s.v>0).map(s=>
+    `<div class="seg ${s.cls}" style="width:${(s.v/SCALE*100)||0}%"></div>`).join("");
+  const valHtml = sum>0
+    ? `${usd(sum)}${count!=null?`<span class="sub">${count} ${count===1?'contribution':'contributions'}</span>`:''}`
+    : `<span class="zero">none reported</span>`;
+  const labelHtml = clickId
+    ? `<span class="barlabel"><span class="caret">▸</span>${label}</span>`
+    : `<span class="barlabel">${label}</span>`;
+  const inner = `${labelHtml}
+    <div class="bartrack"><div class="barfill" style="width:${pct(sum)}%">${fill}</div></div>
+    <div class="barval">${valHtml}</div>`;
+  return clickId
+    ? `<button class="barrow click" type="button" aria-expanded="false" aria-controls="${clickId}">${inner}</button>`
+    : `<div class="barrow">${inner}</div>`;
+}
+
+function contribPanel(c, id){
+  let body;
+  if(c.contributorList && c.contributorList.length){
+    body = c.contributorList.map(r=>`<div class="crow">
+      <div class="who">${r.who}<span class="tagchip ${r.self?'self':''}">${r.tag}</span></div>
+      <div class="amt">${usd(r.amount)} <span class="n">· ${r.n} ${r.n===1?'record':'records'}</span></div>
+    </div>`).join("");
+  } else {
+    body = `<p class="contrib-note">${c.contributorsNote||"Contributor detail loads from the live filings data."}</p>`;
+  }
+  return `<div class="contrib" id="${id}"><div class="contrib-inner">
+    <p class="contrib-h">Who gave to this campaign</p>${body}</div></div>`;
+}
+
+function card(c){
+  const cid = "contrib-"+(uid++);
+  const mostlySelf = c.contributions>0 && c.selfFunded/c.contributions >= 0.5;
+  const chips = [
+    c.incumbent ? `<span class="chip-inc">Incumbent</span>`:"",
+    mostlySelf ? `<span class="chip-self">Mostly self-funded</span>`:""
+  ].join("");
+  const contribBar = bar("From contributors",
+    [ {cls:"third", v:c.thirdParty}, {cls:"self", v:c.selfFunded} ], c.contributors, cid);
+  const selfLine = c.selfFunded>0
+    ? `<p class="selfline"><b>${usd(c.selfFunded)}</b> is the candidate's own money or loans · <b>${usd(c.thirdParty)}</b> from other donors</p>`:"";
+  const supportBar = bar("Independent support", [ {cls:"support", v:c.support} ], c.supportN, null);
+  const opposeBar  = bar("Independent opposition", [ {cls:"oppose", v:c.oppose} ], c.opposeN, null);
+  return `<article class="card">
+    <div class="card-top"><h3 class="cand-name">${c.name}</h3>${chips}</div>
+    <p class="committee">Committee: ${c.committee}</p>
+    <div class="bars">${contribBar}${contribPanel(c,cid)}${supportBar}${opposeBar}</div>
+    ${selfLine}
+    <p class="caption">Independent support and opposition are spending by outside groups, reported by those groups and not coordinated with the campaign. Figures are shown separately, never added together.</p>
+  </article>`;
+}
+
+function legend(){
+  return `<div class="legend" aria-hidden="true">
+    <span><i class="sw third"></i>From other donors</span>
+    <span><i class="sw self"></i>Candidate's own money / loans</span>
+    <span><i class="sw support"></i>Independent support</span>
+    <span><i class="sw oppose"></i>Independent opposition</span></div>`;
+}
+
+function renderByRace(){
+  $("#tab-pres").setAttribute("aria-selected", office==="pres");
+  $("#tab-dist").setAttribute("aria-selected", office==="dist");
+  const inOffice = DATA.races.filter(r=>r.office===office);
+  $("#picker").innerHTML = inOffice.map(r=>{
+    const lbl = office==="dist" ? r.code : r.label;
+    return `<button class="chip" data-status="${r.status}" data-id="${r.id}"
+      aria-pressed="${r.id===activeRace}">${lbl}${r.status==="live"?'':' · soon'}</button>`;}).join("");
+  $("#picker").style.display = office==="dist" ? "flex":"none";
+  $("#picker-note").style.display = office==="dist" ? "block":"none";
+
+  const race = DATA.races.find(r=>r.id===activeRace) || inOffice.find(r=>r.status==="live") || inOffice[0];
+  if(!race || race.status!=="live"){
+    $("#view").innerHTML = `<div class="soon"><h2>${race?race.label:"This race"} — coming soon</h2>
+      <p>We're adding candidates and campaign-finance data for this race. Check back as the field fills in.</p></div>`;
+    return;
+  }
+  const cands = [...race.candidates].sort((a,b)=>a.name.split(" ").pop().localeCompare(b.name.split(" ").pop()));
+  uid = 0;
+  $("#view").innerHTML = `
+    <div class="race-head"><h2>${race.label}</h2>
+      <span class="race-meta">${cands.length} candidates · on the ballot Nov 3, 2026</span></div>
+    ${race.fieldNote?`<p class="field-note">▸ <span><b>Field still being added.</b> ${race.fieldNote}</span></p>`:''}
+    ${legend()}<div style="height:18px"></div>${cands.map(card).join("")}`;
+}
+
+function renderSpend(){
+  const rows = [...DATA.spend].sort((a,b)=>b.amount-a.amount);
+  const stanceChip = r => {
+    if(r.kind==="self") return `<span class="stance self">self-funding</span>`;
+    if(r.kind==="support") return `<span class="stance support">independent support</span>`;
+    if(r.kind==="oppose") return `<span class="stance oppose">independent opposition</span>`;
+    return `<span class="stance pac">contribution</span>`;
+  };
+  $("#spend").innerHTML = `
+    <p class="preview-banner">▸ <span><b>Preview with confirmed figures.</b> The published view ranks all 3,093 donors and every independent spender by name, each expandable to its rolled-up detail. Shown here are the spend figures confirmed in the first data run; independent-committee names fill in from the live filings.</span></p>
+    ${rows.map((r,i)=>`<div class="srow">
+      <div class="srank">${i+1}</div>
+      <div><span class="sname">${r.name}</span>${stanceChip(r)}${r.nameKnown?'':' <span class="n" style="font-size:11px;color:#A99B91">(name in live view)</span>'}
+        <div class="sdetail">${r.detail}</div></div>
+      <div class="samt">${usd(r.amount)}<span class="k">${r.kind==="self"?"candidate's own":r.kind==="donor"?"to a campaign":"independent"}</span></div>
+    </div>`).join("")}`;
+}
+
+function render(){
+  $("#byrace").hidden = topView!=="byrace";
+  $("#spend").hidden  = topView!=="spend";
+  $("#t-byrace").setAttribute("aria-selected", topView==="byrace");
+  $("#t-spend").setAttribute("aria-selected", topView==="spend");
+  if(topView==="byrace") renderByRace(); else renderSpend();
+}
+
+$("#t-byrace").onclick = ()=>{ topView="byrace"; render(); };
+$("#t-spend").onclick  = ()=>{ topView="spend";  render(); };
+$("#tab-pres").onclick = ()=>{ office="pres"; activeRace=""; render(); };
+$("#tab-dist").onclick = ()=>{ office="dist"; activeRace="sb-d03"; render(); };
+$("#picker").addEventListener("click", e=>{
+  const b=e.target.closest(".chip"); if(!b) return; activeRace=b.dataset.id; render(); });
+// drill-down toggle (event delegation; no re-render so state persists)
+$("#view").addEventListener("click", e=>{
+  const btn=e.target.closest(".barrow.click"); if(!btn) return;
+  const panel=document.getElementById(btn.getAttribute("aria-controls")); if(!panel) return;
+  const open=panel.classList.toggle("open");
+  btn.setAttribute("aria-expanded", open);
+});
+
+render();
+</script>
+</body>
+</html>
