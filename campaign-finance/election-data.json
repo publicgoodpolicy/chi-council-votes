@@ -900,6 +900,72 @@
       "positions": null
     },
     {
+      "id": "dones-sb-d06",
+      "race_id": "sb-d06",
+      "name": "Jason Dones",
+      "committee_id": "39820",
+      "status": "filed",
+      "incumbent": false,
+      "vacating_for": null,
+      "bio": {},
+      "positions": null
+    },
+    {
+      "id": "rivas-sb-d06",
+      "race_id": "sb-d06",
+      "name": "Carlos Rivas Jr.",
+      "committee_id": "39786",
+      "status": "filed",
+      "incumbent": true,
+      "vacating_for": null,
+      "bio": {},
+      "positions": null
+    },
+    {
+      "id": "sherratt-sb-d07",
+      "race_id": "sb-d07",
+      "name": "Elen Sherratt",
+      "committee_id": "41076",
+      "status": "filed",
+      "incumbent": false,
+      "vacating_for": null,
+      "bio": {},
+      "positions": null
+    },
+    {
+      "id": "zaccor-sb-d07",
+      "race_id": "sb-d07",
+      "name": "Karen Zaccor",
+      "committee_id": "39866",
+      "status": "filed",
+      "incumbent": true,
+      "vacating_for": null,
+      "bio": {},
+      "positions": null
+    },
+    {
+      "id": "rosenfeld-sb-d08",
+      "race_id": "sb-d08",
+      "name": "Ellen Rosenfeld",
+      "committee_id": "39858",
+      "status": "filed",
+      "incumbent": true,
+      "vacating_for": null,
+      "bio": {},
+      "positions": null
+    },
+    {
+      "id": "brown-sb-d09",
+      "race_id": "sb-d09",
+      "name": "Aaron \"Jitu\" Brown",
+      "committee_id": "39853",
+      "status": "filed",
+      "incumbent": true,
+      "vacating_for": null,
+      "bio": {},
+      "positions": null
+    },
+    {
       "id": "inc-ward-01",
       "race_id": "ward-01",
       "name": "Daniel La Spata",
@@ -1970,94 +2036,6 @@
       "positions": null
     },
     {
-      "id": "inc-sb-d06",
-      "race_id": "sb-d06",
-      "name": "Carlos Rivas Jr.",
-      "committee_id": null,
-      "status": "incumbent-pending",
-      "incumbent": true,
-      "vacating_for": null,
-      "bio": {
-        "current_roles": [
-          "Chicago Board of Education, District 3b"
-        ],
-        "board_role": "Elected",
-        "phone": "(773) 553-1600",
-        "email": "board@cps.edu",
-        "links": {
-          "office": "https://www.cpsboe.org/about/bios"
-        },
-        "source": "ipg-rep-finder REPS.school (current officeholder; candidacy not confirmed)"
-      },
-      "positions": null
-    },
-    {
-      "id": "inc-sb-d07",
-      "race_id": "sb-d07",
-      "name": "Karen Zaccor",
-      "committee_id": null,
-      "status": "incumbent-pending",
-      "incumbent": true,
-      "vacating_for": null,
-      "bio": {
-        "current_roles": [
-          "Chicago Board of Education, District 4a"
-        ],
-        "board_role": "Appointed",
-        "phone": "(773) 553-1600",
-        "email": "board@cps.edu",
-        "links": {
-          "office": "https://www.cpsboe.org/about/bios"
-        },
-        "source": "ipg-rep-finder REPS.school (current officeholder; candidacy not confirmed)"
-      },
-      "positions": null
-    },
-    {
-      "id": "inc-sb-d08",
-      "race_id": "sb-d08",
-      "name": "Ellen Rosenfeld",
-      "committee_id": null,
-      "status": "incumbent-pending",
-      "incumbent": true,
-      "vacating_for": null,
-      "bio": {
-        "current_roles": [
-          "Chicago Board of Education, District 4b"
-        ],
-        "board_role": "Elected",
-        "phone": "(773) 553-1600",
-        "email": "board@cps.edu",
-        "links": {
-          "office": "https://www.cpsboe.org/about/bios"
-        },
-        "source": "ipg-rep-finder REPS.school (current officeholder; candidacy not confirmed)"
-      },
-      "positions": null
-    },
-    {
-      "id": "inc-sb-d09",
-      "race_id": "sb-d09",
-      "name": "Aaron \"Jitu\" Brown",
-      "committee_id": null,
-      "status": "incumbent-pending",
-      "incumbent": true,
-      "vacating_for": null,
-      "bio": {
-        "current_roles": [
-          "Chicago Board of Education, District 5a"
-        ],
-        "board_role": "Elected",
-        "phone": "(773) 553-1600",
-        "email": "board@cps.edu",
-        "links": {
-          "office": "https://www.cpsboe.org/about/bios"
-        },
-        "source": "ipg-rep-finder REPS.school (current officeholder; candidacy not confirmed)"
-      },
-      "positions": null
-    },
-    {
       "id": "inc-sb-d10",
       "race_id": "sb-d10",
       "name": "Michilla \"Kyla\" Blaise",
@@ -2296,6 +2274,45 @@
           "office": "https://www.cpsboe.org/about/bios"
         },
         "source": "ipg-rep-finder REPS.school (current officeholder; candidacy not confirmed)"
+      },
+      "positions": null
+    },
+    {
+      "id": "cand-lenhof-sb-d04",
+      "race_id": "sb-d04",
+      "name": "Kyna Lenhof",
+      "committee_id": null,
+      "status": "filed",
+      "incumbent": false,
+      "vacating_for": null,
+      "bio": {
+        "source": "filed candidate, committee pending"
+      },
+      "positions": null
+    },
+    {
+      "id": "cand-alvarez-sb-d07",
+      "race_id": "sb-d07",
+      "name": "Angel Alvarez",
+      "committee_id": null,
+      "status": "filed",
+      "incumbent": false,
+      "vacating_for": null,
+      "bio": {
+        "source": "filed candidate, committee pending"
+      },
+      "positions": null
+    },
+    {
+      "id": "cand-williams-sb-d09",
+      "race_id": "sb-d09",
+      "name": "LaPamela Williams",
+      "committee_id": null,
+      "status": "filed",
+      "incumbent": false,
+      "vacating_for": null,
+      "bio": {
+        "source": "filed candidate, committee pending"
       },
       "positions": null
     }
@@ -187266,7 +187283,7 @@
       "color": "#5a6a7a"
     }
   },
-  "seed_generated_at": "2026-06-18T15:20:02",
+  "seed_generated_at": "2026-06-18T17:55:58",
   "cycles": {
     "2015": {
       "label": "2011 \u2013 2015 cycle",

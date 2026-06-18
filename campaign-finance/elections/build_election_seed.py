@@ -251,6 +251,25 @@ def build_candidates(race_map, race_ids):
             "bio": c.get("bio", {}),
             "positions": None,
         })
+
+    cand_stubs = race_map.get("candidate_stubs", {})
+    for candidate_id, c in cand_stubs.items():
+        if candidate_id.startswith("_") or not isinstance(c, dict):
+            continue
+        rid = c.get("race_id")
+        if rid not in race_ids:
+            bad.append((candidate_id, rid))
+        cands.append({
+            "id": c.get("candidate_id", candidate_id),
+            "race_id": rid,
+            "name": c.get("name"),
+            "committee_id": c.get("committee_id"),
+            "status": c.get("status", "filed"),
+            "incumbent": bool(c.get("incumbent", False)),
+            "vacating_for": c.get("vacating_for"),
+            "bio": c.get("bio", {}),
+            "positions": None,
+        })
     return cands, bad
 
 

@@ -106,7 +106,13 @@
       "incumbent": true,
       "status": "filed",
       "bio": {}
-    }
+    },
+    "39820": {"candidate_id":"dones-sb-d06","name":"Jason Dones","race_id":"sb-d06","incumbent":false,"status":"filed","bio":{}},
+    "39786": {"candidate_id":"rivas-sb-d06","name":"Carlos Rivas Jr.","race_id":"sb-d06","incumbent":true,"status":"filed","bio":{}},
+    "41076": {"candidate_id":"sherratt-sb-d07","name":"Elen Sherratt","race_id":"sb-d07","incumbent":false,"status":"filed","bio":{}},
+    "39866": {"candidate_id":"zaccor-sb-d07","name":"Karen Zaccor","race_id":"sb-d07","incumbent":true,"status":"filed","bio":{}},
+    "39858": {"candidate_id":"rosenfeld-sb-d08","name":"Ellen Rosenfeld","race_id":"sb-d08","incumbent":true,"status":"filed","bio":{}},
+    "39853": {"candidate_id":"brown-sb-d09","name":"Aaron \"Jitu\" Brown","race_id":"sb-d09","incumbent":true,"status":"filed","bio":{}}
   },
   "incumbent_stubs": {
     "inc-ward-01": {
@@ -1459,5 +1465,10 @@
         "source": "ipg-rep-finder REPS.school (current officeholder; candidacy not confirmed)"
       }
     }
+  },
+  "candidate_stubs": {
+    "cand-lenhof-sb-d04": {"candidate_id":"cand-lenhof-sb-d04","name":"Kyna Lenhof","race_id":"sb-d04","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "cand-alvarez-sb-d07": {"candidate_id":"cand-alvarez-sb-d07","name":"Angel Alvarez","race_id":"sb-d07","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "cand-williams-sb-d09": {"candidate_id":"cand-williams-sb-d09","name":"LaPamela Williams","race_id":"sb-d09","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}}
   }
 }
