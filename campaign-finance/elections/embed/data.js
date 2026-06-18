@@ -159,9 +159,11 @@
 
     // ---- single pass over IEs ----
     var ieByCandidate = {};  // candidate_id -> {support:[], oppose:[]}
+    var iesBySpender = {};   // spender committee key -> [ie rows]
     for (var m = 0; m < ies.length; m++) {
       stats.ieRowsVisited++;
       var ie = ies[m];
+      if (ie.spender_committee_id) (iesBySpender[ie.spender_committee_id] || (iesBySpender[ie.spender_committee_id] = [])).push(ie);
       var tcand = ie.target_candidate_id;
       if (!tcand) continue;
       var bucket = ieByCandidate[tcand] || (ieByCandidate[tcand] = { support: [], oppose: [] });
@@ -191,7 +193,7 @@
       races: races, candidates: candidates, committees: committees, donors: donors,
       raceById: raceById, candidateById: candidateById, candidatesByRace: candidatesByRace,
       candByCommittee: candByCommittee, committeeKeyByCandidate: committeeKeyByCandidate,
-      directByCandidate: directByCandidate, ieByCandidate: ieByCandidate,
+      directByCandidate: directByCandidate, ieByCandidate: ieByCandidate, iesBySpender: iesBySpender,
       fundersBySpender: fundersBySpender, parentRollup: parentRollup,
       industryByCandidate: industryByCandidate, flagByCandidate: flagByCandidate,
       raceBySlug: raceBySlug, candidateBySlug: candidateBySlug,
@@ -321,6 +323,7 @@
           m.kind = 'candidate'; m.label = (cand.name || cm.candidate_id) + (race.label ? (' — ' + race.label) : '');
         } else if (cm.type === 'independent_expenditure') {
           m.kind = 'ie'; m.label = cm.committee_name || cid;
+          m.ieIdentity = spenderFunders(index, cid).funders.slice(0, 3).map(function (x) { return x.name; });
         }
       }
       m.total = round2(m.total + (c.amount || 0)); m.count++;
@@ -332,6 +335,53 @@
       parent_id: parentId, name: parent.name || parentId,
       industries: parent.industries || [], flags: parent.flags || [],
       committees: committees, total: round2(total), count: committees.length
+    };
+  }
+
+  // Committee profile (bidirectional with the donor footprint). For an IE
+  // committee: what it spent in support vs opposition, by candidate, + who funds
+  // it (second hop). For a candidate committee: what it raised + its contributors.
+  // funders/contributors are donorRow-compatible lines (clickable back to a
+  // footprint) — one modal system, two content types.
+  function committeeProfile(index, committeeKey) {
+    var cm = index.committees[committeeKey] || {};
+    var sun = sunshineUrl(cm);
+    if (cm.type === 'independent_expenditure') {
+      // group this committee's IEs by target candidate
+      var byCand = {}, support = 0, oppose = 0;
+      var src = index.iesBySpender[committeeKey] || [];
+      for (var i = 0; i < src.length; i++) {
+        var ie = src[i];
+        if (EXCLUDED_CYCLES[ie.cycle]) continue;
+        var tc = ie.target_candidate_id || ('race:' + ie.target_race_id);
+        var cand = index.candidateById[ie.target_candidate_id] || {};
+        var race = index.raceById[cand.race_id || ie.target_race_id] || {};
+        var m = byCand[tc] || (byCand[tc] = { candidate_id: ie.target_candidate_id || null,
+          name: cand.name || ('race ' + ie.target_race_id), raceLabel: race.label || null, support: 0, oppose: 0, total: 0, count: 0 });
+        var a = ie.amount || 0;
+        if (ie.stance === 'oppose') { m.oppose = round2(m.oppose + a); oppose = round2(oppose + a); }
+        else { m.support = round2(m.support + a); support = round2(support + a); }
+        m.total = round2(m.total + a); m.count++;
+      }
+      var targets = []; for (var k in byCand) if (byCand.hasOwnProperty(k)) targets.push(byCand[k]);
+      targets.sort(function (a, b) { return b.total - a.total; });
+      var ff = spenderFunders(index, committeeKey);
+      return {
+        committee_id: committeeKey, kind: 'ie', name: cm.committee_name || committeeKey,
+        sunshineUrl: sun, isIE: true, identity: ff.funders.slice(0, 3).map(function (x) { return x.name; }),
+        support: round2(support), oppose: round2(oppose), total: round2(support + oppose), targets: targets,
+        funders: ff.funders, funderTotal: ff.total, funderCount: ff.count
+      };
+    }
+    // candidate (or other) committee — show what it raised + its contributors
+    var candId = cm.candidate_id || null;
+    var cand2 = candId ? (index.candidateById[candId] || {}) : {};
+    var race2 = cand2.race_id ? (index.raceById[cand2.race_id] || {}) : {};
+    var contrib = candId ? candidateContributors(index, candId, null) : { lines: [], total: 0, count: 0 };
+    return {
+      committee_id: committeeKey, kind: 'candidate', name: cm.committee_name || committeeKey,
+      candidateName: cand2.name || null, raceLabel: race2.label || null, sunshineUrl: sun, isIE: false,
+      raised: contrib.total, funders: contrib.lines, funderTotal: contrib.total, funderCount: contrib.count
     };
   }
 
@@ -485,6 +535,7 @@
     candidateIE: candidateIE,
     spenderFunders: spenderFunders,
     donorFootprint: donorFootprint,
+    committeeProfile: committeeProfile,
     committeeMeta: committeeMeta,
     sunshineUrl: sunshineUrl,
     availableCycles: availableCycles,

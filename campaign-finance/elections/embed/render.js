@@ -110,7 +110,10 @@
       '.ipg-elect .caret{font-size:10px;color:var(--teal);transition:transform .2s;}' +
       '.ipg-elect button.barrow[aria-expanded="true"] .caret{transform:rotate(90deg);}' +
       '.ipg-elect .contrib{max-height:0;overflow:hidden;transition:max-height .3s ease;grid-column:1/-1;}' +
-      '.ipg-elect .contrib.open{max-height:3000px;margin-top:10px;}' +
+      '.ipg-elect .contrib.open{max-height:none;margin-top:10px;}' +
+      '.ipg-elect .show-more{appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);font-size:12.5px;font-weight:500;color:var(--teal);padding:9px 4px;display:flex;align-items:center;gap:6px;}' +
+      '.ipg-elect .show-more[aria-expanded="true"] .caret{transform:rotate(90deg);}' +
+      '.ipg-elect .contrib-inner.bare{background:none;border:0;padding:0;border-radius:0;}' +
       '.ipg-elect .contrib-inner{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}' +
       '.ipg-elect .contrib-h{font-size:12px;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 10px;}' +
       '.ipg-elect .crow{display:grid;grid-template-columns:1fr auto;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px;}' +
@@ -211,17 +214,29 @@
       '<div class="who">' + esc(line.name) + ' ' + tagsHtml(line.industries, line.flags) + '</div>' + amt + '</button>';
   }
 
-  // Contributor drill-down panel (collapsed; app toggles .open). Top 25 + an
-  // "All other donors" line so the visible rows still sum to the headline.
+  // Contributor drill-down panel (collapsed; app toggles .open). Top 25 real
+  // donors, then a "Show all N donors" toggle revealing the FULL remainder inline
+  // (mirrors the council embed's single show-all toggle) — every remainder row is
+  // a real, clickable donorRow. The small-dollar aggregate is a labeled,
+  // non-clickable line pinned at the bottom. All rows (top + remainder + aggregate
+  // + self) are in the DOM, so they sum EXACTLY to the contributions headline.
   function contributorPanel(cd, id) {
-    var LIMIT = 25, lines = cd.lines, shown = Math.min(LIMIT, lines.length), html = '', shownTotal = 0;
-    for (var i = 0; i < shown; i++) { html += donorRow(lines[i]); shownTotal += lines[i].total; }
-    if (lines.length > LIMIT) {
-      html += '<div class="crow plain"><div class="who">All other donors</div><div class="amt">' +
-        money(cd.total - shownTotal) + ' <span class="n">· ' + (lines.length - LIMIT) + ' donors</span></div></div>';
+    var rest = [], agg = [], t;
+    for (t = 0; t < cd.lines.length; t++) (cd.lines[t].isAggregate ? agg : rest).push(cd.lines[t]);
+    var LIMIT = 25, top = '';
+    for (t = 0; t < Math.min(LIMIT, rest.length); t++) top += donorRow(rest[t]);
+    var moreHtml = '';
+    if (rest.length > LIMIT) {
+      var moreRows = ''; for (t = LIMIT; t < rest.length; t++) moreRows += donorRow(rest[t]);
+      var mid = id + '-more';
+      moreHtml = '<button class="show-more" type="button" aria-expanded="false" aria-controls="' + mid + '">' +
+        '<span class="caret" aria-hidden="true">▸</span> Show all ' + rest.length + ' donors</button>' +
+        '<div class="contrib tall" id="' + mid + '"><div class="contrib-inner bare">' + moreRows + '</div></div>';
     }
+    var aggHtml = ''; for (t = 0; t < agg.length; t++) aggHtml += donorRow(agg[t]);
     return '<div class="contrib" id="' + id + '"><div class="contrib-inner">' +
-      '<p class="contrib-h">Who gave to this campaign · ' + money(cd.total) + ' total</p>' + html +
+      '<p class="contrib-h">Who gave to this campaign · ' + money(cd.total) + ' total</p>' +
+      top + moreHtml + aggHtml +
       '<p class="contrib-note">Rolled up by affiliation; lines sum to the contributions figure. Click a donor to see ' +
       'their full footprint. Small-dollar (under $150) donors are disclosed only in aggregate.</p></div></div>';
   }
@@ -265,12 +280,21 @@
   }
 
   // Tier 3 — donor-footprint modal (app mounts/unmounts it). Election-scoped.
+  // Committee rows show the committee NAME, never the bare id: candidate
+  // committees use their real name; placeholder IE PACs use the identity
+  // treatment ("Funded primarily by …"). Each row is clickable -> committee profile.
   function renderFunderModal(fp) {
     var rows = fp.committees.map(function (x) {
-      var kind = x.kind === 'candidate' ? '<span class="kind cand">candidate</span>'
-        : x.kind === 'ie' ? '<span class="kind ie">IE PAC</span>' : '<span class="kind">committee</span>';
-      return '<div class="crow"><div class="who">' + esc(x.label) + ' ' + kind + '</div>' +
-        '<div class="amt">' + money(x.total) + ' <span class="n">· ' + plural(x.count, 'gift', 'gifts') + '</span></div></div>';
+      var label, kind;
+      if (x.kind === 'ie') {
+        kind = '<span class="kind ie">IE PAC</span>';
+        label = (x.ieIdentity && x.ieIdentity.length) ? ('Funded primarily by ' + x.ieIdentity.join(', ')) : 'Independent-expenditure committee';
+      } else if (x.kind === 'candidate') {
+        kind = '<span class="kind cand">candidate</span>'; label = x.label;
+      } else { kind = '<span class="kind">committee</span>'; label = x.label; }
+      return '<button class="crow funder-row" type="button" data-committee="' + esc(x.committee_id) + '">' +
+        '<div class="who">' + esc(label) + ' ' + kind + '</div>' +
+        '<div class="amt">' + money(x.total) + ' <span class="n">· ' + plural(x.count, 'gift', 'gifts') + '</span></div></button>';
     }).join('') || '<p class="contrib-note">No election giving recorded.</p>';
     return '<div class="ipg-modal-overlay" data-modal-overlay><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Donor footprint">' +
       '<button class="ipg-modal-close" type="button" data-modal-close aria-label="Close">×</button>' +
@@ -282,6 +306,45 @@
       'not-yet-connected view.</p>' +
       '<div class="modal-summary">' + money(fp.total) + ' across ' + plural(fp.count, 'recipient', 'recipients') + '</div>' +
       rows + '</div></div>';
+  }
+
+  // Committee-profile modal — bidirectional with the donor footprint. Same modal
+  // system (app mounts/closes it the same way). Its funder/contributor rows are
+  // donorRows (clickable back into a footprint).
+  function renderCommitteeProfile(p) {
+    var sun = p.sunshineUrl ? ' <a class="paclink" href="' + esc(p.sunshineUrl) + '" target="_blank" rel="noopener">Illinois Sunshine ↗</a>' : '';
+    var head, summary, spent = '';
+    if (p.isIE) {
+      var idy = (p.identity && p.identity.length) ? ('Funded primarily by ' + p.identity.join(', ') + '. ') : '';
+      head = '<div class="modal-kicker">Independent-expenditure committee · this election</div>' +
+        '<div class="modal-name"><span class="ie-pac-tag">IE PAC</span> ' + esc(p.name) + '</div>' +
+        '<p class="modal-note">' + idy + 'Independent spending is made without coordinating with any candidate.' + sun + '</p>';
+      summary = '<div class="modal-summary">' + money(p.total) + ' spent · ' +
+        money(p.support) + ' support · ' + money(p.oppose) + ' oppose</div>';
+      spent = '<p class="contrib-h">What it spent on</p>' + (p.targets.length ? p.targets.map(function (t) {
+        var bits = [];
+        if (t.support) bits.push('<span style="color:var(--sage)">' + money(t.support) + ' for</span>');
+        if (t.oppose) bits.push('<span style="color:var(--coral)">' + money(t.oppose) + ' against</span>');
+        return '<div class="crow"><div class="who">' + esc(t.name) +
+          (t.raceLabel ? ' <span class="muted">· ' + esc(t.raceLabel) + '</span>' : '') + '</div>' +
+          '<div class="amt">' + bits.join(' · ') + '</div></div>';
+      }).join('') : '<p class="contrib-note">No itemized spending recorded.</p>');
+    } else {
+      head = '<div class="modal-kicker">Campaign committee · this election</div>' +
+        '<div class="modal-name">' + esc(p.name) + '</div>' +
+        '<p class="modal-note">Campaign committee' + (p.candidateName ? ' for <b>' + esc(p.candidateName) + '</b>' : '') +
+        (p.raceLabel ? ' — ' + esc(p.raceLabel) : '') + '.' + sun + '</p>';
+      summary = '<div class="modal-summary">' + money(p.raised) + ' raised</div>';
+    }
+    var label = p.isIE
+      ? ('Who funds this committee · ' + money(p.funderTotal) + ' from ' + plural(p.funderCount, 'funder', 'funders') + ' (dues excluded)')
+      : ('Contributors · ' + money(p.funderTotal) + ' from ' + plural(p.funderCount, 'donor', 'donors'));
+    var fl = p.funders.slice(0, 30), funders = '';
+    for (var i = 0; i < fl.length; i++) funders += donorRow(fl[i]);
+    var moreF = p.funders.length > 30 ? '<p class="contrib-note">+ ' + (p.funders.length - 30) + ' more</p>' : '';
+    return '<div class="ipg-modal-overlay" data-modal-overlay><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Committee profile">' +
+      '<button class="ipg-modal-close" type="button" data-modal-close aria-label="Close">×</button>' +
+      head + summary + spent + '<p class="contrib-h" style="margin-top:14px">' + label + '</p>' + funders + moreF + '</div></div>';
   }
 
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
@@ -439,7 +502,8 @@
     masthead: masthead, footer: footer,
     renderOfficeNav: renderOfficeNav, renderRaceView: renderRaceView,
     renderComingSoon: renderComingSoon, spendPlaceholder: spendPlaceholder,
-    renderFunderModal: renderFunderModal, donorRow: donorRow,
+    renderFunderModal: renderFunderModal, renderCommitteeProfile: renderCommitteeProfile,
+    donorRow: donorRow, contributorPanel: contributorPanel,
     renderPage: renderPage, pageLabel: pageLabel,
     _money: money, _esc: esc
   };

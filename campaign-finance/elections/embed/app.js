@@ -20,13 +20,29 @@
       ElectRender.styles().replace('<style>', '<style id="ipg-elect-css">'));
   }
 
-  // Tier-3 modal: mounted on <body> wrapped in .ipg-elect so scoped styles apply;
-  // closed by the × button, the backdrop, or Esc. App only mounts/unmounts.
+  // ONE modal system, two content types (donor footprint + committee profile).
+  // Mounted on <body> wrapped in .ipg-elect so scoped styles apply; closed by ×,
+  // backdrop, or Esc. App only mounts/unmounts and dispatches by data-attr — it
+  // does NOT fork into separate handlers per content type. The modals are
+  // bidirectional: a footprint's committee row opens a committee profile, whose
+  // funder rows open footprints, all through the same openModal/closeModal.
+  var IDX = null;  // current loaded index (set in start)
   function escClose(e) { if (e.key === 'Escape') closeModal(); }
   function closeModal() {
     var m = document.getElementById('ipg-elect-modal');
     if (m) m.parentNode.removeChild(m);
     document.removeEventListener('keydown', escClose);
+  }
+  function openFunder(pid) { if (IDX) openModal(ElectRender.renderFunderModal(ElectData.donorFootprint(IDX, pid))); }
+  function openCommittee(key) { if (IDX) openModal(ElectRender.renderCommitteeProfile(ElectData.committeeProfile(IDX, key))); }
+  // Shared dispatch: a clicked donor row -> footprint, a clicked committee row ->
+  // committee profile. Used by BOTH the page handler and the in-modal handler.
+  function modalNav(target) {
+    var fr = target.closest && target.closest('[data-funder]');
+    if (fr) { openFunder(fr.getAttribute('data-funder')); return true; }
+    var cr = target.closest && target.closest('[data-committee]');
+    if (cr) { openCommittee(cr.getAttribute('data-committee')); return true; }
+    return false;
   }
   function openModal(html) {
     closeModal();
@@ -34,7 +50,8 @@
     w.id = 'ipg-elect-modal'; w.className = 'ipg-elect'; w.innerHTML = html;
     w.addEventListener('click', function (e) {
       if ((e.target.closest && e.target.closest('[data-modal-close]')) ||
-          (e.target.matches && e.target.matches('[data-modal-overlay]'))) closeModal();
+          (e.target.matches && e.target.matches('[data-modal-overlay]'))) { closeModal(); return; }
+      modalNav(e.target);  // same dispatch as the page → bidirectional navigation
     });
     document.body.appendChild(w);
     document.addEventListener('keydown', escClose);
@@ -63,6 +80,7 @@
   }
 
   function start(root, office, index) {
+    IDX = index;
     var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null };
     state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, office));
 
@@ -77,10 +95,9 @@
     }
 
     root.addEventListener('click', function (e) {
+      // donor/committee rows open a modal (shared dispatch — same as in-modal nav)
+      if (modalNav(e.target)) return;
       var cl = function (sel) { return e.target.closest && e.target.closest(sel); };
-      // Tier 3: a funder row opens the donor-footprint modal
-      var fr = cl('.funder-row[data-funder]');
-      if (fr) { openModal(ElectRender.renderFunderModal(ElectData.donorFootprint(index, fr.getAttribute('data-funder')))); return; }
       // Tier 1/2 + figure bars: any aria-controls toggle expands its panel in place
       // (no redraw → open state persists)
       var dz = cl('[aria-controls]');

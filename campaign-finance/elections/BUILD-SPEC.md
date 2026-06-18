@@ -51,6 +51,17 @@ The **cross-office aggregate** ("all Chicago election spend" + "who's spending"
 quick-stats/graphics) lives on the **cover page**, not per office. Deferred build,
 but the IA reserves the root for it.
 
+**Deferred — cover-page "biggest spenders" ranking.** A leaderboard of the largest
+money-movers across **all** Chicago elections (school board + municipal), aggregated
+by `parent_id` and ranked by **total money moved** — combining a parent's direct
+contributions to candidates AND its funding of IE committees (the donor-footprint
+total the embed already computes). Threshold around **$1M+**. Mix unions, IE PACs,
+corporations, and individuals in one ranking; each row links into that donor's
+footprint modal (reuse the B3 footprint). This is the cover-page counterpart to the
+per-office "Election spend" tab — cross-office, parent-aggregated, deferred with the
+rest of the cover page (do not foreclose: the data layer's `donorFootprint` /
+parent rollups already support it).
+
 ## Multi-cycle / year filtering (first-class, build-in-now)
 
 The tool must hold many election cycles over time and filter by year/cycle. The

@@ -162,6 +162,50 @@ if (multiFp) console.log('       (example multi-lens donor: ' + multiFp.name + '
 ok('footprint is keyed only by parent_id (identical from either lens)',
   D.donorFootprint(index, realLine.parent_id).parent_id === realLine.parent_id);
 
+console.log('\n=== B3-REVISE-3 assertions (named committees + committee profile + tail) ===');
+// 1) Footprint committees show a name/identity, never the bare placeholder id.
+// Use a donor whose footprint includes an IE committee (multiFp from above).
+var fpMulti = multiFp || fp;
+var fpModal = R.renderFunderModal(fpMulti);
+ok('footprint IE committee row shows identity ("Funded primarily by"), not bare id',
+  /Funded primarily by /.test(fpModal) && fpModal.indexOf('>IE committee ') < 0);
+ok('footprint committee rows are clickable (data-committee)', /data-committee="/.test(fpModal));
+ok('footprint candidate committee shows its real name', /Michelle Pierre|Ebony DeBerry|Bruce Leon/.test(fpModal) || /class="kind cand"/.test(fpModal));
+
+// 2) Committee-profile modal resolves support/oppose + funders for an IE committee.
+var prof = D.committeeProfile(index, 'ie-committee-26066');
+ok('IE committee profile resolves spend (support+oppose) + funders',
+  prof.isIE && prof.total > 0 && prof.targets.length >= 1 && prof.funders.length >= 1);
+ok('IE committee profile splits support vs opposition across candidates', prof.support > 0 && prof.oppose > 0);
+var profHtml = R.renderCommitteeProfile(prof);
+ok('committee-profile modal renders "What it spent on" + "Who funds this committee"',
+  /What it spent on/.test(profHtml) && /Who funds this committee/.test(profHtml));
+ok('committee-profile funders are clickable donorRows (back to footprint)', /class="crow funder-row" type="button" data-funder=/.test(profHtml));
+// candidate committee profile (other content type, same modal)
+var candProf = D.committeeProfile(index, index.committeeKeyByCandidate['deberry-sb-d03']);
+ok('candidate committee profile shows raised + contributors', candProf.kind === 'candidate' && candProf.raised > 0 && candProf.funders.length >= 1);
+
+// 3) ONE modal mount/close path (no fork): single openModal/closeModal in app.js,
+// and BOTH modal types carry the same close affordances.
+var appSrc = fs.readFileSync(path.join(__dirname, '..', 'app.js'), 'utf8');
+ok('app.js has exactly one openModal and one closeModal (no fork)',
+  (appSrc.match(/function openModal\(/g) || []).length === 1 && (appSrc.match(/function closeModal\(/g) || []).length === 1);
+ok('both modal types use the same close affordances (data-modal-close + overlay)',
+  /data-modal-close/.test(fpModal) && /data-modal-overlay/.test(fpModal) &&
+  /data-modal-close/.test(profHtml) && /data-modal-overlay/.test(profHtml));
+
+// 1.5) "Show all" expands the full remainder; rows clickable; sums hold.
+var debCd2 = D.candidateContributors(index, 'deberry-sb-d03', null);
+var debPanel = R.contributorPanel(debCd2, 'tst');
+var realCount = debCd2.lines.filter(function (l) { return !l.isSelf && !l.isAggregate; }).length;
+var funderBtns = (debPanel.match(/class="crow funder-row" type="button" data-funder=/g) || []).length;
+ok('every real donor (top 25 + expanded remainder) is a clickable row', funderBtns === realCount && realCount > 25);
+ok('"Show all N donors" toggle reveals the remainder inline', /Show all \d+ donors/.test(debPanel) && /class="contrib tall"/.test(debPanel));
+ok('small-dollar aggregate is a plain non-clickable line at the bottom',
+  /class="crow plain"><div class="who">Small-dollar donors/.test(debPanel));
+ok('full set (real + self + small-dollar) sums EXACTLY to the headline ($534,950)',
+  Math.round(debCd2.lines.reduce(function (s, l) { return s + l.total; }, 0)) === 534950);
+
 console.log('\nwrote ' + path.relative(process.cwd(), out) + '  (open in a browser to eyeball — self-contained, no fetch)');
 console.log(fails ? (fails + ' ASSERTION(S) FAILED') : 'ALL ASSERTIONS PASSED');
 process.exit(fails ? 1 : 0);
