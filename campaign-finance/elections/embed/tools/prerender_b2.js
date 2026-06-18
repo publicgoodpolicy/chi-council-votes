@@ -268,6 +268,23 @@ ok('scoped footprint keeps in-scope IE (26066) + the direct candidate gift',
   ok('Bannon: button N == clickable == real (' + N + '=' + btns + '=' + real + '), self/small-dollar excluded', N === btns && btns === real);
 })();
 
+console.log('\n=== B3-REVISE-6 assertions (resolved names + funder-tail expansion) ===');
+// All 3 formerly-unnamed committees now resolved from Illinois Sunshine (at source).
+ok('39901 -> "Urban Center Action" (Leon support spender, now named)', D.committeeProfile(index, 'ie-committee-39901').name === 'Urban Center Action');
+ok('page shows the resolved name "Urban Center Action"', /Urban Center Action/.test(page));
+ok('539 -> "Illinois Farm Bureau ACTIVATOR"', (json.committees['ie-committee-539'] || {}).committee_name === 'Illinois Farm Bureau ACTIVATOR');
+ok('36936 -> "Areyto Political Action Committee"', (json.committees['ie-committee-36936'] || {}).committee_name === 'Areyto Political Action Committee');
+ok('NO IE committee remains a bare placeholder', Object.keys(json.committees).every(function (k) {
+  var cm = json.committees[k]; return cm.type !== 'independent_expenditure' || !/^IE committee \d+$/.test(cm.committee_name || '');
+}));
+// Tier-2 funder tail expands to ALL funders, each a clickable donorRow.
+var ieDebOpp = D.candidateIE(index, 'deberry-sb-d03', 'oppose', null);
+var iePanelHtml = R.iePanel(ieDebOpp, 'Ebony DeBerry', 'tst');
+var totalFunders = ieDebOpp.spenders.reduce(function (s, sp) { return s + sp.funders.length; }, 0);
+var funderRows = (iePanelHtml.match(/class="crow funder-row" type="button" data-funder=/g) || []).length;
+ok('IE funder tail has a "Show all N funders" toggle', /Show all \d+ funders/.test(iePanelHtml));
+ok('IE funder tail reveals ALL funders as clickable rows (' + funderRows + ' = ' + totalFunders + ')', funderRows === totalFunders && totalFunders > 10);
+
 console.log('\nwrote ' + path.relative(process.cwd(), out) + '  (open in a browser to eyeball — self-contained, no fetch)');
 console.log(fails ? (fails + ' ASSERTION(S) FAILED') : 'ALL ASSERTIONS PASSED');
 process.exit(fails ? 1 : 0);

@@ -274,9 +274,16 @@
         '" target="_blank" rel="noopener">Illinois Sunshine ↗</a>' : '';
       var names = s.topFunders.map(function (f) { return esc(f.name); });
       var primarily = names.length ? ('Funded primarily by ' + names.join(', ') + '.') : 'No outside funding recorded.';
-      var fLimit = 10, fShown = Math.min(fLimit, s.funders.length), frows = '';
-      for (var i = 0; i < fShown; i++) { frows += donorRow(s.funders[i]); }   // shared donor-row path
-      var more = s.funderCount > fLimit ? '<p class="contrib-note">+ ' + (s.funderCount - fLimit) + ' more funders</p>' : '';
+      var fLimit = 10, frows = '';
+      for (var i = 0; i < Math.min(fLimit, s.funders.length); i++) frows += donorRow(s.funders[i]);  // shared donor-row path
+      var more = '';
+      if (s.funders.length > fLimit) {        // expandable tail (same as the contributor "show all")
+        var moreRows = ''; for (var j = fLimit; j < s.funders.length; j++) moreRows += donorRow(s.funders[j]);
+        var fid = t2 + '-f';
+        more = '<button class="show-more" type="button" aria-expanded="false" aria-controls="' + fid + '">' +
+          '<span class="caret" aria-hidden="true">▸</span> Show all ' + s.funders.length + ' funders</button>' +
+          '<div class="contrib tall" id="' + fid + '"><div class="contrib-inner bare">' + moreRows + '</div></div>';
+      }
       var cn = ieNaming(s.committeeName, names);
       return '<div class="ie-cmte"><div class="ie-cmte-head">' +
         '<button class="ie-cmte-toggle" type="button" aria-expanded="false" aria-controls="' + t2 + '">' +
@@ -520,7 +527,7 @@
     renderOfficeNav: renderOfficeNav, renderRaceView: renderRaceView,
     renderComingSoon: renderComingSoon, spendPlaceholder: spendPlaceholder,
     renderFunderModal: renderFunderModal, renderCommitteeProfile: renderCommitteeProfile,
-    donorRow: donorRow, contributorPanel: contributorPanel,
+    donorRow: donorRow, contributorPanel: contributorPanel, iePanel: iePanel,
     renderPage: renderPage, pageLabel: pageLabel,
     _money: money, _esc: esc
   };

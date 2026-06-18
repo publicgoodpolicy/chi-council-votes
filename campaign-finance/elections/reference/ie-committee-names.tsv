@@ -1,0 +1,20 @@
+# IE committee SBE id -> name. 12 from council-data.json; 3 (539, 36936, 39901)
+# pulled from Illinois Sunshine (illinoissunshine.org/committees/<id>/) since they are
+# school-board-only spenders absent from the council artifact. Feed to
+# enrich_committee_names.py (header ID<TAB>Name) so election IE names are reproducible.
+ID	Name
+539	Illinois Farm Bureau ACTIVATOR
+18574	SEIU Illinois Council PAC
+19830	Friends of Nicholas Sposato
+22729	Welcome Wal-Mart
+25064	Illinois REALTORS Fund
+25109	HACIA PAC
+25782	Chicagoans United for Economic Security PAC
+25901	Democrats for Education Reform Independent Committee IL
+25960	Chicago Forward
+26023	Friends of Gilbert Villegas for Alderman
+26066	INCS Action Independent Committee
+36936	Areyto Political Action Committee
+38979	Get Stuff Done PAC
+39122	Working Families for Chicago
+39901	Urban Center Action
