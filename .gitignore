@@ -223,5 +223,5 @@ raw/
 .DS_Store
 campaign-finance/sheets-sync/creds.json
 
-# Generated election artifact (built by the elections run order; not source)
-campaign-finance/election-data.json
+# NOTE: campaign-finance/election-data.json is intentionally TRACKED (published) so
+# the GitHub raw CDN serves it to the elections embed — same as council-data.json.
