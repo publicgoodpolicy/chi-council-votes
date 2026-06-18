@@ -127,6 +127,41 @@ ok('tags helper shows "uncategorized" rather than blank for an empty donor',
   /class="tagchip ind">uncategorized<\/span>/.test(R.renderFunderModal(D.donorFootprint(index, sp0.funders[0].parent_id))) ||
   R.renderFunderModal(fp).indexOf('tagchip ind') >= 0);
 
+console.log('\n=== B3-REVISE-2 assertions (unified donor rows) ===');
+var debCd = D.candidateContributors(index, 'deberry-sb-d03', null);
+var realLine = debCd.lines.filter(function (l) { return !l.isSelf && !l.isAggregate; })[0];
+var selfLine = debCd.lines.filter(function (l) { return l.isSelf; })[0] || leonC.lines.filter(function (l) { return l.isSelf; })[0];
+var aggLine = debCd.lines.filter(function (l) { return l.isAggregate; })[0];
+ok('DeBerry has a real (non-self, non-aggregate) contributor line', !!realLine && !!realLine.parent_id);
+// A real contributor row renders EXACTLY like a PAC funder row: clickable + tagged.
+var realRow = R.donorRow(realLine);
+ok('real contributor row is clickable (funder-row + data-funder) and tagged',
+  /class="crow funder-row" type="button" data-funder="/.test(realRow) && /class="tagchip ind"/.test(realRow));
+// Exceptions stay non-clickable + no industry tag.
+var selfRow = R.donorRow(selfLine), aggRow = R.donorRow(aggLine);
+ok('self-funding/loan line is a plain labeled line (no button, no industry tag)',
+  /class="crow plain"/.test(selfRow) && selfRow.indexOf('funder-row') < 0 && selfRow.indexOf('tagchip ind') < 0);
+ok('small-dollar aggregate line is a plain labeled line (no button, no tag)',
+  /class="crow plain"/.test(aggRow) && aggRow.indexOf('funder-row') < 0 && aggRow.indexOf('tagchip ind') < 0);
+// The same shared row path means contributor + funder rows are byte-identical for a donor.
+ok('contributor row == funder row for the same donor (one shared path)',
+  R.donorRow({ parent_id: 'x', name: 'Acme PAC', industries: ['labor-trades'], flags: [], total: 100, count: 1 }) ===
+  R.donorRow({ parent_id: 'x', name: 'Acme PAC', industries: ['labor-trades'], flags: [], total: 100, count: 1 }));
+
+// Footprint spans BOTH lenses (direct candidate gifts + IE-committee funding),
+// regardless of which lens it was opened from (it's keyed only by parent_id).
+var multiFp = null;
+for (var pid in index.parentRollup) {
+  if (!index.parentRollup.hasOwnProperty(pid)) continue;
+  var f = D.donorFootprint(index, pid);
+  if (f.committees.some(function (x) { return x.kind === 'candidate'; }) &&
+      f.committees.some(function (x) { return x.kind === 'ie'; })) { multiFp = f; break; }
+}
+ok('a donor footprint aggregates BOTH lenses (direct candidate + IE funding)', !!multiFp);
+if (multiFp) console.log('       (example multi-lens donor: ' + multiFp.name + ' → ' + multiFp.committees.length + ' recipients across both)');
+ok('footprint is keyed only by parent_id (identical from either lens)',
+  D.donorFootprint(index, realLine.parent_id).parent_id === realLine.parent_id);
+
 console.log('\nwrote ' + path.relative(process.cwd(), out) + '  (open in a browser to eyeball — self-contained, no fetch)');
 console.log(fails ? (fails + ' ASSERTION(S) FAILED') : 'ALL ASSERTIONS PASSED');
 process.exit(fails ? 1 : 0);

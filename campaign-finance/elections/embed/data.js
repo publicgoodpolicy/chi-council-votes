@@ -266,7 +266,9 @@
       var donor = index.donors[c.donor_id] || {};
       var pid = donor.parent_id || c.donor_id;
       var parent = index.donors[pid] || donor;
-      var m = by[pid] || (by[pid] = { parent_id: pid, name: parent.name || pid, total: 0, count: 0, isSelf: false, isAggregate: false });
+      var m = by[pid] || (by[pid] = { parent_id: pid, name: parent.name || pid,
+        industries: parent.industries || [], flags: parent.flags || [],
+        total: 0, count: 0, isSelf: false, isAggregate: false });
       m.total = round2(m.total + (c.amount || 0)); m.count++;
       if (c.is_loan || c.contribution_type === 'Loan Received' || parent.type === 'Candidate' ||
           (parent.industries || []).indexOf('self-funding') >= 0) m.isSelf = true;

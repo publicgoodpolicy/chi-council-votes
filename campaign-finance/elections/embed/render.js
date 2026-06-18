@@ -133,6 +133,7 @@
       '.ipg-elect .framing{font-style:italic;color:var(--coral);}' +
       '.ipg-elect button.funder-row{display:grid;grid-template-columns:1fr auto;gap:10px;width:100%;text-align:left;appearance:none;border:0;border-bottom:1px solid var(--line);background:none;cursor:pointer;font-family:var(--body);padding:7px 4px;align-items:center;}' +
       '.ipg-elect button.funder-row:hover{background:#F2E8DC;}.ipg-elect button.funder-row:focus-visible{outline:2px solid var(--sage);outline-offset:1px;}' +
+      '.ipg-elect .crow.plain{cursor:default;}' +
       '.ipg-elect .tagchip.ind{background:var(--tan);color:var(--ink-soft);}.ipg-elect .tagchip.flag{background:#F4E3DC;color:var(--coral);}' +
       '.ipg-elect .ipg-modal-overlay{position:fixed;inset:0;background:rgba(52,40,40,.55);display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px;z-index:99999;overflow:auto;}' +
       '.ipg-elect .ipg-modal{background:var(--paper);border-radius:14px;max-width:560px;width:100%;padding:24px 26px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3);}' +
@@ -191,25 +192,38 @@
       : '<div class="barrow">' + body + '</div>';
   }
 
+  // Shared donor-row render path — used by the contributor drill-down AND the
+  // Tier-2 PAC-funder list, so a direct contributor behaves exactly like a PAC
+  // funder: real rolled-up donors (by parent_id) are clickable into the Tier-3
+  // footprint modal and show their tags/flags. The small-dollar aggregate and the
+  // candidate self-funding/loan line are NOT donor entities — labeled lines only,
+  // no modal, no tag.
+  function donorRow(line) {
+    var amt = '<div class="amt">' + money(line.total) + ' <span class="n">· ' + plural(line.count, 'gift', 'gifts') + '</span></div>';
+    if (line.isSelf) {
+      return '<div class="crow plain"><div class="who">' + esc(line.name) +
+        ' <span class="tagchip self">Candidate’s own money / loans</span></div>' + amt + '</div>';
+    }
+    if (line.isAggregate) {
+      return '<div class="crow plain"><div class="who">' + esc(line.name) + '</div>' + amt + '</div>';
+    }
+    return '<button class="crow funder-row" type="button" data-funder="' + esc(line.parent_id) + '">' +
+      '<div class="who">' + esc(line.name) + ' ' + tagsHtml(line.industries, line.flags) + '</div>' + amt + '</button>';
+  }
+
   // Contributor drill-down panel (collapsed; app toggles .open). Top 25 + an
   // "All other donors" line so the visible rows still sum to the headline.
   function contributorPanel(cd, id) {
     var LIMIT = 25, lines = cd.lines, shown = Math.min(LIMIT, lines.length), html = '', shownTotal = 0;
-    for (var i = 0; i < shown; i++) {
-      var l = lines[i]; shownTotal += l.total;
-      var tag = l.isSelf ? '<span class="tagchip self">Candidate’s own money / loans</span>'
-        : l.isAggregate ? '<span class="tagchip">small-dollar</span>' : '';
-      html += '<div class="crow"><div class="who">' + esc(l.name) + tag + '</div>' +
-        '<div class="amt">' + money(l.total) + ' <span class="n">· ' + plural(l.count, 'record', 'records') + '</span></div></div>';
-    }
+    for (var i = 0; i < shown; i++) { html += donorRow(lines[i]); shownTotal += lines[i].total; }
     if (lines.length > LIMIT) {
-      html += '<div class="crow"><div class="who">All other donors</div><div class="amt">' +
+      html += '<div class="crow plain"><div class="who">All other donors</div><div class="amt">' +
         money(cd.total - shownTotal) + ' <span class="n">· ' + (lines.length - LIMIT) + ' donors</span></div></div>';
     }
     return '<div class="contrib" id="' + id + '"><div class="contrib-inner">' +
       '<p class="contrib-h">Who gave to this campaign · ' + money(cd.total) + ' total</p>' + html +
-      '<p class="contrib-note">Rolled up by affiliation; lines sum to the contributions figure. ' +
-      'Small-dollar (under $150) donors are disclosed only in aggregate.</p></div></div>';
+      '<p class="contrib-note">Rolled up by affiliation; lines sum to the contributions figure. Click a donor to see ' +
+      'their full footprint. Small-dollar (under $150) donors are disclosed only in aggregate.</p></div></div>';
   }
 
   // IE drill-down — THREE explicit tiers so a funder never reads as a direct
@@ -230,12 +244,7 @@
       var names = s.topFunders.map(function (f) { return esc(f.name); });
       var primarily = names.length ? ('Funded primarily by ' + names.join(', ') + '.') : 'No outside funding recorded.';
       var fLimit = 10, fShown = Math.min(fLimit, s.funders.length), frows = '';
-      for (var i = 0; i < fShown; i++) {
-        var fr = s.funders[i];
-        frows += '<button class="crow funder-row" type="button" data-funder="' + esc(fr.parent_id) + '">' +
-          '<div class="who">' + esc(fr.name) + ' ' + tagsHtml(fr.industries, fr.flags) + '</div>' +
-          '<div class="amt">' + money(fr.total) + ' <span class="n">· ' + plural(fr.count, 'gift', 'gifts') + '</span></div></button>';
-      }
+      for (var i = 0; i < fShown; i++) { frows += donorRow(s.funders[i]); }   // shared donor-row path
       var more = s.funderCount > fLimit ? '<p class="contrib-note">+ ' + (s.funderCount - fLimit) + ' more funders</p>' : '';
       return '<div class="ie-cmte"><div class="ie-cmte-head">' +
         '<button class="ie-cmte-toggle" type="button" aria-expanded="false" aria-controls="' + t2 + '">' +
@@ -430,7 +439,7 @@
     masthead: masthead, footer: footer,
     renderOfficeNav: renderOfficeNav, renderRaceView: renderRaceView,
     renderComingSoon: renderComingSoon, spendPlaceholder: spendPlaceholder,
-    renderFunderModal: renderFunderModal,
+    renderFunderModal: renderFunderModal, donorRow: donorRow,
     renderPage: renderPage, pageLabel: pageLabel,
     _money: money, _esc: esc
   };
