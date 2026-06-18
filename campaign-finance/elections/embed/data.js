@@ -60,6 +60,11 @@
     return ({ school_board_president: 'President', mayor: 'Mayor',
               city_clerk: 'Clerk', city_treasurer: 'Treasurer' }[race.office]) || race.label;
   }
+  function officeFriendly(office) {   // for the "running for X" note
+    return ({ school_board_president: 'Board President', school_board_member: 'School Board',
+              alderperson: 'City Council', mayor: 'Mayor',
+              city_clerk: 'City Clerk', city_treasurer: 'City Treasurer' }[office]) || office;
+  }
 
   function round2(n) { return Math.round((n + Number.EPSILON) * 100) / 100; }
 
@@ -266,16 +271,26 @@
   function raceView(index, raceId, cycle) {
     var race = index.raceById[raceId];
     if (!race) return null;
-    var cands = (index.candidatesByRace[raceId] || []).slice().sort(byNameNeutral);
+    var all = (index.candidatesByRace[raceId] || []).slice().sort(byNameNeutral);
+    // A vacating incumbent (running for another office) is NOT listed here as a
+    // candidate; the district surfaces a pointer to the office they're seeking.
+    var vacating = [], active = [];
+    for (var i = 0; i < all.length; i++) {
+      var c = all[i], target = c.vacating_for ? index.raceById[c.vacating_for] : null;
+      if (target) {
+        vacating.push({ name: c.name, targetRaceId: target.id, targetSlug: raceSlug(target),
+                        targetLabel: officeFriendly(target.office) });
+      } else { active.push(c); }
+    }
     return {
       race: {
         id: race.id, slug: raceSlug(race), code: raceCode(race),
         label: race.label, office: race.office, status: race.status,
         district: race.district || null, ward: race.ward || null, election_id: race.election_id,
-        hasFinance: hasAnyFinance(index, race.id)
+        hasFinance: hasAnyFinance(index, race.id), vacating: vacating
       },
       cycle: cycle || null,
-      candidates: cands.map(function (c) {
+      candidates: active.map(function (c) {
         var hasFinance = !!c.committee_id;
         return {
           id: c.id, slug: candidateSlug(c, race), name: c.name,

@@ -59,7 +59,8 @@
     root.addEventListener('click', function (e) {
       var v = e.target.closest && e.target.closest('[data-view]');
       if (v) { state.topView = v.getAttribute('data-view'); draw(); return; }
-      var ch = e.target.closest && e.target.closest('.chip[data-slug]');
+      // chips AND the vacating-incumbent "→" link both navigate by slug
+      var ch = e.target.closest && e.target.closest('[data-slug]');
       if (ch) { state.activeSlug = ch.getAttribute('data-slug'); state.topView = 'byrace'; draw(); return; }
       var of = e.target.closest && e.target.closest('.office[data-group]');
       if (of) {

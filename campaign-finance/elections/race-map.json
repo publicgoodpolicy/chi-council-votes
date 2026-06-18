@@ -1052,6 +1052,7 @@
       "committee_id": null,
       "incumbent": true,
       "status": "incumbent-pending",
+      "vacating_for": "sb-president",
       "bio": {
         "current_roles": [
           "Chicago Board of Education, District 1b"
@@ -1252,6 +1253,7 @@
       "committee_id": null,
       "incumbent": true,
       "status": "incumbent-pending",
+      "vacating_for": "sb-president",
       "bio": {
         "current_roles": [
           "Chicago Board of Education, District 6b"

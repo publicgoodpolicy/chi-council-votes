@@ -222,6 +222,7 @@ def build_candidates(race_map, race_ids):
             "committee_id": committee_id,
             "status": c.get("status", "declared"),
             "incumbent": bool(c.get("incumbent", False)),
+            "vacating_for": c.get("vacating_for"),
             "bio": c.get("bio", {}),
             "positions": None,
         })
@@ -241,6 +242,7 @@ def build_candidates(race_map, race_ids):
             "committee_id": c.get("committee_id"),
             "status": c.get("status", "incumbent-pending"),
             "incumbent": bool(c.get("incumbent", True)),
+            "vacating_for": c.get("vacating_for"),
             "bio": c.get("bio", {}),
             "positions": None,
         })

@@ -51,6 +51,32 @@ ok('coming-soon races marked (· soon)', /· soon/.test(page));
 ok('office sub-tabs (Board President / Districts)', /Board President/.test(page) && /Districts/.test(page));
 ok('figures NOT summed (no grand-total markup)', page.indexOf('Total raised') < 0 && page.indexOf('grand total') < 0);
 
+console.log('\n=== B2-FIXES assertions ===');
+// Vacating incumbents: Custer (sb-d02 / District 1B) and Biggs (sb-d12 / District 6B)
+var d02 = R.renderRaceView(D.viewModels.raceView(index, index.raceBySlug['district-1b'], null));
+var d12 = R.renderRaceView(D.viewModels.raceView(index, index.raceBySlug['district-6b'], null));
+var pres = R.renderRaceView(D.viewModels.raceView(index, index.raceBySlug['school-board-president'], null));
+ok('sb-d02 does NOT show a Custer candidate card', d02.indexOf('cand-jennifer-custer') < 0);
+ok('sb-d02 still lists its real candidates (Peralta/Pierre)', /Peralta/.test(d02) && /Pierre/.test(d02));
+ok('sb-d02 vacating note: Custer -> Board President (links to president race)',
+  /Current member <b>Jennifer Custer<\/b> is running for/.test(d02) && /data-slug="school-board-president"/.test(d02));
+ok('sb-d12 does NOT show a Biggs candidate card', d12.indexOf('cand-jessica-biggs') < 0);
+ok('sb-d12 vacating note: Biggs -> Board President',
+  /Current member <b>Jessica Biggs<\/b> is running for/.test(d12) && /data-slug="school-board-president"/.test(d12));
+ok('sb-president DOES list Custer AND Biggs as candidates',
+  /cand-jennifer-custer-school-board-president/.test(pres) && /cand-jessica-biggs-school-board-president/.test(pres));
+
+// View toggle: active chip + view move on topView change
+var spendPage = R.renderPage({ office: OFFICE, topView: 'spend', officeRaces: omVM, activeSlug: 'district-2a', raceView: rv });
+ok('toggle: spend view renders its coming-soon placeholder', /Election spend — coming soon/.test(spendPage));
+ok('toggle: Election-spend tab active when topView=spend',
+  /data-view="spend" aria-selected="true"/.test(spendPage) && /data-view="byrace" aria-selected="false"/.test(spendPage));
+ok('toggle: By-race tab active when topView=byrace',
+  /data-view="byrace" aria-selected="true"/.test(page) && /data-view="spend" aria-selected="false"/.test(page));
+
+// Cycle label
+ok('default cycle label is "current cycle" (not "all-time")', /current cycle/.test(page) && page.indexOf('all-time') < 0);
+
 console.log('\nwrote ' + path.relative(process.cwd(), out) + '  (open in a browser to eyeball — self-contained, no fetch)');
 console.log(fails ? (fails + ' ASSERTION(S) FAILED') : 'ALL ASSERTIONS PASSED');
 process.exit(fails ? 1 : 0);

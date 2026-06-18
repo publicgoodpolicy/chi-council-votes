@@ -64,10 +64,14 @@ So the year filter is UI on an existing dimension, not a schema change. Two note
 - Distinguish the **election-year filter** (which election a candidate is running
   in) from the SBE **4-year cycle** bucket used for giving history — the filter
   scopes by election/year, not the coarse SBE cycle.
-- **DECIDED:** election pages default to **all-time** committee money; the year/
-  cycle filter narrows to a specific cycle. (Committees carry money across past
-  runs — e.g., DeBerry's and Leon's current totals are largely from their 2024
-  race — so all-time is the default and the filter scopes down.)
+- **DECIDED:** election pages default to the full committee money on file; the
+  year/cycle filter narrows to a specific cycle. (Committees carry money across
+  past runs — e.g., DeBerry's and Leon's current totals are largely from their
+  2024 race — so the unfiltered total is the default and the filter scopes down.)
+  **Default label = "current cycle"** (not "all-time"): while the data is a
+  single SBE cycle, "current cycle" is the honest description of the unfiltered
+  default; the label generalizes when older cycles land and the filter exposes
+  them. Label only — the data scope and filter mechanism are unchanged.
 
 ## Per-candidate SEO pre-render (deferred, committed — do not forget)
 

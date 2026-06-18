@@ -1,2 +1,6 @@
 # Generated verification previews (regenerable via tools/prerender_*.js)
 tools/preview_*.html
+
+# Local test wrapper + its data copy (never commit)
+local-preview.html
+election-data.local.json

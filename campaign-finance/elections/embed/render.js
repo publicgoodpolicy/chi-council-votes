@@ -68,6 +68,10 @@
       '.ipg-elect .race-meta{font-size:13px;color:var(--ink-soft);}' +
       '.ipg-elect .field-note{font-size:13px;color:var(--ink-soft);background:var(--tan);border-radius:10px;padding:10px 14px;margin:14px 0 22px;display:flex;gap:9px;align-items:flex-start;}' +
       '.ipg-elect .field-note b{color:var(--ink);font-weight:500;}' +
+      '.ipg-elect .vacating-note{font-size:13px;color:var(--ink-soft);background:#E5EFE9;border-radius:10px;padding:10px 14px;margin:10px 0 18px;}' +
+      '.ipg-elect .vacating-note b{color:var(--ink);font-weight:500;}' +
+      '.ipg-elect .goto-link{appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);font-size:13px;font-weight:500;color:var(--teal);padding:0;text-decoration:underline;}' +
+      '.ipg-elect .goto-link:focus-visible{outline:2px solid var(--sage);outline-offset:2px;}' +
       '.ipg-elect .legend{display:flex;flex-wrap:wrap;gap:14px 20px;margin:6px 0 0;font-size:12px;color:var(--ink-soft);}' +
       '.ipg-elect .legend span{display:flex;align-items:center;gap:7px;}' +
       '.ipg-elect .sw{width:15px;height:13px;border-radius:3px;flex:none;}' +
@@ -155,26 +159,40 @@
       '<span><i class="sw oppose"></i>Independent opposition</span></div>';
   }
 
-  // Race view: head + legend + candidate cards (neutral order from the data layer).
+  function pendingCard(c) {
+    return '<article class="card"><div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' +
+      (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') + '</div>' +
+      '<p class="committee">Finance data still populating — committee not yet identified.</p></article>';
+  }
+
+  // Race view: head + vacating-incumbent note(s) + legend + candidate cards
+  // (neutral order from the data layer; the three figures never summed).
   function renderRaceView(vm) {
     if (!vm) return '<div class="soon"><h2>Race not found</h2></div>';
+    var vac = (vm.race.vacating || []).map(function (v) {
+      return '<p class="vacating-note">↳ Current member <b>' + esc(v.name) + '</b> is running for ' +
+        '<button class="goto-link" type="button" data-slug="' + esc(v.targetSlug) + '">' + esc(v.targetLabel) + ' →</button></p>';
+    }).join('');
+    var meta = plural(vm.candidates.length, 'candidate', 'candidates') +
+      (vm.cycle ? ' · cycle ' + esc(vm.cycle) : ' · current cycle');
+    var head = '<div class="race-head"><h2>' + esc(vm.race.label) + '</h2>' +
+      '<span class="race-meta">' + meta + '</span></div>' + vac;
+
+    if (!vm.candidates.length) {
+      return head + '<div class="soon"><h2>Field forming</h2>' +
+        '<p>No candidate committees are processed for this race yet. Check back as the field fills in.</p></div>';
+    }
     var live = vm.candidates.filter(function (c) { return c.hasFinance; });
-    if (!live.length) return renderComingSoon(vm.race.label);
+    if (!live.length) return head + vm.candidates.map(pendingCard).join('');
+
     var scale = 1;
     for (var i = 0; i < vm.candidates.length; i++) {
       var f = vm.candidates[i].figures; if (!f) continue;
       scale = Math.max(scale, f.contributions.total, f.independentSupport, f.independentOpposition);
     }
     var anyPending = vm.candidates.some(function (c) { return !c.hasFinance; });
-    var cards = vm.candidates.map(function (c) {
-      if (c.hasFinance) return card(c, scale);
-      return '<article class="card"><div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' +
-        (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') + '</div>' +
-        '<p class="committee">Finance data still populating — committee not yet identified.</p></article>';
-    }).join('');
-    return '<div class="race-head"><h2>' + esc(vm.race.label) + '</h2>' +
-      '<span class="race-meta">' + plural(vm.candidates.length, 'candidate', 'candidates') +
-      (vm.cycle ? ' · cycle ' + esc(vm.cycle) : ' · all-time') + '</span></div>' +
+    var cards = vm.candidates.map(function (c) { return c.hasFinance ? card(c, scale) : pendingCard(c); }).join('');
+    return head +
       (anyPending ? '<p class="field-note">▸ <span><b>Field still being added.</b> Candidates with registered ' +
         'committees are shown; others appear as they file and finance is processed.</span></p>' : '') +
       legend() + '<div style="height:18px"></div>' + cards;
@@ -209,13 +227,14 @@
       '<p class="picker-note">Races with processed campaign-finance data are live; the rest fill in as candidates file.</p>';
   }
 
-  function masthead(office) {
+  function masthead(office, topView) {
     var m = MAST[office] || MAST.school_board;
+    var byrace = topView !== 'spend';
     return '<header class="masthead"><p class="eyebrow"><span class="box" aria-hidden="true"></span>' + esc(m.kicker) + '</p>' +
       '<h1>Who’s running, and who’s funding them</h1><p class="lede">' + m.lede + '</p>' +
       '<div class="topnav" role="tablist" aria-label="View">' +
-      '<button role="tab" data-view="byrace" aria-selected="true">By race</button>' +
-      '<button role="tab" data-view="spend" aria-selected="false">Election spend</button></div></header>';
+      '<button role="tab" data-view="byrace" aria-selected="' + byrace + '">By race</button>' +
+      '<button role="tab" data-view="spend" aria-selected="' + (!byrace) + '">Election spend</button></div></header>';
   }
 
   function footer() {
@@ -245,7 +264,7 @@
       ? (renderOfficeNav(state.officeRaces, state.activeSlug) +
          '<div aria-live="polite">' + (state.raceView ? renderRaceView(state.raceView) : '') + '</div>')
       : spendPlaceholder();
-    return '<div class="wrap">' + masthead(state.office) +
+    return '<div class="wrap">' + masthead(state.office, state.topView) +
       '<section>' + body + '</section>' + footer() + '</div>';
   }
 
