@@ -85,7 +85,28 @@
       '.ipg-elect .committee{font-size:12.5px;color:var(--ink-soft);margin:0 0 18px;}' +
       '.ipg-elect .bars{display:flex;flex-direction:column;gap:13px;}' +
       '.ipg-elect .barrow{display:grid;grid-template-columns:170px 1fr 140px;align-items:center;gap:12px;}' +
-      '.ipg-elect .barlabel{font-size:12.5px;color:var(--ink-soft);}' +
+      '.ipg-elect button.barrow{appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);text-align:left;width:calc(100% + 16px);padding:6px 8px;margin:-6px -8px;border-radius:8px;}' +
+      '.ipg-elect button.barrow:hover{background:#F2E8DC;}' +
+      '.ipg-elect button.barrow:focus-visible{outline:2px solid var(--sage);outline-offset:1px;}' +
+      '.ipg-elect .barlabel{font-size:12.5px;color:var(--ink-soft);display:flex;align-items:center;gap:6px;}' +
+      '.ipg-elect .caret{font-size:10px;color:var(--teal);transition:transform .2s;}' +
+      '.ipg-elect button.barrow[aria-expanded="true"] .caret{transform:rotate(90deg);}' +
+      '.ipg-elect .contrib{max-height:0;overflow:hidden;transition:max-height .3s ease;grid-column:1/-1;}' +
+      '.ipg-elect .contrib.open{max-height:3000px;margin-top:10px;}' +
+      '.ipg-elect .contrib-inner{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}' +
+      '.ipg-elect .contrib-h{font-size:12px;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 10px;}' +
+      '.ipg-elect .crow{display:grid;grid-template-columns:1fr auto;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px;}' +
+      '.ipg-elect .crow:last-child{border-bottom:0;}' +
+      '.ipg-elect .crow .who{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}' +
+      '.ipg-elect .crow .amt{font-weight:500;white-space:nowrap;}.ipg-elect .crow .n{font-size:11px;color:var(--ink-soft);font-weight:400;}' +
+      '.ipg-elect .tagchip{font-size:10.5px;padding:1px 8px;border-radius:14px;background:var(--tan);color:var(--ink-soft);}' +
+      '.ipg-elect .tagchip.self{background:#F4E3DC;color:var(--coral);}' +
+      '.ipg-elect .contrib-note{font-size:12px;color:var(--ink-soft);margin:8px 0 0;}' +
+      '.ipg-elect .ie-spender{padding:2px 0 4px;}.ipg-elect .ie-spender + .ie-spender{border-top:1px solid var(--line);margin-top:12px;padding-top:12px;}' +
+      '.ipg-elect .ie-lead{font-size:13.5px;color:var(--ink);margin:0 0 6px;}.ipg-elect .ie-lead b{font-weight:500;}' +
+      '.ipg-elect .ie-cmte-line{font-size:12px;color:var(--ink-soft);margin:0 0 10px;}' +
+      '.ipg-elect .ie-pac-tag{font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--coral);background:#F4E3DC;border-radius:4px;padding:1px 5px;}' +
+      '.ipg-elect .paclink{font-size:12px;}' +
       '.ipg-elect .bartrack{height:18px;background:#EFE6DC;border-radius:5px;overflow:hidden;}' +
       '.ipg-elect .barfill{height:100%;display:flex;}' +
       '.ipg-elect .seg{height:100%;}' +
@@ -108,8 +129,9 @@
       '</style>';
   }
 
-  // One static figure bar (no drill-down in B2). scale = race-wide max for width.
-  function bar(label, segs, countText, scale) {
+  // One figure bar. scale = race-wide max for width. panelId (if given) makes the
+  // row a clickable disclosure button controlling a drill-down panel.
+  function bar(label, segs, countText, scale, panelId) {
     var sum = 0, i; for (i = 0; i < segs.length; i++) sum += segs[i].v;
     var fillW = scale > 0 ? Math.min(100, (sum / scale) * 100) : 0;
     var inner = '';
@@ -121,9 +143,59 @@
     var val = sum > 0
       ? (money(sum) + (countText ? '<span class="sub">' + esc(countText) + '</span>' : ''))
       : '<span class="zero">none reported</span>';
-    return '<div class="barrow"><span class="barlabel">' + esc(label) + '</span>' +
+    var labelHtml = panelId
+      ? '<span class="barlabel"><span class="caret" aria-hidden="true">▸</span>' + esc(label) + '</span>'
+      : '<span class="barlabel">' + esc(label) + '</span>';
+    var body = labelHtml +
       '<div class="bartrack"><div class="barfill" style="width:' + fillW + '%">' + inner + '</div></div>' +
-      '<div class="barval">' + val + '</div></div>';
+      '<div class="barval">' + val + '</div>';
+    return panelId
+      ? '<button class="barrow click" type="button" aria-expanded="false" aria-controls="' + panelId + '">' + body + '</button>'
+      : '<div class="barrow">' + body + '</div>';
+  }
+
+  // Contributor drill-down panel (collapsed; app toggles .open). Top 25 + an
+  // "All other donors" line so the visible rows still sum to the headline.
+  function contributorPanel(cd, id) {
+    var LIMIT = 25, lines = cd.lines, shown = Math.min(LIMIT, lines.length), html = '', shownTotal = 0;
+    for (var i = 0; i < shown; i++) {
+      var l = lines[i]; shownTotal += l.total;
+      var tag = l.isSelf ? '<span class="tagchip self">Candidate’s own money / loans</span>'
+        : l.isAggregate ? '<span class="tagchip">small-dollar</span>' : '';
+      html += '<div class="crow"><div class="who">' + esc(l.name) + tag + '</div>' +
+        '<div class="amt">' + money(l.total) + ' <span class="n">· ' + plural(l.count, 'record', 'records') + '</span></div></div>';
+    }
+    if (lines.length > LIMIT) {
+      html += '<div class="crow"><div class="who">All other donors</div><div class="amt">' +
+        money(cd.total - shownTotal) + ' <span class="n">· ' + (lines.length - LIMIT) + ' donors</span></div></div>';
+    }
+    return '<div class="contrib" id="' + id + '"><div class="contrib-inner">' +
+      '<p class="contrib-h">Who gave to this campaign · ' + money(cd.total) + ' total</p>' + html +
+      '<p class="contrib-note">Rolled up by affiliation; lines sum to the contributions figure. ' +
+      'Small-dollar (under $150) donors are disclosed only in aggregate.</p></div></div>';
+  }
+
+  // IE drill-down panel — LEADS WITH funder identity (committee names are
+  // placeholders), then lists the second-hop funders. Collapsed; app toggles.
+  function iePanel(detail, candName, id) {
+    var verb = detail.stance === 'oppose' ? 'opposing' : 'supporting';
+    var html = detail.spenders.map(function (s) {
+      var names = s.topFunders.map(function (f) { return esc(f.name); });
+      var primarily = names.length ? ('funded primarily by ' + names.join(', ')) : 'with no outside funding recorded';
+      var sun = s.sunshineUrl ? ' <a class="paclink" href="' + esc(s.sunshineUrl) + '" target="_blank" rel="noopener">Illinois Sunshine ↗</a>' : '';
+      var fLimit = 8, fShown = Math.min(fLimit, s.funders.length), frows = '';
+      for (var i = 0; i < fShown; i++) {
+        frows += '<div class="crow"><div class="who">' + esc(s.funders[i].name) + '</div>' +
+          '<div class="amt">' + money(s.funders[i].total) + '</div></div>';
+      }
+      var more = s.funderCount > fLimit ? '<p class="contrib-note">+ ' + (s.funderCount - fLimit) + ' more funders</p>' : '';
+      return '<div class="ie-spender">' +
+        '<p class="ie-lead">' + money(s.amount) + ' ' + verb + ' <b>' + esc(candName) + '</b>, from a committee ' + primarily + '.</p>' +
+        '<div class="ie-cmte-line"><span class="ie-pac-tag">IE PAC</span> ' + esc(s.committeeName) + sun + '</div>' +
+        '<p class="contrib-h">Who funds this committee · ' + money(s.funderTotal) + ' from ' +
+        plural(s.funderCount, 'funder', 'funders') + ' (dues excluded)</p>' + frows + more + '</div>';
+    }).join('');
+    return '<div class="contrib" id="' + id + '"><div class="contrib-inner">' + html + '</div></div>';
   }
 
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
@@ -133,20 +205,28 @@
     var mostlySelf = f.contributions.total > 0 && (f.contributions.selfFunded / f.contributions.total) >= 0.5;
     var chips = (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') +
       (mostlySelf ? '<span class="chip-self">Mostly self-funded</span>' : '');
+    var base = 'd-' + esc(c.slug);
+    var hasSup = f.independentSupport > 0, hasOpp = f.independentOpposition > 0;
     var contribBar = bar('From contributors',
       [{ cls: 'third', v: f.contributions.thirdParty }, { cls: 'self', v: f.contributions.selfFunded }],
-      plural(f.contributions.count, 'contribution', 'contributions'), scale);
+      plural(f.contributions.count, 'contribution', 'contributions'), scale, base + '-c');
+    var contribPanel = contributorPanel(c.contributors, base + '-c');
     var supportBar = bar('Independent support', [{ cls: 'support', v: f.independentSupport }],
-      f.independentSupportCount ? plural(f.independentSupportCount, 'expenditure', 'expenditures') : '', scale);
+      f.independentSupportCount ? plural(f.independentSupportCount, 'expenditure', 'expenditures') : '', scale, hasSup ? base + '-s' : null);
+    var supportPanel = hasSup ? iePanel(c.ieSupportDetail, c.name, base + '-s') : '';
     var opposeBar = bar('Independent opposition', [{ cls: 'oppose', v: f.independentOpposition }],
-      f.independentOppositionCount ? plural(f.independentOppositionCount, 'expenditure', 'expenditures') : '', scale);
+      f.independentOppositionCount ? plural(f.independentOppositionCount, 'expenditure', 'expenditures') : '', scale, hasOpp ? base + '-o' : null);
+    var opposePanel = hasOpp ? iePanel(c.ieOpposeDetail, c.name, base + '-o') : '';
     var selfLine = f.contributions.selfFunded > 0
       ? '<p class="selfline"><b>' + money(f.contributions.selfFunded) + '</b> is the candidate’s own money or loans · <b>' +
         money(f.contributions.thirdParty) + '</b> from other donors</p>' : '';
+    var committeeLine = (c.committee && c.committee.name)
+      ? '<p class="committee">Committee: ' + esc(c.committee.name) +
+        (c.committee.sunshineUrl ? ' · <a href="' + esc(c.committee.sunshineUrl) + '" target="_blank" rel="noopener">Illinois Sunshine ↗</a>' : '') + '</p>'
+      : '';
     return '<article class="card" id="cand-' + esc(c.slug) + '">' +
-      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' + chips + '</div>' +
-      (c.committee && c.committee.name ? '<p class="committee">Committee: ' + esc(c.committee.name) + '</p>' : '') +
-      '<div class="bars">' + contribBar + supportBar + opposeBar + '</div>' + selfLine +
+      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' + chips + '</div>' + committeeLine +
+      '<div class="bars">' + contribBar + contribPanel + supportBar + supportPanel + opposeBar + opposePanel + '</div>' + selfLine +
       '<p class="caption">Independent support and opposition are spending by outside groups, reported by those ' +
       'groups and not coordinated with the campaign. Figures are shown separately, never added together.</p></article>';
   }

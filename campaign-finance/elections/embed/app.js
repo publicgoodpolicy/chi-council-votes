@@ -57,6 +57,13 @@
     }
 
     root.addEventListener('click', function (e) {
+      // drill-down disclosure: toggle the panel in place (no redraw → state persists)
+      var dz = e.target.closest && e.target.closest('.barrow.click');
+      if (dz) {
+        var pid = dz.getAttribute('aria-controls'), panel = pid && document.getElementById(pid);
+        if (panel) { var open = panel.classList.toggle('open'); dz.setAttribute('aria-expanded', open ? 'true' : 'false'); }
+        return;
+      }
       var v = e.target.closest && e.target.closest('[data-view]');
       if (v) { state.topView = v.getAttribute('data-view'); draw(); return; }
       // chips AND the vacating-incumbent "→" link both navigate by slug

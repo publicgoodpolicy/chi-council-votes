@@ -77,6 +77,30 @@ ok('toggle: By-race tab active when topView=byrace',
 // Cycle label
 ok('default cycle label is "current cycle" (not "all-time")', /current cycle/.test(page) && page.indexOf('all-time') < 0);
 
+console.log('\n=== B3 assertions (drill-downs + Sunshine) ===');
+function sumLines(cd) { return Math.round(cd.lines.reduce(function (s, l) { return s + l.total; }, 0)); }
+var leonC = D.candidateContributors(index, 'leon-sb-d03', null);
+var debC = D.candidateContributors(index, 'deberry-sb-d03', null);
+ok('Leon contributor lines sum EXACTLY to $620,403', sumLines(leonC) === 620403 && Math.round(leonC.total) === 620403);
+ok('DeBerry contributor lines sum EXACTLY to $534,950', sumLines(debC) === 534950 && Math.round(debC.total) === 534950);
+ok('Leon contributor list flags a self/loan line', leonC.lines.some(function (l) { return l.isSelf; }));
+ok('contributor list includes a small-dollar aggregate line', leonC.lines.some(function (l) { return l.isAggregate; }) && debC.lines.some(function (l) { return l.isAggregate; }));
+
+var debOpp = D.candidateIE(index, 'deberry-sb-d03', 'oppose', null);
+ok('DeBerry opposition drill-down totals $126,078 with >=1 spender', Math.round(debOpp.total) === 126078 && debOpp.spenders.length >= 1);
+ok('DeBerry opposition spender surfaces SECOND-HOP funders', debOpp.spenders[0].topFunders.length >= 1 && debOpp.spenders[0].funderTotal > 0);
+console.log('       (lead funders: ' + debOpp.spenders[0].topFunders.map(function (f) { return f.name; }).join(', ') + ')');
+
+var debMeta = D.committeeMeta(index, 'deberry-sb-d03');
+ok('DeBerry committee Sunshine URL builds', /^https:\/\/illinoissunshine\.org\/committees\/.+\/$/.test(debMeta.sunshineUrl));
+ok('IE spender Sunshine URL builds (encoded sbe id)', !!debOpp.spenders[0].sunshineUrl && /illinoissunshine\.org\/committees\//.test(debOpp.spenders[0].sunshineUrl));
+
+ok('page renders contributor panels', /class="contrib"/.test(page) && /Who gave to this campaign/.test(page));
+ok('page renders IE drill-down LEADING with funder identity',
+  /opposing <b>Ebony DeBerry<\/b>, from a committee funded primarily by /.test(page));
+ok('bars are clickable disclosures (caret + aria-controls)', /class="barrow click"/.test(page) && /aria-controls="d-/.test(page));
+ok('candidate committee Sunshine link present in card', /Illinois Sunshine ↗/.test(page));
+
 console.log('\nwrote ' + path.relative(process.cwd(), out) + '  (open in a browser to eyeball — self-contained, no fetch)');
 console.log(fails ? (fails + ' ASSERTION(S) FAILED') : 'ALL ASSERTIONS PASSED');
 process.exit(fails ? 1 : 0);

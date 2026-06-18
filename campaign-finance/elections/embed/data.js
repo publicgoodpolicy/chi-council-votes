@@ -233,15 +233,102 @@
     };
   }
 
+  // Illinois Sunshine link — council embed's exact construction: prefer a stored
+  // il_sunshine_url, else build from the SBE id (encoded), else none.
+  function sunshineUrl(cm) {
+    if (!cm) return null;
+    if (cm.il_sunshine_url) return cm.il_sunshine_url;
+    if (cm.sbe_committee_id) return 'https://illinoissunshine.org/committees/' + encodeURIComponent(cm.sbe_committee_id) + '/';
+    return null;
+  }
+
   function committeeMeta(index, candidateId) {
     var ckey = index.committeeKeyByCandidate[candidateId];
     if (!ckey) return null;
     var cm = index.committees[ckey];
-    var sbe = cm.sbe_committee_id || null;
     return {
-      key: ckey, name: cm.committee_name || null, sbe_committee_id: sbe,
-      sunshineUrl: sbe ? ('https://illinoissunshine.org/committees/' + sbe + '/') : null
+      key: ckey, name: cm.committee_name || null, sbe_committee_id: cm.sbe_committee_id || null,
+      sunshineUrl: sunshineUrl(cm)
     };
+  }
+
+  // Contributor drill-down: a candidate's direct contributions rolled up by
+  // parent_id, sorted desc, INCLUDING the small-dollar aggregate as its own line.
+  // Option A: lines sum EXACTLY to candidateFigures().contributions.total.
+  function candidateContributors(index, candidateId, cycle) {
+    var rows = index.directByCandidate[candidateId] || [];
+    var by = {};
+    for (var i = 0; i < rows.length; i++) {
+      var c = rows[i];
+      if (EXCLUDED_CYCLES[c.cycle]) continue;
+      if (c.contribution_type === DUES_TYPE) continue;
+      if (cycle != null && c.cycle !== cycle) continue;
+      var donor = index.donors[c.donor_id] || {};
+      var pid = donor.parent_id || c.donor_id;
+      var parent = index.donors[pid] || donor;
+      var m = by[pid] || (by[pid] = { parent_id: pid, name: parent.name || pid, total: 0, count: 0, isSelf: false, isAggregate: false });
+      m.total = round2(m.total + (c.amount || 0)); m.count++;
+      if (c.is_loan || c.contribution_type === 'Loan Received' || parent.type === 'Candidate' ||
+          (parent.industries || []).indexOf('self-funding') >= 0) m.isSelf = true;
+      if (parent.type === 'Aggregate' || (parent.industries || []).indexOf('small-dollar') >= 0) m.isAggregate = true;
+    }
+    var lines = []; for (var k in by) if (by.hasOwnProperty(k)) lines.push(by[k]);
+    lines.sort(function (a, b) { return b.total - a.total; });
+    var total = 0; for (var j = 0; j < lines.length; j++) total += lines[j].total;
+    return { lines: lines, total: round2(total), count: lines.length };
+  }
+
+  // Second hop: who funds one IE committee — contributions INTO it, dues excluded,
+  // rolled up by parent_id, sorted desc.
+  function spenderFunders(index, spenderKey) {
+    var rows = index.fundersBySpender[spenderKey] || [];
+    var by = {};
+    for (var i = 0; i < rows.length; i++) {
+      var c = rows[i];
+      if (c.contribution_type === DUES_TYPE) continue;        // internal dues transfers are not giving
+      var donor = index.donors[c.donor_id] || {};
+      var pid = donor.parent_id || c.donor_id;
+      var parent = index.donors[pid] || donor;
+      var m = by[pid] || (by[pid] = { parent_id: pid, name: parent.name || pid, total: 0, count: 0 });
+      m.total = round2(m.total + (c.amount || 0)); m.count++;
+    }
+    var funders = []; for (var k in by) if (by.hasOwnProperty(k)) funders.push(by[k]);
+    funders.sort(function (a, b) { return b.total - a.total; });
+    var total = 0; for (var j = 0; j < funders.length; j++) total += funders[j].total;
+    return { funders: funders, total: round2(total), count: funders.length };
+  }
+
+  // IE drill-down for one candidate + stance: the spender committee(s), each with
+  // its second-hop top funders. Spender names are placeholders, so the funders
+  // are the identity ("funded primarily by ...").
+  function candidateIE(index, candidateId, stance, cycle) {
+    var ieB = index.ieByCandidate[candidateId] || { support: [], oppose: [] };
+    var list = stance === 'oppose' ? ieB.oppose : ieB.support;
+    var by = {};
+    for (var i = 0; i < list.length; i++) {
+      var ie = list[i];
+      if (EXCLUDED_CYCLES[ie.cycle]) continue;
+      if (cycle != null && ie.cycle !== cycle) continue;
+      var sk = ie.spender_committee_id;
+      var m = by[sk] || (by[sk] = { spender_committee_id: sk, amount: 0, count: 0 });
+      m.amount = round2(m.amount + (ie.amount || 0)); m.count++;
+    }
+    var spenders = [];
+    for (var key in by) {
+      if (!by.hasOwnProperty(key)) continue;
+      var s = by[key], cm = index.committees[key] || {};
+      var ff = spenderFunders(index, key);
+      s.committeeName = cm.committee_name || key;
+      s.sunshineUrl = sunshineUrl(cm);
+      s.topFunders = ff.funders.slice(0, 3);
+      s.funders = ff.funders;
+      s.funderTotal = ff.total;
+      s.funderCount = ff.count;
+      spenders.push(s);
+    }
+    spenders.sort(function (a, b) { return b.amount - a.amount; });
+    var total = 0; for (var t = 0; t < spenders.length; t++) total += spenders[t].amount;
+    return { stance: stance, spenders: spenders, total: round2(total) };
   }
 
   // Neutral order = alphabetical by SURNAME (ballot convention), never by amount.
@@ -297,7 +384,10 @@
           incumbent: !!c.incumbent, status: c.status,
           hasFinance: hasFinance, stillPopulating: !hasFinance,
           committee: hasFinance ? committeeMeta(index, c.id) : null,
-          figures: hasFinance ? candidateFigures(index, c.id, cycle) : null
+          figures: hasFinance ? candidateFigures(index, c.id, cycle) : null,
+          contributors: hasFinance ? candidateContributors(index, c.id, cycle) : null,
+          ieSupportDetail: hasFinance ? candidateIE(index, c.id, 'support', cycle) : null,
+          ieOpposeDetail: hasFinance ? candidateIE(index, c.id, 'oppose', cycle) : null
         };
       })
     };
@@ -354,7 +444,11 @@
     EXCLUDED_CYCLES: EXCLUDED_CYCLES,
     loadData: loadData,
     candidateFigures: candidateFigures,
+    candidateContributors: candidateContributors,
+    candidateIE: candidateIE,
+    spenderFunders: spenderFunders,
     committeeMeta: committeeMeta,
+    sunshineUrl: sunshineUrl,
     availableCycles: availableCycles,
     isSelfFunded: isSelfFunded,
     kebab: kebab, raceSlug: raceSlug, candidateSlug: candidateSlug, raceCode: raceCode,
