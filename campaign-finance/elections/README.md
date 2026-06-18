@@ -92,6 +92,13 @@ governing rule below). Export `$REPO`; paths are relative to the repo root.
 5.  ingest_ie.py --council campaign-finance/election-data.json \
         --expenditures <SBE Expenditures> --receipts <SBE Receipts> \
         --out campaign-finance/election-data.json            # IE layer; internal build_rollups now safe
+5b. enrich_committee_names.py --council campaign-finance/election-data.json \
+        --committees <SBE Committees.txt> --out campaign-finance/election-data.json
+                                                            # resolve IE spender ids -> real names
+                                                            #   (ingest_ie only knows the id). Same step
+                                                            #   council runs. Absent the SBE Committees.txt,
+                                                            #   back-fill from council-data.json's resolved
+                                                            #   names (the shared committee-name table).
 6.  sync_overrides.py    --data-file campaign-finance/election-data.json \
         --sheet-id <ID> --creds-file <path>                  # shared classification + clusters
                                                             #   + IE-committee industry tags

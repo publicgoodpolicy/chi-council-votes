@@ -46,6 +46,11 @@ CANONICAL RUN ORDER (full election build)
   5. ingest_ie.py --council election-data.json --expenditures <SBE Exp> \
         --receipts <SBE Rec> --out election-data.json
         IE layer; its internal build_rollups is now safe (every donor has parent_id).
+  5b. enrich_committee_names.py --council election-data.json --committees <SBE Committees.txt> \
+        --out election-data.json
+        Resolve IE spender committee_ids to real names (ingest_ie only knows the id).
+        Same step the council build runs. Without the SBE Committees.txt, back-fill from
+        council-data.json's already-resolved names (the shared committee-name table).
   6. sync_overrides.py    --data-file election-data.json --sheet-id <ID> --creds-file <path>
         Shared classification + clusters + IE-committee industry tags (sets parent_id
         on clustered donors directly).

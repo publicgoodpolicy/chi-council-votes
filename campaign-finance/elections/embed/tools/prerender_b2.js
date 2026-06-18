@@ -206,6 +206,35 @@ ok('small-dollar aggregate is a plain non-clickable line at the bottom',
 ok('full set (real + self + small-dollar) sums EXACTLY to the headline ($534,950)',
   Math.round(debCd2.lines.reduce(function (s, l) { return s + l.total; }, 0)) === 534950);
 
+console.log('\n=== B3-REVISE-4 assertions (resolved IE committee names) ===');
+// Real name resolved at the source (enrich), shown primary + funder subtitle.
+var prof26066 = D.committeeProfile(index, 'ie-committee-26066');
+ok('IE committee 26066 carries a real name (enriched, not placeholder)', prof26066.name === 'INCS Action Independent Committee');
+var prof26066Html = R.renderCommitteeProfile(prof26066);
+ok('committee-profile shows real name primary + "Funded primarily by" + no bare id',
+  /INCS Action Independent Committee/.test(prof26066Html) && /Funded primarily by /.test(prof26066Html) && prof26066Html.indexOf('IE committee 26066') < 0);
+// Footprint modal IE row: name primary + subtitle, never the bare placeholder.
+var frankId = (function () { for (var p in index.parentRollup) if (/James S\. Frank/.test((index.donors[p] || {}).name)) return p; })();
+var frankHtml = R.renderFunderModal(D.donorFootprint(index, frankId));
+ok('footprint IE row shows resolved name + "Funded primarily by" subtitle',
+  /INCS Action Independent Committee/.test(frankHtml) && /class="sub">Funded primarily by/.test(frankHtml));
+ok('footprint IE row no longer shows the bare placeholder text', frankHtml.indexOf('>IE committee 26066') < 0);
+// IE drill-down on the page shows the resolved name (DeBerry opposition spender = 26066).
+ok('IE drill-down (page) shows the resolved committee name', /INCS Action Independent Committee/.test(page));
+// Genuinely-unnamed committee (39901) keeps the framed-identity fallback, never a bare id.
+var prof39901Html = R.renderCommitteeProfile(D.committeeProfile(index, 'ie-committee-39901'));
+ok('genuinely-unnamed IE (39901) falls back to framed identity, never a bare id',
+  prof39901Html.indexOf('IE committee 39901') < 0 && /Funded primarily by |Independent-expenditure committee/.test(prof39901Html));
+// "Show all N" count == clickable real-donor rows (excl. self + small-dollar).
+(function () {
+  var cd = D.candidateContributors(index, 'deberry-sb-d03', null), panel = R.contributorPanel(cd, 'x');
+  var m = panel.match(/Show all (\d+) donors/), N = m ? +m[1] : -1;
+  var btns = (panel.match(/class="crow funder-row" type="button" data-funder=/g) || []).length;
+  var real = cd.lines.filter(function (l) { return !l.isSelf && !l.isAggregate; }).length;
+  ok('"Show all N" N excludes self/small-dollar and equals the clickable rows (' + N + '=' + real + '=' + btns + ')',
+    N === real && btns === real);
+})();
+
 console.log('\nwrote ' + path.relative(process.cwd(), out) + '  (open in a browser to eyeball — self-contained, no fetch)');
 console.log(fails ? (fails + ' ASSERTION(S) FAILED') : 'ALL ASSERTIONS PASSED');
 process.exit(fails ? 1 : 0);
