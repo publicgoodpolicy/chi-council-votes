@@ -96,10 +96,36 @@ ok('DeBerry committee Sunshine URL builds', /^https:\/\/illinoissunshine\.org\/c
 ok('IE spender Sunshine URL builds (encoded sbe id)', !!debOpp.spenders[0].sunshineUrl && /illinoissunshine\.org\/committees\//.test(debOpp.spenders[0].sunshineUrl));
 
 ok('page renders contributor panels', /class="contrib"/.test(page) && /Who gave to this campaign/.test(page));
-ok('page renders IE drill-down LEADING with funder identity',
-  /opposing <b>Ebony DeBerry<\/b>, from a committee funded primarily by /.test(page));
 ok('bars are clickable disclosures (caret + aria-controls)', /class="barrow click"/.test(page) && /aria-controls="d-/.test(page));
 ok('candidate committee Sunshine link present in card', /Illinois Sunshine ↗/.test(page));
+
+console.log('\n=== B3-REVISE assertions (three tiers + footprint + tags) ===');
+var sp0 = debOpp.spenders[0];
+// Tier 1: committee, amount, stance, Sunshine — NOT the funders yet
+ok('Tier 1 lists the IE committee with amount+stance (not funders)',
+  /Outside spending opposing <b>Ebony DeBerry<\/b>/.test(page) ||
+  /class="ie-cmte-toggle"[^>]*>[^<]*<span class="caret"[^>]*>▸<\/span> <b>\$126,078 against<\/b> opposing Ebony DeBerry/.test(page));
+ok('Tier 1 committee row has aria-controls to a Tier-2 panel', /class="ie-cmte-toggle" type="button" aria-expanded="false" aria-controls="d-/.test(page));
+ok('Tier 1 committee row carries a Sunshine link', /class="ie-cmte-head">[\s\S]{0,400}?class="paclink"/.test(page));
+// Tier 2: funders, with the explicit "gave this committee over time, not this race" framing
+ok('Tier 2 shows the plain-language identity line ("Funded primarily by ...")', /class="ie-lead">Funded primarily by /.test(page));
+ok('Tier 2 has the explicit framing (gave this committee over time, not this race)',
+  /Amounts below are what each donor gave <b>this committee<\/b> over time — not money spent on this race\./.test(page));
+ok('Tier 2 funder rows are clickable (data-funder) -> Tier 3', /class="crow funder-row" type="button" data-funder="/.test(page));
+// Funder amounts are PAC RECEIPTS, not race spend: top funder gave the PAC far
+// more than the PAC spent opposing DeBerry ($126,078).
+ok('funder amount is a PAC receipt, not the race spend', sp0.topFunders[0].total !== sp0.amount && sp0.funderTotal > sp0.amount);
+// Tier 3: donor footprint resolves for a funder (committee -> its funders -> footprint)
+var topFunderId = sp0.funders[0].parent_id;
+var fp = D.donorFootprint(index, topFunderId);
+ok('Tier 3 footprint resolves to >=1 recipient committee/candidate', fp.committees.length >= 1 && fp.total > 0);
+ok('Tier 3 footprint is election-scoped (modal copy says so)',
+  /Donor footprint · this election only/.test(R.renderFunderModal(fp)) && /Council-side giving is a separate/.test(R.renderFunderModal(fp)));
+// Tags/flags surface (uncategorized never blank)
+ok('funder rows render industry tag(s) (uncategorized if none)', /class="tagchip ind">/.test(page));
+ok('tags helper shows "uncategorized" rather than blank for an empty donor',
+  /class="tagchip ind">uncategorized<\/span>/.test(R.renderFunderModal(D.donorFootprint(index, sp0.funders[0].parent_id))) ||
+  R.renderFunderModal(fp).indexOf('tagchip ind') >= 0);
 
 console.log('\nwrote ' + path.relative(process.cwd(), out) + '  (open in a browser to eyeball — self-contained, no fetch)');
 console.log(fails ? (fails + ' ASSERTION(S) FAILED') : 'ALL ASSERTIONS PASSED');

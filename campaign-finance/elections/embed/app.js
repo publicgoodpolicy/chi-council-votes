@@ -20,6 +20,26 @@
       ElectRender.styles().replace('<style>', '<style id="ipg-elect-css">'));
   }
 
+  // Tier-3 modal: mounted on <body> wrapped in .ipg-elect so scoped styles apply;
+  // closed by the × button, the backdrop, or Esc. App only mounts/unmounts.
+  function escClose(e) { if (e.key === 'Escape') closeModal(); }
+  function closeModal() {
+    var m = document.getElementById('ipg-elect-modal');
+    if (m) m.parentNode.removeChild(m);
+    document.removeEventListener('keydown', escClose);
+  }
+  function openModal(html) {
+    closeModal();
+    var w = document.createElement('div');
+    w.id = 'ipg-elect-modal'; w.className = 'ipg-elect'; w.innerHTML = html;
+    w.addEventListener('click', function (e) {
+      if ((e.target.closest && e.target.closest('[data-modal-close]')) ||
+          (e.target.matches && e.target.matches('[data-modal-overlay]'))) closeModal();
+    });
+    document.body.appendChild(w);
+    document.addEventListener('keydown', escClose);
+  }
+
   function notice(root, msg, coral) {
     root.innerHTML = '<div class="wrap"><p style="padding:44px 0;font-family:Poppins,system-ui,sans-serif;color:' +
       (coral ? '#B0553A' : '#6E5F58') + '">' + msg + '</p></div>';
@@ -57,19 +77,24 @@
     }
 
     root.addEventListener('click', function (e) {
-      // drill-down disclosure: toggle the panel in place (no redraw → state persists)
-      var dz = e.target.closest && e.target.closest('.barrow.click');
+      var cl = function (sel) { return e.target.closest && e.target.closest(sel); };
+      // Tier 3: a funder row opens the donor-footprint modal
+      var fr = cl('.funder-row[data-funder]');
+      if (fr) { openModal(ElectRender.renderFunderModal(ElectData.donorFootprint(index, fr.getAttribute('data-funder')))); return; }
+      // Tier 1/2 + figure bars: any aria-controls toggle expands its panel in place
+      // (no redraw → open state persists)
+      var dz = cl('[aria-controls]');
       if (dz) {
         var pid = dz.getAttribute('aria-controls'), panel = pid && document.getElementById(pid);
         if (panel) { var open = panel.classList.toggle('open'); dz.setAttribute('aria-expanded', open ? 'true' : 'false'); }
         return;
       }
-      var v = e.target.closest && e.target.closest('[data-view]');
+      var v = cl('[data-view]');
       if (v) { state.topView = v.getAttribute('data-view'); draw(); return; }
       // chips AND the vacating-incumbent "→" link both navigate by slug
-      var ch = e.target.closest && e.target.closest('[data-slug]');
+      var ch = cl('[data-slug]');
       if (ch) { state.activeSlug = ch.getAttribute('data-slug'); state.topView = 'byrace'; draw(); return; }
-      var of = e.target.closest && e.target.closest('.office[data-group]');
+      var of = cl('.office[data-group]');
       if (of) {
         var label = of.getAttribute('data-group');
         var omVM = ElectData.viewModels.officeRaces(index, state.office);

@@ -21,6 +21,24 @@
     });
   }
   function money(n) { return (n == null) ? '—' : ('$' + Math.round(n).toLocaleString('en-US')); }
+  function prettyTag(s) { return String(s).replace(/-/g, ' '); }
+
+  // Industry tag(s) + flag(s) for a donor. Uncategorized shows as uncategorized,
+  // never blank. Forward-compat: surfaces whatever is in industries/flags now.
+  function tagsHtml(industries, flags) {
+    var inds = (industries && industries.length) ? industries : ['uncategorized'];
+    var out = '';
+    for (var i = 0; i < inds.length; i++) {
+      var label = (inds[i] === 'unclassified') ? 'uncategorized' : prettyTag(inds[i]);
+      out += '<span class="tagchip ind">' + esc(label) + '</span>';
+    }
+    var fl = flags || [];
+    for (var j = 0; j < fl.length; j++) {
+      var ft = (fl[j] && fl[j].type) || fl[j];
+      if (ft) out += '<span class="tagchip flag">⚑ ' + esc(prettyTag(ft)) + '</span>';
+    }
+    return out;
+  }
 
   // Editorial masthead copy per office page.
   var MAST = {
@@ -102,11 +120,30 @@
       '.ipg-elect .tagchip{font-size:10.5px;padding:1px 8px;border-radius:14px;background:var(--tan);color:var(--ink-soft);}' +
       '.ipg-elect .tagchip.self{background:#F4E3DC;color:var(--coral);}' +
       '.ipg-elect .contrib-note{font-size:12px;color:var(--ink-soft);margin:8px 0 0;}' +
-      '.ipg-elect .ie-spender{padding:2px 0 4px;}.ipg-elect .ie-spender + .ie-spender{border-top:1px solid var(--line);margin-top:12px;padding-top:12px;}' +
       '.ipg-elect .ie-lead{font-size:13.5px;color:var(--ink);margin:0 0 6px;}.ipg-elect .ie-lead b{font-weight:500;}' +
-      '.ipg-elect .ie-cmte-line{font-size:12px;color:var(--ink-soft);margin:0 0 10px;}' +
       '.ipg-elect .ie-pac-tag{font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--coral);background:#F4E3DC;border-radius:4px;padding:1px 5px;}' +
       '.ipg-elect .paclink{font-size:12px;}' +
+      '.ipg-elect .ie-cmte + .ie-cmte{border-top:1px solid var(--line);margin-top:10px;padding-top:10px;}' +
+      '.ipg-elect .ie-cmte-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px;}' +
+      '.ipg-elect .ie-cmte-toggle{appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);font-size:13px;color:var(--ink);text-align:left;padding:4px 6px;margin:-4px -6px;border-radius:6px;}' +
+      '.ipg-elect .ie-cmte-toggle:hover{background:#F2E8DC;}.ipg-elect .ie-cmte-toggle b{font-weight:600;}' +
+      '.ipg-elect .ie-cmte-toggle[aria-expanded="true"] .caret{transform:rotate(90deg);}' +
+      '.ipg-elect .tier2{margin:6px 0 0 6px;border-left:2px solid var(--tan);}' +
+      '.ipg-elect .tier2 .contrib-inner{background:#fff;border-radius:0 10px 10px 0;}' +
+      '.ipg-elect .framing{font-style:italic;color:var(--coral);}' +
+      '.ipg-elect button.funder-row{display:grid;grid-template-columns:1fr auto;gap:10px;width:100%;text-align:left;appearance:none;border:0;border-bottom:1px solid var(--line);background:none;cursor:pointer;font-family:var(--body);padding:7px 4px;align-items:center;}' +
+      '.ipg-elect button.funder-row:hover{background:#F2E8DC;}.ipg-elect button.funder-row:focus-visible{outline:2px solid var(--sage);outline-offset:1px;}' +
+      '.ipg-elect .tagchip.ind{background:var(--tan);color:var(--ink-soft);}.ipg-elect .tagchip.flag{background:#F4E3DC;color:var(--coral);}' +
+      '.ipg-elect .ipg-modal-overlay{position:fixed;inset:0;background:rgba(52,40,40,.55);display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px;z-index:99999;overflow:auto;}' +
+      '.ipg-elect .ipg-modal{background:var(--paper);border-radius:14px;max-width:560px;width:100%;padding:24px 26px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3);}' +
+      '.ipg-elect .ipg-modal-close{position:absolute;top:10px;right:14px;appearance:none;border:0;background:none;font-size:24px;line-height:1;color:var(--ink-soft);cursor:pointer;}' +
+      '.ipg-elect .modal-kicker{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);font-weight:600;}' +
+      '.ipg-elect .modal-name{font-family:var(--display);font-weight:600;font-size:22px;margin:4px 0;}' +
+      '.ipg-elect .modal-tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;}' +
+      '.ipg-elect .modal-note{font-size:12.5px;color:var(--ink-soft);margin:0 0 14px;}' +
+      '.ipg-elect .modal-summary{font-size:13px;font-weight:500;margin:0 0 8px;padding-bottom:8px;border-bottom:1px solid var(--line);}' +
+      '.ipg-elect .kind{font-size:10px;text-transform:uppercase;letter-spacing:.04em;padding:1px 6px;border-radius:4px;background:var(--tan);color:var(--ink-soft);}' +
+      '.ipg-elect .kind.cand{background:#E5EFE9;color:var(--teal);}.ipg-elect .kind.ie{background:#F4E3DC;color:var(--coral);}' +
       '.ipg-elect .bartrack{height:18px;background:#EFE6DC;border-radius:5px;overflow:hidden;}' +
       '.ipg-elect .barfill{height:100%;display:flex;}' +
       '.ipg-elect .seg{height:100%;}' +
@@ -175,27 +212,67 @@
       'Small-dollar (under $150) donors are disclosed only in aggregate.</p></div></div>';
   }
 
-  // IE drill-down panel — LEADS WITH funder identity (committee names are
-  // placeholders), then lists the second-hop funders. Collapsed; app toggles.
+  // IE drill-down — THREE explicit tiers so a funder never reads as a direct
+  // opponent/supporter:
+  //   Tier 1 (this panel): the IE COMMITTEE(s) that spent for/against — amount,
+  //     stance, Sunshine. NOT the funders.
+  //   Tier 2 (click a committee): that committee's second-hop funders (dues
+  //     excluded), with explicit "gave this committee over time, not this race"
+  //     framing and a plain-language identity line.
+  //   Tier 3 (click a funder): the donor-footprint modal (app opens it).
   function iePanel(detail, candName, id) {
-    var verb = detail.stance === 'oppose' ? 'opposing' : 'supporting';
-    var html = detail.spenders.map(function (s) {
+    var verb = detail.stance === 'oppose' ? 'against' : 'for';
+    var verbing = detail.stance === 'oppose' ? 'opposing' : 'supporting';
+    var committees = detail.spenders.map(function (s, idx) {
+      var t2 = id + '-' + idx;
+      var sun = s.sunshineUrl ? ' <a class="paclink" href="' + esc(s.sunshineUrl) +
+        '" target="_blank" rel="noopener">Illinois Sunshine ↗</a>' : '';
       var names = s.topFunders.map(function (f) { return esc(f.name); });
-      var primarily = names.length ? ('funded primarily by ' + names.join(', ')) : 'with no outside funding recorded';
-      var sun = s.sunshineUrl ? ' <a class="paclink" href="' + esc(s.sunshineUrl) + '" target="_blank" rel="noopener">Illinois Sunshine ↗</a>' : '';
-      var fLimit = 8, fShown = Math.min(fLimit, s.funders.length), frows = '';
+      var primarily = names.length ? ('Funded primarily by ' + names.join(', ') + '.') : 'No outside funding recorded.';
+      var fLimit = 10, fShown = Math.min(fLimit, s.funders.length), frows = '';
       for (var i = 0; i < fShown; i++) {
-        frows += '<div class="crow"><div class="who">' + esc(s.funders[i].name) + '</div>' +
-          '<div class="amt">' + money(s.funders[i].total) + '</div></div>';
+        var fr = s.funders[i];
+        frows += '<button class="crow funder-row" type="button" data-funder="' + esc(fr.parent_id) + '">' +
+          '<div class="who">' + esc(fr.name) + ' ' + tagsHtml(fr.industries, fr.flags) + '</div>' +
+          '<div class="amt">' + money(fr.total) + ' <span class="n">· ' + plural(fr.count, 'gift', 'gifts') + '</span></div></button>';
       }
       var more = s.funderCount > fLimit ? '<p class="contrib-note">+ ' + (s.funderCount - fLimit) + ' more funders</p>' : '';
-      return '<div class="ie-spender">' +
-        '<p class="ie-lead">' + money(s.amount) + ' ' + verb + ' <b>' + esc(candName) + '</b>, from a committee ' + primarily + '.</p>' +
-        '<div class="ie-cmte-line"><span class="ie-pac-tag">IE PAC</span> ' + esc(s.committeeName) + sun + '</div>' +
-        '<p class="contrib-h">Who funds this committee · ' + money(s.funderTotal) + ' from ' +
-        plural(s.funderCount, 'funder', 'funders') + ' (dues excluded)</p>' + frows + more + '</div>';
+      return '<div class="ie-cmte"><div class="ie-cmte-head">' +
+        '<button class="ie-cmte-toggle" type="button" aria-expanded="false" aria-controls="' + t2 + '">' +
+        '<span class="caret" aria-hidden="true">▸</span> <b>' + money(s.amount) + ' ' + verb + '</b> ' + verbing + ' ' +
+        esc(candName) + ' · <span class="ie-pac-tag">IE PAC</span> ' + esc(s.committeeName) + '</button>' + sun + '</div>' +
+        '<div class="contrib tier2" id="' + t2 + '"><div class="contrib-inner">' +
+          '<p class="ie-lead">' + primarily + '</p>' +
+          '<p class="contrib-note framing">Amounts below are what each donor gave <b>this committee</b> over time — ' +
+          'not money spent on this race.</p>' +
+          '<p class="contrib-h">Who funds this committee · ' + money(s.funderTotal) + ' from ' +
+          plural(s.funderCount, 'funder', 'funders') + ' (dues excluded)</p>' + frows + more +
+        '</div></div></div>';
     }).join('');
-    return '<div class="contrib" id="' + id + '"><div class="contrib-inner">' + html + '</div></div>';
+    return '<div class="contrib" id="' + id + '"><div class="contrib-inner">' +
+      '<p class="contrib-h">Outside spending ' + verbing + ' ' + esc(candName) + '</p>' +
+      '<p class="contrib-note">Independent-expenditure committees — outside groups not coordinated with the campaign. ' +
+      'Click a committee to see who funds it.</p>' + committees + '</div></div>';
+  }
+
+  // Tier 3 — donor-footprint modal (app mounts/unmounts it). Election-scoped.
+  function renderFunderModal(fp) {
+    var rows = fp.committees.map(function (x) {
+      var kind = x.kind === 'candidate' ? '<span class="kind cand">candidate</span>'
+        : x.kind === 'ie' ? '<span class="kind ie">IE PAC</span>' : '<span class="kind">committee</span>';
+      return '<div class="crow"><div class="who">' + esc(x.label) + ' ' + kind + '</div>' +
+        '<div class="amt">' + money(x.total) + ' <span class="n">· ' + plural(x.count, 'gift', 'gifts') + '</span></div></div>';
+    }).join('') || '<p class="contrib-note">No election giving recorded.</p>';
+    return '<div class="ipg-modal-overlay" data-modal-overlay><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Donor footprint">' +
+      '<button class="ipg-modal-close" type="button" data-modal-close aria-label="Close">×</button>' +
+      '<div class="modal-kicker">Donor footprint · this election only</div>' +
+      '<div class="modal-name">' + esc(fp.name) + '</div>' +
+      '<div class="modal-tags">' + tagsHtml(fp.industries, fp.flags) + '</div>' +
+      '<p class="modal-note">Everything <b>' + esc(fp.name) + '</b> has given within the 2026 Board of Education data — ' +
+      'direct contributions and money into independent-expenditure committees. Council-side giving is a separate, ' +
+      'not-yet-connected view.</p>' +
+      '<div class="modal-summary">' + money(fp.total) + ' across ' + plural(fp.count, 'recipient', 'recipients') + '</div>' +
+      rows + '</div></div>';
   }
 
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
@@ -353,6 +430,7 @@
     masthead: masthead, footer: footer,
     renderOfficeNav: renderOfficeNav, renderRaceView: renderRaceView,
     renderComingSoon: renderComingSoon, spendPlaceholder: spendPlaceholder,
+    renderFunderModal: renderFunderModal,
     renderPage: renderPage, pageLabel: pageLabel,
     _money: money, _esc: esc
   };

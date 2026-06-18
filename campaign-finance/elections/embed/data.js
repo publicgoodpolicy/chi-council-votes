@@ -289,13 +289,48 @@
       var donor = index.donors[c.donor_id] || {};
       var pid = donor.parent_id || c.donor_id;
       var parent = index.donors[pid] || donor;
-      var m = by[pid] || (by[pid] = { parent_id: pid, name: parent.name || pid, total: 0, count: 0 });
+      var m = by[pid] || (by[pid] = { parent_id: pid, name: parent.name || pid,
+        industries: parent.industries || [], flags: parent.flags || [], total: 0, count: 0 });
       m.total = round2(m.total + (c.amount || 0)); m.count++;
     }
     var funders = []; for (var k in by) if (by.hasOwnProperty(k)) funders.push(by[k]);
     funders.sort(function (a, b) { return b.total - a.total; });
     var total = 0; for (var j = 0; j < funders.length; j++) total += funders[j].total;
     return { funders: funders, total: round2(total), count: funders.length };
+  }
+
+  // Tier 3: a donor's footprint WITHIN this election artifact — every committee /
+  // candidate this parent has funded (direct gifts + money into IE committees),
+  // dues excluded. Election-scoped only; council-side giving is NOT included.
+  function donorFootprint(index, parentId) {
+    var parent = index.donors[parentId] || { id: parentId, name: parentId };
+    var pr = index.parentRollup[parentId];
+    var rows = (pr && pr.rows) || [];
+    var by = {};
+    for (var i = 0; i < rows.length; i++) {
+      var c = rows[i];
+      if (c.contribution_type === DUES_TYPE) continue;
+      var cid = c.committee_id, cm = index.committees[cid] || {};
+      var m = by[cid];
+      if (!m) {
+        m = by[cid] = { committee_id: cid, total: 0, count: 0, kind: 'other', label: cm.committee_name || cid };
+        if (cm.candidate_id) {
+          var cand = index.candidateById[cm.candidate_id] || {}, race = index.raceById[cand.race_id] || {};
+          m.kind = 'candidate'; m.label = (cand.name || cm.candidate_id) + (race.label ? (' — ' + race.label) : '');
+        } else if (cm.type === 'independent_expenditure') {
+          m.kind = 'ie'; m.label = cm.committee_name || cid;
+        }
+      }
+      m.total = round2(m.total + (c.amount || 0)); m.count++;
+    }
+    var committees = []; for (var k in by) if (by.hasOwnProperty(k)) committees.push(by[k]);
+    committees.sort(function (a, b) { return b.total - a.total; });
+    var total = 0; for (var j = 0; j < committees.length; j++) total += committees[j].total;
+    return {
+      parent_id: parentId, name: parent.name || parentId,
+      industries: parent.industries || [], flags: parent.flags || [],
+      committees: committees, total: round2(total), count: committees.length
+    };
   }
 
   // IE drill-down for one candidate + stance: the spender committee(s), each with
@@ -447,6 +482,7 @@
     candidateContributors: candidateContributors,
     candidateIE: candidateIE,
     spenderFunders: spenderFunders,
+    donorFootprint: donorFootprint,
     committeeMeta: committeeMeta,
     sunshineUrl: sunshineUrl,
     availableCycles: availableCycles,
