@@ -13,7 +13,8 @@ var D = require(path.join(__dirname, '..', 'data.js'));
 var R = require(path.join(__dirname, '..', 'render.js'));
 
 var json = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', '..', 'election-data.json'), 'utf8'));
-var index = D.loadData(json);
+var index = D.loadData(json, { office: 'school_board' });   // the embed is per-office
+var indexAll = D.loadData(json);                            // unscoped, for scope comparison
 
 var OFFICE = 'school_board';
 var omVM = D.viewModels.officeRaces(index, OFFICE);
@@ -233,6 +234,38 @@ ok('genuinely-unnamed IE (39901) falls back to framed identity, never a bare id'
   var real = cd.lines.filter(function (l) { return !l.isSelf && !l.isAggregate; }).length;
   ok('"Show all N" N excludes self/small-dollar and equals the clickable rows (' + N + '=' + real + '=' + btns + ')',
     N === real && btns === real);
+})();
+
+console.log('\n=== B3-REVISE-5 assertions (school-board scope + spender guard + Bannon) ===');
+function ieCount(idx) { var n = 0; for (var c in idx.ieByCandidate) n += idx.ieByCandidate[c].support.length + idx.ieByCandidate[c].oppose.length; return n; }
+ok('unscoped index keeps all IEs incl. council (' + ieCount(indexAll) + ' = ' + json.independent_expenditures.length + ')', ieCount(indexAll) === json.independent_expenditures.length);
+ok('school-board scope keeps ONLY school-board IEs (94), drops council (218)', ieCount(index) === 94);
+var councilTarget = false;
+for (var cc in index.ieByCandidate) { var r5 = index.raceById[(index.candidateById[cc] || {}).race_id] || {}; if (r5.office === 'alderperson' || r5.office === 'mayor') councilTarget = true; }
+ok('no council/municipal IE target survives school-board scope', !councilTarget);
+var scopedSpenders = Object.keys(index.iesBySpender);
+ok('council candidate committees (26023 Villegas / 19830 Sposato) are NOT scoped IE spenders',
+  scopedSpenders.indexOf('ie-committee-26023') < 0 && scopedSpenders.indexOf('ie-committee-19830') < 0);
+ok('scoped school-board IE spenders are real IE PACs (e.g. INCS 26066)', scopedSpenders.indexOf('ie-committee-26066') >= 0);
+// item 5 structural guard: no ELECTION candidate committee is ever an IE spender (even unscoped)
+var candKeys = {}; Object.keys(indexAll.committeeKeyByCandidate).forEach(function (cId) { candKeys[indexAll.committeeKeyByCandidate[cId]] = 1; });
+ok('guard: no election candidate committee appears as an IE spender',
+  Object.keys(indexAll.iesBySpender).every(function (k) { return !candKeys[k]; }));
+// scoped footprint excludes council-only IE committees, keeps in-scope + direct
+var frankId5 = (function () { for (var p5 in index.parentRollup) if (/James S\. Frank/.test((index.donors[p5] || {}).name)) return p5; })();
+var frankScoped = D.donorFootprint(index, frankId5);
+ok('scoped footprint drops council-only IE committee (26023)',
+  frankScoped.committees.every(function (x) { return x.committee_id !== 'ie-committee-26023'; }));
+ok('scoped footprint keeps in-scope IE (26066) + the direct candidate gift',
+  frankScoped.committees.some(function (x) { return x.committee_id === 'ie-committee-26066'; }) &&
+  frankScoped.committees.some(function (x) { return x.kind === 'candidate'; }));
+// Bannon count locked: button N == clickable rows == real donors; self/small-dollar excluded
+(function () {
+  var cd = D.candidateContributors(index, 'bannon-sb-d01', null), panel = R.contributorPanel(cd, 'b');
+  var m = panel.match(/Show all (\d+) donors/), N = m ? +m[1] : -1;
+  var btns = (panel.match(/class="crow funder-row" type="button" data-funder=/g) || []).length;
+  var real = cd.lines.filter(function (l) { return !l.isSelf && !l.isAggregate; }).length;
+  ok('Bannon: button N == clickable == real (' + N + '=' + btns + '=' + real + '), self/small-dollar excluded', N === btns && btns === real);
 })();
 
 console.log('\nwrote ' + path.relative(process.cwd(), out) + '  (open in a browser to eyeball — self-contained, no fetch)');

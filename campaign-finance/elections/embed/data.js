@@ -78,7 +78,8 @@
               (d.industries || []).indexOf('self-funding') >= 0);
   }
 
-  function loadData(json) {
+  function loadData(json, opts) {
+    opts = opts || {};
     var races = json.races || [];
     var candidates = json.candidates || [];
     var committees = json.committees || {};
@@ -92,6 +93,19 @@
       var cnd = candidates[j];
       candidateById[cnd.id] = cnd;
       (candidatesByRace[cnd.race_id] || (candidatesByRace[cnd.race_id] = [])).push(cnd);
+    }
+
+    // Office scope (opts.office): keep only IEs whose TARGET candidate runs for
+    // this office, so council/municipal IE activity never bleeds into a
+    // school-board view. inScopeCand=null means no scoping (all offices).
+    var officeSet = opts.office ? OFFICE_RACE_OFFICES[opts.office] : null;
+    var inScopeCand = null;
+    if (officeSet) {
+      inScopeCand = {};
+      for (var s = 0; s < candidates.length; s++) {
+        var rc = raceById[candidates[s].race_id];
+        if (rc && officeSet.indexOf(rc.office) >= 0) inScopeCand[candidates[s].id] = 1;
+      }
     }
 
     // committee key <-> candidate_id, and the committee meta lookup
@@ -160,10 +174,18 @@
     // ---- single pass over IEs ----
     var ieByCandidate = {};  // candidate_id -> {support:[], oppose:[]}
     var iesBySpender = {};   // spender committee key -> [ie rows]
+    var inScopeIE = {};      // IE committee keys with >=1 kept IE (office-scoped)
     for (var m = 0; m < ies.length; m++) {
       stats.ieRowsVisited++;
       var ie = ies[m];
-      if (ie.spender_committee_id) (iesBySpender[ie.spender_committee_id] || (iesBySpender[ie.spender_committee_id] = [])).push(ie);
+      // item 5: a candidate's OWN committee is never an independent spender
+      if (candByCommittee[ie.spender_committee_id]) continue;
+      // item 4: office scope — drop IEs whose target runs for another office
+      if (inScopeCand && !inScopeCand[ie.target_candidate_id]) continue;
+      if (ie.spender_committee_id) {
+        (iesBySpender[ie.spender_committee_id] || (iesBySpender[ie.spender_committee_id] = [])).push(ie);
+        inScopeIE[ie.spender_committee_id] = 1;
+      }
       var tcand = ie.target_candidate_id;
       if (!tcand) continue;
       var bucket = ieByCandidate[tcand] || (ieByCandidate[tcand] = { support: [], oppose: [] });
@@ -194,6 +216,7 @@
       raceById: raceById, candidateById: candidateById, candidatesByRace: candidatesByRace,
       candByCommittee: candByCommittee, committeeKeyByCandidate: committeeKeyByCandidate,
       directByCandidate: directByCandidate, ieByCandidate: ieByCandidate, iesBySpender: iesBySpender,
+      inScopeIE: inScopeIE, office: opts.office || null,
       fundersBySpender: fundersBySpender, parentRollup: parentRollup,
       industryByCandidate: industryByCandidate, flagByCandidate: flagByCandidate,
       raceBySlug: raceBySlug, candidateBySlug: candidateBySlug,
@@ -315,6 +338,9 @@
       var c = rows[i];
       if (c.contribution_type === DUES_TYPE) continue;
       var cid = c.committee_id, cm = index.committees[cid] || {};
+      // office scope: an IE committee that didn't spend in this office is out of
+      // scope (e.g. a council-only IE PAC must not appear in a school-board view).
+      if (cm.type === 'independent_expenditure' && index.office && !index.inScopeIE[cid]) continue;
       var m = by[cid];
       if (!m) {
         m = by[cid] = { committee_id: cid, total: 0, count: 0, kind: 'other', label: cm.committee_name || cid };

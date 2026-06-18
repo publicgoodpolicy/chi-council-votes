@@ -139,7 +139,7 @@
     injectStyles();
     notice(root, 'Loading election data…');
     fetch(src).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-      .then(function (json) { start(root, office, ElectData.loadData(json)); })
+      .then(function (json) { start(root, office, ElectData.loadData(json, { office: office })); })
       .catch(function (err) { notice(root, 'Couldn’t load election data (' + String(err && err.message || err) + ').', true); });
   }
 
