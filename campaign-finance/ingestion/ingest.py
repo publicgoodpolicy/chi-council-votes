@@ -564,7 +564,7 @@ def merge_into_data(data: dict, parsed: dict, ward, linkage: dict = None) -> dic
     for c in parsed['contributions']:
         c['committee_id'] = committee_id_str
 
-    # 4. Union donors (preserve editor-set industries/flags/notes)
+    # 4. Union donors (preserve editor-set industries/flags/notes/clusters)
     for did, donor in parsed['donors'].items():
         if did in data['donors']:
             existing = data['donors'][did]
@@ -575,6 +575,14 @@ def merge_into_data(data: dict, parsed: dict, ward, linkage: dict = None) -> dic
                 donor['flags'] = existing['flags']
             if existing.get('notes') and 'DEMO' not in existing['notes'].upper():
                 donor['notes'] = existing['notes']
+            # Sheet-owned cluster fields (set by sync_overrides). The fresh parse
+            # has none of these; without this, re-ingest orphans clustered donors
+            # by stripping the parent flag (see repair_clusters.py). The
+            # `is not None` guard is REQUIRED: cluster_is_parent is legitimately
+            # False for members and must be preserved, not dropped.
+            for f in ('cluster_id', 'cluster_is_parent', 'cluster_name', 'cluster_role', 'parent_id'):
+                if existing.get(f) is not None:
+                    donor[f] = existing[f]
         data['donors'][did] = donor
 
     # 5. Replace all contributions for this committee
