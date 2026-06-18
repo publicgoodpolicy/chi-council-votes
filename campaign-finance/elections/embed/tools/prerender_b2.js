@@ -76,7 +76,7 @@ ok('toggle: By-race tab active when topView=byrace',
   /data-view="byrace" aria-selected="true"/.test(page) && /data-view="spend" aria-selected="false"/.test(page));
 
 // Cycle label
-ok('default cycle label is "current cycle" (not "all-time")', /current cycle/.test(page) && page.indexOf('all-time') < 0);
+ok('race-view meta uses the "all years" unfiltered label', /· all years/.test(page) && page.indexOf('current cycle') < 0);
 
 console.log('\n=== B3 assertions (drill-downs + Sunshine) ===');
 function sumLines(cd) { return Math.round(cd.lines.reduce(function (s, l) { return s + l.total; }, 0)); }
@@ -333,7 +333,9 @@ console.log('\n=== B5 assertions (year filter + office param + Recoleta) ===');
 var cyclesAvail = D.availableCycles(index);
 ok('available cycles include the data cycle (2027)', cyclesAvail.indexOf('2027') >= 0);
 var pageCyc = R.renderPage({ office: 'school_board', topView: 'byrace', cycles: cyclesAvail, cycle: null, officeRaces: omVM, activeSlug: 'district-2a', raceView: rv });
-ok('year bar renders with "current cycle" default selected', /data-cycle=""[^>]*aria-pressed="true"/.test(pageCyc) && /current cycle/.test(pageCyc));
+ok('year bar default chip reads "All years" and is selected by default, showing unfiltered totals',
+  /data-cycle=""[^>]*aria-pressed="true">All years</.test(pageCyc) && pageCyc.indexOf('current cycle') < 0 &&
+  Math.round(D.candidateFigures(index, 'leon-sb-d03', null).contributions.total) === 620403);
 ok('year bar offers the 2027 cycle chip', /data-cycle="2027"/.test(pageCyc));
 ok('cycle filter degrades cleanly (single cycle: 2027 == current)',
   Math.round(D.candidateFigures(index, 'deberry-sb-d03', '2027').contributions.total) === Math.round(D.candidateFigures(index, 'deberry-sb-d03', null).contributions.total));

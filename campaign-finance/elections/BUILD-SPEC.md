@@ -79,10 +79,12 @@ So the year filter is UI on an existing dimension, not a schema change. Two note
   year/cycle filter narrows to a specific cycle. (Committees carry money across
   past runs — e.g., DeBerry's and Leon's current totals are largely from their
   2024 race — so the unfiltered total is the default and the filter scopes down.)
-  **Default label = "current cycle"** (not "all-time"): while the data is a
-  single SBE cycle, "current cycle" is the honest description of the unfiltered
-  default; the label generalizes when older cycles land and the filter exposes
-  them. Label only — the data scope and filter mechanism are unchanged.
+  **Default label = "All years"**: the data already spans 4 SBE cycles
+  (2015/2019/2023/2027 — funder receipts + prior committee money), so the
+  unfiltered default genuinely shows all-time money; "All years" is the honest
+  label (an earlier "current cycle" label was dropped — it read as a single year
+  next to the per-cycle chips). Label only — the data scope and filter mechanism
+  are unchanged.
 
 ## Per-candidate SEO pre-render (deferred, committed — do not forget)
 

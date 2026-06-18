@@ -445,7 +445,7 @@
         '<button class="goto-link" type="button" data-slug="' + esc(v.targetSlug) + '">' + esc(v.targetLabel) + ' →</button></p>';
     }).join('');
     var meta = plural(vm.candidates.length, 'candidate', 'candidates') +
-      (vm.cycle ? ' · cycle ' + esc(vm.cycle) : ' · current cycle');
+      (vm.cycle ? ' · cycle ' + esc(vm.cycle) : ' · all years');
     var head = '<div class="race-head"><h2>' + esc(vm.race.label) + '</h2>' +
       '<span class="race-meta">' + meta + '</span></div>' + vac;
 
@@ -603,11 +603,12 @@
     return '<div class="spend">' + spendNav(tab) + '<div class="spend-body">' + body + '</div></div>';
   }
 
-  // Year/cycle filter. Default label "current cycle" (honest single-cycle default);
-  // selecting a specific cycle re-derives the view models. active=null => current.
+  // Year/cycle filter. Default label "All years" — the unfiltered default shows
+  // all-time money across the 4 cycles present (2015/2019/2023/2027); the year
+  // chips narrow to one cycle and re-derive the view models. active=null => All years.
   function cycleSelector(cycles, active) {
     if (!cycles || !cycles.length) return '';
-    var chips = '<button class="chip cyc" type="button" data-cycle="" aria-pressed="' + (active == null) + '">current cycle</button>';
+    var chips = '<button class="chip cyc" type="button" data-cycle="" aria-pressed="' + (active == null) + '">All years</button>';
     for (var i = 0; i < cycles.length; i++) {
       chips += '<button class="chip cyc" type="button" data-cycle="' + esc(cycles[i]) + '" aria-pressed="' + (active === cycles[i]) + '">' + esc(cycles[i]) + ' cycle</button>';
     }
