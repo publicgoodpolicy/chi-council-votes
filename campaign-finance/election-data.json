@@ -856,6 +856,50 @@
       "positions": null
     },
     {
+      "id": "basco-sb-d04",
+      "race_id": "sb-d04",
+      "name": "Daniel Basco",
+      "committee_id": "41211",
+      "status": "filed",
+      "incumbent": false,
+      "vacating_for": null,
+      "bio": {},
+      "positions": null
+    },
+    {
+      "id": "pope-sb-d04",
+      "race_id": "sb-d04",
+      "name": "Deborah \"Debby\" Pope",
+      "committee_id": "39834",
+      "status": "filed",
+      "incumbent": true,
+      "vacating_for": null,
+      "bio": {},
+      "positions": null
+    },
+    {
+      "id": "gonzales-sb-d05",
+      "race_id": "sb-d05",
+      "name": "Peter Gonzales",
+      "committee_id": "41125",
+      "status": "filed",
+      "incumbent": false,
+      "vacating_for": null,
+      "bio": {},
+      "positions": null
+    },
+    {
+      "id": "rios-sierra-sb-d05",
+      "race_id": "sb-d05",
+      "name": "Norma Rios Sierra",
+      "committee_id": "41082",
+      "status": "filed",
+      "incumbent": true,
+      "vacating_for": null,
+      "bio": {},
+      "positions": null
+    },
+    {
       "id": "inc-ward-01",
       "race_id": "ward-01",
       "name": "Daniel La Spata",
@@ -1926,50 +1970,6 @@
       "positions": null
     },
     {
-      "id": "inc-sb-d04",
-      "race_id": "sb-d04",
-      "name": "Debby Pope",
-      "committee_id": null,
-      "status": "incumbent-pending",
-      "incumbent": true,
-      "vacating_for": null,
-      "bio": {
-        "current_roles": [
-          "Chicago Board of Education, District 2b"
-        ],
-        "board_role": "Appointed",
-        "phone": "(773) 553-1600",
-        "email": "board@cps.edu",
-        "links": {
-          "office": "https://www.cpsboe.org/about/bios"
-        },
-        "source": "ipg-rep-finder REPS.school (current officeholder; candidacy not confirmed)"
-      },
-      "positions": null
-    },
-    {
-      "id": "inc-sb-d05",
-      "race_id": "sb-d05",
-      "name": "Norma Rios-Sierra",
-      "committee_id": null,
-      "status": "incumbent-pending",
-      "incumbent": true,
-      "vacating_for": null,
-      "bio": {
-        "current_roles": [
-          "Chicago Board of Education, District 3a"
-        ],
-        "board_role": "Appointed",
-        "phone": "(773) 553-1600",
-        "email": "board@cps.edu",
-        "links": {
-          "office": "https://www.cpsboe.org/about/bios"
-        },
-        "source": "ipg-rep-finder REPS.school (current officeholder; candidacy not confirmed)"
-      },
-      "positions": null
-    },
-    {
       "id": "inc-sb-d06",
       "race_id": "sb-d06",
       "name": "Carlos Rivas Jr.",
@@ -2310,7 +2310,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38810/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-06-16",
+      "last_updated": "2026-06-18",
       "cash_on_hand": null,
       "cash_on_hand_as_of": null,
       "notes": "Ingested from SBE on 2026-06-16.",
@@ -2331,7 +2331,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/39783/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-06-16",
+      "last_updated": "2026-06-18",
       "cash_on_hand": null,
       "cash_on_hand_as_of": null,
       "notes": "Ingested from SBE on 2026-06-16.",
@@ -2352,7 +2352,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/39805/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-06-16",
+      "last_updated": "2026-06-18",
       "cash_on_hand": null,
       "cash_on_hand_as_of": null,
       "notes": "Ingested from SBE on 2026-06-16.",
@@ -2373,7 +2373,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/39821/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-06-16",
+      "last_updated": "2026-06-18",
       "cash_on_hand": null,
       "cash_on_hand_as_of": null,
       "notes": "Ingested from SBE on 2026-06-16.",
@@ -2394,7 +2394,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/39881/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-06-16",
+      "last_updated": "2026-06-18",
       "cash_on_hand": null,
       "cash_on_hand_as_of": null,
       "notes": "Ingested from SBE on 2026-06-16.",
@@ -2415,7 +2415,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/39903/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-06-16",
+      "last_updated": "2026-06-18",
       "cash_on_hand": null,
       "cash_on_hand_as_of": null,
       "notes": "Ingested from SBE on 2026-06-16.",
@@ -2436,7 +2436,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/40912/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-06-16",
+      "last_updated": "2026-06-18",
       "cash_on_hand": null,
       "cash_on_hand_as_of": null,
       "notes": "Ingested from SBE on 2026-06-16.",
@@ -2457,7 +2457,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/41087/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-06-16",
+      "last_updated": "2026-06-18",
       "cash_on_hand": null,
       "cash_on_hand_as_of": null,
       "notes": "Ingested from SBE on 2026-06-16.",
@@ -2478,7 +2478,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/41112/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-06-16",
+      "last_updated": "2026-06-18",
       "cash_on_hand": null,
       "cash_on_hand_as_of": null,
       "notes": "Ingested from SBE on 2026-06-16.",
@@ -2674,6 +2674,90 @@
       "industry_tags": [],
       "donor_id": null,
       "data_quality": "INGESTED_IE"
+    },
+    "cand-pope-sb-d04": {
+      "id": "cand-pope-sb-d04",
+      "ward": null,
+      "alder_name": null,
+      "committee_name": "Debby For District 2B",
+      "sbe_committee_id": "39834",
+      "il_sunshine_url": "https://illinoissunshine.org/committees/39834/",
+      "founded": null,
+      "data_quality": "REAL",
+      "last_updated": "2026-06-18",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "Ingested from SBE on 2026-06-18.",
+      "candidate_id": "pope-sb-d04",
+      "race_id": "sb-d04",
+      "office": "school_board_member",
+      "district": "District 2B",
+      "type": "candidate",
+      "industry_tags": [],
+      "donor_id": null
+    },
+    "cand-rios-sierra-sb-d05": {
+      "id": "cand-rios-sierra-sb-d05",
+      "ward": null,
+      "alder_name": null,
+      "committee_name": "Friends of Norma Rios Sierra",
+      "sbe_committee_id": "41082",
+      "il_sunshine_url": "https://illinoissunshine.org/committees/41082/",
+      "founded": null,
+      "data_quality": "REAL",
+      "last_updated": "2026-06-18",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "Ingested from SBE on 2026-06-18.",
+      "candidate_id": "rios-sierra-sb-d05",
+      "race_id": "sb-d05",
+      "office": "school_board_member",
+      "district": "District 3A",
+      "type": "candidate",
+      "industry_tags": [],
+      "donor_id": null
+    },
+    "cand-gonzales-sb-d05": {
+      "id": "cand-gonzales-sb-d05",
+      "ward": null,
+      "alder_name": null,
+      "committee_name": "Practical Progressive, Pete",
+      "sbe_committee_id": "41125",
+      "il_sunshine_url": "https://illinoissunshine.org/committees/41125/",
+      "founded": null,
+      "data_quality": "REAL",
+      "last_updated": "2026-06-18",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "Ingested from SBE on 2026-06-18.",
+      "candidate_id": "gonzales-sb-d05",
+      "race_id": "sb-d05",
+      "office": "school_board_member",
+      "district": "District 3A",
+      "type": "candidate",
+      "industry_tags": [],
+      "donor_id": null
+    },
+    "cand-basco-sb-d04": {
+      "id": "cand-basco-sb-d04",
+      "ward": null,
+      "alder_name": null,
+      "committee_name": "Friends for Daniel Basco",
+      "sbe_committee_id": "41211",
+      "il_sunshine_url": "https://illinoissunshine.org/committees/41211/",
+      "founded": null,
+      "data_quality": "REAL",
+      "last_updated": "2026-06-18",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "Ingested from SBE on 2026-06-18.",
+      "candidate_id": "basco-sb-d04",
+      "race_id": "sb-d04",
+      "office": "school_board_member",
+      "district": "District 2B",
+      "type": "candidate",
+      "industry_tags": [],
+      "donor_id": null
     }
   },
   "donors": {
@@ -4594,8 +4678,8 @@
     },
     "citizens-to-elect-felix-cardona-jr": {
       "id": "citizens-to-elect-felix-cardona-jr",
-      "name": "Citizens to Elect Felix Cardona, Jr",
-      "type": "PAC",
+      "name": "Citizens to Elect Felix Cardona Jr.",
+      "type": "Individual",
       "industries": [
         "individual"
       ],
@@ -43209,6 +43293,86 @@
       "city": null,
       "parent_id": "liam-krehbiel",
       "committee_id": null
+    },
+    "lamme-william": {
+      "id": "lamme-william",
+      "name": "Lamme, William",
+      "type": "Individual",
+      "industries": [
+        "individual"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": "Chicago, IL",
+      "parent_id": "lamme-william",
+      "committee_id": null
+    },
+    "pope-debby": {
+      "id": "pope-debby",
+      "name": "Pope, Debby",
+      "type": "Individual",
+      "industries": [
+        "individual"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": "Chicago, IL",
+      "parent_id": "pope-debby",
+      "committee_id": null
+    },
+    "brice-coleman": {
+      "id": "brice-coleman",
+      "name": "Brice, Coleman",
+      "type": "Individual",
+      "industries": [
+        "individual"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": "Chicago, IL",
+      "parent_id": "brice-coleman",
+      "committee_id": null
+    },
+    "gibbons-michael": {
+      "id": "gibbons-michael",
+      "name": "Gibbons, Michael",
+      "type": "Individual",
+      "industries": [
+        "individual"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": "Burr Ridge, IL",
+      "parent_id": "gibbons-michael",
+      "committee_id": null
+    },
+    "walsh-matt": {
+      "id": "walsh-matt",
+      "name": "Walsh, Matt",
+      "type": "Individual",
+      "industries": [
+        "individual"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": "Chicago, IL",
+      "parent_id": "walsh-matt",
+      "committee_id": null
+    },
+    "basco-daniel": {
+      "id": "basco-daniel",
+      "name": "Basco, Daniel",
+      "type": "Candidate",
+      "industries": [
+        "self-funding"
+      ],
+      "flags": [],
+      "notes": null,
+      "occupation": "Tech",
+      "employer": "Kindsight",
+      "city": "Chicago, IL",
+      "parent_id": "basco-daniel",
+      "committee_id": null
     }
   },
   "contributions": [
@@ -49437,6 +49601,37 @@
       "contribution_count": 20
     },
     {
+      "id": "c-39834-00002",
+      "donor_id": "lamme-william",
+      "committee_id": "cand-pope-sb-d04",
+      "amount": 500.0,
+      "date": "2026-03-29",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-39834-00003",
+      "donor_id": "lamme-william",
+      "committee_id": "cand-pope-sb-d04",
+      "amount": 500.0,
+      "date": "2024-05-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-39834-00004",
+      "donor_id": "pope-debby",
+      "committee_id": "cand-pope-sb-d04",
+      "amount": 500.0,
+      "date": "2024-05-03",
+      "cycle": "2027",
+      "contribution_type": "Loan Received",
+      "source_filing": "Quarterly",
+      "is_loan": true
+    },
+    {
       "id": "c-39881-00002",
       "donor_id": "finnegan-alex",
       "committee_id": "cand-biggs-sb-president",
@@ -52155,6 +52350,31 @@
       "source_filing": "Quarterly"
     },
     {
+      "id": "c-41082-00003",
+      "donor_id": "brice-coleman",
+      "committee_id": "cand-rios-sierra-sb-d05",
+      "amount": 57.0,
+      "date": "2026-02-25",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Postage (PO Box rental for 3 months)"
+    },
+    {
+      "id": "c-agg-ward-x-41082-2027",
+      "donor_id": "_small-dollar-donors",
+      "committee_id": "cand-rios-sierra-sb-d05",
+      "amount": 100.0,
+      "date": null,
+      "cycle": "2027",
+      "contribution_type": "Aggregate",
+      "source_filing": "SBE Bulk (aggregated)",
+      "is_aggregate": true,
+      "donor_count": 1,
+      "contribution_count": 1
+    },
+    {
       "id": "c-41087-00002",
       "donor_id": "avelar-noemi",
       "committee_id": "cand-peralta-sb-d02",
@@ -52718,6 +52938,48 @@
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "A-1"
+    },
+    {
+      "id": "c-41125-00002",
+      "donor_id": "citizens-to-elect-felix-cardona-jr",
+      "committee_id": "cand-gonzales-sb-d05",
+      "amount": 1000.0,
+      "date": "2026-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-41125-00003",
+      "donor_id": "gibbons-michael",
+      "committee_id": "cand-gonzales-sb-d05",
+      "amount": 7000.0,
+      "date": "2026-04-29",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-41125-00004",
+      "donor_id": "walsh-matt",
+      "committee_id": "cand-gonzales-sb-d05",
+      "amount": 2500.0,
+      "date": "2026-05-28",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-41211-00002",
+      "donor_id": "basco-daniel",
+      "committee_id": "cand-basco-sb-d04",
+      "amount": 6500.0,
+      "date": "2026-06-09",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "A-1",
+      "is_in_kind": true,
+      "in_kind_description": "Legal fees"
     },
     {
       "id": "ie-rec-539-0",
@@ -125404,23 +125666,23 @@
         }
       },
       "citizens-to-elect-felix-cardona-jr": {
-        "name": "Citizens to Elect Felix Cardona, Jr",
-        "type": "PAC",
+        "name": "Citizens to Elect Felix Cardona Jr.",
+        "type": "Individual",
         "industries": [
           "individual"
         ],
-        "direct": 6000.0,
+        "direct": 7000.0,
         "independent": 0.0,
-        "total": 6000.0,
-        "count": 4,
-        "committees": 1,
+        "total": 7000.0,
+        "count": 5,
+        "committees": 2,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 6000.0,
+            "direct": 7000.0,
             "independent": 0.0,
-            "total": 6000.0,
-            "count": 4
+            "total": 7000.0,
+            "count": 5
           }
         }
       },
@@ -128367,6 +128629,48 @@
             "direct": 250.0,
             "independent": 0.0,
             "total": 250.0,
+            "count": 1
+          }
+        }
+      },
+      "lamme-william": {
+        "name": "Lamme, William",
+        "type": "Individual",
+        "industries": [
+          "individual"
+        ],
+        "direct": 1000.0,
+        "independent": 0.0,
+        "total": 1000.0,
+        "count": 2,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 1000.0,
+            "independent": 0.0,
+            "total": 1000.0,
+            "count": 2
+          }
+        }
+      },
+      "pope-debby": {
+        "name": "Pope, Debby",
+        "type": "Individual",
+        "industries": [
+          "individual"
+        ],
+        "direct": 500.0,
+        "independent": 0.0,
+        "total": 500.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 500.0,
+            "independent": 0.0,
+            "total": 500.0,
             "count": 1
           }
         }
@@ -132791,6 +133095,27 @@
           }
         }
       },
+      "brice-coleman": {
+        "name": "Brice, Coleman",
+        "type": "Individual",
+        "industries": [
+          "individual"
+        ],
+        "direct": 57.0,
+        "independent": 0.0,
+        "total": 57.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 57.0,
+            "independent": 0.0,
+            "total": 57.0,
+            "count": 1
+          }
+        }
+      },
       "avelar-noemi": {
         "name": "Avelar, Noemi",
         "type": "Individual",
@@ -133837,6 +134162,69 @@
             "direct": 2500.0,
             "independent": 0.0,
             "total": 2500.0,
+            "count": 1
+          }
+        }
+      },
+      "gibbons-michael": {
+        "name": "Gibbons, Michael",
+        "type": "Individual",
+        "industries": [
+          "individual"
+        ],
+        "direct": 7000.0,
+        "independent": 0.0,
+        "total": 7000.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 7000.0,
+            "independent": 0.0,
+            "total": 7000.0,
+            "count": 1
+          }
+        }
+      },
+      "walsh-matt": {
+        "name": "Walsh, Matt",
+        "type": "Individual",
+        "industries": [
+          "individual"
+        ],
+        "direct": 2500.0,
+        "independent": 0.0,
+        "total": 2500.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 2500.0,
+            "independent": 0.0,
+            "total": 2500.0,
+            "count": 1
+          }
+        }
+      },
+      "basco-daniel": {
+        "name": "Basco, Daniel",
+        "type": "Candidate",
+        "industries": [
+          "self-funding"
+        ],
+        "direct": 6500.0,
+        "independent": 0.0,
+        "total": 6500.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 6500.0,
+            "independent": 0.0,
+            "total": 6500.0,
             "count": 1
           }
         }
@@ -185573,14 +185961,14 @@
     "by_industry": {
       "individual": {
         "all": {
-          "direct": 20103473.79
+          "direct": 20115530.79
         },
         "by_cycle": {
           "2023": {
             "direct": 4851721.0
           },
           "2027": {
-            "direct": 6201652.79
+            "direct": 6213709.79
           },
           "2015": {
             "direct": 4610000.0
@@ -185592,11 +185980,11 @@
       },
       "self-funding": {
         "all": {
-          "direct": 770752.57
+          "direct": 777252.57
         },
         "by_cycle": {
           "2027": {
-            "direct": 703654.54
+            "direct": 710154.54
           },
           "2023": {
             "direct": 67098.03
@@ -186089,6 +186477,16 @@
           }
         }
       },
+      "pope-sb-d04": {
+        "all": {
+          "direct": 1500.0
+        },
+        "by_cycle": {
+          "2027": {
+            "direct": 1500.0
+          }
+        }
+      },
       "biggs-sb-president": {
         "all": {
           "direct": 173382.84
@@ -186121,6 +186519,16 @@
           }
         }
       },
+      "rios-sierra-sb-d05": {
+        "all": {
+          "direct": 57.0
+        },
+        "by_cycle": {
+          "2027": {
+            "direct": 57.0
+          }
+        }
+      },
       "peralta-sb-d02": {
         "all": {
           "direct": 15300.0
@@ -186138,6 +186546,26 @@
         "by_cycle": {
           "2027": {
             "direct": 90900.0
+          }
+        }
+      },
+      "gonzales-sb-d05": {
+        "all": {
+          "direct": 10500.0
+        },
+        "by_cycle": {
+          "2027": {
+            "direct": 10500.0
+          }
+        }
+      },
+      "basco-sb-d04": {
+        "all": {
+          "direct": 6500.0
+        },
+        "by_cycle": {
+          "2027": {
+            "direct": 6500.0
           }
         }
       },
@@ -186436,6 +186864,26 @@
             "direct": 1153988.46,
             "ie_support": 24765.93,
             "ie_oppose": 126078.0
+          }
+        }
+      },
+      "sb-d04": {
+        "all": {
+          "direct": 8000.0
+        },
+        "by_cycle": {
+          "2027": {
+            "direct": 8000.0
+          }
+        }
+      },
+      "sb-d05": {
+        "all": {
+          "direct": 10557.0
+        },
+        "by_cycle": {
+          "2027": {
+            "direct": 10557.0
           }
         }
       },
@@ -186818,7 +187266,7 @@
       "color": "#5a6a7a"
     }
   },
-  "seed_generated_at": "2026-06-18T08:20:35",
+  "seed_generated_at": "2026-06-18T15:20:02",
   "cycles": {
     "2015": {
       "label": "2011 \u2013 2015 cycle",
@@ -186845,7 +187293,7 @@
       "election_date": "2027-02-23"
     }
   },
-  "generated_at": "2026-06-17T04:00:35Z",
+  "generated_at": "2026-06-18T21:25:44Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "current_cycle": "2027",
   "default_cycle": "all",

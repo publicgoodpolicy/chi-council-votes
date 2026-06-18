@@ -74,6 +74,38 @@
       "incumbent": false,
       "status": "filed",
       "bio": {}
+    },
+    "41211": {
+      "candidate_id": "basco-sb-d04",
+      "name": "Daniel Basco",
+      "race_id": "sb-d04",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {}
+    },
+    "39834": {
+      "candidate_id": "pope-sb-d04",
+      "name": "Deborah \"Debby\" Pope",
+      "race_id": "sb-d04",
+      "incumbent": true,
+      "status": "filed",
+      "bio": {}
+    },
+    "41125": {
+      "candidate_id": "gonzales-sb-d05",
+      "name": "Peter Gonzales",
+      "race_id": "sb-d05",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {}
+    },
+    "41082": {
+      "candidate_id": "rios-sierra-sb-d05",
+      "name": "Norma Rios Sierra",
+      "race_id": "sb-d05",
+      "incumbent": true,
+      "status": "filed",
+      "bio": {}
     }
   },
   "incumbent_stubs": {
