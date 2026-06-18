@@ -81,16 +81,17 @@
 
   function start(root, office, index) {
     IDX = index;
-    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null };
+    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors' };
     state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, office));
 
     function draw() {
       var omVM = ElectData.viewModels.officeRaces(index, state.office);
       var raceId = index.raceBySlug[state.activeSlug];
       var rv = raceId ? ElectData.viewModels.raceView(index, raceId, state.cycle) : null;
+      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab) : null;
       root.innerHTML = ElectRender.renderPage({
         office: state.office, topView: state.topView,
-        officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv
+        officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend
       });
     }
 
@@ -108,6 +109,8 @@
       }
       var v = cl('[data-view]');
       if (v) { state.topView = v.getAttribute('data-view'); draw(); return; }
+      var st = cl('[data-spendtab]');
+      if (st) { state.spendTab = st.getAttribute('data-spendtab'); draw(); return; }
       // chips AND the vacating-incumbent "→" link both navigate by slug
       var ch = cl('[data-slug]');
       if (ch) { state.activeSlug = ch.getAttribute('data-slug'); state.topView = 'byrace'; draw(); return; }

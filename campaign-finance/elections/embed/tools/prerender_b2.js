@@ -285,6 +285,50 @@ var funderRows = (iePanelHtml.match(/class="crow funder-row" type="button" data-
 ok('IE funder tail has a "Show all N funders" toggle', /Show all \d+ funders/.test(iePanelHtml));
 ok('IE funder tail reveals ALL funders as clickable rows (' + funderRows + ' = ' + totalFunders + ')', funderRows === totalFunders && totalFunders > 10);
 
+console.log('\n=== B4 assertions (Election Spend subtabs) ===');
+var donorsVM = D.spendSubtab(index, 'school_board', 'donors');
+var candsVM = D.spendSubtab(index, 'school_board', 'candidates');
+var indsVM = D.spendSubtab(index, 'school_board', 'industries');
+var ixcVM = D.spendSubtab(index, 'school_board', 'industry-candidate');
+var flagsVM = D.spendSubtab(index, 'school_board', 'flags');
+ok('browse-donors resolves with BOTH donor rows and IE-PAC spender rows',
+  donorsVM.rows.length > 0 && donorsVM.rows.some(function (r) { return r.kind === 'donor'; }) && donorsVM.rows.some(function (r) { return r.kind === 'ie'; }));
+ok('spend-by-candidate resolves', candsVM.candidates.length > 0);
+ok('industry-totals resolves and includes uncategorized (never folded)',
+  indsVM.industries.length > 0 && indsVM.industries.some(function (x) { return x.industry === 'unclassified' || x.industry === 'uncategorized'; }));
+ok('industries-by-candidate resolves', ixcVM.rows.length > 0);
+ok('flag-totals resolves (array; may be empty for this office)', Array.isArray(flagsVM.flags));
+// KEY: spend-by-candidate surfaces IE money for a COMMITTEE-LESS candidate
+var clIE = candsVM.candidates.filter(function (c) { return !c.hasCommittee && (c.figures.independentSupport > 0 || c.figures.independentOpposition > 0); });
+ok('spend-by-candidate surfaces IE money for a committee-LESS candidate', clIE.length >= 1);
+if (clIE.length) console.log('       (e.g. ' + clIE[0].name + ': support $' + Math.round(clIE[0].figures.independentSupport) + ' / oppose $' + Math.round(clIE[0].figures.independentOpposition) + ', no committee)');
+// three figures shown separately (never summed)
+var candHtml = R.renderSpend(candsVM);
+ok('spend-by-candidate shows three separate figures (contrib/support/oppose)',
+  /contrib<\/span>/.test(candHtml) && /support<\/span>/.test(candHtml) && /oppose<\/span>/.test(candHtml));
+// neutral order (alphabetical by surname), never by amount
+function snk(n) { return String(n).replace(/,?\s*(jr|sr|ii|iii|iv)\.?$/i, '').trim().split(/\s+/).pop().toLowerCase(); }
+var inOrder = candsVM.candidates.map(function (c) { return c.name; });
+var alpha = inOrder.slice().sort(function (a, b) { return snk(a).localeCompare(snk(b)) || a.localeCompare(b); });
+ok('candidates ordered neutrally (alphabetical by surname), not by amount', JSON.stringify(inOrder) === JSON.stringify(alpha));
+// office scope: no council/ward candidate in the spend view
+ok('spend-by-candidate is office-scoped (no ward/council candidates)',
+  candsVM.candidates.every(function (c) { return !/^ward-/.test(c.raceSlug); }));
+// browse-donors rows open the RIGHT modal
+var donorsHtml = R.renderSpend(donorsVM);
+ok('browse-donors: donor rows open the footprint modal (data-funder)', /class="crow funder-row" type="button" data-funder=/.test(donorsHtml));
+ok('browse-donors: IE-PAC rows open the committee-profile modal (data-committee)', /class="crow funder-row" type="button" data-committee=/.test(donorsHtml));
+// industries-by-candidate: uncategorized shown, never blank
+var ixcHtml = R.renderSpend(ixcVM);
+ok('industries-by-candidate surfaces uncategorized (never blank/folded)',
+  /uncategorized/.test(ixcHtml) && ixcVM.rows.every(function (r) { return r.industries.length > 0; }));
+// subtab nav present + the spend view replaces the placeholder
+var spendPage = R.renderPage({ office: 'school_board', topView: 'spend', officeRaces: omVM, activeSlug: 'district-2a', raceView: rv, spend: donorsVM });
+ok('spend view renders the subtab nav (5 tabs) instead of coming-soon',
+  /data-spendtab="donors"/.test(spendPage) && /data-spendtab="candidates"/.test(spendPage) &&
+  /data-spendtab="industries"/.test(spendPage) && /data-spendtab="industry-candidate"/.test(spendPage) &&
+  /data-spendtab="flags"/.test(spendPage) && spendPage.indexOf('Election spend — coming soon') < 0);
+
 console.log('\nwrote ' + path.relative(process.cwd(), out) + '  (open in a browser to eyeball — self-contained, no fetch)');
 console.log(fails ? (fails + ' ASSERTION(S) FAILED') : 'ALL ASSERTIONS PASSED');
 process.exit(fails ? 1 : 0);

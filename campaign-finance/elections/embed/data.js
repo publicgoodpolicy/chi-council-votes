@@ -551,6 +551,130 @@
     return Object.keys(index.cyclesSeen).sort().reverse();
   }
 
+  // ---- Election Spend subtabs (office-scoped) ----
+
+  // Is a recipient committee in the current office scope? Candidate committees of
+  // an in-office race, and IE committees that spent in-office, are in scope.
+  function recipInScope(index, committeeKey) {
+    var cm = index.committees[committeeKey] || {};
+    if (!index.office) return true;
+    var offs = OFFICE_RACE_OFFICES[index.office] || [];
+    if (cm.candidate_id) {
+      var race = index.raceById[(index.candidateById[cm.candidate_id] || {}).race_id] || {};
+      return offs.indexOf(race.office) >= 0;
+    }
+    if (cm.type === 'independent_expenditure') return !!index.inScopeIE[committeeKey];
+    return false;
+  }
+
+  // 1) Browse donors — real donors (by parent_id) ranked by office-scoped giving,
+  // merged with IE committees as "political spender" rows (ranked by their spend).
+  function browseDonors(index) {
+    var rows = [];
+    for (var pid in index.parentRollup) {
+      if (!index.parentRollup.hasOwnProperty(pid)) continue;
+      var pr = index.parentRollup[pid], total = 0;
+      for (var i = 0; i < pr.rows.length; i++) {
+        var c = pr.rows[i];
+        if (c.contribution_type === DUES_TYPE) continue;
+        if (!recipInScope(index, c.committee_id)) continue;
+        total += c.amount || 0;
+      }
+      if (total > 0) {
+        var d = index.donors[pid] || {};
+        rows.push({ kind: 'donor', parent_id: pid, name: d.name || pid,
+          industries: d.industries || [], flags: d.flags || [], total: round2(total) });
+      }
+    }
+    for (var key in index.iesBySpender) {           // already office-scoped
+      if (!index.iesBySpender.hasOwnProperty(key)) continue;
+      var cm = index.committees[key] || {}, spend = 0, rws = index.iesBySpender[key];
+      for (var j = 0; j < rws.length; j++) spend += rws[j].amount || 0;
+      rows.push({ kind: 'ie', committee_id: key, name: cm.committee_name || key,
+        identity: spenderFunders(index, key).funders.slice(0, 3).map(function (f) { return f.name; }), total: round2(spend) });
+    }
+    rows.sort(function (a, b) { return b.total - a.total; });
+    return rows;
+  }
+
+  // 2) Spend by candidate — keyed on the CANDIDATE (target_candidate_id), NOT the
+  // committee join, so a name-matched candidate with no committee still shows their
+  // IE total. Three figures kept separate. Neutral (alphabetical) order.
+  function spendByCandidate(index, office) {
+    var offs = OFFICE_RACE_OFFICES[office] || [], out = [];
+    for (var i = 0; i < index.candidates.length; i++) {
+      var c = index.candidates[i], race = index.raceById[c.race_id] || {};
+      if (offs.indexOf(race.office) < 0) continue;
+      if (c.vacating_for) continue;                  // vacating incumbents listed in their new race
+      var f = candidateFigures(index, c.id, null);   // works for committee-less candidates (direct 0)
+      if (!(f.contributions.total > 0 || f.independentSupport > 0 || f.independentOpposition > 0)) continue;
+      out.push({ id: c.id, slug: candidateSlug(c, race), name: c.name,
+        race: race.label, raceSlug: raceSlug(race), hasCommittee: !!c.committee_id, figures: f });
+    }
+    out.sort(byNameNeutral);
+    return out;
+  }
+
+  // 3) Industry totals — sum the client-side industry×candidate cross-tab.
+  function industryTotals(index) {
+    var agg = {};
+    for (var cand in index.industryByCandidate) {
+      if (!index.industryByCandidate.hasOwnProperty(cand)) continue;
+      var ind = index.industryByCandidate[cand];
+      for (var tag in ind) {
+        if (!ind.hasOwnProperty(tag)) continue;
+        var a = agg[tag] || (agg[tag] = { industry: tag, direct: 0, support: 0, oppose: 0 });
+        a.direct = round2(a.direct + ind[tag].direct); a.support = round2(a.support + ind[tag].support);
+        a.oppose = round2(a.oppose + ind[tag].oppose);
+      }
+    }
+    var list = []; for (var t in agg) { var x = agg[t]; x.total = round2(x.direct + x.support + x.oppose); list.push(x); }
+    list.sort(function (a, b) { return b.total - a.total; });
+    return list;
+  }
+
+  // 4) Industries by candidate — per in-office candidate, their industry breakdown.
+  function industriesByCandidate(index, office) {
+    var cands = spendByCandidate(index, office), out = [];
+    for (var i = 0; i < cands.length; i++) {
+      var ind = index.industryByCandidate[cands[i].id]; if (!ind) continue;
+      var inds = [];
+      for (var tag in ind) {
+        if (!ind.hasOwnProperty(tag)) continue;
+        inds.push({ industry: tag, direct: ind[tag].direct, support: ind[tag].support, oppose: ind[tag].oppose,
+          total: round2(ind[tag].direct + ind[tag].support + ind[tag].oppose) });
+      }
+      inds.sort(function (a, b) { return b.total - a.total; });
+      if (inds.length) out.push({ name: cands[i].name, slug: cands[i].slug, race: cands[i].race, industries: inds });
+    }
+    return out;  // already neutral order (spendByCandidate is alphabetical)
+  }
+
+  // 5) Flag totals — aggregate the client-side flag×candidate derivation.
+  function flagTotals(index) {
+    var agg = {};
+    for (var cand in index.flagByCandidate) {
+      if (!index.flagByCandidate.hasOwnProperty(cand)) continue;
+      var fl = index.flagByCandidate[cand];
+      for (var ft in fl) {
+        if (!fl.hasOwnProperty(ft)) continue;
+        var a = agg[ft] || (agg[ft] = { flag: ft, amount: 0, count: 0 });
+        a.amount = round2(a.amount + fl[ft].amount); a.count += fl[ft].count;
+      }
+    }
+    var list = []; for (var f in agg) list.push(agg[f]); list.sort(function (a, b) { return b.amount - a.amount; });
+    return list;
+  }
+
+  // Dispatcher: one call from the thin app for the active subtab.
+  function spendSubtab(index, office, tab) {
+    if (tab === 'candidates') return { tab: tab, candidates: spendByCandidate(index, office) };
+    if (tab === 'industries') return { tab: tab, industries: industryTotals(index) };
+    if (tab === 'industry-candidate') return { tab: tab, rows: industriesByCandidate(index, office) };
+    if (tab === 'flags') return { tab: tab, flags: flagTotals(index) };
+    return { tab: 'donors', rows: browseDonors(index) };   // default
+  }
+
   return {
     OFFICE_RACE_OFFICES: OFFICE_RACE_OFFICES,
     OFFICE_GROUPS: OFFICE_GROUPS,
@@ -565,6 +689,9 @@
     committeeMeta: committeeMeta,
     sunshineUrl: sunshineUrl,
     availableCycles: availableCycles,
+    browseDonors: browseDonors, spendByCandidate: spendByCandidate,
+    industryTotals: industryTotals, industriesByCandidate: industriesByCandidate,
+    flagTotals: flagTotals, spendSubtab: spendSubtab,
     isSelfFunded: isSelfFunded,
     kebab: kebab, raceSlug: raceSlug, candidateSlug: candidateSlug, raceCode: raceCode,
     viewModels: { raceBrowse: raceBrowse, raceView: raceView, officeRaces: officeRaces }

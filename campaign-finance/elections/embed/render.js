@@ -159,6 +159,16 @@
       '.ipg-elect .modal-summary{font-size:13px;font-weight:500;margin:0 0 8px;padding-bottom:8px;border-bottom:1px solid var(--line);}' +
       '.ipg-elect .kind{font-size:10px;text-transform:uppercase;letter-spacing:.04em;padding:1px 6px;border-radius:4px;background:var(--tan);color:var(--ink-soft);}' +
       '.ipg-elect .kind.cand{background:#E5EFE9;color:var(--teal);}.ipg-elect .kind.ie{background:#F4E3DC;color:var(--coral);}' +
+      '.ipg-elect .subnav{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0 16px;border-bottom:2px solid var(--line);}' +
+      '.ipg-elect .subtab{appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);font-size:14px;font-weight:500;color:var(--ink-soft);padding:10px 14px;border-bottom:3px solid transparent;margin-bottom:-2px;border-radius:6px 6px 0 0;}' +
+      '.ipg-elect .subtab[aria-selected="true"]{color:var(--teal);border-bottom-color:var(--teal);}' +
+      '.ipg-elect .subtab:focus-visible{outline:2px solid var(--sage);outline-offset:2px;}' +
+      '.ipg-elect .srow{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:11px 15px;margin:0 0 8px;}' +
+      '.ipg-elect .sname{font-size:14px;font-weight:500;}' +
+      '.ipg-elect .figrow{margin-top:6px;display:flex;flex-wrap:wrap;gap:8px;}' +
+      '.ipg-elect .mini{font-size:12px;font-weight:500;border-radius:6px;padding:2px 8px;}' +
+      '.ipg-elect .mini.c{background:#E5EFE9;color:var(--teal);}.ipg-elect .mini.s{background:#E4EEEB;color:var(--sage);}.ipg-elect .mini.o{background:#F4E3DC;color:var(--coral);}' +
+      '.ipg-elect .ixc{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px;}' +
       '.ipg-elect .bartrack{height:18px;background:#EFE6DC;border-radius:5px;overflow:hidden;}' +
       '.ipg-elect .barfill{height:100%;display:flex;}' +
       '.ipg-elect .seg{height:100%;}' +
@@ -213,7 +223,8 @@
   // candidate self-funding/loan line are NOT donor entities — labeled lines only,
   // no modal, no tag.
   function donorRow(line) {
-    var amt = '<div class="amt">' + money(line.total) + ' <span class="n">· ' + plural(line.count, 'gift', 'gifts') + '</span></div>';
+    var amt = '<div class="amt">' + money(line.total) +
+      (line.count ? ' <span class="n">· ' + plural(line.count, 'gift', 'gifts') + '</span>' : '') + '</div>';
     if (line.isSelf) {
       return '<div class="crow plain"><div class="who">' + esc(line.name) +
         ' <span class="tagchip self">Candidate’s own money / loans</span></div>' + amt + '</div>';
@@ -509,6 +520,82 @@
       '<p>Browse donors, spend by candidate, and industry breakdowns for this office arrive in the next build.</p></div>';
   }
 
+  // ---- Election Spend subtabs (vm computed by the data layer; render is pure) ----
+  var SPEND_TABS = [['donors', 'Browse donors'], ['candidates', 'Spend by candidate'],
+    ['industries', 'Industry totals'], ['industry-candidate', 'Industries by candidate'], ['flags', 'Flag totals']];
+
+  function spendNav(active) {
+    return '<div class="subnav" role="tablist" aria-label="Election spend">' + SPEND_TABS.map(function (t) {
+      return '<button class="subtab" role="tab" data-spendtab="' + t[0] + '" aria-selected="' + (t[0] === active) + '">' + esc(t[1]) + '</button>';
+    }).join('') + '</div>';
+  }
+
+  function browseRow(r) {
+    if (r.kind === 'ie') {
+      var nm = ieNaming(r.name, r.identity);
+      return '<button class="crow funder-row" type="button" data-committee="' + esc(r.committee_id) + '">' +
+        '<div class="who">' + nm.primary + ' <span class="kind ie">IE PAC</span>' +
+        (nm.subtitle ? '<div class="sub">' + nm.subtitle + '</div>' : '') + '</div>' +
+        '<div class="amt">' + money(r.total) + ' <span class="n">· spent</span></div></button>';
+    }
+    return donorRow({ parent_id: r.parent_id, name: r.name, industries: r.industries, flags: r.flags, total: r.total, count: 0 });
+  }
+
+  function threeFig(f) {
+    return '<span class="mini c">' + money(f.contributions.total) + ' contrib</span>' +
+      '<span class="mini s">' + money(f.independentSupport) + ' support</span>' +
+      '<span class="mini o">' + money(f.independentOpposition) + ' oppose</span>';
+  }
+
+  function renderSpend(vm) {
+    var tab = vm.tab || 'donors', body;
+    if (tab === 'candidates') {
+      body = '<p class="contrib-note">The three figures are shown separately and never added together. Candidates are listed ' +
+        'alphabetically (never ranked by money). Candidates with no committee yet still show independent spending for or against them.</p>' +
+        vm.candidates.map(function (c) {
+          return '<div class="srow"><div class="sname">' + esc(c.name) + ' <span class="muted">· ' + esc(c.race) + '</span>' +
+            (c.hasCommittee ? '' : ' <span class="badge">no committee yet</span>') +
+            '<div class="figrow">' + threeFig(c.figures) + '</div></div></div>';
+        }).join('');
+    } else if (tab === 'industries') {
+      body = '<p class="contrib-note">Direct contributions and independent spending are shown separately. ' +
+        'Uncategorized donors are shown as uncategorized.</p>' +
+        vm.industries.map(function (x) {
+          return '<div class="srow"><div class="sname">' + esc(prettyTag(x.industry === 'unclassified' ? 'uncategorized' : x.industry)) +
+            '<div class="figrow"><span class="mini c">' + money(x.direct) + ' contrib</span>' +
+            '<span class="mini s">' + money(x.support) + ' support</span><span class="mini o">' + money(x.oppose) + ' oppose</span></div></div></div>';
+        }).join('');
+    } else if (tab === 'industry-candidate') {
+      body = '<p class="contrib-note">Each candidate’s money by donor/​spender industry (direct + independent). ' +
+        'Uncategorized shown as uncategorized.</p>' +
+        vm.rows.map(function (r) {
+          return '<div class="srow"><div class="sname">' + esc(r.name) + ' <span class="muted">· ' + esc(r.race) + '</span>' +
+            '<div class="ixc">' + r.industries.map(function (i) {
+              return '<span class="tagchip ind">' + esc(prettyTag(i.industry === 'unclassified' ? 'uncategorized' : i.industry)) + ' ' + money(i.total) + '</span>';
+            }).join('') + '</div></div></div>';
+        }).join('');
+    } else if (tab === 'flags') {
+      body = '<p class="contrib-note">Editorial flags aggregated across this office’s donors.</p>' +
+        (vm.flags.length ? vm.flags.map(function (x) {
+          return '<div class="srow"><div class="sname">⚑ ' + esc(prettyTag(x.flag)) +
+            '<div class="figrow"><span class="mini c">' + money(x.amount) + '</span><span class="muted">· ' + x.count + ' contributions</span></div></div></div>';
+        }).join('') : '<div class="soon"><p>No flags recorded for this office yet.</p></div>');
+    } else { // donors
+      var LIMIT = 50, rows = vm.rows, top = '';
+      for (var i = 0; i < Math.min(LIMIT, rows.length); i++) top += browseRow(rows[i]);
+      var more = '';
+      if (rows.length > LIMIT) {
+        var moreRows = ''; for (var j = LIMIT; j < rows.length; j++) moreRows += browseRow(rows[j]);
+        more = '<button class="show-more" type="button" aria-expanded="false" aria-controls="spend-donors-more">' +
+          '<span class="caret" aria-hidden="true">▸</span> Show all ' + rows.length + ' donors &amp; spenders</button>' +
+          '<div class="contrib tall" id="spend-donors-more"><div class="contrib-inner bare">' + moreRows + '</div></div>';
+      }
+      body = '<p class="contrib-note">Everyone who gave to a candidate or funded an independent-expenditure committee in this ' +
+        'office, by affiliation. Click a donor for their footprint; an <span class="kind ie">IE PAC</span> opens its profile.</p>' + top + more;
+    }
+    return '<div class="spend">' + spendNav(tab) + '<div class="spend-body">' + body + '</div></div>';
+  }
+
   // Full inner HTML for the mount container — used by the browser app AND the
   // future SEO pre-render (same pure output).
   function renderPage(state) {
@@ -516,7 +603,7 @@
     var body = byrace
       ? (renderOfficeNav(state.officeRaces, state.activeSlug) +
          '<div aria-live="polite">' + (state.raceView ? renderRaceView(state.raceView) : '') + '</div>')
-      : spendPlaceholder();
+      : (state.spend ? renderSpend(state.spend) : spendPlaceholder());
     return '<div class="wrap">' + masthead(state.office, state.topView) +
       '<section>' + body + '</section>' + footer() + '</div>';
   }
@@ -525,7 +612,7 @@
     styles: styles,
     masthead: masthead, footer: footer,
     renderOfficeNav: renderOfficeNav, renderRaceView: renderRaceView,
-    renderComingSoon: renderComingSoon, spendPlaceholder: spendPlaceholder,
+    renderComingSoon: renderComingSoon, spendPlaceholder: spendPlaceholder, renderSpend: renderSpend,
     renderFunderModal: renderFunderModal, renderCommitteeProfile: renderCommitteeProfile,
     donorRow: donorRow, contributorPanel: contributorPanel, iePanel: iePanel,
     renderPage: renderPage, pageLabel: pageLabel,
