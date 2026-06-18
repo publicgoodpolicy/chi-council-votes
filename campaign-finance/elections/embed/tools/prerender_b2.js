@@ -329,6 +329,28 @@ ok('spend view renders the subtab nav (5 tabs) instead of coming-soon',
   /data-spendtab="industries"/.test(spendPage) && /data-spendtab="industry-candidate"/.test(spendPage) &&
   /data-spendtab="flags"/.test(spendPage) && spendPage.indexOf('Election spend — coming soon') < 0);
 
+console.log('\n=== B5 assertions (year filter + office param + Recoleta) ===');
+var cyclesAvail = D.availableCycles(index);
+ok('available cycles include the data cycle (2027)', cyclesAvail.indexOf('2027') >= 0);
+var pageCyc = R.renderPage({ office: 'school_board', topView: 'byrace', cycles: cyclesAvail, cycle: null, officeRaces: omVM, activeSlug: 'district-2a', raceView: rv });
+ok('year bar renders with "current cycle" default selected', /data-cycle=""[^>]*aria-pressed="true"/.test(pageCyc) && /current cycle/.test(pageCyc));
+ok('year bar offers the 2027 cycle chip', /data-cycle="2027"/.test(pageCyc));
+ok('cycle filter degrades cleanly (single cycle: 2027 == current)',
+  Math.round(D.candidateFigures(index, 'deberry-sb-d03', '2027').contributions.total) === Math.round(D.candidateFigures(index, 'deberry-sb-d03', null).contributions.total));
+(function () {
+  function dir(cyc) { return D.spendSubtab(index, 'school_board', 'industries', cyc).industries.reduce(function (s, x) { return s + x.direct; }, 0); }
+  ok('spend subtabs genuinely thread cycle (industries direct @2027 < all-time, both > 0)',
+    dir('2027') > 0 && dir('2027') < dir(null) && dir('bogus-cycle') === 0);
+})();
+['city_council', 'mayor'].forEach(function (off) {
+  var oi = D.loadData(json, { office: off });
+  var om = D.viewModels.officeRaces(oi, off);
+  var pg = R.renderPage({ office: off, topView: 'byrace', cycles: D.availableCycles(oi), cycle: null, officeRaces: om, activeSlug: null, raceView: null });
+  ok(off + ' renders a clean coming-soon (no crash, full page)', /coming soon/i.test(pg) && pg.indexOf('<div class="wrap">') >= 0 && pg.length > 600);
+});
+ok('real Recoleta @font-face present (onlinewebfonts CDN) + Georgia fallback',
+  /@font-face\{font-family:"Recoleta";src:url\("https:\/\/db\.onlinewebfonts\.com/.test(R.styles()) && /--display:Recoleta,Georgia/.test(R.styles()));
+
 console.log('\nwrote ' + path.relative(process.cwd(), out) + '  (open in a browser to eyeball — self-contained, no fetch)');
 console.log(fails ? (fails + ' ASSERTION(S) FAILED') : 'ALL ASSERTIONS PASSED');
 process.exit(fails ? 1 : 0);

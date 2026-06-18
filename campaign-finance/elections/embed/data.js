@@ -569,7 +569,8 @@
 
   // 1) Browse donors — real donors (by parent_id) ranked by office-scoped giving,
   // merged with IE committees as "political spender" rows (ranked by their spend).
-  function browseDonors(index) {
+  function browseDonors(index, cycle) {
+    var keep = function (cyc) { return !EXCLUDED_CYCLES[cyc] && (cycle == null || cyc === cycle); };
     var rows = [];
     for (var pid in index.parentRollup) {
       if (!index.parentRollup.hasOwnProperty(pid)) continue;
@@ -577,6 +578,7 @@
       for (var i = 0; i < pr.rows.length; i++) {
         var c = pr.rows[i];
         if (c.contribution_type === DUES_TYPE) continue;
+        if (!keep(c.cycle)) continue;
         if (!recipInScope(index, c.committee_id)) continue;
         total += c.amount || 0;
       }
@@ -589,7 +591,8 @@
     for (var key in index.iesBySpender) {           // already office-scoped
       if (!index.iesBySpender.hasOwnProperty(key)) continue;
       var cm = index.committees[key] || {}, spend = 0, rws = index.iesBySpender[key];
-      for (var j = 0; j < rws.length; j++) spend += rws[j].amount || 0;
+      for (var j = 0; j < rws.length; j++) { if (!keep(rws[j].cycle)) continue; spend += rws[j].amount || 0; }
+      if (spend <= 0) continue;
       rows.push({ kind: 'ie', committee_id: key, name: cm.committee_name || key,
         identity: spenderFunders(index, key).funders.slice(0, 3).map(function (f) { return f.name; }), total: round2(spend) });
     }
@@ -600,13 +603,13 @@
   // 2) Spend by candidate — keyed on the CANDIDATE (target_candidate_id), NOT the
   // committee join, so a name-matched candidate with no committee still shows their
   // IE total. Three figures kept separate. Neutral (alphabetical) order.
-  function spendByCandidate(index, office) {
+  function spendByCandidate(index, office, cycle) {
     var offs = OFFICE_RACE_OFFICES[office] || [], out = [];
     for (var i = 0; i < index.candidates.length; i++) {
       var c = index.candidates[i], race = index.raceById[c.race_id] || {};
       if (offs.indexOf(race.office) < 0) continue;
       if (c.vacating_for) continue;                  // vacating incumbents listed in their new race
-      var f = candidateFigures(index, c.id, null);   // works for committee-less candidates (direct 0)
+      var f = candidateFigures(index, c.id, cycle);  // works for committee-less candidates (direct 0)
       if (!(f.contributions.total > 0 || f.independentSupport > 0 || f.independentOpposition > 0)) continue;
       out.push({ id: c.id, slug: candidateSlug(c, race), name: c.name,
         race: race.label, raceSlug: raceSlug(race), hasCommittee: !!c.committee_id, figures: f });
@@ -615,64 +618,89 @@
     return out;
   }
 
-  // 3) Industry totals — sum the client-side industry×candidate cross-tab.
-  function industryTotals(index) {
-    var agg = {};
-    for (var cand in index.industryByCandidate) {
-      if (!index.industryByCandidate.hasOwnProperty(cand)) continue;
-      var ind = index.industryByCandidate[cand];
-      for (var tag in ind) {
-        if (!ind.hasOwnProperty(tag)) continue;
-        var a = agg[tag] || (agg[tag] = { industry: tag, direct: 0, support: 0, oppose: 0 });
-        a.direct = round2(a.direct + ind[tag].direct); a.support = round2(a.support + ind[tag].support);
-        a.oppose = round2(a.oppose + ind[tag].oppose);
+  // Shared cycle-aware aggregation for the industry/flag cross-tabs (re-derived
+  // from the office-scoped per-candidate index by cycle; null cycle = all-time).
+  function spendAgg(index, office, cycle) {
+    var offs = OFFICE_RACE_OFFICES[office] || [];
+    var keep = function (cyc) { return !EXCLUDED_CYCLES[cyc] && (cycle == null || cyc === cycle); };
+    var byCand = {}, flags = {};
+    function ind(map, key, tag) {
+      var m = map[key] || (map[key] = {});
+      return m[tag] || (m[tag] = { direct: 0, support: 0, oppose: 0 });
+    }
+    for (var i = 0; i < index.candidates.length; i++) {
+      var cand = index.candidates[i], race = index.raceById[cand.race_id] || {};
+      if (offs.indexOf(race.office) < 0 || cand.vacating_for) continue;
+      var cid = cand.id;
+      var dr = index.directByCandidate[cid] || [];
+      for (var d = 0; d < dr.length; d++) {
+        var c = dr[d]; if (c.contribution_type === DUES_TYPE || !keep(c.cycle)) continue;
+        var donor = index.donors[c.donor_id] || {}, amt = c.amount || 0;
+        var inds = (donor.industries && donor.industries.length) ? donor.industries : ['uncategorized'];
+        for (var a = 0; a < inds.length; a++) ind(byCand, cid, inds[a]).direct = round2(ind(byCand, cid, inds[a]).direct + amt);
+        var fl = donor.flags || [];
+        for (var g = 0; g < fl.length; g++) {
+          var ft = (fl[g] && fl[g].type) || fl[g]; if (!ft) continue;
+          var fa = flags[ft] || (flags[ft] = { amount: 0, count: 0 }); fa.amount = round2(fa.amount + amt); fa.count++;
+        }
+      }
+      var ieB = index.ieByCandidate[cid] || { support: [], oppose: [] };
+      ['support', 'oppose'].forEach(function (field) {
+        ieB[field].forEach(function (ie) {
+          if (!keep(ie.cycle)) return;
+          var sp = index.committees[ie.spender_committee_id] || {}, tags = sp.industry_tags || [], amt2 = ie.amount || 0;
+          for (var t = 0; t < tags.length; t++) ind(byCand, cid, tags[t])[field] = round2(ind(byCand, cid, tags[t])[field] + amt2);
+        });
+      });
+    }
+    return { byCand: byCand, flags: flags };
+  }
+
+  // 3) Industry totals — office-scoped, cycle-aware (sum the cross-tab).
+  function industryTotals(index, office, cycle) {
+    var byCand = spendAgg(index, office, cycle).byCand, tot = {};
+    for (var cid in byCand) {
+      var inds = byCand[cid];
+      for (var tag in inds) {
+        var a = tot[tag] || (tot[tag] = { industry: tag, direct: 0, support: 0, oppose: 0 });
+        a.direct = round2(a.direct + inds[tag].direct); a.support = round2(a.support + inds[tag].support);
+        a.oppose = round2(a.oppose + inds[tag].oppose);
       }
     }
-    var list = []; for (var t in agg) { var x = agg[t]; x.total = round2(x.direct + x.support + x.oppose); list.push(x); }
+    var list = []; for (var t in tot) { var x = tot[t]; x.total = round2(x.direct + x.support + x.oppose); list.push(x); }
     list.sort(function (a, b) { return b.total - a.total; });
     return list;
   }
 
   // 4) Industries by candidate — per in-office candidate, their industry breakdown.
-  function industriesByCandidate(index, office) {
-    var cands = spendByCandidate(index, office), out = [];
+  function industriesByCandidate(index, office, cycle) {
+    var byCand = spendAgg(index, office, cycle).byCand, cands = spendByCandidate(index, office, cycle), out = [];
     for (var i = 0; i < cands.length; i++) {
-      var ind = index.industryByCandidate[cands[i].id]; if (!ind) continue;
-      var inds = [];
-      for (var tag in ind) {
-        if (!ind.hasOwnProperty(tag)) continue;
-        inds.push({ industry: tag, direct: ind[tag].direct, support: ind[tag].support, oppose: ind[tag].oppose,
-          total: round2(ind[tag].direct + ind[tag].support + ind[tag].oppose) });
-      }
-      inds.sort(function (a, b) { return b.total - a.total; });
-      if (inds.length) out.push({ name: cands[i].name, slug: cands[i].slug, race: cands[i].race, industries: inds });
+      var inds = byCand[cands[i].id]; if (!inds) continue;
+      var arr = [];
+      for (var tag in inds) arr.push({ industry: tag, direct: inds[tag].direct, support: inds[tag].support,
+        oppose: inds[tag].oppose, total: round2(inds[tag].direct + inds[tag].support + inds[tag].oppose) });
+      arr.sort(function (a, b) { return b.total - a.total; });
+      if (arr.length) out.push({ name: cands[i].name, slug: cands[i].slug, race: cands[i].race, industries: arr });
     }
-    return out;  // already neutral order (spendByCandidate is alphabetical)
+    return out;  // neutral order (spendByCandidate is alphabetical)
   }
 
-  // 5) Flag totals — aggregate the client-side flag×candidate derivation.
-  function flagTotals(index) {
-    var agg = {};
-    for (var cand in index.flagByCandidate) {
-      if (!index.flagByCandidate.hasOwnProperty(cand)) continue;
-      var fl = index.flagByCandidate[cand];
-      for (var ft in fl) {
-        if (!fl.hasOwnProperty(ft)) continue;
-        var a = agg[ft] || (agg[ft] = { flag: ft, amount: 0, count: 0 });
-        a.amount = round2(a.amount + fl[ft].amount); a.count += fl[ft].count;
-      }
-    }
-    var list = []; for (var f in agg) list.push(agg[f]); list.sort(function (a, b) { return b.amount - a.amount; });
+  // 5) Flag totals — office-scoped, cycle-aware aggregation.
+  function flagTotals(index, office, cycle) {
+    var flags = spendAgg(index, office, cycle).flags, list = [];
+    for (var ft in flags) list.push({ flag: ft, amount: flags[ft].amount, count: flags[ft].count });
+    list.sort(function (a, b) { return b.amount - a.amount; });
     return list;
   }
 
-  // Dispatcher: one call from the thin app for the active subtab.
-  function spendSubtab(index, office, tab) {
-    if (tab === 'candidates') return { tab: tab, candidates: spendByCandidate(index, office) };
-    if (tab === 'industries') return { tab: tab, industries: industryTotals(index) };
-    if (tab === 'industry-candidate') return { tab: tab, rows: industriesByCandidate(index, office) };
-    if (tab === 'flags') return { tab: tab, flags: flagTotals(index) };
-    return { tab: 'donors', rows: browseDonors(index) };   // default
+  // Dispatcher: one call from the thin app for the active subtab (cycle-aware).
+  function spendSubtab(index, office, tab, cycle) {
+    if (tab === 'candidates') return { tab: tab, candidates: spendByCandidate(index, office, cycle) };
+    if (tab === 'industries') return { tab: tab, industries: industryTotals(index, office, cycle) };
+    if (tab === 'industry-candidate') return { tab: tab, rows: industriesByCandidate(index, office, cycle) };
+    if (tab === 'flags') return { tab: tab, flags: flagTotals(index, office, cycle) };
+    return { tab: 'donors', rows: browseDonors(index, cycle) };   // default
   }
 
   return {
