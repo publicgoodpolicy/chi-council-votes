@@ -4,3 +4,6 @@ tools/preview_*.html
 # Local test wrapper + its data copy (never commit)
 local-preview.html
 election-data.local.json
+
+# Generated local preview (inlines full dataset; regenerable via tools/build_preview.js)
+preview/
