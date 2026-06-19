@@ -1,10 +1,30 @@
 # Single source of truth for all three rollups. IE-aware: works with zero IEs
 # (direct-only) now, and fills the independent layer once ingest_ie has run.
-import json, os, sys
+import json, os, sys, re, unicodedata
 from collections import Counter
 from datetime import datetime, timezone
 
 EXCLUDED_CYCLES={'pre-2011','undated'}
+
+# election-windows.json lives beside race-map.json in elections/; it buckets a finance
+# row to an election by FILING DATE (the SBE 'cycle' field is the useless 4-year bucket).
+WINDOWS_PATH=os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','elections','election-windows.json')
+
+def _office_type(office):
+    return 'school_board' if office and office.startswith('school_board') else None
+
+def _name_key(n):
+    if not n: return frozenset()
+    n=unicodedata.normalize('NFKD',n).encode('ascii','ignore').decode().lower()
+    drop={'jr','sr','ii','iii','iv','mr','mrs','ms','dr'}
+    return frozenset(t for t in re.findall(r'[a-z]+',n) if t not in drop and len(t)>1)
+
+def _bucket(date,wins):
+    if not date: return None
+    for w in wins:
+        s=w.get('start'); e=w.get('end')
+        if (s is None or date>=s) and (e is None or date<=e): return w
+    return None
 
 def build(d):
     donors=d['donors']; comms=d['committees']; contribs=d['contributions']
@@ -78,6 +98,59 @@ def build(d):
         if ie.get('target_race_id'):
             add(by_race,ie['target_race_id'],cyc,field,amt)
 
+    # ---- by_candidate_election (ADDITIVE, election-guarded) ----
+    # Per-candidate, per-election buckets with the FOUR streams kept SEPARATE and never
+    # summed: contributions, self_funding, ie_support, ie_oppose. Rows are bucketed by
+    # FILING DATE via election-windows.json (NOT the 4-year 'cycle' bucket). Self-funding
+    # = donor is the candidate (normalized name match), kept distinct from contributions.
+    # Computed only in election_mode and attached only in election_mode below, so the
+    # council rollup shape is provably untouched (council data has no candidates/races).
+    by_candidate_election={}
+    if election_mode:
+        try:
+            windows=json.load(open(WINDOWS_PATH))
+        except (OSError,json.JSONDecodeError):
+            windows={}
+        cands={c['id']:c for c in d.get('candidates',[])}
+        race_office={r['id']:r.get('office') for r in d.get('races',[])}
+        def wins_for(cid):
+            c=cands.get(cid)
+            if not c: return None
+            ot=_office_type(race_office.get(c.get('race_id')))
+            return windows.get(ot) if ot else None
+        def slot(cid,date):
+            wins=wins_for(cid)
+            if not wins: return None
+            w=_bucket(date,wins)
+            if not w: return None
+            pe=cands[cid].get('prior_election') or {}
+            label=pe['label'] if pe.get('election')==w['id'] and pe.get('label') else w['label']
+            return by_candidate_election.setdefault(cid,{}).setdefault(w['id'],{
+                'label':label,'contributions':{'amount':0.0,'count':0},
+                'self_funding':{'amount':0.0,'count':0},
+                'ie_support':{'amount':0.0,'count':0},'ie_oppose':{'amount':0.0,'count':0}})
+        for c in contribs:
+            if c.get('is_aggregate'): continue
+            if c['cycle'] in EXCLUDED_CYCLES: continue
+            if c.get('contribution_type')=='IE Committee Dues Transfer': continue
+            rc=comms.get(c['committee_id'])
+            if not (rc and rc.get('candidate_id')): continue
+            eb=slot(rc['candidate_id'],c.get('date'))
+            if eb is None: continue
+            dv=donors.get(c.get('donor_id'))
+            ck=_name_key(cands[rc['candidate_id']].get('name'))
+            is_self=bool(dv) and bool(ck) and _name_key(dv.get('name'))==ck
+            stream='self_funding' if is_self else 'contributions'
+            eb[stream]['amount']=rnd(eb[stream]['amount']+(c.get('amount') or 0.0)); eb[stream]['count']+=1
+        for ie in ies:
+            if ie.get('cycle') in EXCLUDED_CYCLES: continue
+            tc=ie.get('target_candidate_id')
+            if not tc: continue
+            eb=slot(tc,ie.get('date'))
+            if eb is None: continue
+            stream='ie_support' if ie.get('stance')=='support' else 'ie_oppose'
+            eb[stream]['amount']=rnd(eb[stream]['amount']+(ie.get('amount') or 0.0)); eb[stream]['count']+=1
+
     for pid,r in by_parent.items():
         r['committees']=len(pcom.get(pid,()))
     d.setdefault('rollups',{})
@@ -87,13 +160,15 @@ def build(d):
     if election_mode:
         d['rollups']['by_candidate']=by_candidate
         d['rollups']['by_race']=by_race
+        d['rollups']['by_candidate_election']=by_candidate_election
     # build_rollups runs last in both the build_all derived step and ingest_ie, so
     # this is the single place that always fires on a (re)build. Stamp real build
     # time — the field was previously static and falsely read as "stale".
     d['generated_at']=datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
     return {'by_parent':len(by_parent),'by_industry':len(by_industry),
             'by_alder':len(by_alder),'ies':len(ies),
-            'by_candidate':len(by_candidate),'by_race':len(by_race)}
+            'by_candidate':len(by_candidate),'by_race':len(by_race),
+            'by_candidate_election':len(by_candidate_election)}
 
 if __name__=='__main__':
     SRC=sys.argv[1] if len(sys.argv)>1 else 'council-data.json'; OUT=sys.argv[2] if len(sys.argv)>2 else SRC

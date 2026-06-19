@@ -1,0 +1,7 @@
+{
+  "_doc": "Per-office-type election windows for school-board (and later municipal) race views. A finance row (contribution or IE) is bucketed to an election by its FILING DATE falling in [start, end] inclusive; start:null means open-ended into the past. The SBE 'cycle' field is the useless 4-year bucket (Diagnostic B) and is NOT used here -- bucket by date only. Ordered most-recent-last within each office_type. Extensible: add a 'municipal' key with its own ordered list when that calendar fills in.",
+  "school_board": [
+    {"id": "2024", "start": null, "end": "2024-12-31", "label": "2024"},
+    {"id": "2026", "start": "2025-01-01", "end": "2026-12-31", "label": "2026"}
+  ]
+}

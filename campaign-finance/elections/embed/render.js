@@ -188,6 +188,9 @@
       '.ipg-elect .selfline{font-size:12px;color:var(--coral);margin:11px 0 0;padding-left:182px;}' +
       '.ipg-elect .selfline b{font-weight:500;}' +
       '.ipg-elect .caption{font-size:11.5px;color:var(--ink-soft);margin:14px 0 0;padding-top:13px;border-top:1px solid var(--line);}' +
+      '.ipg-elect .elec-block{margin:0 0 10px;}' +
+      '.ipg-elect .elec-block-h{font-family:var(--display);font-weight:600;font-size:18px;color:var(--teal);margin:0 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line);}' +
+      '.ipg-elect .elec-divider{height:0;border-top:1px dashed var(--line);margin:22px 0;}' +
       '.ipg-elect .soon{text-align:center;padding:54px 24px;background:var(--paper);border:1px dashed var(--line);border-radius:var(--r);color:var(--ink-soft);}' +
       '.ipg-elect .soon h2{font-family:var(--display);font-weight:600;color:var(--ink);font-size:22px;margin:0 0 8px;}' +
       '.ipg-elect .soon p{margin:0 auto;max-width:46ch;font-size:14px;}' +
@@ -436,6 +439,79 @@
       '<p class="committee">Finance data still populating — committee not yet identified.</p></article>';
   }
 
+  // ---- This / Last / All-Elections toggle (vm = data.viewModels.raceElections) ----
+  // Pure: `active` selects which view to emit — an election id ("this"/last) or
+  // "all". Each view shows the FOUR streams as SEPARATE bars (contributions,
+  // self-funding, independent support, independent opposition), NEVER summed.
+  // "All elections" emits each election as its OWN segmented block under its own
+  // (boundary-specific) label — never merged into one cross-election total.
+  function elecScale(vm) {
+    var s = 1, i, e;
+    for (i = 0; i < vm.candidates.length; i++) {
+      var be = vm.candidates[i].byElection;
+      for (e in be) {
+        if (!be.hasOwnProperty(e)) continue;
+        var f = be[e].figures; if (!f) continue;
+        s = Math.max(s, f.contributions, f.selfFunding, f.independentSupport, f.independentOpposition);
+      }
+    }
+    return s;
+  }
+  function elecFourBars(f, scale) {
+    if (!f) return '<p class="contrib-note">No money reported for this election.</p>';
+    return '<div class="bars">' +
+      bar('From contributors', [{ cls: 'third', v: f.contributions }],
+        f.contributionsCount ? plural(f.contributionsCount, 'contribution', 'contributions') : '', scale) +
+      bar('Candidate self-funding', [{ cls: 'self', v: f.selfFunding }],
+        f.selfFundingCount ? plural(f.selfFundingCount, 'gift or loan', 'gifts or loans') : '', scale) +
+      bar('Independent support', [{ cls: 'support', v: f.independentSupport }],
+        f.independentSupportCount ? plural(f.independentSupportCount, 'expenditure', 'expenditures') : '', scale) +
+      bar('Independent opposition', [{ cls: 'oppose', v: f.independentOpposition }],
+        f.independentOppositionCount ? plural(f.independentOppositionCount, 'expenditure', 'expenditures') : '', scale) +
+      '</div>';
+  }
+  function elecCandBlock(c, eid, scale) {
+    var ev = c.byElection[eid] || { label: eid, figures: null };
+    return '<article class="card" id="elec-' + esc(c.slug) + '-' + esc(eid) + '">' +
+      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' +
+      (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') +
+      '<span class="race-meta">· ' + esc(ev.label) + '</span></div>' +
+      elecFourBars(ev.figures, scale) + '</article>';
+  }
+  function elecBlockLabel(vm, eid) {
+    for (var i = 0; i < vm.candidates.length; i++) {
+      var ev = vm.candidates[i].byElection[eid];
+      if (ev && ev.label) return ev.label;
+    }
+    return eid;
+  }
+  function renderRaceElections(vm, active) {
+    if (!vm || !vm.toggles.length) return '';
+    active = active || vm.toggles[0].id;     // default = "this" (current) election
+    var scale = elecScale(vm);
+    var tabs = vm.toggles.map(function (t) {
+      return '<button class="subtab" role="tab" data-electionview="' + esc(t.id) + '" aria-selected="' +
+        (active === t.id) + '">' + esc(t.label) + '</button>';
+    }).join('') +
+      '<button class="subtab" role="tab" data-electionview="all" aria-selected="' + (active === 'all') + '">All elections</button>';
+    var nav = '<div class="subnav" role="tablist" aria-label="Election">' + tabs + '</div>';
+    var note = '<p class="contrib-note">Money is bucketed by filing date to each election. The four figures — ' +
+      'contributions, candidate self-funding, independent support, and independent opposition — are shown ' +
+      '<b>separately and never added together</b>. “All elections” shows each election as its own block under its ' +
+      'redrawn district boundaries, not a single cross-election total.</p>';
+    var body;
+    if (active === 'all') {
+      body = vm.electionIds.map(function (eid) {
+        return '<section class="elec-block"><h3 class="elec-block-h">' + esc(elecBlockLabel(vm, eid)) + '</h3>' +
+          vm.candidates.map(function (c) { return elecCandBlock(c, eid, scale); }).join('') + '</section>';
+      }).join('<div class="elec-divider" aria-hidden="true"></div>');
+    } else {
+      body = vm.candidates.map(function (c) { return elecCandBlock(c, active, scale); }).join('');
+    }
+    return '<div class="elections" data-race="' + esc(vm.race.slug) + '">' + nav + note + legend() +
+      '<div style="height:14px"></div>' + body + '</div>';
+  }
+
   // Race view: head + vacating-incumbent note(s) + legend + candidate cards
   // (neutral order from the data layer; the three figures never summed).
   function renderRaceView(vm) {
@@ -448,6 +524,10 @@
       (vm.cycle ? ' · cycle ' + esc(vm.cycle) : ' · all years');
     var head = '<div class="race-head"><h2>' + esc(vm.race.label) + '</h2>' +
       '<span class="race-meta">' + meta + '</span></div>' + vac;
+
+    // Races wired for the per-election toggle (sb-d06 this halt) render the
+    // This/Last/All view instead of the single all-years cards.
+    if (vm.elections) return head + renderRaceElections(vm.elections);
 
     if (!vm.candidates.length) {
       return head + '<div class="soon"><h2>Field forming</h2>' +
@@ -645,7 +725,7 @@
   return {
     styles: styles,
     masthead: masthead, footer: footer,
-    renderOfficeNav: renderOfficeNav, renderRaceView: renderRaceView,
+    renderOfficeNav: renderOfficeNav, renderRaceView: renderRaceView, renderRaceElections: renderRaceElections,
     renderComingSoon: renderComingSoon, spendPlaceholder: spendPlaceholder, renderSpend: renderSpend,
     renderFunderModal: renderFunderModal, renderCommitteeProfile: renderCommitteeProfile,
     donorRow: donorRow, contributorPanel: contributorPanel, iePanel: iePanel,

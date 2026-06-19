@@ -762,6 +762,7 @@
       "name": "Jessica Biggs",
       "committee_id": "39881",
       "status": "filed",
+      "prior_election": null,
       "incumbent": false,
       "vacating_for": null,
       "bio": {},
@@ -773,6 +774,7 @@
       "name": "Jennifer Custer",
       "committee_id": "39805",
       "status": "filed",
+      "prior_election": null,
       "incumbent": false,
       "vacating_for": null,
       "bio": {},
@@ -784,6 +786,7 @@
       "name": "Sendhil Revuluri",
       "committee_id": "40912",
       "status": "filed",
+      "prior_election": null,
       "incumbent": false,
       "vacating_for": null,
       "bio": {},
@@ -795,6 +798,7 @@
       "name": "Victor Henderson",
       "committee_id": "41112",
       "status": "filed",
+      "prior_election": null,
       "incumbent": false,
       "vacating_for": null,
       "bio": {},
@@ -806,6 +810,7 @@
       "name": "Ed Bannon",
       "committee_id": "38810",
       "status": "filed",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
@@ -817,6 +822,7 @@
       "name": "Claudia Peralta",
       "committee_id": "41087",
       "status": "filed",
+      "prior_election": null,
       "incumbent": false,
       "vacating_for": null,
       "bio": {},
@@ -828,6 +834,7 @@
       "name": "Michelle Pierre",
       "committee_id": "39783",
       "status": "filed",
+      "prior_election": null,
       "incumbent": false,
       "vacating_for": null,
       "bio": {},
@@ -839,6 +846,7 @@
       "name": "Ebony DeBerry",
       "committee_id": "39821",
       "status": "filed",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
@@ -850,6 +858,7 @@
       "name": "Bruce Leon",
       "committee_id": "39903",
       "status": "filed",
+      "prior_election": null,
       "incumbent": false,
       "vacating_for": null,
       "bio": {},
@@ -861,6 +870,7 @@
       "name": "Daniel Basco",
       "committee_id": "41211",
       "status": "filed",
+      "prior_election": null,
       "incumbent": false,
       "vacating_for": null,
       "bio": {},
@@ -872,6 +882,7 @@
       "name": "Deborah \"Debby\" Pope",
       "committee_id": "39834",
       "status": "filed",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
@@ -883,6 +894,7 @@
       "name": "Peter Gonzales",
       "committee_id": "41125",
       "status": "filed",
+      "prior_election": null,
       "incumbent": false,
       "vacating_for": null,
       "bio": {},
@@ -894,6 +906,7 @@
       "name": "Norma Rios Sierra",
       "committee_id": "41082",
       "status": "filed",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
@@ -902,9 +915,13 @@
     {
       "id": "dones-sb-d06",
       "race_id": "sb-d06",
-      "name": "Jason Dónes",
+      "name": "Jason D\u00f3nes",
       "committee_id": "39820",
       "status": "filed",
+      "prior_election": {
+        "election": "2024",
+        "label": "2024: District 3"
+      },
       "incumbent": false,
       "vacating_for": null,
       "bio": {},
@@ -916,6 +933,10 @@
       "name": "Carlos A. Rivas Jr.",
       "committee_id": "39786",
       "status": "filed",
+      "prior_election": {
+        "election": "2024",
+        "label": "2024: District 3"
+      },
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
@@ -927,6 +948,7 @@
       "name": "Elen Sherratt",
       "committee_id": "41076",
       "status": "filed",
+      "prior_election": null,
       "incumbent": false,
       "vacating_for": null,
       "bio": {},
@@ -938,6 +960,7 @@
       "name": "Karen Zaccor",
       "committee_id": "39866",
       "status": "filed",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
@@ -949,6 +972,7 @@
       "name": "Ellen Rosenfeld",
       "committee_id": "39858",
       "status": "filed",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
@@ -960,6 +984,7 @@
       "name": "Aaron \"Jitu\" Brown",
       "committee_id": "39853",
       "status": "filed",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
@@ -971,6 +996,7 @@
       "name": "Daniel La Spata",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -993,6 +1019,7 @@
       "name": "Brian Hopkins",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1015,6 +1042,7 @@
       "name": "Pat Dowell",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1037,6 +1065,7 @@
       "name": "Lamont J. Robinson",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1057,6 +1086,7 @@
       "name": "Desmon C. Yancy",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1077,6 +1107,7 @@
       "name": "William E. Hall",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1097,6 +1128,7 @@
       "name": "Gregory I. Mitchell",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1119,6 +1151,7 @@
       "name": "Michelle A. Harris",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1141,6 +1174,7 @@
       "name": "Anthony Beale",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1163,6 +1197,7 @@
       "name": "Peter Chico",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1183,6 +1218,7 @@
       "name": "Nicole T. Lee",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1203,6 +1239,7 @@
       "name": "Julia M. Ramirez",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1223,6 +1260,7 @@
       "name": "Marty Quinn",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1243,6 +1281,7 @@
       "name": "Jeylu B. Gutierrez",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1263,6 +1302,7 @@
       "name": "Raymond A. Lopez",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1285,6 +1325,7 @@
       "name": "Stephanie D. Coleman",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1307,6 +1348,7 @@
       "name": "David H. Moore",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1327,6 +1369,7 @@
       "name": "Derrick G. Curtis",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1347,6 +1390,7 @@
       "name": "Matthew J. O'Shea",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1369,6 +1413,7 @@
       "name": "Jeanette B. Taylor",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1389,6 +1434,7 @@
       "name": "Ronnie L. Mosley",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1409,6 +1455,7 @@
       "name": "Michael D. Rodriguez",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1429,6 +1476,7 @@
       "name": "Silvana Tabares",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1449,6 +1497,7 @@
       "name": "Monique L. Scott",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1469,6 +1518,7 @@
       "name": "Byron Sigcho-Lopez",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1491,6 +1541,7 @@
       "name": "Jessica L. Fuentes",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1511,6 +1562,7 @@
       "name": "Walter R. Burnett",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1533,6 +1585,7 @@
       "name": "Jason C. Ervin",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1555,6 +1608,7 @@
       "name": "Chris Taliaferro",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1577,6 +1631,7 @@
       "name": "Ruth Cruz",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1597,6 +1652,7 @@
       "name": "Felix Cardona, Jr.",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1617,6 +1673,7 @@
       "name": "Scott Waguespack",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1639,6 +1696,7 @@
       "name": "Rossana Rodriguez Sanchez",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1659,6 +1717,7 @@
       "name": "William Conway",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1679,6 +1738,7 @@
       "name": "Anthony J. Quezada",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1699,6 +1759,7 @@
       "name": "Gilbert Villegas",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1721,6 +1782,7 @@
       "name": "Emma Mitts",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1741,6 +1803,7 @@
       "name": "Nicholas Sposato",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1763,6 +1826,7 @@
       "name": "Samantha Nugent",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1783,6 +1847,7 @@
       "name": "Andre Vasquez, Jr.",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1805,6 +1870,7 @@
       "name": "Anthony V. Napolitano",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1827,6 +1893,7 @@
       "name": "Brendan Reilly",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1847,6 +1914,7 @@
       "name": "Timothy R. Knudsen",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1869,6 +1937,7 @@
       "name": "Bennett R. Lawson",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1889,6 +1958,7 @@
       "name": "James M. Gardiner",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1911,6 +1981,7 @@
       "name": "Angela Clay",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1931,6 +2002,7 @@
       "name": "Matthew J. Martin",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1953,6 +2025,7 @@
       "name": "Leni Manaa-Hoppenworth",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1975,6 +2048,7 @@
       "name": "Maria E. Hadden",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -1997,6 +2071,7 @@
       "name": "Debra L. Silverstein",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -2019,6 +2094,7 @@
       "name": "Jennifer Custer",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": "sb-president",
       "bio": {
@@ -2041,6 +2117,7 @@
       "name": "Michilla \"Kyla\" Blaise",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -2063,6 +2140,7 @@
       "name": "Anusha Thotakura",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -2085,6 +2163,7 @@
       "name": "Jessica Biggs",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": "sb-president",
       "bio": {
@@ -2107,6 +2186,7 @@
       "name": "Emma Lozano",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -2129,6 +2209,7 @@
       "name": "Yesenia Lopez",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -2151,6 +2232,7 @@
       "name": "Angel Gutierrez",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -2173,6 +2255,7 @@
       "name": "Cydney Wallace",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -2195,6 +2278,7 @@
       "name": "Frank Niles Thomas",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -2217,6 +2301,7 @@
       "name": "Therese Boyle",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -2239,6 +2324,7 @@
       "name": "Che \"Rhymefest\" Smith",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -2261,6 +2347,7 @@
       "name": "Olga Bautista",
       "committee_id": null,
       "status": "incumbent-pending",
+      "prior_election": null,
       "incumbent": true,
       "vacating_for": null,
       "bio": {
@@ -2283,6 +2370,7 @@
       "name": "Kyna Lenhof",
       "committee_id": null,
       "status": "filed",
+      "prior_election": null,
       "incumbent": false,
       "vacating_for": null,
       "bio": {
@@ -2296,6 +2384,7 @@
       "name": "Angel Alvarez",
       "committee_id": null,
       "status": "filed",
+      "prior_election": null,
       "incumbent": false,
       "vacating_for": null,
       "bio": {
@@ -2309,6 +2398,7 @@
       "name": "LaPamela Williams",
       "committee_id": null,
       "status": "filed",
+      "prior_election": null,
       "incumbent": false,
       "vacating_for": null,
       "bio": {
@@ -209092,6 +209182,679 @@
           }
         }
       }
+    },
+    "by_candidate_election": {
+      "bannon-sb-d01": {
+        "2024": {
+          "label": "2024",
+          "contributions": {
+            "amount": 14455.0,
+            "count": 27
+          },
+          "self_funding": {
+            "amount": 70539.82,
+            "count": 69
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        },
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "self_funding": {
+            "amount": 1073.45,
+            "count": 19
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "pierre-sb-d02": {
+        "2024": {
+          "label": "2024",
+          "contributions": {
+            "amount": 67491.15,
+            "count": 96
+          },
+          "self_funding": {
+            "amount": 1460.0,
+            "count": 2
+          },
+          "ie_support": {
+            "amount": 367780.99,
+            "count": 27
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        },
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 1500.0,
+            "count": 1
+          },
+          "self_funding": {
+            "amount": 900.0,
+            "count": 1
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "rivas-sb-d06": {
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 76283.88,
+            "count": 45
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        },
+        "2024": {
+          "label": "2024: District 3",
+          "contributions": {
+            "amount": 71991.23,
+            "count": 43
+          },
+          "self_funding": {
+            "amount": 500.0,
+            "count": 1
+          },
+          "ie_support": {
+            "amount": 98676.17,
+            "count": 17
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "custer-sb-president": {
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 101031.3,
+            "count": 50
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        },
+        "2024": {
+          "label": "2024",
+          "contributions": {
+            "amount": 217595.61,
+            "count": 124
+          },
+          "self_funding": {
+            "amount": 1000.0,
+            "count": 1
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "dones-sb-d06": {
+        "2024": {
+          "label": "2024: District 3",
+          "contributions": {
+            "amount": 462534.5,
+            "count": 156
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 35153.0,
+            "count": 1
+          }
+        },
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 171.88,
+            "count": 1
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "deberry-sb-d03": {
+        "2024": {
+          "label": "2024",
+          "contributions": {
+            "amount": 533360.46,
+            "count": 179
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 126078.0,
+            "count": 3
+          }
+        },
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 250.0,
+            "count": 1
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "pope-sb-d04": {
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 500.0,
+            "count": 1
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        },
+        "2024": {
+          "label": "2024",
+          "contributions": {
+            "amount": 1000.0,
+            "count": 2
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "brown-sb-d09": {
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 1400.0,
+            "count": 4
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        },
+        "2024": {
+          "label": "2024",
+          "contributions": {
+            "amount": 89427.49,
+            "count": 113
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "rosenfeld-sb-d08": {
+        "2024": {
+          "label": "2024",
+          "contributions": {
+            "amount": 227960.8,
+            "count": 180
+          },
+          "self_funding": {
+            "amount": 26900.0,
+            "count": 2
+          },
+          "ie_support": {
+            "amount": 146025.64,
+            "count": 11
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        },
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 103514.93,
+            "count": 68
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "zaccor-sb-d07": {
+        "2024": {
+          "label": "2024",
+          "contributions": {
+            "amount": 492236.85,
+            "count": 164
+          },
+          "self_funding": {
+            "amount": 6867.54,
+            "count": 6
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 173817.0,
+            "count": 4
+          }
+        },
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 6650.0,
+            "count": 6
+          },
+          "self_funding": {
+            "amount": 4777.78,
+            "count": 5
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "biggs-sb-president": {
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 99634.34,
+            "count": 58
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        },
+        "2024": {
+          "label": "2024",
+          "contributions": {
+            "amount": 73748.5,
+            "count": 71
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "leon-sb-d03": {
+        "2024": {
+          "label": "2024",
+          "contributions": {
+            "amount": 378.0,
+            "count": 1
+          },
+          "self_funding": {
+            "amount": 620000.0,
+            "count": 5
+          },
+          "ie_support": {
+            "amount": 24765.93,
+            "count": 5
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "revuluri-sb-president": {
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 214084.0,
+            "count": 131
+          },
+          "self_funding": {
+            "amount": 68000.0,
+            "count": 1
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "sherratt-sb-d07": {
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 31100.0,
+            "count": 11
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "rios-sierra-sb-d05": {
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 57.0,
+            "count": 1
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "peralta-sb-d02": {
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 15300.0,
+            "count": 13
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "henderson-sb-president": {
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 60900.0,
+            "count": 40
+          },
+          "self_funding": {
+            "amount": 30000.0,
+            "count": 2
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "gonzales-sb-d05": {
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 10500.0,
+            "count": 3
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "basco-sb-d04": {
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "self_funding": {
+            "amount": 6500.0,
+            "count": 1
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "inc-sb-d15": {
+        "2024": {
+          "label": "2024",
+          "contributions": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 317052.51,
+            "count": 25
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "inc-sb-d14": {
+        "2024": {
+          "label": "2024",
+          "contributions": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 24632.0,
+            "count": 1
+          }
+        }
+      },
+      "inc-sb-d11": {
+        "2024": {
+          "label": "2024",
+          "contributions": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 41537.0,
+            "count": 1
+          }
+        }
+      }
     }
   },
   "industry_tags": {
@@ -209224,7 +209987,7 @@
       "color": "#5a6a7a"
     }
   },
-  "seed_generated_at": "2026-06-18T17:55:58",
+  "seed_generated_at": "2026-06-18T22:37:52",
   "cycles": {
     "2015": {
       "label": "2011 \u2013 2015 cycle",
@@ -209251,7 +210014,7 @@
       "election_date": "2027-02-23"
     }
   },
-  "generated_at": "2026-06-18T23:21:32Z",
+  "generated_at": "2026-06-19T03:37:53Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "current_cycle": "2027",
   "default_cycle": "all",

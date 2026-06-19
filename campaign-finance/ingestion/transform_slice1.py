@@ -29,6 +29,7 @@ for cid,cl in d.get('donor_clusters',{}).items():
         for k in roles:
             if k not in ordered:
                 ordered[k]=roles[k]
+        # roles ordered canonically by the members list (NOT donors-dict order) so serialization is stable for the clean-diff gate -- do not revert to dict iteration (583b545)
         cl['canonical_id']=cl2p[cid]; cl['roles']=ordered; nca+=1
 log(f'[1b] canonical_id+roles on {nca} clusters')
 

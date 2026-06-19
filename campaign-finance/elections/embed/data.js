@@ -213,6 +213,7 @@
 
     return {
       races: races, candidates: candidates, committees: committees, donors: donors,
+      rollups: json.rollups || {},
       raceById: raceById, candidateById: candidateById, candidatesByRace: candidatesByRace,
       candByCommittee: candByCommittee, committeeKeyByCandidate: committeeKeyByCandidate,
       directByCandidate: directByCandidate, ieByCandidate: ieByCandidate, iesBySpender: iesBySpender,
@@ -468,6 +469,51 @@
     return false;
   }
 
+  // ---- This / Last / All-Elections toggle (per-candidate buckets) ----
+  // Reads the precomputed rollups.by_candidate_election (built globally in
+  // build_rollups, bucketed by FILING DATE). sb-d06 only this halt — widen
+  // TOGGLE_RACES as other races acquire prior_election data.
+  var TOGGLE_RACES = { 'sb-d06': 1 };
+
+  // Map one by_candidate_election bucket to the FOUR SEPARATE streams the render
+  // bars consume. contributions (third-party) and self_funding are kept distinct;
+  // nothing is summed across the four streams.
+  function bucketFigures(bk) {
+    return {
+      contributions: round2(bk.contributions.amount), contributionsCount: bk.contributions.count,
+      selfFunding: round2(bk.self_funding.amount), selfFundingCount: bk.self_funding.count,
+      independentSupport: round2(bk.ie_support.amount), independentSupportCount: bk.ie_support.count,
+      independentOpposition: round2(bk.ie_oppose.amount), independentOppositionCount: bk.ie_oppose.count
+    };
+  }
+
+  function raceElections(index, raceId) {
+    var race = index.raceById[raceId];
+    if (!race) return null;
+    var bce = (index.rollups && index.rollups.by_candidate_election) || {};
+    var cands = (index.candidatesByRace[raceId] || []).slice()
+      .filter(function (c) { return !c.vacating_for; }).sort(byNameNeutral);
+    var idset = {};
+    cands.forEach(function (c) { var b = bce[c.id]; if (b) for (var e in b) if (b.hasOwnProperty(e)) idset[e] = 1; });
+    var ids = Object.keys(idset).sort().reverse();   // newest first -> ["2026","2024"]
+    if (!ids.length) return null;
+    var toggles = ids.map(function (id, i) {
+      return { id: id, role: i === 0 ? 'this' : 'prior',
+               label: (i === 0 ? 'This election' : 'Last election') + ' (' + id + ')' };
+    });
+    var candidates = cands.map(function (c) {
+      var b = bce[c.id] || {}, byElection = {};
+      ids.forEach(function (id) {
+        var bk = b[id];
+        byElection[id] = bk ? { label: bk.label || id, figures: bucketFigures(bk) }
+                            : { label: id, figures: null };
+      });
+      return { id: c.id, slug: candidateSlug(c, race), name: c.name, incumbent: !!c.incumbent, byElection: byElection };
+    });
+    return { race: { id: race.id, slug: raceSlug(race), label: race.label },
+             electionIds: ids, toggles: toggles, candidates: candidates };
+  }
+
   function raceView(index, raceId, cycle) {
     var race = index.raceById[raceId];
     if (!race) return null;
@@ -490,6 +536,7 @@
         hasFinance: hasAnyFinance(index, race.id), vacating: vacating
       },
       cycle: cycle || null,
+      elections: TOGGLE_RACES[raceId] ? raceElections(index, raceId) : null,
       candidates: active.map(function (c) {
         var hasFinance = !!c.committee_id;
         return {
@@ -722,6 +769,7 @@
     flagTotals: flagTotals, spendSubtab: spendSubtab,
     isSelfFunded: isSelfFunded,
     kebab: kebab, raceSlug: raceSlug, candidateSlug: candidateSlug, raceCode: raceCode,
-    viewModels: { raceBrowse: raceBrowse, raceView: raceView, officeRaces: officeRaces }
+    raceElections: raceElections,
+    viewModels: { raceBrowse: raceBrowse, raceView: raceView, officeRaces: officeRaces, raceElections: raceElections }
   };
 });
