@@ -107,8 +107,8 @@
       "status": "filed",
       "bio": {}
     },
-    "39820": {"candidate_id":"dones-sb-d06","name":"Jason Dones","race_id":"sb-d06","incumbent":false,"status":"filed","bio":{}},
-    "39786": {"candidate_id":"rivas-sb-d06","name":"Carlos Rivas Jr.","race_id":"sb-d06","incumbent":true,"status":"filed","bio":{}},
+    "39820": {"candidate_id":"dones-sb-d06","name":"Jason Dónes","race_id":"sb-d06","incumbent":false,"status":"filed","bio":{}},
+    "39786": {"candidate_id":"rivas-sb-d06","name":"Carlos A. Rivas Jr.","race_id":"sb-d06","incumbent":true,"status":"filed","bio":{}},
     "41076": {"candidate_id":"sherratt-sb-d07","name":"Elen Sherratt","race_id":"sb-d07","incumbent":false,"status":"filed","bio":{}},
     "39866": {"candidate_id":"zaccor-sb-d07","name":"Karen Zaccor","race_id":"sb-d07","incumbent":true,"status":"filed","bio":{}},
     "39858": {"candidate_id":"rosenfeld-sb-d08","name":"Ellen Rosenfeld","race_id":"sb-d08","incumbent":true,"status":"filed","bio":{}},
