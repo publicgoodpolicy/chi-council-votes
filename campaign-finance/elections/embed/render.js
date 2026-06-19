@@ -457,6 +457,9 @@
     }
     return s;
   }
+  function elecHasMoney(f) {
+    return !!f && (f.contributions > 0 || f.selfFunding > 0 || f.independentSupport > 0 || f.independentOpposition > 0);
+  }
   function elecFourBars(f, scale) {
     if (!f) return '<p class="contrib-note">No money reported for this election.</p>';
     return '<div class="bars">' +
@@ -470,25 +473,55 @@
         f.independentOppositionCount ? plural(f.independentOppositionCount, 'expenditure', 'expenditures') : '', scale) +
       '</div>';
   }
-  function elecCandBlock(c, eid, scale) {
+  // State machine for a candidate's header in a given election. For the prior (Last)
+  // election: (i) prior_election present -> its own label (split-origin safe, never a
+  // 2026 subdistrict id); (ii) no prior_election but 2024 money present -> "did not
+  // run" transparency framing; (iii) no prior + no money -> generic label, empty bars.
+  function elecHeader(c, eid, role) {
     var ev = c.byElection[eid] || { label: eid, figures: null };
+    if (role === 'prior') {
+      if (c.priorElection && c.priorElection.label) return { header: c.priorElection.label, subnote: '' };
+      if (elecHasMoney(ev.figures)) {
+        return { header: eid + ' (did not run)',
+          subnote: 'Committee activity from ' + eid + ', before their appointment — shown for transparency, not a ' + eid + ' candidacy.' };
+      }
+    }
+    return { header: ev.label || eid, subnote: '' };
+  }
+  function elecCandBlock(c, eid, role, scale) {
+    var ev = c.byElection[eid] || { label: eid, figures: null };
+    var h = elecHeader(c, eid, role);
     return '<article class="card" id="elec-' + esc(c.slug) + '-' + esc(eid) + '">' +
       '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' +
       (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') +
-      '<span class="race-meta">· ' + esc(ev.label) + '</span></div>' +
+      '<span class="race-meta">· ' + esc(h.header) + '</span></div>' +
+      (h.subnote ? '<p class="contrib-note">' + esc(h.subnote) + '</p>' : '') +
       elecFourBars(ev.figures, scale) + '</article>';
   }
-  function elecBlockLabel(vm, eid) {
+  function elecAnyMoney(vm, eid) {
     for (var i = 0; i < vm.candidates.length; i++) {
       var ev = vm.candidates[i].byElection[eid];
-      if (ev && ev.label) return ev.label;
+      if (ev && elecHasMoney(ev.figures)) return true;
     }
-    return eid;
+    return false;
+  }
+  function elecUndatedSection(vm) {
+    var rows = vm.candidates.filter(function (c) { return c.undated && c.undated.amount > 0; });
+    if (!rows.length) return '';
+    return '<div class="elec-divider" aria-hidden="true"></div>' +
+      '<section class="elec-block undated"><h3 class="elec-block-h">Undated small-dollar</h3>' +
+      '<p class="contrib-note">Small-dollar (under $150) donors are disclosed only in aggregate and carry no filing ' +
+      'date, so they sit outside both election segments.</p>' +
+      rows.map(function (c) {
+        return '<div class="srow"><div class="sname">' + esc(c.name) +
+          '<div class="figrow"><span class="mini c">' + money(c.undated.amount) + ' small-dollar</span></div></div></div>';
+      }).join('') + '</section>';
   }
   function renderRaceElections(vm, active) {
     if (!vm || !vm.toggles.length) return '';
     active = active || vm.toggles[0].id;     // default = "this" (current) election
     var scale = elecScale(vm);
+    var roleOf = {}; vm.toggles.forEach(function (t) { roleOf[t.id] = t.role; });
     var tabs = vm.toggles.map(function (t) {
       return '<button class="subtab" role="tab" data-electionview="' + esc(t.id) + '" aria-selected="' +
         (active === t.id) + '">' + esc(t.label) + '</button>';
@@ -501,12 +534,16 @@
       'redrawn district boundaries, not a single cross-election total.</p>';
     var body;
     if (active === 'all') {
-      body = vm.electionIds.map(function (eid) {
-        return '<section class="elec-block"><h3 class="elec-block-h">' + esc(elecBlockLabel(vm, eid)) + '</h3>' +
-          vm.candidates.map(function (c) { return elecCandBlock(c, eid, scale); }).join('') + '</section>';
-      }).join('<div class="elec-divider" aria-hidden="true"></div>');
+      var blocks = vm.toggles.map(function (t) {
+        // The current ("this") election always shows; a prior election block is shown
+        // only if some candidate has money there (else "All elections" = 2026 only).
+        if (t.role !== 'this' && !elecAnyMoney(vm, t.id)) return '';
+        return '<section class="elec-block"><h3 class="elec-block-h">' + esc(t.label) + '</h3>' +
+          vm.candidates.map(function (c) { return elecCandBlock(c, t.id, t.role, scale); }).join('') + '</section>';
+      }).filter(Boolean).join('<div class="elec-divider" aria-hidden="true"></div>');
+      body = blocks + elecUndatedSection(vm);
     } else {
-      body = vm.candidates.map(function (c) { return elecCandBlock(c, active, scale); }).join('');
+      body = vm.candidates.map(function (c) { return elecCandBlock(c, active, roleOf[active], scale); }).join('');
     }
     return '<div class="elections" data-race="' + esc(vm.race.slug) + '">' + nav + note + legend() +
       '<div style="height:14px"></div>' + body + '</div>';
@@ -525,8 +562,9 @@
     var head = '<div class="race-head"><h2>' + esc(vm.race.label) + '</h2>' +
       '<span class="race-meta">' + meta + '</span></div>' + vac;
 
-    // Races wired for the per-election toggle (sb-d06 this halt) render the
-    // This/Last/All view instead of the single all-years cards.
+    // Races wired for the per-election toggle (the loaded sb-d04..sb-d09 cohort,
+    // gated in data.js TOGGLE_RACES) render the This/Last/All view instead of the
+    // single all-years cards.
     if (vm.elections) return head + renderRaceElections(vm.elections);
 
     if (!vm.candidates.length) {

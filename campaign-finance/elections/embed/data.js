@@ -471,9 +471,13 @@
 
   // ---- This / Last / All-Elections toggle (per-candidate buckets) ----
   // Reads the precomputed rollups.by_candidate_election (built globally in
-  // build_rollups, bucketed by FILING DATE). sb-d06 only this halt — widen
-  // TOGGLE_RACES as other races acquire prior_election data.
-  var TOGGLE_RACES = { 'sb-d06': 1 };
+  // build_rollups, bucketed by FILING DATE). Scoped to the loaded 2024-cohort
+  // races (sb-d04..sb-d09): their candidates' 2024 status is verified (returning
+  // incumbents carry prior_election; appointees/challengers are confirmed 2024
+  // non-candidates). Other SB races (e.g. sb-d03 Leon) have 2024 returners that
+  // still LACK prior_election and would mislabel as "did not run", so they stay on
+  // the all-years view until verified. Widen this set as cohorts are verified.
+  var TOGGLE_RACES = { 'sb-d04': 1, 'sb-d05': 1, 'sb-d06': 1, 'sb-d07': 1, 'sb-d08': 1, 'sb-d09': 1 };
 
   // Map one by_candidate_election bucket to the FOUR SEPARATE streams the render
   // bars consume. contributions (third-party) and self_funding are kept distinct;
@@ -487,14 +491,32 @@
     };
   }
 
+  // Dateless small-dollar aggregate for a candidate (the _small-dollar-donors rows):
+  // these carry no filing date so they bucket to NO election; surfaced separately in
+  // the All-Elections view so 2024 + 2026 + undated reconciles to the all-years total.
+  function undatedSmallDollar(index, candId) {
+    var rows = index.directByCandidate[candId] || [], amt = 0, n = 0;
+    for (var i = 0; i < rows.length; i++) {
+      var c = rows[i];
+      if (EXCLUDED_CYCLES[c.cycle] || c.contribution_type === DUES_TYPE) continue;
+      if (c.date) continue;          // dated rows bucket to an election
+      amt += c.amount || 0; n++;
+    }
+    return { amount: round2(amt), count: n };
+  }
+
   function raceElections(index, raceId) {
     var race = index.raceById[raceId];
     if (!race) return null;
     var bce = (index.rollups && index.rollups.by_candidate_election) || {};
     var cands = (index.candidatesByRace[raceId] || []).slice()
       .filter(function (c) { return !c.vacating_for; }).sort(byNameNeutral);
+    if (!cands.length) return null;
+    // Full election set for the office = union of all bucket keys across all candidates
+    // (NOT just this race), so a race whose candidates only have 2026 money (e.g.
+    // sb-d05) still renders an empty "Last election (2024)" tab.
     var idset = {};
-    cands.forEach(function (c) { var b = bce[c.id]; if (b) for (var e in b) if (b.hasOwnProperty(e)) idset[e] = 1; });
+    for (var cc in bce) { if (!bce.hasOwnProperty(cc)) continue; for (var e in bce[cc]) if (bce[cc].hasOwnProperty(e)) idset[e] = 1; }
     var ids = Object.keys(idset).sort().reverse();   // newest first -> ["2026","2024"]
     if (!ids.length) return null;
     var toggles = ids.map(function (id, i) {
@@ -508,7 +530,8 @@
         byElection[id] = bk ? { label: bk.label || id, figures: bucketFigures(bk) }
                             : { label: id, figures: null };
       });
-      return { id: c.id, slug: candidateSlug(c, race), name: c.name, incumbent: !!c.incumbent, byElection: byElection };
+      return { id: c.id, slug: candidateSlug(c, race), name: c.name, incumbent: !!c.incumbent,
+               priorElection: c.prior_election || null, undated: undatedSmallDollar(index, c.id), byElection: byElection };
     });
     return { race: { id: race.id, slug: raceSlug(race), label: race.label },
              electionIds: ids, toggles: toggles, candidates: candidates };

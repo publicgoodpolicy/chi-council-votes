@@ -70,7 +70,8 @@ ok('All view selects all tab', /data-electionview="all" aria-selected="true"/.te
 ok('Last view shows $35,153 (oppose Dones)', allHtml.indexOf('$35,153') >= 0 && lastHtml.indexOf('$35,153') >= 0);
 ok('Last view shows $98,676 (support Rivas)', lastHtml.indexOf('$98,676') >= 0);
 ok('Last view labels "2024: District 3"', lastHtml.indexOf('2024: District 3') >= 0);
-ok('All view = two segmented blocks (2 elec-block-h)', (allHtml.match(/elec-block-h/g) || []).length === 2);
+ok('All view = two segmented election blocks (2026 + 2024 headers)',
+  allHtml.indexOf('elec-block-h">This election (2026)') >= 0 && allHtml.indexOf('elec-block-h">Last election (2024)') >= 0);
 ok('All view is segmented, not merged (has divider)', /elec-divider/.test(allHtml));
 ok('four separate stream bars present', /From contributors/.test(lastHtml) && /Candidate self-funding/.test(lastHtml) &&
   /Independent support/.test(lastHtml) && /Independent opposition/.test(lastHtml));

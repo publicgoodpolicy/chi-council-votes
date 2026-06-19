@@ -13,11 +13,28 @@ WINDOWS_PATH=os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','elect
 def _office_type(office):
     return 'school_board' if office and office.startswith('school_board') else None
 
+_NAME_DROP={'jr','sr','ii','iii','iv','mr','mrs','ms','dr'}
 def _name_key(n):
     if not n: return frozenset()
     n=unicodedata.normalize('NFKD',n).encode('ascii','ignore').decode().lower()
-    drop={'jr','sr','ii','iii','iv','mr','mrs','ms','dr'}
-    return frozenset(t for t in re.findall(r'[a-z]+',n) if t not in drop and len(t)>1)
+    return frozenset(t for t in re.findall(r'[a-z]+',n) if t not in _NAME_DROP and len(t)>1)
+
+def _split_name(n):
+    """(surname-tokens, given-tokens). Donor names are stored 'Last, First'; candidate
+    names 'First [M.] Last [Suffix]'. With a comma, family=pre-comma; else family=last
+    non-suffix token. Used for the committee-scoped self-funding match (surname + given
+    subset), which is robust to nickname/middle-name drift (e.g. 'Deborah "Debby" Pope'
+    vs donor 'Pope, Debby')."""
+    if not n: return frozenset(), frozenset()
+    n=unicodedata.normalize('NFKD',n).encode('ascii','ignore').decode().lower()
+    if ',' in n:
+        fam_s,_,giv_s=n.partition(',')
+        fam=frozenset(t for t in re.findall(r'[a-z]+',fam_s) if t not in _NAME_DROP and len(t)>1)
+        giv=frozenset(t for t in re.findall(r'[a-z]+',giv_s) if t not in _NAME_DROP and len(t)>1)
+    else:
+        toks=[t for t in re.findall(r'[a-z]+',n) if t not in _NAME_DROP and len(t)>1]
+        fam=frozenset(toks[-1:]); giv=frozenset(toks[:-1])
+    return fam,giv
 
 def _bucket(date,wins):
     if not date: return None
@@ -138,8 +155,13 @@ def build(d):
             eb=slot(rc['candidate_id'],c.get('date'))
             if eb is None: continue
             dv=donors.get(c.get('donor_id'))
-            ck=_name_key(cands[rc['candidate_id']].get('name'))
-            is_self=bool(dv) and bool(ck) and _name_key(dv.get('name'))==ck
+            ctoks=_name_key(cands[rc['candidate_id']].get('name'))
+            is_self=False
+            if dv and ctoks:
+                dfam,dgiv=_split_name(dv.get('name'))
+                if dfam & ctoks:    # committee-scoped surname match (recipient is THIS candidate)
+                    if (dgiv and dgiv<=ctoks) or c.get('contribution_type')=='Loan Received':
+                        is_self=True
             stream='self_funding' if is_self else 'contributions'
             eb[stream]['amount']=rnd(eb[stream]['amount']+(c.get('amount') or 0.0)); eb[stream]['count']+=1
         for ie in ies:

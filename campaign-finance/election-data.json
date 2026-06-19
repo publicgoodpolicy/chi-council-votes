@@ -960,7 +960,10 @@
       "name": "Karen Zaccor",
       "committee_id": "39866",
       "status": "filed",
-      "prior_election": null,
+      "prior_election": {
+        "election": "2024",
+        "label": "2024: District 4"
+      },
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
@@ -972,7 +975,10 @@
       "name": "Ellen Rosenfeld",
       "committee_id": "39858",
       "status": "filed",
-      "prior_election": null,
+      "prior_election": {
+        "election": "2024",
+        "label": "2024: District 4"
+      },
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
@@ -984,7 +990,10 @@
       "name": "Aaron \"Jitu\" Brown",
       "committee_id": "39853",
       "status": "filed",
-      "prior_election": null,
+      "prior_election": {
+        "election": "2024",
+        "label": "2024: District 5"
+      },
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
@@ -209447,12 +209456,12 @@
         "2024": {
           "label": "2024",
           "contributions": {
-            "amount": 1000.0,
-            "count": 2
+            "amount": 500.0,
+            "count": 1
           },
           "self_funding": {
-            "amount": 0.0,
-            "count": 0
+            "amount": 500.0,
+            "count": 1
           },
           "ie_support": {
             "amount": 0.0,
@@ -209485,7 +209494,7 @@
           }
         },
         "2024": {
-          "label": "2024",
+          "label": "2024: District 5",
           "contributions": {
             "amount": 89427.49,
             "count": 113
@@ -209506,7 +209515,7 @@
       },
       "rosenfeld-sb-d08": {
         "2024": {
-          "label": "2024",
+          "label": "2024: District 4",
           "contributions": {
             "amount": 227960.8,
             "count": 180
@@ -209546,7 +209555,7 @@
       },
       "zaccor-sb-d07": {
         "2024": {
-          "label": "2024",
+          "label": "2024: District 4",
           "contributions": {
             "amount": 492236.85,
             "count": 164
@@ -209987,7 +209996,7 @@
       "color": "#5a6a7a"
     }
   },
-  "seed_generated_at": "2026-06-18T22:37:52",
+  "seed_generated_at": "2026-06-19T09:23:26",
   "cycles": {
     "2015": {
       "label": "2011 \u2013 2015 cycle",
@@ -210014,7 +210023,7 @@
       "election_date": "2027-02-23"
     }
   },
-  "generated_at": "2026-06-19T03:37:53Z",
+  "generated_at": "2026-06-19T14:23:27Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "current_cycle": "2027",
   "default_cycle": "all",
