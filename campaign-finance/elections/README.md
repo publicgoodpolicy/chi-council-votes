@@ -123,6 +123,15 @@ industry layer and pre-Sheet classification counts — so the step-5 internal
 `build_rollups` is intermediate only and is overwritten by step 7. (`sync_overrides`
 sets `parent_id` on clustered donors directly, so no slice1 re-run is needed.)
 
+**Regen chain for a seed-only change (no finance re-ingest).** When only the seed
+layer changes (e.g. a candidate display-name fix) and the diff against the committed
+artifact must stay clean, run `build_election_seed → transform_slice1 →
+transform_slice2 → build_rollups` (step 7). `build_rollups` is required, not optional:
+`transform_slice1`'s `[8] by_parent` is a lean intermediate (no `committees`/`members`
+fields, no IE `independent`) that `build_rollups` overwrites with the canonical
+rollup. Stopping after slice1/slice2 leaves that intermediate in place and produces a
+spurious ~6.5k-line `by_parent` diff that is not real drift.
+
 - **`transform_slice1`** self-parents donors on election data (no clusters →
   `parent_id = id` for every donor) and tolerates a zero-contribution seed.
 - **`transform_slice2`** carries an election-aware guard: no 50-candidate floor for

@@ -24,7 +24,12 @@ for v in donors.values():
 nca=0
 for cid,cl in d.get('donor_clusters',{}).items():
     if cid in cl2p:
-        cl['canonical_id']=cl2p[cid]; cl['roles']=roles_by_cluster.get(cid,{}); nca+=1
+        roles=roles_by_cluster.get(cid,{})
+        ordered={m: roles[m] for m in cl.get('members', []) if m in roles}
+        for k in roles:
+            if k not in ordered:
+                ordered[k]=roles[k]
+        cl['canonical_id']=cl2p[cid]; cl['roles']=ordered; nca+=1
 log(f'[1b] canonical_id+roles on {nca} clusters')
 
 # 3. current_cycle + default_cycle
