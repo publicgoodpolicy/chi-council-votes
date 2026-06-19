@@ -1000,6 +1000,61 @@
       "positions": null
     },
     {
+      "id": "blaise-sb-d10",
+      "race_id": "sb-d10",
+      "name": "Michilla \"Kyla\" Blaise",
+      "committee_id": "37001",
+      "status": "filed",
+      "prior_election": {
+        "election": "2024",
+        "label": "2024: District 5",
+        "qualifier": "Withdrew from the 2024 District 5 race; later appointed to the board."
+      },
+      "incumbent": true,
+      "vacating_for": null,
+      "bio": {},
+      "positions": null
+    },
+    {
+      "id": "thotakura-sb-d11",
+      "race_id": "sb-d11",
+      "name": "Anusha Thotakura",
+      "committee_id": "39855",
+      "status": "filed",
+      "prior_election": {
+        "election": "2024",
+        "label": "2024: District 6"
+      },
+      "incumbent": true,
+      "vacating_for": null,
+      "bio": {},
+      "positions": null
+    },
+    {
+      "id": "anderson-sb-d11",
+      "race_id": "sb-d11",
+      "name": "Brenda Lee Anderson",
+      "committee_id": "41131",
+      "status": "filed",
+      "prior_election": null,
+      "incumbent": false,
+      "vacating_for": null,
+      "bio": {},
+      "positions": null
+    },
+    {
+      "id": "kimble-sb-d12",
+      "race_id": "sb-d12",
+      "name": "Brittany B. Kimble",
+      "committee_id": "41134",
+      "status": "filed",
+      "prior_election": null,
+      "incumbent": false,
+      "vacating_for": null,
+      "bio": {},
+      "positions": null
+    },
+    {
       "id": "inc-ward-01",
       "race_id": "ward-01",
       "name": "Daniel La Spata",
@@ -2121,52 +2176,6 @@
       "positions": null
     },
     {
-      "id": "inc-sb-d10",
-      "race_id": "sb-d10",
-      "name": "Michilla \"Kyla\" Blaise",
-      "committee_id": null,
-      "status": "incumbent-pending",
-      "prior_election": null,
-      "incumbent": true,
-      "vacating_for": null,
-      "bio": {
-        "current_roles": [
-          "Chicago Board of Education, District 5b"
-        ],
-        "board_role": "Appointed",
-        "phone": "(773) 553-1600",
-        "email": "board@cps.edu",
-        "links": {
-          "office": "https://www.cpsboe.org/about/bios"
-        },
-        "source": "ipg-rep-finder REPS.school (current officeholder; candidacy not confirmed)"
-      },
-      "positions": null
-    },
-    {
-      "id": "inc-sb-d11",
-      "race_id": "sb-d11",
-      "name": "Anusha Thotakura",
-      "committee_id": null,
-      "status": "incumbent-pending",
-      "prior_election": null,
-      "incumbent": true,
-      "vacating_for": null,
-      "bio": {
-        "current_roles": [
-          "Chicago Board of Education, District 6a"
-        ],
-        "board_role": "Appointed",
-        "phone": "(773) 553-1600",
-        "email": "board@cps.edu",
-        "links": {
-          "office": "https://www.cpsboe.org/about/bios"
-        },
-        "source": "ipg-rep-finder REPS.school (current officeholder; candidacy not confirmed)"
-      },
-      "positions": null
-    },
-    {
       "id": "inc-sb-d12",
       "race_id": "sb-d12",
       "name": "Jessica Biggs",
@@ -2405,6 +2414,48 @@
       "id": "cand-williams-sb-d09",
       "race_id": "sb-d09",
       "name": "LaPamela Williams",
+      "committee_id": null,
+      "status": "filed",
+      "prior_election": null,
+      "incumbent": false,
+      "vacating_for": null,
+      "bio": {
+        "source": "filed candidate, committee pending"
+      },
+      "positions": null
+    },
+    {
+      "id": "cand-hargrove-sb-d10",
+      "race_id": "sb-d10",
+      "name": "Anthony Hargrove",
+      "committee_id": null,
+      "status": "filed",
+      "prior_election": null,
+      "incumbent": false,
+      "vacating_for": null,
+      "bio": {
+        "source": "filed candidate, committee pending"
+      },
+      "positions": null
+    },
+    {
+      "id": "cand-white-sb-d11",
+      "race_id": "sb-d11",
+      "name": "Isaiah White",
+      "committee_id": null,
+      "status": "filed",
+      "prior_election": null,
+      "incumbent": false,
+      "vacating_for": null,
+      "bio": {
+        "source": "filed candidate, committee pending"
+      },
+      "positions": null
+    },
+    {
+      "id": "cand-neal-sb-d12",
+      "race_id": "sb-d12",
+      "name": "Michael L. Neal",
       "committee_id": null,
       "status": "filed",
       "prior_election": null,
@@ -209842,27 +209893,6 @@
             "count": 1
           }
         }
-      },
-      "inc-sb-d11": {
-        "2024": {
-          "label": "2024",
-          "contributions": {
-            "amount": 0.0,
-            "count": 0
-          },
-          "self_funding": {
-            "amount": 0.0,
-            "count": 0
-          },
-          "ie_support": {
-            "amount": 0.0,
-            "count": 0
-          },
-          "ie_oppose": {
-            "amount": 41537.0,
-            "count": 1
-          }
-        }
       }
     }
   },
@@ -209996,7 +210026,7 @@
       "color": "#5a6a7a"
     }
   },
-  "seed_generated_at": "2026-06-19T09:23:26",
+  "seed_generated_at": "2026-06-19T13:19:08",
   "cycles": {
     "2015": {
       "label": "2011 \u2013 2015 cycle",
@@ -210023,7 +210053,7 @@
       "election_date": "2027-02-23"
     }
   },
-  "generated_at": "2026-06-19T14:23:27Z",
+  "generated_at": "2026-06-19T18:19:09Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "current_cycle": "2027",
   "default_cycle": "all",

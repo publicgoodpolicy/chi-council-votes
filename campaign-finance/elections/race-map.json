@@ -112,7 +112,11 @@
     "41076": {"candidate_id":"sherratt-sb-d07","name":"Elen Sherratt","race_id":"sb-d07","incumbent":false,"status":"filed","bio":{}},
     "39866": {"candidate_id":"zaccor-sb-d07","name":"Karen Zaccor","race_id":"sb-d07","incumbent":true,"status":"filed","prior_election":{"election":"2024","label":"2024: District 4"},"bio":{}},
     "39858": {"candidate_id":"rosenfeld-sb-d08","name":"Ellen Rosenfeld","race_id":"sb-d08","incumbent":true,"status":"filed","prior_election":{"election":"2024","label":"2024: District 4"},"bio":{}},
-    "39853": {"candidate_id":"brown-sb-d09","name":"Aaron \"Jitu\" Brown","race_id":"sb-d09","incumbent":true,"status":"filed","prior_election":{"election":"2024","label":"2024: District 5"},"bio":{}}
+    "39853": {"candidate_id":"brown-sb-d09","name":"Aaron \"Jitu\" Brown","race_id":"sb-d09","incumbent":true,"status":"filed","prior_election":{"election":"2024","label":"2024: District 5"},"bio":{}},
+    "37001": {"candidate_id":"blaise-sb-d10","name":"Michilla \"Kyla\" Blaise","race_id":"sb-d10","incumbent":true,"status":"filed","prior_election":{"election":"2024","label":"2024: District 5","qualifier":"Withdrew from the 2024 District 5 race; later appointed to the board."},"bio":{}},
+    "39855": {"candidate_id":"thotakura-sb-d11","name":"Anusha Thotakura","race_id":"sb-d11","incumbent":true,"status":"filed","prior_election":{"election":"2024","label":"2024: District 6"},"bio":{}},
+    "41131": {"candidate_id":"anderson-sb-d11","name":"Brenda Lee Anderson","race_id":"sb-d11","incumbent":false,"status":"filed","bio":{}},
+    "41134": {"candidate_id":"kimble-sb-d12","name":"Brittany B. Kimble","race_id":"sb-d12","incumbent":false,"status":"filed","bio":{}}
   },
   "incumbent_stubs": {
     "inc-ward-01": {
@@ -1469,6 +1473,9 @@
   "candidate_stubs": {
     "cand-lenhof-sb-d04": {"candidate_id":"cand-lenhof-sb-d04","name":"Kyna Lenhof","race_id":"sb-d04","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
     "cand-alvarez-sb-d07": {"candidate_id":"cand-alvarez-sb-d07","name":"Angel Alvarez","race_id":"sb-d07","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "cand-williams-sb-d09": {"candidate_id":"cand-williams-sb-d09","name":"LaPamela Williams","race_id":"sb-d09","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}}
+    "cand-williams-sb-d09": {"candidate_id":"cand-williams-sb-d09","name":"LaPamela Williams","race_id":"sb-d09","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "cand-hargrove-sb-d10": {"candidate_id":"cand-hargrove-sb-d10","name":"Anthony Hargrove","race_id":"sb-d10","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "cand-white-sb-d11": {"candidate_id":"cand-white-sb-d11","name":"Isaiah White","race_id":"sb-d11","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "cand-neal-sb-d12": {"candidate_id":"cand-neal-sb-d12","name":"Michael L. Neal","race_id":"sb-d12","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}}
   }
 }
