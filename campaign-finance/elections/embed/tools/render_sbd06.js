@@ -31,9 +31,9 @@ ok('toggle labels This(2026)/Last(2024)',
 console.log('\n=== Last election (2024) — Diagnostic-B oracle ===');
 var rivas24 = fig('rivas-sb-d06', '2024'), dones24 = fig('dones-sb-d06', '2024');
 ok('IE-oppose Dones 2024 = $35,153', money(dones24.independentOpposition) === 35153);
-ok('IE-support Rivas 2024 = $98,676.17 (17 rows)',
-  money(rivas24.independentSupport) === 98676 && rivas24.independentSupportCount === 17);
-ok('IE-oppose Rivas 2024 = $0 (26066 NOT on Rivas support stream proven in data layer)',
+ok('IE-support Rivas 2024 = $340,740.08 (29 rows, post HALT-3b robust match)',
+  money(rivas24.independentSupport) === 340740 && rivas24.independentSupportCount === 29);
+ok('IE-oppose Rivas 2024 = $0 (Rivas has support only; 26066 now supports Rivas post HALT-3b)',
   rivas24.independentOpposition === 0);
 ok('Dones 2024 IE-support = $0', dones24.independentSupport === 0);
 
@@ -68,7 +68,7 @@ ok('This view selects 2026 tab', /data-electionview="2026" aria-selected="true"/
 ok('Last view selects 2024 tab', /data-electionview="2024" aria-selected="true"/.test(lastHtml));
 ok('All view selects all tab', /data-electionview="all" aria-selected="true"/.test(allHtml));
 ok('Last view shows $35,153 (oppose Dones)', allHtml.indexOf('$35,153') >= 0 && lastHtml.indexOf('$35,153') >= 0);
-ok('Last view shows $98,676 (support Rivas)', lastHtml.indexOf('$98,676') >= 0);
+ok('Last view shows $340,740 (support Rivas)', lastHtml.indexOf('$340,740') >= 0);
 ok('Last view labels "2024: District 3"', lastHtml.indexOf('2024: District 3') >= 0);
 ok('All view = two segmented election blocks (2026 + 2024 headers)',
   allHtml.indexOf('elec-block-h">This election (2026)') >= 0 && allHtml.indexOf('elec-block-h">Last election (2024)') >= 0);

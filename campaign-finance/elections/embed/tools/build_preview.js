@@ -8,12 +8,10 @@
  * CURRENT local artifact — never the published CDN copy.
  *
  * Reuses the production render path: app.js mounts and calls ElectRender.renderPage,
- * so all real interactivity (race chips, office tabs, cycle filter, modals, panel
- * expanders) works. NOTE: production app.js does not (yet) wire the This/Last/All
- * toggle ([data-electionview]); a small PREVIEW-ONLY handler below re-invokes the
- * real ElectRender.renderRaceElections so the toggle is clickable here. That handler
- * is harness glue (this file only) — it does not modify any embed source. Wiring it
- * into app.js is a HALT-3 task.
+ * so ALL real interactivity works — including the This/Last/All toggle, now wired in
+ * production app.js ([data-electionview] delegation). The preview carries NO toggle
+ * shim, so it exercises the real production handler. The only preview-only glue is an
+ * optional --race pre-navigation (clicks a race chip after first render).
  *
  * Reads only; modifies no embed source and never touches election-data.json.
  * Usage (from embed/):  node tools/build_preview.js [--race <raceId>]
@@ -55,27 +53,17 @@ var shim =
   '  };\n' +
   '})();\n';
 
-// PREVIEW-ONLY toggle handler + optional race pre-navigation. Reuses the real
-// ElectRender.renderRaceElections — no embed source is touched.
+// PREVIEW-ONLY: optional --race pre-navigation (clicks the race chip once rendered).
+// The This/Last/All toggle is now handled by PRODUCTION app.js ([data-electionview]
+// delegation) — NO shim here, so the preview exercises the real production handler.
 var glue =
   '(function () {\n' +
-  '  var PIDX = null;\n' +
-  '  function idx() { if (!PIDX) PIDX = ElectData.loadData(PREVIEW_DATA, { office: "school_board" }); return PIDX; }\n' +
-  '  document.addEventListener("click", function (e) {\n' +
-  '    var tab = e.target.closest && e.target.closest("[data-electionview]");\n' +
-  '    if (!tab) return;\n' +
-  '    var box = tab.closest(".elections"); if (!box) return;\n' +
-  '    var raceId = idx().raceBySlug[box.getAttribute("data-race")];\n' +
-  '    var vm = raceId && ElectData.viewModels.raceView(idx(), raceId, null).elections;\n' +
-  '    if (vm) box.outerHTML = ElectRender.renderRaceElections(vm, tab.getAttribute("data-electionview"));\n' +
-  '  });\n' +
   '  var R = window.IPG_PREVIEW_RACE;\n' +
-  '  if (R) {\n' +
-  '    var n = 0, t = setInterval(function () {\n' +
-  '      var chip = document.querySelector(\'[data-slug="\' + R + \'"]\');\n' +
-  '      if (chip) { clearInterval(t); chip.click(); } else if (++n > 100) clearInterval(t);\n' +
-  '    }, 30);\n' +
-  '  }\n' +
+  '  if (!R) return;\n' +
+  '  var n = 0, t = setInterval(function () {\n' +
+  '    var chip = document.querySelector(\'[data-slug="\' + R + \'"]\');\n' +
+  '    if (chip) { clearInterval(t); chip.click(); } else if (++n > 100) clearInterval(t);\n' +
+  '  }, 30);\n' +
   '})();\n';
 
 var html = '<!doctype html>\n<html lang="en">\n<head>\n' +

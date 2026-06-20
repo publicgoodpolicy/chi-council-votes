@@ -477,7 +477,8 @@
   // non-candidates). Other SB races (e.g. sb-d03 Leon) have 2024 returners that
   // still LACK prior_election and would mislabel as "did not run", so they stay on
   // the all-years view until verified. Widen this set as cohorts are verified.
-  var TOGGLE_RACES = { 'sb-d04': 1, 'sb-d05': 1, 'sb-d06': 1, 'sb-d07': 1, 'sb-d08': 1, 'sb-d09': 1 };
+  var TOGGLE_RACES = { 'sb-d04': 1, 'sb-d05': 1, 'sb-d06': 1, 'sb-d07': 1, 'sb-d08': 1, 'sb-d09': 1,
+                       'sb-d10': 1, 'sb-d11': 1, 'sb-d12': 1 };
 
   // Map one by_candidate_election bucket to the FOUR SEPARATE streams the render
   // bars consume. contributions (third-party) and self_funding are kept distinct;

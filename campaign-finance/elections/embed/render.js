@@ -480,7 +480,7 @@
   function elecHeader(c, eid, role) {
     var ev = c.byElection[eid] || { label: eid, figures: null };
     if (role === 'prior') {
-      if (c.priorElection && c.priorElection.label) return { header: c.priorElection.label, subnote: '' };
+      if (c.priorElection && c.priorElection.label) return { header: c.priorElection.label, subnote: c.priorElection.qualifier || '' };
       if (elecHasMoney(ev.figures)) {
         return { header: eid + ' (did not run)',
           subnote: 'Committee activity from ' + eid + ', before their appointment — shown for transparency, not a ' + eid + ' candidacy.' };
@@ -551,7 +551,7 @@
 
   // Race view: head + vacating-incumbent note(s) + legend + candidate cards
   // (neutral order from the data layer; the three figures never summed).
-  function renderRaceView(vm) {
+  function renderRaceView(vm, electionView) {
     if (!vm) return '<div class="soon"><h2>Race not found</h2></div>';
     var vac = (vm.race.vacating || []).map(function (v) {
       return '<p class="vacating-note">↳ Current member <b>' + esc(v.name) + '</b> is running for ' +
@@ -562,10 +562,10 @@
     var head = '<div class="race-head"><h2>' + esc(vm.race.label) + '</h2>' +
       '<span class="race-meta">' + meta + '</span></div>' + vac;
 
-    // Races wired for the per-election toggle (the loaded sb-d04..sb-d09 cohort,
-    // gated in data.js TOGGLE_RACES) render the This/Last/All view instead of the
-    // single all-years cards.
-    if (vm.elections) return head + renderRaceElections(vm.elections);
+    // Races wired for the per-election toggle (the loaded cohort, gated in data.js
+    // TOGGLE_RACES) render the This/Last/All view instead of the single all-years
+    // cards. electionView (from app state) selects the active tab.
+    if (vm.elections) return head + renderRaceElections(vm.elections, electionView);
 
     if (!vm.candidates.length) {
       return head + '<div class="soon"><h2>Field forming</h2>' +
@@ -752,7 +752,7 @@
       var byrace = state.topView !== 'spend';
       var content = byrace
         ? (renderOfficeNav(state.officeRaces, state.activeSlug) +
-           '<div aria-live="polite">' + (state.raceView ? renderRaceView(state.raceView) : '') + '</div>')
+           '<div aria-live="polite">' + (state.raceView ? renderRaceView(state.raceView, state.electionView) : '') + '</div>')
         : (state.spend ? renderSpend(state.spend) : spendPlaceholder());
       inner = cycleSelector(state.cycles, state.cycle) + content;
     }

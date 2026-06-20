@@ -82,7 +82,7 @@
   function start(root, office, index) {
     IDX = index;
     var cycles = ElectData.availableCycles(index);
-    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors' };
+    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors', electionView: null };
     state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, office));
 
     function draw() {
@@ -92,7 +92,8 @@
       var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle) : null;
       root.innerHTML = ElectRender.renderPage({
         office: state.office, topView: state.topView, cycles: cycles, cycle: state.cycle,
-        officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend
+        officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend,
+        electionView: state.electionView
       });
     }
 
@@ -112,11 +113,15 @@
       if (v) { state.topView = v.getAttribute('data-view'); draw(); return; }
       var st = cl('[data-spendtab]');
       if (st) { state.spendTab = st.getAttribute('data-spendtab'); draw(); return; }
+      // This/Last/All election toggle — same delegation pattern as the spend subtabs:
+      // update state, redraw (which refreshes both the active-tab state and the view).
+      var ev = cl('[data-electionview]');
+      if (ev) { state.electionView = ev.getAttribute('data-electionview'); draw(); return; }
       var cy = cl('[data-cycle]');
       if (cy) { state.cycle = cy.getAttribute('data-cycle') || null; draw(); return; }
       // chips AND the vacating-incumbent "→" link both navigate by slug
       var ch = cl('[data-slug]');
-      if (ch) { state.activeSlug = ch.getAttribute('data-slug'); state.topView = 'byrace'; draw(); return; }
+      if (ch) { state.activeSlug = ch.getAttribute('data-slug'); state.electionView = null; state.topView = 'byrace'; draw(); return; }
       var of = cl('.office[data-group]');
       if (of) {
         var label = of.getAttribute('data-group');
@@ -126,6 +131,7 @@
             state.activeSlug = groupFirstSlug(omVM.groups[i]); break;
           }
         }
+        state.electionView = null;
         draw(); return;
       }
     });

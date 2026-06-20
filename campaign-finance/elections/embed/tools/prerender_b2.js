@@ -239,7 +239,7 @@ ok('genuinely-unnamed IE (39901) falls back to framed identity, never a bare id'
 console.log('\n=== B3-REVISE-5 assertions (school-board scope + spender guard + Bannon) ===');
 function ieCount(idx) { var n = 0; for (var c in idx.ieByCandidate) n += idx.ieByCandidate[c].support.length + idx.ieByCandidate[c].oppose.length; return n; }
 ok('unscoped index keeps all IEs incl. council (' + ieCount(indexAll) + ' = ' + json.independent_expenditures.length + ')', ieCount(indexAll) === json.independent_expenditures.length);
-ok('school-board scope keeps ONLY school-board IEs (95), drops council (218)', ieCount(index) === 95);
+ok('school-board scope keeps ONLY school-board IEs (110), drops council (218)', ieCount(index) === 110);
 var councilTarget = false;
 for (var cc in index.ieByCandidate) { var r5 = index.raceById[(index.candidateById[cc] || {}).race_id] || {}; if (r5.office === 'alderperson' || r5.office === 'mayor') councilTarget = true; }
 ok('no council/municipal IE target survives school-board scope', !councilTarget);
