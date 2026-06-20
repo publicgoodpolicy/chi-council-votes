@@ -163,6 +163,31 @@
       '.ipg-elect .modal-tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;}' +
       '.ipg-elect .modal-note{font-size:12.5px;color:var(--ink-soft);margin:0 0 14px;}' +
       '.ipg-elect .modal-summary{font-size:13px;font-weight:500;margin:0 0 8px;padding-bottom:8px;border-bottom:1px solid var(--line);}' +
+      // Donor-popup stat cards (E-2/E-3): TOTAL GIVEN / COMMITTEES FUNDED / CONTRIBUTIONS / CYCLES.
+      '.ipg-elect .elect-statgrid{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;}' +
+      '.ipg-elect .elect-stat{flex:1 1 calc(50% - 8px);min-width:120px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:11px 13px;}' +
+      '.ipg-elect .elect-stat .num{font-family:var(--display);font-weight:700;font-size:23px;line-height:1.05;color:var(--teal);white-space:nowrap;}' +
+      '.ipg-elect .elect-stat .lab{font-weight:600;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-top:6px;}' +
+      // Affiliated-entity rollup card (E-2): combined total (nowrap) + always-shown entity breakdown.
+      '.ipg-elect .elect-rollup{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--sage);border-radius:10px;padding:13px 15px;margin:0 0 14px;}' +
+      '.ipg-elect .elect-rollup-kicker{font-weight:600;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--sage);margin-bottom:6px;}' +
+      '.ipg-elect .elect-rollup-total{font-family:var(--display);font-weight:700;font-size:25px;line-height:1;color:var(--teal);white-space:nowrap;}' +
+      '.ipg-elect .elect-rollup-sub{font-size:12px;color:var(--ink-soft);margin-top:4px;}' +
+      '.ipg-elect .elect-rollup-members{margin-top:10px;}' +
+      '.ipg-elect .elect-rollup-member{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);}' +
+      '.ipg-elect .elect-rollup-member:last-of-type{border-bottom:none;}' +
+      '.ipg-elect .elect-rollup-name{font-size:14px;color:var(--ink);font-weight:600;}' +
+      '.ipg-elect .elect-rollup-amt{font-size:14px;color:var(--teal);font-weight:600;white-space:nowrap;}' +
+      '.ipg-elect .elect-rollup-role{display:inline-block;font-size:8.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:20px;margin-left:5px;vertical-align:middle;border:1px solid;}' +
+      '.ipg-elect .elect-rollup-role.role-parent{background:#DCEAE8;color:var(--teal);border-color:var(--teal);}' +
+      '.ipg-elect .elect-rollup-role.role-alt-name{background:#E6EEF0;color:var(--teal);border-color:var(--sage);}' +
+      '.ipg-elect .elect-rollup-role.role-affiliated-pac{background:#EFE7D8;color:#7c6f4f;border-color:#9a8e74;}' +
+      '.ipg-elect .elect-rollup-role.role-subsidiary{background:#ECE4F1;color:#6d4c91;border-color:#9a7bbf;}' +
+      '.ipg-elect .elect-rollup-role.role-related{background:#E9E4DC;color:var(--ink-soft);border-color:#a9a299;}' +
+      '.ipg-elect .elect-rollup-note{font-size:11px;color:var(--ink-soft);font-style:italic;margin-top:9px;}' +
+      // Browse-donors front-card rollup counts (E-4).
+      '.ipg-elect .browse-counts{font-size:12px;color:var(--ink-soft);margin-top:2px;}' +
+      '.ipg-elect .rollup-pill{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:20px;margin-left:6px;background:#E6EEF0;color:var(--teal);border:1px solid var(--sage);vertical-align:middle;}' +
       '.ipg-elect .kind{font-size:10px;text-transform:uppercase;letter-spacing:.04em;padding:1px 6px;border-radius:4px;background:var(--tan);color:var(--ink-soft);}' +
       '.ipg-elect .kind.cand{background:#E5EFE9;color:var(--teal);}.ipg-elect .kind.ie{background:#F4E3DC;color:var(--coral);}' +
       '.ipg-elect .subnav{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0 16px;border-bottom:2px solid var(--line);}' +
@@ -347,6 +372,32 @@
         '<div class="who">' + who + '</div>' +
         '<div class="amt">' + money(x.total) + ' <span class="n">· ' + plural(x.count, 'gift', 'gifts') + '</span></div></button>';
     }).join('') || '<p class="contrib-note">No election giving recorded.</p>';
+    // Four stat cards (E-2/E-3) + chronological cycle line (pre-YYYY first).
+    var stat = function (num, lab) { return '<div class="elect-stat"><div class="num">' + num + '</div><div class="lab">' + lab + '</div></div>'; };
+    var cyc = fp.cycles || [];
+    var statgrid = '<div class="elect-statgrid">' + stat(money(fp.total), 'Total given') +
+      stat(fp.count, 'Committees funded') + stat(fp.contributionsCount || 0, 'Contributions') +
+      stat(cyc.length, 'Cycles') + '</div>';
+    var cycLine = cyc.length ? '<p class="browse-counts" style="margin:-8px 0 14px">Cycles: ' + cyc.map(esc).join(' · ') + '</p>' : '';
+    // Affiliated-entity rollup card (E-2): single-stream sum, firewall-clean. Always shows
+    // the per-entity breakdown with PARENT / ALTERNATE NAME role pills + the disclaimer.
+    var rc = '';
+    if (fp.rollup) {
+      var rl = fp.rollup;
+      var roleLabel = function (r) { return ({ parent: 'Parent', 'alt-name': 'Alternate name', 'affiliated-pac': 'Affiliated PAC', subsidiary: 'Subsidiary', related: 'Related' })[r] || r; };
+      var mem = rl.members.map(function (m) {
+        return '<div class="elect-rollup-member"><div><span class="elect-rollup-name">' + esc(m.name) + '</span>' +
+          ' <span class="elect-rollup-role role-' + esc(m.role) + '">' + esc(roleLabel(m.role)) + '</span></div>' +
+          '<div class="elect-rollup-amt">' + money(m.amount) + '</div></div>';
+      }).join('');
+      rc = '<div class="elect-rollup">' +
+        '<div class="elect-rollup-kicker">Rollup · ' + esc(rl.relationship) + '</div>' +
+        '<div class="elect-rollup-total">' + money(rl.total) + '</div>' +
+        '<div class="elect-rollup-sub">combined across ' + rl.entities + ' affiliated ' + (rl.entities === 1 ? 'entity' : 'entities') + '</div>' +
+        '<div class="elect-rollup-members">' + mem + '</div>' +
+        '<div class="elect-rollup-note">Each entity stays a distinct, source-traceable donor; the total is their sum, not a merged record.</div>' +
+        '</div>';
+    }
     var wA = fp.win ? (' data-win-start="' + esc(fp.win.start || '') + '" data-win-end="' + esc(fp.win.end || '') + '"') : '';
     return '<div class="ipg-modal-overlay" data-modal-overlay' + wA + '><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Donor footprint">' +
       '<button class="ipg-modal-close" type="button" data-modal-close aria-label="Close">×</button>' +
@@ -356,6 +407,7 @@
       '<p class="modal-note">Everything <b>' + esc(fp.name) + '</b> has given within the 2026 Board of Education data — ' +
       'direct contributions and money into independent-expenditure committees. Council-side giving is a separate, ' +
       'not-yet-connected view.</p>' +
+      statgrid + cycLine + rc +
       '<div class="modal-summary">' + money(fp.total) + ' across ' + plural(fp.count, 'recipient', 'recipients') + '</div>' +
       rows + '</div></div>';
   }
@@ -742,7 +794,16 @@
         (nm.subtitle ? '<div class="sub">' + nm.subtitle + '</div>' : '') + '</div>' +
         '<div class="amt">' + money(r.total) + ' <span class="n">· spent</span></div></button>';
     }
-    return donorRow({ parent_id: r.parent_id, name: r.name, industries: r.industries, flags: r.flags, total: r.total, count: 0 });
+    // Front card (E-4): rollup pill + "N entities · N committees · N contributions".
+    var isRollup = (r.entities || 0) > 1;
+    var sub = [];
+    if (isRollup) sub.push(r.entities + ' entities');
+    sub.push(plural(r.committees || 0, 'committee', 'committees'));
+    sub.push(plural(r.contributions || 0, 'contribution', 'contributions'));
+    return '<button class="crow funder-row" type="button" data-funder="' + esc(r.parent_id) + '">' +
+      '<div class="who">' + esc(r.name) + (isRollup ? ' <span class="rollup-pill">rollup</span>' : '') + ' ' + tagsHtml(r.industries, r.flags) +
+      '<div class="browse-counts">' + sub.join(' · ') + '</div></div>' +
+      '<div class="amt">' + money(r.total) + '</div></button>';
   }
 
   function threeFig(f) {

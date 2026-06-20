@@ -262,8 +262,18 @@
       if (rr) candidateBySlug[candidateSlug(cc, rr)] = cc.id;
     }
 
+    // Affiliated-entity rollup metadata (parent -> {members, roles, ...}), keyed by the
+    // canonical (parent) donor id, so the donor popup can show the entity breakdown.
+    var donorClusters = json.donor_clusters || {};
+    var clusterByParent = {};
+    for (var ccid in donorClusters) {
+      if (!donorClusters.hasOwnProperty(ccid)) continue;
+      var _cl = donorClusters[ccid];
+      if (_cl && _cl.canonical_id) clusterByParent[_cl.canonical_id] = _cl;
+    }
     return {
       races: races, candidates: candidates, committees: committees, donors: donors,
+      donorClusters: donorClusters, clusterByParent: clusterByParent,
       rollups: json.rollups || {},
       raceById: raceById, candidateById: candidateById, candidatesByRace: candidatesByRace,
       candByCommittee: candByCommittee, committeeKeyByCandidate: committeeKeyByCandidate,
@@ -387,11 +397,22 @@
   // Tier 3: a donor's footprint WITHIN this election artifact — every committee /
   // candidate this parent has funded (direct gifts + money into IE committees),
   // dues excluded. Election-scoped only; council-side giving is NOT included.
+  // Chronological cycle order: a "pre-YYYY" bucket sorts just BEFORE that year (oldest
+  // first), so pre-2011 < 2015 < 2019 < 2023 < 2027 (a plain lexical sort puts "pre-…"
+  // last because 'p' > '2'). Used wherever a cycle list is displayed.
+  function cycleKey(c) {
+    var s = String(c), pre = /^pre-?(\d{4})/i.exec(s);
+    if (pre) return (+pre[1]) - 0.5;
+    var y = /(\d{4})/.exec(s);
+    return y ? +y[1] : 1e9;
+  }
+  function sortCycles(arr) { return arr.slice().sort(function (a, b) { return cycleKey(a) - cycleKey(b); }); }
+
   function donorFootprint(index, parentId, win) {
     var parent = index.donors[parentId] || { id: parentId, name: parentId };
     var pr = index.parentRollup[parentId];
     var rows = (pr && pr.rows) || [];
-    var by = {};
+    var by = {}, entBy = {}, cyc = {}, kept = 0;
     for (var i = 0; i < rows.length; i++) {
       var c = rows[i];
       if (c.contribution_type === DUES_TYPE) continue;
@@ -412,14 +433,42 @@
         }
       }
       m.total = round2(m.total + (c.amount || 0)); m.count++;
+      kept++;
+      if (c.cycle) cyc[c.cycle] = 1;
+      var eid = c.donor_id, em = entBy[eid] || (entBy[eid] = { id: eid, amount: 0, count: 0 });
+      em.amount = round2(em.amount + (c.amount || 0)); em.count++;
     }
     var committees = []; for (var k in by) if (by.hasOwnProperty(k)) committees.push(by[k]);
     committees.sort(function (a, b) { return b.total - a.total; });
     var total = 0; for (var j = 0; j < committees.length; j++) total += committees[j].total;
+    // Affiliated-entity breakdown (E-2): split the SAME windowed rows by the actual filer
+    // (child entity), so the per-entity figures sum EXACTLY to the footprint total. This is
+    // ONE legitimate stream (a sum of affiliated-entity contributions), NOT direct + support
+    // + oppose — firewall-clean. Present only when >1 entity gave within the window.
+    var cluster = index.clusterByParent && index.clusterByParent[parentId];
+    var entIds = []; for (var e in entBy) if (entBy.hasOwnProperty(e)) entIds.push(e);
+    var rollup = null;
+    if (cluster && entIds.length > 1) {
+      var roles = cluster.roles || {};
+      var members = entIds.map(function (eid) {
+        var dn = index.donors[eid] || {};
+        return { id: eid, name: dn.name || eid,
+          role: (eid === parentId) ? 'parent' : (roles[eid] || 'related'),
+          amount: entBy[eid].amount, count: entBy[eid].count };
+      });
+      members.sort(function (a, b) {
+        if (a.role === 'parent' && b.role !== 'parent') return -1;
+        if (b.role === 'parent' && a.role !== 'parent') return 1;
+        return b.amount - a.amount;
+      });
+      rollup = { relationship: cluster.relationship || 'affiliated entities',
+        total: round2(total), members: members, entities: members.length };
+    }
     return {
       parent_id: parentId, name: parent.name || parentId, win: win || null,
       industries: parent.industries || [], flags: parent.flags || [],
-      committees: committees, total: round2(total), count: committees.length
+      committees: committees, total: round2(total), count: committees.length,
+      contributionsCount: kept, cycles: sortCycles(Object.keys(cyc)), rollup: rollup
     };
   }
 
@@ -792,19 +841,22 @@
     var rows = [];
     for (var pid in index.parentRollup) {
       if (!index.parentRollup.hasOwnProperty(pid)) continue;
-      var pr = index.parentRollup[pid], total = 0;
+      var pr = index.parentRollup[pid], total = 0, cmset = {}, entset = {}, ncontrib = 0;
       for (var i = 0; i < pr.rows.length; i++) {
         var c = pr.rows[i];
         if (c.contribution_type === DUES_TYPE) continue;
         if (!keep(c.cycle)) continue;
         if (win && !inWindow(c.date, win)) continue;
         if (!recipInScope(index, c.committee_id)) continue;
-        total += c.amount || 0;
+        total += c.amount || 0; ncontrib++;
+        if (c.committee_id) cmset[c.committee_id] = 1;
+        if (c.donor_id) entset[c.donor_id] = 1;
       }
       if (total > 0) {
         var d = index.donors[pid] || {};
         rows.push({ kind: 'donor', parent_id: pid, name: d.name || pid,
-          industries: d.industries || [], flags: d.flags || [], total: round2(total) });
+          industries: d.industries || [], flags: d.flags || [], total: round2(total),
+          entities: Object.keys(entset).length, committees: Object.keys(cmset).length, contributions: ncontrib });
       }
     }
     for (var key in index.iesBySpender) {           // already office-scoped
