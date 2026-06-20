@@ -89,14 +89,16 @@
   function start(root, office, index) {
     IDX = index;
     var cycles = ElectData.availableCycles(index);
-    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors', spendElection: 'all', electionView: null };
+    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors', spendElection: 'all',
+      donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, electionView: null };
+    var browseSearchTimer = null;
     state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, office));
 
     function draw() {
       var omVM = ElectData.viewModels.officeRaces(index, state.office);
       var raceId = index.raceBySlug[state.activeSlug];
       var rv = raceId ? ElectData.viewModels.raceView(index, raceId, state.cycle) : null;
-      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.spendElection) : null;
+      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.spendElection, state.donorFilters) : null;
       root.innerHTML = ElectRender.renderPage({
         office: state.office, topView: state.topView, cycles: cycles, cycle: state.cycle,
         officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend,
@@ -123,6 +125,8 @@
       // Election filter (This/Last/All) — reslices every spend figure + drill-down by window.
       var se = cl('[data-spendelection]');
       if (se) { state.spendElection = se.getAttribute('data-spendelection'); draw(); return; }
+      // Browse-Donors filters: clear-all (the search input + selects are handled by input/change).
+      if (cl('[data-clear-filters]')) { state.donorFilters = { search: '', type: 'All', industry: 'All', flag: 'All' }; draw(); return; }
       // This/Last/All election toggle — same delegation pattern as the spend subtabs:
       // update state, redraw (which refreshes both the active-tab state and the view).
       var ev = cl('[data-electionview]');
@@ -146,7 +150,27 @@
 
     // Client-side donor search inside a drill-down panel (council behavior): filter the
     // panel's donor rows by name; reveal the collapsed remainder while a query is active.
+    // Browse-Donors filter selects (E-1): re-run browseDonors through the active filters.
+    root.addEventListener('change', function (e) {
+      var t = e.target; if (!(t && t.matches)) return;
+      if (t.matches('[data-donor-type]')) { state.donorFilters.type = t.value; draw(); return; }
+      if (t.matches('[data-donor-industry]')) { state.donorFilters.industry = t.value; draw(); return; }
+      if (t.matches('[data-donor-flag]')) { state.donorFilters.flag = t.value; draw(); return; }
+    });
+
     root.addEventListener('input', function (e) {
+      // Browse-Donors search (E-1): debounced redraw through browseDonors, then restore focus +
+      // cursor to the search box (council behavior) so typing isn't interrupted by the rerender.
+      if (e.target.matches && e.target.matches('[data-browse-search]')) {
+        var val = e.target.value;
+        clearTimeout(browseSearchTimer);
+        browseSearchTimer = setTimeout(function () {
+          state.donorFilters.search = val; draw();
+          var s = root.querySelector('[data-browse-search]');
+          if (s) { s.focus(); try { s.setSelectionRange(s.value.length, s.value.length); } catch (e2) {} }
+        }, 180);
+        return;
+      }
       if (!(e.target.matches && e.target.matches('[data-donor-search]'))) return;
       var panel = e.target.closest('.contrib-inner'); if (!panel) return;
       var q = (e.target.value || '').trim().toLowerCase();

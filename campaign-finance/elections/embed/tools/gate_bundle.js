@@ -69,7 +69,9 @@ var FIXTURES = {
     parity: { support: 663609, oppose: 401217 },
     // self-funding negative case (relational is_self, 8f148b2): a funder who self-funds
     // their OWN race must NOT be flagged self in another candidate's drill.
-    selfLeak: { funder: 'Leon', leakRace: 'Rosenfeld', ownRace: 'Leon' }
+    selfLeak: { funder: 'Leon', leakRace: 'Rosenfeld', ownRace: 'Leon' },
+    // Browse-Donors filters (E-1): a search term that hits a known rollup, and a donor type.
+    browseFilters: { search: 'frank', searchHit: 'Frank', type: 'Individual' }
   }
 };
 
@@ -259,6 +261,52 @@ async function assertParity(T, ctx, fx) {
   T.ok('[parity] All == This + Last per stream (oppose)', all.opp === thisE.opp + lastE.opp && all.opp === fx.parity.oppose);
 }
 
+// (E-1) Browse-Donors filters: present, apply, compose (AND), flag-excludes-IE, uncategorized
+// honest, and compose with the time window.  [NEW coverage — the original 44 are blind to this]
+async function assertBrowseFilters(T, ctx, fx) {
+  var bf = fx.browseFilters;
+  await ctx.closeModal();
+  await ctx.spend(); ctx.setFilter(fx.filter.allId); await ctx.wait(40);
+  ctx.click(ctx.root().querySelector('[data-spendtab="donors"]')); await ctx.wait(50);
+  var donorRows = function () { return ctx.root().querySelectorAll('.spend-body [data-funder]').length; };
+  var ieRows = function () { return ctx.root().querySelectorAll('.spend-body [data-committee]').length; };
+  var setSel = function (sel, val) { var e = ctx.root().querySelector(sel); e.value = val; e.dispatchEvent(new ctx.window.Event('change', { bubbles: true })); };
+  var typeSearch = async function (val) { var s = ctx.root().querySelector('[data-browse-search]'); s.value = val; s.dispatchEvent(new ctx.window.Event('input', { bubbles: true })); await ctx.wait(260); };
+  T.ok('[filters] 4 controls present (search + type/industry/flag)',
+    !!ctx.root().querySelector('[data-browse-search]') && !!ctx.root().querySelector('[data-donor-type]') &&
+    !!ctx.root().querySelector('[data-donor-industry]') && !!ctx.root().querySelector('[data-donor-flag]'));
+  var base = donorRows();
+  await typeSearch(bf.search);
+  var afterSearch = donorRows();
+  T.ok('[filters] search "' + bf.search + '" applies (fewer rows, box retains value)',
+    afterSearch > 0 && afterSearch < base && ctx.root().querySelector('[data-browse-search]').value === bf.search);
+  T.ok('[filters] search hit present (' + bf.searchHit + ')', new RegExp(bf.searchHit, 'i').test(ctx.root().querySelector('.spend-body').textContent));
+  T.ok('[filters] active-filter note shows Clear filters', !!ctx.root().querySelector('[data-clear-filters]'));
+  ctx.click(ctx.root().querySelector('[data-clear-filters]')); await ctx.wait(50);
+  T.ok('[filters] Clear filters resets to base rows', donorRows() === base);
+  setSel('[data-donor-type]', bf.type); await ctx.wait(50);
+  var afterType = donorRows();
+  T.ok('[filters] type=' + bf.type + ' applies (rows reduced)', afterType > 0 && afterType < base);
+  await typeSearch(bf.search);
+  T.ok('[filters] compose type + search = AND (subset of type-only)', donorRows() > 0 && donorRows() <= afterType);
+  ctx.click(ctx.root().querySelector('[data-clear-filters]')); await ctx.wait(50);
+  var flagOpt = [].slice.call(ctx.root().querySelector('[data-donor-flag]').options).filter(function (o) { return o.value !== 'All'; })[0];
+  if (flagOpt) { setSel('[data-donor-flag]', flagOpt.value); await ctx.wait(50);
+    T.ok('[filters] flag filter applies AND excludes IE rows (IE carry no donor flags)', ieRows() === 0);
+    ctx.click(ctx.root().querySelector('[data-clear-filters]')); await ctx.wait(50); }
+  var hasUncat = [].slice.call(ctx.root().querySelector('[data-donor-industry]').options).some(function (o) { return o.value === 'uncategorized'; });
+  T.ok('[filters] industry offers "uncategorized" (firewall: unclassified filterable)', hasUncat);
+  if (hasUncat) { setSel('[data-donor-industry]', 'uncategorized'); await ctx.wait(50);
+    T.ok('[filters] uncategorized renders rows OR an honest empty state (never blank)',
+      donorRows() > 0 || /No donors or spenders match/.test(ctx.root().querySelector('.spend-body').textContent));
+    ctx.click(ctx.root().querySelector('[data-clear-filters]')); await ctx.wait(50); }
+  setSel('[data-donor-type]', bf.type); await ctx.wait(50); var typeAll = donorRows();
+  ctx.setFilter(fx.filter.lastId); await ctx.wait(50);
+  T.ok('[filters] composes with the time window (type persists + re-slices on Last)',
+    ctx.root().querySelector('[data-donor-type]').value === bf.type && donorRows() > 0 && donorRows() <= typeAll);
+  ctx.setFilter(fx.filter.allId); await ctx.wait(40); ctx.click(ctx.root().querySelector('[data-clear-filters]')); await ctx.wait(40);
+}
+
 (async function () {
   var html = fs.readFileSync(PREVIEW, 'utf8');
   var dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: true, url: 'http://localhost/' });
@@ -274,6 +322,7 @@ async function assertParity(T, ctx, fx) {
   await assertSpendTabFeatures(T, ctx, fx);
   await assertFirewallFiveNames(T, ctx, fx);
   await assertParity(T, ctx, fx);
+  await assertBrowseFilters(T, ctx, fx);
 
   console.log('\n' + T.n + ' checks · ' + (T.fail ? ('FAILED ' + T.fail) : 'ALL PASS'));
   process.exit(T.fail ? 1 : 0);

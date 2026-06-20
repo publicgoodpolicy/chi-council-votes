@@ -292,6 +292,7 @@
     return {
       races: races, candidates: candidates, committees: committees, donors: donors,
       donorClusters: donorClusters, clusterByParent: clusterByParent,
+      industryTags: json.industry_tags || {}, flagTypes: json.flag_types || {},
       rollups: json.rollups || {},
       raceById: raceById, candidateById: candidateById, candidatesByRace: candidatesByRace,
       candByCommittee: candByCommittee, committeeKeyByCandidate: committeeKeyByCandidate,
@@ -854,11 +855,62 @@
 
   // 1) Browse donors — real donors (by parent_id) ranked by office-scoped giving,
   // merged with IE committees as "political spender" rows (ranked by their spend).
-  function browseDonors(index, cycle, win) {
+  // Browse-Donors filters (E-1): donor-type / industry / flag / name-search, applied to the
+  // ROLLED-UP PARENT (the E-2 rollup unit). All conditions AND together and compose with the
+  // active date window (applied separately in browseDonors). Firewall: an 'uncategorized'
+  // industry selection matches a parent with no real industry, so unclassified stays
+  // filterable, never silently dropped.
+  function donorMatches(donor, name, f) {
+    if (!f) return true;
+    if (f.type && f.type !== 'All' && (donor.type || 'Other') !== f.type) return false;
+    if (f.industry && f.industry !== 'All') {
+      var inds = donor.industries || [];
+      var real = inds.filter(function (x) { return x && x !== 'unclassified' && x !== 'uncategorized'; });
+      if (f.industry === 'uncategorized') { if (real.length) return false; }
+      else if (inds.indexOf(f.industry) < 0) return false;
+    }
+    if (f.flag && f.flag !== 'All') {
+      var ft = (donor.flags || []).map(function (x) { return (x && x.type) || x; });
+      if (ft.indexOf(f.flag) < 0) return false;
+    }
+    if (f.search && String(name || '').toLowerCase().indexOf(String(f.search).toLowerCase()) < 0) return false;
+    return true;
+  }
+
+  // Stable filter option lists (window/filter-independent): every type/industry/flag present
+  // on a parent with giving, so dropdowns never offer empty buckets. Labels prefer the curated
+  // industry_tags / flag_types (fall back to the raw tag, prettified by the render layer).
+  // 'uncategorized' is always offered for industry when any parent lacks a real industry.
+  function browseDonorFacets(index) {
+    var types = {}, inds = {}, flags = {}, anyUncat = false;
+    for (var pid in index.parentRollup) {
+      if (!index.parentRollup.hasOwnProperty(pid)) continue;
+      var d = index.donors[pid] || {};
+      if (d.type) types[d.type] = 1;
+      var di = (d.industries || []).filter(function (x) { return x && x !== 'unclassified' && x !== 'uncategorized'; });
+      if (di.length) { for (var i = 0; i < di.length; i++) inds[di[i]] = 1; } else anyUncat = true;
+      var fl = d.flags || [];
+      for (var j = 0; j < fl.length; j++) { var t = (fl[j] && fl[j].type) || fl[j]; if (t) flags[t] = 1; }
+    }
+    var indL = function (k) { return (index.industryTags[k] && index.industryTags[k].label) || null; };
+    var flagL = function (k) { return (index.flagTypes[k] && index.flagTypes[k].label) || null; };
+    var indOpts = Object.keys(inds).sort().map(function (k) { return { id: k, label: indL(k) }; });
+    if (anyUncat) indOpts.push({ id: 'uncategorized', label: 'Uncategorized' });
+    return {
+      types: Object.keys(types).sort(),
+      industries: indOpts,
+      flags: Object.keys(flags).sort().map(function (k) { return { id: k, label: flagL(k) }; })
+    };
+  }
+
+  function browseDonors(index, cycle, win, filters) {
+    var f = filters || {};
     var keep = function (cyc) { return !EXCLUDED_CYCLES[cyc] && (cycle == null || cyc === cycle); };
     var rows = [];
     for (var pid in index.parentRollup) {
       if (!index.parentRollup.hasOwnProperty(pid)) continue;
+      var d = index.donors[pid] || {};
+      if (!donorMatches(d, d.name || pid, f)) continue;     // E-1 donor filters (parent unit)
       var pr = index.parentRollup[pid], total = 0, cmset = {}, entset = {}, ncontrib = 0;
       for (var i = 0; i < pr.rows.length; i++) {
         var c = pr.rows[i];
@@ -871,19 +923,28 @@
         if (c.donor_id) entset[c.donor_id] = 1;
       }
       if (total > 0) {
-        var d = index.donors[pid] || {};
         rows.push({ kind: 'donor', parent_id: pid, name: d.name || pid,
           industries: d.industries || [], flags: d.flags || [], total: round2(total),
           entities: Object.keys(entset).length, committees: Object.keys(cmset).length, contributions: ncontrib });
       }
     }
+    var q = (f.search || '').toLowerCase();
     for (var key in index.iesBySpender) {           // already office-scoped
       if (!index.iesBySpender.hasOwnProperty(key)) continue;
-      var cm = index.committees[key] || {}, spend = 0, rws = index.iesBySpender[key];
+      if (f.type && f.type !== 'All' && f.type !== 'PAC') continue;     // IE PACs are PAC-like only
+      if (f.flag && f.flag !== 'All') continue;                        // IE committees carry no donor flags
+      var cm = index.committees[key] || {}, itags = cm.industry_tags || [];
+      if (f.industry && f.industry !== 'All') {
+        if (f.industry === 'uncategorized') { if (itags.length) continue; }
+        else if (itags.indexOf(f.industry) < 0) continue;
+      }
+      var inm = cm.committee_name || key;
+      if (q && String(inm).toLowerCase().indexOf(q) < 0) continue;
+      var spend = 0, rws = index.iesBySpender[key];
       for (var j = 0; j < rws.length; j++) { if (!keep(rws[j].cycle)) continue; if (win && !inWindow(rws[j].date, win)) continue; spend += rws[j].amount || 0; }
       if (spend <= 0) continue;
-      rows.push({ kind: 'ie', committee_id: key, name: cm.committee_name || key,
-        identity: spenderFunders(index, key).funders.slice(0, 3).map(function (f) { return f.name; }), total: round2(spend) });
+      rows.push({ kind: 'ie', committee_id: key, name: inm,
+        identity: spenderFunders(index, key).funders.slice(0, 3).map(function (fn) { return fn.name; }), total: round2(spend) });
     }
     rows.sort(function (a, b) { return b.total - a.total; });
     return rows;
@@ -989,13 +1050,17 @@
   // election-window-aware: `election` is 'all' (default = union of both windows),
   // '2026' (This) or '2024' (Last). The resolved window drives every figure + the
   // drill-downs (the spend container carries it so spender modals stay scoped).
-  function spendSubtab(index, office, tab, cycle, election) {
+  function spendSubtab(index, office, tab, cycle, election, filters) {
     var sel = election || 'all', win = spendWin(office, sel), filter = spendElectionFilter(office, sel);
     if (tab === 'candidates') return { tab: tab, election: sel, filter: filter, win: win, candidates: spendByCandidate(index, office, cycle, win) };
     if (tab === 'industries') return { tab: tab, election: sel, filter: filter, win: win, industries: industryTotals(index, office, cycle, win) };
     if (tab === 'industry-candidate') return { tab: tab, election: sel, filter: filter, win: win, rows: industriesByCandidate(index, office, cycle, win) };
     if (tab === 'flags') return { tab: tab, election: sel, filter: filter, win: win, flags: flagTotals(index, office, cycle, win) };
-    return { tab: 'donors', election: sel, filter: filter, win: win, rows: browseDonors(index, cycle, win) };   // default
+    var df = filters || { search: '', type: 'All', industry: 'All', flag: 'All' };
+    var browse = browseDonors(index, cycle, win, df), ieCount = 0;
+    for (var bi = 0; bi < browse.length; bi++) if (browse[bi].kind === 'ie') ieCount++;
+    return { tab: 'donors', election: sel, filter: filter, win: win, rows: browse,
+             donorFilters: df, facets: browseDonorFacets(index), ieCount: ieCount };   // default
   }
 
   return {
@@ -1214,6 +1279,17 @@
       // Browse-donors front-card rollup counts (E-4).
       '.ipg-elect .browse-counts{font-size:12px;color:var(--ink-soft);margin-top:2px;}' +
       '.ipg-elect .rollup-pill{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:20px;margin-left:6px;background:#E6EEF0;color:var(--teal);border:1px solid var(--sage);vertical-align:middle;}' +
+      // Browse-Donors filter controls (E-1): search + donor-type / industry / flag.
+      '.ipg-elect .elect-controls{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 12px;align-items:flex-end;}' +
+      '.ipg-elect .elect-field{display:flex;flex-direction:column;gap:4px;}' +
+      '.ipg-elect .elect-field.grow{flex:2 1 240px;}' +
+      '.ipg-elect .elect-field label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}' +
+      '.ipg-elect .elect-field input,.ipg-elect .elect-field select{font-family:var(--body);font-size:13px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:130px;}' +
+      '.ipg-elect .elect-field input{width:100%;box-sizing:border-box;}' +
+      '.ipg-elect .elect-field input:focus,.ipg-elect .elect-field select:focus{outline:2px solid var(--sage);outline-offset:1px;}' +
+      '.ipg-elect .browse-meta{font-size:12.5px;color:var(--ink-soft);margin:0 0 12px;}' +
+      '.ipg-elect .browse-meta .framing{display:block;margin-top:4px;}' +
+      '.ipg-elect .clear-filters{appearance:none;border:0;background:none;cursor:pointer;color:var(--sage);font:inherit;font-weight:600;font-size:12.5px;text-decoration:underline;padding:0;margin-left:6px;}' +
       '.ipg-elect .kind{font-size:10px;text-transform:uppercase;letter-spacing:.04em;padding:1px 6px;border-radius:4px;background:var(--tan);color:var(--ink-soft);}' +
       '.ipg-elect .kind.cand{background:#E5EFE9;color:var(--teal);}.ipg-elect .kind.ie{background:#F4E3DC;color:var(--coral);}' +
       '.ipg-elect .subnav{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0 16px;border-bottom:2px solid var(--line);}' +
@@ -1812,6 +1888,48 @@
     }).join('') + '</div>';
   }
 
+  // Browse-Donors filter controls (E-1): search + donor-type / industry / flag, all defaulting
+  // to All. The time control (electionFilterNav) is separate and sits above — untouched here.
+  function donorFilterControls(facets, df) {
+    facets = facets || { types: [], industries: [], flags: [] };
+    df = df || { search: '', type: 'All', industry: 'All', flag: 'All' };
+    var opt = function (val, label, sel) { return '<option value="' + esc(val) + '"' + (sel ? ' selected' : '') + '>' + esc(label) + '</option>'; };
+    var typeSel = '<select data-donor-type>' + opt('All', 'All types', df.type === 'All') +
+      facets.types.map(function (t) { return opt(t, t, df.type === t); }).join('') + '</select>';
+    var indSel = '<select data-donor-industry>' + opt('All', 'All industries', df.industry === 'All') +
+      facets.industries.map(function (o) { return opt(o.id, o.label || prettyTag(o.id), df.industry === o.id); }).join('') + '</select>';
+    var flagSel = '<select data-donor-flag>' + opt('All', 'All flags', df.flag === 'All') +
+      facets.flags.map(function (o) { return opt(o.id, o.label || prettyTag(o.id), df.flag === o.id); }).join('') + '</select>';
+    return '<div class="elect-controls">' +
+      '<div class="elect-field grow"><label>Search donors</label>' +
+        '<input type="search" data-browse-search placeholder="e.g. Realtors, CTU, Frank" autocomplete="off" value="' + esc(df.search || '') + '"></div>' +
+      '<div class="elect-field"><label>Donor type</label>' + typeSel + '</div>' +
+      '<div class="elect-field"><label>Industry</label>' + indSel + '</div>' +
+      '<div class="elect-field"><label>Flag</label>' + flagSel + '</div>' +
+      '</div>';
+  }
+
+  function browseResultsNote(rows, ieCount, df, facets) {
+    df = df || {}; facets = facets || {};
+    var n = rows.length, bits = [];
+    if (df.type && df.type !== 'All') bits.push('type: ' + df.type);
+    if (df.industry && df.industry !== 'All') {
+      var io = (facets.industries || []).filter(function (o) { return o.id === df.industry; })[0];
+      bits.push('industry: ' + (io ? (io.label || prettyTag(io.id)) : df.industry));
+    }
+    if (df.flag && df.flag !== 'All') {
+      var fo = (facets.flags || []).filter(function (o) { return o.id === df.flag; })[0];
+      bits.push('flag: ' + (fo ? (fo.label || prettyTag(fo.id)) : df.flag));
+    }
+    if (df.search) bits.push('“' + df.search + '”');
+    var filtSummary = bits.length
+      ? ' · <b>Filtered by ' + esc(bits.join(' + ')) + '.</b> <button class="clear-filters" type="button" data-clear-filters>Clear filters</button>' : '';
+    return '<p class="browse-meta">' + n + (n === 1 ? ' result' : ' results') +
+      (ieCount ? ' (' + ieCount + ' independent-expenditure ' + (ieCount === 1 ? 'committee' : 'committees') + ')' : '') + ' matched.' + filtSummary +
+      '<span class="framing">Everyone who gave to a school-board candidate or funded an independent-expenditure committee in these races, by affiliation. ' +
+      'Affiliated donors are combined into one group; an <span class="kind ie">IE PAC</span> opens its profile. Click any row for its footprint.</span></p>';
+  }
+
   function browseRow(r) {
     if (r.kind === 'ie') {
       var nm = ieNaming(r.name, r.identity);
@@ -1872,17 +1990,22 @@
             '<div class="figrow"><span class="mini c">' + money(x.amount) + '</span><span class="muted">· ' + x.count + ' contributions</span></div></div></div>';
         }).join('') : '<div class="soon"><p>No flags recorded for this office yet.</p></div>');
     } else { // donors
-      var LIMIT = 50, rows = vm.rows, top = '';
-      for (var i = 0; i < Math.min(LIMIT, rows.length); i++) top += browseRow(rows[i]);
-      var more = '';
-      if (rows.length > LIMIT) {
-        var moreRows = ''; for (var j = LIMIT; j < rows.length; j++) moreRows += browseRow(rows[j]);
-        more = '<button class="show-more" type="button" aria-expanded="false" aria-controls="spend-donors-more">' +
-          '<span class="caret" aria-hidden="true">▸</span> Show all ' + rows.length + ' donors &amp; spenders</button>' +
-          '<div class="contrib tall" id="spend-donors-more"><div class="contrib-inner bare">' + moreRows + '</div></div>';
+      var controls = donorFilterControls(vm.facets, vm.donorFilters);
+      var note = browseResultsNote(vm.rows, vm.ieCount || 0, vm.donorFilters, vm.facets);
+      if (!vm.rows.length) {
+        body = controls + note + '<div class="soon"><p>No donors or spenders match these filters.</p></div>';
+      } else {
+        var LIMIT = 50, rows = vm.rows, top = '';
+        for (var i = 0; i < Math.min(LIMIT, rows.length); i++) top += browseRow(rows[i]);
+        var more = '';
+        if (rows.length > LIMIT) {
+          var moreRows = ''; for (var j = LIMIT; j < rows.length; j++) moreRows += browseRow(rows[j]);
+          more = '<button class="show-more" type="button" aria-expanded="false" aria-controls="spend-donors-more">' +
+            '<span class="caret" aria-hidden="true">▸</span> Show all ' + rows.length + ' donors &amp; spenders</button>' +
+            '<div class="contrib tall" id="spend-donors-more"><div class="contrib-inner bare">' + moreRows + '</div></div>';
+        }
+        body = controls + note + top + more;
       }
-      body = '<p class="contrib-note">Everyone who gave to a candidate or funded an independent-expenditure committee in this ' +
-        'office, by affiliation. Click a donor for their footprint; an <span class="kind ie">IE PAC</span> opens its profile.</p>' + top + more;
     }
     // The active election window rides on the container so a spender drill-down opened
     // from this tab (donor footprint OR IE-PAC profile) stays scoped to the same window
@@ -2029,14 +2152,16 @@
   function start(root, office, index) {
     IDX = index;
     var cycles = ElectData.availableCycles(index);
-    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors', spendElection: 'all', electionView: null };
+    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors', spendElection: 'all',
+      donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, electionView: null };
+    var browseSearchTimer = null;
     state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, office));
 
     function draw() {
       var omVM = ElectData.viewModels.officeRaces(index, state.office);
       var raceId = index.raceBySlug[state.activeSlug];
       var rv = raceId ? ElectData.viewModels.raceView(index, raceId, state.cycle) : null;
-      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.spendElection) : null;
+      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.spendElection, state.donorFilters) : null;
       root.innerHTML = ElectRender.renderPage({
         office: state.office, topView: state.topView, cycles: cycles, cycle: state.cycle,
         officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend,
@@ -2063,6 +2188,8 @@
       // Election filter (This/Last/All) — reslices every spend figure + drill-down by window.
       var se = cl('[data-spendelection]');
       if (se) { state.spendElection = se.getAttribute('data-spendelection'); draw(); return; }
+      // Browse-Donors filters: clear-all (the search input + selects are handled by input/change).
+      if (cl('[data-clear-filters]')) { state.donorFilters = { search: '', type: 'All', industry: 'All', flag: 'All' }; draw(); return; }
       // This/Last/All election toggle — same delegation pattern as the spend subtabs:
       // update state, redraw (which refreshes both the active-tab state and the view).
       var ev = cl('[data-electionview]');
@@ -2086,7 +2213,27 @@
 
     // Client-side donor search inside a drill-down panel (council behavior): filter the
     // panel's donor rows by name; reveal the collapsed remainder while a query is active.
+    // Browse-Donors filter selects (E-1): re-run browseDonors through the active filters.
+    root.addEventListener('change', function (e) {
+      var t = e.target; if (!(t && t.matches)) return;
+      if (t.matches('[data-donor-type]')) { state.donorFilters.type = t.value; draw(); return; }
+      if (t.matches('[data-donor-industry]')) { state.donorFilters.industry = t.value; draw(); return; }
+      if (t.matches('[data-donor-flag]')) { state.donorFilters.flag = t.value; draw(); return; }
+    });
+
     root.addEventListener('input', function (e) {
+      // Browse-Donors search (E-1): debounced redraw through browseDonors, then restore focus +
+      // cursor to the search box (council behavior) so typing isn't interrupted by the rerender.
+      if (e.target.matches && e.target.matches('[data-browse-search]')) {
+        var val = e.target.value;
+        clearTimeout(browseSearchTimer);
+        browseSearchTimer = setTimeout(function () {
+          state.donorFilters.search = val; draw();
+          var s = root.querySelector('[data-browse-search]');
+          if (s) { s.focus(); try { s.setSelectionRange(s.value.length, s.value.length); } catch (e2) {} }
+        }, 180);
+        return;
+      }
       if (!(e.target.matches && e.target.matches('[data-donor-search]'))) return;
       var panel = e.target.closest('.contrib-inner'); if (!panel) return;
       var q = (e.target.value || '').trim().toLowerCase();

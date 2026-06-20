@@ -188,6 +188,17 @@
       // Browse-donors front-card rollup counts (E-4).
       '.ipg-elect .browse-counts{font-size:12px;color:var(--ink-soft);margin-top:2px;}' +
       '.ipg-elect .rollup-pill{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:20px;margin-left:6px;background:#E6EEF0;color:var(--teal);border:1px solid var(--sage);vertical-align:middle;}' +
+      // Browse-Donors filter controls (E-1): search + donor-type / industry / flag.
+      '.ipg-elect .elect-controls{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 12px;align-items:flex-end;}' +
+      '.ipg-elect .elect-field{display:flex;flex-direction:column;gap:4px;}' +
+      '.ipg-elect .elect-field.grow{flex:2 1 240px;}' +
+      '.ipg-elect .elect-field label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}' +
+      '.ipg-elect .elect-field input,.ipg-elect .elect-field select{font-family:var(--body);font-size:13px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:130px;}' +
+      '.ipg-elect .elect-field input{width:100%;box-sizing:border-box;}' +
+      '.ipg-elect .elect-field input:focus,.ipg-elect .elect-field select:focus{outline:2px solid var(--sage);outline-offset:1px;}' +
+      '.ipg-elect .browse-meta{font-size:12.5px;color:var(--ink-soft);margin:0 0 12px;}' +
+      '.ipg-elect .browse-meta .framing{display:block;margin-top:4px;}' +
+      '.ipg-elect .clear-filters{appearance:none;border:0;background:none;cursor:pointer;color:var(--sage);font:inherit;font-weight:600;font-size:12.5px;text-decoration:underline;padding:0;margin-left:6px;}' +
       '.ipg-elect .kind{font-size:10px;text-transform:uppercase;letter-spacing:.04em;padding:1px 6px;border-radius:4px;background:var(--tan);color:var(--ink-soft);}' +
       '.ipg-elect .kind.cand{background:#E5EFE9;color:var(--teal);}.ipg-elect .kind.ie{background:#F4E3DC;color:var(--coral);}' +
       '.ipg-elect .subnav{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0 16px;border-bottom:2px solid var(--line);}' +
@@ -786,6 +797,48 @@
     }).join('') + '</div>';
   }
 
+  // Browse-Donors filter controls (E-1): search + donor-type / industry / flag, all defaulting
+  // to All. The time control (electionFilterNav) is separate and sits above — untouched here.
+  function donorFilterControls(facets, df) {
+    facets = facets || { types: [], industries: [], flags: [] };
+    df = df || { search: '', type: 'All', industry: 'All', flag: 'All' };
+    var opt = function (val, label, sel) { return '<option value="' + esc(val) + '"' + (sel ? ' selected' : '') + '>' + esc(label) + '</option>'; };
+    var typeSel = '<select data-donor-type>' + opt('All', 'All types', df.type === 'All') +
+      facets.types.map(function (t) { return opt(t, t, df.type === t); }).join('') + '</select>';
+    var indSel = '<select data-donor-industry>' + opt('All', 'All industries', df.industry === 'All') +
+      facets.industries.map(function (o) { return opt(o.id, o.label || prettyTag(o.id), df.industry === o.id); }).join('') + '</select>';
+    var flagSel = '<select data-donor-flag>' + opt('All', 'All flags', df.flag === 'All') +
+      facets.flags.map(function (o) { return opt(o.id, o.label || prettyTag(o.id), df.flag === o.id); }).join('') + '</select>';
+    return '<div class="elect-controls">' +
+      '<div class="elect-field grow"><label>Search donors</label>' +
+        '<input type="search" data-browse-search placeholder="e.g. Realtors, CTU, Frank" autocomplete="off" value="' + esc(df.search || '') + '"></div>' +
+      '<div class="elect-field"><label>Donor type</label>' + typeSel + '</div>' +
+      '<div class="elect-field"><label>Industry</label>' + indSel + '</div>' +
+      '<div class="elect-field"><label>Flag</label>' + flagSel + '</div>' +
+      '</div>';
+  }
+
+  function browseResultsNote(rows, ieCount, df, facets) {
+    df = df || {}; facets = facets || {};
+    var n = rows.length, bits = [];
+    if (df.type && df.type !== 'All') bits.push('type: ' + df.type);
+    if (df.industry && df.industry !== 'All') {
+      var io = (facets.industries || []).filter(function (o) { return o.id === df.industry; })[0];
+      bits.push('industry: ' + (io ? (io.label || prettyTag(io.id)) : df.industry));
+    }
+    if (df.flag && df.flag !== 'All') {
+      var fo = (facets.flags || []).filter(function (o) { return o.id === df.flag; })[0];
+      bits.push('flag: ' + (fo ? (fo.label || prettyTag(fo.id)) : df.flag));
+    }
+    if (df.search) bits.push('“' + df.search + '”');
+    var filtSummary = bits.length
+      ? ' · <b>Filtered by ' + esc(bits.join(' + ')) + '.</b> <button class="clear-filters" type="button" data-clear-filters>Clear filters</button>' : '';
+    return '<p class="browse-meta">' + n + (n === 1 ? ' result' : ' results') +
+      (ieCount ? ' (' + ieCount + ' independent-expenditure ' + (ieCount === 1 ? 'committee' : 'committees') + ')' : '') + ' matched.' + filtSummary +
+      '<span class="framing">Everyone who gave to a school-board candidate or funded an independent-expenditure committee in these races, by affiliation. ' +
+      'Affiliated donors are combined into one group; an <span class="kind ie">IE PAC</span> opens its profile. Click any row for its footprint.</span></p>';
+  }
+
   function browseRow(r) {
     if (r.kind === 'ie') {
       var nm = ieNaming(r.name, r.identity);
@@ -846,17 +899,22 @@
             '<div class="figrow"><span class="mini c">' + money(x.amount) + '</span><span class="muted">· ' + x.count + ' contributions</span></div></div></div>';
         }).join('') : '<div class="soon"><p>No flags recorded for this office yet.</p></div>');
     } else { // donors
-      var LIMIT = 50, rows = vm.rows, top = '';
-      for (var i = 0; i < Math.min(LIMIT, rows.length); i++) top += browseRow(rows[i]);
-      var more = '';
-      if (rows.length > LIMIT) {
-        var moreRows = ''; for (var j = LIMIT; j < rows.length; j++) moreRows += browseRow(rows[j]);
-        more = '<button class="show-more" type="button" aria-expanded="false" aria-controls="spend-donors-more">' +
-          '<span class="caret" aria-hidden="true">▸</span> Show all ' + rows.length + ' donors &amp; spenders</button>' +
-          '<div class="contrib tall" id="spend-donors-more"><div class="contrib-inner bare">' + moreRows + '</div></div>';
+      var controls = donorFilterControls(vm.facets, vm.donorFilters);
+      var note = browseResultsNote(vm.rows, vm.ieCount || 0, vm.donorFilters, vm.facets);
+      if (!vm.rows.length) {
+        body = controls + note + '<div class="soon"><p>No donors or spenders match these filters.</p></div>';
+      } else {
+        var LIMIT = 50, rows = vm.rows, top = '';
+        for (var i = 0; i < Math.min(LIMIT, rows.length); i++) top += browseRow(rows[i]);
+        var more = '';
+        if (rows.length > LIMIT) {
+          var moreRows = ''; for (var j = LIMIT; j < rows.length; j++) moreRows += browseRow(rows[j]);
+          more = '<button class="show-more" type="button" aria-expanded="false" aria-controls="spend-donors-more">' +
+            '<span class="caret" aria-hidden="true">▸</span> Show all ' + rows.length + ' donors &amp; spenders</button>' +
+            '<div class="contrib tall" id="spend-donors-more"><div class="contrib-inner bare">' + moreRows + '</div></div>';
+        }
+        body = controls + note + top + more;
       }
-      body = '<p class="contrib-note">Everyone who gave to a candidate or funded an independent-expenditure committee in this ' +
-        'office, by affiliation. Click a donor for their footprint; an <span class="kind ie">IE PAC</span> opens its profile.</p>' + top + more;
     }
     // The active election window rides on the container so a spender drill-down opened
     // from this tab (donor footprint OR IE-PAC profile) stays scoped to the same window

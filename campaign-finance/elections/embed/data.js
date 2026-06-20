@@ -274,6 +274,7 @@
     return {
       races: races, candidates: candidates, committees: committees, donors: donors,
       donorClusters: donorClusters, clusterByParent: clusterByParent,
+      industryTags: json.industry_tags || {}, flagTypes: json.flag_types || {},
       rollups: json.rollups || {},
       raceById: raceById, candidateById: candidateById, candidatesByRace: candidatesByRace,
       candByCommittee: candByCommittee, committeeKeyByCandidate: committeeKeyByCandidate,
@@ -836,11 +837,62 @@
 
   // 1) Browse donors — real donors (by parent_id) ranked by office-scoped giving,
   // merged with IE committees as "political spender" rows (ranked by their spend).
-  function browseDonors(index, cycle, win) {
+  // Browse-Donors filters (E-1): donor-type / industry / flag / name-search, applied to the
+  // ROLLED-UP PARENT (the E-2 rollup unit). All conditions AND together and compose with the
+  // active date window (applied separately in browseDonors). Firewall: an 'uncategorized'
+  // industry selection matches a parent with no real industry, so unclassified stays
+  // filterable, never silently dropped.
+  function donorMatches(donor, name, f) {
+    if (!f) return true;
+    if (f.type && f.type !== 'All' && (donor.type || 'Other') !== f.type) return false;
+    if (f.industry && f.industry !== 'All') {
+      var inds = donor.industries || [];
+      var real = inds.filter(function (x) { return x && x !== 'unclassified' && x !== 'uncategorized'; });
+      if (f.industry === 'uncategorized') { if (real.length) return false; }
+      else if (inds.indexOf(f.industry) < 0) return false;
+    }
+    if (f.flag && f.flag !== 'All') {
+      var ft = (donor.flags || []).map(function (x) { return (x && x.type) || x; });
+      if (ft.indexOf(f.flag) < 0) return false;
+    }
+    if (f.search && String(name || '').toLowerCase().indexOf(String(f.search).toLowerCase()) < 0) return false;
+    return true;
+  }
+
+  // Stable filter option lists (window/filter-independent): every type/industry/flag present
+  // on a parent with giving, so dropdowns never offer empty buckets. Labels prefer the curated
+  // industry_tags / flag_types (fall back to the raw tag, prettified by the render layer).
+  // 'uncategorized' is always offered for industry when any parent lacks a real industry.
+  function browseDonorFacets(index) {
+    var types = {}, inds = {}, flags = {}, anyUncat = false;
+    for (var pid in index.parentRollup) {
+      if (!index.parentRollup.hasOwnProperty(pid)) continue;
+      var d = index.donors[pid] || {};
+      if (d.type) types[d.type] = 1;
+      var di = (d.industries || []).filter(function (x) { return x && x !== 'unclassified' && x !== 'uncategorized'; });
+      if (di.length) { for (var i = 0; i < di.length; i++) inds[di[i]] = 1; } else anyUncat = true;
+      var fl = d.flags || [];
+      for (var j = 0; j < fl.length; j++) { var t = (fl[j] && fl[j].type) || fl[j]; if (t) flags[t] = 1; }
+    }
+    var indL = function (k) { return (index.industryTags[k] && index.industryTags[k].label) || null; };
+    var flagL = function (k) { return (index.flagTypes[k] && index.flagTypes[k].label) || null; };
+    var indOpts = Object.keys(inds).sort().map(function (k) { return { id: k, label: indL(k) }; });
+    if (anyUncat) indOpts.push({ id: 'uncategorized', label: 'Uncategorized' });
+    return {
+      types: Object.keys(types).sort(),
+      industries: indOpts,
+      flags: Object.keys(flags).sort().map(function (k) { return { id: k, label: flagL(k) }; })
+    };
+  }
+
+  function browseDonors(index, cycle, win, filters) {
+    var f = filters || {};
     var keep = function (cyc) { return !EXCLUDED_CYCLES[cyc] && (cycle == null || cyc === cycle); };
     var rows = [];
     for (var pid in index.parentRollup) {
       if (!index.parentRollup.hasOwnProperty(pid)) continue;
+      var d = index.donors[pid] || {};
+      if (!donorMatches(d, d.name || pid, f)) continue;     // E-1 donor filters (parent unit)
       var pr = index.parentRollup[pid], total = 0, cmset = {}, entset = {}, ncontrib = 0;
       for (var i = 0; i < pr.rows.length; i++) {
         var c = pr.rows[i];
@@ -853,19 +905,28 @@
         if (c.donor_id) entset[c.donor_id] = 1;
       }
       if (total > 0) {
-        var d = index.donors[pid] || {};
         rows.push({ kind: 'donor', parent_id: pid, name: d.name || pid,
           industries: d.industries || [], flags: d.flags || [], total: round2(total),
           entities: Object.keys(entset).length, committees: Object.keys(cmset).length, contributions: ncontrib });
       }
     }
+    var q = (f.search || '').toLowerCase();
     for (var key in index.iesBySpender) {           // already office-scoped
       if (!index.iesBySpender.hasOwnProperty(key)) continue;
-      var cm = index.committees[key] || {}, spend = 0, rws = index.iesBySpender[key];
+      if (f.type && f.type !== 'All' && f.type !== 'PAC') continue;     // IE PACs are PAC-like only
+      if (f.flag && f.flag !== 'All') continue;                        // IE committees carry no donor flags
+      var cm = index.committees[key] || {}, itags = cm.industry_tags || [];
+      if (f.industry && f.industry !== 'All') {
+        if (f.industry === 'uncategorized') { if (itags.length) continue; }
+        else if (itags.indexOf(f.industry) < 0) continue;
+      }
+      var inm = cm.committee_name || key;
+      if (q && String(inm).toLowerCase().indexOf(q) < 0) continue;
+      var spend = 0, rws = index.iesBySpender[key];
       for (var j = 0; j < rws.length; j++) { if (!keep(rws[j].cycle)) continue; if (win && !inWindow(rws[j].date, win)) continue; spend += rws[j].amount || 0; }
       if (spend <= 0) continue;
-      rows.push({ kind: 'ie', committee_id: key, name: cm.committee_name || key,
-        identity: spenderFunders(index, key).funders.slice(0, 3).map(function (f) { return f.name; }), total: round2(spend) });
+      rows.push({ kind: 'ie', committee_id: key, name: inm,
+        identity: spenderFunders(index, key).funders.slice(0, 3).map(function (fn) { return fn.name; }), total: round2(spend) });
     }
     rows.sort(function (a, b) { return b.total - a.total; });
     return rows;
@@ -971,13 +1032,17 @@
   // election-window-aware: `election` is 'all' (default = union of both windows),
   // '2026' (This) or '2024' (Last). The resolved window drives every figure + the
   // drill-downs (the spend container carries it so spender modals stay scoped).
-  function spendSubtab(index, office, tab, cycle, election) {
+  function spendSubtab(index, office, tab, cycle, election, filters) {
     var sel = election || 'all', win = spendWin(office, sel), filter = spendElectionFilter(office, sel);
     if (tab === 'candidates') return { tab: tab, election: sel, filter: filter, win: win, candidates: spendByCandidate(index, office, cycle, win) };
     if (tab === 'industries') return { tab: tab, election: sel, filter: filter, win: win, industries: industryTotals(index, office, cycle, win) };
     if (tab === 'industry-candidate') return { tab: tab, election: sel, filter: filter, win: win, rows: industriesByCandidate(index, office, cycle, win) };
     if (tab === 'flags') return { tab: tab, election: sel, filter: filter, win: win, flags: flagTotals(index, office, cycle, win) };
-    return { tab: 'donors', election: sel, filter: filter, win: win, rows: browseDonors(index, cycle, win) };   // default
+    var df = filters || { search: '', type: 'All', industry: 'All', flag: 'All' };
+    var browse = browseDonors(index, cycle, win, df), ieCount = 0;
+    for (var bi = 0; bi < browse.length; bi++) if (browse[bi].kind === 'ie') ieCount++;
+    return { tab: 'donors', election: sel, filter: filter, win: win, rows: browse,
+             donorFilters: df, facets: browseDonorFacets(index), ieCount: ieCount };   // default
   }
 
   return {
