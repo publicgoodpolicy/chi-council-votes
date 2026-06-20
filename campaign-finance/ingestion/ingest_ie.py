@@ -10,7 +10,7 @@ Scoping decisions baked in (flag to change):
   * Exact-duplicate rows (same committee+payee+candidate+amount+date+purpose) are
     collapsed once -> handles the 8x-dupe artifact and B-1/quarterly re-reports.
 """
-import json, re, csv, sys, os, argparse
+import json, re, csv, sys, os, argparse, unicodedata
 from collections import defaultdict
 import build_rollups
 from ingest import slug  # shared donor-id slug ([:80] cap) — keeps election donor_ids
@@ -73,43 +73,79 @@ def match_target(cand,office,alders):
 # is a controlled name match against the known candidate registry — per race the
 # candidate set is small, so Office/ward disambiguates collisions. A defensive
 # committee-id index is built too in case a target committee id ever appears.
+# Election-only name helpers (do NOT touch the shared norm()): accent-fold to ASCII
+# THEN apply norm, and tokenize dropping generational suffixes + lone middle initials.
+_SUFFIX={'jr','sr','ii','iii','iv'}
+def _fold(s): return unicodedata.normalize('NFKD',(s or '')).encode('ascii','ignore').decode()
+def _foldnorm(s): return norm(_fold(s))
+def _mtoks(s): return [t for t in _foldnorm(s).split() if t not in _SUFFIX and len(t)>1]
 def build_target_index(d):
     races_by_id={r['id']:r for r in d.get('races',[])}
-    by_committee={}; by_name=defaultdict(list)
+    by_committee={}; by_name=defaultdict(list); by_folded=defaultdict(list); by_surname=defaultdict(list)
     for cand in d.get('candidates',[]):
         r=races_by_id.get(cand.get('race_id'),{})
         w=r.get('ward'); ward=int(w) if w not in (None,'') else None
+        mt=_mtoks(cand.get('name'))
         entry={'candidate_id':cand.get('id'),'race_id':cand.get('race_id'),
                'office':r.get('office'),'ward':ward,'district':r.get('district'),
-               'committee_id':cand.get('committee_id')}
+               'committee_id':cand.get('committee_id'),
+               'surname':(mt[-1] if mt else None),'given':set(mt[:-1])}
         nm=norm(cand.get('name'))
         if nm: by_name[nm].append(entry)
         if cand.get('committee_id'): by_committee[str(cand['committee_id'])]=entry
-    return by_committee,by_name
+        # SCOPE (HALT-3b Option A): the robust rungs (accent-fold + surname
+        # corroboration + multi-name guard) are indexed ONLY for school_board targets,
+        # so ward/mayor keep exact-only (Rung 0) = committed behavior. DEFERRED root
+        # cause: the election target index shouldn't carry the 70 ward/incumbent stubs
+        # at all; this structurally contains that until the registry is narrowed.
+        if (r.get('office') or '').startswith('school_board'):
+            fn=_foldnorm(cand.get('name'))
+            if fn: by_folded[fn].append(entry)
+            if entry['surname']: by_surname[entry['surname']].append(entry)
+    return by_committee,by_name,by_folded,by_surname
 def _tgt(e,method,needs_review):
     return {'target_committee_id':e['committee_id'],'target_candidate_id':e['candidate_id'],
             'target_race_id':e['race_id'],'target_ward':e['ward'],
             'match_method':method,'needs_review':needs_review}
-def match_target_registry(row,by_committee,by_name):
-    F=FIELD_MAP['exp']
-    # 1) committee-id (deterministic) — only if SBE exp rows ever carry a target id
-    tcid=row.get('CandidateID') or row.get('TargetCommitteeID')
-    if tcid and str(tcid) in by_committee:
-        return _tgt(by_committee[str(tcid)],'committee_id',False)
-    # 2) controlled name match against the candidate registry
-    cand=row.get(F['candidate']); office=row.get(F['office'])
-    n=norm(cand)
-    if not n: return None
-    hits=by_name.get(n)
-    if not hits: return None
-    if len(hits)==1: return _tgt(hits[0],'registry_name',False)
-    # ambiguous: same name in multiple races -> disambiguate by ward in Office text
-    blob=(office or '')+' '+(cand or ''); ward=extract_ward(blob)
+def _resolve(hits,office,cand,method):
+    # one hit = identity-grade (needs_review False); a same-name COLLISION broken by
+    # ward/Office is flagged for review; an unresolved collision -> name_fallback.
+    if len(hits)==1: return _tgt(hits[0],method,False)
+    ward=extract_ward((office or '')+' '+(cand or ''))
     if ward is not None:
         w=[e for e in hits if e['ward']==ward]
-        if len(w)==1: return _tgt(w[0],'registry_name',False)
-    # still ambiguous -> record best guess, flag for human review
+        if len(w)==1: return _tgt(w[0],method,True)
     return _tgt(hits[0],'name_fallback',True)
+def match_target_registry(row,by_committee,by_name,by_folded,by_surname):
+    F=FIELD_MAP['exp']
+    # 0) defensive committee-id (SBE exp rows carry only the SPENDER id today)
+    tcid=row.get('CandidateID') or row.get('TargetCommitteeID')
+    if tcid and str(tcid) in by_committee:
+        return _tgt(by_committee[str(tcid)],'exact',False)
+    cand=row.get(F['candidate']); office=row.get(F['office'])
+    if not norm(cand): return None
+    # Rung 0 — exact normalized full name (identity-grade)
+    hits=by_name.get(norm(cand))
+    if hits: return _resolve(hits,office,cand,'exact')
+    # Rung 1 — equal after accent-folding (differed only by accents; identity-grade)
+    fhits=by_folded.get(_foldnorm(cand))
+    if fhits: return _resolve(fhits,office,cand,'accent_fold_exact')
+    # MULTI-NAME GUARD — a beneficiary field naming >1 DISTINCT registry surname
+    # (e.g. "Carlos Rivas, ... Michelle N. Pierre") must NOT single-match: route to
+    # review without auto-attributing (return None; reported, not persisted).
+    bt=_mtoks(cand)
+    if len({t for t in bt if t in by_surname})>1: return None
+    # Rung 2 — surname + >=1 corroborating token (a given-name token OR Office/ward).
+    # Surname-alone is rejected; no fuzzy / edit-distance.
+    bsur=bt[-1] if bt else None; bgiven=set(bt[:-1])
+    cohort=by_surname.get(bsur,[]) if bsur else []
+    if not cohort: return None
+    g=[e for e in cohort if e['given'] & bgiven]
+    if len(g)==1: return _tgt(g[0],'surname_plus_given',True)
+    ward=extract_ward((office or '')+' '+(cand or ''))
+    o=[e for e in cohort if ward is not None and e['ward']==ward]
+    if len(o)==1: return _tgt(o[0],'surname_plus_office',True)
+    return None
 
 def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
     cycles=d['cycles']; comms=d['committees']; donors=d['donors']
@@ -117,7 +153,7 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
     # candidate registry; council mode keeps the current-50-alders matcher unchanged.
     election_mode=bool(d.get('races')) and bool(d.get('candidates'))
     if election_mode:
-        by_committee,by_name=build_target_index(d)
+        by_committee,by_name,by_folded,by_surname=build_target_index(d)
     else:
         alders=build_matcher(comms)
     # precomputed indexes (built once)
@@ -163,7 +199,7 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
         if not (sup or opp): continue
         raw+=1
         if election_mode:
-            tgt=match_target_registry(row,by_committee,by_name)
+            tgt=match_target_registry(row,by_committee,by_name,by_folded,by_surname)
         else:
             ward,tcmte=match_target(row.get(F['candidate']),row.get(F['office']),alders)
             tgt=None if ward is None else {'target_committee_id':tcmte,'target_candidate_id':None,
