@@ -313,8 +313,11 @@
         industries: parent.industries || [], flags: parent.flags || [],
         total: 0, count: 0, isSelf: false, isAggregate: false });
       m.total = round2(m.total + (c.amount || 0)); m.count++;
-      if (c.is_loan || c.contribution_type === 'Loan Received' || parent.type === 'Candidate' ||
-          (parent.industries || []).indexOf('self-funding') >= 0) m.isSelf = true;
+      // Self-funding is the pipeline's ONE relational decision, stamped per row by
+      // build_rollups (donor identity-matches THIS recipient). The render DISPLAYS it; it
+      // does not decide self from donor-global attributes (which leaked a self-funder's
+      // gift to ANOTHER candidate, e.g. Leon->Rosenfeld).
+      if (c.is_self) m.isSelf = true;
       if (parent.type === 'Aggregate' || (parent.industries || []).indexOf('small-dollar') >= 0) m.isAggregate = true;
     }
     var lines = []; for (var k in by) if (by.hasOwnProperty(k)) lines.push(by[k]);

@@ -36,6 +36,17 @@ def _split_name(n):
         fam=frozenset(toks[-1:]); giv=frozenset(toks[:-1])
     return fam,giv
 
+def _self_match(donor_name, ctoks, ctype):
+    """The ONE relational self-funding predicate (3b rule): a contribution is self IFF the
+    donor identity-matches the RECIPIENT candidate -- committee-scoped surname match AND
+    (>=1 given/nick token shared OR a Loan Received). NOT self merely because the donor is
+    a Candidate-type / self-funding-flagged person in their own race. Used to stamp
+    is_self; candidateContributors (embed) READS that stamp, so render can't diverge."""
+    if not ctoks or not donor_name: return False
+    dfam,dgiv=_split_name(donor_name)
+    if dfam & ctoks and ((dgiv and dgiv<=ctoks) or ctype=='Loan Received'): return True
+    return False
+
 def _bucket(date,wins):
     if not date: return None
     for w in wins:
@@ -130,6 +141,16 @@ def build(d):
             windows={}
         cands={c['id']:c for c in d.get('candidates',[])}
         race_office={r['id']:r.get('office') for r in d.get('races',[])}
+        # Stamp the ONE relational self-funding decision on each candidate-recipient
+        # contribution row (election-only; council rows get NO stamp). candidateContributors
+        # READS c['is_self'] instead of deciding from donor-global attributes -> render
+        # cannot diverge from this aggregate.
+        cand_toks={cid:_name_key(c.get('name')) for cid,c in cands.items()}
+        for c in contribs:
+            rc=comms.get(c['committee_id'])
+            if rc and rc.get('candidate_id') in cand_toks:
+                c['is_self']=_self_match((donors.get(c.get('donor_id')) or {}).get('name'),
+                                         cand_toks[rc['candidate_id']], c.get('contribution_type'))
         def wins_for(cid):
             c=cands.get(cid)
             if not c: return None
@@ -154,15 +175,7 @@ def build(d):
             if not (rc and rc.get('candidate_id')): continue
             eb=slot(rc['candidate_id'],c.get('date'))
             if eb is None: continue
-            dv=donors.get(c.get('donor_id'))
-            ctoks=_name_key(cands[rc['candidate_id']].get('name'))
-            is_self=False
-            if dv and ctoks:
-                dfam,dgiv=_split_name(dv.get('name'))
-                if dfam & ctoks:    # committee-scoped surname match (recipient is THIS candidate)
-                    if (dgiv and dgiv<=ctoks) or c.get('contribution_type')=='Loan Received':
-                        is_self=True
-            stream='self_funding' if is_self else 'contributions'
+            stream='self_funding' if c.get('is_self') else 'contributions'
             eb[stream]['amount']=rnd(eb[stream]['amount']+(c.get('amount') or 0.0)); eb[stream]['count']+=1
         for ie in ies:
             if ie.get('cycle') in EXCLUDED_CYCLES: continue
