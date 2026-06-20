@@ -66,6 +66,25 @@ var glue =
   '  }, 30);\n' +
   '})();\n';
 
+// --bundle: gate the DEPLOY ARTIFACT, not the sources. Load the shipped bundle
+// (build_embed.js output, verbatim) and splice the PREVIEW_DATA + window.fetch shim
+// in just before </head> (after the font links) so jsdom serves the working-tree
+// election-data.json with NO CDN. The 3 inline scripts + mount markup are the
+// bundle's own, so the jsdom gates exercise exactly what ships. Source mode below
+// is untouched.
+if (argv.indexOf('--bundle') >= 0) {
+  var bundleHtml = read('elections-embed.inlined.html');
+  var shimTag = '<script>\n' + shim + '\n</script>\n';
+  var injected = bundleHtml.replace('</head>', shimTag + '</head>');
+  if (injected === bundleHtml) { console.error('--bundle: no </head> seam found in elections-embed.inlined.html'); process.exit(1); }
+  var bOutDir = path.join(dir, 'preview');
+  fs.mkdirSync(bOutDir, { recursive: true });
+  var bOut = path.join(bOutDir, 'elections-preview.html');
+  fs.writeFileSync(bOut, injected);
+  console.log('built ' + path.relative(process.cwd(), bOut) + '  (BUNDLE mode: elections-embed.inlined.html + fetch shim)');
+  process.exit(0);
+}
+
 var html = '<!doctype html>\n<html lang="en">\n<head>\n' +
   '<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
   '<title>Elections embed — LOCAL preview (inlined data, no CDN)</title>\n' +
