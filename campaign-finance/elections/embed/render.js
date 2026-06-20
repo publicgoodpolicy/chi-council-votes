@@ -537,7 +537,11 @@
   // "2024: District N" provenance so a returner's combined total visibly comprises two
   // different districts -- it can never read as single-race spending. Reuses elecStreams
   // (c.combined has the same shape: figures + windowed drill-down). Streams stay separate.
-  function elecCombinedBlock(c, scale) {
+  function raceOfficeFriendly(o) {
+    return ({ school_board_member: 'board-member', school_board_president: 'board president',
+              alderperson: 'alderperson', mayor: 'mayor', school_board_president_label: 'board president' })[o] || o;
+  }
+  function elecCombinedBlock(c, scale, raceOffice) {
     var ev = c.combined;
     if (!ev || !elecHasMoney(ev.figures)) return '';
     var win = ev.win || {};
@@ -545,12 +549,28 @@
     var base = 'eleccomb-' + esc(c.slug);
     var e24 = c.byElection['2024'];
     var has24 = e24 && elecHasMoney(e24.figures);
-    var meta = has24 ? '· across both elections (2024 + 2026)' : '· 2026 election only';
-    var prov = has24
-      ? 'This total combines <b>two separate elections under redrawn district boundaries</b> — ' +
+    var pe = c.priorElection || {};
+    // STRUCTURAL office-change detection: the prior election's office differs from the
+    // current race office (e.g. a 2024 board-MEMBER seat -> the 2026 board-PRESIDENT seat).
+    // Generalizes to any future office-changer; NOT a Biggs/Custer special-case.
+    var officeChange = has24 && pe.office && raceOffice && pe.office !== raceOffice;
+    var meta, prov;
+    if (officeChange) {
+      var distN = String(pe.label || '').replace(/^\s*\d+:\s*/, '');   // "2024: District 6" -> "District 6"
+      meta = '· across two offices (2024 + 2026)';
+      prov = 'This total combines ' + esc(c.name) + '’s 2024 campaign for the ' + esc(distN) + ' ' +
+        esc(raceOfficeFriendly(pe.office)) + ' seat and their 2026 campaign for ' + esc(raceOfficeFriendly(raceOffice)) +
+        ' — <b>two different offices</b>. It is a cross-election sum across <b>different offices</b>, ' +
+        '<b>not single-race spending</b>. Per-election detail is in the This / Last tabs.';
+    } else if (has24) {
+      meta = '· across both elections (2024 + 2026)';
+      prov = 'This total combines <b>two separate elections under redrawn district boundaries</b> — ' +
         esc(e24.label) + ' and 2026 — so it spans two <b>different</b> districts. It is a cross-election sum, ' +
-        '<b>not single-race spending</b>. Per-election detail is in the This / Last tabs.'
-      : 'From the 2026 election only (no 2024 election money to combine).';
+        '<b>not single-race spending</b>. Per-election detail is in the This / Last tabs.';
+    } else {
+      meta = '· 2026 election only';
+      prov = 'From the 2026 election only (no 2024 election money to combine).';
+    }
     return '<article class="card" id="' + base + '"' + winAttrs + '>' +
       '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' +
       (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') +
@@ -583,7 +603,7 @@
         'per stream (streams still separate). The districts were <b>redrawn between the two elections</b>, so a combined ' +
         'total spans two different districts — it is a <b>cross-election sum, not single-race spending</b>. The 2024 ' +
         'portion keeps its “2024: District N” label.</p>' +
-        vm.candidates.map(function (c) { return elecCombinedBlock(c, combScale); }).filter(Boolean).join('');
+        vm.candidates.map(function (c) { return elecCombinedBlock(c, combScale, vm.race.office); }).filter(Boolean).join('');
     } else {
       body = vm.candidates.map(function (c) { return elecCandBlock(c, active, roleOf[active], scale); }).join('');
     }

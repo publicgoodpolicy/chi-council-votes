@@ -9,6 +9,7 @@
       "race_id": "sb-president",
       "incumbent": false,
       "status": "filed",
+      "prior_election": {"election": "2024", "label": "2024: District 6", "office": "school_board_member"},
       "bio": {}
     },
     "39805": {
@@ -17,6 +18,7 @@
       "race_id": "sb-president",
       "incumbent": false,
       "status": "filed",
+      "prior_election": {"election": "2024", "label": "2024: District 1", "office": "school_board_member"},
       "bio": {}
     },
     "40912": {

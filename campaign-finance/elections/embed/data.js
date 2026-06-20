@@ -628,7 +628,7 @@
                priorElection: c.prior_election || null, undated: undatedSmallDollar(index, c.id),
                byElection: byElection, combined: combined };
     });
-    return { race: { id: race.id, slug: raceSlug(race), label: race.label },
+    return { race: { id: race.id, slug: raceSlug(race), label: race.label, office: race.office },
              electionIds: ids, toggles: toggles, candidates: candidates };
   }
 
