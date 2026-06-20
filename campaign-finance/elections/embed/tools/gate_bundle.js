@@ -1,0 +1,280 @@
+#!/usr/bin/env node
+/* tools/gate_bundle.js — consolidated real-click gate for the SHIPPED bundle.
+ *
+ * PRE-DEPLOY RITUAL (decision 1, HALT 2): the bundle couples ONLY to data.js /
+ * render.js / app.js, never to finance re-ingest (probe A3). So this gate is NOT
+ * part of the per-commit ritual — run it as a deliberate step before any push /
+ * deploy:
+ *     node tools/build_embed.js                  (rebuild elections-embed.inlined.html)
+ *     node tools/build_preview.js --bundle       (regenerate the --bundle preview)
+ *     node tools/gate_bundle.js                  (this gate, against that preview)
+ *
+ * It loads preview/elections-preview.html (which --bundle mode fills from the
+ * shipped bundle + a fetch shim) into jsdom and drives REAL clicks through the
+ * bundle's own production app.js delegation — so it tests what ships, not the
+ * sources. Consolidates the former ad-hoc /tmp/gate_spend.js (24 checks) and the
+ * reconstructed /tmp/bundle_gate.js (5-item set) into one committed, fixture-driven
+ * gate. Read-only: touches no source, artifact, or election-data.json.
+ */
+'use strict';
+var fs = require('fs'), path = require('path');
+
+// jsdom resolution (portable): project/global install, else the ad-hoc /tmp sandbox.
+function resolveJSDOM() {
+  var tries = ['jsdom', path.join(__dirname, 'node_modules', 'jsdom'),
+    path.join(__dirname, '..', 'node_modules', 'jsdom'), '/tmp/domtest/node_modules/jsdom'];
+  for (var i = 0; i < tries.length; i++) { try { return require(tries[i]).JSDOM; } catch (e) {} }
+  console.error('gate_bundle: jsdom not found. Install it (npm i jsdom) or provide /tmp/domtest/node_modules/jsdom.');
+  process.exit(2);
+}
+var JSDOM = resolveJSDOM();
+
+// PREREQUISITE: the --bundle preview must already exist (build it via the ritual above).
+var PREVIEW = path.join(__dirname, '..', 'preview', 'elections-preview.html');
+if (!fs.existsSync(PREVIEW)) {
+  console.error('gate_bundle: preview not found at ' + PREVIEW + '\n' +
+    'Run the pre-deploy ritual first:\n' +
+    '  node tools/build_embed.js\n  node tools/build_preview.js --bundle');
+  process.exit(2);
+}
+
+// ====================================================================
+// FIXTURES — one block per office. Office-SPECIFIC data ONLY. Add council /
+// mayor blocks here when their cohorts land; the assertion functions below are
+// office-agnostic and consume one of these blocks unchanged.
+// ====================================================================
+var FIXTURES = {
+  school_board: {
+    office: 'school_board',
+    presidentSlug: 'school-board-president',
+    minRaces: 11,                       // President + the sb-d04..d12 district cohort (districts split a/b)
+    subtabs: ['donors', 'candidates', 'industries', 'industry-candidate', 'flags'],
+    filter: { allLabel: /All elections/, thisLabel: /This election \(2026\)/, lastLabel: /Last election \(2024\)/,
+              allId: 'all', thisId: '2026', lastId: '2024' },
+    windowEnd: '2026-12-31',
+    incs: {
+      committee: 'ie-committee-26066',  // INCS Action Independent Committee
+      // exact-figure firewall lines (election label + stance + amount), checked precisely:
+      exactLines: [
+        { name: 'Jason Dónes', label: '2024: District 3', amount: '$35,153', stance: 'against' },
+        { name: 'Carlos A. Rivas', label: '2024: District 3', amount: '$234,231', stance: 'for' }
+      ],
+      // broader coverage: every name must render as a clickable for/against fact:
+      fiveNames: ['Carlos A. Rivas', 'Karen Zaccor', 'Ebony DeBerry', 'Anusha Thotakura', 'Jason Dónes']
+    },
+    // INCS All-vs-(This+Last) parity. INCS spent ONLY in 2024, so the 2026 leg is 0
+    // by absence (the spender row is correctly missing from the 2026 browse list) —
+    // the parity is therefore trivially All == 2024 (see note at assertParity); it is
+    // NOT independent 2026 confirmation. Figures are post-rounding display dollars.
+    parity: { support: 663609, oppose: 401217 },
+    // self-funding negative case (relational is_self, 8f148b2): a funder who self-funds
+    // their OWN race must NOT be flagged self in another candidate's drill.
+    selfLeak: { funder: 'Leon', leakRace: 'Rosenfeld', ownRace: 'Leon' }
+  }
+};
+
+// ====================================================================
+// Office-agnostic assertion functions — each consumes (ctx, fx). One shared jsdom
+// bootstrap (the dedup): ctx wraps the single document + click/nav helpers.
+// ====================================================================
+function makeCtx(window) {
+  var doc = window.document;
+  var wait = function (ms) { return new Promise(function (r) { window.setTimeout(r, ms); }); };
+  var click = function (el) { return el && el.dispatchEvent(new window.MouseEvent('click', { bubbles: true })); };
+  var root = function () { return doc.getElementById('ipg-elect-root'); };
+  var modal = function () { return doc.getElementById('ipg-elect-modal'); };
+  var ctx = {
+    doc: doc, window: window, wait: wait, click: click, root: root, modal: modal,
+    q: function (sel) { return doc.querySelector(sel); },
+    nav: function (slug) { click(doc.querySelector('[data-slug="' + slug + '"]')); },
+    tab: function (v) { var b = root().querySelector('[data-electionview="' + v + '"]'); if (b) click(b); return !!b; },
+    cardByName: function (n) { return [].slice.call(root().querySelectorAll('article.card')).filter(function (a) { return a.innerHTML.indexOf(n) >= 0; })[0]; },
+    slugs: function () { return [].slice.call(doc.querySelectorAll('[data-slug]')).map(function (e) { return e.getAttribute('data-slug'); }); },
+    closeModal: async function () { var c = modal() && modal().querySelector('[data-modal-close]'); if (c) { click(c); await wait(30); } },
+    spend: async function () { click(doc.querySelector('[data-view="spend"]')); await wait(70); },
+    setFilter: function (id) { click([].slice.call(root().querySelectorAll('[data-spendelection]')).filter(function (b) { return b.getAttribute('data-spendelection') === id; })[0]); },
+    openCommittee: async function (id) {
+      click(root().querySelector('[data-spendtab="donors"]')); await wait(40);
+      var r = root().querySelector('[data-committee="' + id + '"]'); if (!r) return false;
+      click(r); await wait(60); return true;
+    },
+    ieSummary: function () {
+      var seg = modal().innerHTML.match(/([\d,]+) support[\s\S]*?([\d,]+) oppose/);
+      return seg ? { sup: +seg[1].replace(/,/g, ''), opp: +seg[2].replace(/,/g, '') } : { sup: 0, opp: 0 };
+    }
+  };
+  ctx.findRaceWith = async function (name) {
+    var ss = ctx.slugs();
+    for (var i = 0; i < ss.length; i++) { ctx.nav(ss[i]); await wait(40); if (ctx.cardByName(name)) return ss[i]; }
+    return null;
+  };
+  return ctx;
+}
+
+// (b1) boot — bundle assembles + delegation is live.  [origin: bundle_gate #1]
+async function assertBoot(T, ctx, fx) {
+  await ctx.wait(700);
+  T.ok('[boot] bundle mounts + delegation live (root populated)', (ctx.root().innerHTML || '').length > 500);
+}
+
+// (race set) fixture-driven: the expected cohort exists. [fixture-driven addition]
+async function assertRaceSet(T, ctx, fx) {
+  var slugs = ctx.slugs();
+  T.ok('[races] President race present', slugs.indexOf(fx.presidentSlug) >= 0);
+  T.ok('[races] district cohort present (>= ' + fx.minRaces + ' races: sb-d04..d12 + President)', slugs.length >= fx.minRaces);
+}
+
+// (1) This/Last/All toggle wiring.  [origin: bundle_gate #2-5]
+async function assertToggleWiring(T, ctx, fx) {
+  await ctx.closeModal();
+  ctx.nav(fx.presidentSlug); await ctx.wait(60);
+  T.ok('[toggle] This/Last/All buttons present',
+    !!ctx.root().querySelector('[data-electionview="' + fx.filter.thisId + '"]') &&
+    !!ctx.root().querySelector('[data-electionview="' + fx.filter.lastId + '"]') &&
+    !!ctx.root().querySelector('[data-electionview="all"]'));
+  ctx.tab(fx.filter.lastId); await ctx.wait(50); var hLast = ctx.root().innerHTML;
+  T.ok('[toggle] Last selected via click', ctx.root().querySelector('[data-electionview="' + fx.filter.lastId + '"]').getAttribute('aria-selected') === 'true');
+  ctx.tab(fx.filter.thisId); await ctx.wait(50);
+  T.ok('[toggle] This selected + content changed', ctx.root().querySelector('[data-electionview="' + fx.filter.thisId + '"]').getAttribute('aria-selected') === 'true' && hLast !== ctx.root().innerHTML);
+  ctx.tab('all'); await ctx.wait(50);
+  T.ok('[toggle] All selected', ctx.root().querySelector('[data-electionview="all"]').getAttribute('aria-selected') === 'true');
+}
+
+// (3) per-election drill-down reachable.  [origin: bundle_gate #6-7]
+async function assertPerElectionDrill(T, ctx, fx) {
+  await ctx.closeModal();
+  ctx.nav(fx.presidentSlug); await ctx.wait(60); ctx.tab(fx.filter.lastId); await ctx.wait(50);
+  var drill = [].slice.call(ctx.root().querySelectorAll('[aria-controls]')).filter(function (b) {
+    var p = ctx.doc.getElementById(b.getAttribute('aria-controls')); return p && /contrib/.test(p.className);
+  })[0];
+  T.ok('[drill] a per-election drill toggle exists', !!drill);
+  if (drill) {
+    var panel = ctx.doc.getElementById(drill.getAttribute('aria-controls'));
+    ctx.click(drill); await ctx.wait(40);
+    T.ok('[drill] clicking it opens the drill panel (.open)', panel.classList.contains('open'));
+  }
+}
+
+// (4) self-funding renders separately + named-case no-leak.  [origin: bundle_gate #8-11]
+async function assertSelfFundingNoLeak(T, ctx, fx) {
+  await ctx.closeModal();
+  var leakSlug = await ctx.findRaceWith(fx.selfLeak.leakRace);
+  T.ok('[self] found ' + fx.selfLeak.leakRace + ' race (' + leakSlug + ')', !!leakSlug);
+  ctx.nav(leakSlug); await ctx.wait(60); ctx.tab('all'); await ctx.wait(50);
+  var card = ctx.cardByName(fx.selfLeak.leakRace) || { innerHTML: '' };
+  T.ok('[self] ' + fx.selfLeak.leakRace + ' self-funding renders separately (own money / loans)',
+    /own money|tagchip self|candidate’s own money/.test(card.innerHTML));
+  var leak = [].slice.call((ctx.cardByName(fx.selfLeak.leakRace) || ctx.doc.createElement('div')).querySelectorAll('.crow,.selfline'))
+    .filter(function (r) { return new RegExp(fx.selfLeak.funder).test(r.textContent) && /own money|tagchip self/.test(r.innerHTML); });
+  T.ok('[self] NO LEAK: no ' + fx.selfLeak.funder + ' row in ' + fx.selfLeak.leakRace + ' marked self (relational is_self)', leak.length === 0);
+  var ownSlug = await ctx.findRaceWith(fx.selfLeak.ownRace);
+  ctx.nav(ownSlug); await ctx.wait(60); ctx.tab('all'); await ctx.wait(50);
+  T.ok('[self] ' + fx.selfLeak.ownRace + ' OWN race shows self-funding distinctly',
+    /own money|candidate’s own money/.test((ctx.cardByName(fx.selfLeak.ownRace) || { innerHTML: '' }).innerHTML));
+}
+
+// Full Spend-tab feature set: the former gate_spend A/B/C/D 24 checks. The INCS
+// "present + modal opens" (bundle_gate #12) and "streams SEPARATE" (bundle_gate #18)
+// checks are DELIBERATELY DEDUPED here (the granular C row-present/modal-opened and
+// the C streams-separate assertions below subsume them).  [origin: gate_spend 24]
+async function assertSpendTabFeatures(T, ctx, fx) {
+  await ctx.closeModal();
+  // A — tab + feature set
+  var spendBtn = ctx.q('[data-view="spend"]');
+  T.ok('[spend.A] top-nav has a Spend view button', !!spendBtn);
+  ctx.click(spendBtn); await ctx.wait(80);
+  var R = ctx.root().innerHTML;
+  T.ok('[spend.A] election filter nav present (data-spendelection)', R.indexOf('data-spendelection') >= 0);
+  fx.subtabs.forEach(function (t) { T.ok('[spend.A] subtab present: ' + t, R.indexOf('data-spendtab="' + t + '"') >= 0); });
+  T.ok('[spend.A] browse-donors list shows IE PAC spenders', /IE PAC/.test(R));
+  T.ok('[spend.A] browse note (donors+spenders) present', /funded an independent-expenditure committee/.test(R));
+  // B — election filter defaults to All, reslices
+  var fbtns = [].slice.call(ctx.root().querySelectorAll('[data-spendelection]'));
+  var active = fbtns.filter(function (b) { return b.getAttribute('aria-selected') === 'true'; })[0];
+  T.ok('[spend.B] default selected = All elections', active && active.getAttribute('data-spendelection') === fx.filter.allId && fx.filter.allLabel.test(active.textContent));
+  T.ok('[spend.B] filter has This + Last', fbtns.some(function (b) { return fx.filter.thisLabel.test(b.textContent); }) && fbtns.some(function (b) { return fx.filter.lastLabel.test(b.textContent); }));
+  ctx.click(ctx.root().querySelector('[data-spendtab="industries"]')); await ctx.wait(60);
+  var indAll = ctx.root().querySelector('.spend-body').textContent;
+  ctx.setFilter(fx.filter.thisId); await ctx.wait(60);
+  var indThis = ctx.root().querySelector('.spend-body').textContent;
+  T.ok('[spend.B] switching to This reslices the industry totals (content changes)', indAll !== indThis);
+  T.ok('[spend.B] This now the selected filter', ctx.root().querySelector('[data-spendelection="' + fx.filter.thisId + '"]').getAttribute('aria-selected') === 'true');
+  // C — firewall drill (exact lines)
+  ctx.setFilter(fx.filter.allId); await ctx.wait(60);
+  ctx.click(ctx.root().querySelector('[data-spendtab="donors"]')); await ctx.wait(60);
+  var incsRow = ctx.root().querySelector('[data-committee="' + fx.incs.committee + '"]');
+  T.ok('[spend.C] INCS Action row present in browse list', !!incsRow);
+  ctx.click(incsRow); await ctx.wait(80);
+  T.ok('[spend.C] committee-profile modal opened', !!ctx.modal());
+  var M = ctx.modal().innerHTML;
+  var spentSection = (M.split('What it spent on')[1] || '').split('Who funds this committee')[0];
+  var spentText = spentSection.replace(/<[^>]+>/g, ' ');
+  fx.incs.exactLines.forEach(function (L) {
+    var re = new RegExp(L.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '[\\s\\S]*?' + L.label + '[\\s\\S]*?' + L.amount.replace('$', '\\$') + ' ' + L.stance);
+    T.ok('[spend.C] ' + L.name + ' line: ' + L.label + ' + ' + L.stance + ' ' + L.amount, re.test(spentText));
+  });
+  T.ok('[spend.C] streams SEPARATE (for/against shown, never a summed "funded" total)',
+    spentSection.indexOf(' for') >= 0 && spentSection.indexOf(' against') >= 0 && spentSection.indexOf('funded') < 0);
+  T.ok('[spend.C] firewall note present (separate streams + election label)', M.indexOf('never summed') >= 0);
+  T.ok('[spend.C] IE provenance ⚑ needs review surfaces on a line', /needs review/.test(spentSection));
+  // D — deep drill: sub-funder -> footprint, window-scoped
+  var winRe = new RegExp('data-win-end="' + fx.windowEnd + '"');
+  T.ok('[spend.D] committee-profile modal carries the active window (data-win-end)', winRe.test(M));
+  var funderRow = ctx.modal().querySelector('[data-funder]');
+  T.ok('[spend.D] INCS has clickable funder rows (data-funder, rollup by parent_id)', !!funderRow);
+  ctx.click(funderRow); await ctx.wait(80);
+  var FM = ctx.modal().innerHTML;
+  T.ok('[spend.D] clicking a sub-funder opens the donor footprint (Tier-3)', /Donor footprint/.test(FM));
+  T.ok('[spend.D] footprint modal is election-scoped (carries window)', winRe.test(FM));
+}
+
+// (5) IE for/against firewall — every named target renders as a clickable for/against
+// fact.  [origin: bundle_gate #13-17]
+async function assertFirewallFiveNames(T, ctx, fx) {
+  await ctx.closeModal();
+  await ctx.spend(); ctx.setFilter(fx.filter.allId); await ctx.wait(50);
+  var opened = await ctx.openCommittee(fx.incs.committee);
+  if (!opened) { T.ok('[firewall] INCS drill opens under All', false); return; }
+  fx.incs.fiveNames.forEach(function (nm) {
+    var row = [].slice.call(ctx.modal().querySelectorAll('.crow')).filter(function (r) { return r.textContent.indexOf(nm) >= 0; })[0];
+    T.ok('[firewall] INCS drill: ' + nm + ' renders as for/against fact', !!row && /(for|against)/.test(row.textContent));
+  });
+}
+
+// (2) All == This + Last per stream.  [origin: bundle_gate #19-20]
+async function assertParity(T, ctx, fx) {
+  await ctx.closeModal();
+  await ctx.spend();
+  ctx.setFilter(fx.filter.allId); await ctx.wait(50); var oAll = await ctx.openCommittee(fx.incs.committee);
+  var all = oAll ? ctx.ieSummary() : { sup: 0, opp: 0 };
+  ctx.setFilter(fx.filter.thisId); await ctx.wait(50); var oThis = await ctx.openCommittee(fx.incs.committee);
+  var thisE = oThis ? ctx.ieSummary() : { sup: 0, opp: 0 };   // INCS absent in 2026 -> {0,0} (see fixture note)
+  ctx.setFilter(fx.filter.lastId); await ctx.wait(50); var oLast = await ctx.openCommittee(fx.incs.committee);
+  var lastE = oLast ? ctx.ieSummary() : { sup: 0, opp: 0 };
+  console.log('   INCS support  All=' + all.sup + '  This=' + thisE.sup + '  Last=' + lastE.sup);
+  console.log('   INCS oppose   All=' + all.opp + '  This=' + thisE.opp + '  Last=' + lastE.opp);
+  // NOTE: This(2026) leg is 0 by absence (INCS only spent in 2024), so this parity is
+  // trivially All == Last. It is the FIREWALL sum check, not independent 2026 confirmation.
+  T.ok('[parity] All == This + Last per stream (support)', all.sup === thisE.sup + lastE.sup && all.sup === fx.parity.support);
+  T.ok('[parity] All == This + Last per stream (oppose)', all.opp === thisE.opp + lastE.opp && all.opp === fx.parity.oppose);
+}
+
+(async function () {
+  var html = fs.readFileSync(PREVIEW, 'utf8');
+  var dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: true, url: 'http://localhost/' });
+  var ctx = makeCtx(dom.window);
+  var fx = FIXTURES.school_board;
+  var T = { n: 0, fail: 0, ok: function (name, cond) { this.n++; if (!cond) this.fail++; console.log((cond ? 'PASS  ' : 'FAIL  ') + name); } };
+
+  await assertBoot(T, ctx, fx);
+  await assertRaceSet(T, ctx, fx);
+  await assertToggleWiring(T, ctx, fx);
+  await assertPerElectionDrill(T, ctx, fx);
+  await assertSelfFundingNoLeak(T, ctx, fx);
+  await assertSpendTabFeatures(T, ctx, fx);
+  await assertFirewallFiveNames(T, ctx, fx);
+  await assertParity(T, ctx, fx);
+
+  console.log('\n' + T.n + ' checks · ' + (T.fail ? ('FAILED ' + T.fail) : 'ALL PASS'));
+  process.exit(T.fail ? 1 : 0);
+})();
