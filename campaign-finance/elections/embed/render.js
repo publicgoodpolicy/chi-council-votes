@@ -130,6 +130,8 @@
       '.ipg-elect .contrib-inner.bare{background:none;border:0;padding:0;border-radius:0;}' +
       '.ipg-elect .contrib-inner{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}' +
       '.ipg-elect .contrib-h{font-size:12px;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 10px;}' +
+      '.ipg-elect .donor-search{width:100%;box-sizing:border-box;font-family:var(--body);font-size:13px;padding:8px 11px;margin:0 0 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);}' +
+      '.ipg-elect .donor-search:focus-visible{outline:2px solid var(--sage);outline-offset:1px;}' +
       '.ipg-elect .crow{display:grid;grid-template-columns:1fr auto;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px;}' +
       '.ipg-elect .crow:last-child{border-bottom:0;}' +
       '.ipg-elect .crow .who{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}' +
@@ -273,6 +275,7 @@
     var aggHtml = ''; for (t = 0; t < agg.length; t++) aggHtml += donorRow(agg[t]);
     return '<div class="contrib" id="' + id + '"><div class="contrib-inner">' +
       '<p class="contrib-h">Who gave to this campaign · ' + money(cd.total) + ' total</p>' +
+      (realCount > 8 ? '<input class="donor-search" type="search" placeholder="Search donors…" aria-label="Search donors" data-donor-search>' : '') +
       top + moreHtml + aggHtml +
       '<p class="contrib-note">Rolled up by affiliation; lines sum to the contributions figure. Click a donor to see ' +
       'their full footprint. Small-dollar (under $150) donors are disclosed only in aggregate.</p></div></div>';
@@ -309,7 +312,10 @@
       return '<div class="ie-cmte"><div class="ie-cmte-head">' +
         '<button class="ie-cmte-toggle" type="button" aria-expanded="false" aria-controls="' + t2 + '">' +
         '<span class="caret" aria-hidden="true">▸</span> <b>' + money(s.amount) + ' ' + verb + '</b> ' + verbing + ' ' +
-        esc(candName) + ' · <span class="ie-pac-tag">IE PAC</span> ' + cn.primary + '</button>' + sun + '</div>' +
+        esc(candName) + ' · <span class="ie-pac-tag">IE PAC</span> ' + cn.primary +
+        ((s.industryTags && s.industryTags.length) ? ' ' + s.industryTags.map(function (tg) { return '<span class="tagchip ind">' + esc(prettyTag(tg)) + '</span>'; }).join('') : '') +
+        (s.needsReview ? ' <span class="tagchip flag" title="match: ' + esc((s.matchMethods || []).join(', ')) + '">⚑ needs review</span>' : '') +
+        '</button>' + sun + '</div>' +
         '<div class="contrib tier2" id="' + t2 + '"><div class="contrib-inner">' +
           '<p class="ie-lead">' + primarily + '</p>' +
           '<p class="contrib-note framing">Amounts below are what each donor gave <b>this committee</b> over time — ' +
@@ -460,18 +466,37 @@
   function elecHasMoney(f) {
     return !!f && (f.contributions > 0 || f.selfFunding > 0 || f.independentSupport > 0 || f.independentOpposition > 0);
   }
-  function elecFourBars(f, scale) {
+  // Per-election industry composition strip (reuses the spend-tab tagchip markup).
+  // Uncategorized donors render as "uncategorized" honestly, never dropped.
+  function elecIndustries(industries) {
+    if (!industries || !industries.length) return '';
+    var chips = industries.slice(0, 8).map(function (i) {
+      var label = (i.industry === 'unclassified' || i.industry === 'uncategorized') ? 'uncategorized' : prettyTag(i.industry);
+      return '<span class="tagchip ind">' + esc(label) + ' ' + money(i.total) + '</span>';
+    }).join('');
+    return '<p class="contrib-h" style="margin-top:14px">Industries this election</p><div class="ixc">' + chips + '</div>';
+  }
+  // Four separate stream bars (HALT-2.5 model preserved). contributions / IE-support /
+  // IE-oppose are CLICKABLE -> the council drill-down panels (contributorPanel/iePanel),
+  // date-window-sliced. Self-funding stays a value bar; its distinct non-clickable line
+  // appears inside the contributor drill-down via donorRow's isSelf treatment.
+  function elecStreams(ev, candName, scale, base) {
+    var f = ev.figures;
     if (!f) return '<p class="contrib-note">No money reported for this election.</p>';
-    return '<div class="bars">' +
-      bar('From contributors', [{ cls: 'third', v: f.contributions }],
-        f.contributionsCount ? plural(f.contributionsCount, 'contribution', 'contributions') : '', scale) +
-      bar('Candidate self-funding', [{ cls: 'self', v: f.selfFunding }],
-        f.selfFundingCount ? plural(f.selfFundingCount, 'gift or loan', 'gifts or loans') : '', scale) +
-      bar('Independent support', [{ cls: 'support', v: f.independentSupport }],
-        f.independentSupportCount ? plural(f.independentSupportCount, 'expenditure', 'expenditures') : '', scale) +
-      bar('Independent opposition', [{ cls: 'oppose', v: f.independentOpposition }],
-        f.independentOppositionCount ? plural(f.independentOppositionCount, 'expenditure', 'expenditures') : '', scale) +
-      '</div>';
+    var hasC = f.contributions > 0 || f.selfFunding > 0, hasS = f.independentSupport > 0, hasO = f.independentOpposition > 0;
+    var cBar = bar('From contributors', [{ cls: 'third', v: f.contributions }],
+      f.contributionsCount ? plural(f.contributionsCount, 'contribution', 'contributions') : '', scale, hasC ? base + '-c' : null);
+    var cPanel = hasC && ev.contributors ? contributorPanel(ev.contributors, base + '-c') : '';
+    var selfBar = bar('Candidate self-funding', [{ cls: 'self', v: f.selfFunding }],
+      f.selfFundingCount ? plural(f.selfFundingCount, 'gift or loan', 'gifts or loans') : '', scale);
+    var sBar = bar('Independent support', [{ cls: 'support', v: f.independentSupport }],
+      f.independentSupportCount ? plural(f.independentSupportCount, 'expenditure', 'expenditures') : '', scale, hasS ? base + '-s' : null);
+    var sPanel = hasS && ev.ieSupportDetail ? iePanel(ev.ieSupportDetail, candName, base + '-s') : '';
+    var oBar = bar('Independent opposition', [{ cls: 'oppose', v: f.independentOpposition }],
+      f.independentOppositionCount ? plural(f.independentOppositionCount, 'expenditure', 'expenditures') : '', scale, hasO ? base + '-o' : null);
+    var oPanel = hasO && ev.ieOpposeDetail ? iePanel(ev.ieOpposeDetail, candName, base + '-o') : '';
+    return '<div class="bars">' + cBar + cPanel + selfBar + sBar + sPanel + oBar + oPanel + '</div>' +
+      elecIndustries(ev.industries);
   }
   // State machine for a candidate's header in a given election. For the prior (Last)
   // election: (i) prior_election present -> its own label (split-origin safe, never a
@@ -491,12 +516,17 @@
   function elecCandBlock(c, eid, role, scale) {
     var ev = c.byElection[eid] || { label: eid, figures: null };
     var h = elecHeader(c, eid, role);
-    return '<article class="card" id="elec-' + esc(c.slug) + '-' + esc(eid) + '">' +
+    var base = 'elec-' + esc(c.slug) + '-' + esc(eid);
+    // data-win-* lets the app scope a donor-footprint modal opened from this panel to
+    // the election's date window (Gate G), not the whole 4-year cycle.
+    var win = ev.win || {};
+    var winAttrs = ' data-win-start="' + esc(win.start || '') + '" data-win-end="' + esc(win.end || '') + '"';
+    return '<article class="card" id="' + base + '"' + winAttrs + '>' +
       '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' +
       (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') +
       '<span class="race-meta">· ' + esc(h.header) + '</span></div>' +
       (h.subnote ? '<p class="contrib-note">' + esc(h.subnote) + '</p>' : '') +
-      elecFourBars(ev.figures, scale) + '</article>';
+      elecStreams(ev, c.name, scale, base) + '</article>';
   }
   function elecAnyMoney(vm, eid) {
     for (var i = 0; i < vm.candidates.length; i++) {

@@ -41,6 +41,22 @@
   var EXCLUDED_CYCLES = { 'pre-2011': 1, 'undated': 1 };
   var DUES_TYPE = 'IE Committee Dues Transfer';
 
+  // Election windows — mirrors campaign-finance/elections/election-windows.json (the
+  // browser embed can't read that file at runtime). A finance row slices to an election
+  // by FILING DATE in [start,end] inclusive; start:null = open-ended past. This is the
+  // ADDITIVE per-election date filter layered onto the existing cycle filtering (2024 &
+  // 2026 both live in cycle '2027', so only a date slice separates them). Keep in sync.
+  var ELECTION_WINDOWS = { school_board: {
+    '2024': { start: null, end: '2024-12-31' },
+    '2026': { start: '2025-01-01', end: '2026-12-31' } } };
+  function officeType(office) { return (office && office.indexOf('school_board') === 0) ? 'school_board' : null; }
+  function winFor(office, electionId) {
+    var t = officeType(office), o = t && ELECTION_WINDOWS[t]; return (o && o[electionId]) || null;
+  }
+  function inWindow(date, win) {
+    return !!win && !!date && (win.start == null || date >= win.start) && (win.end == null || date <= win.end);
+  }
+
   // ---- stable, URL-safe slugs (locked scheme: e.g. "bruce-leon-district-2a") ----
   // Pure + deterministic so the browser app and the future SEO pre-render derive
   // identical paths from the same data.
@@ -281,7 +297,7 @@
   // Contributor drill-down: a candidate's direct contributions rolled up by
   // parent_id, sorted desc, INCLUDING the small-dollar aggregate as its own line.
   // Option A: lines sum EXACTLY to candidateFigures().contributions.total.
-  function candidateContributors(index, candidateId, cycle) {
+  function candidateContributors(index, candidateId, cycle, win) {
     var rows = index.directByCandidate[candidateId] || [];
     var by = {};
     for (var i = 0; i < rows.length; i++) {
@@ -289,6 +305,7 @@
       if (EXCLUDED_CYCLES[c.cycle]) continue;
       if (c.contribution_type === DUES_TYPE) continue;
       if (cycle != null && c.cycle !== cycle) continue;
+      if (win && !inWindow(c.date, win)) continue;
       var donor = index.donors[c.donor_id] || {};
       var pid = donor.parent_id || c.donor_id;
       var parent = index.donors[pid] || donor;
@@ -330,7 +347,7 @@
   // Tier 3: a donor's footprint WITHIN this election artifact — every committee /
   // candidate this parent has funded (direct gifts + money into IE committees),
   // dues excluded. Election-scoped only; council-side giving is NOT included.
-  function donorFootprint(index, parentId) {
+  function donorFootprint(index, parentId, win) {
     var parent = index.donors[parentId] || { id: parentId, name: parentId };
     var pr = index.parentRollup[parentId];
     var rows = (pr && pr.rows) || [];
@@ -338,6 +355,7 @@
     for (var i = 0; i < rows.length; i++) {
       var c = rows[i];
       if (c.contribution_type === DUES_TYPE) continue;
+      if (win && !inWindow(c.date, win)) continue;
       var cid = c.committee_id, cm = index.committees[cid] || {};
       // office scope: an IE committee that didn't spend in this office is out of
       // scope (e.g. a council-only IE PAC must not appear in a school-board view).
@@ -415,7 +433,7 @@
   // IE drill-down for one candidate + stance: the spender committee(s), each with
   // its second-hop top funders. Spender names are placeholders, so the funders
   // are the identity ("funded primarily by ...").
-  function candidateIE(index, candidateId, stance, cycle) {
+  function candidateIE(index, candidateId, stance, cycle, win) {
     var ieB = index.ieByCandidate[candidateId] || { support: [], oppose: [] };
     var list = stance === 'oppose' ? ieB.oppose : ieB.support;
     var by = {};
@@ -423,9 +441,13 @@
       var ie = list[i];
       if (EXCLUDED_CYCLES[ie.cycle]) continue;
       if (cycle != null && ie.cycle !== cycle) continue;
+      if (win && !inWindow(ie.date, win)) continue;
       var sk = ie.spender_committee_id;
-      var m = by[sk] || (by[sk] = { spender_committee_id: sk, amount: 0, count: 0 });
+      var m = by[sk] || (by[sk] = { spender_committee_id: sk, amount: 0, count: 0, needsReview: false, methods: {} });
       m.amount = round2(m.amount + (ie.amount || 0)); m.count++;
+      // 3b provenance (admin-review seam): surface needs_review + the match method(s).
+      if (ie.needs_review) m.needsReview = true;
+      if (ie.match_method) m.methods[ie.match_method] = 1;
     }
     var spenders = [];
     for (var key in by) {
@@ -433,6 +455,8 @@
       var s = by[key], cm = index.committees[key] || {};
       var ff = spenderFunders(index, key);
       s.committeeName = cm.committee_name || key;
+      s.industryTags = cm.industry_tags || [];
+      s.matchMethods = Object.keys(s.methods);
       s.sunshineUrl = sunshineUrl(cm);
       s.topFunders = ff.funders.slice(0, 3);
       s.funders = ff.funders;
@@ -443,6 +467,38 @@
     spenders.sort(function (a, b) { return b.amount - a.amount; });
     var total = 0; for (var t = 0; t < spenders.length; t++) total += spenders[t].amount;
     return { stance: stance, spenders: spenders, total: round2(total) };
+  }
+
+  // Per-candidate industry composition (optionally windowed) — same logic as spendAgg
+  // for ONE candidate: contributions x donor.industries + IE spender.industry_tags.
+  // Uncategorized donors render as 'uncategorized', never silently bucketed. Powers the
+  // per-election industries strip in the toggle panels (reuses the spend-tab markup).
+  function candidateIndustries(index, candidateId, cycle, win) {
+    var ind = {};
+    function slot(tag) { return ind[tag] || (ind[tag] = { industry: tag, direct: 0, support: 0, oppose: 0 }); }
+    var dr = index.directByCandidate[candidateId] || [];
+    for (var d = 0; d < dr.length; d++) {
+      var c = dr[d];
+      if (EXCLUDED_CYCLES[c.cycle] || c.contribution_type === DUES_TYPE) continue;
+      if (cycle != null && c.cycle !== cycle) continue;
+      if (win && !inWindow(c.date, win)) continue;
+      var donor = index.donors[c.donor_id] || {}, amt = c.amount || 0;
+      var inds = (donor.industries && donor.industries.length) ? donor.industries : ['uncategorized'];
+      for (var a = 0; a < inds.length; a++) { var s = slot(inds[a]); s.direct = round2(s.direct + amt); }
+    }
+    var ieB = index.ieByCandidate[candidateId] || { support: [], oppose: [] };
+    ['support', 'oppose'].forEach(function (field) {
+      ieB[field].forEach(function (ie) {
+        if (EXCLUDED_CYCLES[ie.cycle]) return;
+        if (cycle != null && ie.cycle !== cycle) return;
+        if (win && !inWindow(ie.date, win)) return;
+        var sp = index.committees[ie.spender_committee_id] || {}, tags = sp.industry_tags || [], amt2 = ie.amount || 0;
+        for (var t = 0; t < tags.length; t++) { var s2 = slot(tags[t]); s2[field] = round2(s2[field] + amt2); }
+      });
+    });
+    var arr = []; for (var k in ind) if (ind.hasOwnProperty(k)) { var x = ind[k]; x.total = round2(x.direct + x.support + x.oppose); arr.push(x); }
+    arr.sort(function (a, b) { return b.total - a.total; });
+    return arr;
   }
 
   // Neutral order = alphabetical by SURNAME (ballot convention), never by amount.
@@ -527,9 +583,18 @@
     var candidates = cands.map(function (c) {
       var b = bce[c.id] || {}, byElection = {};
       ids.forEach(function (id) {
-        var bk = b[id];
-        byElection[id] = bk ? { label: bk.label || id, figures: bucketFigures(bk) }
-                            : { label: id, figures: null };
+        var bk = b[id], win = winFor(race.office, id);
+        // Each election panel carries its date-window-sliced drill-down data (council
+        // components reused): contributor list, IE support/oppose detail, industries.
+        byElection[id] = {
+          label: bk ? (bk.label || id) : id,
+          figures: bk ? bucketFigures(bk) : null,
+          win: win,
+          contributors: candidateContributors(index, c.id, null, win),
+          ieSupportDetail: candidateIE(index, c.id, 'support', null, win),
+          ieOpposeDetail: candidateIE(index, c.id, 'oppose', null, win),
+          industries: candidateIndustries(index, c.id, null, win)
+        };
       });
       return { id: c.id, slug: candidateSlug(c, race), name: c.name, incumbent: !!c.incumbent,
                priorElection: c.prior_election || null, undated: undatedSmallDollar(index, c.id), byElection: byElection };
@@ -640,7 +705,7 @@
 
   // 1) Browse donors — real donors (by parent_id) ranked by office-scoped giving,
   // merged with IE committees as "political spender" rows (ranked by their spend).
-  function browseDonors(index, cycle) {
+  function browseDonors(index, cycle, win) {
     var keep = function (cyc) { return !EXCLUDED_CYCLES[cyc] && (cycle == null || cyc === cycle); };
     var rows = [];
     for (var pid in index.parentRollup) {
@@ -650,6 +715,7 @@
         var c = pr.rows[i];
         if (c.contribution_type === DUES_TYPE) continue;
         if (!keep(c.cycle)) continue;
+        if (win && !inWindow(c.date, win)) continue;
         if (!recipInScope(index, c.committee_id)) continue;
         total += c.amount || 0;
       }
@@ -662,7 +728,7 @@
     for (var key in index.iesBySpender) {           // already office-scoped
       if (!index.iesBySpender.hasOwnProperty(key)) continue;
       var cm = index.committees[key] || {}, spend = 0, rws = index.iesBySpender[key];
-      for (var j = 0; j < rws.length; j++) { if (!keep(rws[j].cycle)) continue; spend += rws[j].amount || 0; }
+      for (var j = 0; j < rws.length; j++) { if (!keep(rws[j].cycle)) continue; if (win && !inWindow(rws[j].date, win)) continue; spend += rws[j].amount || 0; }
       if (spend <= 0) continue;
       rows.push({ kind: 'ie', committee_id: key, name: cm.committee_name || key,
         identity: spenderFunders(index, key).funders.slice(0, 3).map(function (f) { return f.name; }), total: round2(spend) });
@@ -691,7 +757,7 @@
 
   // Shared cycle-aware aggregation for the industry/flag cross-tabs (re-derived
   // from the office-scoped per-candidate index by cycle; null cycle = all-time).
-  function spendAgg(index, office, cycle) {
+  function spendAgg(index, office, cycle, win) {
     var offs = OFFICE_RACE_OFFICES[office] || [];
     var keep = function (cyc) { return !EXCLUDED_CYCLES[cyc] && (cycle == null || cyc === cycle); };
     var byCand = {}, flags = {};
@@ -706,6 +772,7 @@
       var dr = index.directByCandidate[cid] || [];
       for (var d = 0; d < dr.length; d++) {
         var c = dr[d]; if (c.contribution_type === DUES_TYPE || !keep(c.cycle)) continue;
+        if (win && !inWindow(c.date, win)) continue;
         var donor = index.donors[c.donor_id] || {}, amt = c.amount || 0;
         var inds = (donor.industries && donor.industries.length) ? donor.industries : ['uncategorized'];
         for (var a = 0; a < inds.length; a++) ind(byCand, cid, inds[a]).direct = round2(ind(byCand, cid, inds[a]).direct + amt);
@@ -719,6 +786,7 @@
       ['support', 'oppose'].forEach(function (field) {
         ieB[field].forEach(function (ie) {
           if (!keep(ie.cycle)) return;
+          if (win && !inWindow(ie.date, win)) return;
           var sp = index.committees[ie.spender_committee_id] || {}, tags = sp.industry_tags || [], amt2 = ie.amount || 0;
           for (var t = 0; t < tags.length; t++) ind(byCand, cid, tags[t])[field] = round2(ind(byCand, cid, tags[t])[field] + amt2);
         });

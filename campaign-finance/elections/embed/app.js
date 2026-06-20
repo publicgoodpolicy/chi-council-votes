@@ -33,13 +33,20 @@
     if (m) m.parentNode.removeChild(m);
     document.removeEventListener('keydown', escClose);
   }
-  function openFunder(pid) { if (IDX) openModal(ElectRender.renderFunderModal(ElectData.donorFootprint(IDX, pid))); }
+  function openFunder(pid, win) { if (IDX) openModal(ElectRender.renderFunderModal(ElectData.donorFootprint(IDX, pid, win))); }
   function openCommittee(key) { if (IDX) openModal(ElectRender.renderCommitteeProfile(ElectData.committeeProfile(IDX, key))); }
+  // A donor clicked inside a per-election panel carries a [data-win-*] ancestor; scope
+  // its footprint to that election window (Gate G). Elsewhere -> null -> full footprint.
+  function winFromEl(el) {
+    var w = el && el.closest && el.closest('[data-win-end]');
+    if (!w) return null;
+    return { start: w.getAttribute('data-win-start') || null, end: w.getAttribute('data-win-end') || null };
+  }
   // Shared dispatch: a clicked donor row -> footprint, a clicked committee row ->
   // committee profile. Used by BOTH the page handler and the in-modal handler.
   function modalNav(target) {
     var fr = target.closest && target.closest('[data-funder]');
-    if (fr) { openFunder(fr.getAttribute('data-funder')); return true; }
+    if (fr) { openFunder(fr.getAttribute('data-funder'), winFromEl(fr)); return true; }
     var cr = target.closest && target.closest('[data-committee]');
     if (cr) { openCommittee(cr.getAttribute('data-committee')); return true; }
     return false;
@@ -134,6 +141,21 @@
         state.electionView = null;
         draw(); return;
       }
+    });
+
+    // Client-side donor search inside a drill-down panel (council behavior): filter the
+    // panel's donor rows by name; reveal the collapsed remainder while a query is active.
+    root.addEventListener('input', function (e) {
+      if (!(e.target.matches && e.target.matches('[data-donor-search]'))) return;
+      var panel = e.target.closest('.contrib-inner'); if (!panel) return;
+      var q = (e.target.value || '').trim().toLowerCase();
+      var rows = panel.querySelectorAll('.crow');
+      for (var i = 0; i < rows.length; i++) {
+        var hit = !q || (rows[i].textContent || '').toLowerCase().indexOf(q) >= 0;
+        rows[i].style.display = hit ? '' : 'none';
+      }
+      var more = panel.querySelector('.contrib.tall');
+      if (more) more.classList.toggle('open', !!q);
     });
 
     draw();
