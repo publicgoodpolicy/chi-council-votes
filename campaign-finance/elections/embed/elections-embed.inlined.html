@@ -48,8 +48,7 @@
   // How each office page groups its races (sub-tabs / pickers).
   var OFFICE_GROUPS = {
     school_board: [
-      { label: 'Board President', offices: ['school_board_president'] },
-      { label: 'Districts', offices: ['school_board_member'] }
+      { label: 'School Board', offices: ['school_board_president', 'school_board_member'] }
     ],
     city_council: [{ label: 'Wards', offices: ['alderperson'] }],
     mayor: [{ label: 'Mayor', offices: ['mayor'] }]
@@ -58,6 +57,58 @@
   // Cycles never shown (out of SBE range / unattributable). Always excluded.
   var EXCLUDED_CYCLES = { 'pre-2011': 1, 'undated': 1 };
   var DUES_TYPE = 'IE Committee Dues Transfer';
+
+  // Election windows — mirrors campaign-finance/elections/election-windows.json (the
+  // browser embed can't read that file at runtime). A finance row slices to an election
+  // by FILING DATE in [start,end] inclusive; start:null = open-ended past. This is the
+  // ADDITIVE per-election date filter layered onto the existing cycle filtering (2024 &
+  // 2026 both live in cycle '2027', so only a date slice separates them). Keep in sync.
+  var ELECTION_WINDOWS = { school_board: {
+    '2024': { start: null, end: '2024-12-31' },
+    '2026': { start: '2025-01-01', end: '2026-12-31' } } };
+  function officeType(office) { return (office && office.indexOf('school_board') === 0) ? 'school_board' : null; }
+  function winFor(office, electionId) {
+    var t = officeType(office), o = t && ELECTION_WINDOWS[t]; return (o && o[electionId]) || null;
+  }
+  function inWindow(date, win) {
+    return !!win && !!date && (win.start == null || date >= win.start) && (win.end == null || date <= win.end);
+  }
+  // Which election a dated row belongs to (office-aware). Returns the election id or null.
+  function electionOf(office, date) {
+    var t = officeType(office), o = t && ELECTION_WINDOWS[t];
+    if (!o || !date) return null;
+    for (var id in o) { if (o.hasOwnProperty(id) && inWindow(date, o[id])) return id; }
+    return null;
+  }
+  // Union window across all of an office's elections (earliest start, latest end). An
+  // open (null) bound on any window makes that side of the union open. For school_board:
+  // [null, 2026-12-31] = 2024 + 2026 — the "All elections" default for the spend tab.
+  function unionWindow(office) {
+    var t = officeType(office), o = t && ELECTION_WINDOWS[t];
+    if (!o) return null;
+    var ids = Object.keys(o), start = null, end = null, openStart = false, openEnd = false;
+    for (var i = 0; i < ids.length; i++) {
+      var w = o[ids[i]];
+      if (w.start == null) openStart = true; else if (start == null || w.start < start) start = w.start;
+      if (w.end == null) openEnd = true; else if (end == null || w.end > end) end = w.end;
+    }
+    return { start: openStart ? null : start, end: openEnd ? null : end };
+  }
+  // Election ids for an office, newest first (e.g. ["2026","2024"]).
+  function spendElectionIds(office) {
+    var t = officeType(office), o = t && ELECTION_WINDOWS[t];
+    return o ? Object.keys(o).sort().reverse() : [];
+  }
+  // Resolve a spend-filter selection ('all' | electionId) to a date window. 'all' = union.
+  function spendWin(office, sel) { return (sel == null || sel === 'all') ? unionWindow(office) : winFor(office, sel); }
+  // Filter options for the spend tab: All (default) + This/Last per election, newest first.
+  function spendElectionFilter(office, sel) {
+    var opts = [{ id: 'all', label: 'All elections' }];
+    spendElectionIds(office).forEach(function (id, i) {
+      opts.push({ id: id, label: (i === 0 ? 'This election' : 'Last election') + ' (' + id + ')' });
+    });
+    return { active: sel || 'all', options: opts };
+  }
 
   // ---- stable, URL-safe slugs (locked scheme: e.g. "bruce-leon-district-2a") ----
   // Pure + deterministic so the browser app and the future SEO pre-render derive
@@ -231,6 +282,7 @@
 
     return {
       races: races, candidates: candidates, committees: committees, donors: donors,
+      rollups: json.rollups || {},
       raceById: raceById, candidateById: candidateById, candidatesByRace: candidatesByRace,
       candByCommittee: candByCommittee, committeeKeyByCandidate: committeeKeyByCandidate,
       directByCandidate: directByCandidate, ieByCandidate: ieByCandidate, iesBySpender: iesBySpender,
@@ -242,12 +294,13 @@
     };
   }
 
-  function sumIE(list, cycle) {
+  function sumIE(list, cycle, win) {
     var s = 0, n = 0;
     for (var i = 0; i < list.length; i++) {
       var ie = list[i];
       if (EXCLUDED_CYCLES[ie.cycle]) continue;
       if (cycle != null && ie.cycle !== cycle) continue;
+      if (win && !inWindow(ie.date, win)) continue;
       s += ie.amount || 0; n++;
     }
     return { amount: s, count: n };
@@ -255,7 +308,7 @@
 
   // The three money figures, kept SEPARATE — never summed into one number.
   // cycle = null -> all-time (all non-excluded cycles); else a specific cycle code.
-  function candidateFigures(index, candidateId, cycle) {
+  function candidateFigures(index, candidateId, cycle, win) {
     var direct = index.directByCandidate[candidateId] || [];
     var total = 0, self = 0, count = 0;
     for (var i = 0; i < direct.length; i++) {
@@ -263,12 +316,13 @@
       if (EXCLUDED_CYCLES[c.cycle]) continue;
       if (c.contribution_type === DUES_TYPE) continue;
       if (cycle != null && c.cycle !== cycle) continue;
+      if (win && !inWindow(c.date, win)) continue;
       var a = c.amount || 0;
       total += a; count++;
       if (isSelfFunded(index.donors, c)) self += a;
     }
     var ieB = index.ieByCandidate[candidateId] || { support: [], oppose: [] };
-    var sup = sumIE(ieB.support, cycle), opp = sumIE(ieB.oppose, cycle);
+    var sup = sumIE(ieB.support, cycle, win), opp = sumIE(ieB.oppose, cycle, win);
     return {
       contributions: { total: round2(total), selfFunded: round2(self), thirdParty: round2(total - self), count: count },
       independentSupport: round2(sup.amount), independentSupportCount: sup.count,
@@ -298,7 +352,7 @@
   // Contributor drill-down: a candidate's direct contributions rolled up by
   // parent_id, sorted desc, INCLUDING the small-dollar aggregate as its own line.
   // Option A: lines sum EXACTLY to candidateFigures().contributions.total.
-  function candidateContributors(index, candidateId, cycle) {
+  function candidateContributors(index, candidateId, cycle, win) {
     var rows = index.directByCandidate[candidateId] || [];
     var by = {};
     for (var i = 0; i < rows.length; i++) {
@@ -306,6 +360,7 @@
       if (EXCLUDED_CYCLES[c.cycle]) continue;
       if (c.contribution_type === DUES_TYPE) continue;
       if (cycle != null && c.cycle !== cycle) continue;
+      if (win && !inWindow(c.date, win)) continue;
       var donor = index.donors[c.donor_id] || {};
       var pid = donor.parent_id || c.donor_id;
       var parent = index.donors[pid] || donor;
@@ -313,8 +368,11 @@
         industries: parent.industries || [], flags: parent.flags || [],
         total: 0, count: 0, isSelf: false, isAggregate: false });
       m.total = round2(m.total + (c.amount || 0)); m.count++;
-      if (c.is_loan || c.contribution_type === 'Loan Received' || parent.type === 'Candidate' ||
-          (parent.industries || []).indexOf('self-funding') >= 0) m.isSelf = true;
+      // Self-funding is the pipeline's ONE relational decision, stamped per row by
+      // build_rollups (donor identity-matches THIS recipient). The render DISPLAYS it; it
+      // does not decide self from donor-global attributes (which leaked a self-funder's
+      // gift to ANOTHER candidate, e.g. Leon->Rosenfeld).
+      if (c.is_self) m.isSelf = true;
       if (parent.type === 'Aggregate' || (parent.industries || []).indexOf('small-dollar') >= 0) m.isAggregate = true;
     }
     var lines = []; for (var k in by) if (by.hasOwnProperty(k)) lines.push(by[k]);
@@ -347,7 +405,7 @@
   // Tier 3: a donor's footprint WITHIN this election artifact — every committee /
   // candidate this parent has funded (direct gifts + money into IE committees),
   // dues excluded. Election-scoped only; council-side giving is NOT included.
-  function donorFootprint(index, parentId) {
+  function donorFootprint(index, parentId, win) {
     var parent = index.donors[parentId] || { id: parentId, name: parentId };
     var pr = index.parentRollup[parentId];
     var rows = (pr && pr.rows) || [];
@@ -355,6 +413,7 @@
     for (var i = 0; i < rows.length; i++) {
       var c = rows[i];
       if (c.contribution_type === DUES_TYPE) continue;
+      if (win && !inWindow(c.date, win)) continue;
       var cid = c.committee_id, cm = index.committees[cid] || {};
       // office scope: an IE committee that didn't spend in this office is out of
       // scope (e.g. a council-only IE PAC must not appear in a school-board view).
@@ -376,7 +435,7 @@
     committees.sort(function (a, b) { return b.total - a.total; });
     var total = 0; for (var j = 0; j < committees.length; j++) total += committees[j].total;
     return {
-      parent_id: parentId, name: parent.name || parentId,
+      parent_id: parentId, name: parent.name || parentId, win: win || null,
       industries: parent.industries || [], flags: parent.flags || [],
       committees: committees, total: round2(total), count: committees.length
     };
@@ -387,43 +446,58 @@
   // it (second hop). For a candidate committee: what it raised + its contributors.
   // funders/contributors are donorRow-compatible lines (clickable back to a
   // footprint) — one modal system, two content types.
-  function committeeProfile(index, committeeKey) {
+  function committeeProfile(index, committeeKey, win) {
     var cm = index.committees[committeeKey] || {};
     var sun = sunshineUrl(cm);
+    var office = index.office;
+    var bce = (index.rollups && index.rollups.by_candidate_election) || {};
     if (cm.type === 'independent_expenditure') {
-      // group this committee's IEs by target candidate
+      // FIREWALL: group this committee's IEs by (target candidate × ELECTION), keeping
+      // support/oppose as SEPARATE streams — never one summed "funded X". Each target
+      // carries the candidate's per-election label ("2024: District 3" / "2026") so a
+      // 2024 member-race spend can never read as current-race (2026) spending. `win`
+      // scopes to the active election filter (union = All).
       var byCand = {}, support = 0, oppose = 0;
       var src = index.iesBySpender[committeeKey] || [];
       for (var i = 0; i < src.length; i++) {
         var ie = src[i];
         if (EXCLUDED_CYCLES[ie.cycle]) continue;
-        var tc = ie.target_candidate_id || ('race:' + ie.target_race_id);
+        if (win && !inWindow(ie.date, win)) continue;
+        var eid = electionOf(office, ie.date);
         var cand = index.candidateById[ie.target_candidate_id] || {};
         var race = index.raceById[cand.race_id || ie.target_race_id] || {};
+        var cb = (ie.target_candidate_id && bce[ie.target_candidate_id]) || {};
+        var elabel = (eid && cb[eid] && cb[eid].label) || eid || 'undated';
+        var tc = (ie.target_candidate_id || ('race:' + ie.target_race_id)) + '|' + (eid || 'undated');
         var m = byCand[tc] || (byCand[tc] = { candidate_id: ie.target_candidate_id || null,
-          name: cand.name || ('race ' + ie.target_race_id), raceLabel: race.label || null, support: 0, oppose: 0, total: 0, count: 0 });
+          name: cand.name || ('race ' + ie.target_race_id), raceLabel: race.label || null,
+          electionId: eid || null, electionLabel: elabel, support: 0, oppose: 0, total: 0, count: 0,
+          needsReview: false, methods: {} });
         var a = ie.amount || 0;
         if (ie.stance === 'oppose') { m.oppose = round2(m.oppose + a); oppose = round2(oppose + a); }
         else { m.support = round2(m.support + a); support = round2(support + a); }
         m.total = round2(m.total + a); m.count++;
+        if (ie.needs_review) m.needsReview = true;            // 3b provenance, surfaced per line
+        if (ie.match_method) m.methods[ie.match_method] = 1;
       }
-      var targets = []; for (var k in byCand) if (byCand.hasOwnProperty(k)) targets.push(byCand[k]);
+      var targets = [];
+      for (var k in byCand) if (byCand.hasOwnProperty(k)) { var tt = byCand[k]; tt.matchMethods = Object.keys(tt.methods); delete tt.methods; targets.push(tt); }
       targets.sort(function (a, b) { return b.total - a.total; });
       var ff = spenderFunders(index, committeeKey);
       return {
-        committee_id: committeeKey, kind: 'ie', name: cm.committee_name || committeeKey,
+        committee_id: committeeKey, kind: 'ie', name: cm.committee_name || committeeKey, win: win || null,
         sunshineUrl: sun, isIE: true, identity: ff.funders.slice(0, 3).map(function (x) { return x.name; }),
         support: round2(support), oppose: round2(oppose), total: round2(support + oppose), targets: targets,
         funders: ff.funders, funderTotal: ff.total, funderCount: ff.count
       };
     }
-    // candidate (or other) committee — show what it raised + its contributors
+    // candidate (or other) committee — show what it raised + its contributors (window-scoped)
     var candId = cm.candidate_id || null;
     var cand2 = candId ? (index.candidateById[candId] || {}) : {};
     var race2 = cand2.race_id ? (index.raceById[cand2.race_id] || {}) : {};
-    var contrib = candId ? candidateContributors(index, candId, null) : { lines: [], total: 0, count: 0 };
+    var contrib = candId ? candidateContributors(index, candId, null, win) : { lines: [], total: 0, count: 0 };
     return {
-      committee_id: committeeKey, kind: 'candidate', name: cm.committee_name || committeeKey,
+      committee_id: committeeKey, kind: 'candidate', name: cm.committee_name || committeeKey, win: win || null,
       candidateName: cand2.name || null, raceLabel: race2.label || null, sunshineUrl: sun, isIE: false,
       raised: contrib.total, funders: contrib.lines, funderTotal: contrib.total, funderCount: contrib.count
     };
@@ -432,7 +506,7 @@
   // IE drill-down for one candidate + stance: the spender committee(s), each with
   // its second-hop top funders. Spender names are placeholders, so the funders
   // are the identity ("funded primarily by ...").
-  function candidateIE(index, candidateId, stance, cycle) {
+  function candidateIE(index, candidateId, stance, cycle, win) {
     var ieB = index.ieByCandidate[candidateId] || { support: [], oppose: [] };
     var list = stance === 'oppose' ? ieB.oppose : ieB.support;
     var by = {};
@@ -440,9 +514,13 @@
       var ie = list[i];
       if (EXCLUDED_CYCLES[ie.cycle]) continue;
       if (cycle != null && ie.cycle !== cycle) continue;
+      if (win && !inWindow(ie.date, win)) continue;
       var sk = ie.spender_committee_id;
-      var m = by[sk] || (by[sk] = { spender_committee_id: sk, amount: 0, count: 0 });
+      var m = by[sk] || (by[sk] = { spender_committee_id: sk, amount: 0, count: 0, needsReview: false, methods: {} });
       m.amount = round2(m.amount + (ie.amount || 0)); m.count++;
+      // 3b provenance (admin-review seam): surface needs_review + the match method(s).
+      if (ie.needs_review) m.needsReview = true;
+      if (ie.match_method) m.methods[ie.match_method] = 1;
     }
     var spenders = [];
     for (var key in by) {
@@ -450,6 +528,8 @@
       var s = by[key], cm = index.committees[key] || {};
       var ff = spenderFunders(index, key);
       s.committeeName = cm.committee_name || key;
+      s.industryTags = cm.industry_tags || [];
+      s.matchMethods = Object.keys(s.methods);
       s.sunshineUrl = sunshineUrl(cm);
       s.topFunders = ff.funders.slice(0, 3);
       s.funders = ff.funders;
@@ -460,6 +540,38 @@
     spenders.sort(function (a, b) { return b.amount - a.amount; });
     var total = 0; for (var t = 0; t < spenders.length; t++) total += spenders[t].amount;
     return { stance: stance, spenders: spenders, total: round2(total) };
+  }
+
+  // Per-candidate industry composition (optionally windowed) — same logic as spendAgg
+  // for ONE candidate: contributions x donor.industries + IE spender.industry_tags.
+  // Uncategorized donors render as 'uncategorized', never silently bucketed. Powers the
+  // per-election industries strip in the toggle panels (reuses the spend-tab markup).
+  function candidateIndustries(index, candidateId, cycle, win) {
+    var ind = {};
+    function slot(tag) { return ind[tag] || (ind[tag] = { industry: tag, direct: 0, support: 0, oppose: 0 }); }
+    var dr = index.directByCandidate[candidateId] || [];
+    for (var d = 0; d < dr.length; d++) {
+      var c = dr[d];
+      if (EXCLUDED_CYCLES[c.cycle] || c.contribution_type === DUES_TYPE) continue;
+      if (cycle != null && c.cycle !== cycle) continue;
+      if (win && !inWindow(c.date, win)) continue;
+      var donor = index.donors[c.donor_id] || {}, amt = c.amount || 0;
+      var inds = (donor.industries && donor.industries.length) ? donor.industries : ['uncategorized'];
+      for (var a = 0; a < inds.length; a++) { var s = slot(inds[a]); s.direct = round2(s.direct + amt); }
+    }
+    var ieB = index.ieByCandidate[candidateId] || { support: [], oppose: [] };
+    ['support', 'oppose'].forEach(function (field) {
+      ieB[field].forEach(function (ie) {
+        if (EXCLUDED_CYCLES[ie.cycle]) return;
+        if (cycle != null && ie.cycle !== cycle) return;
+        if (win && !inWindow(ie.date, win)) return;
+        var sp = index.committees[ie.spender_committee_id] || {}, tags = sp.industry_tags || [], amt2 = ie.amount || 0;
+        for (var t = 0; t < tags.length; t++) { var s2 = slot(tags[t]); s2[field] = round2(s2[field] + amt2); }
+      });
+    });
+    var arr = []; for (var k in ind) if (ind.hasOwnProperty(k)) { var x = ind[k]; x.total = round2(x.direct + x.support + x.oppose); arr.push(x); }
+    arr.sort(function (a, b) { return b.total - a.total; });
+    return arr;
   }
 
   // Neutral order = alphabetical by SURNAME (ballot convention), never by amount.
@@ -486,6 +598,111 @@
     return false;
   }
 
+  // ---- This / Last / All-Elections toggle (per-candidate buckets) ----
+  // Reads the precomputed rollups.by_candidate_election (built globally in
+  // build_rollups, bucketed by FILING DATE). Scoped to the loaded 2024-cohort
+  // races (sb-d04..sb-d09): their candidates' 2024 status is verified (returning
+  // incumbents carry prior_election; appointees/challengers are confirmed 2024
+  // non-candidates). Other SB races (e.g. sb-d03 Leon) have 2024 returners that
+  // still LACK prior_election and would mislabel as "did not run", so they stay on
+  // the all-years view until verified. Widen this set as cohorts are verified.
+  var TOGGLE_RACES = { 'sb-d04': 1, 'sb-d05': 1, 'sb-d06': 1, 'sb-d07': 1, 'sb-d08': 1, 'sb-d09': 1,
+                       'sb-d10': 1, 'sb-d11': 1, 'sb-d12': 1, 'sb-president': 1 };
+
+  // Map one by_candidate_election bucket to the FOUR SEPARATE streams the render
+  // bars consume. contributions (third-party) and self_funding are kept distinct;
+  // nothing is summed across the four streams.
+  function bucketFigures(bk) {
+    return {
+      contributions: round2(bk.contributions.amount), contributionsCount: bk.contributions.count,
+      selfFunding: round2(bk.self_funding.amount), selfFundingCount: bk.self_funding.count,
+      independentSupport: round2(bk.ie_support.amount), independentSupportCount: bk.ie_support.count,
+      independentOpposition: round2(bk.ie_oppose.amount), independentOppositionCount: bk.ie_oppose.count
+    };
+  }
+
+  // Dateless small-dollar aggregate for a candidate (the _small-dollar-donors rows):
+  // these carry no filing date so they bucket to NO election; surfaced separately in
+  // the All-Elections view so 2024 + 2026 + undated reconciles to the all-years total.
+  function undatedSmallDollar(index, candId) {
+    var rows = index.directByCandidate[candId] || [], amt = 0, n = 0;
+    for (var i = 0; i < rows.length; i++) {
+      var c = rows[i];
+      if (EXCLUDED_CYCLES[c.cycle] || c.contribution_type === DUES_TYPE) continue;
+      if (c.date) continue;          // dated rows bucket to an election
+      amt += c.amount || 0; n++;
+    }
+    return { amount: round2(amt), count: n };
+  }
+
+  function raceElections(index, raceId) {
+    var race = index.raceById[raceId];
+    if (!race) return null;
+    var bce = (index.rollups && index.rollups.by_candidate_election) || {};
+    var cands = (index.candidatesByRace[raceId] || []).slice()
+      .filter(function (c) { return !c.vacating_for; }).sort(byNameNeutral);
+    if (!cands.length) return null;
+    // Full election set for the office = union of all bucket keys across all candidates
+    // (NOT just this race), so a race whose candidates only have 2026 money (e.g.
+    // sb-d05) still renders an empty "Last election (2024)" tab.
+    var idset = {};
+    for (var cc in bce) { if (!bce.hasOwnProperty(cc)) continue; for (var e in bce[cc]) if (bce[cc].hasOwnProperty(e)) idset[e] = 1; }
+    var ids = Object.keys(idset).sort().reverse();   // newest first -> ["2026","2024"]
+    if (!ids.length) return null;
+    var toggles = ids.map(function (id, i) {
+      return { id: id, role: i === 0 ? 'this' : 'prior',
+               label: (i === 0 ? 'This election' : 'Last election') + ' (' + id + ')' };
+    });
+    // Combined ("All elections") window = union of the office's election windows
+    // (earliest start, latest end). For school_board: [null, 2026-12-31] = 2024 + 2026.
+    var combinedWin = (function () {
+      var ws = ids.map(function (id) { return winFor(race.office, id); }).filter(Boolean);
+      if (!ws.length) return null;
+      var start = ws.some(function (w) { return w.start == null; }) ? null : ws.map(function (w) { return w.start; }).sort()[0];
+      var ends = ws.map(function (w) { return w.end; });
+      var end = ends.some(function (e) { return e == null; }) ? null : ends.slice().sort().reverse()[0];
+      return { start: start, end: end };
+    })();
+    var SK = ['contributions', 'selfFunding', 'independentSupport', 'independentOpposition'];
+    var candidates = cands.map(function (c) {
+      var b = bce[c.id] || {}, byElection = {};
+      ids.forEach(function (id) {
+        var bk = b[id], win = winFor(race.office, id);
+        // Each election panel carries its date-window-sliced drill-down data (council
+        // components reused): contributor list, IE support/oppose detail, industries.
+        byElection[id] = {
+          label: bk ? (bk.label || id) : id,
+          figures: bk ? bucketFigures(bk) : null,
+          win: win,
+          contributors: candidateContributors(index, c.id, null, win),
+          ieSupportDetail: candidateIE(index, c.id, 'support', null, win),
+          ieOpposeDetail: candidateIE(index, c.id, 'oppose', null, win),
+          industries: candidateIndustries(index, c.id, null, win)
+        };
+      });
+      // Combined figures SUM the per-election buckets (so combined == This + Last per
+      // stream, streams never merged); drill-down uses the union window (= same rows).
+      var cf = { contributions: 0, contributionsCount: 0, selfFunding: 0, selfFundingCount: 0,
+                 independentSupport: 0, independentSupportCount: 0, independentOpposition: 0, independentOppositionCount: 0 };
+      ids.forEach(function (id) {
+        var g = byElection[id].figures; if (!g) return;
+        SK.forEach(function (k) { cf[k] = round2(cf[k] + g[k]); cf[k + 'Count'] += g[k + 'Count']; });
+      });
+      var combined = {
+        figures: cf, win: combinedWin,
+        contributors: candidateContributors(index, c.id, null, combinedWin),
+        ieSupportDetail: candidateIE(index, c.id, 'support', null, combinedWin),
+        ieOpposeDetail: candidateIE(index, c.id, 'oppose', null, combinedWin),
+        industries: candidateIndustries(index, c.id, null, combinedWin)
+      };
+      return { id: c.id, slug: candidateSlug(c, race), name: c.name, incumbent: !!c.incumbent,
+               priorElection: c.prior_election || null, undated: undatedSmallDollar(index, c.id),
+               byElection: byElection, combined: combined };
+    });
+    return { race: { id: race.id, slug: raceSlug(race), label: race.label, office: race.office },
+             electionIds: ids, toggles: toggles, candidates: candidates };
+  }
+
   function raceView(index, raceId, cycle) {
     var race = index.raceById[raceId];
     if (!race) return null;
@@ -508,6 +725,7 @@
         hasFinance: hasAnyFinance(index, race.id), vacating: vacating
       },
       cycle: cycle || null,
+      elections: TOGGLE_RACES[raceId] ? raceElections(index, raceId) : null,
       candidates: active.map(function (c) {
         var hasFinance = !!c.committee_id;
         return {
@@ -587,7 +805,7 @@
 
   // 1) Browse donors — real donors (by parent_id) ranked by office-scoped giving,
   // merged with IE committees as "political spender" rows (ranked by their spend).
-  function browseDonors(index, cycle) {
+  function browseDonors(index, cycle, win) {
     var keep = function (cyc) { return !EXCLUDED_CYCLES[cyc] && (cycle == null || cyc === cycle); };
     var rows = [];
     for (var pid in index.parentRollup) {
@@ -597,6 +815,7 @@
         var c = pr.rows[i];
         if (c.contribution_type === DUES_TYPE) continue;
         if (!keep(c.cycle)) continue;
+        if (win && !inWindow(c.date, win)) continue;
         if (!recipInScope(index, c.committee_id)) continue;
         total += c.amount || 0;
       }
@@ -609,7 +828,7 @@
     for (var key in index.iesBySpender) {           // already office-scoped
       if (!index.iesBySpender.hasOwnProperty(key)) continue;
       var cm = index.committees[key] || {}, spend = 0, rws = index.iesBySpender[key];
-      for (var j = 0; j < rws.length; j++) { if (!keep(rws[j].cycle)) continue; spend += rws[j].amount || 0; }
+      for (var j = 0; j < rws.length; j++) { if (!keep(rws[j].cycle)) continue; if (win && !inWindow(rws[j].date, win)) continue; spend += rws[j].amount || 0; }
       if (spend <= 0) continue;
       rows.push({ kind: 'ie', committee_id: key, name: cm.committee_name || key,
         identity: spenderFunders(index, key).funders.slice(0, 3).map(function (f) { return f.name; }), total: round2(spend) });
@@ -621,13 +840,13 @@
   // 2) Spend by candidate — keyed on the CANDIDATE (target_candidate_id), NOT the
   // committee join, so a name-matched candidate with no committee still shows their
   // IE total. Three figures kept separate. Neutral (alphabetical) order.
-  function spendByCandidate(index, office, cycle) {
+  function spendByCandidate(index, office, cycle, win) {
     var offs = OFFICE_RACE_OFFICES[office] || [], out = [];
     for (var i = 0; i < index.candidates.length; i++) {
       var c = index.candidates[i], race = index.raceById[c.race_id] || {};
       if (offs.indexOf(race.office) < 0) continue;
       if (c.vacating_for) continue;                  // vacating incumbents listed in their new race
-      var f = candidateFigures(index, c.id, cycle);  // works for committee-less candidates (direct 0)
+      var f = candidateFigures(index, c.id, cycle, win);  // works for committee-less candidates (direct 0)
       if (!(f.contributions.total > 0 || f.independentSupport > 0 || f.independentOpposition > 0)) continue;
       out.push({ id: c.id, slug: candidateSlug(c, race), name: c.name,
         race: race.label, raceSlug: raceSlug(race), hasCommittee: !!c.committee_id, figures: f });
@@ -638,7 +857,7 @@
 
   // Shared cycle-aware aggregation for the industry/flag cross-tabs (re-derived
   // from the office-scoped per-candidate index by cycle; null cycle = all-time).
-  function spendAgg(index, office, cycle) {
+  function spendAgg(index, office, cycle, win) {
     var offs = OFFICE_RACE_OFFICES[office] || [];
     var keep = function (cyc) { return !EXCLUDED_CYCLES[cyc] && (cycle == null || cyc === cycle); };
     var byCand = {}, flags = {};
@@ -653,6 +872,7 @@
       var dr = index.directByCandidate[cid] || [];
       for (var d = 0; d < dr.length; d++) {
         var c = dr[d]; if (c.contribution_type === DUES_TYPE || !keep(c.cycle)) continue;
+        if (win && !inWindow(c.date, win)) continue;
         var donor = index.donors[c.donor_id] || {}, amt = c.amount || 0;
         var inds = (donor.industries && donor.industries.length) ? donor.industries : ['uncategorized'];
         for (var a = 0; a < inds.length; a++) ind(byCand, cid, inds[a]).direct = round2(ind(byCand, cid, inds[a]).direct + amt);
@@ -666,6 +886,7 @@
       ['support', 'oppose'].forEach(function (field) {
         ieB[field].forEach(function (ie) {
           if (!keep(ie.cycle)) return;
+          if (win && !inWindow(ie.date, win)) return;
           var sp = index.committees[ie.spender_committee_id] || {}, tags = sp.industry_tags || [], amt2 = ie.amount || 0;
           for (var t = 0; t < tags.length; t++) ind(byCand, cid, tags[t])[field] = round2(ind(byCand, cid, tags[t])[field] + amt2);
         });
@@ -675,8 +896,8 @@
   }
 
   // 3) Industry totals — office-scoped, cycle-aware (sum the cross-tab).
-  function industryTotals(index, office, cycle) {
-    var byCand = spendAgg(index, office, cycle).byCand, tot = {};
+  function industryTotals(index, office, cycle, win) {
+    var byCand = spendAgg(index, office, cycle, win).byCand, tot = {};
     for (var cid in byCand) {
       var inds = byCand[cid];
       for (var tag in inds) {
@@ -691,8 +912,8 @@
   }
 
   // 4) Industries by candidate — per in-office candidate, their industry breakdown.
-  function industriesByCandidate(index, office, cycle) {
-    var byCand = spendAgg(index, office, cycle).byCand, cands = spendByCandidate(index, office, cycle), out = [];
+  function industriesByCandidate(index, office, cycle, win) {
+    var byCand = spendAgg(index, office, cycle, win).byCand, cands = spendByCandidate(index, office, cycle, win), out = [];
     for (var i = 0; i < cands.length; i++) {
       var inds = byCand[cands[i].id]; if (!inds) continue;
       var arr = [];
@@ -705,20 +926,24 @@
   }
 
   // 5) Flag totals — office-scoped, cycle-aware aggregation.
-  function flagTotals(index, office, cycle) {
-    var flags = spendAgg(index, office, cycle).flags, list = [];
+  function flagTotals(index, office, cycle, win) {
+    var flags = spendAgg(index, office, cycle, win).flags, list = [];
     for (var ft in flags) list.push({ flag: ft, amount: flags[ft].amount, count: flags[ft].count });
     list.sort(function (a, b) { return b.amount - a.amount; });
     return list;
   }
 
-  // Dispatcher: one call from the thin app for the active subtab (cycle-aware).
-  function spendSubtab(index, office, tab, cycle) {
-    if (tab === 'candidates') return { tab: tab, candidates: spendByCandidate(index, office, cycle) };
-    if (tab === 'industries') return { tab: tab, industries: industryTotals(index, office, cycle) };
-    if (tab === 'industry-candidate') return { tab: tab, rows: industriesByCandidate(index, office, cycle) };
-    if (tab === 'flags') return { tab: tab, flags: flagTotals(index, office, cycle) };
-    return { tab: 'donors', rows: browseDonors(index, cycle) };   // default
+  // Dispatcher: one call from the thin app for the active subtab. Cycle-aware AND
+  // election-window-aware: `election` is 'all' (default = union of both windows),
+  // '2026' (This) or '2024' (Last). The resolved window drives every figure + the
+  // drill-downs (the spend container carries it so spender modals stay scoped).
+  function spendSubtab(index, office, tab, cycle, election) {
+    var sel = election || 'all', win = spendWin(office, sel), filter = spendElectionFilter(office, sel);
+    if (tab === 'candidates') return { tab: tab, election: sel, filter: filter, win: win, candidates: spendByCandidate(index, office, cycle, win) };
+    if (tab === 'industries') return { tab: tab, election: sel, filter: filter, win: win, industries: industryTotals(index, office, cycle, win) };
+    if (tab === 'industry-candidate') return { tab: tab, election: sel, filter: filter, win: win, rows: industriesByCandidate(index, office, cycle, win) };
+    if (tab === 'flags') return { tab: tab, election: sel, filter: filter, win: win, flags: flagTotals(index, office, cycle, win) };
+    return { tab: 'donors', election: sel, filter: filter, win: win, rows: browseDonors(index, cycle, win) };   // default
   }
 
   return {
@@ -740,7 +965,8 @@
     flagTotals: flagTotals, spendSubtab: spendSubtab,
     isSelfFunded: isSelfFunded,
     kebab: kebab, raceSlug: raceSlug, candidateSlug: candidateSlug, raceCode: raceCode,
-    viewModels: { raceBrowse: raceBrowse, raceView: raceView, officeRaces: officeRaces }
+    raceElections: raceElections,
+    viewModels: { raceBrowse: raceBrowse, raceView: raceView, officeRaces: officeRaces, raceElections: raceElections }
   };
 });
 
@@ -878,6 +1104,8 @@
       '.ipg-elect .contrib-inner.bare{background:none;border:0;padding:0;border-radius:0;}' +
       '.ipg-elect .contrib-inner{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}' +
       '.ipg-elect .contrib-h{font-size:12px;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 10px;}' +
+      '.ipg-elect .donor-search{width:100%;box-sizing:border-box;font-family:var(--body);font-size:13px;padding:8px 11px;margin:0 0 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);}' +
+      '.ipg-elect .donor-search:focus-visible{outline:2px solid var(--sage);outline-offset:1px;}' +
       '.ipg-elect .crow{display:grid;grid-template-columns:1fr auto;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px;}' +
       '.ipg-elect .crow:last-child{border-bottom:0;}' +
       '.ipg-elect .crow .who{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}' +
@@ -936,6 +1164,9 @@
       '.ipg-elect .selfline{font-size:12px;color:var(--coral);margin:11px 0 0;padding-left:182px;}' +
       '.ipg-elect .selfline b{font-weight:500;}' +
       '.ipg-elect .caption{font-size:11.5px;color:var(--ink-soft);margin:14px 0 0;padding-top:13px;border-top:1px solid var(--line);}' +
+      '.ipg-elect .elec-block{margin:0 0 10px;}' +
+      '.ipg-elect .elec-block-h{font-family:var(--display);font-weight:600;font-size:18px;color:var(--teal);margin:0 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line);}' +
+      '.ipg-elect .elec-divider{height:0;border-top:1px dashed var(--line);margin:22px 0;}' +
       '.ipg-elect .soon{text-align:center;padding:54px 24px;background:var(--paper);border:1px dashed var(--line);border-radius:var(--r);color:var(--ink-soft);}' +
       '.ipg-elect .soon h2{font-family:var(--display);font-weight:600;color:var(--ink);font-size:22px;margin:0 0 8px;}' +
       '.ipg-elect .soon p{margin:0 auto;max-width:46ch;font-size:14px;}' +
@@ -1018,6 +1249,7 @@
     var aggHtml = ''; for (t = 0; t < agg.length; t++) aggHtml += donorRow(agg[t]);
     return '<div class="contrib" id="' + id + '"><div class="contrib-inner">' +
       '<p class="contrib-h">Who gave to this campaign · ' + money(cd.total) + ' total</p>' +
+      (realCount > 8 ? '<input class="donor-search" type="search" placeholder="Search donors…" aria-label="Search donors" data-donor-search>' : '') +
       top + moreHtml + aggHtml +
       '<p class="contrib-note">Rolled up by affiliation; lines sum to the contributions figure. Click a donor to see ' +
       'their full footprint. Small-dollar (under $150) donors are disclosed only in aggregate.</p></div></div>';
@@ -1054,7 +1286,10 @@
       return '<div class="ie-cmte"><div class="ie-cmte-head">' +
         '<button class="ie-cmte-toggle" type="button" aria-expanded="false" aria-controls="' + t2 + '">' +
         '<span class="caret" aria-hidden="true">▸</span> <b>' + money(s.amount) + ' ' + verb + '</b> ' + verbing + ' ' +
-        esc(candName) + ' · <span class="ie-pac-tag">IE PAC</span> ' + cn.primary + '</button>' + sun + '</div>' +
+        esc(candName) + ' · <span class="ie-pac-tag">IE PAC</span> ' + cn.primary +
+        ((s.industryTags && s.industryTags.length) ? ' ' + s.industryTags.map(function (tg) { return '<span class="tagchip ind">' + esc(prettyTag(tg)) + '</span>'; }).join('') : '') +
+        (s.needsReview ? ' <span class="tagchip flag" title="match: ' + esc((s.matchMethods || []).join(', ')) + '">⚑ needs review</span>' : '') +
+        '</button>' + sun + '</div>' +
         '<div class="contrib tier2" id="' + t2 + '"><div class="contrib-inner">' +
           '<p class="ie-lead">' + primarily + '</p>' +
           '<p class="contrib-note framing">Amounts below are what each donor gave <b>this committee</b> over time — ' +
@@ -1086,7 +1321,8 @@
         '<div class="who">' + who + '</div>' +
         '<div class="amt">' + money(x.total) + ' <span class="n">· ' + plural(x.count, 'gift', 'gifts') + '</span></div></button>';
     }).join('') || '<p class="contrib-note">No election giving recorded.</p>';
-    return '<div class="ipg-modal-overlay" data-modal-overlay><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Donor footprint">' +
+    var wA = fp.win ? (' data-win-start="' + esc(fp.win.start || '') + '" data-win-end="' + esc(fp.win.end || '') + '"') : '';
+    return '<div class="ipg-modal-overlay" data-modal-overlay' + wA + '><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Donor footprint">' +
       '<button class="ipg-modal-close" type="button" data-modal-close aria-label="Close">×</button>' +
       '<div class="modal-kicker">Donor footprint · this election only</div>' +
       '<div class="modal-name">' + esc(fp.name) + '</div>' +
@@ -1111,12 +1347,17 @@
         '<p class="modal-note">' + idy + 'Independent spending is made without coordinating with any candidate.' + sun + '</p>';
       summary = '<div class="modal-summary">' + money(p.total) + ' spent · ' +
         money(p.support) + ' support · ' + money(p.oppose) + ' oppose</div>';
-      spent = '<p class="contrib-h">What it spent on</p>' + (p.targets.length ? p.targets.map(function (t) {
+      spent = '<p class="contrib-h">What it spent on</p>' +
+        '<p class="contrib-note">Each line is one candidate in one election. Support and opposition are ' +
+        'separate streams, never summed; the election label keeps a past-race spend from reading as this race.</p>' +
+        (p.targets.length ? p.targets.map(function (t) {
         var bits = [];
         if (t.support) bits.push('<span style="color:var(--sage)">' + money(t.support) + ' for</span>');
         if (t.oppose) bits.push('<span style="color:var(--coral)">' + money(t.oppose) + ' against</span>');
+        var lab = t.electionLabel || t.raceLabel;
+        var rev = t.needsReview ? ' <span class="tagchip flag" title="match: ' + esc((t.matchMethods || []).join(', ')) + '">⚑ needs review</span>' : '';
         return '<div class="crow"><div class="who">' + esc(t.name) +
-          (t.raceLabel ? ' <span class="muted">· ' + esc(t.raceLabel) + '</span>' : '') + '</div>' +
+          (lab ? ' <span class="muted">· ' + esc(lab) + '</span>' : '') + rev + '</div>' +
           '<div class="amt">' + bits.join(' · ') + '</div></div>';
       }).join('') : '<p class="contrib-note">No itemized spending recorded.</p>');
     } else {
@@ -1132,7 +1373,8 @@
     var fl = p.funders.slice(0, 30), funders = '';
     for (var i = 0; i < fl.length; i++) funders += donorRow(fl[i]);
     var moreF = p.funders.length > 30 ? '<p class="contrib-note">+ ' + (p.funders.length - 30) + ' more</p>' : '';
-    return '<div class="ipg-modal-overlay" data-modal-overlay><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Committee profile">' +
+    var wA = p.win ? (' data-win-start="' + esc(p.win.start || '') + '" data-win-end="' + esc(p.win.end || '') + '"') : '';
+    return '<div class="ipg-modal-overlay" data-modal-overlay' + wA + '><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Committee profile">' +
       '<button class="ipg-modal-close" type="button" data-modal-close aria-label="Close">×</button>' +
       head + summary + spent + '<p class="contrib-h" style="margin-top:14px">' + label + '</p>' + funders + moreF + '</div></div>';
   }
@@ -1184,9 +1426,175 @@
       '<p class="committee">Finance data still populating — committee not yet identified.</p></article>';
   }
 
+  // ---- This / Last / All-Elections toggle (vm = data.viewModels.raceElections) ----
+  // Pure: `active` selects which view to emit — an election id ("this"/last) or
+  // "all". Each view shows the FOUR streams as SEPARATE bars (contributions,
+  // self-funding, independent support, independent opposition), NEVER summed.
+  // "All elections" emits each election as its OWN segmented block under its own
+  // (boundary-specific) label — never merged into one cross-election total.
+  function elecScale(vm) {
+    var s = 1, i, e;
+    for (i = 0; i < vm.candidates.length; i++) {
+      var be = vm.candidates[i].byElection;
+      for (e in be) {
+        if (!be.hasOwnProperty(e)) continue;
+        var f = be[e].figures; if (!f) continue;
+        s = Math.max(s, f.contributions, f.selfFunding, f.independentSupport, f.independentOpposition);
+      }
+    }
+    return s;
+  }
+  function elecHasMoney(f) {
+    return !!f && (f.contributions > 0 || f.selfFunding > 0 || f.independentSupport > 0 || f.independentOpposition > 0);
+  }
+  // Per-election industry composition strip (reuses the spend-tab tagchip markup).
+  // Uncategorized donors render as "uncategorized" honestly, never dropped.
+  function elecIndustries(industries) {
+    if (!industries || !industries.length) return '';
+    var chips = industries.slice(0, 8).map(function (i) {
+      var label = (i.industry === 'unclassified' || i.industry === 'uncategorized') ? 'uncategorized' : prettyTag(i.industry);
+      return '<span class="tagchip ind">' + esc(label) + ' ' + money(i.total) + '</span>';
+    }).join('');
+    return '<p class="contrib-h" style="margin-top:14px">Industries this election</p><div class="ixc">' + chips + '</div>';
+  }
+  // Four separate stream bars (HALT-2.5 model preserved). contributions / IE-support /
+  // IE-oppose are CLICKABLE -> the council drill-down panels (contributorPanel/iePanel),
+  // date-window-sliced. Self-funding stays a value bar; its distinct non-clickable line
+  // appears inside the contributor drill-down via donorRow's isSelf treatment.
+  function elecStreams(ev, candName, scale, base) {
+    var f = ev.figures;
+    if (!f) return '<p class="contrib-note">No money reported for this election.</p>';
+    var hasC = f.contributions > 0 || f.selfFunding > 0, hasS = f.independentSupport > 0, hasO = f.independentOpposition > 0;
+    var cBar = bar('From contributors', [{ cls: 'third', v: f.contributions }],
+      f.contributionsCount ? plural(f.contributionsCount, 'contribution', 'contributions') : '', scale, hasC ? base + '-c' : null);
+    var cPanel = hasC && ev.contributors ? contributorPanel(ev.contributors, base + '-c') : '';
+    var selfBar = bar('Candidate self-funding', [{ cls: 'self', v: f.selfFunding }],
+      f.selfFundingCount ? plural(f.selfFundingCount, 'gift or loan', 'gifts or loans') : '', scale);
+    var sBar = bar('Independent support', [{ cls: 'support', v: f.independentSupport }],
+      f.independentSupportCount ? plural(f.independentSupportCount, 'expenditure', 'expenditures') : '', scale, hasS ? base + '-s' : null);
+    var sPanel = hasS && ev.ieSupportDetail ? iePanel(ev.ieSupportDetail, candName, base + '-s') : '';
+    var oBar = bar('Independent opposition', [{ cls: 'oppose', v: f.independentOpposition }],
+      f.independentOppositionCount ? plural(f.independentOppositionCount, 'expenditure', 'expenditures') : '', scale, hasO ? base + '-o' : null);
+    var oPanel = hasO && ev.ieOpposeDetail ? iePanel(ev.ieOpposeDetail, candName, base + '-o') : '';
+    return '<div class="bars">' + cBar + cPanel + selfBar + sBar + sPanel + oBar + oPanel + '</div>' +
+      elecIndustries(ev.industries);
+  }
+  // State machine for a candidate's header in a given election. For the prior (Last)
+  // election: (i) prior_election present -> its own label (split-origin safe, never a
+  // 2026 subdistrict id); (ii) no prior_election but 2024 money present -> "did not
+  // run" transparency framing; (iii) no prior + no money -> generic label, empty bars.
+  function elecHeader(c, eid, role) {
+    var ev = c.byElection[eid] || { label: eid, figures: null };
+    if (role === 'prior') {
+      if (c.priorElection && c.priorElection.label) return { header: c.priorElection.label, subnote: c.priorElection.qualifier || '' };
+      if (elecHasMoney(ev.figures)) {
+        return { header: eid + ' (did not run)',
+          subnote: 'Committee activity dated to ' + eid + ' — shown for transparency, not a ' + eid + ' candidacy.' };
+      }
+    }
+    return { header: ev.label || eid, subnote: '' };
+  }
+  function elecCandBlock(c, eid, role, scale) {
+    var ev = c.byElection[eid] || { label: eid, figures: null };
+    var h = elecHeader(c, eid, role);
+    var base = 'elec-' + esc(c.slug) + '-' + esc(eid);
+    // data-win-* lets the app scope a donor-footprint modal opened from this panel to
+    // the election's date window (Gate G), not the whole 4-year cycle.
+    var win = ev.win || {};
+    var winAttrs = ' data-win-start="' + esc(win.start || '') + '" data-win-end="' + esc(win.end || '') + '"';
+    return '<article class="card" id="' + base + '"' + winAttrs + '>' +
+      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' +
+      (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') +
+      '<span class="race-meta">· ' + esc(h.header) + '</span></div>' +
+      (h.subnote ? '<p class="contrib-note">' + esc(h.subnote) + '</p>' : '') +
+      elecStreams(ev, c.name, scale, base) + '</article>';
+  }
+  // (elecAnyMoney / elecUndatedSection removed with the segmented "All elections" view —
+  // All elections is now ONE combined cross-election total per candidate, see
+  // elecCombinedBlock. The dateless small-dollar aggregate is outside both election
+  // windows, so it is excluded from the combined total by construction.)
+  // "All elections" = ONE combined cross-election total per (2026) candidate. FIREWALL:
+  // explicitly labeled as spanning both elections, with the 2024 portion keeping its
+  // "2024: District N" provenance so a returner's combined total visibly comprises two
+  // different districts -- it can never read as single-race spending. Reuses elecStreams
+  // (c.combined has the same shape: figures + windowed drill-down). Streams stay separate.
+  function raceOfficeFriendly(o) {
+    return ({ school_board_member: 'board-member', school_board_president: 'board president',
+              alderperson: 'alderperson', mayor: 'mayor', school_board_president_label: 'board president' })[o] || o;
+  }
+  function elecCombinedBlock(c, scale, raceOffice) {
+    var ev = c.combined;
+    if (!ev || !elecHasMoney(ev.figures)) return '';
+    var win = ev.win || {};
+    var winAttrs = ' data-win-start="' + esc(win.start || '') + '" data-win-end="' + esc(win.end || '') + '"';
+    var base = 'eleccomb-' + esc(c.slug);
+    var e24 = c.byElection['2024'];
+    var has24 = e24 && elecHasMoney(e24.figures);
+    var pe = c.priorElection || {};
+    // STRUCTURAL office-change detection: the prior election's office differs from the
+    // current race office (e.g. a 2024 board-MEMBER seat -> the 2026 board-PRESIDENT seat).
+    // Generalizes to any future office-changer; NOT a Biggs/Custer special-case.
+    var officeChange = has24 && pe.office && raceOffice && pe.office !== raceOffice;
+    var meta, prov;
+    if (officeChange) {
+      var distN = String(pe.label || '').replace(/^\s*\d+:\s*/, '');   // "2024: District 6" -> "District 6"
+      meta = '· across two offices (2024 + 2026)';
+      prov = 'This total combines ' + esc(c.name) + '’s 2024 campaign for the ' + esc(distN) + ' ' +
+        esc(raceOfficeFriendly(pe.office)) + ' seat and their 2026 campaign for ' + esc(raceOfficeFriendly(raceOffice)) +
+        ' — <b>two different offices</b>. It is a cross-election sum across <b>different offices</b>, ' +
+        '<b>not single-race spending</b>. Per-election detail is in the This / Last tabs.';
+    } else if (has24) {
+      meta = '· across both elections (2024 + 2026)';
+      prov = 'This total combines <b>two separate elections under redrawn district boundaries</b> — ' +
+        esc(e24.label) + ' and 2026 — so it spans two <b>different</b> districts. It is a cross-election sum, ' +
+        '<b>not single-race spending</b>. Per-election detail is in the This / Last tabs.';
+    } else {
+      meta = '· 2026 election only';
+      prov = 'From the 2026 election only (no 2024 election money to combine).';
+    }
+    return '<article class="card" id="' + base + '"' + winAttrs + '>' +
+      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' +
+      (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') +
+      '<span class="race-meta">' + meta + '</span></div>' +
+      '<p class="contrib-note">' + prov + '</p>' +
+      elecStreams(ev, c.name, scale, base) + '</article>';
+  }
+  function renderRaceElections(vm, active) {
+    if (!vm || !vm.toggles.length) return '';
+    active = active || vm.toggles[0].id;     // default = "this" (current) election
+    var scale = elecScale(vm);
+    var roleOf = {}; vm.toggles.forEach(function (t) { roleOf[t.id] = t.role; });
+    var tabs = vm.toggles.map(function (t) {
+      return '<button class="subtab" role="tab" data-electionview="' + esc(t.id) + '" aria-selected="' +
+        (active === t.id) + '">' + esc(t.label) + '</button>';
+    }).join('') +
+      '<button class="subtab" role="tab" data-electionview="all" aria-selected="' + (active === 'all') + '">All elections</button>';
+    var nav = '<div class="subnav" role="tablist" aria-label="Election">' + tabs + '</div>';
+    var note = '<p class="contrib-note">Money is bucketed by filing date to each election. The four figures — ' +
+      'contributions, candidate self-funding, independent support, and independent opposition — are shown ' +
+      '<b>separately and never added together</b>.</p>';
+    var body;
+    if (active === 'all') {
+      var combScale = 1;
+      vm.candidates.forEach(function (c) {
+        var f = c.combined && c.combined.figures; if (!f) return;
+        combScale = Math.max(combScale, f.contributions, f.selfFunding, f.independentSupport, f.independentOpposition);
+      });
+      body = '<p class="contrib-note"><b>“All elections” combines each candidate’s 2024 and 2026 money</b> into one total ' +
+        'per stream (streams still separate). The districts were <b>redrawn between the two elections</b>, so a combined ' +
+        'total spans two different districts — it is a <b>cross-election sum, not single-race spending</b>. The 2024 ' +
+        'portion keeps its “2024: District N” label.</p>' +
+        vm.candidates.map(function (c) { return elecCombinedBlock(c, combScale, vm.race.office); }).filter(Boolean).join('');
+    } else {
+      body = vm.candidates.map(function (c) { return elecCandBlock(c, active, roleOf[active], scale); }).join('');
+    }
+    return '<div class="elections" data-race="' + esc(vm.race.slug) + '">' + nav + note + legend() +
+      '<div style="height:14px"></div>' + body + '</div>';
+  }
+
   // Race view: head + vacating-incumbent note(s) + legend + candidate cards
   // (neutral order from the data layer; the three figures never summed).
-  function renderRaceView(vm) {
+  function renderRaceView(vm, electionView) {
     if (!vm) return '<div class="soon"><h2>Race not found</h2></div>';
     var vac = (vm.race.vacating || []).map(function (v) {
       return '<p class="vacating-note">↳ Current member <b>' + esc(v.name) + '</b> is running for ' +
@@ -1196,6 +1604,11 @@
       (vm.cycle ? ' · cycle ' + esc(vm.cycle) : ' · all years');
     var head = '<div class="race-head"><h2>' + esc(vm.race.label) + '</h2>' +
       '<span class="race-meta">' + meta + '</span></div>' + vac;
+
+    // Races wired for the per-election toggle (the loaded cohort, gated in data.js
+    // TOGGLE_RACES) render the This/Last/All view instead of the single all-years
+    // cards. electionView (from app state) selects the active tab.
+    if (vm.elections) return head + renderRaceElections(vm.elections, electionView);
 
     if (!vm.candidates.length) {
       return head + '<div class="soon"><h2>Field forming</h2>' +
@@ -1285,6 +1698,16 @@
     }).join('') + '</div>';
   }
 
+  // Election filter (This / Last / All-Elections, default All) — the SOLE time selector
+  // for the spend tab (the legacy SBE cycle pills are gone). Same delegated-button
+  // pattern as the subtabs; drives every spend figure + drill-down through the window.
+  function electionFilterNav(filter) {
+    if (!filter || !filter.options || filter.options.length <= 1) return '';
+    return '<div class="subnav elect-filter" role="tablist" aria-label="Election filter">' + filter.options.map(function (o) {
+      return '<button class="subtab" role="tab" data-spendelection="' + esc(o.id) + '" aria-selected="' + (o.id === filter.active) + '">' + esc(o.label) + '</button>';
+    }).join('') + '</div>';
+  }
+
   function browseRow(r) {
     if (r.kind === 'ie') {
       var nm = ieNaming(r.name, r.identity);
@@ -1348,20 +1771,15 @@
       body = '<p class="contrib-note">Everyone who gave to a candidate or funded an independent-expenditure committee in this ' +
         'office, by affiliation. Click a donor for their footprint; an <span class="kind ie">IE PAC</span> opens its profile.</p>' + top + more;
     }
-    return '<div class="spend">' + spendNav(tab) + '<div class="spend-body">' + body + '</div></div>';
+    // The active election window rides on the container so a spender drill-down opened
+    // from this tab (donor footprint OR IE-PAC profile) stays scoped to the same window
+    // (winFromEl reads the nearest [data-win-end] ancestor).
+    var winAttr = vm.win ? (' data-win-start="' + esc(vm.win.start || '') + '" data-win-end="' + esc(vm.win.end || '') + '"') : '';
+    return '<div class="spend"' + winAttr + '>' + electionFilterNav(vm.filter) + spendNav(tab) + '<div class="spend-body">' + body + '</div></div>';
   }
 
-  // Year/cycle filter. Default label "All years" — the unfiltered default shows
-  // all-time money across the 4 cycles present (2015/2019/2023/2027); the year
-  // chips narrow to one cycle and re-derive the view models. active=null => All years.
-  function cycleSelector(cycles, active) {
-    if (!cycles || !cycles.length) return '';
-    var chips = '<button class="chip cyc" type="button" data-cycle="" aria-pressed="' + (active == null) + '">All years</button>';
-    for (var i = 0; i < cycles.length; i++) {
-      chips += '<button class="chip cyc" type="button" data-cycle="' + esc(cycles[i]) + '" aria-pressed="' + (active === cycles[i]) + '">' + esc(cycles[i]) + ' cycle</button>';
-    }
-    return '<div class="cycle-bar"><span class="cycle-label">Year:</span>' + chips + '</div>';
-  }
+  // (Cycle/year pills removed from the election views — the This/Last/All election
+  // toggle is the sole time selector. The council tool keeps its own cycle pills.)
 
   function officeComingSoon(office) {
     return '<div class="soon"><h2>' + esc(pageLabel(office)) + ' — coming soon</h2>' +
@@ -1382,9 +1800,12 @@
       var byrace = state.topView !== 'spend';
       var content = byrace
         ? (renderOfficeNav(state.officeRaces, state.activeSlug) +
-           '<div aria-live="polite">' + (state.raceView ? renderRaceView(state.raceView) : '') + '</div>')
+           '<div aria-live="polite">' + (state.raceView ? renderRaceView(state.raceView, state.electionView) : '') + '</div>')
         : (state.spend ? renderSpend(state.spend) : spendPlaceholder());
-      inner = cycleSelector(state.cycles, state.cycle) + content;
+      // The legacy SBE 4-year cycle pills are removed from the election views: they
+      // cannot express 2024-vs-2026 (both cycle '2027') and duplicate the election
+      // toggle, which is now the SOLE time selector. (Council still uses cycle pills.)
+      inner = content;
     }
     return '<div class="wrap">' + masthead(state.office, state.topView) +
       '<section>' + inner + '</section>' + footer() + '</div>';
@@ -1393,7 +1814,7 @@
   return {
     styles: styles,
     masthead: masthead, footer: footer,
-    renderOfficeNav: renderOfficeNav, renderRaceView: renderRaceView,
+    renderOfficeNav: renderOfficeNav, renderRaceView: renderRaceView, renderRaceElections: renderRaceElections,
     renderComingSoon: renderComingSoon, spendPlaceholder: spendPlaceholder, renderSpend: renderSpend,
     renderFunderModal: renderFunderModal, renderCommitteeProfile: renderCommitteeProfile,
     donorRow: donorRow, contributorPanel: contributorPanel, iePanel: iePanel,
@@ -1439,15 +1860,22 @@
     if (m) m.parentNode.removeChild(m);
     document.removeEventListener('keydown', escClose);
   }
-  function openFunder(pid) { if (IDX) openModal(ElectRender.renderFunderModal(ElectData.donorFootprint(IDX, pid))); }
-  function openCommittee(key) { if (IDX) openModal(ElectRender.renderCommitteeProfile(ElectData.committeeProfile(IDX, key))); }
+  function openFunder(pid, win) { if (IDX) openModal(ElectRender.renderFunderModal(ElectData.donorFootprint(IDX, pid, win))); }
+  function openCommittee(key, win) { if (IDX) openModal(ElectRender.renderCommitteeProfile(ElectData.committeeProfile(IDX, key, win))); }
+  // A donor clicked inside a per-election panel carries a [data-win-*] ancestor; scope
+  // its footprint to that election window (Gate G). Elsewhere -> null -> full footprint.
+  function winFromEl(el) {
+    var w = el && el.closest && el.closest('[data-win-end]');
+    if (!w) return null;
+    return { start: w.getAttribute('data-win-start') || null, end: w.getAttribute('data-win-end') || null };
+  }
   // Shared dispatch: a clicked donor row -> footprint, a clicked committee row ->
   // committee profile. Used by BOTH the page handler and the in-modal handler.
   function modalNav(target) {
     var fr = target.closest && target.closest('[data-funder]');
-    if (fr) { openFunder(fr.getAttribute('data-funder')); return true; }
+    if (fr) { openFunder(fr.getAttribute('data-funder'), winFromEl(fr)); return true; }
     var cr = target.closest && target.closest('[data-committee]');
-    if (cr) { openCommittee(cr.getAttribute('data-committee')); return true; }
+    if (cr) { openCommittee(cr.getAttribute('data-committee'), winFromEl(cr)); return true; }
     return false;
   }
   function openModal(html) {
@@ -1488,17 +1916,18 @@
   function start(root, office, index) {
     IDX = index;
     var cycles = ElectData.availableCycles(index);
-    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors' };
+    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors', spendElection: 'all', electionView: null };
     state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, office));
 
     function draw() {
       var omVM = ElectData.viewModels.officeRaces(index, state.office);
       var raceId = index.raceBySlug[state.activeSlug];
       var rv = raceId ? ElectData.viewModels.raceView(index, raceId, state.cycle) : null;
-      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle) : null;
+      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.spendElection) : null;
       root.innerHTML = ElectRender.renderPage({
         office: state.office, topView: state.topView, cycles: cycles, cycle: state.cycle,
-        officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend
+        officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend,
+        electionView: state.electionView
       });
     }
 
@@ -1518,11 +1947,16 @@
       if (v) { state.topView = v.getAttribute('data-view'); draw(); return; }
       var st = cl('[data-spendtab]');
       if (st) { state.spendTab = st.getAttribute('data-spendtab'); draw(); return; }
-      var cy = cl('[data-cycle]');
-      if (cy) { state.cycle = cy.getAttribute('data-cycle') || null; draw(); return; }
+      // Election filter (This/Last/All) — reslices every spend figure + drill-down by window.
+      var se = cl('[data-spendelection]');
+      if (se) { state.spendElection = se.getAttribute('data-spendelection'); draw(); return; }
+      // This/Last/All election toggle — same delegation pattern as the spend subtabs:
+      // update state, redraw (which refreshes both the active-tab state and the view).
+      var ev = cl('[data-electionview]');
+      if (ev) { state.electionView = ev.getAttribute('data-electionview'); draw(); return; }
       // chips AND the vacating-incumbent "→" link both navigate by slug
       var ch = cl('[data-slug]');
-      if (ch) { state.activeSlug = ch.getAttribute('data-slug'); state.topView = 'byrace'; draw(); return; }
+      if (ch) { state.activeSlug = ch.getAttribute('data-slug'); state.electionView = null; state.topView = 'byrace'; draw(); return; }
       var of = cl('.office[data-group]');
       if (of) {
         var label = of.getAttribute('data-group');
@@ -1532,8 +1966,24 @@
             state.activeSlug = groupFirstSlug(omVM.groups[i]); break;
           }
         }
+        state.electionView = null;
         draw(); return;
       }
+    });
+
+    // Client-side donor search inside a drill-down panel (council behavior): filter the
+    // panel's donor rows by name; reveal the collapsed remainder while a query is active.
+    root.addEventListener('input', function (e) {
+      if (!(e.target.matches && e.target.matches('[data-donor-search]'))) return;
+      var panel = e.target.closest('.contrib-inner'); if (!panel) return;
+      var q = (e.target.value || '').trim().toLowerCase();
+      var rows = panel.querySelectorAll('.crow');
+      for (var i = 0; i < rows.length; i++) {
+        var hit = !q || (rows[i].textContent || '').toLowerCase().indexOf(q) >= 0;
+        rows[i].style.display = hit ? '' : 'none';
+      }
+      var more = panel.querySelector('.contrib.tall');
+      if (more) more.classList.toggle('open', !!q);
     });
 
     draw();
