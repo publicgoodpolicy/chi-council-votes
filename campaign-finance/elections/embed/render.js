@@ -347,7 +347,8 @@
         '<div class="who">' + who + '</div>' +
         '<div class="amt">' + money(x.total) + ' <span class="n">· ' + plural(x.count, 'gift', 'gifts') + '</span></div></button>';
     }).join('') || '<p class="contrib-note">No election giving recorded.</p>';
-    return '<div class="ipg-modal-overlay" data-modal-overlay><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Donor footprint">' +
+    var wA = fp.win ? (' data-win-start="' + esc(fp.win.start || '') + '" data-win-end="' + esc(fp.win.end || '') + '"') : '';
+    return '<div class="ipg-modal-overlay" data-modal-overlay' + wA + '><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Donor footprint">' +
       '<button class="ipg-modal-close" type="button" data-modal-close aria-label="Close">×</button>' +
       '<div class="modal-kicker">Donor footprint · this election only</div>' +
       '<div class="modal-name">' + esc(fp.name) + '</div>' +
@@ -372,12 +373,17 @@
         '<p class="modal-note">' + idy + 'Independent spending is made without coordinating with any candidate.' + sun + '</p>';
       summary = '<div class="modal-summary">' + money(p.total) + ' spent · ' +
         money(p.support) + ' support · ' + money(p.oppose) + ' oppose</div>';
-      spent = '<p class="contrib-h">What it spent on</p>' + (p.targets.length ? p.targets.map(function (t) {
+      spent = '<p class="contrib-h">What it spent on</p>' +
+        '<p class="contrib-note">Each line is one candidate in one election. Support and opposition are ' +
+        'separate streams, never summed; the election label keeps a past-race spend from reading as this race.</p>' +
+        (p.targets.length ? p.targets.map(function (t) {
         var bits = [];
         if (t.support) bits.push('<span style="color:var(--sage)">' + money(t.support) + ' for</span>');
         if (t.oppose) bits.push('<span style="color:var(--coral)">' + money(t.oppose) + ' against</span>');
+        var lab = t.electionLabel || t.raceLabel;
+        var rev = t.needsReview ? ' <span class="tagchip flag" title="match: ' + esc((t.matchMethods || []).join(', ')) + '">⚑ needs review</span>' : '';
         return '<div class="crow"><div class="who">' + esc(t.name) +
-          (t.raceLabel ? ' <span class="muted">· ' + esc(t.raceLabel) + '</span>' : '') + '</div>' +
+          (lab ? ' <span class="muted">· ' + esc(lab) + '</span>' : '') + rev + '</div>' +
           '<div class="amt">' + bits.join(' · ') + '</div></div>';
       }).join('') : '<p class="contrib-note">No itemized spending recorded.</p>');
     } else {
@@ -393,7 +399,8 @@
     var fl = p.funders.slice(0, 30), funders = '';
     for (var i = 0; i < fl.length; i++) funders += donorRow(fl[i]);
     var moreF = p.funders.length > 30 ? '<p class="contrib-note">+ ' + (p.funders.length - 30) + ' more</p>' : '';
-    return '<div class="ipg-modal-overlay" data-modal-overlay><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Committee profile">' +
+    var wA = p.win ? (' data-win-start="' + esc(p.win.start || '') + '" data-win-end="' + esc(p.win.end || '') + '"') : '';
+    return '<div class="ipg-modal-overlay" data-modal-overlay' + wA + '><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Committee profile">' +
       '<button class="ipg-modal-close" type="button" data-modal-close aria-label="Close">×</button>' +
       head + summary + spent + '<p class="contrib-h" style="margin-top:14px">' + label + '</p>' + funders + moreF + '</div></div>';
   }
@@ -717,6 +724,16 @@
     }).join('') + '</div>';
   }
 
+  // Election filter (This / Last / All-Elections, default All) — the SOLE time selector
+  // for the spend tab (the legacy SBE cycle pills are gone). Same delegated-button
+  // pattern as the subtabs; drives every spend figure + drill-down through the window.
+  function electionFilterNav(filter) {
+    if (!filter || !filter.options || filter.options.length <= 1) return '';
+    return '<div class="subnav elect-filter" role="tablist" aria-label="Election filter">' + filter.options.map(function (o) {
+      return '<button class="subtab" role="tab" data-spendelection="' + esc(o.id) + '" aria-selected="' + (o.id === filter.active) + '">' + esc(o.label) + '</button>';
+    }).join('') + '</div>';
+  }
+
   function browseRow(r) {
     if (r.kind === 'ie') {
       var nm = ieNaming(r.name, r.identity);
@@ -780,7 +797,11 @@
       body = '<p class="contrib-note">Everyone who gave to a candidate or funded an independent-expenditure committee in this ' +
         'office, by affiliation. Click a donor for their footprint; an <span class="kind ie">IE PAC</span> opens its profile.</p>' + top + more;
     }
-    return '<div class="spend">' + spendNav(tab) + '<div class="spend-body">' + body + '</div></div>';
+    // The active election window rides on the container so a spender drill-down opened
+    // from this tab (donor footprint OR IE-PAC profile) stays scoped to the same window
+    // (winFromEl reads the nearest [data-win-end] ancestor).
+    var winAttr = vm.win ? (' data-win-start="' + esc(vm.win.start || '') + '" data-win-end="' + esc(vm.win.end || '') + '"') : '';
+    return '<div class="spend"' + winAttr + '>' + electionFilterNav(vm.filter) + spendNav(tab) + '<div class="spend-body">' + body + '</div></div>';
   }
 
   // (Cycle/year pills removed from the election views — the This/Last/All election

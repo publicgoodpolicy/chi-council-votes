@@ -34,7 +34,7 @@
     document.removeEventListener('keydown', escClose);
   }
   function openFunder(pid, win) { if (IDX) openModal(ElectRender.renderFunderModal(ElectData.donorFootprint(IDX, pid, win))); }
-  function openCommittee(key) { if (IDX) openModal(ElectRender.renderCommitteeProfile(ElectData.committeeProfile(IDX, key))); }
+  function openCommittee(key, win) { if (IDX) openModal(ElectRender.renderCommitteeProfile(ElectData.committeeProfile(IDX, key, win))); }
   // A donor clicked inside a per-election panel carries a [data-win-*] ancestor; scope
   // its footprint to that election window (Gate G). Elsewhere -> null -> full footprint.
   function winFromEl(el) {
@@ -48,7 +48,7 @@
     var fr = target.closest && target.closest('[data-funder]');
     if (fr) { openFunder(fr.getAttribute('data-funder'), winFromEl(fr)); return true; }
     var cr = target.closest && target.closest('[data-committee]');
-    if (cr) { openCommittee(cr.getAttribute('data-committee')); return true; }
+    if (cr) { openCommittee(cr.getAttribute('data-committee'), winFromEl(cr)); return true; }
     return false;
   }
   function openModal(html) {
@@ -89,14 +89,14 @@
   function start(root, office, index) {
     IDX = index;
     var cycles = ElectData.availableCycles(index);
-    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors', electionView: null };
+    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors', spendElection: 'all', electionView: null };
     state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, office));
 
     function draw() {
       var omVM = ElectData.viewModels.officeRaces(index, state.office);
       var raceId = index.raceBySlug[state.activeSlug];
       var rv = raceId ? ElectData.viewModels.raceView(index, raceId, state.cycle) : null;
-      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle) : null;
+      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.spendElection) : null;
       root.innerHTML = ElectRender.renderPage({
         office: state.office, topView: state.topView, cycles: cycles, cycle: state.cycle,
         officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend,
@@ -120,6 +120,9 @@
       if (v) { state.topView = v.getAttribute('data-view'); draw(); return; }
       var st = cl('[data-spendtab]');
       if (st) { state.spendTab = st.getAttribute('data-spendtab'); draw(); return; }
+      // Election filter (This/Last/All) — reslices every spend figure + drill-down by window.
+      var se = cl('[data-spendelection]');
+      if (se) { state.spendElection = se.getAttribute('data-spendelection'); draw(); return; }
       // This/Last/All election toggle — same delegation pattern as the spend subtabs:
       // update state, redraw (which refreshes both the active-tab state and the view).
       var ev = cl('[data-electionview]');
