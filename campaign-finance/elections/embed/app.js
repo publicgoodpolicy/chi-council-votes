@@ -124,8 +124,6 @@
       // update state, redraw (which refreshes both the active-tab state and the view).
       var ev = cl('[data-electionview]');
       if (ev) { state.electionView = ev.getAttribute('data-electionview'); draw(); return; }
-      var cy = cl('[data-cycle]');
-      if (cy) { state.cycle = cy.getAttribute('data-cycle') || null; draw(); return; }
       // chips AND the vacating-incumbent "→" link both navigate by slug
       var ch = cl('[data-slug]');
       if (ch) { state.activeSlug = ch.getAttribute('data-slug'); state.electionView = null; state.topView = 'byrace'; draw(); return; }

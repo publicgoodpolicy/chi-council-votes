@@ -49,7 +49,8 @@ ok('exact disclaimer copy (footer)', /separately and never added together/.test(
 ok('locked slug scheme: cand-bruce-leon-district-2a', /id="cand-bruce-leon-district-2a"/.test(page));
 ok('District 2A chip is active', /data-slug="district-2a" aria-pressed="true"/.test(page));
 ok('coming-soon races marked (· soon)', /· soon/.test(page));
-ok('office sub-tabs (Board President / Districts)', /Board President/.test(page) && /Districts/.test(page));
+ok('President + districts in ONE selector (no office sub-tabs)',
+  /data-slug="school-board-president"/.test(page) && /data-slug="district-2a"/.test(page) && page.indexOf('aria-label="Office section"') < 0);
 ok('figures NOT summed (no grand-total markup)', page.indexOf('Total raised') < 0 && page.indexOf('grand total') < 0);
 
 console.log('\n=== B2-FIXES assertions ===');
@@ -64,8 +65,8 @@ ok('sb-d02 vacating note: Custer -> Board President (links to president race)',
 ok('sb-d12 does NOT show a Biggs candidate card', d12.indexOf('cand-jessica-biggs') < 0);
 ok('sb-d12 vacating note: Biggs -> Board President',
   /Current member <b>Jessica Biggs<\/b> is running for/.test(d12) && /data-slug="school-board-president"/.test(d12));
-ok('sb-president DOES list Custer AND Biggs as candidates',
-  /cand-jennifer-custer-school-board-president/.test(pres) && /cand-jessica-biggs-school-board-president/.test(pres));
+ok('sb-president (now toggle) lists Custer AND Biggs as candidates',
+  /Jennifer Custer/.test(pres) && /Jessica Biggs/.test(pres) && /data-electionview/.test(pres));
 
 // View toggle: active chip + view move on topView change
 var spendPage = R.renderPage({ office: OFFICE, topView: 'spend', officeRaces: omVM, activeSlug: 'district-2a', raceView: rv });
@@ -333,10 +334,10 @@ console.log('\n=== B5 assertions (year filter + office param + Recoleta) ===');
 var cyclesAvail = D.availableCycles(index);
 ok('available cycles include the data cycle (2027)', cyclesAvail.indexOf('2027') >= 0);
 var pageCyc = R.renderPage({ office: 'school_board', topView: 'byrace', cycles: cyclesAvail, cycle: null, officeRaces: omVM, activeSlug: 'district-2a', raceView: rv });
-ok('year bar default chip reads "All years" and is selected by default, showing unfiltered totals',
-  /data-cycle=""[^>]*aria-pressed="true">All years</.test(pageCyc) && pageCyc.indexOf('current cycle') < 0 &&
+ok('cycle pills REMOVED from election views (election toggle is the sole time control)',
+  pageCyc.indexOf('data-cycle') < 0 && pageCyc.indexOf('cycle-bar') < 0 &&
   Math.round(D.candidateFigures(index, 'leon-sb-d03', null).contributions.total) === 620403);
-ok('year bar offers the 2027 cycle chip', /data-cycle="2027"/.test(pageCyc));
+ok('cycle data functions still accept a cycle arg (data layer intact)', cyclesAvail.indexOf('2027') >= 0);
 ok('cycle filter degrades cleanly (single cycle: 2027 == current)',
   Math.round(D.candidateFigures(index, 'deberry-sb-d03', '2027').contributions.total) === Math.round(D.candidateFigures(index, 'deberry-sb-d03', null).contributions.total));
 (function () {

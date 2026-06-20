@@ -62,18 +62,23 @@ ok('Rosenfeld single-candidate race renders (1 candidate card per block)', (rosA
 var riosLast = R.renderRaceElections(VM['sb-d05'], '2024');
 var riosAll = R.renderRaceElections(VM['sb-d05'], 'all');
 ok('Rios-Sierra Last 2024 tab clean-empty ("No money reported")', /No money reported for this election/.test(riosLast));
-ok('Rios-Sierra All = 2026 election block only (no 2024 block header; undated $100 line separate)',
-  riosAll.indexOf('elec-block-h">This election (2026)') >= 0 &&
-  riosAll.indexOf('elec-block-h">Last election (2024)') < 0 && /Undated small-dollar/.test(riosAll));
+ok('Rios-Sierra All = 2026-only combined ("2026 election only", no "across both" claim)',
+  /2026 election only/.test(riosAll) && /From the 2026 election only/.test(riosAll));
 
-console.log('\n=== invariant 7: All Elections segmented + undated line ===');
+console.log('\n=== invariant 7 (combined All-Elections, FIREWALL): cross-election total, not single-race ===');
 var zAll = R.renderRaceElections(VM['sb-d07'], 'all');
-ok('Zaccor All: 2 election blocks + divider (segmented, not merged)',
-  (zAll.match(/class="elec-block"/g) || []).length >= 2 && /elec-divider/.test(zAll));
-ok('Zaccor All: undated small-dollar line ($2,468)', /Undated small-dollar/.test(zAll) && zAll.indexOf('$2,468') >= 0);
-ok('Rosenfeld All: undated $750', /\$750/.test(rosAll) && /Undated small-dollar/.test(rosAll));
-ok('Rios All: undated $100', riosAll.indexOf('$100') >= 0 && /Undated small-dollar/.test(riosAll));
-ok('Pope All: no undated line (none)', R.renderRaceElections(VM['sb-d04'], 'all').indexOf('Undated small-dollar') < 0);
+ok('Zaccor All: combined header "across both elections (2024 + 2026)"', /across both elections \(2024 \+ 2026\)/.test(zAll));
+ok('Zaccor All: firewall framing (redrawn boundaries; NOT single-race spending)',
+  /redrawn district boundaries/.test(zAll) && /not single-race spending/.test(zAll));
+ok('Zaccor All: 2024 provenance "2024: District 4" preserved in combined', /2024: District 4/.test(zAll));
+ok('Zaccor All: NOT segmented (no per-election blocks, no undated line)',
+  zAll.indexOf('elec-block-h') < 0 && zAll.indexOf('Undated small-dollar') < 0);
+(function () {
+  var cand = VM['sb-d07'].candidates.filter(function (x) { return x.id === 'zaccor-sb-d07'; })[0];
+  var cf = cand.combined.figures, a = cand.byElection['2024'].figures, b = cand.byElection['2026'].figures;
+  var okm = ['contributions', 'selfFunding', 'independentSupport', 'independentOpposition'].every(function (k) { return Math.abs(cf[k] - (a[k] + b[k])) < 0.01; });
+  ok('Zaccor combined == This + Last per stream (streams stay separate)', okm);
+})();
 
 console.log('\n=== invariant 3: four separate streams, no cross-sum (figures are distinct numeric fields) ===');
 ok('figures have 4 distinct numeric stream fields, no summed total',

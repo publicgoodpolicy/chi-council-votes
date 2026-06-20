@@ -30,8 +30,7 @@
   // How each office page groups its races (sub-tabs / pickers).
   var OFFICE_GROUPS = {
     school_board: [
-      { label: 'Board President', offices: ['school_board_president'] },
-      { label: 'Districts', offices: ['school_board_member'] }
+      { label: 'School Board', offices: ['school_board_president', 'school_board_member'] }
     ],
     city_council: [{ label: 'Wards', offices: ['alderperson'] }],
     mayor: [{ label: 'Mayor', offices: ['mayor'] }]
@@ -537,7 +536,7 @@
   // still LACK prior_election and would mislabel as "did not run", so they stay on
   // the all-years view until verified. Widen this set as cohorts are verified.
   var TOGGLE_RACES = { 'sb-d04': 1, 'sb-d05': 1, 'sb-d06': 1, 'sb-d07': 1, 'sb-d08': 1, 'sb-d09': 1,
-                       'sb-d10': 1, 'sb-d11': 1, 'sb-d12': 1 };
+                       'sb-d10': 1, 'sb-d11': 1, 'sb-d12': 1, 'sb-president': 1 };
 
   // Map one by_candidate_election bucket to the FOUR SEPARATE streams the render
   // bars consume. contributions (third-party) and self_funding are kept distinct;
@@ -583,6 +582,17 @@
       return { id: id, role: i === 0 ? 'this' : 'prior',
                label: (i === 0 ? 'This election' : 'Last election') + ' (' + id + ')' };
     });
+    // Combined ("All elections") window = union of the office's election windows
+    // (earliest start, latest end). For school_board: [null, 2026-12-31] = 2024 + 2026.
+    var combinedWin = (function () {
+      var ws = ids.map(function (id) { return winFor(race.office, id); }).filter(Boolean);
+      if (!ws.length) return null;
+      var start = ws.some(function (w) { return w.start == null; }) ? null : ws.map(function (w) { return w.start; }).sort()[0];
+      var ends = ws.map(function (w) { return w.end; });
+      var end = ends.some(function (e) { return e == null; }) ? null : ends.slice().sort().reverse()[0];
+      return { start: start, end: end };
+    })();
+    var SK = ['contributions', 'selfFunding', 'independentSupport', 'independentOpposition'];
     var candidates = cands.map(function (c) {
       var b = bce[c.id] || {}, byElection = {};
       ids.forEach(function (id) {
@@ -599,8 +609,24 @@
           industries: candidateIndustries(index, c.id, null, win)
         };
       });
+      // Combined figures SUM the per-election buckets (so combined == This + Last per
+      // stream, streams never merged); drill-down uses the union window (= same rows).
+      var cf = { contributions: 0, contributionsCount: 0, selfFunding: 0, selfFundingCount: 0,
+                 independentSupport: 0, independentSupportCount: 0, independentOpposition: 0, independentOppositionCount: 0 };
+      ids.forEach(function (id) {
+        var g = byElection[id].figures; if (!g) return;
+        SK.forEach(function (k) { cf[k] = round2(cf[k] + g[k]); cf[k + 'Count'] += g[k + 'Count']; });
+      });
+      var combined = {
+        figures: cf, win: combinedWin,
+        contributors: candidateContributors(index, c.id, null, combinedWin),
+        ieSupportDetail: candidateIE(index, c.id, 'support', null, combinedWin),
+        ieOpposeDetail: candidateIE(index, c.id, 'oppose', null, combinedWin),
+        industries: candidateIndustries(index, c.id, null, combinedWin)
+      };
       return { id: c.id, slug: candidateSlug(c, race), name: c.name, incumbent: !!c.incumbent,
-               priorElection: c.prior_election || null, undated: undatedSmallDollar(index, c.id), byElection: byElection };
+               priorElection: c.prior_election || null, undated: undatedSmallDollar(index, c.id),
+               byElection: byElection, combined: combined };
     });
     return { race: { id: race.id, slug: raceSlug(race), label: race.label },
              electionIds: ids, toggles: toggles, candidates: candidates };

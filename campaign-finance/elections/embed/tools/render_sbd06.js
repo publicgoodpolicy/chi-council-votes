@@ -70,9 +70,11 @@ ok('All view selects all tab', /data-electionview="all" aria-selected="true"/.te
 ok('Last view shows $35,153 (oppose Dones)', allHtml.indexOf('$35,153') >= 0 && lastHtml.indexOf('$35,153') >= 0);
 ok('Last view shows $340,740 (support Rivas)', lastHtml.indexOf('$340,740') >= 0);
 ok('Last view labels "2024: District 3"', lastHtml.indexOf('2024: District 3') >= 0);
-ok('All view = two segmented election blocks (2026 + 2024 headers)',
-  allHtml.indexOf('elec-block-h">This election (2026)') >= 0 && allHtml.indexOf('elec-block-h">Last election (2024)') >= 0);
-ok('All view is segmented, not merged (has divider)', /elec-divider/.test(allHtml));
+ok('All view = combined cross-election ("across both elections (2024 + 2026)")', /across both elections \(2024 \+ 2026\)/.test(allHtml));
+ok('All view FIREWALL: redrawn boundaries, NOT single-race, "2024: District 3" provenance',
+  /redrawn district boundaries/.test(allHtml) && /not single-race spending/.test(allHtml) && /2024: District 3/.test(allHtml));
+ok('All view NOT segmented (no per-election block headers)', allHtml.indexOf('elec-block-h') < 0);
+ok('All view combined: Rivas IE-support $340,740 (2024 + 2026)', allHtml.indexOf('$340,740') >= 0);
 ok('four separate stream bars present', /From contributors/.test(lastHtml) && /Candidate self-funding/.test(lastHtml) &&
   /Independent support/.test(lastHtml) && /Independent opposition/.test(lastHtml));
 

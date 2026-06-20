@@ -508,7 +508,7 @@
       if (c.priorElection && c.priorElection.label) return { header: c.priorElection.label, subnote: c.priorElection.qualifier || '' };
       if (elecHasMoney(ev.figures)) {
         return { header: eid + ' (did not run)',
-          subnote: 'Committee activity from ' + eid + ', before their appointment — shown for transparency, not a ' + eid + ' candidacy.' };
+          subnote: 'Committee activity dated to ' + eid + ' — shown for transparency, not a ' + eid + ' candidacy.' };
       }
     }
     return { header: ev.label || eid, subnote: '' };
@@ -528,24 +528,35 @@
       (h.subnote ? '<p class="contrib-note">' + esc(h.subnote) + '</p>' : '') +
       elecStreams(ev, c.name, scale, base) + '</article>';
   }
-  function elecAnyMoney(vm, eid) {
-    for (var i = 0; i < vm.candidates.length; i++) {
-      var ev = vm.candidates[i].byElection[eid];
-      if (ev && elecHasMoney(ev.figures)) return true;
-    }
-    return false;
-  }
-  function elecUndatedSection(vm) {
-    var rows = vm.candidates.filter(function (c) { return c.undated && c.undated.amount > 0; });
-    if (!rows.length) return '';
-    return '<div class="elec-divider" aria-hidden="true"></div>' +
-      '<section class="elec-block undated"><h3 class="elec-block-h">Undated small-dollar</h3>' +
-      '<p class="contrib-note">Small-dollar (under $150) donors are disclosed only in aggregate and carry no filing ' +
-      'date, so they sit outside both election segments.</p>' +
-      rows.map(function (c) {
-        return '<div class="srow"><div class="sname">' + esc(c.name) +
-          '<div class="figrow"><span class="mini c">' + money(c.undated.amount) + ' small-dollar</span></div></div></div>';
-      }).join('') + '</section>';
+  // (elecAnyMoney / elecUndatedSection removed with the segmented "All elections" view —
+  // All elections is now ONE combined cross-election total per candidate, see
+  // elecCombinedBlock. The dateless small-dollar aggregate is outside both election
+  // windows, so it is excluded from the combined total by construction.)
+  // "All elections" = ONE combined cross-election total per (2026) candidate. FIREWALL:
+  // explicitly labeled as spanning both elections, with the 2024 portion keeping its
+  // "2024: District N" provenance so a returner's combined total visibly comprises two
+  // different districts -- it can never read as single-race spending. Reuses elecStreams
+  // (c.combined has the same shape: figures + windowed drill-down). Streams stay separate.
+  function elecCombinedBlock(c, scale) {
+    var ev = c.combined;
+    if (!ev || !elecHasMoney(ev.figures)) return '';
+    var win = ev.win || {};
+    var winAttrs = ' data-win-start="' + esc(win.start || '') + '" data-win-end="' + esc(win.end || '') + '"';
+    var base = 'eleccomb-' + esc(c.slug);
+    var e24 = c.byElection['2024'];
+    var has24 = e24 && elecHasMoney(e24.figures);
+    var meta = has24 ? '· across both elections (2024 + 2026)' : '· 2026 election only';
+    var prov = has24
+      ? 'This total combines <b>two separate elections under redrawn district boundaries</b> — ' +
+        esc(e24.label) + ' and 2026 — so it spans two <b>different</b> districts. It is a cross-election sum, ' +
+        '<b>not single-race spending</b>. Per-election detail is in the This / Last tabs.'
+      : 'From the 2026 election only (no 2024 election money to combine).';
+    return '<article class="card" id="' + base + '"' + winAttrs + '>' +
+      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' +
+      (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') +
+      '<span class="race-meta">' + meta + '</span></div>' +
+      '<p class="contrib-note">' + prov + '</p>' +
+      elecStreams(ev, c.name, scale, base) + '</article>';
   }
   function renderRaceElections(vm, active) {
     if (!vm || !vm.toggles.length) return '';
@@ -560,18 +571,19 @@
     var nav = '<div class="subnav" role="tablist" aria-label="Election">' + tabs + '</div>';
     var note = '<p class="contrib-note">Money is bucketed by filing date to each election. The four figures — ' +
       'contributions, candidate self-funding, independent support, and independent opposition — are shown ' +
-      '<b>separately and never added together</b>. “All elections” shows each election as its own block under its ' +
-      'redrawn district boundaries, not a single cross-election total.</p>';
+      '<b>separately and never added together</b>.</p>';
     var body;
     if (active === 'all') {
-      var blocks = vm.toggles.map(function (t) {
-        // The current ("this") election always shows; a prior election block is shown
-        // only if some candidate has money there (else "All elections" = 2026 only).
-        if (t.role !== 'this' && !elecAnyMoney(vm, t.id)) return '';
-        return '<section class="elec-block"><h3 class="elec-block-h">' + esc(t.label) + '</h3>' +
-          vm.candidates.map(function (c) { return elecCandBlock(c, t.id, t.role, scale); }).join('') + '</section>';
-      }).filter(Boolean).join('<div class="elec-divider" aria-hidden="true"></div>');
-      body = blocks + elecUndatedSection(vm);
+      var combScale = 1;
+      vm.candidates.forEach(function (c) {
+        var f = c.combined && c.combined.figures; if (!f) return;
+        combScale = Math.max(combScale, f.contributions, f.selfFunding, f.independentSupport, f.independentOpposition);
+      });
+      body = '<p class="contrib-note"><b>“All elections” combines each candidate’s 2024 and 2026 money</b> into one total ' +
+        'per stream (streams still separate). The districts were <b>redrawn between the two elections</b>, so a combined ' +
+        'total spans two different districts — it is a <b>cross-election sum, not single-race spending</b>. The 2024 ' +
+        'portion keeps its “2024: District N” label.</p>' +
+        vm.candidates.map(function (c) { return elecCombinedBlock(c, combScale); }).filter(Boolean).join('');
     } else {
       body = vm.candidates.map(function (c) { return elecCandBlock(c, active, roleOf[active], scale); }).join('');
     }
@@ -751,17 +763,8 @@
     return '<div class="spend">' + spendNav(tab) + '<div class="spend-body">' + body + '</div></div>';
   }
 
-  // Year/cycle filter. Default label "All years" — the unfiltered default shows
-  // all-time money across the 4 cycles present (2015/2019/2023/2027); the year
-  // chips narrow to one cycle and re-derive the view models. active=null => All years.
-  function cycleSelector(cycles, active) {
-    if (!cycles || !cycles.length) return '';
-    var chips = '<button class="chip cyc" type="button" data-cycle="" aria-pressed="' + (active == null) + '">All years</button>';
-    for (var i = 0; i < cycles.length; i++) {
-      chips += '<button class="chip cyc" type="button" data-cycle="' + esc(cycles[i]) + '" aria-pressed="' + (active === cycles[i]) + '">' + esc(cycles[i]) + ' cycle</button>';
-    }
-    return '<div class="cycle-bar"><span class="cycle-label">Year:</span>' + chips + '</div>';
-  }
+  // (Cycle/year pills removed from the election views — the This/Last/All election
+  // toggle is the sole time selector. The council tool keeps its own cycle pills.)
 
   function officeComingSoon(office) {
     return '<div class="soon"><h2>' + esc(pageLabel(office)) + ' — coming soon</h2>' +
@@ -784,7 +787,10 @@
         ? (renderOfficeNav(state.officeRaces, state.activeSlug) +
            '<div aria-live="polite">' + (state.raceView ? renderRaceView(state.raceView, state.electionView) : '') + '</div>')
         : (state.spend ? renderSpend(state.spend) : spendPlaceholder());
-      inner = cycleSelector(state.cycles, state.cycle) + content;
+      // The legacy SBE 4-year cycle pills are removed from the election views: they
+      // cannot express 2024-vs-2026 (both cycle '2027') and duplicate the election
+      // toggle, which is now the SOLE time selector. (Council still uses cycle pills.)
+      inner = content;
     }
     return '<div class="wrap">' + masthead(state.office, state.topView) +
       '<section>' + inner + '</section>' + footer() + '</div>';
