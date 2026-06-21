@@ -200,7 +200,7 @@ const FEEDBACK_CONFIG = {
   flex:1;min-width:118px;background:var(--white);border:1px solid var(--line);
   border-radius:10px;padding:15px 16px;
 }
-#ipg-council-app .ipg-stat .num{font-size:30px;line-height:1;color:var(--teal)}
+#ipg-council-app .ipg-stat .num{font-size:30px;line-height:1;color:var(--teal);white-space:nowrap}
 #ipg-council-app .ipg-stat .num.serif{font-family:'Recoleta',Georgia,serif}
 #ipg-council-app .ipg-stat .lab{font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#9a8e7e;margin-top:8px}
 
@@ -301,7 +301,7 @@ const FEEDBACK_CONFIG = {
   background:linear-gradient(135deg,var(--teal) 0%,#0a5a5e 100%); color:var(--cream);
   border-color:var(--teal); flex:1.4; min-width:170px;
 }
-#ipg-council-app .ipg-cf-summary .ipg-stat-cash .num{color:var(--cream);font-size:32px}
+#ipg-council-app .ipg-cf-summary .ipg-stat-cash .num{color:var(--cream);font-size:32px;white-space:nowrap}
 #ipg-council-app .ipg-cf-summary .ipg-stat-cash .lab{color:#b9d4d2}
 #ipg-council-app .ipg-stat-sub{font-size:11px;color:#a8c2bf;margin-top:6px;line-height:1.3}
 #ipg-council-app .ipg-cf-row{
@@ -600,7 +600,7 @@ const FEEDBACK_CONFIG = {
 .ipg-modal .ipg-cf-pac-recipient{border-left:4px solid #508F88;background:#eef4f3;padding-left:11px;border-radius:6px}
 .ipg-modal .ipg-cf-pac-recipient .name{color:#044147}
 .ipg-modal .ipg-cf-pac-recipient.ipg-cf-clickable{cursor:pointer}
-.ipg-cf-pac-tag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:20px;margin-left:5px;vertical-align:middle;background:#dCEae8;color:#044147;border:1px solid #508F88}
+.ipg-cf-pac-tag{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:1px 5px;border-radius:4px;margin-left:5px;vertical-align:middle;background:#dceae8;color:#044147}
 .ipg-cf-paclink,a.ipg-cf-paclink{color:#044147;font-weight:600;text-decoration:underline}
 .ipg-modal-foot{font-size:11.5px;color:#9a8e7e;margin-top:18px;text-align:center;font-style:italic}
 /* ===== FEEDBACK / REPORT-A-CORRECTION ===== */
@@ -1011,6 +1011,8 @@ const FEEDBACK_CONFIG = {
   }
 
   function fmtMoney(n){return '$'+Math.round(n).toLocaleString()}
+  function cycleKey(c){var s=String(c),pre=/^pre-?(\d{4})/i.exec(s);if(pre)return (+pre[1])-0.5;var y=/(\d{4})/.exec(s);return y?+y[1]:1e9;}
+  function sortCycles(arr){return arr.slice().sort(function(a,b){return cycleKey(a)-cycleKey(b);});}
   function fmtMoneyExact(n){return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
   function fmtDate(s){if(!s)return '';const d=new Date(s+'T00:00:00');return d.toLocaleDateString('en-US',{month:'short',year:'numeric'})}
   function fmtDateLong(s){if(!s)return '';const d=new Date(s+'T00:00:00');return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
@@ -1219,17 +1221,25 @@ const FEEDBACK_CONFIG = {
   }
   // Renders one or more industry chips for a donor. Pass {compact:true} to
   // condense to "Primary tag +N more" when there are several.
+  function readableText(hex){
+    var h=String(hex||'').replace('#','');
+    if(h.length!==6) return '#fff';
+    function ch(c){c/=255;return c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4);}
+    var L=0.2126*ch(parseInt(h.slice(0,2),16))+0.7152*ch(parseInt(h.slice(2,4),16))+0.0722*ch(parseInt(h.slice(4,6),16));
+    var cWhite=1.05/(L+0.05), cInk=(L+0.05)/(0.0331+0.05);
+    return cWhite>=cInk?'#fff':'#342828';
+  }
   function renderIndustryChips(d, opts){
     opts=opts||{};
     const inds=donorIndustries(d);
     if(opts.compact && inds.length>2){
       const meta0=state.cf.industry_tags[inds[0]]||state.cf.industry_tags['unclassified'];
-      return '<span class="ipg-cf-chip" style="background:'+meta0.color+'">'+meta0.label+'</span>'
+      return '<span class="ipg-cf-chip" style="background:'+meta0.color+';color:'+readableText(meta0.color)+'">'+meta0.label+'</span>'
         +'<span class="ipg-cf-chip ipg-cf-chip-more" title="'+inds.slice(1).map(k=>(state.cf.industry_tags[k]||{label:k}).label).join(', ')+'">+'+(inds.length-1)+' more</span>';
     }
     return inds.map(k=>{
       const m=state.cf.industry_tags[k]||state.cf.industry_tags['unclassified'];
-      return '<span class="ipg-cf-chip" style="background:'+m.color+'">'+m.label+'</span>';
+      return '<span class="ipg-cf-chip" style="background:'+m.color+';color:'+readableText(m.color)+'">'+m.label+'</span>';
     }).join('');
   }
 
@@ -1654,7 +1664,7 @@ const FEEDBACK_CONFIG = {
         sub.push(fmtMoney(x.support)+' for');
         sub.push(fmtMoney(x.oppose)+' against');
         sub.push(x.count+(x.count===1?' expenditure':' expenditures'));
-        const chips=(x.industries||[]).map(k=>{const m=state.cf.industry_tags[k]||{label:k,color:'#cfc5b5'};return '<span class="ipg-cf-chip" style="background:'+m.color+'">'+m.label+'</span>';}).join('');
+        const chips=(x.industries||[]).map(k=>{const m=state.cf.industry_tags[k]||{label:k,color:'#cfc5b5'};return '<span class="ipg-cf-chip" style="background:'+m.color+';color:'+readableText(m.color)+'">'+m.label+'</span>';}).join('');
         h+='<div class="ipg-cf-row ipg-cf-ie-clickable" data-ie-id="'+relEscAttr(x.id)+'">'
           +'<div><div class="name">'+relEsc(x.name)+' <span class="ipg-cf-pac-tag">IE PAC</span></div>'
           +'<div class="sub">Independent spending \u00b7 '+sub.join(' \u00b7 ')+'</div>'
@@ -1701,7 +1711,7 @@ const FEEDBACK_CONFIG = {
     const cycles=state.cf.cycles||{};
     let h='<div class="ipg-controls"><div class="ipg-field"><label>Cycle</label><select id="ipg-spend-cycle">';
     h+='<option value="all"'+(cyc==='all'?' selected':'')+'>All cycles</option>';
-    Object.keys(cycles).sort().forEach(k=>{ h+='<option value="'+k+'"'+(cyc===k?' selected':'')+'>'+(cycles[k].label||k)+'</option>'; });
+    sortCycles(Object.keys(cycles)).forEach(k=>{ h+='<option value="'+k+'"'+(cyc===k?' selected':'')+'>'+(cycles[k].label||k)+'</option>'; });
     h+='</select></div></div>';
     h+='<div class="ipg-cf-meta" style="margin-top:8px">Money in each ward\u2019s council race, shown as <strong>three separate streams</strong> \u2014 direct contributions to the alder\u2019s committee'+(anyIE?', plus independent spending <strong>for</strong> and <strong>against</strong> them':'')+'.'
       +(anyIE?' Opposition spending is made <em>against</em> a candidate, so the three streams are shown separately and never added together.':'')
@@ -1764,7 +1774,7 @@ const FEEDBACK_CONFIG = {
         +'<div><div class="name">'+meta.label+'</div>'
         +'<div class="sub">'+x.donorCount+(x.donorCount===1?' donor':' donors')+' \u00b7 funded '+x.committeeCount+(x.committeeCount===1?' committee':' committees')
         +(pct ? ' \u00b7 <strong>'+(pct>=1?Math.round(pct):pct.toFixed(1))+'% of total</strong>' : '')+'</div>'
-        +'<div class="ipg-cf-tags"><span class="ipg-cf-chip" style="background:'+meta.color+'">'+meta.label+'</span></div>'
+        +'<div class="ipg-cf-tags"><span class="ipg-cf-chip" style="background:'+meta.color+';color:'+readableText(meta.color)+'">'+meta.label+'</span></div>'
         +'</div>'
         +'<div class="amount">'+fmtMoney(x.total)+'</div></div>';
     });
@@ -1811,7 +1821,7 @@ const FEEDBACK_CONFIG = {
     // Header with back button
     h += '<button class="ipg-cf-toggle" id="ipg-industry-back" style="margin-bottom:14px">\u2190 Back to all industries</button>';
     h += '<div style="margin-bottom:18px">'
-      + '<span class="ipg-cf-chip" style="background:'+meta.color+';font-size:13px;padding:6px 14px">'+meta.label+'</span>'
+      + '<span class="ipg-cf-chip" style="background:'+meta.color+';color:'+readableText(meta.color)+';font-size:13px;padding:6px 14px">'+meta.label+'</span>'
       + '</div>';
 
     // Top-line stats card row
@@ -1899,7 +1909,7 @@ const FEEDBACK_CONFIG = {
   function alderMixSubView(){
     if(!state.cf || !state.cf.committees) return '<div class="ipg-cf-empty">No data loaded.</div>';
 
-    let h = '<div class="ipg-cf-meta" style="margin:8px 0 16px">Each alder\u2019s funding mix shown as a 100% horizontal bar. '
+    let h = '<div class="ipg-cf-meta" style="margin:8px 0 16px">Where each alder\u2019s <strong>direct contributions</strong> come from, by industry, shown as a 100% bar \u2014 independent spending is not included here. '
       + '<span style="color:#9a8e7e">Bars sorted by ward. Click any bar to see that alder\u2019s full profile.</span></div>';
 
     // Build a list of (ward, committee_id, total, inds) for every alder with contribs
@@ -2135,7 +2145,7 @@ const FEEDBACK_CONFIG = {
       recipients.forEach(r=>{
         const cm=state.cf.committees[r.committee_id];
         if(!cm) return;
-        const cycleList=Array.from(r.cycles).sort().join(', ');
+        const cycleList=sortCycles(Array.from(r.cycles)).join(', ');
         const countStr=r.count+(r.count===1?' contribution':' contributions')+' · cycles: '+cycleList;
         const isWardRow=(cm.ward!=null && cm.type==='candidate');
         if(isWardRow){
@@ -2246,7 +2256,7 @@ const FEEDBACK_CONFIG = {
     const support=sp?sp.support:0, oppose=sp?sp.oppose:0, total=sp?sp.total:0, count=sp?sp.count:0;
     const fundTotal=funders.reduce((s,f)=>s+f.total,0);
     const sbe=cm&&cm.sbe_committee_id;
-    const chips=(inds||[]).map(k=>{const m=state.cf.industry_tags[k]||{label:k,color:'#cfc5b5'};return '<span class="ipg-cf-chip" style="background:'+m.color+'">'+m.label+'</span>';}).join('');
+    const chips=(inds||[]).map(k=>{const m=state.cf.industry_tags[k]||{label:k,color:'#cfc5b5'};return '<span class="ipg-cf-chip" style="background:'+m.color+';color:'+readableText(m.color)+'">'+m.label+'</span>';}).join('');
 
     let h='<div class="ipg-modal-overlay" id="ipg-ie-overlay"><div class="ipg-modal" role="dialog" aria-modal="true">'
       +'<button class="ipg-modal-close" id="ipg-ie-close" aria-label="Close">\u00d7</button>'
