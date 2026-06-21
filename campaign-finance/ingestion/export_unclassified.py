@@ -164,6 +164,37 @@ def suggest_industry(donor):
     return None, None
 
 
+def is_unclassified(donor):
+    """A donor auto-classification couldn't tag: no industries, or only 'unclassified'.
+    The single shared definition — used for the main file AND the dedup file so the two
+    worklists stay consistent."""
+    inds = donor.get('industries', [])
+    return (not inds) or ('unclassified' in inds) or (inds == ['unclassified'])
+
+
+def worklist_id_set(data, min_amount=0.0):
+    """The set of donor_ids THIS exporter would surface for `data`: non-aggregate,
+    unclassified, with total contributions >= min_amount. This is the file's worklist
+    MEMBERSHIP (not merely its donor universe), so a second file can dedup against the
+    donors council actually surfaces — the union-aware exclusion. Totals are summed in a
+    single pass over contributions (same per-donor_id sum, dues included, as the main loop)."""
+    totals = {}
+    for c in data.get('contributions', []):
+        did = c.get('donor_id')
+        if did:
+            totals[did] = totals.get(did, 0) + (c.get('amount', 0) or 0)
+    out = set()
+    for did, donor in data.get('donors', {}).items():
+        if did.startswith('_'):
+            continue
+        if not is_unclassified(donor):
+            continue
+        if totals.get(did, 0) < min_amount:
+            continue
+        out.add(did)
+    return out
+
+
 # ============================================================
 # MAIN
 # ============================================================
@@ -178,6 +209,12 @@ def main():
                     help='Only export top N by total given (default: all)')
     ap.add_argument('--min-amount', type=float, default=0,
                     help='Only export donors with total >= this amount (default: 0)')
+    ap.add_argument('--dedup-against', type=Path, default=None,
+                    help='Exclude donors already surfaced by THIS file\'s worklist (e.g. '
+                         'council-data.json). Use for the ELECTION-ONLY cut: a shared '
+                         'unclassified donor stays on council\'s worklist and is not '
+                         'double-listed here. Dedup uses the same unclassified rule and '
+                         'surfaces council\'s full unclassified set (no dollar cutoff).')
     args = ap.parse_args()
 
     if not args.data_file.exists():
@@ -186,23 +223,41 @@ def main():
     print(f"Reading {args.data_file}…")
     data = json.load(open(args.data_file))
 
-    # Identify unclassified donors
-    unclassified = []
-    for did, donor in data['donors'].items():
-        if did.startswith('_'):  # skip aggregate pseudo-donors (_small-dollar-donors)
-            continue
-        inds = donor.get('industries', [])
-        if not inds or 'unclassified' in inds or inds == ['unclassified']:
-            unclassified.append((did, donor))
+    # Identify unclassified donors (same "classified" definition for every file). IE
+    # committees live in data['committees'], NOT data['donors'], so they never appear here —
+    # they classify via the Committee Tags tab (SBE-id), a separate path from donor-slug overrides.
+    non_aggregate = [(did, d) for did, d in data['donors'].items() if not did.startswith('_')]
+    start_count = len(non_aggregate)
+    unclassified = [(did, d) for did, d in non_aggregate if is_unclassified(d)]
+    print(f"  Stage 1 — donors in {args.data_file.name} (excl. _aggregates, IE cmtes not in donors): {start_count}")
+    print(f"  Stage 2 — minus already-classified  ->  unclassified: {len(unclassified)}")
 
-    print(f"  {len(unclassified)} unclassified donors out of {len(data['donors'])} total")
+    # ELECTION-ONLY cut: drop donors already on the dedup file's (council's) worklist, so a
+    # shared unclassified donor isn't double-surfaced (the union-aware exclusion — council's
+    # worklist MEMBERSHIP, not just its donor universe).
+    if args.dedup_against:
+        if not args.dedup_against.exists():
+            raise SystemExit(f"--dedup-against file not found: {args.dedup_against}")
+        council = json.load(open(args.dedup_against))
+        council_ids = worklist_id_set(council, 0.0)   # council surfaces its FULL unclassified set
+        before = len(unclassified)
+        unclassified = [(did, d) for did, d in unclassified if did not in council_ids]
+        print(f"  Stage 3 — minus donors already on {args.dedup_against.name}'s worklist "
+              f"({before - len(unclassified)} shared-unclassified removed)  ->  election-only: {len(unclassified)}")
+    else:
+        print(f"  Stage 3 — no --dedup-against: this IS the primary worklist for {args.data_file.name}")
 
     # Build committee_id → friendly alder name map
     committee_to_alder = {}
     for cid, cm in data['committees'].items():
         name = cm.get('alder_name', '')
         ward = cm.get('ward', '')
-        committee_to_alder[cid] = f"Ward {ward} — {name}" if name else f"Ward {ward}"
+        if name:
+            committee_to_alder[cid] = f"Ward {ward} — {name}"
+        elif ward:
+            committee_to_alder[cid] = f"Ward {ward}"
+        else:                                  # elections: committees have a candidate, not a ward
+            committee_to_alder[cid] = cm.get('committee_name') or cid
 
     # Aggregate each donor's giving across all their contributions
     enriched = []
@@ -242,6 +297,8 @@ def main():
     if args.top:
         enriched = enriched[:args.top]
         print(f"  Trimmed to top {args.top}")
+
+    print(f"  Stage 4 — final list (after min-amount/top filters): {len(enriched)} rows")
 
     if not enriched:
         print("\nNo unclassified donors to export. Either everything is classified, "
