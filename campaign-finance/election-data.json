@@ -2846,7 +2846,9 @@
       "sbe_committee_id": "39901",
       "ward": null,
       "alder_name": null,
-      "industry_tags": [],
+      "industry_tags": [
+        "charter-schools"
+      ],
       "donor_id": null,
       "data_quality": "INGESTED_IE"
     },
@@ -215843,7 +215845,7 @@
       },
       "charter-schools": {
         "all": {
-          "independent": 1328301.19
+          "independent": 1876811.07
         },
         "by_cycle": {
           "2015": {
@@ -215856,7 +215858,7 @@
             "independent": 173853.28
           },
           "2027": {
-            "independent": 1064825.78
+            "independent": 1613335.66
           }
         }
       }
@@ -217798,7 +217800,7 @@
       "election_date": "2027-02-23"
     }
   },
-  "generated_at": "2026-06-20T14:05:55Z",
+  "generated_at": "2026-06-21T01:55:45Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "current_cycle": "2027",
   "default_cycle": "all",
