@@ -103,8 +103,10 @@ function makeCtx(window) {
       click(r); await wait(60); return true;
     },
     ieSummary: function () {
-      var seg = modal().innerHTML.match(/([\d,]+) support[\s\S]*?([\d,]+) oppose/);
-      return seg ? { sup: +seg[1].replace(/,/g, ''), opp: +seg[2].replace(/,/g, '') } : { sup: 0, opp: 0 };
+      // Reads the E-3 IE summary boxes: <div class="num">$N</div><div class="lab">Spent to support|oppose</div>.
+      var html = modal() ? modal().innerHTML : '';
+      var grab = function (lab) { var m = html.match(new RegExp('([\\d,]+)</div><div class="lab">' + lab)); return m ? +m[1].replace(/,/g, '') : 0; };
+      return { sup: grab('Spent to support'), opp: grab('Spent to oppose') };
     }
   };
   ctx.findRaceWith = async function (name) {
@@ -221,6 +223,11 @@ async function assertSpendTabFeatures(T, ctx, fx) {
     spentSection.indexOf(' for') >= 0 && spentSection.indexOf(' against') >= 0 && spentSection.indexOf('funded') < 0);
   T.ok('[spend.C] firewall note present (separate streams + election label)', M.indexOf('never summed') >= 0);
   T.ok('[spend.C] IE provenance ⚑ needs review surfaces on a line', /needs review/.test(spentSection));
+  // (E-3) IE summary boxes: support + oppose render as SEPARATE stat cards (firewall, box level).
+  var ieHead = M.split('What it spent on')[0];
+  T.ok('[spend.E3] IE summary boxes — support + oppose SEPARATE cards (+ total + targeted), never fused',
+    /elect-statgrid/.test(ieHead) && /Spent to support/.test(ieHead) && /Spent to oppose/.test(ieHead) &&
+    /Total independent spend/.test(ieHead) && /Candidates? targeted/.test(ieHead));
   // D — deep drill: sub-funder -> footprint, window-scoped
   var winRe = new RegExp('data-win-end="' + fx.windowEnd + '"');
   T.ok('[spend.D] committee-profile modal carries the active window (data-win-end)', winRe.test(M));

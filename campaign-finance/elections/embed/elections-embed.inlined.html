@@ -1546,8 +1546,19 @@
       head = '<div class="modal-kicker">Independent-expenditure committee · this election</div>' +
         '<div class="modal-name"><span class="ie-pac-tag">IE PAC</span> ' + ieNaming(p.name, p.identity).primary + '</div>' +
         '<p class="modal-note">' + idy + 'Independent spending is made without coordinating with any candidate.' + sun + '</p>';
-      summary = '<div class="modal-summary">' + money(p.total) + ' spent · ' +
-        money(p.support) + ' support · ' + money(p.oppose) + ' oppose</div>';
+      // IE summary boxes (E-3), council parity. FIREWALL: Spent to support and Spent to oppose
+      // are SEPARATE boxes — never fused. "Total independent spend" is this ONE committee's own
+      // outflow (support + oppose; IE committees make no direct contributions), the single-stream
+      // own-spend total council shows — NOT a per-candidate or cross-stream sum.
+      var ieStat = function (num, lab) { return '<div class="elect-stat"><div class="num">' + num + '</div><div class="lab">' + lab + '</div></div>'; };
+      var tset = {}; (p.targets || []).forEach(function (t) { tset[t.candidate_id || ('n:' + t.name)] = 1; });
+      var nTargets = Object.keys(tset).length;
+      summary = '<div class="elect-statgrid">' +
+        ieStat(money(p.total), 'Total independent spend') +
+        ieStat(money(p.support), 'Spent to support') +
+        ieStat(money(p.oppose), 'Spent to oppose') +
+        ieStat(nTargets, nTargets === 1 ? 'Candidate targeted' : 'Candidates targeted') +
+        '</div>';
       spent = '<p class="contrib-h">What it spent on</p>' +
         '<p class="contrib-note">Each line is one candidate in one election. Support and opposition are ' +
         'separate streams, never summed; the election label keeps a past-race spend from reading as this race.</p>' +
