@@ -532,16 +532,30 @@
         var m = byCand[tc] || (byCand[tc] = { candidate_id: ie.target_candidate_id || null,
           name: cand.name || ('race ' + ie.target_race_id), raceLabel: race.label || null,
           electionId: eid || null, electionLabel: elabel, support: 0, oppose: 0, total: 0, count: 0,
-          needsReview: false, methods: {} });
+          needsReview: false, methods: {}, rows: [] });
         var a = ie.amount || 0;
         if (ie.stance === 'oppose') { m.oppose = round2(m.oppose + a); oppose = round2(oppose + a); }
         else { m.support = round2(m.support + a); support = round2(support + a); }
         m.total = round2(m.total + a); m.count++;
         if (ie.needs_review) m.needsReview = true;            // 3b provenance, surfaced per line
         if (ie.match_method) m.methods[ie.match_method] = 1;
+        // X-1b: itemized IE row, additive. Attaches to THIS target×election group, so it is
+        // single-stance by construction (the target sits on one side of the for/against line).
+        // No committee-wide sort — that would interleave for/against (firewall). stance kept on
+        // the row for render coloring; never re-aggregated across targets.
+        m.rows.push({
+          date: ie.date || null, year: rowYear(ie), amount: a, stance: ie.stance || 'support',
+          target_candidate_id: ie.target_candidate_id || null, target_ward: ie.target_ward != null ? ie.target_ward : null,
+          purpose: ie.purpose || null, match_method: ie.match_method || null, needs_review: !!ie.needs_review
+        });
       }
       var targets = [];
-      for (var k in byCand) if (byCand.hasOwnProperty(k)) { var tt = byCand[k]; tt.matchMethods = Object.keys(tt.methods); delete tt.methods; targets.push(tt); }
+      for (var k in byCand) if (byCand.hasOwnProperty(k)) {
+        var tt = byCand[k]; tt.matchMethods = Object.keys(tt.methods); delete tt.methods;
+        // Rows newest-first WITHIN this target only (single-stance group); null dates last.
+        tt.rows.sort(function (a, b) { var da = a.date || '', db = b.date || ''; return da < db ? 1 : da > db ? -1 : 0; });
+        targets.push(tt);
+      }
       targets.sort(function (a, b) { return b.total - a.total; });
       var ff = spenderFunders(index, committeeKey);
       return {

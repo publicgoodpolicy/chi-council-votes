@@ -187,6 +187,18 @@
       '.ipg-elect .ichip.loan{background:var(--tan);color:var(--ink);font-weight:500;}' +
       '.ipg-elect .ichip.inkind{background:var(--cream);color:var(--ink-soft);border:1px solid var(--line);}' +
       '.ipg-elect .ichip.agg{background:var(--cream);color:var(--ink-soft);border:1px solid var(--line);}' +
+      // X-1b itemized IE rows: nested under each target .crow, the WHOLE block one stance.
+      // Left border + amount color encode the for/against side (support green / oppose coral),
+      // matching the target-level bits above. Support and oppose never share a block.
+      '.ipg-elect .ie-items{margin:2px 0 8px 6px;padding:3px 0 3px 12px;border-left:2px solid var(--line);}' +
+      '.ipg-elect .ie-items.support{border-left-color:var(--sage);}.ipg-elect .ie-items.oppose{border-left-color:var(--coral);}' +
+      '.ipg-elect .ie-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--line);font-size:12px;}' +
+      '.ipg-elect .ie-item:last-child{border-bottom:0;}' +
+      '.ipg-elect .ie-item .ileft{display:flex;flex-wrap:wrap;align-items:center;gap:6px;}' +
+      '.ipg-elect .ie-item .idate{color:var(--ink-soft);white-space:nowrap;font-variant-numeric:tabular-nums;}' +
+      '.ipg-elect .ie-item .ipurpose{color:var(--ink-soft);}' +
+      '.ipg-elect .ie-item .iamt{font-weight:500;white-space:nowrap;}' +
+      '.ipg-elect .ie-items.support .iamt{color:var(--sage);}.ipg-elect .ie-items.oppose .iamt{color:var(--coral);}' +
       '.ipg-elect .tagchip.ind{background:var(--tan);color:var(--ink-soft);}.ipg-elect .tagchip.flag{background:#F4E3DC;color:var(--coral);}' +
       '.ipg-elect .ipg-modal-overlay{position:fixed;inset:0;background:rgba(52,40,40,.55);display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px;z-index:99999;overflow:auto;}' +
       '.ipg-elect .ipg-modal{background:var(--paper);border-radius:14px;max-width:560px;width:100%;padding:24px 26px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3);}' +
@@ -543,9 +555,23 @@
         if (t.oppose) bits.push('<span style="color:var(--coral)">' + money(t.oppose) + ' against</span>');
         var lab = t.electionLabel || t.raceLabel;
         var rev = t.needsReview ? ' <span class="tagchip flag" title="match: ' + esc((t.matchMethods || []).join(', ')) + '">⚑ needs review</span>' : '';
+        // X-1b: itemized IE rows nest as a SIBLING after this target's .crow (never a child;
+        // no navigation data-attr). The whole block is ONE stance — the target sits on one side
+        // of the for/against line — so it gets that stance's color. No committee-wide sort:
+        // rows are ordered within this single-stance group only, never interleaved with the
+        // other stance (the firewall the X-1b probe identified).
+        var st = (t.rows && t.rows.length) ? t.rows[0].stance : (t.oppose > 0 ? 'oppose' : 'support');
+        var items = (t.rows || []).map(function (r) {
+          var rrev = r.needs_review ? ' <span class="tagchip flag" title="match: ' + esc(r.match_method || '') + '">⚑ needs review</span>' : '';
+          return '<div class="ie-item">' +
+            '<div class="ileft"><span class="idate">' + esc(fmtRowDate(r)) + '</span>' +
+            (r.purpose ? '<span class="ipurpose">· ' + esc(r.purpose) + '</span>' : '') + rrev + '</div>' +
+            '<div class="iamt">' + money(r.amount) + '</div></div>';
+        }).join('');
         return '<div class="crow"><div class="who">' + esc(t.name) +
           (lab ? ' <span class="muted">· ' + esc(lab) + '</span>' : '') + rev + '</div>' +
-          '<div class="amt">' + bits.join(' · ') + '</div></div>';
+          '<div class="amt">' + bits.join(' · ') + '</div></div>' +
+          (items ? '<div class="ie-items ' + st + '">' + items + '</div>' : '');
       }).join('') : '<p class="contrib-note">No itemized spending recorded.</p>');
     } else {
       head = '<div class="modal-kicker">Campaign committee · this election</div>' +
