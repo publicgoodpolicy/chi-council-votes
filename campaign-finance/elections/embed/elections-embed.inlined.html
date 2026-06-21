@@ -487,7 +487,8 @@
       parent_id: parentId, name: parent.name || parentId, win: win || null,
       industries: parent.industries || [], flags: parent.flags || [],
       committees: committees, total: round2(total), count: committees.length,
-      contributionsCount: kept, cycles: sortCycles(Object.keys(cyc)), rollup: rollup
+      contributionsCount: kept, cycles: sortCycles(Object.keys(cyc)), rollup: rollup,
+      industryTags: index.industryTags
     };
   }
 
@@ -1060,7 +1061,8 @@
     var browse = browseDonors(index, cycle, win, df), ieCount = 0;
     for (var bi = 0; bi < browse.length; bi++) if (browse[bi].kind === 'ie') ieCount++;
     return { tab: 'donors', election: sel, filter: filter, win: win, rows: browse,
-             donorFilters: df, facets: browseDonorFacets(index), ieCount: ieCount };   // default
+             donorFilters: df, facets: browseDonorFacets(index), ieCount: ieCount,
+             industryTags: index.industryTags };   // default
   }
 
   return {
@@ -1126,12 +1128,31 @@
 
   // Industry tag(s) + flag(s) for a donor. Uncategorized shows as uncategorized,
   // never blank. Forward-compat: surfaces whatever is in industries/flags now.
-  function tagsHtml(industries, flags) {
+  // Legible text color for a tag background WITHOUT inventing palette colors: pick whichever
+  // of white / --ink (#342828) has higher WCAG contrast on the given hex. (Council hardcodes
+  // #fff, which is low-contrast on the lightest schema tags like #b5a995 / #9a8e7e — E-5
+  // probe flagged that; this avoids copying it.)
+  function readableText(hex) {
+    var h = String(hex || '').replace('#', '');
+    if (h.length !== 6) return '#fff';
+    function ch(c) { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
+    var L = 0.2126 * ch(parseInt(h.slice(0, 2), 16)) + 0.7152 * ch(parseInt(h.slice(2, 4), 16)) + 0.0722 * ch(parseInt(h.slice(4, 6), 16));
+    var cWhite = 1.05 / (L + 0.05), cInk = (L + 0.05) / (0.0331 + 0.05);   // 0.0331 = luminance of #342828
+    return cWhite >= cInk ? '#fff' : '#342828';
+  }
+
+  // tagMap (optional) = index.industryTags {slug:{label,color}}. When present, an industry pill
+  // gets its canonical color + curated label (council parity); unknown / uncategorized tags fall
+  // back to the neutral .tagchip.ind style + a readable label — never a broken or empty pill.
+  function tagsHtml(industries, flags, tagMap) {
     var inds = (industries && industries.length) ? industries : ['uncategorized'];
     var out = '';
     for (var i = 0; i < inds.length; i++) {
-      var label = (inds[i] === 'unclassified') ? 'uncategorized' : prettyTag(inds[i]);
-      out += '<span class="tagchip ind">' + esc(label) + '</span>';
+      var slug = inds[i], meta = (tagMap && tagMap[slug]) || null;
+      var label = (meta && meta.label) ? meta.label
+        : ((slug === 'unclassified' || slug === 'uncategorized') ? 'uncategorized' : prettyTag(slug));
+      var style = (meta && meta.color) ? ' style="background:' + esc(meta.color) + ';color:' + readableText(meta.color) + '"' : '';
+      out += '<span class="tagchip ind"' + style + '>' + esc(label) + '</span>';
     }
     var fl = flags || [];
     for (var j = 0; j < fl.length; j++) {
@@ -1505,7 +1526,7 @@
       '<button class="ipg-modal-close" type="button" data-modal-close aria-label="Close">×</button>' +
       '<div class="modal-kicker">Donor footprint · this election only</div>' +
       '<div class="modal-name">' + esc(fp.name) + '</div>' +
-      '<div class="modal-tags">' + tagsHtml(fp.industries, fp.flags) + '</div>' +
+      '<div class="modal-tags">' + tagsHtml(fp.industries, fp.flags, fp.industryTags) + '</div>' +
       '<p class="modal-note">Everything <b>' + esc(fp.name) + '</b> has given within the 2026 Board of Education data — ' +
       'direct contributions and money into independent-expenditure committees. Council-side giving is a separate, ' +
       'not-yet-connected view.</p>' +
@@ -1930,7 +1951,7 @@
       'Affiliated donors are combined into one group; an <span class="kind ie">IE PAC</span> opens its profile. Click any row for its footprint.</span></p>';
   }
 
-  function browseRow(r) {
+  function browseRow(r, tagMap) {
     if (r.kind === 'ie') {
       var nm = ieNaming(r.name, r.identity);
       return '<button class="crow funder-row" type="button" data-committee="' + esc(r.committee_id) + '">' +
@@ -1945,7 +1966,7 @@
     sub.push(plural(r.committees || 0, 'committee', 'committees'));
     sub.push(plural(r.contributions || 0, 'contribution', 'contributions'));
     return '<button class="crow funder-row" type="button" data-funder="' + esc(r.parent_id) + '">' +
-      '<div class="who">' + esc(r.name) + (isRollup ? ' <span class="rollup-pill">rollup</span>' : '') + ' ' + tagsHtml(r.industries, r.flags) +
+      '<div class="who">' + esc(r.name) + (isRollup ? ' <span class="rollup-pill">rollup</span>' : '') + ' ' + tagsHtml(r.industries, r.flags, tagMap) +
       '<div class="browse-counts">' + sub.join(' · ') + '</div></div>' +
       '<div class="amt">' + money(r.total) + '</div></button>';
   }
@@ -1996,10 +2017,10 @@
         body = controls + note + '<div class="soon"><p>No donors or spenders match these filters.</p></div>';
       } else {
         var LIMIT = 50, rows = vm.rows, top = '';
-        for (var i = 0; i < Math.min(LIMIT, rows.length); i++) top += browseRow(rows[i]);
+        for (var i = 0; i < Math.min(LIMIT, rows.length); i++) top += browseRow(rows[i], vm.industryTags);
         var more = '';
         if (rows.length > LIMIT) {
-          var moreRows = ''; for (var j = LIMIT; j < rows.length; j++) moreRows += browseRow(rows[j]);
+          var moreRows = ''; for (var j = LIMIT; j < rows.length; j++) moreRows += browseRow(rows[j], vm.industryTags);
           more = '<button class="show-more" type="button" aria-expanded="false" aria-controls="spend-donors-more">' +
             '<span class="caret" aria-hidden="true">▸</span> Show all ' + rows.length + ' donors &amp; spenders</button>' +
             '<div class="contrib tall" id="spend-donors-more"><div class="contrib-inner bare">' + moreRows + '</div></div>';
@@ -2053,6 +2074,7 @@
     renderOfficeNav: renderOfficeNav, renderRaceView: renderRaceView, renderRaceElections: renderRaceElections,
     renderComingSoon: renderComingSoon, spendPlaceholder: spendPlaceholder, renderSpend: renderSpend,
     renderFunderModal: renderFunderModal, renderCommitteeProfile: renderCommitteeProfile,
+    tagsHtml: tagsHtml, readableText: readableText,
     donorRow: donorRow, contributorPanel: contributorPanel, iePanel: iePanel,
     renderPage: renderPage, pageLabel: pageLabel,
     _money: money, _esc: esc

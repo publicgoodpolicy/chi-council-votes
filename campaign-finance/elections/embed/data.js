@@ -469,7 +469,8 @@
       parent_id: parentId, name: parent.name || parentId, win: win || null,
       industries: parent.industries || [], flags: parent.flags || [],
       committees: committees, total: round2(total), count: committees.length,
-      contributionsCount: kept, cycles: sortCycles(Object.keys(cyc)), rollup: rollup
+      contributionsCount: kept, cycles: sortCycles(Object.keys(cyc)), rollup: rollup,
+      industryTags: index.industryTags
     };
   }
 
@@ -1042,7 +1043,8 @@
     var browse = browseDonors(index, cycle, win, df), ieCount = 0;
     for (var bi = 0; bi < browse.length; bi++) if (browse[bi].kind === 'ie') ieCount++;
     return { tab: 'donors', election: sel, filter: filter, win: win, rows: browse,
-             donorFilters: df, facets: browseDonorFacets(index), ieCount: ieCount };   // default
+             donorFilters: df, facets: browseDonorFacets(index), ieCount: ieCount,
+             industryTags: index.industryTags };   // default
   }
 
   return {

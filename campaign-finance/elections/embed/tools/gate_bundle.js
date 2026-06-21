@@ -71,7 +71,9 @@ var FIXTURES = {
     // their OWN race must NOT be flagged self in another candidate's drill.
     selfLeak: { funder: 'Leon', leakRace: 'Rosenfeld', ownRace: 'Leon' },
     // Browse-Donors filters (E-1): a search term that hits a known rollup, and a donor type.
-    browseFilters: { search: 'frank', searchHit: 'Frank', type: 'Individual' }
+    browseFilters: { search: 'frank', searchHit: 'Frank', type: 'Individual' },
+    // Industry-tag color + curated label (E-5): canonical color + curated label, not the slug.
+    tagColor: { industry: 'real-estate', hex: '#a23a2e', label: 'Real Estate / Developers', slugText: '>real estate<' }
   }
 };
 
@@ -305,6 +307,12 @@ async function assertBrowseFilters(T, ctx, fx) {
   T.ok('[filters] composes with the time window (type persists + re-slices on Last)',
     ctx.root().querySelector('[data-donor-type]').value === bf.type && donorRows() > 0 && donorRows() <= typeAll);
   ctx.setFilter(fx.filter.allId); await ctx.wait(40); ctx.click(ctx.root().querySelector('[data-clear-filters]')); await ctx.wait(40);
+  // (E-5) industry pill renders canonical color + curated label, not the dasherized slug.
+  setSel('[data-donor-industry]', fx.tagColor.industry); await ctx.wait(50);
+  var body = ctx.root().querySelector('.spend-body').innerHTML;
+  T.ok('[tagcolor] industry pill = canonical color + curated label, NOT the slug',
+    body.indexOf('background:' + fx.tagColor.hex) >= 0 && body.indexOf(fx.tagColor.label) >= 0 && body.indexOf(fx.tagColor.slugText) < 0);
+  ctx.click(ctx.root().querySelector('[data-clear-filters]')); await ctx.wait(40);
 }
 
 (async function () {
