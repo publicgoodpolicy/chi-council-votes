@@ -75,7 +75,10 @@ var FIXTURES = {
     // Industry-tag color + curated label (E-5): canonical color + curated label, not the slug.
     tagColor: { industry: 'real-estate', hex: '#a23a2e', label: 'Real Estate / Developers', slugText: '>real estate<' },
     // Industry three-level drill (E-6): the IE-funded industry, its IE spender, a direct industry.
-    industryDrill: { ieIndustry: 'charter-schools', ieSpender: 'ie-committee-26066', directIndustry: 'labor-teachers' }
+    industryDrill: { ieIndustry: 'charter-schools', ieSpender: 'ie-committee-26066', directIndustry: 'labor-teachers' },
+    // Grouped spend-by-candidate (E-7): President first, district order, within-race ranking, race filter.
+    candidateGroups: { firstRaceText: 'President', raceCount: 21,
+      presidentOrder: ['Jennifer Custer', 'Sendhil Revuluri', 'Jessica Biggs', 'Victor Henderson'], singleRace: 'sb-d06' }
   }
 };
 
@@ -364,6 +367,39 @@ async function assertIndustryDrill(T, ctx, fx) {
   ctx.click(ctx.root().querySelector('[data-clear-filters]')); await ctx.wait(40);
 }
 
+// (E-7) Grouped spend-by-candidate: sections ordered President -> d01..d20, within-race ranking
+// by contributions.total (single-stream), full roster (committee-less shown), race filter composes
+// with time, three figures stay separate (firewall).  [NEW surface]
+async function assertCandidateGroups(T, ctx, fx) {
+  var cg = fx.candidateGroups;
+  await ctx.closeModal();
+  await ctx.spend(); ctx.setFilter(fx.filter.allId); await ctx.wait(40);
+  ctx.click(ctx.root().querySelector('[data-spendtab="candidates"]')); await ctx.wait(80);
+  var groups = [].slice.call(ctx.root().querySelectorAll('.racegroup'));
+  var heads = [].slice.call(ctx.root().querySelectorAll('.racehead')).map(function (h) { return h.textContent; });
+  T.ok('[E7] grouped into all ' + cg.raceCount + ' school-board race sections', groups.length === cg.raceCount);
+  T.ok('[E7] President section FIRST', new RegExp(cg.firstRaceText).test(heads[0] || ''));
+  T.ok('[E7] districts ascending after President (1A, 1B, ...) — not a string sort',
+    /District 1A/.test(heads[1] || '') && /District 1B/.test(heads[2] || ''));
+  var ph = groups[0].innerHTML, idxs = cg.presidentOrder.map(function (n) { return ph.indexOf(n); });
+  T.ok('[E7] within-race ranked by raised: ' + cg.presidentOrder.join(' > '),
+    idxs.every(function (x, i) { return x >= 0 && (i === 0 || x > idxs[i - 1]); }));
+  T.ok('[E7] FIREWALL: ranking figure (raised) + three figures SEPARATE (contrib/support/oppose), no fused total',
+    /rankfig/.test(ph) && /raised<\/span>/.test(ph) && /figrow/.test(ph) && / contrib/.test(ph) && / support/.test(ph) && / oppose/.test(ph));
+  T.ok('[E7] full roster: committee-less candidates rendered + labeled (not dropped)',
+    /no committee registered/.test(ctx.root().innerHTML));
+  // race filter -> single section, then compose with the time window
+  var sel = ctx.root().querySelector('[data-race-filter]');
+  T.ok('[E7] race filter present (data-race-filter)', !!sel);
+  sel.value = cg.singleRace; sel.dispatchEvent(new ctx.window.Event('change', { bubbles: true })); await ctx.wait(70);
+  T.ok('[E7] race filter -> single race section (graceful)', ctx.root().querySelectorAll('.racegroup').length === 1);
+  ctx.setFilter(fx.filter.lastId); await ctx.wait(70);
+  T.ok('[E7] race filter composes with time window (still one section, value retained)',
+    ctx.root().querySelector('[data-race-filter]').value === cg.singleRace && ctx.root().querySelectorAll('.racegroup').length === 1);
+  var rs = ctx.root().querySelector('[data-race-filter]'); rs.value = 'all'; rs.dispatchEvent(new ctx.window.Event('change', { bubbles: true })); await ctx.wait(40);
+  ctx.setFilter(fx.filter.allId); await ctx.wait(40);
+}
+
 (async function () {
   var html = fs.readFileSync(PREVIEW, 'utf8');
   var dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: true, url: 'http://localhost/' });
@@ -381,6 +417,7 @@ async function assertIndustryDrill(T, ctx, fx) {
   await assertParity(T, ctx, fx);
   await assertBrowseFilters(T, ctx, fx);
   await assertIndustryDrill(T, ctx, fx);
+  await assertCandidateGroups(T, ctx, fx);
 
   console.log('\n' + T.n + ' checks · ' + (T.fail ? ('FAILED ' + T.fail) : 'ALL PASS'));
   process.exit(T.fail ? 1 : 0);

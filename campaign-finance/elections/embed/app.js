@@ -90,7 +90,7 @@
     IDX = index;
     var cycles = ElectData.availableCycles(index);
     var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors', spendElection: 'all',
-      donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, electionView: null };
+      donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, raceFilter: 'all', electionView: null };
     var browseSearchTimer = null;
     state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, office));
 
@@ -98,7 +98,7 @@
       var omVM = ElectData.viewModels.officeRaces(index, state.office);
       var raceId = index.raceBySlug[state.activeSlug];
       var rv = raceId ? ElectData.viewModels.raceView(index, raceId, state.cycle) : null;
-      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.spendElection, state.donorFilters) : null;
+      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.spendElection, state.donorFilters, state.raceFilter) : null;
       root.innerHTML = ElectRender.renderPage({
         office: state.office, topView: state.topView, cycles: cycles, cycle: state.cycle,
         officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend,
@@ -165,6 +165,7 @@
       if (t.matches('[data-donor-type]')) { state.donorFilters.type = t.value; draw(); return; }
       if (t.matches('[data-donor-industry]')) { state.donorFilters.industry = t.value; draw(); return; }
       if (t.matches('[data-donor-flag]')) { state.donorFilters.flag = t.value; draw(); return; }
+      if (t.matches('[data-race-filter]')) { state.raceFilter = t.value; draw(); return; }   // E-7 race filter
     });
 
     root.addEventListener('input', function (e) {

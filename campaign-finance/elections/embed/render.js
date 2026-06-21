@@ -252,6 +252,14 @@
       '.ipg-elect .ind-legend{display:flex;gap:16px;margin:0 0 10px;font-size:11.5px;color:var(--ink-soft);}' +
       '.ipg-elect .ind-legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px;}' +
       '.ipg-elect .sw.indep{background:var(--sage);}' +
+      // Spend-by-candidate grouped view (E-7): race section headers + per-candidate ranking figure.
+      '.ipg-elect .racegroup{margin:0 0 20px;}' +
+      '.ipg-elect .racehead{font-size:13px;font-weight:600;color:var(--teal);letter-spacing:.01em;margin:0 0 9px;padding-bottom:5px;border-bottom:2px solid var(--line);}' +
+      '.ipg-elect .rankfig{font-size:13.5px;font-weight:600;color:var(--teal);font-variant-numeric:tabular-nums;margin-top:3px;}' +
+      '.ipg-elect .rankfig .n{font-weight:500;color:var(--ink-soft);font-size:12px;}' +
+      '.ipg-elect .srow.empty{background:none;border:1px dashed var(--line);}' +
+      '.ipg-elect .srow.empty .sname{color:var(--ink-soft);font-style:italic;font-weight:400;}' +
+      '.ipg-elect .badge{font-size:10.5px;font-weight:600;color:var(--ink-soft);background:var(--tan);border-radius:20px;padding:1px 8px;margin-left:6px;}' +
       '.ipg-elect .barval{font-size:13px;font-weight:500;text-align:right;}' +
       '.ipg-elect .barval .sub{display:block;font-size:11px;font-weight:400;color:var(--ink-soft);}' +
       '.ipg-elect .zero{color:#A99B91;font-weight:400;}' +
@@ -908,6 +916,17 @@
       '<span class="mini o">' + money(f.independentOpposition) + ' oppose</span>';
   }
 
+  // E-7 race filter for the grouped spend-by-candidate view. AND-composes with the time control
+  // (electionFilterNav). 'all' = every school-board race; a single race degrades to one section.
+  function candidateRaceFilter(raceOptions, raceFilter) {
+    if (!raceOptions || !raceOptions.length) return '';
+    var opt = function (id, label, sel) { return '<option value="' + esc(id) + '"' + (sel ? ' selected' : '') + '>' + esc(label) + '</option>'; };
+    return '<div class="elect-controls"><div class="elect-field grow"><label>Race</label><select data-race-filter>' +
+      opt('all', 'All school-board races', raceFilter === 'all' || !raceFilter) +
+      raceOptions.map(function (r) { return opt(r.id, r.label, raceFilter === r.id); }).join('') +
+      '</select></div></div>';
+  }
+
   // E-6 Level 1 — election-wide industry totals as sorted bars (Option A). Each industry is ONE
   // aggregate bar: direct industries in teal, IE-funded industries in sage ("independent"). The
   // aggregate is legitimate here because no candidate is in view — support/oppose are NOT split
@@ -940,12 +959,27 @@
   function renderSpend(vm) {
     var tab = vm.tab || 'donors', body;
     if (tab === 'candidates') {
-      body = '<p class="contrib-note">The three figures are shown separately and never added together. Candidates are listed ' +
-        'alphabetically (never ranked by money). Candidates with no committee yet still show independent spending for or against them.</p>' +
-        vm.candidates.map(function (c) {
-          return '<div class="srow"><div class="sname">' + esc(c.name) + ' <span class="muted">· ' + esc(c.race) + '</span>' +
-            (c.hasCommittee ? '' : ' <span class="badge">no committee yet</span>') +
-            '<div class="figrow">' + threeFig(c.figures) + '</div></div></div>';
+      // E-7: full roster grouped by race (President -> d01 -> d20), ranked within each race by
+      // contributions.total (direct raised, single-stream). The three figures stay SEPARATE.
+      body = candidateRaceFilter(vm.raceOptions, vm.raceFilter) +
+        '<p class="contrib-note">Candidates grouped by race, ranked within each race by money raised (direct ' +
+        'contributions). The three figures — raised, independent support, independent opposition — are shown ' +
+        'separately and never added together.</p>' +
+        vm.groups.map(function (g) {
+          var rows;
+          if (g.candidates.length) {
+            rows = g.candidates.map(function (c) {
+              var f = c.figures;
+              return '<div class="srow"><div class="sname">' + esc(c.name) +
+                (c.incumbent ? ' <span class="chip-inc">Incumbent</span>' : '') +
+                (c.hasCommittee ? '' : ' <span class="badge">no committee registered</span>') +
+                '<div class="rankfig">' + money(f.contributions.total) + ' <span class="n">raised</span></div>' +
+                '<div class="figrow">' + threeFig(f) + '</div></div></div>';
+            }).join('');
+          } else {
+            rows = '<div class="srow empty"><div class="sname">No finance reported yet.</div></div>';
+          }
+          return '<div class="racegroup"><h3 class="racehead">' + esc(g.race.label) + '</h3>' + rows + '</div>';
         }).join('');
     } else if (tab === 'industries') {
       body = industryChart(vm.industries);   // E-6 Level 1: sorted-bar chart, click -> spenders (Level 2)

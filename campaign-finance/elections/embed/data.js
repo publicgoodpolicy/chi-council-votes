@@ -959,6 +959,36 @@
     return out;
   }
 
+  // E-7 grouped spend-by-candidate: the FULL roster (candidatesByRace), grouped by race,
+  // scoped to the office. Section order: President first, then districts ascending by the NN
+  // in sb-dNN (NOT a string sort). Within a race, candidates rank by contributions.total
+  // (direct raised — a SINGLE legitimate stream; support/oppose stay separate, never fused).
+  // No money drop-guard: empty races and $0 / committee-less candidates are included so the
+  // render can label them honestly. Optional raceFilter ('all' | race_id) AND-composes with win.
+  function raceOrderKey(r) {
+    if (r.office === 'school_board_president' || r.id === 'sb-president') return -1;
+    var m = /(\d+)/.exec(r.id || '');
+    return m ? parseInt(m[1], 10) : 9999;
+  }
+  function spendByCandidateGrouped(index, office, cycle, win, raceFilter) {
+    var offs = OFFICE_RACE_OFFICES[office] || [];
+    var scoped = (index.races || []).filter(function (r) { return offs.indexOf(r.office) >= 0; });
+    scoped.sort(function (a, b) { return raceOrderKey(a) - raceOrderKey(b); });
+    var groups = scoped
+      .filter(function (r) { return !raceFilter || raceFilter === 'all' || r.id === raceFilter; })
+      .map(function (r) {
+        var cands = (index.candidatesByRace[r.id] || [])
+          .filter(function (c) { return !c.vacating_for; })
+          .map(function (c) {
+            return { id: c.id, name: c.name, incumbent: !!c.incumbent, hasCommittee: !!c.committee_id,
+              figures: candidateFigures(index, c.id, cycle, win) };
+          });
+        cands.sort(function (a, b) { return b.figures.contributions.total - a.figures.contributions.total; });
+        return { race: { id: r.id, label: r.label, office: r.office }, candidates: cands };
+      });
+    return { groups: groups, raceOptions: scoped.map(function (r) { return { id: r.id, label: r.label }; }) };
+  }
+
   // Shared cycle-aware aggregation for the industry/flag cross-tabs (re-derived
   // from the office-scoped per-candidate index by cycle; null cycle = all-time).
   function spendAgg(index, office, cycle, win) {
@@ -1041,9 +1071,12 @@
   // election-window-aware: `election` is 'all' (default = union of both windows),
   // '2026' (This) or '2024' (Last). The resolved window drives every figure + the
   // drill-downs (the spend container carries it so spender modals stay scoped).
-  function spendSubtab(index, office, tab, cycle, election, filters) {
+  function spendSubtab(index, office, tab, cycle, election, filters, raceFilter) {
     var sel = election || 'all', win = spendWin(office, sel), filter = spendElectionFilter(office, sel);
-    if (tab === 'candidates') return { tab: tab, election: sel, filter: filter, win: win, candidates: spendByCandidate(index, office, cycle, win) };
+    if (tab === 'candidates') {
+      var rf = raceFilter || 'all', g = spendByCandidateGrouped(index, office, cycle, win, rf);
+      return { tab: tab, election: sel, filter: filter, win: win, groups: g.groups, raceOptions: g.raceOptions, raceFilter: rf };
+    }
     if (tab === 'industries') return { tab: tab, election: sel, filter: filter, win: win, industries: industryTotals(index, office, cycle, win) };
     if (tab === 'industry-candidate') return { tab: tab, election: sel, filter: filter, win: win, rows: industriesByCandidate(index, office, cycle, win) };
     if (tab === 'flags') return { tab: tab, election: sel, filter: filter, win: win, flags: flagTotals(index, office, cycle, win) };

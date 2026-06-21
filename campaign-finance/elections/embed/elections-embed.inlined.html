@@ -977,6 +977,36 @@
     return out;
   }
 
+  // E-7 grouped spend-by-candidate: the FULL roster (candidatesByRace), grouped by race,
+  // scoped to the office. Section order: President first, then districts ascending by the NN
+  // in sb-dNN (NOT a string sort). Within a race, candidates rank by contributions.total
+  // (direct raised — a SINGLE legitimate stream; support/oppose stay separate, never fused).
+  // No money drop-guard: empty races and $0 / committee-less candidates are included so the
+  // render can label them honestly. Optional raceFilter ('all' | race_id) AND-composes with win.
+  function raceOrderKey(r) {
+    if (r.office === 'school_board_president' || r.id === 'sb-president') return -1;
+    var m = /(\d+)/.exec(r.id || '');
+    return m ? parseInt(m[1], 10) : 9999;
+  }
+  function spendByCandidateGrouped(index, office, cycle, win, raceFilter) {
+    var offs = OFFICE_RACE_OFFICES[office] || [];
+    var scoped = (index.races || []).filter(function (r) { return offs.indexOf(r.office) >= 0; });
+    scoped.sort(function (a, b) { return raceOrderKey(a) - raceOrderKey(b); });
+    var groups = scoped
+      .filter(function (r) { return !raceFilter || raceFilter === 'all' || r.id === raceFilter; })
+      .map(function (r) {
+        var cands = (index.candidatesByRace[r.id] || [])
+          .filter(function (c) { return !c.vacating_for; })
+          .map(function (c) {
+            return { id: c.id, name: c.name, incumbent: !!c.incumbent, hasCommittee: !!c.committee_id,
+              figures: candidateFigures(index, c.id, cycle, win) };
+          });
+        cands.sort(function (a, b) { return b.figures.contributions.total - a.figures.contributions.total; });
+        return { race: { id: r.id, label: r.label, office: r.office }, candidates: cands };
+      });
+    return { groups: groups, raceOptions: scoped.map(function (r) { return { id: r.id, label: r.label }; }) };
+  }
+
   // Shared cycle-aware aggregation for the industry/flag cross-tabs (re-derived
   // from the office-scoped per-candidate index by cycle; null cycle = all-time).
   function spendAgg(index, office, cycle, win) {
@@ -1059,9 +1089,12 @@
   // election-window-aware: `election` is 'all' (default = union of both windows),
   // '2026' (This) or '2024' (Last). The resolved window drives every figure + the
   // drill-downs (the spend container carries it so spender modals stay scoped).
-  function spendSubtab(index, office, tab, cycle, election, filters) {
+  function spendSubtab(index, office, tab, cycle, election, filters, raceFilter) {
     var sel = election || 'all', win = spendWin(office, sel), filter = spendElectionFilter(office, sel);
-    if (tab === 'candidates') return { tab: tab, election: sel, filter: filter, win: win, candidates: spendByCandidate(index, office, cycle, win) };
+    if (tab === 'candidates') {
+      var rf = raceFilter || 'all', g = spendByCandidateGrouped(index, office, cycle, win, rf);
+      return { tab: tab, election: sel, filter: filter, win: win, groups: g.groups, raceOptions: g.raceOptions, raceFilter: rf };
+    }
     if (tab === 'industries') return { tab: tab, election: sel, filter: filter, win: win, industries: industryTotals(index, office, cycle, win) };
     if (tab === 'industry-candidate') return { tab: tab, election: sel, filter: filter, win: win, rows: industriesByCandidate(index, office, cycle, win) };
     if (tab === 'flags') return { tab: tab, election: sel, filter: filter, win: win, flags: flagTotals(index, office, cycle, win) };
@@ -1353,6 +1386,14 @@
       '.ipg-elect .ind-legend{display:flex;gap:16px;margin:0 0 10px;font-size:11.5px;color:var(--ink-soft);}' +
       '.ipg-elect .ind-legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px;}' +
       '.ipg-elect .sw.indep{background:var(--sage);}' +
+      // Spend-by-candidate grouped view (E-7): race section headers + per-candidate ranking figure.
+      '.ipg-elect .racegroup{margin:0 0 20px;}' +
+      '.ipg-elect .racehead{font-size:13px;font-weight:600;color:var(--teal);letter-spacing:.01em;margin:0 0 9px;padding-bottom:5px;border-bottom:2px solid var(--line);}' +
+      '.ipg-elect .rankfig{font-size:13.5px;font-weight:600;color:var(--teal);font-variant-numeric:tabular-nums;margin-top:3px;}' +
+      '.ipg-elect .rankfig .n{font-weight:500;color:var(--ink-soft);font-size:12px;}' +
+      '.ipg-elect .srow.empty{background:none;border:1px dashed var(--line);}' +
+      '.ipg-elect .srow.empty .sname{color:var(--ink-soft);font-style:italic;font-weight:400;}' +
+      '.ipg-elect .badge{font-size:10.5px;font-weight:600;color:var(--ink-soft);background:var(--tan);border-radius:20px;padding:1px 8px;margin-left:6px;}' +
       '.ipg-elect .barval{font-size:13px;font-weight:500;text-align:right;}' +
       '.ipg-elect .barval .sub{display:block;font-size:11px;font-weight:400;color:var(--ink-soft);}' +
       '.ipg-elect .zero{color:#A99B91;font-weight:400;}' +
@@ -2009,6 +2050,17 @@
       '<span class="mini o">' + money(f.independentOpposition) + ' oppose</span>';
   }
 
+  // E-7 race filter for the grouped spend-by-candidate view. AND-composes with the time control
+  // (electionFilterNav). 'all' = every school-board race; a single race degrades to one section.
+  function candidateRaceFilter(raceOptions, raceFilter) {
+    if (!raceOptions || !raceOptions.length) return '';
+    var opt = function (id, label, sel) { return '<option value="' + esc(id) + '"' + (sel ? ' selected' : '') + '>' + esc(label) + '</option>'; };
+    return '<div class="elect-controls"><div class="elect-field grow"><label>Race</label><select data-race-filter>' +
+      opt('all', 'All school-board races', raceFilter === 'all' || !raceFilter) +
+      raceOptions.map(function (r) { return opt(r.id, r.label, raceFilter === r.id); }).join('') +
+      '</select></div></div>';
+  }
+
   // E-6 Level 1 — election-wide industry totals as sorted bars (Option A). Each industry is ONE
   // aggregate bar: direct industries in teal, IE-funded industries in sage ("independent"). The
   // aggregate is legitimate here because no candidate is in view — support/oppose are NOT split
@@ -2041,12 +2093,27 @@
   function renderSpend(vm) {
     var tab = vm.tab || 'donors', body;
     if (tab === 'candidates') {
-      body = '<p class="contrib-note">The three figures are shown separately and never added together. Candidates are listed ' +
-        'alphabetically (never ranked by money). Candidates with no committee yet still show independent spending for or against them.</p>' +
-        vm.candidates.map(function (c) {
-          return '<div class="srow"><div class="sname">' + esc(c.name) + ' <span class="muted">· ' + esc(c.race) + '</span>' +
-            (c.hasCommittee ? '' : ' <span class="badge">no committee yet</span>') +
-            '<div class="figrow">' + threeFig(c.figures) + '</div></div></div>';
+      // E-7: full roster grouped by race (President -> d01 -> d20), ranked within each race by
+      // contributions.total (direct raised, single-stream). The three figures stay SEPARATE.
+      body = candidateRaceFilter(vm.raceOptions, vm.raceFilter) +
+        '<p class="contrib-note">Candidates grouped by race, ranked within each race by money raised (direct ' +
+        'contributions). The three figures — raised, independent support, independent opposition — are shown ' +
+        'separately and never added together.</p>' +
+        vm.groups.map(function (g) {
+          var rows;
+          if (g.candidates.length) {
+            rows = g.candidates.map(function (c) {
+              var f = c.figures;
+              return '<div class="srow"><div class="sname">' + esc(c.name) +
+                (c.incumbent ? ' <span class="chip-inc">Incumbent</span>' : '') +
+                (c.hasCommittee ? '' : ' <span class="badge">no committee registered</span>') +
+                '<div class="rankfig">' + money(f.contributions.total) + ' <span class="n">raised</span></div>' +
+                '<div class="figrow">' + threeFig(f) + '</div></div></div>';
+            }).join('');
+          } else {
+            rows = '<div class="srow empty"><div class="sname">No finance reported yet.</div></div>';
+          }
+          return '<div class="racegroup"><h3 class="racehead">' + esc(g.race.label) + '</h3>' + rows + '</div>';
         }).join('');
     } else if (tab === 'industries') {
       body = industryChart(vm.industries);   // E-6 Level 1: sorted-bar chart, click -> spenders (Level 2)
@@ -2230,7 +2297,7 @@
     IDX = index;
     var cycles = ElectData.availableCycles(index);
     var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors', spendElection: 'all',
-      donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, electionView: null };
+      donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, raceFilter: 'all', electionView: null };
     var browseSearchTimer = null;
     state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, office));
 
@@ -2238,7 +2305,7 @@
       var omVM = ElectData.viewModels.officeRaces(index, state.office);
       var raceId = index.raceBySlug[state.activeSlug];
       var rv = raceId ? ElectData.viewModels.raceView(index, raceId, state.cycle) : null;
-      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.spendElection, state.donorFilters) : null;
+      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.spendElection, state.donorFilters, state.raceFilter) : null;
       root.innerHTML = ElectRender.renderPage({
         office: state.office, topView: state.topView, cycles: cycles, cycle: state.cycle,
         officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend,
@@ -2305,6 +2372,7 @@
       if (t.matches('[data-donor-type]')) { state.donorFilters.type = t.value; draw(); return; }
       if (t.matches('[data-donor-industry]')) { state.donorFilters.industry = t.value; draw(); return; }
       if (t.matches('[data-donor-flag]')) { state.donorFilters.flag = t.value; draw(); return; }
+      if (t.matches('[data-race-filter]')) { state.raceFilter = t.value; draw(); return; }   // E-7 race filter
     });
 
     root.addEventListener('input', function (e) {
