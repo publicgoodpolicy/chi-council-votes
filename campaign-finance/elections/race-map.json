@@ -3,6 +3,12 @@
   "_status_values": "declared | filed | certified | withdrawn | disqualified | incumbent-pending",
   "_example_remove_before_use": true,
   "mappings": {
+    "39789": {"candidate_id":"ayala-sb-d13","name":"Jesus Ayala Jr","race_id":"sb-d13","incumbent":false,"status":"filed","bio":{}},
+    "39844": {"candidate_id":"lopez-sb-d14","name":"Yesenia Lopez","race_id":"sb-d14","incumbent":true,"status":"filed","bio":{}},
+    "39873": {"candidate_id":"gutierrez-sb-d15","name":"Angel Gutierrez","race_id":"sb-d15","incumbent":true,"status":"filed","bio":{}},
+    "41111": {"candidate_id":"gonzalez-sb-d16","name":"Juan Ignacio Gonzalez","race_id":"sb-d16","incumbent":false,"status":"filed","bio":{}},
+    "39843": {"candidate_id":"boyle-sb-d18","name":"Therese Boyle","race_id":"sb-d18","incumbent":true,"status":"filed","bio":{}},
+    "39788": {"candidate_id":"smith-sb-d19","name":"Che \"Rhymefest\" Smith","race_id":"sb-d19","incumbent":true,"status":"filed","bio":{}},
     "39881": {
       "candidate_id": "biggs-sb-president",
       "name": "Jessica Biggs",
@@ -1393,22 +1399,14 @@
     },
     "inc-sb-d17": {
       "candidate_id": "inc-sb-d17",
-      "name": "Frank Niles Thomas",
+      "name": "Ángel Luis Vélez Rodríguez",
       "race_id": "sb-d17",
       "committee_id": null,
       "incumbent": true,
-      "status": "incumbent-pending",
+      "status": "filed",
       "bio": {
-        "current_roles": [
-          "Chicago Board of Education, District 9a"
-        ],
-        "board_role": "Appointed",
-        "phone": "(773) 553-1600",
-        "email": "board@cps.edu",
-        "links": {
-          "office": "https://www.cpsboe.org/about/bios"
-        },
-        "source": "ipg-rep-finder REPS.school (current officeholder; candidacy not confirmed)"
+        "current_roles": [],
+        "board_role": "Appointed"
       }
     },
     "inc-sb-d18": {
@@ -1450,29 +1448,17 @@
         },
         "source": "ipg-rep-finder REPS.school (current officeholder; candidacy not confirmed)"
       }
-    },
-    "inc-sb-d20": {
-      "candidate_id": "inc-sb-d20",
-      "name": "Olga Bautista",
-      "race_id": "sb-d20",
-      "committee_id": null,
-      "incumbent": true,
-      "status": "incumbent-pending",
-      "bio": {
-        "current_roles": [
-          "Chicago Board of Education, District 10b"
-        ],
-        "board_role": "Appointed",
-        "phone": "(773) 553-1600",
-        "email": "board@cps.edu",
-        "links": {
-          "office": "https://www.cpsboe.org/about/bios"
-        },
-        "source": "ipg-rep-finder REPS.school (current officeholder; candidacy not confirmed)"
-      }
     }
   },
   "candidate_stubs": {
+    "cand-diaz-chavez-sb-d14": {"candidate_id":"cand-diaz-chavez-sb-d14","name":"Erika Díaz-Chávez","race_id":"sb-d14","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "cand-preston-sb-d17": {"candidate_id":"cand-preston-sb-d17","name":"Brittany Bailey Preston","race_id":"sb-d17","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "cand-dunneback-sb-d18": {"candidate_id":"cand-dunneback-sb-d18","name":"Katherine Dunneback","race_id":"sb-d18","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "cand-alston-sb-d19": {"candidate_id":"cand-alston-sb-d19","name":"Krista Nichols Alston","race_id":"sb-d19","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "cand-walton-sb-d19": {"candidate_id":"cand-walton-sb-d19","name":"Tameka Walton","race_id":"sb-d19","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "cand-anderson-sb-d20": {"candidate_id":"cand-anderson-sb-d20","name":"Connie Anderson","race_id":"sb-d20","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "cand-chatonda-sb-d20": {"candidate_id":"cand-chatonda-sb-d20","name":"Rosita Chatonda","race_id":"sb-d20","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "cand-watson-sb-d20": {"candidate_id":"cand-watson-sb-d20","name":"Patrick Watson","race_id":"sb-d20","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
     "cand-lenhof-sb-d04": {"candidate_id":"cand-lenhof-sb-d04","name":"Kyna Lenhof","race_id":"sb-d04","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
     "cand-alvarez-sb-d07": {"candidate_id":"cand-alvarez-sb-d07","name":"Angel Alvarez","race_id":"sb-d07","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
     "cand-williams-sb-d09": {"candidate_id":"cand-williams-sb-d09","name":"LaPamela Williams","race_id":"sb-d09","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},

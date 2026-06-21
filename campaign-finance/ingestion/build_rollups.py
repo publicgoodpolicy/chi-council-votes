@@ -39,12 +39,15 @@ def _split_name(n):
 def _self_match(donor_name, ctoks, ctype):
     """The ONE relational self-funding predicate (3b rule): a contribution is self IFF the
     donor identity-matches the RECIPIENT candidate -- committee-scoped surname match AND
-    (>=1 given/nick token shared OR a Loan Received). NOT self merely because the donor is
-    a Candidate-type / self-funding-flagged person in their own race. Used to stamp
-    is_self; candidateContributors (embed) READS that stamp, so render can't diverge."""
+    >=1 given/nick token shared. A Loan Received no longer independently satisfies the
+    match: a same-surname relative's loan (e.g. a spouse) is NOT the candidate's own
+    self-funding, so a loan must still clear the given-name test like any other row.
+    NOT self merely because the donor is a Candidate-type / self-funding-flagged person
+    in their own race. Used to stamp is_self; candidateContributors (embed) READS that
+    stamp, so render can't diverge. (ctype retained for signature/call-site stability.)"""
     if not ctoks or not donor_name: return False
     dfam,dgiv=_split_name(donor_name)
-    if dfam & ctoks and ((dgiv and dgiv<=ctoks) or ctype=='Loan Received'): return True
+    if dfam & ctoks and (dgiv and dgiv<=ctoks): return True
     return False
 
 def _bucket(date,wins):
