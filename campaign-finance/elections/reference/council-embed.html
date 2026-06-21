@@ -1693,39 +1693,46 @@ const FEEDBACK_CONFIG = {
     const pick=o=> !o?{}:(cyc==='all'?(o.all||{}):((o.by_cycle&&o.by_cycle[cyc])||{}));
     const rows=Object.keys(R).map(w=>{
       const v=pick(R[w]); const direct=v.direct||0, sup=v.ie_support||0, opp=v.ie_oppose||0;
-      return {ward:w, name:wardName[w]||('Ward '+w), direct:direct, sup:sup, opp:opp, total:direct+sup+opp};
-    }).filter(r=>r.total>0).sort((a,b)=>b.total-a.total);
+      return {ward:w, name:wardName[w]||('Ward '+w), direct:direct, sup:sup, opp:opp};
+    }).filter(r=>r.direct||r.sup||r.opp).sort((a,b)=>b.direct-a.direct);
     const anyIE=rows.some(r=>r.sup||r.opp);
+    const maxDirect=Math.max(1,...rows.map(r=>r.direct));
+    const maxIE=Math.max(1,...rows.map(r=>Math.max(r.sup,r.opp)));
     const cycles=state.cf.cycles||{};
     let h='<div class="ipg-controls"><div class="ipg-field"><label>Cycle</label><select id="ipg-spend-cycle">';
     h+='<option value="all"'+(cyc==='all'?' selected':'')+'>All cycles</option>';
     Object.keys(cycles).sort().forEach(k=>{ h+='<option value="'+k+'"'+(cyc===k?' selected':'')+'>'+(cycles[k].label||k)+'</option>'; });
     h+='</select></div></div>';
-    h+='<div class="ipg-cf-meta" style="margin-top:8px">Total political spend in each ward\u2019s council race \u2014 direct contributions to the alder\u2019s committee'+(anyIE?', plus independent spending for or against them':'')+'.'
-      +' <span style="color:#9a8e7e;display:block;margin-top:4px">Ranked by total dollars (shown at right). Each bar shows that ward\u2019s funding mix \u2014 the share that is direct'+(anyIE?', for, and against':'')+' \u2014 so bars are comparable across wards regardless of size. Click a ward to open that alder\u2019s full profile. Independent spending is made without coordinating with the candidate; correlation is not causation.</span></div>';
+    h+='<div class="ipg-cf-meta" style="margin-top:8px">Money in each ward\u2019s council race, shown as <strong>three separate streams</strong> \u2014 direct contributions to the alder\u2019s committee'+(anyIE?', plus independent spending <strong>for</strong> and <strong>against</strong> them':'')+'.'
+      +(anyIE?' Opposition spending is made <em>against</em> a candidate, so the three streams are shown separately and never added together.':'')
+      +' <span style="color:#9a8e7e;display:block;margin-top:4px">Ranked by direct fundraising (shown at right). Click a ward to open that alder\u2019s full profile. Independent spending is made without coordinating with the candidate; correlation is not causation.</span></div>';
     if(!rows.length) return h+'<div class="ipg-cf-empty">No spending data for this cycle.</div>';
     if(anyIE){
+      h+='<div class="ipg-cf-meta" style="margin:8px 0;padding:9px 11px;background:#f6f1e9;border-radius:8px;font-size:.85em;color:#6a5d4e"><strong>How to read the bars:</strong> Each stream has its own scale \u2014 direct bars are sized against the top-fundraising ward, independent-spending bars against the ward with the most independent spending. Compare bar <em>length</em> only within the same stream; the dollar amount on each bar gives its true size.</div>';
       h+='<div class="ipg-cf-meta" style="margin:0 0 8px;font-size:.85em">'
         +'<span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--teal);vertical-align:-1px;margin-right:4px"></span>direct &nbsp; '
-        +'<span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#3f9d78;vertical-align:-1px;margin-right:4px"></span>independent for &nbsp; '
-        +'<span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#c0563a;vertical-align:-1px;margin-right:4px"></span>independent against</div>';
+        +'<span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#3f9d78;vertical-align:-1px;margin-right:4px"></span>independent \u2014 for &nbsp; '
+        +'<span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#c0563a;vertical-align:-1px;margin-right:4px"></span>independent \u2014 against</div>';
     }
-    // Each ward's bar is a 100% composition bar — segment widths are that ward's
-    // own direct/for/against shares, not a fraction of the biggest spender. The
-    // dollar figure on the right conveys the absolute size; the bar conveys the mix.
-    const pct=(v,t)=>(t>0?100*v/t:0).toFixed(2)+'%';
+    const barTrack=(frac,color,amt)=>{
+      const w=Math.max(amt>0?2:0, Math.min(100, frac*100)).toFixed(2);
+      return '<span style="flex:1 1 auto;height:8px;border-radius:4px;background:#ece7df;overflow:hidden;max-width:340px"><span style="display:block;height:100%;width:'+w+'%;background:'+color+'"></span></span>';
+    };
+    const barLine=(lab,frac,color,amt)=> '<div style="display:flex;align-items:center;gap:8px;margin:5px 0 0">'
+        +'<span style="flex:0 0 132px;font-size:11.5px;color:#6a5d4e">'+lab+'</span>'
+        +barTrack(frac,color,amt)
+        +'<span style="flex:0 0 auto;font-size:11.5px;color:#6a5d4e;font-variant-numeric:tabular-nums">'+fmtMoney(amt)+'</span></div>';
     rows.forEach(r=>{
       h+='<div class="ipg-cf-row ipg-cf-clickable ipg-alder-spend-row" data-ward="'+r.ward+'">'
         +'<div style="flex:1 1 auto;min-width:0">'
         +'<div class="name">Ward '+r.ward+' \u00b7 '+r.name+'</div>'
-        +'<div style="display:flex;height:8px;border-radius:4px;overflow:hidden;background:#ece7df;margin:6px 0 2px;max-width:520px">'
-        +(r.direct?'<div style="width:'+pct(r.direct,r.total)+';background:var(--teal)"></div>':'')
-        +(r.sup?'<div style="width:'+pct(r.sup,r.total)+';background:#3f9d78"></div>':'')
-        +(r.opp?'<div style="width:'+pct(r.opp,r.total)+';background:#c0563a"></div>':'')
+        +barLine('Direct contributions', r.direct/maxDirect, 'var(--teal)', r.direct)
+        +((r.sup||r.opp)
+            ? (r.sup?barLine('Independent \u2014 for', r.sup/maxIE, '#3f9d78', r.sup):'')
+              +(r.opp?barLine('Independent \u2014 against', r.opp/maxIE, '#c0563a', r.opp):'')
+            : '<div style="font-size:11.5px;color:#9a8e7e;margin:5px 0 0">No independent spending recorded.</div>')
         +'</div>'
-        +(anyIE?'<div class="sub">'+fmtMoney(r.direct)+' direct'+(r.sup?' \u00b7 '+fmtMoney(r.sup)+' for':'')+(r.opp?' \u00b7 '+fmtMoney(r.opp)+' against':'')+'</div>':'')
-        +'</div>'
-        +'<div class="amount">'+fmtMoney(r.total)+'</div></div>';
+        +'<div class="amount">'+fmtMoney(r.direct)+'</div></div>';
     });
     return h;
   }
