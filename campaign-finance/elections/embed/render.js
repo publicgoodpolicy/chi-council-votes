@@ -173,6 +173,20 @@
       '.ipg-elect button.funder-row:hover{background:#F2E8DC;}.ipg-elect button.funder-row:focus-visible{outline:2px solid var(--sage);outline-offset:1px;}' +
       '.ipg-elect .crow.plain{cursor:default;}' +
       '.ipg-elect .who .sub{display:block;font-size:11px;font-weight:400;color:var(--ink-soft);margin-top:1px;}' +
+      // X-1 itemized direct-contribution rows: sage left-border block, indented under each
+      // committee button. Chips use neutral tokens only (tan/cream/teal) — IE for/against
+      // colors (sage swatch / coral) never appear as a row-level stance signal here.
+      '.ipg-elect .ipg-items{margin:0 0 6px 4px;border-left:2px solid var(--sage);padding:3px 0 3px 12px;}' +
+      '.ipg-elect .ipg-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--line);font-size:12px;}' +
+      '.ipg-elect .ipg-item:last-child{border-bottom:0;}' +
+      '.ipg-elect .ipg-item .ileft{display:flex;flex-wrap:wrap;align-items:center;gap:6px;}' +
+      '.ipg-elect .ipg-item .idate{color:var(--ink-soft);white-space:nowrap;font-variant-numeric:tabular-nums;}' +
+      '.ipg-elect .ipg-item .iamt{font-weight:500;color:var(--ink);white-space:nowrap;}' +
+      '.ipg-elect .ichip{font-size:10px;padding:1px 7px;border-radius:12px;background:var(--tan);color:var(--ink-soft);white-space:nowrap;}' +
+      '.ipg-elect .ichip.self{background:var(--teal);color:#fff;}' +
+      '.ipg-elect .ichip.loan{background:var(--tan);color:var(--ink);font-weight:500;}' +
+      '.ipg-elect .ichip.inkind{background:var(--cream);color:var(--ink-soft);border:1px solid var(--line);}' +
+      '.ipg-elect .ichip.agg{background:var(--cream);color:var(--ink-soft);border:1px solid var(--line);}' +
       '.ipg-elect .tagchip.ind{background:var(--tan);color:var(--ink-soft);}.ipg-elect .tagchip.flag{background:#F4E3DC;color:var(--coral);}' +
       '.ipg-elect .ipg-modal-overlay{position:fixed;inset:0;background:rgba(52,40,40,.55);display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px;z-index:99999;overflow:auto;}' +
       '.ipg-elect .ipg-modal{background:var(--paper);border-radius:14px;max-width:560px;width:100%;padding:24px 26px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3);}' +
@@ -406,6 +420,27 @@
       'Click a committee to see who funds it.</p>' + committees + '</div></div>';
   }
 
+  // X-1: one itemized direct-contribution row. Date is formatted when present; a
+  // null-dated (aggregate) row shows ONLY its year — never a fabricated month/day,
+  // which would assert precision the filing doesn't have.
+  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function fmtRowDate(r) {
+    if (!r.date) return r.year ? String(r.year) : '—';
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(r.date);
+    if (!m) return r.year ? String(r.year) : esc(r.date);
+    return (MONTHS[(+m[2]) - 1] || '') + ' ' + (+m[3]) + ', ' + m[1];
+  }
+  // Per-row label chips — DIRECT-stream vocabulary only. No stance, no support/oppose,
+  // no IE framing (these rows are direct contributions regardless of recipient kind).
+  function itemChips(r) {
+    var out = '';
+    if (r.is_self) out += '<span class="ichip self">self-funding</span>';
+    if (r.is_loan) out += '<span class="ichip loan">loan · not a gift</span>';
+    if (r.is_in_kind) out += '<span class="ichip inkind">in-kind' + (r.in_kind_description ? ' · ' + esc(r.in_kind_description) : '') + '</span>';
+    if (r.is_aggregate) out += '<span class="ichip agg">aggregate of ' + esc(String(r.contribution_count || '?')) + '</span>';
+    return out;
+  }
+
   // Tier 3 — donor-footprint modal (app mounts/unmounts it). Election-scoped.
   // Committee rows show the committee NAME, never the bare id: candidate
   // committees use their real name; placeholder IE PACs use the identity
@@ -419,9 +454,19 @@
       } else if (x.kind === 'candidate') {
         who = esc(x.label) + ' <span class="kind cand">candidate</span>';
       } else { who = esc(x.label) + ' <span class="kind">committee</span>'; }
-      return '<button class="crow funder-row" type="button" data-committee="' + esc(x.committee_id) + '">' +
+      // Committee button — UNCHANGED. It alone carries data-committee -> modalNav -> openCommittee.
+      var btn = '<button class="crow funder-row" type="button" data-committee="' + esc(x.committee_id) + '">' +
         '<div class="who">' + who + '</div>' +
         '<div class="amt">' + money(x.total) + ' <span class="n">· ' + plural(x.count, 'gift', 'gifts') + '</span></div></button>';
+      // X-1: itemized rows render as a SIBLING after the button, never a child. They carry
+      // NO data-committee, so a click on a row can never enter the committee-navigate path.
+      var items = (x.rows || []).map(function (r) {
+        return '<div class="ipg-item">' +
+          '<div class="ileft"><span class="idate">' + esc(fmtRowDate(r)) + '</span>' +
+          '<span class="ichips">' + itemChips(r) + '</span></div>' +
+          '<div class="iamt">' + money(r.amount) + '</div></div>';
+      }).join('');
+      return btn + (items ? '<div class="ipg-items">' + items + '</div>' : '');
     }).join('') || '<p class="contrib-note">No election giving recorded.</p>';
     // Four stat cards (E-2/E-3) + chronological cycle line (pre-YYYY first).
     var stat = function (num, lab) { return '<div class="elect-stat"><div class="num">' + num + '</div><div class="lab">' + lab + '</div></div>'; };
@@ -460,7 +505,9 @@
       'not-yet-connected view.</p>' +
       statgrid + cycLine + rc +
       '<div class="modal-summary">' + money(fp.total) + ' across ' + plural(fp.count, 'recipient', 'recipients') + '</div>' +
-      rows + '</div></div>';
+      rows +
+      '<p class="contrib-note">Direct contributions only — independent spending isn\'t shown here.</p>' +
+      '</div></div>';
   }
 
   // Committee-profile modal — bidirectional with the donor footprint. Same modal

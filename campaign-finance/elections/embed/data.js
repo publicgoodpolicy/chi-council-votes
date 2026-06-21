@@ -409,6 +409,17 @@
   }
   function sortCycles(arr) { return arr.slice().sort(function (a, b) { return cycleKey(a) - cycleKey(b); }); }
 
+  // Display year for one contribution row: prefer the filing date, else fall back to
+  // the cycle — reusing the same /(\d{4})/ extraction as cycleKey. Aggregate rows have
+  // date:null, so they resolve to their cycle year; render shows the bare year (never a
+  // fabricated month/day).
+  function rowYear(c) {
+    var d = /(\d{4})/.exec(String(c.date || ''));
+    if (d) return +d[1];
+    var y = /(\d{4})/.exec(String(c.cycle || ''));
+    return y ? +y[1] : null;
+  }
+
   function donorFootprint(index, parentId, win) {
     var parent = index.donors[parentId] || { id: parentId, name: parentId };
     var pr = index.parentRollup[parentId];
@@ -424,7 +435,7 @@
       if (cm.type === 'independent_expenditure' && index.office && !index.inScopeIE[cid]) continue;
       var m = by[cid];
       if (!m) {
-        m = by[cid] = { committee_id: cid, total: 0, count: 0, kind: 'other', label: cm.committee_name || cid };
+        m = by[cid] = { committee_id: cid, total: 0, count: 0, kind: 'other', label: cm.committee_name || cid, rows: [] };
         if (cm.candidate_id) {
           var cand = index.candidateById[cm.candidate_id] || {}, race = index.raceById[cand.race_id] || {};
           m.kind = 'candidate'; m.label = (cand.name || cm.candidate_id) + (race.label ? (' — ' + race.label) : '');
@@ -434,12 +445,28 @@
         }
       }
       m.total = round2(m.total + (c.amount || 0)); m.count++;
+      // X-1: itemized direct-contribution row, additive (existing fields/keys untouched).
+      // Optional flags default to false; in_kind_description / contribution_count are null
+      // unless the row carries them. Stream is direct by construction — pr.rows are
+      // contributions[] only, never IE rows (verified: no contribution carries a stance).
+      m.rows.push({
+        date: c.date || null, year: rowYear(c), amount: c.amount || 0,
+        is_self: !!c.is_self, is_loan: !!c.is_loan, is_in_kind: !!c.is_in_kind,
+        in_kind_description: c.in_kind_description || null,
+        is_aggregate: !!c.is_aggregate, contribution_count: c.contribution_count || null
+      });
       kept++;
       if (c.cycle) cyc[c.cycle] = 1;
       var eid = c.donor_id, em = entBy[eid] || (entBy[eid] = { id: eid, amount: 0, count: 0 });
       em.amount = round2(em.amount + (c.amount || 0)); em.count++;
     }
-    var committees = []; for (var k in by) if (by.hasOwnProperty(k)) committees.push(by[k]);
+    var committees = [];
+    for (var k in by) if (by.hasOwnProperty(k)) {
+      // Rows newest-first; ISO dates sort lexically = chronologically. Null-dated
+      // (aggregate) rows sort last.
+      by[k].rows.sort(function (a, b) { var da = a.date || '', db = b.date || ''; return da < db ? 1 : da > db ? -1 : 0; });
+      committees.push(by[k]);
+    }
     committees.sort(function (a, b) { return b.total - a.total; });
     var total = 0; for (var j = 0; j < committees.length; j++) total += committees[j].total;
     // Affiliated-entity breakdown (E-2): split the SAME windowed rows by the actual filer
