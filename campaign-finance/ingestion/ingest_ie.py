@@ -189,7 +189,7 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
         dname_idx[n]=did
         return did
 
-    F=FIELD_MAP['exp']; seen={}; raw=0; matched=0; dups=0; unmatched=0; spenders={}
+    F=FIELD_MAP['exp']; seen={}; raw=0; matched=0; dups=0; unmatched=0; spenders={}; cand_spender_skipped=0
     method_counts=defaultdict(int); review_n=0
     ies=[]
     for i,row in enumerate(read_tsv(exp_path)):
@@ -208,6 +208,14 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
         amt=float(row.get(F['amount']) or 0); date=(row.get(F['date']) or '')[:10]
         payee=norm((row.get(F['payee_first']) or '')+' '+(row.get(F['payee_last']) or ''))
         sbe=row.get(F['committee_id'])
+        # A candidate/alder committee is never an independent spender. If the filer
+        # resolves to an existing non-IE committee in the registry, this expenditure is
+        # its own campaign spend (or a candidate-to-candidate transfer), not an IE —
+        # don't emit it. (Council: Friends-of-X ward committees. Elections: any seeded
+        # school-board candidate committee.)
+        _spk = sbe_idx.get(sbe); _cm = comms.get(_spk) if _spk else None
+        if _cm and _cm.get('type') != 'independent_expenditure':
+            cand_spender_skipped += 1; continue
         dk=(sbe,payee,norm(row.get(F['candidate'])),round(amt,2),date,norm(row.get(F['purpose'])))
         if dk in seen: dups+=1; continue
         seen[dk]=1; matched+=1
@@ -232,7 +240,7 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
                 'filed_doc_id':row.get(F['filed_doc_id']),'purpose':row.get(F['purpose'])})
             ies.append(base)
     stats={'exp_ie_nonarchived':raw,'matched_to_current_alders':matched,
-           'exact_dups_collapsed':dups,'ie_committees':len(spenders),
+           'exact_dups_collapsed':dups,'ie_committees':len(spenders),'candidate_cmte_spender_skipped':cand_spender_skipped,
            'matched_total':round(sum(spenders.values()),2)}
     if election_mode:
         stats.update({'mode':'election','unmatched':unmatched,
