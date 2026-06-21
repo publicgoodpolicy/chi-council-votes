@@ -73,7 +73,9 @@ var FIXTURES = {
     // Browse-Donors filters (E-1): a search term that hits a known rollup, and a donor type.
     browseFilters: { search: 'frank', searchHit: 'Frank', type: 'Individual' },
     // Industry-tag color + curated label (E-5): canonical color + curated label, not the slug.
-    tagColor: { industry: 'real-estate', hex: '#a23a2e', label: 'Real Estate / Developers', slugText: '>real estate<' }
+    tagColor: { industry: 'real-estate', hex: '#a23a2e', label: 'Real Estate / Developers', slugText: '>real estate<' },
+    // Industry three-level drill (E-6): the IE-funded industry, its IE spender, a direct industry.
+    industryDrill: { ieIndustry: 'charter-schools', ieSpender: 'ie-committee-26066', directIndustry: 'labor-teachers' }
   }
 };
 
@@ -322,6 +324,46 @@ async function assertBrowseFilters(T, ctx, fx) {
   ctx.click(ctx.root().querySelector('[data-clear-filters]')); await ctx.wait(40);
 }
 
+// (E-6) Industry three-level drill: Level 1 chart -> Level 2 spenders -> Level 3 per-candidate,
+// dispatch-by-kind, streams separate, no empty boxes (the firewall checks).  [NEW surface]
+async function assertIndustryDrill(T, ctx, fx) {
+  var d = fx.industryDrill;
+  await ctx.closeModal();
+  await ctx.spend(); ctx.setFilter(fx.filter.allId); await ctx.wait(40);
+  ctx.click(ctx.root().querySelector('[data-spendtab="industries"]')); await ctx.wait(70);
+  // Level 1 — the chart
+  T.ok('[E6.L1] industry chart renders (sorted clickable bars)',
+    !!ctx.root().querySelector('.indchart') && !!ctx.root().querySelector('[data-industry-drill]'));
+  var bars = [].slice.call(ctx.root().querySelectorAll('[data-industry-drill]'));
+  T.ok('[E6.L1] charter-schools is largest (first bar) + distinguished as independent',
+    bars[0].getAttribute('data-industry-drill') === d.ieIndustry && /independent/.test(bars[0].textContent) && !!bars[0].querySelector('.seg.indep'));
+  T.ok('[E6.L1] no support/oppose split at Level 1 (aggregate only)',
+    ctx.root().querySelector('.spend-body').innerHTML.indexOf('Spent to support') < 0);
+  // Level 1 -> 2: click the IE industry bar -> filtered spender list
+  ctx.click(bars.filter(function (b) { return b.getAttribute('data-industry-drill') === d.ieIndustry; })[0]); await ctx.wait(80);
+  T.ok('[E6.L2] industry bar click -> Browse Donors filtered to that industry',
+    ctx.root().querySelector('[data-donor-industry]') && ctx.root().querySelector('[data-donor-industry]').value === d.ieIndustry);
+  var incsRow = ctx.root().querySelector('.spend-body [data-committee="' + d.ieSpender + '"]');
+  T.ok('[E6.L2] IE industry spenders include the IE committee (INCS)', !!incsRow);
+  // Level 2 -> 3: IE spender -> support/oppose SEPARATE
+  ctx.click(incsRow); await ctx.wait(70);
+  var M = ctx.modal() ? ctx.modal().innerHTML : '';
+  T.ok('[E6.L3] IE spender -> support + oppose SEPARATE boxes (firewall)', /Spent to support/.test(M) && /Spent to oppose/.test(M));
+  await ctx.closeModal();
+  // Direct industry -> donor spender -> footprint with NO empty support/oppose boxes
+  ctx.click(ctx.root().querySelector('[data-spendtab="industries"]')); await ctx.wait(70);
+  ctx.click([].slice.call(ctx.root().querySelectorAll('[data-industry-drill]')).filter(function (b) { return b.getAttribute('data-industry-drill') === d.directIndustry; })[0]); await ctx.wait(80);
+  var donorRow = ctx.root().querySelector('.spend-body [data-funder]');
+  T.ok('[E6.L2] direct industry -> donor spenders present', !!donorRow);
+  ctx.click(donorRow); await ctx.wait(70);
+  var FM = ctx.modal() ? ctx.modal().innerHTML : '';
+  T.ok('[E6.L3] donor spender -> direct footprint, NO empty support/oppose boxes (honest absence)',
+    FM.indexOf('Spent to support') < 0 && FM.indexOf('Spent to oppose') < 0 && /Total given/.test(FM));
+  await ctx.closeModal();
+  ctx.click(ctx.root().querySelector('[data-spendtab="donors"]')); await ctx.wait(40);
+  ctx.click(ctx.root().querySelector('[data-clear-filters]')); await ctx.wait(40);
+}
+
 (async function () {
   var html = fs.readFileSync(PREVIEW, 'utf8');
   var dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: true, url: 'http://localhost/' });
@@ -338,6 +380,7 @@ async function assertBrowseFilters(T, ctx, fx) {
   await assertFirewallFiveNames(T, ctx, fx);
   await assertParity(T, ctx, fx);
   await assertBrowseFilters(T, ctx, fx);
+  await assertIndustryDrill(T, ctx, fx);
 
   console.log('\n' + T.n + ' checks · ' + (T.fail ? ('FAILED ' + T.fail) : 'ALL PASS'));
   process.exit(T.fail ? 1 : 0);

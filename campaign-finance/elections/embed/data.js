@@ -875,6 +875,14 @@
       var fl = d.flags || [];
       for (var j = 0; j < fl.length; j++) { var t = (fl[j] && fl[j].type) || fl[j]; if (t) flags[t] = 1; }
     }
+    // Industry facets also include in-scope IE-committee tags: an IE-only industry (e.g.
+    // charter-schools) is carried by no donor, so without this the E-6 chart could drill into
+    // it but the industry dropdown couldn't reflect the selection. (E-6 facet completeness.)
+    for (var iek in index.iesBySpender) {
+      if (!index.iesBySpender.hasOwnProperty(iek)) continue;
+      var its = (index.committees[iek] || {}).industry_tags || [];
+      for (var t2 = 0; t2 < its.length; t2++) if (its[t2]) inds[its[t2]] = 1;
+    }
     var indL = function (k) { return (index.industryTags[k] && index.industryTags[k].label) || null; };
     var flagL = function (k) { return (index.flagTypes[k] && index.flagTypes[k].label) || null; };
     var indOpts = Object.keys(inds).sort().map(function (k) { return { id: k, label: indL(k) }; });

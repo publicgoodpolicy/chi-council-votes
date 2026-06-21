@@ -239,6 +239,19 @@
       '.ipg-elect .seg.third{background:var(--teal);}' +
       '.ipg-elect .seg.self{background:repeating-linear-gradient(135deg,#3E6B53 0 5px,#9DBBA9 5px 10px);}' +
       '.ipg-elect .seg.support{background:var(--sage);}.ipg-elect .seg.oppose{background:var(--coral);}' +
+      '.ipg-elect .seg.indep{background:var(--sage);}' +
+      // Industry-totals chart (E-6 Level 1): sorted bars, direct (teal) vs independent (sage).
+      '.ipg-elect .indchart{margin-top:4px;}' +
+      '.ipg-elect button.indbar{width:100%;text-align:left;appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);padding:7px 6px;border-radius:8px;}' +
+      '.ipg-elect button.indbar:hover{background:var(--paper);}' +
+      '.ipg-elect button.indbar:focus-visible{outline:2px solid var(--sage);outline-offset:1px;}' +
+      '.ipg-elect .indbar-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:3px;}' +
+      '.ipg-elect .indbar-label{font-size:13.5px;font-weight:500;color:var(--ink);}' +
+      '.ipg-elect .indbar-val{font-size:13.5px;font-weight:600;color:var(--teal);font-variant-numeric:tabular-nums;white-space:nowrap;}' +
+      '.ipg-elect .indep-tag{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--sage);border:1px solid var(--sage);border-radius:20px;padding:1px 6px;margin-left:6px;vertical-align:middle;}' +
+      '.ipg-elect .ind-legend{display:flex;gap:16px;margin:0 0 10px;font-size:11.5px;color:var(--ink-soft);}' +
+      '.ipg-elect .ind-legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px;}' +
+      '.ipg-elect .sw.indep{background:var(--sage);}' +
       '.ipg-elect .barval{font-size:13px;font-weight:500;text-align:right;}' +
       '.ipg-elect .barval .sub{display:block;font-size:11px;font-weight:400;color:var(--ink-soft);}' +
       '.ipg-elect .zero{color:#A99B91;font-weight:400;}' +
@@ -895,6 +908,35 @@
       '<span class="mini o">' + money(f.independentOpposition) + ' oppose</span>';
   }
 
+  // E-6 Level 1 — election-wide industry totals as sorted bars (Option A). Each industry is ONE
+  // aggregate bar: direct industries in teal, IE-funded industries in sage ("independent"). The
+  // aggregate is legitimate here because no candidate is in view — support/oppose are NOT split
+  // at Level 1; that split appears only on drill into a candidate (Level 3). Click a bar to see
+  // that industry's spenders (Level 2). Sorted high-to-low (industryTotals is pre-sorted by total).
+  function industryChart(industries) {
+    var max = 1;
+    for (var m = 0; m < industries.length; m++) if (industries[m].total > max) max = industries[m].total;
+    var note = '<p class="contrib-note">Total election money by industry — direct contributions and independent ' +
+      'spending, largest first. Click an industry to see who gave or spent. Support and opposition are split only ' +
+      'when you drill into a candidate, never here.</p>';
+    var legend = '<div class="ind-legend" aria-hidden="true"><span><i class="sw third"></i>Direct contributions</span>' +
+      '<span><i class="sw indep"></i>Independent spending</span></div>';
+    var rows = industries.map(function (x) {
+      var isIE = (x.support + x.oppose) > 0;          // an IE-funded industry (charter-schools)
+      var uncat = (x.industry === 'unclassified' || x.industry === 'uncategorized');
+      var drill = uncat ? 'uncategorized' : x.industry;
+      var label = uncat ? 'uncategorized' : prettyTag(x.industry);
+      var w = max > 0 ? Math.min(100, Math.max(1.5, x.total / max * 100)) : 0;
+      return '<button class="indbar" type="button" data-industry-drill="' + esc(drill) + '">' +
+        '<div class="indbar-top"><span class="indbar-label">' + esc(label) +
+          (isIE ? ' <span class="indep-tag">independent</span>' : '') + '</span>' +
+          '<span class="indbar-val">' + money(x.total) + '</span></div>' +
+        '<div class="bartrack"><div class="barfill" style="width:' + w + '%">' +
+          '<div class="seg ' + (isIE ? 'indep' : 'third') + '" style="width:100%"></div></div></div></button>';
+    }).join('');
+    return note + legend + '<div class="indchart">' + rows + '</div>';
+  }
+
   function renderSpend(vm) {
     var tab = vm.tab || 'donors', body;
     if (tab === 'candidates') {
@@ -906,13 +948,7 @@
             '<div class="figrow">' + threeFig(c.figures) + '</div></div></div>';
         }).join('');
     } else if (tab === 'industries') {
-      body = '<p class="contrib-note">Direct contributions and independent spending are shown separately. ' +
-        'Uncategorized donors are shown as uncategorized.</p>' +
-        vm.industries.map(function (x) {
-          return '<div class="srow"><div class="sname">' + esc(prettyTag(x.industry === 'unclassified' ? 'uncategorized' : x.industry)) +
-            '<div class="figrow"><span class="mini c">' + money(x.direct) + ' contrib</span>' +
-            '<span class="mini s">' + money(x.support) + ' support</span><span class="mini o">' + money(x.oppose) + ' oppose</span></div></div></div>';
-        }).join('');
+      body = industryChart(vm.industries);   // E-6 Level 1: sorted-bar chart, click -> spenders (Level 2)
     } else if (tab === 'industry-candidate') {
       body = '<p class="contrib-note">Each candidate’s money by donor/​spender industry (direct + independent). ' +
         'Uncategorized shown as uncategorized.</p>' +

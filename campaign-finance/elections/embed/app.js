@@ -122,6 +122,15 @@
       if (v) { state.topView = v.getAttribute('data-view'); draw(); return; }
       var st = cl('[data-spendtab]');
       if (st) { state.spendTab = st.getAttribute('data-spendtab'); draw(); return; }
+      // E-6 Level 1 -> 2: click an industry bar -> that industry's ranked spenders, via the
+      // E-1 industry filter on Browse Donors (donors subtab). Level 3 is then the existing
+      // spender modal (donor footprint / IE committee profile, dispatch-by-kind).
+      var idr = cl('[data-industry-drill]');
+      if (idr) {
+        state.spendTab = 'donors';
+        state.donorFilters = { search: '', type: 'All', industry: idr.getAttribute('data-industry-drill'), flag: 'All' };
+        draw(); return;
+      }
       // Election filter (This/Last/All) — reslices every spend figure + drill-down by window.
       var se = cl('[data-spendelection]');
       if (se) { state.spendElection = se.getAttribute('data-spendelection'); draw(); return; }
