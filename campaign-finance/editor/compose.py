@@ -128,6 +128,25 @@ def expected_committee_tags(item: dict) -> list:
     return [t.strip() for t in (item.get('industry_tags') or []) if t and t.strip()]
 
 
+def sanitization_notes(item: dict) -> dict:
+    """Report where _clean_seg would alter a flag field (a ';' or '|' in a segment).
+
+    type/note changes are WARN — sanitized but still writable ("typed X → stored Y").
+    A source_url change is HOLD — a sanitized URL is wrong, so the row is held out of
+    the writable batch until the curator fixes it (not silently cleaned).
+    Returns {'warn':[{flag_index,field,typed,stored}], 'hold':[…]}.
+    """
+    warn, hold = [], []
+    for i, f in enumerate(item.get('flags') or []):
+        for field in ('type', 'source_url', 'note'):
+            typed = (f.get(field) or '')
+            stored = _clean_seg(typed)
+            if typed.strip() != stored:
+                rec = {'flag_index': i, 'field': field, 'typed': typed, 'stored': stored}
+                (hold if field == 'source_url' else warn).append(rec)
+    return {'warn': warn, 'hold': hold}
+
+
 # ============================================================
 # ROUND-TRIP  (compose -> live reader -> compare to intended)
 # ============================================================

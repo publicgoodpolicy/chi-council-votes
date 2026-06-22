@@ -299,7 +299,9 @@ def read_live_tabs(sheet_id: str, creds_file) -> dict:
 
 
 # ============================================================
-# SERVER (read-only; GET only)
+# SERVER — GET is read-only; POST is the H3 guarded write surface
+# (POST /api/write-plan = dry-run, POST /api/write = live write; both via
+#  write_overrides, which writes only the Donor Overrides tab).
 # ============================================================
 class WorklistHandler(BaseHTTPRequestHandler):
     payload_json: bytes = b'{}'              # set in main() once, cached
@@ -329,6 +331,36 @@ class WorklistHandler(BaseHTTPRequestHandler):
                 self._send(404, b'index.html not found', 'text/plain; charset=utf-8')
         else:
             self._send(404, b'not found', 'text/plain; charset=utf-8')
+
+    def do_POST(self):
+        # The ONLY mutating surface (H3). /api/write-plan is dry-run (no write);
+        # /api/write performs the guarded live write. Both re-read the live tab
+        # fresh immediately before planning/writing (the concurrent-edit guard).
+        path = self.path.split('?', 1)[0]
+        if path not in ('/api/write-plan', '/api/write'):
+            self._send(404, b'not found', 'text/plain; charset=utf-8'); return
+        try:
+            n = int(self.headers.get('Content-Length', 0))
+            body = json.loads(self.rfile.read(n) or b'{}')
+            batch = body.get('batch', [])
+            import write_overrides as wo
+            cls = type(self)
+            sheet = wo.open_sheet_rw(cls.sheet_id, cls.creds_file)
+            live = wo.read_live_donor_rows(sheet)          # fresh read, immediately before
+            plan = wo.build_plan(batch, live)
+            if path == '/api/write':
+                if plan['blocked']:
+                    out = {'mode': 'BLOCKED', 'round_trip': plan['round_trip'], 'plan': plan}
+                else:
+                    out = {'mode': 'LIVE-WRITE', 'results': wo.execute_plan(sheet, plan),
+                           'plan': plan}
+            else:
+                out = {'mode': 'DRY-RUN', 'plan': plan}
+            self._send(200, json.dumps(out, ensure_ascii=False).encode('utf-8'),
+                       'application/json; charset=utf-8')
+        except Exception as e:
+            self._send(200, json.dumps({'mode': 'ERROR', 'error': f'{type(e).__name__}: {e}'}).encode('utf-8'),
+                       'application/json; charset=utf-8')
 
     def _live_json(self) -> bytes:
         cls = type(self)

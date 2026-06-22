@@ -128,8 +128,11 @@
 // campaign-finance/editor/compose.py (the Python composer the H3 write harness
 // reuses). A parity check proves the two emit identical cells.
 // ============================================================
-const API  = (location.protocol === 'http:' ? '' : 'http://localhost:8765') + '/api/worklist';
-const LIVE = (location.protocol === 'http:' ? '' : 'http://localhost:8765') + '/api/live';
+const ORIGIN = (location.protocol === 'http:' ? '' : 'http://localhost:8765');
+const API  = ORIGIN + '/api/worklist';
+const LIVE = ORIGIN + '/api/live';
+const WRITE_PLAN = ORIGIN + '/api/write-plan';   // dry-run (no write)
+const WRITE      = ORIGIN + '/api/write';        // live write (explicit confirm)
 const EDITOR_STAMP = 'editor-ui';
 
 const state = {
@@ -428,8 +431,77 @@ function renderReview(list, note){
       `<div class="err"><b>Couldn't read the live tabs.</b><br>${esc(e.message)}</div>`; });
     return;
   }
-  const banner = `<div class="note-banner">Live tabs read read-only: ${Object.keys(state.live.donor_overrides||{}).length} donor-override rows, ${Object.keys(state.live.committee_tags||{}).length} committee-tag rows. <b>No write is performed.</b> last_edited_by stamps as <code>${EDITOR_STAMP}</code>.</div>`;
-  list.innerHTML = banner + items.map(renderDiffItem).join('');
+  const banner = `<div class="note-banner">Live tabs read read-only: ${Object.keys(state.live.donor_overrides||{}).length} donor-override rows, ${Object.keys(state.live.committee_tags||{}).length} committee-tag rows. last_edited_by stamps as <code>${EDITOR_STAMP}</code>.</div>`;
+  const donorN = items.filter(s=>s.kind==='donor').length;
+  const writePanel = `<div class="diff" id="write-panel">
+      <h3>Write to the Sheet — Donor Overrides only</h3>
+      <div class="meta-line">Dry-run first (re-reads the live tab, plans, writes nothing). A separate explicit confirm performs the live write. ${donorN} donor row(s) eligible; committee tags are out of scope (H4).</div>
+      <div class="ed-actions"><button class="act edit" id="btn-dryrun" onclick="runDryRun()" ${donorN?'':'disabled'}>Dry-run plan</button></div>
+      <div id="write-out"></div>
+    </div>`;
+  list.innerHTML = banner + writePanel + items.map(renderDiffItem).join('');
+}
+
+// ============================================================
+// WRITE FLOW (H3) — dry-run default, explicit confirm. The batch is composed
+// SERVER-SIDE by compose.py; this renders that plan, not a JS re-compose.
+// ============================================================
+function buildBatch(){
+  return Array.from(state.staged.values()).filter(s=>s.kind==='donor').map(s=>({
+    donor_id:s.id, primary_industry:s.primary_industry, additional_industries:s.additional_industries,
+    flags:s.flags, notes:s.notes, edited:s.edited,
+    snapshot:(state.live&&state.live.donor_overrides&&state.live.donor_overrides[s.id])||null,
+  }));
+}
+async function postJSON(url, body){ return fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json()); }
+async function runDryRun(){
+  const out=document.getElementById('write-out');
+  out.innerHTML=`<div class="note-banner">Re-reading the live tab and planning…</div>`;
+  try{ const res=await postJSON(WRITE_PLAN,{batch:buildBatch()}); renderPlan(out,res,false); }
+  catch(e){ out.innerHTML=`<div class="err">${esc(e.message)}</div>`; }
+}
+async function runConfirm(){
+  const out=document.getElementById('write-out');
+  out.innerHTML=`<div class="note-banner">Writing to the Donor Overrides tab…</div>`;
+  try{ const res=await postJSON(WRITE,{batch:buildBatch()}); renderPlan(out,res,true); }
+  catch(e){ out.innerHTML=`<div class="err">${esc(e.message)}</div>`; }
+}
+function planRowHTML(r){
+  const warn = (r.warn||[]).map(w=>`<div class="hint" style="border-color:var(--upd)">flag ${esc(w.field)}: typed <code>${esc(w.typed)}</code> → stored <code>${esc(w.stored)}</code></div>`).join('');
+  let changed='';
+  if(r.status==='NEW') changed = Object.entries(r.cells).filter(([k,v])=>v).map(([k,v])=>`${esc(k)}=<code>${esc(v)}</code>`).join(' · ') || '(empty row)';
+  else changed = Object.keys(r.changed).length ? Object.entries(r.changed).map(([k,v])=>`${esc(k)}→<code>${esc(v)}</code>`).join(' · ') : '<span class="empty-cell">no cell changes</span>';
+  return `<div class="diff" style="margin:8px 0"><h3>${esc(r.donor_id)} <span class="status ${r.status==='NEW'?'NEW':'UPDATE'}">${esc(r.status)}</span></h3>
+    <div class="meta-line">${r.status==='NEW'?'append':'write only'}: ${changed}</div>${warn}</div>`;
+}
+function heldRowHTML(r){
+  return `<div class="diff" style="margin:8px 0;border-color:var(--opp)"><h3>${esc(r.donor_id)} <span class="status" style="background:var(--opp)">${esc(r.status)}</span></h3>
+    <div class="meta-line" style="color:var(--opp)">held out of the write — ${esc(r.reason)}</div></div>`;
+}
+function propagationPromptHTML(){
+  return `<div class="note-banner" id="prop-prompt" style="border-color:var(--sage)">
+    <b>Edit saved to the shared Donor Overrides tab.</b> It is not live yet — each tool picks it up only on that tool's next build:
+    <ul style="margin:6px 0 0 18px">
+      <li><b>Council</b>: run <code>campaign-finance/build_all.sh</code> (its sync_overrides step applies the tab).</li>
+      <li><b>Elections</b>: run the elections build sequence (…ingest → <code>sync_overrides.py --data-file campaign-finance/election-data.json</code> → build_rollups → validate).</li>
+    </ul>
+    <span style="color:var(--muted)">The editor does not trigger either build — run them when you're ready.</span></div>`;
+}
+function renderPlan(out, res, wrote){
+  if(res.mode==='ERROR'){ out.innerHTML=`<div class="err">${esc(res.error)}</div>`; return; }
+  const plan=res.plan||{}; const rt=plan.round_trip||{rows:0,mismatches:0};
+  const blocked = plan.blocked;
+  const w=(plan.writable||[]), h=(plan.held||[]);
+  let html=`<div class="rt">round-trip gate: <b>${rt.rows} rows, ${rt.mismatches} mismatches</b>${blocked?' — <span style="color:var(--opp)">BATCH BLOCKED</span>':''}</div>`;
+  html+=`<div class="meta-line" style="margin:6px 0">${w.length} writable · ${h.length} held</div>`;
+  html+= w.map(planRowHTML).join('') + h.map(heldRowHTML).join('');
+  if(wrote && res.mode==='LIVE-WRITE'){
+    const r=res.results||[];
+    html = `<div class="rt"><b>✓ wrote ${r.length} row(s)</b>: ${r.map(x=>esc(x.donor_id)+' ('+esc(x.action)+')').join(', ')}</div>` + html + propagationPromptHTML();
+  } else if(!blocked && w.length){
+    html += `<div class="ed-actions"><button class="act accept" id="btn-confirm" onclick="runConfirm()">Confirm live write (${w.length} row${w.length===1?'':'s'})</button></div>`;
+  }
+  out.innerHTML=html;
 }
 
 function setView(v){ state.view=v; state.editing=null; state.q=''; document.getElementById('search').value=''; render(); }
@@ -451,6 +523,18 @@ fetch(API).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(
 // buttons call, then opens the review/diff view. Never runs without the hash.
 // ============================================================
 async function maybeSelftest(){
+  // #confirmtest — real post-write proof for Stage 4: stage ONE new donor, open
+  // review, load live, and CONFIRM (a real write) so the §5.5 propagation prompt
+  // renders. Guarded; never runs without the hash.
+  if(location.hash==='#confirmtest'){
+    const r=state.data.donors.find(x=>x.donor_id==='illinois-realtors')||state.data.donors.find(x=>x.suggested_industry);
+    if(r) stageDonorAccept(r.donor_id);
+    setView('review');
+    try{ await loadLive(); render(); await runConfirm(); }catch(e){}
+    const d=document.createElement('div'); d.id='confirmtest-done'; d.style.display='none';
+    d.textContent=JSON.stringify({donor:r&&r.donor_id}); document.body.appendChild(d);
+    return;
+  }
   if(location.hash!=='#selftest') return;
   const D=state.data.donors, C=state.data.committees;
   const newDonor = D.find(r=>r.donor_id==='illinois-realtors') || D.find(r=>r.suggested_industry);
@@ -471,17 +555,22 @@ async function maybeSelftest(){
   if(noClobber) stageDonorAccept(noClobber.donor_id);
   // 4. Accept another, then Skip it (proves Skip removes from staging)
   if(acceptSkip) stageDonorAccept(acceptSkip.donor_id);
-  // 5. Stage a committee
+  // 5. Stage a HOLD donor — flag source_url contains ';' (must be held, not cleaned)
+  const holdDonor = D.find(r=>r.donor_id==='michael-sacks') || D.find(r=>!r.suggested_industry && r!==newDonor && r!==updDonor && r!==noClobber);
+  if(holdDonor) stageDonorEdit(holdDonor.donor_id, {primary_industry:'finance',
+    additional_industries:[], flags:[{type:(state.vocab.flags[0]&&state.vocab.flags[0].key)||'aipac-donor', source_url:'https://x.example/?a=1;b=2', note:'url has a semicolon'}],
+    notes:'', edited:['primary_industry','flags']});
+  // 6. Stage a committee (out of scope for the write batch)
   if(cmte) stageCommittee(cmte.committee_id, ['real-estate','finance']);
-  // 6. Skip #4
+  // 7. Skip #4
   if(acceptSkip) skip('donor', acceptSkip.donor_id);
   window.__selftest = { staged: editor.getStaged().map(s=>({kind:s.kind,id:s.id})),
     newDonor:newDonor&&newDonor.donor_id, updDonor:updDonor&&updDonor.donor_id,
-    noClobber:noClobber&&noClobber.donor_id, skipped:acceptSkip&&acceptSkip.donor_id,
-    committee:cmte&&cmte.committee_id };
-  // 6. open review + load live, then mark done
+    noClobber:noClobber&&noClobber.donor_id, holdDonor:holdDonor&&holdDonor.donor_id,
+    skipped:acceptSkip&&acceptSkip.donor_id, committee:cmte&&cmte.committee_id };
+  // 8. open review, load live, run a DRY-RUN (no write), then mark done
   setView('review');
-  try{ await loadLive(); render(); }catch(e){}
+  try{ await loadLive(); render(); await runDryRun(); }catch(e){}
   const d=document.createElement('div'); d.id='selftest-done'; d.style.display='none';
   d.textContent=JSON.stringify(window.__selftest); document.body.appendChild(d);
 }
