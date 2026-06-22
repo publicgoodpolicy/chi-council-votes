@@ -41,6 +41,7 @@ import json
 import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.parse import urlsplit, parse_qs
 
 # The shared read model lives in ingestion/ — import it rather than copy logic.
 CF_ROOT = Path(__file__).resolve().parent.parent          # campaign-finance/
@@ -74,9 +75,17 @@ DEFAULT_CREDS = SHEETS_DIR / 'creds.json'
 # ============================================================
 # READ MODEL
 # ============================================================
+_LOAD_CACHE: dict[str, dict] = {}
+
+
 def load(path: Path) -> dict:
-    with open(path) as f:
-        return json.load(f)
+    """Read + cache a data JSON. Memoized so the worklist payload AND the master
+    donor index (build_donor_index) share one parse of each large file."""
+    p = str(path)
+    if p not in _LOAD_CACHE:
+        with open(path) as f:
+            _LOAD_CACHE[p] = json.load(f)
+    return _LOAD_CACHE[p]
 
 
 def committee_worklist(data: dict) -> list[dict]:
@@ -273,6 +282,125 @@ def build_payload() -> dict:
     return {'meta': meta, 'donors': donors, 'committees': committees, 'vocab': vocab}
 
 
+# ============================================================
+# MASTER DONOR INDEX  (read-only — the lookup surface, NOT gated by
+# is_unclassified). The worklist (build_payload) stays unclassified-only; this
+# indexes the FULL donor universe so ANY donor — classified or not — is reachable
+# for editing. It carries each donor's CURRENT (flat) classification straight from
+# the data JSON (industries/flags/notes), which the editor shows as un-curated
+# current state. No primary/additional split lives here (the data JSON has none —
+# that split exists only in the live Sheet, read separately via /api/live); the
+# curator owns promoting a flat value to primary. Read-only: no write surface.
+# ============================================================
+def _is_classified(inds) -> bool:
+    return any(x and x != 'unclassified' for x in (inds or []))
+
+
+def _donor_rows_for(tool: str, data: dict) -> list[dict]:
+    """Every non-aggregate donor in one file, with giving aggregated in a SINGLE
+    pass over contributions (the full set is too large for the worklist's
+    per-donor contribution scan). Dues transfers excluded — same footprint rule as
+    build_worklist, so a donor's dollars/count match the worklist where they
+    overlap. Carries the donor's current flat classification verbatim."""
+    totals, counts, cmtes = {}, {}, {}
+    for c in data.get('contributions', []):
+        did = c.get('donor_id')
+        if not did:
+            continue
+        if c.get('contribution_type') == 'IE Committee Dues Transfer':
+            continue
+        totals[did] = totals.get(did, 0) + (c.get('amount', 0) or 0)
+        counts[did] = counts.get(did, 0) + 1
+        cmtes.setdefault(did, set()).add(c.get('committee_id'))
+
+    c2a = {}
+    for cid, cm in data.get('committees', {}).items():
+        nm, wd = cm.get('alder_name', ''), cm.get('ward', '')
+        c2a[cid] = (f"Ward {wd} — {nm}" if nm else
+                    f"Ward {wd}" if wd else (cm.get('committee_name') or cid))
+
+    rows = []
+    for did, donor in data.get('donors', {}).items():
+        if did.startswith('_'):
+            continue
+        funded = sorted(set(c2a.get(x, x) for x in cmtes.get(did, set()) if x))
+        rows.append({
+            'donor_id': did,
+            'name': donor.get('name', '') or '',
+            'occupation': donor.get('occupation', '') or '',
+            'employer': donor.get('employer', '') or '',
+            'city': donor.get('city', '') or '',
+            'total_given': totals.get(did, 0),
+            'contribution_count': counts.get(did, 0),
+            'committees_funded': '; '.join(funded),
+            # CURRENT classification (flat) — what the editor shows as un-curated state
+            'industries': donor.get('industries', []) or [],
+            'flags': donor.get('flags', []) or [],
+            'notes': donor.get('notes') or '',
+            'last_edited_by': donor.get('_last_edited_by', '') or '',
+            'tool': tool,
+        })
+    return rows
+
+
+def build_donor_index() -> list[dict]:
+    """Full donor universe unioned across both files, keyed by donor_id. Headline
+    total_given is MAX across tools (same ranking rule as union_donors). The current
+    classification is the classified industries list where the tools disagree (an
+    auto/curated tag in either file wins over a blank/unclassified one)."""
+    merged: dict[str, dict] = {}
+    for tool, path in DATA_FILES.items():
+        for r in _donor_rows_for(tool, load(path)):
+            did = r['donor_id']
+            m = merged.get(did)
+            if m is None:
+                m = {k: v for k, v in r.items() if k != 'tool'}
+                m['tools'] = [tool]
+                m['per_tool'] = {tool: {'total_given': r['total_given'],
+                                        'contribution_count': r['contribution_count']}}
+                m['suggested_industry'] = ''      # lookup donors carry no heuristic hint
+                m['suggested_reason'] = ''
+                merged[did] = m
+                continue
+            m['tools'].append(tool)
+            m['per_tool'][tool] = {'total_given': r['total_given'],
+                                   'contribution_count': r['contribution_count']}
+            if r['total_given'] > m['total_given']:
+                m['total_given'] = r['total_given']
+                m['contribution_count'] = r['contribution_count']
+                m['committees_funded'] = r['committees_funded']
+            if (not _is_classified(m['industries'])) and _is_classified(r['industries']):
+                m['industries'] = r['industries']
+            if not m['flags'] and r['flags']:
+                m['flags'] = r['flags']
+            if not m['notes'] and r['notes']:
+                m['notes'] = r['notes']
+            for k in ('name', 'occupation', 'employer', 'city', 'last_edited_by'):
+                if not m[k] and r[k]:
+                    m[k] = r[k]
+    return list(merged.values())
+
+
+def search_donor_index(index: list[dict], q: str, cap: int = 50) -> list[dict]:
+    """Substring/id search over the master index. Exact donor_id match is pinned
+    first; the rest rank by total_given. Empty query returns nothing (the lookup is
+    explicit — it is NOT the default queue)."""
+    q = (q or '').strip().lower()
+    if not q:
+        return []
+    scored = []
+    for r in index:
+        if r['donor_id'].lower() == q:
+            scored.append((0, r))
+            continue
+        hay = ' '.join((r['donor_id'], r['name'], r['employer'],
+                        r['occupation'], r['city'])).lower()
+        if q in hay:
+            scored.append((1, r))
+    scored.sort(key=lambda t: (t[0], -t[1]['total_given']))
+    return [r for _, r in scored[:cap]]
+
+
 def read_live_tabs(sheet_id: str, creds_file) -> dict:
     """READ ONLY snapshot of the current Donor Overrides + Committee Tags tabs, so
     the diff preview can mark NEW vs UPDATE and show before→after per cell.
@@ -312,6 +440,7 @@ def read_live_tabs(sheet_id: str, creds_file) -> dict:
 # ============================================================
 class WorklistHandler(BaseHTTPRequestHandler):
     payload_json: bytes = b'{}'              # set in main() once, cached
+    donor_index: list = []                   # master lookup set (full universe), cached
     sheet_id: str = DEFAULT_SHEET_ID
     creds_file = DEFAULT_CREDS
     _live_cache: bytes = None               # lazy: first /api/live request reads the Sheet
@@ -329,6 +458,8 @@ class WorklistHandler(BaseHTTPRequestHandler):
         path = self.path.split('?', 1)[0]
         if path in ('/api/worklist', '/api/worklist/'):
             self._send(200, self.payload_json, 'application/json; charset=utf-8')
+        elif path in ('/api/donor', '/api/donor/'):
+            self._send(200, self._donor_search_json(), 'application/json; charset=utf-8')
         elif path in ('/api/live', '/api/live/'):
             self._send(200, self._live_json(), 'application/json; charset=utf-8')
         elif path in ('/', '/index.html'):
@@ -376,6 +507,16 @@ class WorklistHandler(BaseHTTPRequestHandler):
             self._send(200, json.dumps({'mode': 'ERROR', 'error': f'{type(e).__name__}: {e}'}).encode('utf-8'),
                        'application/json; charset=utf-8')
 
+    def _donor_search_json(self) -> bytes:
+        """GET /api/donor?q=<id-or-name> — master-view lookup over the FULL donor
+        set (read-only; NOT gated by is_unclassified). Returns each hit's current
+        classification so the editor can render it. Empty q -> no hits."""
+        qs = parse_qs(urlsplit(self.path).query)
+        q = (qs.get('q', ['']) or [''])[0]
+        hits = search_donor_index(type(self).donor_index, q)
+        return json.dumps({'q': q, 'count': len(hits), 'hits': hits},
+                          ensure_ascii=False).encode('utf-8')
+
     def _live_json(self) -> bytes:
         cls = type(self)
         if cls._live_cache is None:
@@ -405,6 +546,8 @@ def main():
     print("Building worklist payload (council + election)…")
     payload = build_payload()
     WorklistHandler.payload_json = json.dumps(payload, ensure_ascii=False).encode('utf-8')
+    print("Building master donor index (full universe — lookup surface)…")
+    WorklistHandler.donor_index = build_donor_index()
     WorklistHandler.sheet_id = args.sheet_id
     WorklistHandler.creds_file = args.creds_file
 
@@ -419,6 +562,8 @@ def main():
           f"(overlap {m['committees']['overlap_count']})")
     print(f"  vocab: {len(payload['vocab']['industries'])} industries, "
           f"{len(payload['vocab']['flags'])} flag types")
+    print(f"  master index: {len(WorklistHandler.donor_index):,} donors reachable by lookup "
+          f"(classified + unclassified)")
 
     srv = ThreadingHTTPServer((args.host, args.port), WorklistHandler)
     print(f"\nServing read-only worklist on http://{args.host}:{args.port}/  (Ctrl-C to stop)")

@@ -94,6 +94,22 @@
   .err{padding:30px; background:#f1e1dc; border:1px solid var(--opp); color:var(--opp); border-radius:10px; margin-top:20px;}
   .err code{background:#fff; padding:2px 6px; border-radius:4px;}
   .note-banner{font-size:12.5px; color:var(--muted); background:var(--hint-bg); border:1px solid var(--line); border-radius:8px; padding:8px 12px; margin-bottom:12px;}
+
+  /* master-view: current-classification surfaces (3 states — a:new/none, b:curated override, c:auto-classified) */
+  .cls-badge{display:inline-block; font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; padding:2px 8px; border-radius:99px; margin-left:7px; border:1px solid transparent; vertical-align:middle;}
+  .cls-badge.curated{background:#e7f0ee; color:var(--teal); border-color:#9ec4bf;}
+  .cls-badge.auto{background:#f3e8d4; color:#8a5a12; border-color:#dcc59a;}
+  .cls-badge.none{background:var(--hint-bg); color:var(--muted); border-color:var(--line);}
+  .cls-banner{margin:2px 0 8px; padding:8px 11px; border-radius:8px; font-size:12.5px; line-height:1.4;}
+  .cls-banner.curated{background:#e7f0ee; border:1px solid #9ec4bf; color:#2c4f4b;}
+  .cls-banner.auto{background:#f6edda; border:1px solid #dcc59a; color:#6b4d1c;}
+  .cls-banner.none{background:var(--hint-bg); border:1px solid var(--line); color:#5a5048;}
+  .cls-banner b{font-weight:700;}
+  .cands{margin-top:6px; display:flex; flex-wrap:wrap; gap:6px;}
+  .cand{cursor:pointer; font:inherit; font-size:12px; font-weight:600; border-radius:99px; padding:3px 11px; border:1px solid var(--sage); background:#fff; color:var(--teal);}
+  .cand:hover{background:var(--sage); color:#fff;}
+  .ed-err{margin-top:8px; font-size:12.5px; color:var(--opp); font-weight:600; display:none;}
+  .ed-err.show{display:block;}
 </style>
 </head>
 <body>
@@ -101,8 +117,9 @@
   <div class="gap-inner">
     <h1>Unclassified Worklist</h1>
     <span class="ro-badge">no sheet write</span>
-    <div class="sub">Stage classifications offline, preview the exact Donor Overrides / Committee Tags rows that
-      would be written (NEW vs UPDATE), and prove they round-trip through the live reader. Nothing is written. (H2.)</div>
+    <div class="sub">The <b>Donors</b>/<b>Committees</b> tabs are the unclassified queue. <b>Find donor</b> is the master view —
+      look up ANY donor (classified or not) and edit their current classification through the same write path.
+      Stage offline, preview the exact NEW/UPDATE rows, and prove they round-trip before writing.</div>
     <div id="metrics" style="flex-basis:100%; display:flex; flex-wrap:wrap; gap:10px 30px; margin-top:6px;"></div>
     <div class="staged-badge zero" id="staged-badge" onclick="setView('review')">0 staged</div>
   </div>
@@ -113,6 +130,7 @@
     <div class="tabs">
       <div class="tab active" data-view="donors" id="tab-donors" onclick="setView('donors')">Donors</div>
       <div class="tab" data-view="committees" id="tab-committees" onclick="setView('committees')">Committees</div>
+      <div class="tab" data-view="lookup" id="tab-lookup" onclick="setView('lookup')">Find donor</div>
       <div class="tab" data-view="review" id="tab-review" onclick="setView('review')">Review &amp; diff</div>
     </div>
     <div class="search"><input id="search" type="text" placeholder="Filter by name / employer / city…" autocomplete="off"></div>
@@ -130,6 +148,7 @@
 // ============================================================
 const ORIGIN = (location.protocol === 'http:' ? '' : 'http://localhost:8765');
 const API  = ORIGIN + '/api/worklist';
+const DONORS = ORIGIN + '/api/donor';            // master lookup — full donor set (read-only)
 const LIVE = ORIGIN + '/api/live';
 const WRITE_PLAN = ORIGIN + '/api/write-plan';   // dry-run (no write)
 const WRITE      = ORIGIN + '/api/write';        // live write (explicit confirm)
@@ -139,13 +158,18 @@ const state = {
   data:null, vocab:{industries:[],flags:[]}, live:null,
   staged:new Map(),               // key `${kind}:${id}` -> staged item (user EDITS + `edited` set)
   view:'donors', q:'', editing:null,
+  // master-view lookup (full donor set) — kept SEPARATE from data.donors so the
+  // worklist stays unclassified-only; looked-up donors resolve via lookupById.
+  lookupHits:[], lookupById:new Map(), lookupQ:'',
 };
 
 const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const usd = n => '$' + Math.round(n).toLocaleString('en-US');
 const usdShort = n => { n=+n||0; if(n>=1e6) return '$'+(n/1e6).toFixed(n>=1e7?0:1)+'M'; if(n>=1e3) return '$'+(n/1e3).toFixed(0)+'K'; return '$'+Math.round(n); };
 const key = (kind,id) => kind+':'+id;
-const donorById = id => state.data.donors.find(r=>r.donor_id===id);
+// resolve worklist donors first, then looked-up donors (master view) — the editor
+// is the SAME component for both, so both must be findable by id.
+const donorById = id => state.data.donors.find(r=>r.donor_id===id) || state.lookupById.get(id) || null;
 const committeeById = id => state.data.committees.find(r=>r.committee_id===id);
 
 // ---- JS parsers (mirror sync_overrides.parse_list_cell / parse_flag_cell) ----
@@ -219,6 +243,28 @@ window.editor = { stageDonorAccept, stageDonorEdit, stageCommittee, skip, isStag
 function liveForDonor(id){ return (state.live && state.live.donor_overrides && state.live.donor_overrides[id]) || null; }
 function liveForCommittee(id){ return (state.live && state.live.committee_tags && state.live.committee_tags[id]) || null; }
 
+// The three master-view states a looked-up donor can open into:
+//   (b) curated  — has a live Donor Overrides row (primary/additional already split by a human)
+//   (c) auto     — classified by ingest only (flat `industries`, NO override row) — un-curated
+//   (a) none     — unclassified (the worklist's normal new-classification case)
+// (b) needs the live read; without it (e.g. /api/live unavailable) a curated donor
+// degrades to (c) — shown as un-curated, never silently treated as authoritative.
+function classifyState(r){
+  const lv=liveForDonor(r.donor_id);
+  const inds=((r&&r.industries)||[]).filter(x=>x && x!=='unclassified');
+  if(lv) return {state:'b', lv, inds};
+  if(inds.length) return {state:'c', lv:null, inds};
+  return {state:'a', lv:null, inds:[]};
+}
+// Row badge — only on lookup-sourced rows (worklist rows carry no `industries` key).
+function clsBadge(r){
+  if(!r || !('industries' in r)) return '';
+  const cs=classifyState(r);
+  if(cs.state==='b') return `<span class="cls-badge curated">curated · ${esc((cs.lv.primary_industry||'').trim()||'override')}</span>`;
+  if(cs.state==='c') return `<span class="cls-badge auto">auto · ${esc(cs.inds.join(', '))}</span>`;
+  return `<span class="cls-badge none">unclassified</span>`;
+}
+
 function intendedDonor(s){
   const ed=new Set(s.edited||[]);
   const lv=liveForDonor(s.id);
@@ -256,6 +302,9 @@ function updateBadge(){
 function toolBadges(tools){ return (tools||[]).map(t=>`<span class="badge ${esc(t)}">${esc(t)}</span>`).join(''); }
 
 function indOptions(sel){ return state.vocab.industries.map(i=>`<option value="${esc(i.key)}"${i.key===sel?' selected':''}>${esc(i.label)} (${esc(i.key)})</option>`).join(''); }
+// primary select carries an explicit blank: the curator must CHOOSE a primary —
+// the tool never silently promotes a heuristic guess (or the alphabetical first).
+function indPrimaryOptions(sel){ return `<option value="">— select primary —</option>`+state.vocab.industries.map(i=>`<option value="${esc(i.key)}"${i.key===sel?' selected':''}>${esc(i.label)} (${esc(i.key)})</option>`).join(''); }
 function indMultiOptions(selArr){ const s=new Set(selArr||[]); return state.vocab.industries.map(i=>`<option value="${esc(i.key)}"${s.has(i.key)?' selected':''}>${esc(i.label)} (${esc(i.key)})</option>`).join(''); }
 function flagOptions(sel){ return `<option value="">— flag —</option>`+state.vocab.flags.map(f=>`<option value="${esc(f.key)}"${f.key===sel?' selected':''}>${esc(f.label)} (${esc(f.key)})</option>`).join(''); }
 
@@ -277,7 +326,7 @@ function donorRow(r,i){
   return `<div class="row${staged?' staged':''}">
     <div class="rank">${i+1}</div>
     <div>
-      <div class="name">${esc(r.name)||'<em>(unnamed)</em>'}</div>
+      <div class="name">${esc(r.name)||'<em>(unnamed)</em>'}${clsBadge(r)}</div>
       ${idLine.length?`<div class="meta-line">${idLine.join('<span class="sep">•</span>')}</div>`:''}
       ${r.committees_funded?`<div class="funded">funds: ${esc(r.committees_funded)}</div>`:''}
       ${pertool}
@@ -290,17 +339,48 @@ function donorRow(r,i){
   </div>`;
 }
 
+// Current-state banner — makes the donor's existing classification explicit, and
+// visibly distinguishes a CURATED override (b) from an UN-CURATED machine guess (c).
+function currentBannerHTML(cs){
+  if(cs.state==='b'){
+    const addl=(cs.lv.additional_industries||'').trim();
+    return `<div class="cls-banner curated">Current — <b>curated override</b>. primary <b>${esc((cs.lv.primary_industry||'').trim()||'∅')}</b>${addl?` · additional <b>${esc(addl)}</b>`:''}. Saving <b>UPDATEs</b> the existing Donor Overrides row (no clobber of fields you don't touch).</div>`;
+  }
+  if(cs.state==='c'){
+    return `<div class="cls-banner auto">Current — <b>auto-classified (un-curated)</b>: <b>${esc(cs.inds.join(', '))}</b>. This is ingest's guess, not an editorial decision. Promote a value to <b>primary</b> to make it authoritative — nothing is pre-filled, and you can't stage until you choose.</div>`;
+  }
+  return `<div class="cls-banner none"><b>New classification</b> — this donor is unclassified.</div>`;
+}
+// (c) only: the flat ingest industries as one-click promote-to-primary candidates.
+function candidatesHTML(inds){
+  return `<div class="meta-line" style="margin-top:9px">auto-classified candidates — click to set primary (then add the rest under additional):</div>
+    <div class="cands">${inds.map(k=>`<button type="button" class="cand" onclick="promotePrimary('${esc(k)}')">${esc(k)} → primary</button>`).join('')}</div>`;
+}
+function promotePrimary(k){
+  const sel=document.getElementById('f-primary'); if(sel) sel.value=k;
+  document.querySelectorAll('.ed-err.show').forEach(e=>e.classList.remove('show'));
+}
 function donorEditor(r){
   const s=state.staged.get(key('donor',r.donor_id));
-  const primary = s?s.primary_industry:(r.suggested_industry||'');
-  const addl = s?s.additional_industries:[];
-  const notes = s?s.notes:'';
-  const f = (s&&s.flags&&s.flags[0])||{type:'',source_url:'',note:''};
+  const cs=classifyState(r);
+  // Base seed from CURRENT state: (b) the live curated split; (a) the heuristic
+  // suggestion; (c) NOTHING — promoting the machine's guess is the curator's call.
+  let bP='', bA=[], bF=[], bN='';
+  if(cs.state==='b'){ bP=cs.lv.primary_industry||''; bA=parseList(cs.lv.additional_industries); bF=parseFlags(cs.lv.flags); bN=cs.lv.notes||''; }
+  else if(cs.state==='a'){ bP=r.suggested_industry||''; }
+  // A staged edit (re-opening) wins over the base seed so in-progress work persists.
+  const primary = s?s.primary_industry:bP;
+  const addl = s?s.additional_industries:bA;
+  const notes = s?s.notes:bN;
+  const flags = s?s.flags:bF;
+  const f = (flags&&flags[0])||{type:'',source_url:'',note:''};
   return `<div class="editor" id="ed-${esc(r.donor_id)}">
+    ${currentBannerHTML(cs)}
     <div class="grid2">
-      <div><label>primary_industry</label><select id="f-primary">${indOptions(primary)}</select></div>
+      <div><label>primary_industry${cs.state==='c'?' — <span style="color:var(--opp)">required</span>':''}</label><select id="f-primary">${indPrimaryOptions(primary)}</select></div>
       <div><label>additional_industries (multi)</label><select id="f-addl" multiple>${indMultiOptions(addl)}</select></div>
     </div>
+    ${cs.state==='c'?candidatesHTML(cs.inds):''}
     <label>flag (optional)</label>
     <div class="flagrow">
       <select id="f-flagtype">${flagOptions(f.type)}</select>
@@ -310,6 +390,7 @@ function donorEditor(r){
     </div>
     <label>notes (free text)</label>
     <textarea id="f-notes" rows="2">${esc(notes)}</textarea>
+    <div class="ed-err" id="ed-err-${esc(r.donor_id)}">Choose a primary_industry before staging — editing this donor is the first human classification, and the tool won't promote the machine's guess for you.</div>
     <div class="ed-actions">
       <button class="act accept" onclick="saveDonorEdit('${esc(r.donor_id)}')">Stage these</button>
       <button class="act" onclick="editor.openEdit(null)">Cancel</button>
@@ -321,6 +402,8 @@ function donorEditor(r){
 function saveDonorEdit(id){
   const g=x=>document.getElementById(x);
   const primary=g('f-primary').value;
+  // No silent promotion: a primary is mandatory for EVERY staged classification.
+  if(!primary){ const e=g('ed-err-'+id); if(e) e.classList.add('show'); return; }
   const addl=Array.from(g('f-addl').selectedOptions).map(o=>o.value);
   const ft=g('f-flagtype').value, fu=g('f-flagurl').value.trim(), fn=g('f-flagnote').value.trim();
   const flags = ft ? [{type:ft, source_url:fu, note:fn}] : [];
@@ -469,6 +552,7 @@ function render(){
   if(!state.data) return;
 
   if(state.view==='review'){ renderReview(list,note); return; }
+  if(state.view==='lookup'){ renderLookup(list,note); return; }
 
   const isD = state.view==='donors';
   const rows = isD ? state.data.donors : state.data.committees;
@@ -485,6 +569,33 @@ function render(){
     (cap<shown.length?`<div class="count-note">showing top ${cap.toLocaleString()} of ${shown.length.toLocaleString()} — filter to see more</div>`:'');
 }
 function matches(r,q){ return [r.name,r.employer,r.occupation,r.city,r.committee_id,r.suggested_industry].filter(Boolean).join(' ').toLowerCase().indexOf(q)!==-1; }
+
+// ============================================================
+// MASTER VIEW — lookup any donor (classified or not) over the FULL set, then edit
+// through the SAME selection->editor->write flow the queue uses. The queue
+// (Donors tab) is unchanged: still unclassified-only. This is purely a read
+// surface that feeds the existing editor.
+// ============================================================
+let __lookupTimer=null;
+function doLookup(){
+  const q=state.lookupQ.trim();
+  if(!q){ state.lookupHits=[]; state.lookupById=new Map(); render(); return Promise.resolve(); }
+  return fetch(DONORS+'?q='+encodeURIComponent(q)).then(r=>r.json()).then(j=>{
+    state.lookupHits = j.hits||[];
+    // resolvable by the shared editor (donorById) WITHOUT polluting the worklist
+    state.lookupById = new Map((j.hits||[]).map(h=>[h.donor_id,h]));
+    render();
+  }).catch(e=>{ const l=document.getElementById('list'); if(l) l.innerHTML=`<div class="err">lookup failed: ${esc(e.message)}</div>`; });
+}
+function renderLookup(list, note){
+  const q=state.lookupQ.trim();
+  note.textContent = q
+    ? `${state.lookupHits.length.toLocaleString()} match “${state.lookupQ.trim()}” across the full donor set (classified + unclassified). Edit opens the same classifier the queue uses.`
+    : `Master view — look up ANY donor by name or donor_id, classified or not, and edit through the existing write path. The queue (Donors tab) stays unclassified-only.`;
+  if(!q){ list.innerHTML=`<div class="empty">Type a name or donor_id above to find any donor — including ones already classified.</div>`; return; }
+  if(!state.lookupHits.length){ list.innerHTML=`<div class="empty">No donors match “${esc(state.lookupQ.trim())}”.</div>`; return; }
+  list.innerHTML = state.lookupHits.map(donorRow).join('');
+}
 
 function renderReview(list, note){
   const items=Array.from(state.staged.values());
@@ -578,10 +689,26 @@ function renderPlan(out, res, wrote){
   out.innerHTML=html;
 }
 
-function setView(v){ state.view=v; state.editing=null; state.q=''; document.getElementById('search').value=''; render(); }
+function setView(v){
+  state.view=v; state.editing=null; state.q='';
+  const sb=document.getElementById('search');
+  sb.value='';
+  sb.placeholder = v==='lookup' ? 'Look up ANY donor by name or donor_id (classified too)…'
+                                : 'Filter by name / employer / city…';
+  if(v==='lookup'){
+    state.lookupQ=''; state.lookupHits=[]; state.lookupById=new Map();
+    // need the live read to tell a CURATED override (b) from an AUTO guess (c);
+    // if it fails (no creds/offline) curated donors degrade to (c) — never silently authoritative.
+    if(!state.live){ loadLive().then(()=>render()).catch(()=>render()); }
+  }
+  render();
+}
 function refresh(){ render(); }
 
-document.getElementById('search').addEventListener('input', e=>{ state.q=e.target.value; render(); });
+document.getElementById('search').addEventListener('input', e=>{
+  if(state.view==='lookup'){ state.lookupQ=e.target.value; clearTimeout(__lookupTimer); __lookupTimer=setTimeout(doLookup,250); }
+  else { state.q=e.target.value; render(); }
+});
 
 function loadLive(){
   return fetch(LIVE).then(r=>r.json()).then(j=>{ if(!j.ok) throw new Error(j.error||'live read failed'); state.live=j; return j; });
@@ -636,6 +763,34 @@ async function maybeSelftest(){
     const d=document.createElement('div'); d.id='confirmtest-done'; d.style.display='none';
     d.textContent=JSON.stringify({donor:r&&r.donor_id}); document.body.appendChild(d);
     return;
+  }
+  // #mastertest — master-view proof: look up a CLASSIFIED donor in each state and
+  // prove (b) seeds from the curated split, (c) pre-fills NOTHING and blocks staging
+  // until a primary is promoted. Guarded; never runs without the hash.
+  if(location.hash==='#mastertest'){
+    setView('lookup');
+    try{ await loadLive(); }catch(e){}
+    // (b) override-backed, single industry -> UPDATE; primary seeds from live
+    state.lookupQ='illinois-realtors'; await doLookup();
+    const b=state.lookupHits.find(x=>x.donor_id==='illinois-realtors');
+    const bState=b?classifyState(b).state:null;
+    editor.openEdit('donor:illinois-realtors');
+    const bPrimarySeed=(document.getElementById('f-primary')||{}).value;
+    // (c) auto-classified, multi-industry, no override row -> NEW; nothing pre-filled
+    state.lookupQ='seiu-local-73'; await doLookup();
+    const c=state.lookupHits.find(x=>x.donor_id==='seiu-local-73');
+    const cs=c?classifyState(c):null;
+    editor.openEdit('donor:seiu-local-73');
+    const cState=cs&&cs.state, cInds=cs&&cs.inds;
+    const cPrimarySeed=(document.getElementById('f-primary')||{}).value;   // expect '' (no silent promotion)
+    saveDonorEdit('seiu-local-73');                                        // no primary -> must NOT stage
+    const stagedNoPrimary=editor.isStaged('donor','seiu-local-73');
+    const errShown=!!document.querySelector('#ed-err-seiu-local-73.show');
+    promotePrimary('labor-trades'); saveDonorEdit('seiu-local-73');        // promote -> now stages
+    const stagedAfterPromote=editor.isStaged('donor','seiu-local-73');
+    const m=document.createElement('div'); m.id='mastertest-done'; m.style.display='none';
+    m.textContent=JSON.stringify({bState,bPrimarySeed,cState,cInds,cPrimarySeed,
+      stagedNoPrimary,errShown,stagedAfterPromote}); document.body.appendChild(m); return;
   }
   if(location.hash!=='#selftest') return;
   const D=state.data.donors, C=state.data.committees;
