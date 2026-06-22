@@ -61,6 +61,15 @@ DATA_FILES = {
 HERE = Path(__file__).resolve().parent
 INDEX_HTML = HERE / 'index.html'
 
+# Live Sheet read (READ ONLY) — for the H2 diff preview's NEW-vs-UPDATE check.
+# Reuses sync_overrides.open_sheet, whose SCOPES are spreadsheets.READONLY and
+# whose gspread import is lazy, so the offline endpoints work without creds. The
+# default sheet id matches build_all.sh; creds are the existing readonly key.
+SHEETS_DIR = CF_ROOT / 'sheets-sync'
+sys.path.insert(0, str(SHEETS_DIR))           # so read_live_tabs can import sync_overrides
+DEFAULT_SHEET_ID = '1tUJNv7S611xM-VO7LcZlOStbJ8O7LQ5deYjsHeVAwQ8'
+DEFAULT_CREDS = SHEETS_DIR / 'creds.json'
+
 
 # ============================================================
 # READ MODEL
@@ -185,10 +194,25 @@ def union_committees(per_tool: dict[str, list[dict]]) -> list[dict]:
     return rows
 
 
+def read_vocab(data: dict) -> dict:
+    """Pull the editor's dropdown vocab from the data JSON itself — industry_tags
+    and flag_types are baked there by sync_overrides, so the UI stays offline
+    (no Sheet needed). Returns {industries:[{key,label}], flags:[{key,label}]}."""
+    inds, flags = [], []
+    for key, v in (data.get('industry_tags') or {}).items():
+        inds.append({'key': key, 'label': (v or {}).get('label', key)})
+    for key, v in (data.get('flag_types') or {}).items():
+        flags.append({'key': key, 'label': (v or {}).get('label', key)})
+    inds.sort(key=lambda x: x['label'].lower())
+    flags.sort(key=lambda x: x['label'].lower())
+    return {'industries': inds, 'flags': flags}
+
+
 def build_payload() -> dict:
     """Read both files and assemble the full read-only worklist payload."""
     donor_rows, committee_rows = {}, {}
     per_file_meta = {}
+    vocab_ind, vocab_flag = {}, {}
     for tool, path in DATA_FILES.items():
         if not path.exists():
             raise SystemExit(f"Data file not found: {path}")
@@ -203,6 +227,11 @@ def build_payload() -> dict:
             'committee_count': len(c_rows),
             'committee_total': round(sum(r['received_total'] for r in c_rows), 2),
         }
+        v = read_vocab(data)                                # union vocab across files
+        for it in v['industries']:
+            vocab_ind[it['key']] = it
+        for it in v['flags']:
+            vocab_flag[it['key']] = it
 
     donors = union_donors(donor_rows)
     committees = union_committees(committee_rows)
@@ -214,17 +243,59 @@ def build_payload() -> dict:
     meta = {
         'per_file': per_file_meta,
         'donors': {
+            # NO single union dollar: council & election contributions for a shared
+            # donor are not the same rows (direct giving is file-specific; the IE
+            # layer is duplicated across files with unstable ids), so neither sum
+            # nor max is a sound combined total. The headline reports the two
+            # per-file totals (per_file.*.donor_total — exact, matching
+            # export_unclassified.py); `max` survives only as the row-ranking key.
             'union_count': len(donors),
-            'union_total': round(sum(r['total_given'] for r in donors), 2),
             'overlap_count': d_overlap,
+            'basis': 'per-file totals; rows ranked by max(council,election)',
         },
         'committees': {
+            # committee sets ARE disjoint across files (ward vs candidate ids,
+            # overlap 0), so a union total here is sound.
             'union_count': len(committees),
             'union_total': round(sum(r['received_total'] for r in committees), 2),
             'overlap_count': c_overlap,
         },
     }
-    return {'meta': meta, 'donors': donors, 'committees': committees}
+    vocab = {'industries': sorted(vocab_ind.values(), key=lambda x: x['label'].lower()),
+             'flags': sorted(vocab_flag.values(), key=lambda x: x['label'].lower())}
+    return {'meta': meta, 'donors': donors, 'committees': committees, 'vocab': vocab}
+
+
+def read_live_tabs(sheet_id: str, creds_file) -> dict:
+    """READ ONLY snapshot of the current Donor Overrides + Committee Tags tabs, so
+    the diff preview can mark NEW vs UPDATE and show before→after per cell.
+
+    Only get_all_records() (a read) is called — there is NO write verb here.
+    Auth/scope come from sync_overrides.open_sheet (spreadsheets.READONLY)."""
+    import sync_overrides as so                              # lazy: gspread only loads on demand
+    sheet = so.open_sheet(sheet_id, creds_file=str(creds_file))
+
+    def rows(name):
+        try:
+            ws = sheet.worksheet(name)
+        except Exception:
+            return []
+        return ws.get_all_records()
+
+    donor_cols = ['primary_industry', 'additional_industries', 'flags',
+                  'notes', 'last_edited_by']
+    donors = {}
+    for r in rows('Donor Overrides'):
+        did = str(r.get('donor_id') or '').strip()
+        if did:
+            donors[did] = {k: str(r.get(k, '') or '') for k in donor_cols}
+    comms = {}
+    for r in rows('Committee Tags'):
+        cid = str(r.get('committee_id') or '').strip()
+        if cid:
+            comms[cid] = {'committee_name': str(r.get('committee_name', '') or ''),
+                          'industry_tags': str(r.get('industry_tags', '') or '')}
+    return {'donor_overrides': donors, 'committee_tags': comms}
 
 
 # ============================================================
@@ -232,6 +303,9 @@ def build_payload() -> dict:
 # ============================================================
 class WorklistHandler(BaseHTTPRequestHandler):
     payload_json: bytes = b'{}'              # set in main() once, cached
+    sheet_id: str = DEFAULT_SHEET_ID
+    creds_file = DEFAULT_CREDS
+    _live_cache: bytes = None               # lazy: first /api/live request reads the Sheet
 
     def _send(self, status, body: bytes, ctype: str):
         self.send_response(status)
@@ -246,6 +320,8 @@ class WorklistHandler(BaseHTTPRequestHandler):
         path = self.path.split('?', 1)[0]
         if path in ('/api/worklist', '/api/worklist/'):
             self._send(200, self.payload_json, 'application/json; charset=utf-8')
+        elif path in ('/api/live', '/api/live/'):
+            self._send(200, self._live_json(), 'application/json; charset=utf-8')
         elif path in ('/', '/index.html'):
             if INDEX_HTML.exists():
                 self._send(200, INDEX_HTML.read_bytes(), 'text/html; charset=utf-8')
@@ -253,6 +329,18 @@ class WorklistHandler(BaseHTTPRequestHandler):
                 self._send(404, b'index.html not found', 'text/plain; charset=utf-8')
         else:
             self._send(404, b'not found', 'text/plain; charset=utf-8')
+
+    def _live_json(self) -> bytes:
+        cls = type(self)
+        if cls._live_cache is None:
+            try:
+                live = read_live_tabs(cls.sheet_id, cls.creds_file)
+                cls._live_cache = json.dumps({'ok': True, **live},
+                                             ensure_ascii=False).encode('utf-8')
+            except Exception as e:                          # surface, don't crash the server
+                return json.dumps({'ok': False,
+                                   'error': f'{type(e).__name__}: {e}'}).encode('utf-8')
+        return cls._live_cache
 
     def log_message(self, fmt, *args):       # quieter console
         sys.stderr.write("  %s - %s\n" % (self.address_string(), fmt % args))
@@ -263,21 +351,28 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--port', type=int, default=8765)
     ap.add_argument('--host', default='127.0.0.1')
+    ap.add_argument('--sheet-id', default=DEFAULT_SHEET_ID,
+                    help='Sheet read (read-only) for the diff preview NEW/UPDATE check')
+    ap.add_argument('--creds-file', default=str(DEFAULT_CREDS))
     args = ap.parse_args()
 
     print("Building worklist payload (council + election)…")
     payload = build_payload()
     WorklistHandler.payload_json = json.dumps(payload, ensure_ascii=False).encode('utf-8')
+    WorklistHandler.sheet_id = args.sheet_id
+    WorklistHandler.creds_file = args.creds_file
 
     m = payload['meta']
     print(f"  council : {m['per_file']['council']['donor_count']} donors  "
           f"${m['per_file']['council']['donor_total']:,.2f}")
     print(f"  election: {m['per_file']['election']['donor_count']} donors  "
           f"${m['per_file']['election']['donor_total']:,.2f}")
-    print(f"  UNION   : {m['donors']['union_count']} donors "
-          f"(overlap {m['donors']['overlap_count']})  ${m['donors']['union_total']:,.2f}")
+    print(f"  UNION   : {m['donors']['union_count']} distinct donors "
+          f"(overlap {m['donors']['overlap_count']}) — headline uses per-file totals")
     print(f"  committees union: {m['committees']['union_count']} "
           f"(overlap {m['committees']['overlap_count']})")
+    print(f"  vocab: {len(payload['vocab']['industries'])} industries, "
+          f"{len(payload['vocab']['flags'])} flag types")
 
     srv = ThreadingHTTPServer((args.host, args.port), WorklistHandler)
     print(f"\nServing read-only worklist on http://{args.host}:{args.port}/  (Ctrl-C to stop)")

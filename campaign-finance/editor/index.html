@@ -3,99 +3,117 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Unclassified Worklist — read-only viewer</title>
+<title>Unclassified Worklist — editor (staging + diff preview)</title>
 <style>
-  /* House design tokens (matched to the council/elections embed footer) */
   :root{
     --cream:#F6EFE9; --ink:#342828; --teal:#044147; --sage:#508F88;
     --tan:#EBDAC6; --line:#dcd2c4; --opp:#9c3b2e; --neu:#9a8e74;
     --card:#FFFFFF; --muted:#7d7264; --hint-bg:#efe7d8; --content:1080px;
+    --new:#2e7d5b; --upd:#9a6a1a;
   }
   *{box-sizing:border-box}
-  body{
-    margin:0; background:var(--cream); color:var(--ink);
-    font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-    font-size:15px; line-height:1.45;
-  }
+  body{margin:0; background:var(--cream); color:var(--ink);
+    font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; font-size:15px; line-height:1.45;}
   h1,h2{font-family:'Recoleta','Georgia',serif; font-weight:600; margin:0;}
   .wrap{max-width:var(--content); margin:0 auto; padding:0 18px 60px;}
-
-  /* persistent header — the live gap metric */
-  header.gap{
-    position:sticky; top:0; z-index:10; background:var(--teal); color:var(--cream);
-    border-bottom:3px solid var(--sage);
-  }
-  .gap-inner{max-width:var(--content); margin:0 auto; padding:14px 18px;
-    display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 22px;}
+  header.gap{position:sticky; top:0; z-index:10; background:var(--teal); color:var(--cream); border-bottom:3px solid var(--sage);}
+  .gap-inner{max-width:var(--content); margin:0 auto; padding:14px 18px; display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 22px;}
   .gap h1{color:var(--cream); font-size:20px;}
   .gap .sub{color:#cfe0dd; font-size:12px; flex-basis:100%; margin-top:-2px;}
   .metric{display:flex; align-items:baseline; gap:7px;}
-  .metric .n{font-family:'Recoleta','Georgia',serif; font-size:26px; line-height:1; color:#fff;}
+  .metric .n{font-family:'Recoleta','Georgia',serif; font-size:24px; line-height:1; color:#fff;}
   .metric .l{font-size:12px; color:#bcd3cf; text-transform:uppercase; letter-spacing:.04em;}
-  .ro-badge{margin-left:auto; align-self:center; font-size:11px; letter-spacing:.05em;
-    text-transform:uppercase; color:var(--teal); background:var(--tan);
-    padding:3px 9px; border-radius:99px; font-weight:600;}
+  .ro-badge{align-self:center; font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--teal);
+    background:var(--tan); padding:3px 9px; border-radius:99px; font-weight:600;}
+  .staged-badge{margin-left:auto; align-self:center; cursor:pointer; font-weight:600; font-size:13px;
+    color:var(--teal); background:var(--cream); padding:6px 13px; border-radius:99px; border:2px solid var(--sage);}
+  .staged-badge.zero{opacity:.55;}
 
-  /* tabs + controls */
   .controls{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:18px 0 12px;}
   .tabs{display:flex; gap:6px;}
-  .tab{cursor:pointer; border:1px solid var(--line); background:var(--card);
-    color:var(--muted); padding:7px 15px; border-radius:99px; font-weight:600; font-size:14px;}
+  .tab{cursor:pointer; border:1px solid var(--line); background:var(--card); color:var(--muted);
+    padding:7px 15px; border-radius:99px; font-weight:600; font-size:14px;}
   .tab.active{background:var(--teal); color:#fff; border-color:var(--teal);}
-  .search{margin-left:auto; flex:1; min-width:180px; max-width:340px;}
-  .search input{width:100%; padding:8px 12px; border:1px solid var(--line);
-    border-radius:8px; background:var(--card); color:var(--ink); font:inherit;}
+  .search{margin-left:auto; flex:1; min-width:160px; max-width:320px;}
+  .search input{width:100%; padding:8px 12px; border:1px solid var(--line); border-radius:8px; background:var(--card); color:var(--ink); font:inherit;}
   .count-note{font-size:12px; color:var(--muted); margin:0 0 10px;}
 
-  /* rows */
-  .row{display:grid; grid-template-columns:46px 1fr auto; gap:14px; align-items:start;
-    background:var(--card); border:1px solid var(--line); border-radius:10px;
-    padding:12px 14px; margin-bottom:8px;}
-  .rank{font-family:'Recoleta','Georgia',serif; font-size:15px; color:var(--neu);
-    text-align:right; padding-top:2px;}
+  .row{display:grid; grid-template-columns:40px 1fr auto; gap:14px; align-items:start;
+    background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin-bottom:8px;}
+  .row.staged{border-color:var(--sage); box-shadow:0 0 0 1px var(--sage) inset;}
+  .rank{font-family:'Recoleta','Georgia',serif; font-size:15px; color:var(--neu); text-align:right; padding-top:2px;}
   .name{font-weight:600; font-size:16px;}
   .meta-line{font-size:12.5px; color:var(--muted); margin-top:2px;}
   .meta-line .sep{color:var(--line); padding:0 5px;}
-  .funded{font-size:12px; color:var(--muted); margin-top:4px; font-style:italic;
-    overflow:hidden; text-overflow:ellipsis; display:-webkit-box;
-    -webkit-line-clamp:2; -webkit-box-orient:vertical;}
+  .funded{font-size:12px; color:var(--muted); margin-top:4px; font-style:italic;}
+  .pertool{font-size:12px; color:var(--muted); margin-top:3px;}
   .badges{margin-top:5px;}
-  .badge{display:inline-block; font-size:10.5px; text-transform:uppercase; letter-spacing:.04em;
-    padding:2px 7px; border-radius:99px; margin-right:5px; font-weight:600; border:1px solid transparent;}
+  .badge{display:inline-block; font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; padding:2px 7px;
+    border-radius:99px; margin-right:5px; font-weight:600; border:1px solid transparent;}
   .badge.council{background:var(--hint-bg); color:#6a5d4e; border-color:#cfc5b5;}
   .badge.election{background:#dCEae8; color:var(--teal); border-color:#9ec4bf;}
-  .hint{display:inline-block; margin-top:6px; font-size:12px; background:var(--hint-bg);
-    border:1px dashed var(--neu); color:#5a5048; border-radius:7px; padding:3px 9px;}
-  .hint b{color:var(--teal); font-weight:600;}
-  .hint .why{color:var(--muted);}
-  .hint .tag-na{color:var(--opp); font-weight:600; text-transform:uppercase;
-    font-size:10px; letter-spacing:.04em; margin-left:6px;}
+  .hint{display:inline-block; margin-top:6px; font-size:12px; background:var(--hint-bg); border:1px dashed var(--neu);
+    color:#5a5048; border-radius:7px; padding:3px 9px;}
+  .hint b{color:var(--teal);} .hint .why{color:var(--muted);}
   .amt{text-align:right; white-space:nowrap;}
   .amt .big{font-family:'Recoleta','Georgia',serif; font-size:19px; color:var(--ink);}
   .amt .small{font-size:11.5px; color:var(--muted);}
+  .actions{grid-column:2 / 4; margin-top:9px; display:flex; flex-wrap:wrap; gap:7px; align-items:center;}
+  button.act{cursor:pointer; font:inherit; font-size:13px; font-weight:600; border-radius:7px; padding:5px 12px; border:1px solid var(--line); background:var(--card); color:var(--ink);}
+  button.act.accept{background:var(--sage); color:#fff; border-color:var(--sage);}
+  button.act.edit{background:var(--tan); border-color:#d9c3a6;}
+  button.act.skip{color:var(--opp); border-color:#e0c4bd;}
+  button.act:disabled{opacity:.4; cursor:not-allowed;}
+  .staged-tag{font-size:11px; font-weight:600; color:var(--sage); text-transform:uppercase; letter-spacing:.04em;}
 
+  /* inline editor */
+  .editor{grid-column:1 / 4; margin-top:10px; padding:12px; background:var(--cream); border:1px solid var(--line); border-radius:9px;}
+  .editor label{display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); margin:8px 0 3px;}
+  .editor select, .editor input, .editor textarea{width:100%; padding:6px 9px; border:1px solid var(--line); border-radius:6px; background:#fff; color:var(--ink); font:inherit; font-size:14px;}
+  .editor select[multiple]{height:96px;}
+  .editor .grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .flagrow{display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:7px; margin-top:6px; align-items:center;}
+  .editor .ed-actions{margin-top:12px; display:flex; gap:8px;}
+
+  /* diff preview */
+  .diff{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px; margin-bottom:10px;}
+  .diff h3{margin:0 0 4px; font-family:'Recoleta','Georgia',serif; font-size:16px;}
+  .status{display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:99px; margin-left:8px; color:#fff;}
+  .status.NEW{background:var(--new);} .status.UPDATE{background:var(--upd);}
+  table.cells{width:100%; border-collapse:collapse; margin-top:8px; font-size:13px;}
+  table.cells th{text-align:left; color:var(--muted); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.03em; padding:4px 8px; border-bottom:1px solid var(--line);}
+  table.cells td{padding:5px 8px; border-bottom:1px solid #efe7d8; vertical-align:top; font-family:ui-monospace,Menlo,monospace;}
+  td.col{font-family:'Poppins',sans-serif; color:var(--muted); white-space:nowrap;}
+  .before{color:var(--muted);} .after{color:var(--ink);}
+  tr.changed .after{color:var(--new); font-weight:600;}
+  tr.changed.upd .after{color:var(--upd);}
+  .empty-cell{color:var(--neu); font-style:italic;}
+  .rt{font-size:12px; margin-top:8px; color:var(--muted);}
+  .rt b{color:var(--new);}
   .empty{padding:40px; text-align:center; color:var(--muted);}
-  .err{padding:30px; background:#f1e1dc; border:1px solid var(--opp); color:var(--opp);
-    border-radius:10px; margin-top:20px;}
+  .err{padding:30px; background:#f1e1dc; border:1px solid var(--opp); color:var(--opp); border-radius:10px; margin-top:20px;}
   .err code{background:#fff; padding:2px 6px; border-radius:4px;}
+  .note-banner{font-size:12.5px; color:var(--muted); background:var(--hint-bg); border:1px solid var(--line); border-radius:8px; padding:8px 12px; margin-bottom:12px;}
 </style>
 </head>
 <body>
 <header class="gap">
   <div class="gap-inner">
     <h1>Unclassified Worklist</h1>
-    <span class="ro-badge">read-only</span>
-    <div class="sub">Dollar-ranked donors &amp; committees still missing an industry classification —
-      the live gap. Suggestions are hints only; nothing here is applied. (H1 viewer.)</div>
+    <span class="ro-badge">no sheet write</span>
+    <div class="sub">Stage classifications offline, preview the exact Donor Overrides / Committee Tags rows that
+      would be written (NEW vs UPDATE), and prove they round-trip through the live reader. Nothing is written. (H2.)</div>
     <div id="metrics" style="flex-basis:100%; display:flex; flex-wrap:wrap; gap:10px 30px; margin-top:6px;"></div>
+    <div class="staged-badge zero" id="staged-badge" onclick="setView('review')">0 staged</div>
   </div>
 </header>
 
 <div class="wrap">
   <div class="controls">
     <div class="tabs">
-      <div class="tab active" data-view="donors" id="tab-donors">Donors</div>
-      <div class="tab" data-view="committees" id="tab-committees">Committees</div>
+      <div class="tab active" data-view="donors" id="tab-donors" onclick="setView('donors')">Donors</div>
+      <div class="tab" data-view="committees" id="tab-committees" onclick="setView('committees')">Committees</div>
+      <div class="tab" data-view="review" id="tab-review" onclick="setView('review')">Review &amp; diff</div>
     </div>
     <div class="search"><input id="search" type="text" placeholder="Filter by name / employer / city…" autocomplete="off"></div>
   </div>
@@ -104,133 +122,369 @@
 </div>
 
 <script>
-// Read-only viewer. Fetches the localhost JSON the backend serves and renders two
-// dollar-ranked lists. No writes, no Sheet calls, no localStorage anywhere.
-// When this file is served by serve.py the API is same-origin; opened as a file://
-// it falls back to the default localhost port (serve.py sends permissive CORS).
-const API = (location.protocol === 'http:' ? '' : 'http://localhost:8765') + '/api/worklist';
+// ============================================================
+// Editor — staging + diff preview (H2). No writes, no localStorage.
+// The browser is the canonical editor surface; the row composer below MIRRORS
+// campaign-finance/editor/compose.py (the Python composer the H3 write harness
+// reuses). A parity check proves the two emit identical cells.
+// ============================================================
+const API  = (location.protocol === 'http:' ? '' : 'http://localhost:8765') + '/api/worklist';
+const LIVE = (location.protocol === 'http:' ? '' : 'http://localhost:8765') + '/api/live';
+const EDITOR_STAMP = 'editor-ui';
 
-const state = { view:'donors', q:'', data:null };
-
-const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c =>
-  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const usd = n => '$' + Math.round(n).toLocaleString('en-US');
-const usdShort = n => {
-  n = +n || 0;
-  if (n >= 1e6) return '$' + (n/1e6).toFixed(n>=1e7?0:1) + 'M';
-  if (n >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
-  return '$' + Math.round(n);
+const state = {
+  data:null, vocab:{industries:[],flags:[]}, live:null,
+  staged:new Map(),               // key `${kind}:${id}` -> staged item (user EDITS + `edited` set)
+  view:'donors', q:'', editing:null,
 };
 
-function renderMetrics(meta){
-  const d = meta.donors, c = meta.committees;
-  const el = document.getElementById('metrics');
-  el.innerHTML = `
-    <div class="metric"><span class="n" id="m-donor-n">${d.union_count.toLocaleString()}</span>
-      <span class="l">unclassified donors</span></div>
-    <div class="metric"><span class="n">${usdShort(d.union_total)}</span>
-      <span class="l">donor dollars at stake</span></div>
-    <div class="metric"><span class="n">${c.union_count.toLocaleString()}</span>
-      <span class="l">untagged committees</span></div>
-    <div class="metric"><span class="n">${usdShort(c.union_total)}</span>
-      <span class="l">committee dollars</span></div>`;
-}
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const usd = n => '$' + Math.round(n).toLocaleString('en-US');
+const usdShort = n => { n=+n||0; if(n>=1e6) return '$'+(n/1e6).toFixed(n>=1e7?0:1)+'M'; if(n>=1e3) return '$'+(n/1e3).toFixed(0)+'K'; return '$'+Math.round(n); };
+const key = (kind,id) => kind+':'+id;
+const donorById = id => state.data.donors.find(r=>r.donor_id===id);
+const committeeById = id => state.data.committees.find(r=>r.committee_id===id);
 
-function toolBadges(tools){
-  return (tools||[]).map(t => `<span class="badge ${esc(t)}">${esc(t)}</span>`).join('');
-}
-
-function donorRow(r, i){
-  const idLine = [r.occupation, r.employer, r.city].filter(Boolean).map(esc);
-  const counts = `${r.contribution_count} contribution${r.contribution_count===1?'':'s'}`;
-  const nFunded = r.committees_funded ? r.committees_funded.split('; ').filter(Boolean).length : 0;
-  let hint = '';
-  if (r.suggested_industry){
-    hint = `<div class="hint">suggests <b>${esc(r.suggested_industry)}</b>` +
-           (r.suggested_reason ? ` <span class="why">— ${esc(r.suggested_reason)}</span>` : '') +
-           `<span class="tag-na">not applied</span></div>`;
-  } else {
-    hint = `<div class="hint"><span class="why">no suggestion — needs editorial research</span></div>`;
+// ---- JS parsers (mirror sync_overrides.parse_list_cell / parse_flag_cell) ----
+function parseList(cell){ if(!cell) return []; return cell.split(',').map(s=>s.trim()).filter(Boolean); }
+function parseFlags(cell){
+  if(!cell || !cell.trim()) return [];
+  const out=[];
+  for(let raw of cell.split(';')){ raw=raw.trim(); if(!raw) continue;
+    const parts=raw.split('|').map(p=>p.trim());
+    const f={type:parts[0]};
+    if(parts.length>1 && parts[1]) f.source_url=parts[1];
+    if(parts.length>2 && parts[2]) f.note=parts[2];
+    out.push(f);
   }
-  return `<div class="row">
+  return out;
+}
+// ---- JS composer (mirror compose.py compose_donor_cells / compose_committee_cells) ----
+// mirror compose.py _clean_seg: ';' and '|' are flag-cell delimiters with no
+// escaping in sync_overrides.parse_flag_cell, so strip them from flag segments.
+function cleanSeg(s){ return (s||'').replace(/[;|]/g,' ').trim(); }
+function flagCellOne(f){ const t=cleanSeg(f.type),u=cleanSeg(f.source_url),n=cleanSeg(f.note); if(n) return `${t}|${u}|${n}`; if(u) return `${t}|${u}`; return t; }
+function composeDonorCells(it){
+  const addl=(it.additional_industries||[]).map(s=>(s||'').trim()).filter(Boolean);
+  const flags=(it.flags||[]).filter(f=>(f.type||'').trim()).map(flagCellOne);
+  return { donor_id:it.donor_id, primary_industry:(it.primary_industry||'').trim(),
+           additional_industries:addl.join(','), flags:flags.join(';'),
+           notes:(it.notes||'').trim(), last_edited_by:EDITOR_STAMP };
+}
+function composeCommitteeCells(it){
+  const tags=(it.industry_tags||[]).map(s=>(s||'').trim()).filter(Boolean);
+  return { committee_id:it.committee_id, committee_name:it.committee_name||'', industry_tags:tags.join(',') };
+}
+
+// ============================================================
+// STAGING API  (buttons AND the #selftest hook call these)
+// ============================================================
+function setStaged(kind, id, item){ state.staged.set(key(kind,id), {kind,id,...item}); refresh(); }
+function skip(kind, id){ state.staged.delete(key(kind,id)); state.editing=null; refresh(); }
+function isStaged(kind, id){ return state.staged.has(key(kind,id)); }
+
+function stageDonorAccept(id){
+  const row=donorById(id); if(!row || !row.suggested_industry) return false;
+  setStaged('donor', id, { name:row.name, primary_industry:row.suggested_industry,
+    additional_industries:[], flags:[], notes:'', edited:['primary_industry'] });
+  return true;
+}
+function stageDonorEdit(id, payload){
+  const row=donorById(id); if(!row) return false;
+  setStaged('donor', id, { name:row.name,
+    primary_industry:payload.primary_industry||'',
+    additional_industries:payload.additional_industries||[],
+    flags:payload.flags||[], notes:payload.notes||'',
+    edited:payload.edited||['primary_industry','additional_industries','flags','notes'] });
+  state.editing=null; return true;
+}
+function stageCommittee(id, tags){
+  const row=committeeById(id); if(!row) return false;
+  setStaged('committee', id, { name:row.name, committee_name:row.name,
+    industry_tags:tags||[], edited:['industry_tags'] });
+  state.editing=null; return true;
+}
+
+// Expose for the buttons + the headless self-test (same code path as the UI).
+window.editor = { stageDonorAccept, stageDonorEdit, stageCommittee, skip, isStaged,
+  getStaged:()=>Array.from(state.staged.values()),
+  setView:(v)=>setView(v), openEdit:(k)=>{state.editing=k; render();} };
+
+// ============================================================
+// MERGE + DIFF  (final intended state = staged edits over live; no clobber)
+// ============================================================
+function liveForDonor(id){ return (state.live && state.live.donor_overrides && state.live.donor_overrides[id]) || null; }
+function liveForCommittee(id){ return (state.live && state.live.committee_tags && state.live.committee_tags[id]) || null; }
+
+function intendedDonor(s){
+  const ed=new Set(s.edited||[]);
+  const lv=liveForDonor(s.id);
+  const base = lv ? { primary_industry:lv.primary_industry, additional_industries:parseList(lv.additional_industries),
+                      flags:parseFlags(lv.flags), notes:lv.notes }
+                  : { primary_industry:'', additional_industries:[], flags:[], notes:'' };
+  return { donor_id:s.id,
+    primary_industry: ed.has('primary_industry') ? s.primary_industry : base.primary_industry,
+    additional_industries: ed.has('additional_industries') ? s.additional_industries : base.additional_industries,
+    flags: ed.has('flags') ? s.flags : base.flags,
+    notes: ed.has('notes') ? s.notes : base.notes };
+}
+function intendedCommittee(s){
+  const ed=new Set(s.edited||[]); const lv=liveForCommittee(s.id);
+  return { committee_id:s.id,
+    committee_name: (lv && lv.committee_name) ? lv.committee_name : (s.committee_name||''),
+    industry_tags: ed.has('industry_tags') ? s.industry_tags : (lv ? parseList(lv.industry_tags) : []) };
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderMetrics(meta){
+  const pf=meta.per_file, c=meta.committees;
+  document.getElementById('metrics').innerHTML = `
+    <div class="metric"><span class="n">${meta.donors.union_count.toLocaleString()}</span><span class="l">unclassified donors</span></div>
+    <div class="metric"><span class="n">${usdShort(pf.council.donor_total)}</span><span class="l">council $ to classify</span></div>
+    <div class="metric"><span class="n">${usdShort(pf.election.donor_total)}</span><span class="l">election $ to classify</span></div>
+    <div class="metric"><span class="n">${c.union_count.toLocaleString()}</span><span class="l">untagged committees</span></div>`;
+}
+function updateBadge(){
+  const n=state.staged.size, b=document.getElementById('staged-badge');
+  b.textContent = `${n} staged`; b.classList.toggle('zero', n===0);
+}
+function toolBadges(tools){ return (tools||[]).map(t=>`<span class="badge ${esc(t)}">${esc(t)}</span>`).join(''); }
+
+function indOptions(sel){ return state.vocab.industries.map(i=>`<option value="${esc(i.key)}"${i.key===sel?' selected':''}>${esc(i.label)} (${esc(i.key)})</option>`).join(''); }
+function indMultiOptions(selArr){ const s=new Set(selArr||[]); return state.vocab.industries.map(i=>`<option value="${esc(i.key)}"${s.has(i.key)?' selected':''}>${esc(i.label)} (${esc(i.key)})</option>`).join(''); }
+function flagOptions(sel){ return `<option value="">— flag —</option>`+state.vocab.flags.map(f=>`<option value="${esc(f.key)}"${f.key===sel?' selected':''}>${esc(f.label)} (${esc(f.key)})</option>`).join(''); }
+
+function donorRow(r,i){
+  const k=key('donor',r.donor_id), staged=isStaged('donor',r.donor_id), editing=state.editing===k;
+  const idLine=[r.occupation,r.employer,r.city].filter(Boolean).map(esc);
+  const pertool = (r.tools&&r.tools.length>1 && r.per_tool)
+    ? `<div class="pertool">council ${usd(r.per_tool.council?r.per_tool.council.total_given:0)} · election ${usd(r.per_tool.election?r.per_tool.election.total_given:0)} <span style="color:var(--neu)">(ranked by max)</span></div>` : '';
+  const hint = r.suggested_industry
+    ? `<div class="hint">suggests <b>${esc(r.suggested_industry)}</b>${r.suggested_reason?` <span class="why">— ${esc(r.suggested_reason)}</span>`:''}</div>`
+    : `<div class="hint"><span class="why">no suggestion — use Edit</span></div>`;
+  let actions = `<div class="actions">
+      <button class="act accept" onclick="stageDonorAccept('${esc(r.donor_id)}')" ${r.suggested_industry?'':'disabled'}>Accept${r.suggested_industry?` → ${esc(r.suggested_industry)}`:''}</button>
+      <button class="act edit" onclick="editor.openEdit('${esc(k)}')">Edit</button>
+      <button class="act skip" onclick="skip('donor','${esc(r.donor_id)}')" ${staged?'':'disabled'}>Skip</button>
+      ${staged?`<span class="staged-tag">✓ staged</span>`:''}
+    </div>`;
+  let editor_html = editing ? donorEditor(r) : '';
+  return `<div class="row${staged?' staged':''}">
     <div class="rank">${i+1}</div>
     <div>
-      <div class="name">${esc(r.name) || '<em>(unnamed)</em>'}</div>
-      ${idLine.length ? `<div class="meta-line">${idLine.join('<span class="sep">•</span>')}</div>` : ''}
-      ${r.committees_funded ? `<div class="funded">funds: ${esc(r.committees_funded)}</div>` : ''}
+      <div class="name">${esc(r.name)||'<em>(unnamed)</em>'}</div>
+      ${idLine.length?`<div class="meta-line">${idLine.join('<span class="sep">•</span>')}</div>`:''}
+      ${r.committees_funded?`<div class="funded">funds: ${esc(r.committees_funded)}</div>`:''}
+      ${pertool}
       <div class="badges">${toolBadges(r.tools)}</div>
       ${hint}
     </div>
-    <div class="amt">
-      <div class="big">${usd(r.total_given)}</div>
-      <div class="small">${counts}${nFunded?` · ${nFunded} committee${nFunded===1?'':'s'}`:''}</div>
-    </div>
+    <div class="amt"><div class="big">${usd(r.total_given)}</div><div class="small">${r.contribution_count} contribution${r.contribution_count===1?'':'s'}</div></div>
+    ${actions}
+    ${editor_html}
   </div>`;
 }
 
-function committeeRow(r, i){
-  const sub = [r.ward?`Ward ${esc(r.ward)}`:'', esc(r.alder_name)].filter(Boolean).join(' • ');
-  return `<div class="row">
+function donorEditor(r){
+  const s=state.staged.get(key('donor',r.donor_id));
+  const primary = s?s.primary_industry:(r.suggested_industry||'');
+  const addl = s?s.additional_industries:[];
+  const notes = s?s.notes:'';
+  const f = (s&&s.flags&&s.flags[0])||{type:'',source_url:'',note:''};
+  return `<div class="editor" id="ed-${esc(r.donor_id)}">
+    <div class="grid2">
+      <div><label>primary_industry</label><select id="f-primary">${indOptions(primary)}</select></div>
+      <div><label>additional_industries (multi)</label><select id="f-addl" multiple>${indMultiOptions(addl)}</select></div>
+    </div>
+    <label>flag (optional)</label>
+    <div class="flagrow">
+      <select id="f-flagtype">${flagOptions(f.type)}</select>
+      <input id="f-flagurl" placeholder="source url (optional)" value="${esc(f.source_url||'')}">
+      <input id="f-flagnote" placeholder="note (optional)" value="${esc(f.note||'')}">
+      <span></span>
+    </div>
+    <label>notes (free text)</label>
+    <textarea id="f-notes" rows="2">${esc(notes)}</textarea>
+    <div class="ed-actions">
+      <button class="act accept" onclick="saveDonorEdit('${esc(r.donor_id)}')">Stage these</button>
+      <button class="act" onclick="editor.openEdit(null)">Cancel</button>
+    </div>
+  </div>`;
+}
+function saveDonorEdit(id){
+  const g=x=>document.getElementById(x);
+  const primary=g('f-primary').value;
+  const addl=Array.from(g('f-addl').selectedOptions).map(o=>o.value);
+  const ft=g('f-flagtype').value, fu=g('f-flagurl').value.trim(), fn=g('f-flagnote').value.trim();
+  const flags = ft ? [{type:ft, source_url:fu, note:fn}] : [];
+  const notes=g('f-notes').value;
+  stageDonorEdit(id, {primary_industry:primary, additional_industries:addl, flags, notes,
+    edited:['primary_industry','additional_industries','flags','notes']});
+}
+
+function committeeRow(r,i){
+  const k=key('committee',r.committee_id), staged=isStaged('committee',r.committee_id), editing=state.editing===k;
+  const sub=[r.ward?`Ward ${esc(r.ward)}`:'', esc(r.alder_name)].filter(Boolean).join(' • ');
+  const s=state.staged.get(k);
+  let editor_html = editing ? `<div class="editor">
+      <label>industry_tags (multi-select)</label>
+      <select id="c-tags" multiple>${indMultiOptions(s?s.industry_tags:[])}</select>
+      <div class="ed-actions">
+        <button class="act accept" onclick="saveCommittee('${esc(r.committee_id)}')">Stage these</button>
+        <button class="act" onclick="editor.openEdit(null)">Cancel</button>
+      </div></div>` : '';
+  return `<div class="row${staged?' staged':''}">
     <div class="rank">${i+1}</div>
     <div>
-      <div class="name">${esc(r.name) || esc(r.committee_id)}</div>
-      ${sub ? `<div class="meta-line">${sub}</div>` : ''}
+      <div class="name">${esc(r.name)||esc(r.committee_id)}</div>
+      ${sub?`<div class="meta-line">${sub}</div>`:''}
       <div class="badges">${toolBadges(r.tools)}</div>
-      <div class="hint"><span class="why">no industry_tags — tag via the Committee Tags tab</span>
-        <span class="tag-na">not applied</span></div>
+      <div class="hint"><span class="why">no industry_tags — tag via the Committee Tags tab</span></div>
     </div>
-    <div class="amt">
-      <div class="big">${usd(r.received_total)}</div>
-      <div class="small">${r.contribution_count} contribution${r.contribution_count===1?'':'s'} received</div>
+    <div class="amt"><div class="big">${usd(r.received_total)}</div><div class="small">${r.contribution_count} received</div></div>
+    <div class="actions">
+      <button class="act edit" onclick="editor.openEdit('${esc(k)}')">Edit tags</button>
+      <button class="act skip" onclick="skip('committee','${esc(r.committee_id)}')" ${staged?'':'disabled'}>Skip</button>
+      ${staged?`<span class="staged-tag">✓ staged</span>`:''}
     </div>
+    ${editor_html}
   </div>`;
 }
+function saveCommittee(id){
+  const tags=Array.from(document.getElementById('c-tags').selectedOptions).map(o=>o.value);
+  stageCommittee(id, tags);
+}
 
-function matches(r, q){
-  if (!q) return true;
-  const hay = [r.name, r.employer, r.occupation, r.city, r.committee_id, r.suggested_industry]
-    .filter(Boolean).join(' ').toLowerCase();
-  return hay.indexOf(q) !== -1;
+// ---- diff cell rendering ----
+function diffRow(col, before, after, isNew){
+  const changed = (before||'') !== (after||'');
+  const b = before ? esc(before) : `<span class="empty-cell">${isNew?'(new row)':'∅'}</span>`;
+  const a = after ? esc(after) : `<span class="empty-cell">∅</span>`;
+  return `<tr class="${changed?'changed':''} ${isNew?'':'upd'}"><td class="col">${esc(col)}</td><td class="before">${b}</td><td class="after">${a}</td></tr>`;
+}
+function renderDiffItem(s){
+  if(s.kind==='donor'){
+    const it=intendedDonor(s), cells=composeDonorCells(it), lv=liveForDonor(s.id);
+    const status = lv ? 'UPDATE' : 'NEW', isNew = !lv;
+    const before = lv || {primary_industry:'',additional_industries:'',flags:'',notes:'',last_edited_by:''};
+    const compose_payload = { kind:'donor', id:s.id, status, cells, intended:it };
+    const rows = ['primary_industry','additional_industries','flags','notes','last_edited_by']
+      .map(col=>diffRow(col, before[col]||'', cells[col]||'', isNew)).join('');
+    return `<div class="diff" data-compose='${esc(JSON.stringify(compose_payload))}'>
+      <h3>${esc(s.name||s.id)} <span class="status ${status}">${status}</span></h3>
+      <div class="meta-line">Donor Overrides · donor_id <code>${esc(s.id)}</code></div>
+      <table class="cells"><tr><th>column</th><th>live (before)</th><th>staged (after)</th></tr>${rows}</table>
+    </div>`;
+  } else {
+    const it=intendedCommittee(s), cells=composeCommitteeCells(it), lv=liveForCommittee(s.id);
+    const status = lv ? 'UPDATE' : 'NEW', isNew=!lv;
+    const before = lv || {committee_name:'',industry_tags:''};
+    const compose_payload = { kind:'committee', id:s.id, status, cells, intended:it };
+    const rows=['committee_id','committee_name','industry_tags'].map(col=>{
+      const bv = col==='committee_id'? s.id : (before[col]||'');
+      return diffRow(col, bv, cells[col]||'', isNew);
+    }).join('');
+    return `<div class="diff" data-compose='${esc(JSON.stringify(compose_payload))}'>
+      <h3>${esc(s.name||s.id)} <span class="status ${status}">${status}</span></h3>
+      <div class="meta-line">Committee Tags · committee_id <code>${esc(s.id)}</code></div>
+      <table class="cells"><tr><th>column</th><th>live (before)</th><th>staged (after)</th></tr>${rows}</table>
+    </div>`;
+  }
 }
 
 function render(){
-  const list = document.getElementById('list');
-  const note = document.getElementById('count-note');
-  if (!state.data){ return; }
-  const isD = state.view === 'donors';
-  const rows = (isD ? state.data.donors : state.data.committees);
-  const q = state.q.trim().toLowerCase();
-  const shown = q ? rows.filter(r => matches(r, q)) : rows;
+  const list=document.getElementById('list'), note=document.getElementById('count-note');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.view===state.view));
+  updateBadge();
+  if(!state.data) return;
 
+  if(state.view==='review'){ renderReview(list,note); return; }
+
+  const isD = state.view==='donors';
+  const rows = isD ? state.data.donors : state.data.committees;
+  const q=state.q.trim().toLowerCase();
+  const shown = q ? rows.filter(r=>matches(r,q)) : rows;
   note.textContent = q
-    ? `${shown.length.toLocaleString()} of ${rows.length.toLocaleString()} ${state.view} match “${state.q.trim()}” · ranked by ${isD?'total given':'total received'}`
+    ? `${shown.length.toLocaleString()} of ${rows.length.toLocaleString()} ${state.view} match “${state.q.trim()}”`
     : `${rows.length.toLocaleString()} ${state.view}, ranked by ${isD?'total given':'total received'} (highest first)`;
+  if(!shown.length){ list.innerHTML=`<div class="empty">No ${state.view}.</div>`; return; }
+  const make = isD?donorRow:committeeRow;
+  // cap the rendered DOM for responsiveness; full data still backs search.
+  const cap = q?shown.length:Math.min(shown.length, 400);
+  list.innerHTML = shown.slice(0,cap).map(make).join('') +
+    (cap<shown.length?`<div class="count-note">showing top ${cap.toLocaleString()} of ${shown.length.toLocaleString()} — filter to see more</div>`:'');
+}
+function matches(r,q){ return [r.name,r.employer,r.occupation,r.city,r.committee_id,r.suggested_industry].filter(Boolean).join(' ').toLowerCase().indexOf(q)!==-1; }
 
-  if (!shown.length){ list.innerHTML = `<div class="empty">No ${state.view} to show.</div>`; return; }
-  const make = isD ? donorRow : committeeRow;
-  list.innerHTML = shown.map(make).join('');
+function renderReview(list, note){
+  const items=Array.from(state.staged.values());
+  note.textContent = `${items.length} staged classification${items.length===1?'':'s'} — preview the exact rows that would be written (read-only).`;
+  if(!items.length){ list.innerHTML=`<div class="empty">Nothing staged yet. Accept or Edit donors/committees, then return here.</div>`; return; }
+  if(!state.live){
+    list.innerHTML = `<div class="note-banner">Reading the live Donor Overrides / Committee Tags tabs (read-only) to mark NEW vs UPDATE…</div>`;
+    loadLive().then(()=>render()).catch(e=>{ document.getElementById('list').innerHTML =
+      `<div class="err"><b>Couldn't read the live tabs.</b><br>${esc(e.message)}</div>`; });
+    return;
+  }
+  const banner = `<div class="note-banner">Live tabs read read-only: ${Object.keys(state.live.donor_overrides||{}).length} donor-override rows, ${Object.keys(state.live.committee_tags||{}).length} committee-tag rows. <b>No write is performed.</b> last_edited_by stamps as <code>${EDITOR_STAMP}</code>.</div>`;
+  list.innerHTML = banner + items.map(renderDiffItem).join('');
 }
 
-function setView(v){
-  state.view = v;
-  document.getElementById('tab-donors').classList.toggle('active', v==='donors');
-  document.getElementById('tab-committees').classList.toggle('active', v==='committees');
-  render();
+function setView(v){ state.view=v; state.editing=null; state.q=''; document.getElementById('search').value=''; render(); }
+function refresh(){ render(); }
+
+document.getElementById('search').addEventListener('input', e=>{ state.q=e.target.value; render(); });
+
+function loadLive(){
+  return fetch(LIVE).then(r=>r.json()).then(j=>{ if(!j.ok) throw new Error(j.error||'live read failed'); state.live=j; return j; });
 }
 
-document.getElementById('tab-donors').onclick = () => setView('donors');
-document.getElementById('tab-committees').onclick = () => setView('committees');
-document.getElementById('search').addEventListener('input', e => { state.q = e.target.value; render(); });
+fetch(API).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+  .then(p=>{ state.data=p; state.vocab=p.vocab||{industries:[],flags:[]}; renderMetrics(p.meta); render(); maybeSelftest(); })
+  .catch(err=>{ document.getElementById('list').innerHTML =
+    `<div class="err"><b>Couldn't load the worklist.</b><br>${esc(err.message)}<br><br>Start: <code>python3 campaign-finance/editor/serve.py</code></div>`; });
 
-fetch(API)
-  .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-  .then(payload => { state.data = payload; renderMetrics(payload.meta); render(); })
-  .catch(err => {
-    document.getElementById('list').innerHTML =
-      `<div class="err"><b>Couldn't load the worklist.</b><br>${esc(err.message)}<br><br>` +
-      `Start the backend first: <code>python3 campaign-finance/editor/serve.py</code>, ` +
-      `then reload this page (or open <code>http://localhost:8765/</code>).</div>`;
-  });
+// ============================================================
+// #selftest — guarded headless driver. Exercises the REAL staging API the
+// buttons call, then opens the review/diff view. Never runs without the hash.
+// ============================================================
+async function maybeSelftest(){
+  if(location.hash!=='#selftest') return;
+  const D=state.data.donors, C=state.data.committees;
+  const newDonor = D.find(r=>r.donor_id==='illinois-realtors') || D.find(r=>r.suggested_industry);
+  const updDonor = D.find(r=>r.donor_id==='david-a-weinberg') || D[0];
+  // an UPDATE donor accepted on PRIMARY ONLY — proves no-clobber of live additional/flags/notes
+  const noClobber = D.find(r=>r.donor_id==='security-logistics-group-inc')
+                 || D.find(r=>r.suggested_industry && r!==newDonor && r!==updDonor);
+  const acceptSkip = D.find(r=>r.suggested_industry && r!==newDonor && r!==updDonor && r!==noClobber);
+  const cmte = C[0];
+  // 1. Accept a NEW donor (suggested -> primary)
+  if(newDonor) stageDonorAccept(newDonor.donor_id);
+  // 2. Edit an UPDATE donor with full payload (note carries a ';' on purpose)
+  if(updDonor) stageDonorEdit(updDonor.donor_id, {primary_industry:'finance',
+    additional_industries:['real-estate'],
+    flags:[{type:(state.vocab.flags[0]&&state.vocab.flags[0].key)||'developer-zoning', source_url:'https://example.org/w', note:'self-test; semi=ok'}],
+    notes:'staged via self-test', edited:['primary_industry','additional_industries','flags','notes']});
+  // 3. Accept an UPDATE donor PRIMARY ONLY — additional/flags/notes must stay = live
+  if(noClobber) stageDonorAccept(noClobber.donor_id);
+  // 4. Accept another, then Skip it (proves Skip removes from staging)
+  if(acceptSkip) stageDonorAccept(acceptSkip.donor_id);
+  // 5. Stage a committee
+  if(cmte) stageCommittee(cmte.committee_id, ['real-estate','finance']);
+  // 6. Skip #4
+  if(acceptSkip) skip('donor', acceptSkip.donor_id);
+  window.__selftest = { staged: editor.getStaged().map(s=>({kind:s.kind,id:s.id})),
+    newDonor:newDonor&&newDonor.donor_id, updDonor:updDonor&&updDonor.donor_id,
+    noClobber:noClobber&&noClobber.donor_id, skipped:acceptSkip&&acceptSkip.donor_id,
+    committee:cmte&&cmte.committee_id };
+  // 6. open review + load live, then mark done
+  setView('review');
+  try{ await loadLive(); render(); }catch(e){}
+  const d=document.createElement('div'); d.id='selftest-done'; d.style.display='none';
+  d.textContent=JSON.stringify(window.__selftest); document.body.appendChild(d);
+}
 </script>
 </body>
 </html>
