@@ -132,23 +132,53 @@ def _merged_committee_item(item: dict, live_row) -> dict:
     }
 
 
+def _merged_vocab_item(item: dict, live_row) -> dict:
+    """Vocab-add is ADD-only (collision guard blocks existing keys), so there is no
+    merge against live — the staged item IS the row."""
+    return dict(item)
+
+
+INDUSTRY_VOCAB_TAB = 'Industry Tags'
+FLAG_VOCAB_TAB = 'Flag Types'
+INDUSTRY_VOCAB_COLUMNS = compose.INDUSTRY_VOCAB_COLUMNS   # key | label | color
+FLAG_VOCAB_COLUMNS = compose.FLAG_VOCAB_COLUMNS           # key | label | severity
+
 # Kind specs — the ONLY per-surface knobs. Adding a future field is additive:
 # extend the columns/compose in compose.py; the plan/execute machinery is generic.
+# key_of(item): how to derive the row key (worklist id, or slug(label) for vocab).
+# add_only: collision guard — an existing key blocks instead of becoming an UPDATE.
 DONOR_SPEC = {
     'kind': 'donor', 'tab': DONOR_TAB, 'columns': DONOR_COLUMNS, 'key': KEY_COLUMN,
-    'stamp_col': 'last_edited_by',
+    'key_of': lambda i: i['donor_id'], 'stamp_col': 'last_edited_by', 'add_only': False,
     'merge': _merged_donor_item, 'compose': compose.compose_donor_cells,
     'sanitize': compose.sanitization_notes, 'roundtrip': compose.roundtrip_donors,
 }
 COMMITTEE_SPEC = {
     'kind': 'committee', 'tab': COMMITTEE_TAB, 'columns': COMMITTEE_COLUMNS, 'key': COMMITTEE_KEY,
-    'stamp_col': None,
+    'key_of': lambda i: i['committee_id'], 'stamp_col': None, 'add_only': False,
     'merge': _merged_committee_item, 'compose': compose.compose_committee_cells,
     # committee tags are vocab-only (no free text), so nothing to sanitize/hold
     'sanitize': lambda item: {'warn': [], 'hold': []},
     'roundtrip': compose.roundtrip_committees,
 }
-SPECS = {'donor': DONOR_SPEC, 'committee': COMMITTEE_SPEC}
+INDUSTRY_VOCAB_SPEC = {
+    'kind': 'industry_vocab', 'tab': INDUSTRY_VOCAB_TAB, 'columns': INDUSTRY_VOCAB_COLUMNS, 'key': 'key',
+    'key_of': lambda i: compose.slug(i.get('label', '')), 'stamp_col': None, 'add_only': True,
+    'merge': _merged_vocab_item,
+    'compose': lambda it: compose.compose_vocab_cells(it, INDUSTRY_VOCAB_COLUMNS),
+    'sanitize': lambda item: {'warn': [], 'hold': []},
+    'roundtrip': lambda items: compose.roundtrip_vocab(items, INDUSTRY_VOCAB_TAB, INDUSTRY_VOCAB_COLUMNS),
+}
+FLAG_VOCAB_SPEC = {
+    'kind': 'flag_vocab', 'tab': FLAG_VOCAB_TAB, 'columns': FLAG_VOCAB_COLUMNS, 'key': 'key',
+    'key_of': lambda i: compose.slug(i.get('label', '')), 'stamp_col': None, 'add_only': True,
+    'merge': _merged_vocab_item,
+    'compose': lambda it: compose.compose_vocab_cells(it, FLAG_VOCAB_COLUMNS),
+    'sanitize': lambda item: {'warn': [], 'hold': []},
+    'roundtrip': lambda items: compose.roundtrip_vocab(items, FLAG_VOCAB_TAB, FLAG_VOCAB_COLUMNS),
+}
+SPECS = {'donor': DONOR_SPEC, 'committee': COMMITTEE_SPEC,
+         'industry_vocab': INDUSTRY_VOCAB_SPEC, 'flag_vocab': FLAG_VOCAB_SPEC}
 
 
 # ============================================================
@@ -164,7 +194,7 @@ def _candidate_cols(item: dict, spec: dict) -> list:
 
 
 def _rec(item, spec, status, fresh, san, cells=None, changed=None, reason=''):
-    return {'id': item[spec['key']], 'kind': spec['kind'], 'status': status, 'before': fresh,
+    return {'id': spec['key_of'](item), 'kind': spec['kind'], 'status': status, 'before': fresh,
             'cells': cells or {}, 'changed': changed if changed is not None else {},
             'warn': san['warn'], 'hold': san['hold'], 'reason': reason}
 
@@ -178,10 +208,9 @@ def build_plan(batch: list, live: dict, spec: dict = DONOR_SPEC) -> dict:
     (snapshot = live row captured when the curator staged; None if absent then).
     Generic over `spec` — DONOR_SPEC or COMMITTEE_SPEC.
     """
-    key = spec['key']
     writable, held, rt_items = [], [], []
     for item in batch:
-        k = item[key]
+        k = spec['key_of'](item)
         san = spec['sanitize'](item)
         fresh = live.get(k)
         snap = item.get('snapshot')
@@ -190,6 +219,14 @@ def build_plan(batch: list, live: dict, spec: dict = DONOR_SPEC) -> dict:
         if san['hold']:
             held.append(_rec(item, spec, 'HELD', fresh, san,
                              reason='source_url contains ; or | — edit the URL before writing'))
+            continue
+
+        # collision guard (vocab is ADD-only): an existing key blocks — never a
+        # silent upsert; an "update" to a vocab row would be a rename/recolor (out
+        # of scope). This is also H5's idempotency: re-adding the same key is held.
+        if spec.get('add_only') and fresh is not None:
+            held.append(_rec(item, spec, 'COLLISION', fresh, san,
+                             reason=f"'{k}' already exists — use it, or pick a different label"))
             continue
 
         merged = spec['merge'](item, fresh)

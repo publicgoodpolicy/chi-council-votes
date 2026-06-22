@@ -314,6 +314,8 @@ function donorEditor(r){
       <button class="act accept" onclick="saveDonorEdit('${esc(r.donor_id)}')">Stage these</button>
       <button class="act" onclick="editor.openEdit(null)">Cancel</button>
     </div>
+    ${vocabIndustryFormHTML()}
+    ${vocabFlagFormHTML()}
   </div>`;
 }
 function saveDonorEdit(id){
@@ -338,7 +340,7 @@ function committeeRow(r,i){
       <div class="ed-actions">
         <button class="act accept" onclick="saveCommittee('${esc(r.committee_id)}')">Stage these</button>
         <button class="act" onclick="editor.openEdit(null)">Cancel</button>
-      </div></div>` : '';
+      </div>${vocabIndustryFormHTML()}</div>` : '';
   return `<div class="row${staged?' staged':''}">
     <div class="rank">${i+1}</div>
     <div>
@@ -359,6 +361,68 @@ function committeeRow(r,i){
 function saveCommittee(id){
   const tags=Array.from(document.getElementById('c-tags').selectedOptions).map(o=>o.value);
   stageCommittee(id, tags);
+}
+
+// ============================================================
+// VOCAB-ADD (H5) — inline "+ new industry tag / flag type". ADD only.
+// key = slug(label) (mirrors compose.slug); color from the house palette only;
+// severity from the live set. Goes through the same guarded write harness; the
+// collision guard (server, fresh-read) forbids existing keys.
+// ============================================================
+const PALETTE=[['teal','#044147'],['sage','#508F88'],['tan','#EBDAC6'],['cream','#F6EFE9'],['ink','#342828']];
+function jsSlug(s){ return (s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
+function vocabIndustryFormHTML(){
+  return `<div class="editor" style="background:#fff;border-style:dashed" id="v-ind-form">
+    <label>+ new industry tag (vocab-add)</label>
+    <div class="grid2">
+      <div><input id="v-ind-label" placeholder="label, e.g. Ride-share" oninput="var s=document.getElementById('v-ind-slug');if(s)s.textContent=jsSlug(this.value)||'…'"></div>
+      <div><select id="v-ind-color">${PALETTE.map(([n,h])=>`<option value="${h}">${n} (${h})</option>`).join('')}</select></div>
+    </div>
+    <div class="meta-line">key: <code id="v-ind-slug">…</code> · color from house palette only (keeps By-Industry on-system)</div>
+    <div class="ed-actions"><button class="act accept" onclick="addVocabIndustry()">Add industry tag</button></div>
+    <div id="v-ind-out"></div></div>`;
+}
+function vocabFlagFormHTML(){
+  const sev=(state.vocab.severities||[]);
+  return `<div class="editor" style="background:#fff;border-style:dashed" id="v-flag-form">
+    <label>+ new flag type (vocab-add)</label>
+    <div class="grid2">
+      <div><input id="v-flag-label" placeholder="label, e.g. No-bid contractor" oninput="var s=document.getElementById('v-flag-slug');if(s)s.textContent=jsSlug(this.value)||'…'"></div>
+      <div><select id="v-flag-sev">${sev.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join('')}</select></div>
+    </div>
+    <div class="meta-line">key: <code id="v-flag-slug">…</code> · severity from the live set</div>
+    <div class="ed-actions"><button class="act accept" onclick="addVocabFlag()">Add flag type</button></div>
+    <div id="v-flag-out"></div></div>`;
+}
+function vocabBlastRadiusHTML(){
+  return `<div class="meta-line" style="color:var(--muted)">New vocab affects By-Industry in <b>both</b> tools on their next build (council build_all.sh; the elections sequence).</div>`;
+}
+async function addVocab(kind, item, key, listName, entry, outId){
+  const out=document.getElementById(outId);
+  if((state.vocab[listName]||[]).some(x=>x.key===key)){
+    out.innerHTML=`<div class="hint" style="border-color:var(--opp)">'${esc(key)}' already exists — use it, or pick a different label.</div>`; return;
+  }
+  out.innerHTML=`<div class="note-banner">Adding (guarded write to the vocab tab)…</div>`;
+  const res=await postJSON(WRITE,{batch:[item]});
+  const plan=(res.plans||{})[kind]||{};
+  if((plan.held||[]).length){ out.innerHTML=`<div class="hint" style="border-color:var(--opp)">${esc(plan.held[0].reason)}</div>`; return; }
+  const wrote=(res.results||{})[kind]||[];
+  if(res.mode==='LIVE-WRITE' && wrote.length){
+    // immediately selectable — refresh the vocab source from the just-written row
+    state.vocab[listName]=[...(state.vocab[listName]||[]), entry].sort((a,b)=>a.label.toLowerCase()<b.label.toLowerCase()?-1:1);
+    out.innerHTML=`<div class="hint" style="border-color:var(--sage)">added <b>${esc(key)}</b> — now selectable in the dropdowns above.</div>`+vocabBlastRadiusHTML();
+    render();
+  } else { out.innerHTML=`<div class="err">${esc(res.error||'add failed')}</div>`; }
+}
+function addVocabIndustry(){
+  const label=document.getElementById('v-ind-label').value, color=document.getElementById('v-ind-color').value;
+  const key=jsSlug(label); if(!key) return Promise.resolve();
+  return addVocab('industry_vocab', {kind:'industry_vocab',label,color}, key, 'industries', {key,label}, 'v-ind-out');
+}
+function addVocabFlag(){
+  const label=document.getElementById('v-flag-label').value, severity=document.getElementById('v-flag-sev').value;
+  const key=jsSlug(label); if(!key) return Promise.resolve();
+  return addVocab('flag_vocab', {kind:'flag_vocab',label,severity}, key, 'flags', {key,label}, 'v-flag-out');
 }
 
 // ---- diff cell rendering ----
@@ -533,6 +597,34 @@ fetch(API).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(
 // buttons call, then opens the review/diff view. Never runs without the hash.
 // ============================================================
 async function maybeSelftest(){
+  // #vocabform (Stage 1, no write) — open a donor editor so the vocab-add forms
+  // render; the harness inspects palette/severity/slug structure.
+  if(location.hash==='#vocabform'){
+    const d=state.data.donors.find(x=>x.suggested_industry)||state.data.donors[0];
+    setView('donors'); editor.openEdit('donor:'+d.donor_id);
+    const m=document.createElement('div'); m.id='vocabform-done'; m.style.display='none';
+    m.textContent=d.donor_id; document.body.appendChild(m); return;
+  }
+  // #vocabadd (Stage 2) — real add of one industry + one flag, then prove the new
+  // keys are immediately selectable in a donor AND a committee dropdown.
+  if(location.hash==='#vocabadd'){
+    const d=state.data.donors[0], c=state.data.committees[0];
+    setView('donors'); editor.openEdit('donor:'+d.donor_id);
+    document.getElementById('v-ind-label').value='Ride Share H5';
+    document.getElementById('v-ind-color').value='#508F88';
+    await addVocabIndustry();
+    document.getElementById('v-flag-label').value='No Bid Contractor H5';
+    await addVocabFlag();
+    const indKey=jsSlug('Ride Share H5'), flagKey=jsSlug('No Bid Contractor H5');
+    // donor dropdown now includes the new industry?
+    editor.openEdit('donor:'+d.donor_id);
+    const donorHas = !!document.querySelector(`#f-addl option[value="${indKey}"]`) && !!document.querySelector(`#f-flagtype option[value="${flagKey}"]`);
+    // committee dropdown now includes the new industry?
+    setView('committees'); editor.openEdit('committee:'+c.committee_id);
+    const cmteHas = !!document.querySelector(`#c-tags option[value="${indKey}"]`);
+    const m=document.createElement('div'); m.id='vocabadd-done'; m.style.display='none';
+    m.textContent=JSON.stringify({indKey,flagKey,donorHas,cmteHas}); document.body.appendChild(m); return;
+  }
   // #confirmtest — real post-write proof for Stage 4: stage ONE new donor, open
   // review, load live, and CONFIRM (a real write) so the §5.5 propagation prompt
   // renders. Guarded; never runs without the hash.

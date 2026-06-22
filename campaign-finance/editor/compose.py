@@ -25,11 +25,13 @@ from pathlib import Path
 # Pure parsers live in sheets-sync/sync_overrides.py — import them, don't copy.
 SHEETS = Path(__file__).resolve().parent.parent / 'sheets-sync'
 sys.path.insert(0, str(SHEETS))
+import re                                          # noqa: E402
 from sync_overrides import (                       # noqa: E402 (path set above)
     parse_list_cell,
     parse_flag_cell,
     read_donor_overrides,
     read_committee_tags,
+    read_vocab,
 )
 
 # Stamp distinct from ingest's 'auto-suggest', so a human-applied classification
@@ -40,6 +42,15 @@ EDITOR_STAMP = 'editor-ui'
 DONOR_COLUMNS = ['donor_id', 'primary_industry', 'additional_industries',
                  'flags', 'notes', 'last_edited_by']
 COMMITTEE_COLUMNS = ['committee_id', 'committee_name', 'industry_tags']
+INDUSTRY_VOCAB_COLUMNS = ['key', 'label', 'color']
+FLAG_VOCAB_COLUMNS = ['key', 'label', 'severity']
+
+
+def slug(label: str) -> str:
+    """Vocab key from a label — the SAME normalization ingest.py.slug uses
+    (lowercase, non-alphanumeric runs -> '-', trimmed), so a key composed here
+    matches the rest of the vocab (e.g. 'Real Estate' -> 'real-estate')."""
+    return re.sub(r'[^a-z0-9]+', '-', (label or '').lower()).strip('-')
 
 
 # ============================================================
@@ -145,6 +156,39 @@ def sanitization_notes(item: dict) -> dict:
                 rec = {'flag_index': i, 'field': field, 'typed': typed, 'stored': stored}
                 (hold if field == 'source_url' else warn).append(rec)
     return {'warn': warn, 'hold': hold}
+
+
+# ============================================================
+# VOCAB-ADD  (Industry Tags / Flag Types — ADD only, key from label)
+# ============================================================
+def compose_vocab_cells(item: dict, columns: list) -> dict:
+    """staged vocab item -> {column: cell}. key is slugified from the label; the
+    other columns (color / severity) are taken verbatim. Flat — no encoding."""
+    out = {}
+    for c in columns:
+        out[c] = slug(item.get('label', '')) if c == 'key' else (item.get(c) or '').strip()
+    return out
+
+
+def expected_vocab_entry(item: dict, columns: list) -> dict:
+    """What read_vocab(..., 'key') should yield for this item: the non-key columns
+    with non-empty values (read_vocab drops blanks)."""
+    cells = compose_vocab_cells(item, columns)
+    return {c: cells[c] for c in columns if c != 'key' and cells[c] != ''}
+
+
+def roundtrip_vocab(items: list, tab: str, columns: list, key_field: str = 'key') -> list:
+    """Compose each vocab row and read it back through sync_overrides.read_vocab —
+    the same reader the sync uses — asserting it parses to the intended entry."""
+    rows = [compose_vocab_cells(it, columns) for it in items]
+    parsed = read_vocab(_FakeSheet({tab: rows}), tab, key_field)
+    out = []
+    for it, cells in zip(items, rows):
+        got = parsed.get(cells['key'])
+        exp = expected_vocab_entry(it, columns)
+        out.append({'id': cells['key'], 'cells': cells, 'match': got == exp,
+                    'got': got, 'expected': exp})
+    return out
 
 
 # ============================================================

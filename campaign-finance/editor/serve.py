@@ -197,22 +197,27 @@ def union_committees(per_tool: dict[str, list[dict]]) -> list[dict]:
 def read_vocab(data: dict) -> dict:
     """Pull the editor's dropdown vocab from the data JSON itself — industry_tags
     and flag_types are baked there by sync_overrides, so the UI stays offline
-    (no Sheet needed). Returns {industries:[{key,label}], flags:[{key,label}]}."""
-    inds, flags = [], []
+    (no Sheet needed). Returns {industries:[{key,label}], flags:[{key,label}],
+    severities:[…]}. severities are the live distinct values (for vocab-add — read,
+    don't hardcode)."""
+    inds, flags, sev = [], [], set()
     for key, v in (data.get('industry_tags') or {}).items():
         inds.append({'key': key, 'label': (v or {}).get('label', key)})
     for key, v in (data.get('flag_types') or {}).items():
         flags.append({'key': key, 'label': (v or {}).get('label', key)})
+        s = (v or {}).get('severity')
+        if s:
+            sev.add(s)
     inds.sort(key=lambda x: x['label'].lower())
     flags.sort(key=lambda x: x['label'].lower())
-    return {'industries': inds, 'flags': flags}
+    return {'industries': inds, 'flags': flags, 'severities': sorted(sev)}
 
 
 def build_payload() -> dict:
     """Read both files and assemble the full read-only worklist payload."""
     donor_rows, committee_rows = {}, {}
     per_file_meta = {}
-    vocab_ind, vocab_flag = {}, {}
+    vocab_ind, vocab_flag, vocab_sev = {}, {}, set()
     for tool, path in DATA_FILES.items():
         if not path.exists():
             raise SystemExit(f"Data file not found: {path}")
@@ -232,6 +237,7 @@ def build_payload() -> dict:
             vocab_ind[it['key']] = it
         for it in v['flags']:
             vocab_flag[it['key']] = it
+        vocab_sev.update(v['severities'])
 
     donors = union_donors(donor_rows)
     committees = union_committees(committee_rows)
@@ -262,7 +268,8 @@ def build_payload() -> dict:
         },
     }
     vocab = {'industries': sorted(vocab_ind.values(), key=lambda x: x['label'].lower()),
-             'flags': sorted(vocab_flag.values(), key=lambda x: x['label'].lower())}
+             'flags': sorted(vocab_flag.values(), key=lambda x: x['label'].lower()),
+             'severities': sorted(vocab_sev)}
     return {'meta': meta, 'donors': donors, 'committees': committees, 'vocab': vocab}
 
 
