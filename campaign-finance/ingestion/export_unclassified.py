@@ -196,6 +196,77 @@ def worklist_id_set(data, min_amount=0.0):
 
 
 # ============================================================
+# WORKLIST (shared read model)
+# ============================================================
+def build_worklist(data, min_amount=0, dedup_ids=None):
+    """Build the enriched, dollar-sorted unclassified worklist for `data`.
+
+    Extracted verbatim from main()'s per-donor enrichment loop so the same read
+    model can back the CSV export AND the read-only editor viewer. Returns the
+    same row dicts main() writes to CSV.
+
+    dedup_ids, when given, is a set of donor_ids to exclude (e.g. council's
+    worklist membership for the election-only cut). Iteration order matches
+    data['donors'] insertion order, and the final sort is by total given
+    descending (stable — ties keep that order), so output is deterministic.
+    """
+    dedup_ids = dedup_ids or set()
+
+    non_aggregate = [(did, d) for did, d in data['donors'].items() if not did.startswith('_')]
+    unclassified = [(did, d) for did, d in non_aggregate if is_unclassified(d)]
+    if dedup_ids:
+        unclassified = [(did, d) for did, d in unclassified if did not in dedup_ids]
+
+    # Build committee_id → friendly alder name map
+    committee_to_alder = {}
+    for cid, cm in data['committees'].items():
+        name = cm.get('alder_name', '')
+        ward = cm.get('ward', '')
+        if name:
+            committee_to_alder[cid] = f"Ward {ward} — {name}"
+        elif ward:
+            committee_to_alder[cid] = f"Ward {ward}"
+        else:                                  # elections: committees have a candidate, not a ward
+            committee_to_alder[cid] = cm.get('committee_name') or cid
+
+    # Aggregate each donor's giving across all their contributions
+    enriched = []
+    for did, donor in unclassified:
+        contribs = [c for c in data['contributions'] if c.get('donor_id') == did]
+        total = sum(c.get('amount', 0) for c in contribs)
+        if total < min_amount:
+            continue
+        committee_names = sorted(set(
+            committee_to_alder.get(c['committee_id'], c['committee_id'])
+            for c in contribs
+        ))
+
+        suggested, reason = suggest_industry(donor)
+
+        enriched.append({
+            'donor_id': did,
+            'name': donor.get('name', ''),
+            'total_given': total,
+            'contribution_count': len(contribs),
+            'committees_funded': '; '.join(committee_names),
+            'occupation': donor.get('occupation', ''),
+            'employer': donor.get('employer', ''),
+            'city': donor.get('city', ''),
+            'suggested_industry': suggested or '',
+            'suggested_reason': reason or '',
+            # Empty columns for editor to fill in
+            'primary_industry': '',
+            'additional_industries': '',
+            'flags': '',
+            'notes': '',
+        })
+
+    # Sort by total given, descending — biggest money first
+    enriched.sort(key=lambda x: -x['total_given'])
+    return enriched
+
+
+# ============================================================
 # MAIN
 # ============================================================
 def main():
@@ -235,64 +306,21 @@ def main():
     # ELECTION-ONLY cut: drop donors already on the dedup file's (council's) worklist, so a
     # shared unclassified donor isn't double-surfaced (the union-aware exclusion — council's
     # worklist MEMBERSHIP, not just its donor universe).
+    dedup_ids = None
     if args.dedup_against:
         if not args.dedup_against.exists():
             raise SystemExit(f"--dedup-against file not found: {args.dedup_against}")
         council = json.load(open(args.dedup_against))
-        council_ids = worklist_id_set(council, 0.0)   # council surfaces its FULL unclassified set
+        dedup_ids = worklist_id_set(council, 0.0)   # council surfaces its FULL unclassified set
         before = len(unclassified)
-        unclassified = [(did, d) for did, d in unclassified if did not in council_ids]
+        unclassified = [(did, d) for did, d in unclassified if did not in dedup_ids]
         print(f"  Stage 3 — minus donors already on {args.dedup_against.name}'s worklist "
               f"({before - len(unclassified)} shared-unclassified removed)  ->  election-only: {len(unclassified)}")
     else:
         print(f"  Stage 3 — no --dedup-against: this IS the primary worklist for {args.data_file.name}")
 
-    # Build committee_id → friendly alder name map
-    committee_to_alder = {}
-    for cid, cm in data['committees'].items():
-        name = cm.get('alder_name', '')
-        ward = cm.get('ward', '')
-        if name:
-            committee_to_alder[cid] = f"Ward {ward} — {name}"
-        elif ward:
-            committee_to_alder[cid] = f"Ward {ward}"
-        else:                                  # elections: committees have a candidate, not a ward
-            committee_to_alder[cid] = cm.get('committee_name') or cid
-
-    # Aggregate each donor's giving across all their contributions
-    enriched = []
-    for did, donor in unclassified:
-        contribs = [c for c in data['contributions'] if c.get('donor_id') == did]
-        total = sum(c.get('amount', 0) for c in contribs)
-        if total < args.min_amount:
-            continue
-        committee_names = sorted(set(
-            committee_to_alder.get(c['committee_id'], c['committee_id'])
-            for c in contribs
-        ))
-
-        suggested, reason = suggest_industry(donor)
-
-        enriched.append({
-            'donor_id': did,
-            'name': donor.get('name', ''),
-            'total_given': total,
-            'contribution_count': len(contribs),
-            'committees_funded': '; '.join(committee_names),
-            'occupation': donor.get('occupation', ''),
-            'employer': donor.get('employer', ''),
-            'city': donor.get('city', ''),
-            'suggested_industry': suggested or '',
-            'suggested_reason': reason or '',
-            # Empty columns for editor to fill in
-            'primary_industry': '',
-            'additional_industries': '',
-            'flags': '',
-            'notes': '',
-        })
-
-    # Sort by total given, descending — biggest money first
-    enriched.sort(key=lambda x: -x['total_given'])
+    # The dollar-ranked rows themselves come from the shared read model.
+    enriched = build_worklist(data, args.min_amount, dedup_ids)
 
     if args.top:
         enriched = enriched[:args.top]
