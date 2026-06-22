@@ -83,6 +83,11 @@ def committee_worklist(data: dict) -> list[dict]:
         cid = c.get('committee_id')
         if not cid:
             continue
+        # Exclude internal union-dues transfers — not Council giving/spend; same
+        # rule as build_rollups.py / sync_overrides._contribution_totals and the
+        # donor worklist in export_unclassified.build_worklist.
+        if c.get('contribution_type') == 'IE Committee Dues Transfer':
+            continue
         received[cid] = received.get(cid, 0) + (c.get('amount', 0) or 0)
         contrib_n[cid] = contrib_n.get(cid, 0) + 1
 

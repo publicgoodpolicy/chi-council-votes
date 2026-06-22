@@ -233,6 +233,13 @@ def build_worklist(data, min_amount=0, dedup_ids=None):
     enriched = []
     for did, donor in unclassified:
         contribs = [c for c in data['contributions'] if c.get('donor_id') == did]
+        # Internal union-dues transfers fund a committee's own PAC — not giving on
+        # the Council — and every other figure in the tool excludes them. Same rule
+        # as build_rollups.py and sync_overrides._contribution_totals. Filtering here
+        # (before total/count/committees) keeps a donor's footprint internally
+        # consistent: the dollars and the count describe the same set of rows.
+        contribs = [c for c in contribs
+                    if c.get('contribution_type') != 'IE Committee Dues Transfer']
         total = sum(c.get('amount', 0) for c in contribs)
         if total < min_amount:
             continue
