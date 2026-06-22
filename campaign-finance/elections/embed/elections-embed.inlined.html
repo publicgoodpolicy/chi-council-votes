@@ -427,6 +427,17 @@
   }
   function sortCycles(arr) { return arr.slice().sort(function (a, b) { return cycleKey(a) - cycleKey(b); }); }
 
+  // Display year for one contribution row: prefer the filing date, else fall back to
+  // the cycle — reusing the same /(\d{4})/ extraction as cycleKey. Aggregate rows have
+  // date:null, so they resolve to their cycle year; render shows the bare year (never a
+  // fabricated month/day).
+  function rowYear(c) {
+    var d = /(\d{4})/.exec(String(c.date || ''));
+    if (d) return +d[1];
+    var y = /(\d{4})/.exec(String(c.cycle || ''));
+    return y ? +y[1] : null;
+  }
+
   function donorFootprint(index, parentId, win) {
     var parent = index.donors[parentId] || { id: parentId, name: parentId };
     var pr = index.parentRollup[parentId];
@@ -442,7 +453,7 @@
       if (cm.type === 'independent_expenditure' && index.office && !index.inScopeIE[cid]) continue;
       var m = by[cid];
       if (!m) {
-        m = by[cid] = { committee_id: cid, total: 0, count: 0, kind: 'other', label: cm.committee_name || cid };
+        m = by[cid] = { committee_id: cid, total: 0, count: 0, kind: 'other', label: cm.committee_name || cid, rows: [] };
         if (cm.candidate_id) {
           var cand = index.candidateById[cm.candidate_id] || {}, race = index.raceById[cand.race_id] || {};
           m.kind = 'candidate'; m.label = (cand.name || cm.candidate_id) + (race.label ? (' — ' + race.label) : '');
@@ -452,12 +463,28 @@
         }
       }
       m.total = round2(m.total + (c.amount || 0)); m.count++;
+      // X-1: itemized direct-contribution row, additive (existing fields/keys untouched).
+      // Optional flags default to false; in_kind_description / contribution_count are null
+      // unless the row carries them. Stream is direct by construction — pr.rows are
+      // contributions[] only, never IE rows (verified: no contribution carries a stance).
+      m.rows.push({
+        date: c.date || null, year: rowYear(c), amount: c.amount || 0,
+        is_self: !!c.is_self, is_loan: !!c.is_loan, is_in_kind: !!c.is_in_kind,
+        in_kind_description: c.in_kind_description || null,
+        is_aggregate: !!c.is_aggregate, contribution_count: c.contribution_count || null
+      });
       kept++;
       if (c.cycle) cyc[c.cycle] = 1;
       var eid = c.donor_id, em = entBy[eid] || (entBy[eid] = { id: eid, amount: 0, count: 0 });
       em.amount = round2(em.amount + (c.amount || 0)); em.count++;
     }
-    var committees = []; for (var k in by) if (by.hasOwnProperty(k)) committees.push(by[k]);
+    var committees = [];
+    for (var k in by) if (by.hasOwnProperty(k)) {
+      // Rows newest-first; ISO dates sort lexically = chronologically. Null-dated
+      // (aggregate) rows sort last.
+      by[k].rows.sort(function (a, b) { var da = a.date || '', db = b.date || ''; return da < db ? 1 : da > db ? -1 : 0; });
+      committees.push(by[k]);
+    }
     committees.sort(function (a, b) { return b.total - a.total; });
     var total = 0; for (var j = 0; j < committees.length; j++) total += committees[j].total;
     // Affiliated-entity breakdown (E-2): split the SAME windowed rows by the actual filer
@@ -523,16 +550,30 @@
         var m = byCand[tc] || (byCand[tc] = { candidate_id: ie.target_candidate_id || null,
           name: cand.name || ('race ' + ie.target_race_id), raceLabel: race.label || null,
           electionId: eid || null, electionLabel: elabel, support: 0, oppose: 0, total: 0, count: 0,
-          needsReview: false, methods: {} });
+          needsReview: false, methods: {}, rows: [] });
         var a = ie.amount || 0;
         if (ie.stance === 'oppose') { m.oppose = round2(m.oppose + a); oppose = round2(oppose + a); }
         else { m.support = round2(m.support + a); support = round2(support + a); }
         m.total = round2(m.total + a); m.count++;
         if (ie.needs_review) m.needsReview = true;            // 3b provenance, surfaced per line
         if (ie.match_method) m.methods[ie.match_method] = 1;
+        // X-1b: itemized IE row, additive. Attaches to THIS target×election group, so it is
+        // single-stance by construction (the target sits on one side of the for/against line).
+        // No committee-wide sort — that would interleave for/against (firewall). stance kept on
+        // the row for render coloring; never re-aggregated across targets.
+        m.rows.push({
+          date: ie.date || null, year: rowYear(ie), amount: a, stance: ie.stance || 'support',
+          target_candidate_id: ie.target_candidate_id || null, target_ward: ie.target_ward != null ? ie.target_ward : null,
+          purpose: ie.purpose || null, match_method: ie.match_method || null, needs_review: !!ie.needs_review
+        });
       }
       var targets = [];
-      for (var k in byCand) if (byCand.hasOwnProperty(k)) { var tt = byCand[k]; tt.matchMethods = Object.keys(tt.methods); delete tt.methods; targets.push(tt); }
+      for (var k in byCand) if (byCand.hasOwnProperty(k)) {
+        var tt = byCand[k]; tt.matchMethods = Object.keys(tt.methods); delete tt.methods;
+        // Rows newest-first WITHIN this target only (single-stance group); null dates last.
+        tt.rows.sort(function (a, b) { var da = a.date || '', db = b.date || ''; return da < db ? 1 : da > db ? -1 : 0; });
+        targets.push(tt);
+      }
       targets.sort(function (a, b) { return b.total - a.total; });
       var ff = spenderFunders(index, committeeKey);
       return {
@@ -988,7 +1029,12 @@
     var m = /(\d+)/.exec(r.id || '');
     return m ? parseInt(m[1], 10) : 9999;
   }
-  function spendByCandidateGrouped(index, office, cycle, win, raceFilter) {
+  // X-2: expandedId (threaded from view state) names the ONE candidate whose row is
+  // expanded to its inline funder card. Only that candidate gets the heavy detail
+  // (candidateContributors + candidateIE x2 + committeeMeta) — the exact functions raceView
+  // calls; everyone else stays figures-only. groupScale (per-group Math.max, raceView's
+  // formula) is attached so the inline card's bars fill against the candidate's own race.
+  function spendByCandidateGrouped(index, office, cycle, win, raceFilter, expandedId) {
     var offs = OFFICE_RACE_OFFICES[office] || [];
     var scoped = (index.races || []).filter(function (r) { return offs.indexOf(r.office) >= 0; });
     scoped.sort(function (a, b) { return raceOrderKey(a) - raceOrderKey(b); });
@@ -998,11 +1044,28 @@
         var cands = (index.candidatesByRace[r.id] || [])
           .filter(function (c) { return !c.vacating_for; })
           .map(function (c) {
-            return { id: c.id, name: c.name, incumbent: !!c.incumbent, hasCommittee: !!c.committee_id,
+            var entry = { id: c.id, name: c.name, incumbent: !!c.incumbent, hasCommittee: !!c.committee_id,
               figures: candidateFigures(index, c.id, cycle, win) };
+            // Lazy enrichment: ONLY the expanded candidate gets the five fields card reads.
+            if (expandedId && c.id === expandedId && c.committee_id) {
+              entry.slug = candidateSlug(c, r);
+              entry.committee = committeeMeta(index, c.id);
+              entry.contributors = candidateContributors(index, c.id, cycle, win);
+              entry.ieSupportDetail = candidateIE(index, c.id, 'support', cycle, win);
+              entry.ieOpposeDetail = candidateIE(index, c.id, 'oppose', cycle, win);
+            }
+            return entry;
           });
         cands.sort(function (a, b) { return b.figures.contributions.total - a.figures.contributions.total; });
-        return { race: { id: r.id, label: r.label, office: r.office }, candidates: cands };
+        // Per-group scale = race-wide max across these candidates' figures (raceView's formula,
+        // render.js:833-837). Drives the inline card's bar fill so a 2026 row is comparable
+        // within its own race, not against a global maximum.
+        var groupScale = 1;
+        for (var s = 0; s < cands.length; s++) {
+          var gf = cands[s].figures; if (!gf) continue;
+          groupScale = Math.max(groupScale, gf.contributions.total, gf.independentSupport, gf.independentOpposition);
+        }
+        return { race: { id: r.id, label: r.label, office: r.office }, candidates: cands, scale: groupScale };
       });
     return { groups: groups, raceOptions: scoped.map(function (r) { return { id: r.id, label: r.label }; }) };
   }
@@ -1089,10 +1152,10 @@
   // election-window-aware: `election` is 'all' (default = union of both windows),
   // '2026' (This) or '2024' (Last). The resolved window drives every figure + the
   // drill-downs (the spend container carries it so spender modals stay scoped).
-  function spendSubtab(index, office, tab, cycle, election, filters, raceFilter) {
+  function spendSubtab(index, office, tab, cycle, election, filters, raceFilter, expandedId) {
     var sel = election || 'all', win = spendWin(office, sel), filter = spendElectionFilter(office, sel);
     if (tab === 'candidates') {
-      var rf = raceFilter || 'all', g = spendByCandidateGrouped(index, office, cycle, win, rf);
+      var rf = raceFilter || 'all', g = spendByCandidateGrouped(index, office, cycle, win, rf, expandedId);
       return { tab: tab, election: sel, filter: filter, win: win, groups: g.groups, raceOptions: g.raceOptions, raceFilter: rf };
     }
     if (tab === 'industries') return { tab: tab, election: sel, filter: filter, win: win, industries: industryTotals(index, office, cycle, win) };
@@ -1307,6 +1370,32 @@
       '.ipg-elect button.funder-row:hover{background:#F2E8DC;}.ipg-elect button.funder-row:focus-visible{outline:2px solid var(--sage);outline-offset:1px;}' +
       '.ipg-elect .crow.plain{cursor:default;}' +
       '.ipg-elect .who .sub{display:block;font-size:11px;font-weight:400;color:var(--ink-soft);margin-top:1px;}' +
+      // X-1 itemized direct-contribution rows: sage left-border block, indented under each
+      // committee button. Chips use neutral tokens only (tan/cream/teal) — IE for/against
+      // colors (sage swatch / coral) never appear as a row-level stance signal here.
+      '.ipg-elect .ipg-items{margin:0 0 6px 4px;border-left:2px solid var(--sage);padding:3px 0 3px 12px;}' +
+      '.ipg-elect .ipg-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--line);font-size:12px;}' +
+      '.ipg-elect .ipg-item:last-child{border-bottom:0;}' +
+      '.ipg-elect .ipg-item .ileft{display:flex;flex-wrap:wrap;align-items:center;gap:6px;}' +
+      '.ipg-elect .ipg-item .idate{color:var(--ink-soft);white-space:nowrap;font-variant-numeric:tabular-nums;}' +
+      '.ipg-elect .ipg-item .iamt{font-weight:500;color:var(--ink);white-space:nowrap;}' +
+      '.ipg-elect .ichip{font-size:10px;padding:1px 7px;border-radius:12px;background:var(--tan);color:var(--ink-soft);white-space:nowrap;}' +
+      '.ipg-elect .ichip.self{background:var(--teal);color:#fff;}' +
+      '.ipg-elect .ichip.loan{background:var(--tan);color:var(--ink);font-weight:500;}' +
+      '.ipg-elect .ichip.inkind{background:var(--cream);color:var(--ink-soft);border:1px solid var(--line);}' +
+      '.ipg-elect .ichip.agg{background:var(--cream);color:var(--ink-soft);border:1px solid var(--line);}' +
+      // X-1b itemized IE rows: nested under each target .crow, the WHOLE block one stance.
+      // Left border + amount color encode the for/against side (support green / oppose coral),
+      // matching the target-level bits above. Support and oppose never share a block.
+      '.ipg-elect .ie-items{margin:2px 0 8px 6px;padding:3px 0 3px 12px;border-left:2px solid var(--line);}' +
+      '.ipg-elect .ie-items.support{border-left-color:var(--sage);}.ipg-elect .ie-items.oppose{border-left-color:var(--coral);}' +
+      '.ipg-elect .ie-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--line);font-size:12px;}' +
+      '.ipg-elect .ie-item:last-child{border-bottom:0;}' +
+      '.ipg-elect .ie-item .ileft{display:flex;flex-wrap:wrap;align-items:center;gap:6px;}' +
+      '.ipg-elect .ie-item .idate{color:var(--ink-soft);white-space:nowrap;font-variant-numeric:tabular-nums;}' +
+      '.ipg-elect .ie-item .ipurpose{color:var(--ink-soft);}' +
+      '.ipg-elect .ie-item .iamt{font-weight:500;white-space:nowrap;}' +
+      '.ipg-elect .ie-items.support .iamt{color:var(--sage);}.ipg-elect .ie-items.oppose .iamt{color:var(--coral);}' +
       '.ipg-elect .tagchip.ind{background:var(--tan);color:var(--ink-soft);}.ipg-elect .tagchip.flag{background:#F4E3DC;color:var(--coral);}' +
       '.ipg-elect .ipg-modal-overlay{position:fixed;inset:0;background:rgba(52,40,40,.55);display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px;z-index:99999;overflow:auto;}' +
       '.ipg-elect .ipg-modal{background:var(--paper);border-radius:14px;max-width:560px;width:100%;padding:24px 26px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3);}' +
@@ -1360,6 +1449,14 @@
       '.ipg-elect .subtab:focus-visible{outline:2px solid var(--sage);outline-offset:2px;}' +
       '.ipg-elect .srow{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:11px 15px;margin:0 0 8px;}' +
       '.ipg-elect .sname{font-size:14px;font-weight:500;}' +
+      // X-2 grouped-row expand affordance: a full-width button that looks like the .sname block
+      // (reset button chrome; .sname provides size/weight). Caret rotates when open, matching the
+      // other disclosures. The inline card is a sibling block under the row.
+      '.ipg-elect button.srow-expand{display:block;width:100%;text-align:left;appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);color:inherit;padding:0;}' +
+      '.ipg-elect button.srow-expand:focus-visible{outline:2px solid var(--sage);outline-offset:2px;border-radius:4px;}' +
+      '.ipg-elect button.srow-expand[aria-expanded="true"] .caret{transform:rotate(90deg);}' +
+      '.ipg-elect .srow-card{margin:-2px 0 10px;}' +
+      '.ipg-elect .srow-card .card{margin:0;}' +
       '.ipg-elect .figrow{margin-top:6px;display:flex;flex-wrap:wrap;gap:8px;}' +
       '.ipg-elect .mini{font-size:12px;font-weight:500;border-radius:6px;padding:2px 8px;}' +
       '.ipg-elect .mini.c{background:#E5EFE9;color:var(--teal);}.ipg-elect .mini.s{background:#E4EEEB;color:var(--sage);}.ipg-elect .mini.o{background:#F4E3DC;color:var(--coral);}' +
@@ -1540,6 +1637,27 @@
       'Click a committee to see who funds it.</p>' + committees + '</div></div>';
   }
 
+  // X-1: one itemized direct-contribution row. Date is formatted when present; a
+  // null-dated (aggregate) row shows ONLY its year — never a fabricated month/day,
+  // which would assert precision the filing doesn't have.
+  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function fmtRowDate(r) {
+    if (!r.date) return r.year ? String(r.year) : '—';
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(r.date);
+    if (!m) return r.year ? String(r.year) : esc(r.date);
+    return (MONTHS[(+m[2]) - 1] || '') + ' ' + (+m[3]) + ', ' + m[1];
+  }
+  // Per-row label chips — DIRECT-stream vocabulary only. No stance, no support/oppose,
+  // no IE framing (these rows are direct contributions regardless of recipient kind).
+  function itemChips(r) {
+    var out = '';
+    if (r.is_self) out += '<span class="ichip self">self-funding</span>';
+    if (r.is_loan) out += '<span class="ichip loan">loan · not a gift</span>';
+    if (r.is_in_kind) out += '<span class="ichip inkind">in-kind' + (r.in_kind_description ? ' · ' + esc(r.in_kind_description) : '') + '</span>';
+    if (r.is_aggregate) out += '<span class="ichip agg">aggregate of ' + esc(String(r.contribution_count || '?')) + '</span>';
+    return out;
+  }
+
   // Tier 3 — donor-footprint modal (app mounts/unmounts it). Election-scoped.
   // Committee rows show the committee NAME, never the bare id: candidate
   // committees use their real name; placeholder IE PACs use the identity
@@ -1553,9 +1671,19 @@
       } else if (x.kind === 'candidate') {
         who = esc(x.label) + ' <span class="kind cand">candidate</span>';
       } else { who = esc(x.label) + ' <span class="kind">committee</span>'; }
-      return '<button class="crow funder-row" type="button" data-committee="' + esc(x.committee_id) + '">' +
+      // Committee button — UNCHANGED. It alone carries data-committee -> modalNav -> openCommittee.
+      var btn = '<button class="crow funder-row" type="button" data-committee="' + esc(x.committee_id) + '">' +
         '<div class="who">' + who + '</div>' +
         '<div class="amt">' + money(x.total) + ' <span class="n">· ' + plural(x.count, 'gift', 'gifts') + '</span></div></button>';
+      // X-1: itemized rows render as a SIBLING after the button, never a child. They carry
+      // NO data-committee, so a click on a row can never enter the committee-navigate path.
+      var items = (x.rows || []).map(function (r) {
+        return '<div class="ipg-item">' +
+          '<div class="ileft"><span class="idate">' + esc(fmtRowDate(r)) + '</span>' +
+          '<span class="ichips">' + itemChips(r) + '</span></div>' +
+          '<div class="iamt">' + money(r.amount) + '</div></div>';
+      }).join('');
+      return btn + (items ? '<div class="ipg-items">' + items + '</div>' : '');
     }).join('') || '<p class="contrib-note">No election giving recorded.</p>';
     // Four stat cards (E-2/E-3) + chronological cycle line (pre-YYYY first).
     var stat = function (num, lab) { return '<div class="elect-stat"><div class="num">' + num + '</div><div class="lab">' + lab + '</div></div>'; };
@@ -1594,7 +1722,9 @@
       'not-yet-connected view.</p>' +
       statgrid + cycLine + rc +
       '<div class="modal-summary">' + money(fp.total) + ' across ' + plural(fp.count, 'recipient', 'recipients') + '</div>' +
-      rows + '</div></div>';
+      rows +
+      '<p class="contrib-note">Direct contributions only — independent spending isn\'t shown here.</p>' +
+      '</div></div>';
   }
 
   // Committee-profile modal — bidirectional with the donor footprint. Same modal
@@ -1630,9 +1760,23 @@
         if (t.oppose) bits.push('<span style="color:var(--coral)">' + money(t.oppose) + ' against</span>');
         var lab = t.electionLabel || t.raceLabel;
         var rev = t.needsReview ? ' <span class="tagchip flag" title="match: ' + esc((t.matchMethods || []).join(', ')) + '">⚑ needs review</span>' : '';
+        // X-1b: itemized IE rows nest as a SIBLING after this target's .crow (never a child;
+        // no navigation data-attr). The whole block is ONE stance — the target sits on one side
+        // of the for/against line — so it gets that stance's color. No committee-wide sort:
+        // rows are ordered within this single-stance group only, never interleaved with the
+        // other stance (the firewall the X-1b probe identified).
+        var st = (t.rows && t.rows.length) ? t.rows[0].stance : (t.oppose > 0 ? 'oppose' : 'support');
+        var items = (t.rows || []).map(function (r) {
+          var rrev = r.needs_review ? ' <span class="tagchip flag" title="match: ' + esc(r.match_method || '') + '">⚑ needs review</span>' : '';
+          return '<div class="ie-item">' +
+            '<div class="ileft"><span class="idate">' + esc(fmtRowDate(r)) + '</span>' +
+            (r.purpose ? '<span class="ipurpose">· ' + esc(r.purpose) + '</span>' : '') + rrev + '</div>' +
+            '<div class="iamt">' + money(r.amount) + '</div></div>';
+        }).join('');
         return '<div class="crow"><div class="who">' + esc(t.name) +
           (lab ? ' <span class="muted">· ' + esc(lab) + '</span>' : '') + rev + '</div>' +
-          '<div class="amt">' + bits.join(' · ') + '</div></div>';
+          '<div class="amt">' + bits.join(' · ') + '</div></div>' +
+          (items ? '<div class="ie-items ' + st + '">' + items + '</div>' : '');
       }).join('') : '<p class="contrib-note">No itemized spending recorded.</p>');
     } else {
       head = '<div class="modal-kicker">Campaign committee · this election</div>' +
@@ -1655,12 +1799,12 @@
 
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
 
-  function card(c, scale) {
+  function card(c, scale, idPrefix) {
     var f = c.figures;
     var mostlySelf = f.contributions.total > 0 && (f.contributions.selfFunded / f.contributions.total) >= 0.5;
     var chips = (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') +
       (mostlySelf ? '<span class="chip-self">Mostly self-funded</span>' : '');
-    var base = 'd-' + esc(c.slug);
+    var base = (idPrefix || 'd-') + esc(c.slug);   // raceView passes nothing -> 'd-' (byte-identical); grouped passes 'g-'
     var hasSup = f.independentSupport > 0, hasOpp = f.independentOpposition > 0;
     var contribBar = bar('From contributors',
       [{ cls: 'third', v: f.contributions.thirdParty }, { cls: 'self', v: f.contributions.selfFunded }],
@@ -2104,11 +2248,28 @@
           if (g.candidates.length) {
             rows = g.candidates.map(function (c) {
               var f = c.figures;
-              return '<div class="srow"><div class="sname">' + esc(c.name) +
+              // X-2: the enriched candidate is by construction the single expanded one
+              // (Stage 3 enriches exactly the id === expandedCandidateId), so slug presence
+              // is the expand signal. threeFig stays visible in BOTH states (display-only).
+              var isExpanded = !!c.slug;
+              var inner = (c.hasCommittee ? '<span class="caret" aria-hidden="true">▸</span> ' : '') + esc(c.name) +
                 (c.incumbent ? ' <span class="chip-inc">Incumbent</span>' : '') +
                 (c.hasCommittee ? '' : ' <span class="badge">no committee registered</span>') +
                 '<div class="rankfig">' + money(f.contributions.total) + ' <span class="n">raised</span></div>' +
-                '<div class="figrow">' + threeFig(f) + '</div></div></div>';
+                '<div class="figrow">' + threeFig(f) + '</div>';
+              // Expand affordance: its OWN element carrying ONLY data-expand-cand + aria-expanded.
+              // No aria-controls (that's a dispatch attr caught by an earlier handler; the expand
+              // is redraw-driven, not the in-place .open toggle). Shown only when there's a card to
+              // open (hasCommittee); committee-less candidates stay flat, exactly as raceView.
+              var head = c.hasCommittee
+                ? '<button class="sname srow-expand" type="button" data-expand-cand="' + esc(c.id) +
+                    '" aria-expanded="' + (isExpanded ? 'true' : 'false') + '">' + inner + '</button>'
+                : '<div class="sname">' + inner + '</div>';
+              // Inline card is a SIBLING AFTER the .srow (never a child of the affordance) — the
+              // structural collision guarantee from Stage 2's trace. Rendered VERBATIM via card()
+              // with the 'g-' prefix; no bar/panel markup is reproduced here.
+              var cardHtml = isExpanded ? '<div class="srow-card">' + card(c, g.scale, 'g-') + '</div>' : '';
+              return '<div class="srow">' + head + '</div>' + cardHtml;
             }).join('');
           } else {
             rows = '<div class="srow empty"><div class="sname">No finance reported yet.</div></div>';
@@ -2297,7 +2458,8 @@
     IDX = index;
     var cycles = ElectData.availableCycles(index);
     var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors', spendElection: 'all',
-      donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, raceFilter: 'all', electionView: null };
+      donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, raceFilter: 'all', electionView: null,
+      expandedCandidateId: null };   // X-2: the ONE grouped row expanded to its inline funder card (accordion-of-one)
     var browseSearchTimer = null;
     state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, office));
 
@@ -2305,7 +2467,7 @@
       var omVM = ElectData.viewModels.officeRaces(index, state.office);
       var raceId = index.raceBySlug[state.activeSlug];
       var rv = raceId ? ElectData.viewModels.raceView(index, raceId, state.cycle) : null;
-      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.spendElection, state.donorFilters, state.raceFilter) : null;
+      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.spendElection, state.donorFilters, state.raceFilter, state.expandedCandidateId) : null;
       root.innerHTML = ElectRender.renderPage({
         office: state.office, topView: state.topView, cycles: cycles, cycle: state.cycle,
         officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend,
@@ -2324,6 +2486,19 @@
         var pid = dz.getAttribute('aria-controls'), panel = pid && document.getElementById(pid);
         if (panel) { var open = panel.classList.toggle('open'); dz.setAttribute('aria-expanded', open ? 'true' : 'false'); }
         return;
+      }
+      // X-2: E-7 grouped row -> inline funder card. MUST sit after modalNav and the
+      // aria-controls toggle: a click on a funder row (data-funder -> modalNav, line above)
+      // or an internal disclosure (aria-controls) INSIDE an already-expanded card is caught
+      // and returned by those handlers first, so it never collapses the card. This branch
+      // fires only when neither matched. The affordance is its own element carrying ONLY
+      // data-expand-cand (no data-slug/funder/committee/aria-controls), so one click never
+      // satisfies two dispatch paths. Accordion-of-one: re-clicking the open row toggles off.
+      var xc = cl('[data-expand-cand]');
+      if (xc) {
+        var cid = xc.getAttribute('data-expand-cand');
+        state.expandedCandidateId = (state.expandedCandidateId === cid) ? null : cid;
+        draw(); return;
       }
       var v = cl('[data-view]');
       if (v) { state.topView = v.getAttribute('data-view'); draw(); return; }

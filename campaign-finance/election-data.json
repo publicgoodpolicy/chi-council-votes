@@ -2597,7 +2597,9 @@
       "office": "school_board_president",
       "district": null,
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-deberry-sb-d03": {
@@ -2618,7 +2620,9 @@
       "office": "school_board_member",
       "district": "District 2A",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-biggs-sb-president": {
@@ -2639,7 +2643,9 @@
       "office": "school_board_president",
       "district": null,
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-leon-sb-d03": {
@@ -2660,7 +2666,9 @@
       "office": "school_board_member",
       "district": "District 2A",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-revuluri-sb-president": {
@@ -2681,7 +2689,9 @@
       "office": "school_board_president",
       "district": null,
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-peralta-sb-d02": {
@@ -2723,7 +2733,9 @@
       "office": "school_board_president",
       "district": null,
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "ie-committee-22729": {
@@ -2759,7 +2771,9 @@
       "sbe_committee_id": "26023",
       "ward": null,
       "alder_name": null,
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null,
       "data_quality": "INGESTED_IE"
     },
@@ -2770,7 +2784,9 @@
       "sbe_committee_id": "539",
       "ward": null,
       "alder_name": null,
-      "industry_tags": [],
+      "industry_tags": [
+        "lobby-business"
+      ],
       "donor_id": null,
       "data_quality": "INGESTED_IE"
     },
@@ -2883,7 +2899,9 @@
       "sbe_committee_id": "19830",
       "ward": null,
       "alder_name": null,
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": "friends-of-nicholas-sposato",
       "data_quality": "INGESTED_IE"
     },
@@ -3015,7 +3033,9 @@
       "office": "school_board_member",
       "district": "District 3B",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-dones-sb-d06": {
@@ -3036,7 +3056,9 @@
       "office": "school_board_member",
       "district": "District 3B",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-brown-sb-d09": {
@@ -3057,7 +3079,9 @@
       "office": "school_board_member",
       "district": "District 5A",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-rosenfeld-sb-d08": {
@@ -3078,7 +3102,9 @@
       "office": "school_board_member",
       "district": "District 4B",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-zaccor-sb-d07": {
@@ -3099,7 +3125,9 @@
       "office": "school_board_member",
       "district": "District 4A",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-sherratt-sb-d07": {
@@ -3162,7 +3190,9 @@
       "office": "school_board_member",
       "district": "District 6A",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-anderson-sb-d11": {
@@ -3225,7 +3255,9 @@
       "office": "school_board_member",
       "district": "District 10A",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-ayala-sb-d13": {
@@ -3267,7 +3299,9 @@
       "office": "school_board_member",
       "district": "District 9B",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-lopez-sb-d14": {
@@ -3288,7 +3322,9 @@
       "office": "school_board_member",
       "district": "District 7B",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-gutierrez-sb-d15": {
@@ -3309,7 +3345,9 @@
       "office": "school_board_member",
       "district": "District 8A",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": "friends-for-angel-gutierrez"
     },
     "cand-gonzalez-sb-d16": {
@@ -12631,12 +12669,15 @@
       "id": "chicago-association-of-realtors",
       "name": "Chicago Association of Realtors",
       "type": "Other",
-      "industries": [],
+      "industries": [
+        "real-estate"
+      ],
       "flags": [],
       "notes": null,
       "city": null,
       "parent_id": "chicago-association-of-realtors",
       "committee_id": null,
+      "_last_edited_by": "editor-ui",
       "cluster_id": "rollup-493",
       "cluster_name": "Chicago Association of Realtors",
       "cluster_role": "parent",
@@ -13410,12 +13451,15 @@
       "id": "national-association-of-realtors",
       "name": "National Association of REALTORS",
       "type": "Other",
-      "industries": [],
+      "industries": [
+        "real-estate"
+      ],
       "flags": [],
       "notes": null,
       "city": null,
       "parent_id": "national-association-of-realtors",
-      "committee_id": null
+      "committee_id": null,
+      "_last_edited_by": "editor-ui"
     },
     "alliance-co": {
       "id": "alliance-co",
@@ -14508,12 +14552,15 @@
       "id": "chicago-teachers-union",
       "name": "Chicago Teachers Union",
       "type": "Other",
-      "industries": [],
+      "industries": [
+        "labor-teachers"
+      ],
       "flags": [],
       "notes": null,
       "city": null,
       "parent_id": "chicago-teachers-union",
       "committee_id": null,
+      "_last_edited_by": "editor-ui",
       "cluster_id": "rollup-477",
       "cluster_name": "Chicago Teachers Union",
       "cluster_role": "parent",
@@ -17117,12 +17164,15 @@
       "id": "illinois-association-of-realtors",
       "name": "Illinois Association of REALTORS",
       "type": "Other",
-      "industries": [],
+      "industries": [
+        "real-estate"
+      ],
       "flags": [],
       "notes": null,
       "city": null,
       "parent_id": "illinois-association-of-realtors",
       "committee_id": null,
+      "_last_edited_by": "editor-ui",
       "cluster_id": "rollup-485",
       "cluster_name": "Realtor Political Action Committee",
       "cluster_role": "parent",
@@ -22365,12 +22415,15 @@
       "id": "illinois-realtors",
       "name": "Illinois REALTORS",
       "type": "Other",
-      "industries": [],
+      "industries": [
+        "real-estate"
+      ],
       "flags": [],
       "notes": null,
       "city": null,
       "parent_id": "illinois-association-of-realtors",
       "committee_id": null,
+      "_last_edited_by": "editor-ui",
       "cluster_id": "rollup-485",
       "cluster_name": "Realtor Political Action Committee",
       "cluster_role": "alt-name",
@@ -156362,7 +156415,9 @@
       "chicago-teachers-union": {
         "name": "Chicago Teachers Union",
         "type": "Other",
-        "industries": [],
+        "industries": [
+          "labor-teachers"
+        ],
         "direct": 1742543.29,
         "independent": 0.0,
         "total": 1742543.29,
@@ -175728,7 +175783,9 @@
       "chicago-association-of-realtors": {
         "name": "Chicago Association of Realtors",
         "type": "Other",
-        "industries": [],
+        "industries": [
+          "real-estate"
+        ],
         "direct": 831358.87,
         "independent": 0.0,
         "total": 831358.87,
@@ -177234,7 +177291,9 @@
       "national-association-of-realtors": {
         "name": "National Association of REALTORS",
         "type": "Other",
-        "industries": [],
+        "industries": [
+          "real-estate"
+        ],
         "direct": 3011482.21,
         "independent": 0.0,
         "total": 3011482.21,
@@ -184258,7 +184317,9 @@
       "illinois-association-of-realtors": {
         "name": "Realtor Political Action Committee",
         "type": "Other",
-        "industries": [],
+        "industries": [
+          "real-estate"
+        ],
         "direct": 4484503.52,
         "independent": 0.0,
         "total": 4484503.52,
@@ -226132,23 +226193,23 @@
       },
       "real-estate": {
         "all": {
-          "direct": 1239586.2,
+          "direct": 9529930.8,
           "independent": 213685.02
         },
         "by_cycle": {
           "2027": {
-            "direct": 970536.2
+            "direct": 1890303.93
           },
           "2015": {
-            "direct": 250000.0,
+            "direct": 806612.62,
             "independent": 39315.9
           },
           "2019": {
-            "direct": 8000.0,
+            "direct": 2450373.39,
             "independent": 21734.0
           },
           "2023": {
-            "direct": 11050.0,
+            "direct": 4382640.86,
             "independent": 152635.12
           }
         }
@@ -226192,7 +226253,7 @@
       },
       "labor-teachers": {
         "all": {
-          "direct": 2080778.5,
+          "direct": 2379100.5,
           "independent": 31499.88
         },
         "by_cycle": {
@@ -226200,7 +226261,7 @@
             "direct": 1438578.5
           },
           "2015": {
-            "direct": 256200.0,
+            "direct": 554522.0,
             "independent": 31499.88
           },
           "2019": {
@@ -226239,17 +226300,20 @@
       },
       "candidate-account": {
         "all": {
-          "direct": 135348.42
+          "direct": 135348.42,
+          "independent": 3647.16
         },
         "by_cycle": {
           "2015": {
-            "direct": 9578.95
+            "direct": 9578.95,
+            "independent": 3064.89
           },
           "2019": {
             "direct": 5941.66
           },
           "2023": {
-            "direct": 119827.81
+            "direct": 119827.81,
+            "independent": 582.27
           }
         }
       },
@@ -226316,6 +226380,16 @@
           },
           "2027": {
             "direct": 56725.0
+          }
+        }
+      },
+      "lobby-business": {
+        "all": {
+          "independent": 65.35
+        },
+        "by_cycle": {
+          "2015": {
+            "independent": 65.35
           }
         }
       },
@@ -228543,7 +228617,7 @@
       "election_date": "2027-02-23"
     }
   },
-  "generated_at": "2026-06-21T18:18:19Z",
+  "generated_at": "2026-06-22T14:44:50Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "current_cycle": "2027",
   "default_cycle": "all",
