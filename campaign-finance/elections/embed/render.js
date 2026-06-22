@@ -252,6 +252,14 @@
       '.ipg-elect .subtab:focus-visible{outline:2px solid var(--sage);outline-offset:2px;}' +
       '.ipg-elect .srow{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:11px 15px;margin:0 0 8px;}' +
       '.ipg-elect .sname{font-size:14px;font-weight:500;}' +
+      // X-2 grouped-row expand affordance: a full-width button that looks like the .sname block
+      // (reset button chrome; .sname provides size/weight). Caret rotates when open, matching the
+      // other disclosures. The inline card is a sibling block under the row.
+      '.ipg-elect button.srow-expand{display:block;width:100%;text-align:left;appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);color:inherit;padding:0;}' +
+      '.ipg-elect button.srow-expand:focus-visible{outline:2px solid var(--sage);outline-offset:2px;border-radius:4px;}' +
+      '.ipg-elect button.srow-expand[aria-expanded="true"] .caret{transform:rotate(90deg);}' +
+      '.ipg-elect .srow-card{margin:-2px 0 10px;}' +
+      '.ipg-elect .srow-card .card{margin:0;}' +
       '.ipg-elect .figrow{margin-top:6px;display:flex;flex-wrap:wrap;gap:8px;}' +
       '.ipg-elect .mini{font-size:12px;font-weight:500;border-radius:6px;padding:2px 8px;}' +
       '.ipg-elect .mini.c{background:#E5EFE9;color:var(--teal);}.ipg-elect .mini.s{background:#E4EEEB;color:var(--sage);}.ipg-elect .mini.o{background:#F4E3DC;color:var(--coral);}' +
@@ -594,12 +602,12 @@
 
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
 
-  function card(c, scale) {
+  function card(c, scale, idPrefix) {
     var f = c.figures;
     var mostlySelf = f.contributions.total > 0 && (f.contributions.selfFunded / f.contributions.total) >= 0.5;
     var chips = (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') +
       (mostlySelf ? '<span class="chip-self">Mostly self-funded</span>' : '');
-    var base = 'd-' + esc(c.slug);
+    var base = (idPrefix || 'd-') + esc(c.slug);   // raceView passes nothing -> 'd-' (byte-identical); grouped passes 'g-'
     var hasSup = f.independentSupport > 0, hasOpp = f.independentOpposition > 0;
     var contribBar = bar('From contributors',
       [{ cls: 'third', v: f.contributions.thirdParty }, { cls: 'self', v: f.contributions.selfFunded }],
@@ -1043,11 +1051,28 @@
           if (g.candidates.length) {
             rows = g.candidates.map(function (c) {
               var f = c.figures;
-              return '<div class="srow"><div class="sname">' + esc(c.name) +
+              // X-2: the enriched candidate is by construction the single expanded one
+              // (Stage 3 enriches exactly the id === expandedCandidateId), so slug presence
+              // is the expand signal. threeFig stays visible in BOTH states (display-only).
+              var isExpanded = !!c.slug;
+              var inner = (c.hasCommittee ? '<span class="caret" aria-hidden="true">▸</span> ' : '') + esc(c.name) +
                 (c.incumbent ? ' <span class="chip-inc">Incumbent</span>' : '') +
                 (c.hasCommittee ? '' : ' <span class="badge">no committee registered</span>') +
                 '<div class="rankfig">' + money(f.contributions.total) + ' <span class="n">raised</span></div>' +
-                '<div class="figrow">' + threeFig(f) + '</div></div></div>';
+                '<div class="figrow">' + threeFig(f) + '</div>';
+              // Expand affordance: its OWN element carrying ONLY data-expand-cand + aria-expanded.
+              // No aria-controls (that's a dispatch attr caught by an earlier handler; the expand
+              // is redraw-driven, not the in-place .open toggle). Shown only when there's a card to
+              // open (hasCommittee); committee-less candidates stay flat, exactly as raceView.
+              var head = c.hasCommittee
+                ? '<button class="sname srow-expand" type="button" data-expand-cand="' + esc(c.id) +
+                    '" aria-expanded="' + (isExpanded ? 'true' : 'false') + '">' + inner + '</button>'
+                : '<div class="sname">' + inner + '</div>';
+              // Inline card is a SIBLING AFTER the .srow (never a child of the affordance) — the
+              // structural collision guarantee from Stage 2's trace. Rendered VERBATIM via card()
+              // with the 'g-' prefix; no bar/panel markup is reproduced here.
+              var cardHtml = isExpanded ? '<div class="srow-card">' + card(c, g.scale, 'g-') + '</div>' : '';
+              return '<div class="srow">' + head + '</div>' + cardHtml;
             }).join('');
           } else {
             rows = '<div class="srow empty"><div class="sname">No finance reported yet.</div></div>';

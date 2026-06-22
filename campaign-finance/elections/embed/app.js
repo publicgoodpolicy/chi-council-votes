@@ -90,7 +90,8 @@
     IDX = index;
     var cycles = ElectData.availableCycles(index);
     var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors', spendElection: 'all',
-      donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, raceFilter: 'all', electionView: null };
+      donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, raceFilter: 'all', electionView: null,
+      expandedCandidateId: null };   // X-2: the ONE grouped row expanded to its inline funder card (accordion-of-one)
     var browseSearchTimer = null;
     state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, office));
 
@@ -98,7 +99,7 @@
       var omVM = ElectData.viewModels.officeRaces(index, state.office);
       var raceId = index.raceBySlug[state.activeSlug];
       var rv = raceId ? ElectData.viewModels.raceView(index, raceId, state.cycle) : null;
-      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.spendElection, state.donorFilters, state.raceFilter) : null;
+      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.spendElection, state.donorFilters, state.raceFilter, state.expandedCandidateId) : null;
       root.innerHTML = ElectRender.renderPage({
         office: state.office, topView: state.topView, cycles: cycles, cycle: state.cycle,
         officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend,
@@ -117,6 +118,19 @@
         var pid = dz.getAttribute('aria-controls'), panel = pid && document.getElementById(pid);
         if (panel) { var open = panel.classList.toggle('open'); dz.setAttribute('aria-expanded', open ? 'true' : 'false'); }
         return;
+      }
+      // X-2: E-7 grouped row -> inline funder card. MUST sit after modalNav and the
+      // aria-controls toggle: a click on a funder row (data-funder -> modalNav, line above)
+      // or an internal disclosure (aria-controls) INSIDE an already-expanded card is caught
+      // and returned by those handlers first, so it never collapses the card. This branch
+      // fires only when neither matched. The affordance is its own element carrying ONLY
+      // data-expand-cand (no data-slug/funder/committee/aria-controls), so one click never
+      // satisfies two dispatch paths. Accordion-of-one: re-clicking the open row toggles off.
+      var xc = cl('[data-expand-cand]');
+      if (xc) {
+        var cid = xc.getAttribute('data-expand-cand');
+        state.expandedCandidateId = (state.expandedCandidateId === cid) ? null : cid;
+        draw(); return;
       }
       var v = cl('[data-view]');
       if (v) { state.topView = v.getAttribute('data-view'); draw(); return; }

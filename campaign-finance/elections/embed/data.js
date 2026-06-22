@@ -1011,7 +1011,12 @@
     var m = /(\d+)/.exec(r.id || '');
     return m ? parseInt(m[1], 10) : 9999;
   }
-  function spendByCandidateGrouped(index, office, cycle, win, raceFilter) {
+  // X-2: expandedId (threaded from view state) names the ONE candidate whose row is
+  // expanded to its inline funder card. Only that candidate gets the heavy detail
+  // (candidateContributors + candidateIE x2 + committeeMeta) — the exact functions raceView
+  // calls; everyone else stays figures-only. groupScale (per-group Math.max, raceView's
+  // formula) is attached so the inline card's bars fill against the candidate's own race.
+  function spendByCandidateGrouped(index, office, cycle, win, raceFilter, expandedId) {
     var offs = OFFICE_RACE_OFFICES[office] || [];
     var scoped = (index.races || []).filter(function (r) { return offs.indexOf(r.office) >= 0; });
     scoped.sort(function (a, b) { return raceOrderKey(a) - raceOrderKey(b); });
@@ -1021,11 +1026,28 @@
         var cands = (index.candidatesByRace[r.id] || [])
           .filter(function (c) { return !c.vacating_for; })
           .map(function (c) {
-            return { id: c.id, name: c.name, incumbent: !!c.incumbent, hasCommittee: !!c.committee_id,
+            var entry = { id: c.id, name: c.name, incumbent: !!c.incumbent, hasCommittee: !!c.committee_id,
               figures: candidateFigures(index, c.id, cycle, win) };
+            // Lazy enrichment: ONLY the expanded candidate gets the five fields card reads.
+            if (expandedId && c.id === expandedId && c.committee_id) {
+              entry.slug = candidateSlug(c, r);
+              entry.committee = committeeMeta(index, c.id);
+              entry.contributors = candidateContributors(index, c.id, cycle, win);
+              entry.ieSupportDetail = candidateIE(index, c.id, 'support', cycle, win);
+              entry.ieOpposeDetail = candidateIE(index, c.id, 'oppose', cycle, win);
+            }
+            return entry;
           });
         cands.sort(function (a, b) { return b.figures.contributions.total - a.figures.contributions.total; });
-        return { race: { id: r.id, label: r.label, office: r.office }, candidates: cands };
+        // Per-group scale = race-wide max across these candidates' figures (raceView's formula,
+        // render.js:833-837). Drives the inline card's bar fill so a 2026 row is comparable
+        // within its own race, not against a global maximum.
+        var groupScale = 1;
+        for (var s = 0; s < cands.length; s++) {
+          var gf = cands[s].figures; if (!gf) continue;
+          groupScale = Math.max(groupScale, gf.contributions.total, gf.independentSupport, gf.independentOpposition);
+        }
+        return { race: { id: r.id, label: r.label, office: r.office }, candidates: cands, scale: groupScale };
       });
     return { groups: groups, raceOptions: scoped.map(function (r) { return { id: r.id, label: r.label }; }) };
   }
@@ -1112,10 +1134,10 @@
   // election-window-aware: `election` is 'all' (default = union of both windows),
   // '2026' (This) or '2024' (Last). The resolved window drives every figure + the
   // drill-downs (the spend container carries it so spender modals stay scoped).
-  function spendSubtab(index, office, tab, cycle, election, filters, raceFilter) {
+  function spendSubtab(index, office, tab, cycle, election, filters, raceFilter, expandedId) {
     var sel = election || 'all', win = spendWin(office, sel), filter = spendElectionFilter(office, sel);
     if (tab === 'candidates') {
-      var rf = raceFilter || 'all', g = spendByCandidateGrouped(index, office, cycle, win, rf);
+      var rf = raceFilter || 'all', g = spendByCandidateGrouped(index, office, cycle, win, rf, expandedId);
       return { tab: tab, election: sel, filter: filter, win: win, groups: g.groups, raceOptions: g.raceOptions, raceFilter: rf };
     }
     if (tab === 'industries') return { tab: tab, election: sel, filter: filter, win: win, industries: industryTotals(index, office, cycle, win) };
