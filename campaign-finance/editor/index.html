@@ -332,8 +332,9 @@ function committeeRow(r,i){
   const sub=[r.ward?`Ward ${esc(r.ward)}`:'', esc(r.alder_name)].filter(Boolean).join(' • ');
   const s=state.staged.get(k);
   let editor_html = editing ? `<div class="editor">
-      <label>industry_tags (multi-select)</label>
+      <label>industry_tags (multi-select — vocabulary only)</label>
       <select id="c-tags" multiple>${indMultiOptions(s?s.industry_tags:[])}</select>
+      <div class="meta-line" style="margin-top:5px">Only existing Industry Tags can be assigned — sync drops unknown tags. Tag not listed? Add it in vocab first (H5).</div>
       <div class="ed-actions">
         <button class="act accept" onclick="saveCommittee('${esc(r.committee_id)}')">Stage these</button>
         <button class="act" onclick="editor.openEdit(null)">Cancel</button>
@@ -433,10 +434,11 @@ function renderReview(list, note){
   }
   const banner = `<div class="note-banner">Live tabs read read-only: ${Object.keys(state.live.donor_overrides||{}).length} donor-override rows, ${Object.keys(state.live.committee_tags||{}).length} committee-tag rows. last_edited_by stamps as <code>${EDITOR_STAMP}</code>.</div>`;
   const donorN = items.filter(s=>s.kind==='donor').length;
+  const cmteN = items.filter(s=>s.kind==='committee').length;
   const writePanel = `<div class="diff" id="write-panel">
-      <h3>Write to the Sheet — Donor Overrides only</h3>
-      <div class="meta-line">Dry-run first (re-reads the live tab, plans, writes nothing). A separate explicit confirm performs the live write. ${donorN} donor row(s) eligible; committee tags are out of scope (H4).</div>
-      <div class="ed-actions"><button class="act edit" id="btn-dryrun" onclick="runDryRun()" ${donorN?'':'disabled'}>Dry-run plan</button></div>
+      <h3>Write to the Sheet — Donor Overrides &amp; Committee Tags</h3>
+      <div class="meta-line">Dry-run first (re-reads each live tab, plans, writes nothing). A separate explicit confirm performs the live write. ${donorN} donor row(s), ${cmteN} committee row(s) eligible.</div>
+      <div class="ed-actions"><button class="act edit" id="btn-dryrun" onclick="runDryRun()" ${(donorN+cmteN)?'':'disabled'}>Dry-run plan</button></div>
       <div id="write-out"></div>
     </div>`;
   list.innerHTML = banner + writePanel + items.map(renderDiffItem).join('');
@@ -447,11 +449,14 @@ function renderReview(list, note){
 // SERVER-SIDE by compose.py; this renders that plan, not a JS re-compose.
 // ============================================================
 function buildBatch(){
-  return Array.from(state.staged.values()).filter(s=>s.kind==='donor').map(s=>({
-    donor_id:s.id, primary_industry:s.primary_industry, additional_industries:s.additional_industries,
-    flags:s.flags, notes:s.notes, edited:s.edited,
-    snapshot:(state.live&&state.live.donor_overrides&&state.live.donor_overrides[s.id])||null,
-  }));
+  const lo=(state.live&&state.live.donor_overrides)||{}, lc=(state.live&&state.live.committee_tags)||{};
+  return Array.from(state.staged.values()).map(s=> s.kind==='donor' ? {
+    kind:'donor', donor_id:s.id, primary_industry:s.primary_industry, additional_industries:s.additional_industries,
+    flags:s.flags, notes:s.notes, edited:s.edited, snapshot:lo[s.id]||null,
+  } : {
+    kind:'committee', committee_id:s.id, committee_name:s.committee_name||s.name,
+    industry_tags:s.industry_tags, edited:s.edited, snapshot:lc[s.id]||null,
+  });
 }
 async function postJSON(url, body){ return fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json()); }
 async function runDryRun(){
@@ -471,16 +476,16 @@ function planRowHTML(r){
   let changed='';
   if(r.status==='NEW') changed = Object.entries(r.cells).filter(([k,v])=>v).map(([k,v])=>`${esc(k)}=<code>${esc(v)}</code>`).join(' · ') || '(empty row)';
   else changed = Object.keys(r.changed).length ? Object.entries(r.changed).map(([k,v])=>`${esc(k)}→<code>${esc(v)}</code>`).join(' · ') : '<span class="empty-cell">no cell changes</span>';
-  return `<div class="diff" style="margin:8px 0"><h3>${esc(r.donor_id)} <span class="status ${r.status==='NEW'?'NEW':'UPDATE'}">${esc(r.status)}</span></h3>
+  return `<div class="diff" style="margin:8px 0"><h3>${esc(r.id)} <span class="status ${r.status==='NEW'?'NEW':'UPDATE'}">${esc(r.status)}</span> <span class="badge ${r.kind==='committee'?'election':'council'}">${esc(r.kind)}</span></h3>
     <div class="meta-line">${r.status==='NEW'?'append':'write only'}: ${changed}</div>${warn}</div>`;
 }
 function heldRowHTML(r){
-  return `<div class="diff" style="margin:8px 0;border-color:var(--opp)"><h3>${esc(r.donor_id)} <span class="status" style="background:var(--opp)">${esc(r.status)}</span></h3>
+  return `<div class="diff" style="margin:8px 0;border-color:var(--opp)"><h3>${esc(r.id)} <span class="status" style="background:var(--opp)">${esc(r.status)}</span> <span class="badge ${r.kind==='committee'?'election':'council'}">${esc(r.kind)}</span></h3>
     <div class="meta-line" style="color:var(--opp)">held out of the write — ${esc(r.reason)}</div></div>`;
 }
 function propagationPromptHTML(){
   return `<div class="note-banner" id="prop-prompt" style="border-color:var(--sage)">
-    <b>Edit saved to the shared Donor Overrides tab.</b> It is not live yet — each tool picks it up only on that tool's next build:
+    <b>Edits saved to the shared Sheet (Donor Overrides / Committee Tags).</b> They are not live yet — each tool picks them up only on that tool's next build:
     <ul style="margin:6px 0 0 18px">
       <li><b>Council</b>: run <code>campaign-finance/build_all.sh</code> (its sync_overrides step applies the tab).</li>
       <li><b>Elections</b>: run the elections build sequence (…ingest → <code>sync_overrides.py --data-file campaign-finance/election-data.json</code> → build_rollups → validate).</li>
@@ -489,17 +494,22 @@ function propagationPromptHTML(){
 }
 function renderPlan(out, res, wrote){
   if(res.mode==='ERROR'){ out.innerHTML=`<div class="err">${esc(res.error)}</div>`; return; }
-  const plan=res.plan||{}; const rt=plan.round_trip||{rows:0,mismatches:0};
-  const blocked = plan.blocked;
-  const w=(plan.writable||[]), h=(plan.held||[]);
-  let html=`<div class="rt">round-trip gate: <b>${rt.rows} rows, ${rt.mismatches} mismatches</b>${blocked?' — <span style="color:var(--opp)">BATCH BLOCKED</span>':''}</div>`;
-  html+=`<div class="meta-line" style="margin:6px 0">${w.length} writable · ${h.length} held</div>`;
-  html+= w.map(planRowHTML).join('') + h.map(heldRowHTML).join('');
+  const plans=res.plans||{};
+  const order=['donor','committee'];
+  let totW=0, anyBlocked=false, html='';
+  for(const kind of order){
+    const plan=plans[kind]; if(!plan) continue;
+    const rt=plan.round_trip||{rows:0,mismatches:0};
+    const w=(plan.writable||[]), h=(plan.held||[]); totW+=w.length;
+    if(plan.blocked) anyBlocked=true;
+    html+=`<div class="rt" style="margin-top:8px"><b>${esc(kind)}s</b> — round-trip gate: <b>${rt.rows} rows, ${rt.mismatches} mismatches</b>${plan.blocked?' — <span style="color:var(--opp)">BATCH BLOCKED</span>':''} · ${w.length} writable · ${h.length} held</div>`;
+    html+= w.map(planRowHTML).join('') + h.map(heldRowHTML).join('');
+  }
   if(wrote && res.mode==='LIVE-WRITE'){
-    const r=res.results||[];
-    html = `<div class="rt"><b>✓ wrote ${r.length} row(s)</b>: ${r.map(x=>esc(x.donor_id)+' ('+esc(x.action)+')').join(', ')}</div>` + html + propagationPromptHTML();
-  } else if(!blocked && w.length){
-    html += `<div class="ed-actions"><button class="act accept" id="btn-confirm" onclick="runConfirm()">Confirm live write (${w.length} row${w.length===1?'':'s'})</button></div>`;
+    const rr=res.results||{}; const flat=[].concat(...order.map(k=>(rr[k]||[]).map(x=>({...x,kind:k}))));
+    html = `<div class="rt"><b>✓ wrote ${flat.length} row(s)</b>: ${flat.map(x=>esc(x.id)+' ('+esc(x.kind)+':'+esc(x.action)+')').join(', ')}</div>` + html + propagationPromptHTML();
+  } else if(!anyBlocked && totW){
+    html += `<div class="ed-actions"><button class="act accept" id="btn-confirm" onclick="runConfirm()">Confirm live write (${totW} row${totW===1?'':'s'})</button></div>`;
   }
   out.innerHTML=html;
 }
@@ -560,8 +570,10 @@ async function maybeSelftest(){
   if(holdDonor) stageDonorEdit(holdDonor.donor_id, {primary_industry:'finance',
     additional_industries:[], flags:[{type:(state.vocab.flags[0]&&state.vocab.flags[0].key)||'aipac-donor', source_url:'https://x.example/?a=1;b=2', note:'url has a semicolon'}],
     notes:'', edited:['primary_industry','flags']});
-  // 6. Stage a committee (out of scope for the write batch)
+  // 6. Stage a couple committees via multi-select (vocab-only)
   if(cmte) stageCommittee(cmte.committee_id, ['real-estate','finance']);
+  const cmte2 = C[1];
+  if(cmte2) stageCommittee(cmte2.committee_id, ['labor-trades']);
   // 7. Skip #4
   if(acceptSkip) skip('donor', acceptSkip.donor_id);
   window.__selftest = { staged: editor.getStaged().map(s=>({kind:s.kind,id:s.id})),

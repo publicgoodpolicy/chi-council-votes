@@ -346,16 +346,23 @@ class WorklistHandler(BaseHTTPRequestHandler):
             import write_overrides as wo
             cls = type(self)
             sheet = wo.open_sheet_rw(cls.sheet_id, cls.creds_file)
-            live = wo.read_live_donor_rows(sheet)          # fresh read, immediately before
-            plan = wo.build_plan(batch, live)
-            if path == '/api/write':
+            do_write = (path == '/api/write')
+            plans, results, blocked = {}, {}, False
+            # split by surface; each tab gets its OWN fresh read immediately before
+            for kind, spec in wo.SPECS.items():
+                items = [b for b in batch if b.get('kind', 'donor') == kind]
+                if not items:
+                    continue
+                live = wo.read_live_rows(sheet, spec)
+                plan = wo.build_plan(items, live, spec)
+                plans[kind] = plan
                 if plan['blocked']:
-                    out = {'mode': 'BLOCKED', 'round_trip': plan['round_trip'], 'plan': plan}
-                else:
-                    out = {'mode': 'LIVE-WRITE', 'results': wo.execute_plan(sheet, plan),
-                           'plan': plan}
-            else:
-                out = {'mode': 'DRY-RUN', 'plan': plan}
+                    blocked = True
+                if do_write and not plan['blocked']:
+                    results[kind] = wo.execute_plan(sheet, plan, spec)
+            mode = ('BLOCKED' if (do_write and blocked)
+                    else 'LIVE-WRITE' if do_write else 'DRY-RUN')
+            out = {'mode': mode, 'plans': plans, 'results': results}
             self._send(200, json.dumps(out, ensure_ascii=False).encode('utf-8'),
                        'application/json; charset=utf-8')
         except Exception as e:

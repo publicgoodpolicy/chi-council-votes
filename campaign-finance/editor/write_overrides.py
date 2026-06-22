@@ -39,8 +39,11 @@ import compose                           # noqa: E402  (canonical composer + par
 
 WRITE_SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 DONOR_TAB = 'Donor Overrides'
-DONOR_COLUMNS = compose.DONOR_COLUMNS     # ['donor_id', ...,'last_edited_by'] — single source
+DONOR_COLUMNS = compose.DONOR_COLUMNS         # ['donor_id', ...,'last_edited_by'] — single source
 KEY_COLUMN = 'donor_id'
+COMMITTEE_TAB = 'Committee Tags'
+COMMITTEE_COLUMNS = compose.COMMITTEE_COLUMNS  # ['committee_id','committee_name','industry_tags']
+COMMITTEE_KEY = 'committee_id'
 DEFAULT_SHEET_ID = '1tUJNv7S611xM-VO7LcZlOStbJ8O7LQ5deYjsHeVAwQ8'
 DEFAULT_CREDS = SHEETS_DIR / 'creds.json'
 
@@ -69,28 +72,37 @@ def confirm_write_access(sheet) -> dict:
 
 
 # ============================================================
-# READ the live tab (write path's own fresh read)
+# READ the live tab (write path's own fresh read) — column-map driven
 # ============================================================
-def read_live_donor_rows(sheet) -> dict:
-    """Fresh {donor_id: {col: cell}} read of the Donor Overrides tab — used both for
-    the dry-run NEW/UPDATE recompute and the concurrent-edit guard."""
-    ws = sheet.worksheet(DONOR_TAB)
+def read_live_rows(sheet, spec: dict) -> dict:
+    """Fresh {key: {col: cell}} read of a tab — used for the dry-run NEW/UPDATE
+    recompute and the concurrent-edit guard. Generic over spec (tab/key/columns)."""
+    ws = sheet.worksheet(spec['tab'])
     rows = ws.get_all_records()
-    cols = [c for c in DONOR_COLUMNS if c != KEY_COLUMN]
+    key = spec['key']
+    cols = [c for c in spec['columns'] if c != key]
     out = {}
     for r in rows:
-        did = str(r.get(KEY_COLUMN, '') or '').strip()
-        if did:
-            out[did] = {c: str(r.get(c, '') or '') for c in cols}
+        k = str(r.get(key, '') or '').strip()
+        if k:
+            out[k] = {c: str(r.get(c, '') or '') for c in cols}
     return out
 
 
+def read_live_donor_rows(sheet) -> dict:
+    return read_live_rows(sheet, DONOR_SPEC)
+
+
+def read_live_committee_rows(sheet) -> dict:
+    return read_live_rows(sheet, COMMITTEE_SPEC)
+
+
 # ============================================================
-# MERGE + PLAN  (compose once via compose.py; column-map driven)
+# MERGE  (staged edits over live; per kind)
 # ============================================================
-def _merged_item(item: dict, live_row) -> dict:
-    """Staged edits over the live row: edited columns take staged values, the rest
-    keep their live values (parsed). This is the intended final row state."""
+def _merged_donor_item(item: dict, live_row) -> dict:
+    """Donor: edited columns take staged values, the rest keep their parsed live
+    values (no clobber). The intended final row state."""
     ed = set(item.get('edited') or [])
     base = {
         'primary_industry': (live_row or {}).get('primary_industry', ''),
@@ -107,50 +119,92 @@ def _merged_item(item: dict, live_row) -> dict:
     }
 
 
-def _candidate_cols(item: dict) -> list:
-    """Columns an UPDATE may write: the ones the curator edited, plus the stamp.
-    Everything else is left at its live value (no clobber)."""
+def _merged_committee_item(item: dict, live_row) -> dict:
+    """Committee: industry_tags edited -> staged, else parsed live. committee_name
+    is reference (kept from live on UPDATE; from staged/data on NEW)."""
     ed = set(item.get('edited') or [])
-    return [c for c in DONOR_COLUMNS
-            if c != KEY_COLUMN and (c == 'last_edited_by' or c in ed)]
+    base_tags = compose.parse_list_cell((live_row or {}).get('industry_tags', ''))
+    name = (live_row or {}).get('committee_name', '') or item.get('committee_name', '')
+    return {
+        'committee_id': item['committee_id'],
+        'committee_name': name,
+        'industry_tags': item.get('industry_tags', []) if 'industry_tags' in ed else base_tags,
+    }
 
 
-def build_plan(batch: list, live: dict) -> dict:
+# Kind specs — the ONLY per-surface knobs. Adding a future field is additive:
+# extend the columns/compose in compose.py; the plan/execute machinery is generic.
+DONOR_SPEC = {
+    'kind': 'donor', 'tab': DONOR_TAB, 'columns': DONOR_COLUMNS, 'key': KEY_COLUMN,
+    'stamp_col': 'last_edited_by',
+    'merge': _merged_donor_item, 'compose': compose.compose_donor_cells,
+    'sanitize': compose.sanitization_notes, 'roundtrip': compose.roundtrip_donors,
+}
+COMMITTEE_SPEC = {
+    'kind': 'committee', 'tab': COMMITTEE_TAB, 'columns': COMMITTEE_COLUMNS, 'key': COMMITTEE_KEY,
+    'stamp_col': None,
+    'merge': _merged_committee_item, 'compose': compose.compose_committee_cells,
+    # committee tags are vocab-only (no free text), so nothing to sanitize/hold
+    'sanitize': lambda item: {'warn': [], 'hold': []},
+    'roundtrip': compose.roundtrip_committees,
+}
+SPECS = {'donor': DONOR_SPEC, 'committee': COMMITTEE_SPEC}
+
+
+# ============================================================
+# PLAN  (compose once via compose.py; column-map driven; per-cell guard)
+# ============================================================
+def _candidate_cols(item: dict, spec: dict) -> list:
+    """Columns an UPDATE may write: the ones the curator edited, plus the stamp
+    column if the surface has one. Everything else is left at its live value."""
+    ed = set(item.get('edited') or [])
+    stamp = spec.get('stamp_col')
+    return [c for c in spec['columns']
+            if c != spec['key'] and (c == stamp or c in ed)]
+
+
+def _rec(item, spec, status, fresh, san, cells=None, changed=None, reason=''):
+    return {'id': item[spec['key']], 'kind': spec['kind'], 'status': status, 'before': fresh,
+            'cells': cells or {}, 'changed': changed if changed is not None else {},
+            'warn': san['warn'], 'hold': san['hold'], 'reason': reason}
+
+
+def build_plan(batch: list, live: dict, spec: dict = DONOR_SPEC) -> dict:
     """Compose each staged item once (compose.py), classify NEW/UPDATE against the
     fresh `live` read, compute minimal changed cells, apply the per-cell
-    concurrent-edit guard, surface flag sanitization, and gate on the round-trip.
+    concurrent-edit guard, surface sanitization, and gate on the round-trip.
 
-    batch item: {donor_id, primary_industry, additional_industries[], flags[],
-                 notes, edited[], snapshot:{col:cell}|None}  (snapshot = live row
-                 captured when the curator staged; None if it was absent then).
+    batch item: {<key>, ...staged fields..., edited[], snapshot:{col:cell}|None}
+    (snapshot = live row captured when the curator staged; None if absent then).
+    Generic over `spec` — DONOR_SPEC or COMMITTEE_SPEC.
     """
+    key = spec['key']
     writable, held, rt_items = [], [], []
     for item in batch:
-        did = item['donor_id']
-        san = compose.sanitization_notes(item)
-        fresh = live.get(did)
+        k = item[key]
+        san = spec['sanitize'](item)
+        fresh = live.get(k)
         snap = item.get('snapshot')
 
-        # source_url with ;/|  -> HOLD (don't silently clean a URL)
+        # sanitization HOLD (donor source_url with ;/|) — never silently clean
         if san['hold']:
-            held.append(_rec(item, 'HELD', fresh, san,
+            held.append(_rec(item, spec, 'HELD', fresh, san,
                              reason='source_url contains ; or | — edit the URL before writing'))
             continue
 
-        merged = _merged_item(item, fresh)
-        composed = compose.compose_donor_cells(merged)
+        merged = spec['merge'](item, fresh)
+        composed = spec['compose'](merged)
 
         if fresh is None:
-            # genuinely new (also covers the re-run case where our own append is gone — n/a)
             rt_items.append(merged)
-            writable.append(_rec(item, 'NEW', None, san, cells=composed,
+            writable.append(_rec(item, spec, 'NEW', None, san, cells=composed,
                                  changed=dict(composed)))
             continue
 
-        # fresh read found the row -> UPDATE (this is also what reclassifies a
-        # staged-NEW whose row has since appeared, so a double-run can't duplicate)
+        # fresh read found the row -> UPDATE (also reclassifies a staged-NEW whose
+        # row has since appeared, so a double-run can't append a duplicate)
         changed, conflicts = {}, []
-        for col in _candidate_cols(item):
+        for col in _candidate_cols(item, spec):
             T = composed.get(col, '')
             F = fresh.get(col, '')
             S = None if snap is None else snap.get(col, '')
@@ -161,63 +215,57 @@ def build_plan(batch: list, live: dict) -> dict:
             else:
                 conflicts.append(col)        # changed under us (or no baseline) -> conflict
         if conflicts:
-            held.append(_rec(item, 'CONFLICT', fresh, san, changed={}, cells=composed,
+            held.append(_rec(item, spec, 'CONFLICT', fresh, san, changed={}, cells=composed,
                              reason='cell(s) changed in the Sheet since you loaded them: '
                                     + ', '.join(conflicts)))
             continue
         rt_items.append(merged)
-        writable.append(_rec(item, 'UPDATE', fresh, san, cells=composed, changed=changed))
+        writable.append(_rec(item, spec, 'UPDATE', fresh, san, cells=composed, changed=changed))
 
-    rt = compose.roundtrip_donors(rt_items)
+    rt = spec['roundtrip'](rt_items)
     mism = [r for r in rt if not r['match']]
     return {
-        'writable': writable, 'held': held,
+        'writable': writable, 'held': held, 'kind': spec['kind'],
         'round_trip': {'rows': len(rt_items), 'mismatches': len(mism),
                        'failed': [r['id'] for r in mism]},
         'blocked': len(mism) > 0,
     }
 
 
-def _rec(item, status, fresh, san, cells=None, changed=None, reason=''):
-    return {'donor_id': item['donor_id'], 'status': status, 'before': fresh,
-            'cells': cells or {}, 'changed': changed if changed is not None else {},
-            'warn': san['warn'], 'hold': san['hold'], 'reason': reason}
-
-
 # ============================================================
-# EXECUTE  (the only mutation; Donor Overrides tab only)
+# EXECUTE  (the only mutation; writes solely to spec['tab'])
 # ============================================================
-def execute_plan(sheet, plan: dict) -> dict:
+def execute_plan(sheet, plan: dict, spec: dict = DONOR_SPEC) -> list:
     """NEW -> append a full row; UPDATE -> write ONLY the changed cells (RAW).
-    Never writes held/conflict rows. Returns a per-row result."""
+    Never writes held/conflict rows. Generic over `spec`."""
     if plan.get('blocked'):
         raise RuntimeError(f"batch blocked: round-trip mismatches {plan['round_trip']['failed']}")
     from gspread.utils import rowcol_to_a1
-    ws = sheet.worksheet(DONOR_TAB)
+    ws = sheet.worksheet(spec['tab'])
     header = ws.row_values(1)
     colidx = {name: i + 1 for i, name in enumerate(header) if name}
     rowof = {}
-    for i, v in enumerate(ws.col_values(colidx[KEY_COLUMN])):
+    for i, v in enumerate(ws.col_values(colidx[spec['key']])):
         if i and v:                          # skip header (row 1)
             rowof.setdefault(str(v).strip(), i + 1)
 
     results = []
     for rec in plan['writable']:
-        did = rec['donor_id']
-        if rec['status'] == 'NEW' and did not in rowof:
+        k = rec['id']
+        if rec['status'] == 'NEW' and k not in rowof:
             row = [rec['cells'].get(c, '') for c in header]
             ws.append_row(row, value_input_option='RAW')
-            results.append({'donor_id': did, 'action': 'appended'})
+            results.append({'id': k, 'action': 'appended'})
         else:
-            r = rowof.get(did)
+            r = rowof.get(k)
             if not r:
-                results.append({'donor_id': did, 'action': 'skipped-missing'})
+                results.append({'id': k, 'action': 'skipped-missing'})
                 continue
             data = [{'range': rowcol_to_a1(r, colidx[col]), 'values': [[val]]}
                     for col, val in rec['changed'].items() if col in colidx]
             if data:
                 ws.batch_update(data, value_input_option='RAW')
-            results.append({'donor_id': did, 'action': 'updated' if data else 'no-change',
+            results.append({'id': k, 'action': 'updated' if data else 'no-change',
                             'cells': list(rec['changed'].keys())})
     return results
 
@@ -230,6 +278,8 @@ if __name__ == '__main__':
     ap.add_argument('--check-access', action='store_true',
                     help='Stage-1 probe: confirm the SA-Editor share resolved (no-op write).')
     ap.add_argument('--batch', help='Path to a staged-batch JSON (list of items).')
+    ap.add_argument('--kind', choices=['donor', 'committee'], default='donor',
+                    help='Which surface the batch targets (default: donor).')
     g = ap.add_mutually_exclusive_group()
     g.add_argument('--dry-run', action='store_true', help='Plan only — re-reads live, writes nothing (default).')
     g.add_argument('--confirm', action='store_true', help='Perform the live write.')
@@ -242,13 +292,15 @@ if __name__ == '__main__':
 
     if args.batch:
         batch = json.load(open(args.batch))
+        spec = SPECS[args.kind]
         sheet = open_sheet_rw(args.sheet_id, args.creds_file)
-        live = read_live_donor_rows(sheet)          # fresh read immediately before plan/write
-        plan = build_plan(batch, live)
-        summary = {'writable': len(plan['writable']), 'held': len(plan['held']),
-                   'round_trip': plan['round_trip'], 'blocked': plan['blocked']}
+        live = read_live_rows(sheet, spec)          # fresh read immediately before plan/write
+        plan = build_plan(batch, live, spec)
+        summary = {'kind': spec['kind'], 'writable': len(plan['writable']),
+                   'held': len(plan['held']), 'round_trip': plan['round_trip'],
+                   'blocked': plan['blocked']}
         if args.confirm and not plan['blocked']:
-            results = execute_plan(sheet, plan)
+            results = execute_plan(sheet, plan, spec)
             print(json.dumps({'mode': 'LIVE-WRITE', 'summary': summary, 'results': results}))
         else:
             print(json.dumps({'mode': 'DRY-RUN', 'summary': summary, 'plan': plan}))
