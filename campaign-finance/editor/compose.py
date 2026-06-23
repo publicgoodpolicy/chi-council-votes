@@ -39,11 +39,32 @@ from sync_overrides import (                       # noqa: E402 (path set above)
 EDITOR_STAMP = 'editor-ui'
 
 # Sheet column orders (must match sync_overrides' documented schema / live tabs).
+# entity_type is the 7th Donor Overrides column (added in the entity_type halt) —
+# WHAT a donor is (Individual/Corporation/Labor/…), orthogonal to industry (what
+# SECTOR). Distinct from ingest's donor `type` field; never coupled to industry.
 DONOR_COLUMNS = ['donor_id', 'primary_industry', 'additional_industries',
-                 'flags', 'notes', 'last_edited_by']
+                 'flags', 'notes', 'last_edited_by', 'entity_type']
 COMMITTEE_COLUMNS = ['committee_id', 'committee_name', 'industry_tags']
 INDUSTRY_VOCAB_COLUMNS = ['key', 'label', 'color']
 FLAG_VOCAB_COLUMNS = ['key', 'label', 'severity']
+ENTITY_VOCAB_COLUMNS = ['key', 'label']           # entity_type vocab tab (key | label)
+
+# Seeded starter set for entity_type — a CODE constant unioned with the live
+# 'Entity Types' tab (compose/serve), so the dropdown is never empty on first load
+# and the closed-ish core can't be clobbered by clearing a Sheet row. The tab is
+# the growth surface (operator-added types). Keys are slug(label) so an inline-add
+# of the same label collides with the starter key (union-aware add-only guard).
+# Constant wins for starter keys; the tab contributes only keys NOT in this set.
+STARTER_ENTITY_TYPES = [
+    {'key': 'individual',            'label': 'Individual'},
+    {'key': 'corporation',           'label': 'Corporation'},
+    {'key': 'labor',                 'label': 'Labor'},
+    {'key': 'industry-trade-body',   'label': 'Industry (trade body)'},
+    {'key': 'candidate-committee',   'label': 'Candidate Committee'},
+    {'key': 'political-organization', 'label': 'Political Organization'},
+    {'key': 'interest',              'label': 'Interest'},
+    {'key': 'other',                 'label': 'Other'},
+]
 
 
 def slug(label: str) -> str:
@@ -89,6 +110,7 @@ def compose_donor_cells(item: dict) -> dict:
         'flags': ';'.join(flags),
         'notes': (item.get('notes') or '').strip(),
         'last_edited_by': EDITOR_STAMP,
+        'entity_type': (item.get('entity_type') or '').strip(),
     }
 
 
@@ -131,6 +153,9 @@ def expected_donor_override(item: dict) -> dict:
     notes = (item.get('notes') or '').strip()
     if notes:
         o['notes'] = notes
+    entity_type = (item.get('entity_type') or '').strip()
+    if entity_type:
+        o['entity_type'] = entity_type
     o['last_edited_by'] = EDITOR_STAMP
     return o
 

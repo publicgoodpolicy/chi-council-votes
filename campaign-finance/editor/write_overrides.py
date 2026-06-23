@@ -109,6 +109,9 @@ def _merged_donor_item(item: dict, live_row) -> dict:
         'additional_industries': compose.parse_list_cell((live_row or {}).get('additional_industries', '')),
         'flags': compose.parse_flag_cell((live_row or {}).get('flags', '')),
         'notes': (live_row or {}).get('notes', ''),
+        # entity_type — preserve the live cell unless explicitly edited (orthogonal
+        # to industry; a single scalar, no parse). Never inferred.
+        'entity_type': (live_row or {}).get('entity_type', ''),
     }
     return {
         'donor_id': item['donor_id'],
@@ -116,6 +119,7 @@ def _merged_donor_item(item: dict, live_row) -> dict:
         'additional_industries': item.get('additional_industries', []) if 'additional_industries' in ed else base['additional_industries'],
         'flags': item.get('flags', []) if 'flags' in ed else base['flags'],
         'notes': item.get('notes', '') if 'notes' in ed else base['notes'],
+        'entity_type': item.get('entity_type', '') if 'entity_type' in ed else base['entity_type'],
     }
 
 
@@ -140,8 +144,15 @@ def _merged_vocab_item(item: dict, live_row) -> dict:
 
 INDUSTRY_VOCAB_TAB = 'Industry Tags'
 FLAG_VOCAB_TAB = 'Flag Types'
+ENTITY_VOCAB_TAB = 'Entity Types'
 INDUSTRY_VOCAB_COLUMNS = compose.INDUSTRY_VOCAB_COLUMNS   # key | label | color
 FLAG_VOCAB_COLUMNS = compose.FLAG_VOCAB_COLUMNS           # key | label | severity
+ENTITY_VOCAB_COLUMNS = compose.ENTITY_VOCAB_COLUMNS       # key | label
+# Starter entity types are a CODE constant (compose). The add-only collision guard
+# must be UNION-AWARE: an inline-add of a starter key (e.g. 'labor') is a collision
+# even though the tab itself may not contain it. serve.py seeds these into the live
+# read before build_plan so the existing guard fires — no machinery change.
+ENTITY_VOCAB_SEED_KEYS = [e['key'] for e in compose.STARTER_ENTITY_TYPES]
 
 # Kind specs — the ONLY per-surface knobs. Adding a future field is additive:
 # extend the columns/compose in compose.py; the plan/execute machinery is generic.
@@ -177,8 +188,19 @@ FLAG_VOCAB_SPEC = {
     'sanitize': lambda item: {'warn': [], 'hold': []},
     'roundtrip': lambda items: compose.roundtrip_vocab(items, FLAG_VOCAB_TAB, FLAG_VOCAB_COLUMNS),
 }
+ENTITY_VOCAB_SPEC = {
+    'kind': 'entity_vocab', 'tab': ENTITY_VOCAB_TAB, 'columns': ENTITY_VOCAB_COLUMNS, 'key': 'key',
+    'key_of': lambda i: compose.slug(i.get('label', '')), 'stamp_col': None, 'add_only': True,
+    'merge': _merged_vocab_item,
+    'compose': lambda it: compose.compose_vocab_cells(it, ENTITY_VOCAB_COLUMNS),
+    'sanitize': lambda item: {'warn': [], 'hold': []},
+    'roundtrip': lambda items: compose.roundtrip_vocab(items, ENTITY_VOCAB_TAB, ENTITY_VOCAB_COLUMNS),
+    # union-aware add-only guard: starter keys count as already-existing (serve seeds them)
+    'seed_keys': ENTITY_VOCAB_SEED_KEYS,
+}
 SPECS = {'donor': DONOR_SPEC, 'committee': COMMITTEE_SPEC,
-         'industry_vocab': INDUSTRY_VOCAB_SPEC, 'flag_vocab': FLAG_VOCAB_SPEC}
+         'industry_vocab': INDUSTRY_VOCAB_SPEC, 'flag_vocab': FLAG_VOCAB_SPEC,
+         'entity_vocab': ENTITY_VOCAB_SPEC}
 
 
 # ============================================================

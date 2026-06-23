@@ -155,7 +155,7 @@ const WRITE      = ORIGIN + '/api/write';        // live write (explicit confirm
 const EDITOR_STAMP = 'editor-ui';
 
 const state = {
-  data:null, vocab:{industries:[],flags:[]}, live:null,
+  data:null, vocab:{industries:[],flags:[],entity_types:[]}, live:null,
   staged:new Map(),               // key `${kind}:${id}` -> staged item (user EDITS + `edited` set)
   view:'donors', q:'', editing:null,
   // master-view lookup (full donor set) — kept SEPARATE from data.donors so the
@@ -196,7 +196,8 @@ function composeDonorCells(it){
   const flags=(it.flags||[]).filter(f=>(f.type||'').trim()).map(flagCellOne);
   return { donor_id:it.donor_id, primary_industry:(it.primary_industry||'').trim(),
            additional_industries:addl.join(','), flags:flags.join(';'),
-           notes:(it.notes||'').trim(), last_edited_by:EDITOR_STAMP };
+           notes:(it.notes||'').trim(), last_edited_by:EDITOR_STAMP,
+           entity_type:(it.entity_type||'').trim() };
 }
 function composeCommitteeCells(it){
   const tags=(it.industry_tags||[]).map(s=>(s||'').trim()).filter(Boolean);
@@ -222,7 +223,8 @@ function stageDonorEdit(id, payload){
     primary_industry:payload.primary_industry||'',
     additional_industries:payload.additional_industries||[],
     flags:payload.flags||[], notes:payload.notes||'',
-    edited:payload.edited||['primary_industry','additional_industries','flags','notes'] });
+    entity_type:payload.entity_type||'',
+    edited:payload.edited||['primary_industry','additional_industries','flags','notes','entity_type'] });
   state.editing=null; return true;
 }
 function stageCommittee(id, tags){
@@ -269,13 +271,14 @@ function intendedDonor(s){
   const ed=new Set(s.edited||[]);
   const lv=liveForDonor(s.id);
   const base = lv ? { primary_industry:lv.primary_industry, additional_industries:parseList(lv.additional_industries),
-                      flags:parseFlags(lv.flags), notes:lv.notes }
-                  : { primary_industry:'', additional_industries:[], flags:[], notes:'' };
+                      flags:parseFlags(lv.flags), notes:lv.notes, entity_type:lv.entity_type||'' }
+                  : { primary_industry:'', additional_industries:[], flags:[], notes:'', entity_type:'' };
   return { donor_id:s.id,
     primary_industry: ed.has('primary_industry') ? s.primary_industry : base.primary_industry,
     additional_industries: ed.has('additional_industries') ? s.additional_industries : base.additional_industries,
     flags: ed.has('flags') ? s.flags : base.flags,
-    notes: ed.has('notes') ? s.notes : base.notes };
+    notes: ed.has('notes') ? s.notes : base.notes,
+    entity_type: ed.has('entity_type') ? s.entity_type : base.entity_type };
 }
 function intendedCommittee(s){
   const ed=new Set(s.edited||[]); const lv=liveForCommittee(s.id);
@@ -306,6 +309,8 @@ function indOptions(sel){ return state.vocab.industries.map(i=>`<option value="$
 // the tool never silently promotes a heuristic guess (or the alphabetical first).
 function indPrimaryOptions(sel){ return `<option value="">— select primary —</option>`+state.vocab.industries.map(i=>`<option value="${esc(i.key)}"${i.key===sel?' selected':''}>${esc(i.label)} (${esc(i.key)})</option>`).join(''); }
 function indMultiOptions(selArr){ const s=new Set(selArr||[]); return state.vocab.industries.map(i=>`<option value="${esc(i.key)}"${s.has(i.key)?' selected':''}>${esc(i.label)} (${esc(i.key)})</option>`).join(''); }
+// entity_type is OPTIONAL — blank-first, never required, never inferred from industry.
+function entityOptions(sel){ return `<option value="">— none —</option>`+(state.vocab.entity_types||[]).map(e=>`<option value="${esc(e.key)}"${e.key===sel?' selected':''}>${esc(e.label)}</option>`).join(''); }
 function flagOptions(sel){ return `<option value="">— flag —</option>`+state.vocab.flags.map(f=>`<option value="${esc(f.key)}"${f.key===sel?' selected':''}>${esc(f.label)} (${esc(f.key)})</option>`).join(''); }
 
 function donorRow(r,i){
@@ -365,14 +370,17 @@ function donorEditor(r){
   const cs=classifyState(r);
   // Base seed from CURRENT state: (b) the live curated split; (a) the heuristic
   // suggestion; (c) NOTHING — promoting the machine's guess is the curator's call.
-  let bP='', bA=[], bF=[], bN='';
-  if(cs.state==='b'){ bP=cs.lv.primary_industry||''; bA=parseList(cs.lv.additional_industries); bF=parseFlags(cs.lv.flags); bN=cs.lv.notes||''; }
+  let bP='', bA=[], bF=[], bN='', bE='';
+  // entity_type seeds from the live cell ONLY in state (b); blank in (a)/(c).
+  // NEVER inferred from industry — a labor-* donor opens with blank entity_type.
+  if(cs.state==='b'){ bP=cs.lv.primary_industry||''; bA=parseList(cs.lv.additional_industries); bF=parseFlags(cs.lv.flags); bN=cs.lv.notes||''; bE=cs.lv.entity_type||''; }
   else if(cs.state==='a'){ bP=r.suggested_industry||''; }
   // A staged edit (re-opening) wins over the base seed so in-progress work persists.
   const primary = s?s.primary_industry:bP;
   const addl = s?s.additional_industries:bA;
   const notes = s?s.notes:bN;
   const flags = s?s.flags:bF;
+  const entity = s?(s.entity_type||''):bE;
   const f = (flags&&flags[0])||{type:'',source_url:'',note:''};
   return `<div class="editor" id="ed-${esc(r.donor_id)}">
     ${currentBannerHTML(cs)}
@@ -390,6 +398,8 @@ function donorEditor(r){
     </div>
     <label>notes (free text)</label>
     <textarea id="f-notes" rows="2">${esc(notes)}</textarea>
+    <label>entity_type (optional — what the donor IS, orthogonal to industry)</label>
+    <select id="f-entity">${entityOptions(entity)}</select>
     <div class="ed-err" id="ed-err-${esc(r.donor_id)}">Choose a primary_industry before staging — editing this donor is the first human classification, and the tool won't promote the machine's guess for you.</div>
     <div class="ed-actions">
       <button class="act accept" onclick="saveDonorEdit('${esc(r.donor_id)}')">Stage these</button>
@@ -397,6 +407,7 @@ function donorEditor(r){
     </div>
     ${vocabIndustryFormHTML()}
     ${vocabFlagFormHTML()}
+    ${vocabEntityFormHTML()}
   </div>`;
 }
 function saveDonorEdit(id){
@@ -408,8 +419,10 @@ function saveDonorEdit(id){
   const ft=g('f-flagtype').value, fu=g('f-flagurl').value.trim(), fn=g('f-flagnote').value.trim();
   const flags = ft ? [{type:ft, source_url:fu, note:fn}] : [];
   const notes=g('f-notes').value;
-  stageDonorEdit(id, {primary_industry:primary, additional_industries:addl, flags, notes,
-    edited:['primary_industry','additional_industries','flags','notes']});
+  // entity_type is OPTIONAL — never gates staging; '' means "not set" (no override cell).
+  const entity_type=(g('f-entity')||{value:''}).value;
+  stageDonorEdit(id, {primary_industry:primary, additional_industries:addl, flags, notes, entity_type,
+    edited:['primary_industry','additional_industries','flags','notes','entity_type']});
 }
 
 function committeeRow(r,i){
@@ -477,6 +490,14 @@ function vocabFlagFormHTML(){
     <div class="ed-actions"><button class="act accept" onclick="addVocabFlag()">Add flag type</button></div>
     <div id="v-flag-out"></div></div>`;
 }
+function vocabEntityFormHTML(){
+  return `<div class="editor" style="background:#fff;border-style:dashed" id="v-ent-form">
+    <label>+ new entity type (vocab-add — what a donor IS)</label>
+    <div><input id="v-ent-label" placeholder="label, e.g. Trade Association" oninput="var s=document.getElementById('v-ent-slug');if(s)s.textContent=jsSlug(this.value)||'…'"></div>
+    <div class="meta-line">key: <code id="v-ent-slug">…</code> · add-only; the seeded starter types can't be re-added</div>
+    <div class="ed-actions"><button class="act accept" onclick="addVocabEntity()">Add entity type</button></div>
+    <div id="v-ent-out"></div></div>`;
+}
 function vocabBlastRadiusHTML(){
   return `<div class="meta-line" style="color:var(--muted)">New vocab affects By-Industry in <b>both</b> tools on their next build (council build_all.sh; the elections sequence).</div>`;
 }
@@ -502,6 +523,13 @@ function addVocabIndustry(){
   const key=jsSlug(label); if(!key) return Promise.resolve();
   return addVocab('industry_vocab', {kind:'industry_vocab',label,color}, key, 'industries', {key,label}, 'v-ind-out');
 }
+function addVocabEntity(){
+  const label=document.getElementById('v-ent-label').value;
+  const key=jsSlug(label); if(!key) return Promise.resolve();
+  // listName 'entity_types' already includes the starter constant (served), so the
+  // client-side guard also catches starter-key dupes; the server seed is authoritative.
+  return addVocab('entity_vocab', {kind:'entity_vocab',label}, key, 'entity_types', {key,label}, 'v-ent-out');
+}
 function addVocabFlag(){
   const label=document.getElementById('v-flag-label').value, severity=document.getElementById('v-flag-sev').value;
   const key=jsSlug(label); if(!key) return Promise.resolve();
@@ -519,9 +547,9 @@ function renderDiffItem(s){
   if(s.kind==='donor'){
     const it=intendedDonor(s), cells=composeDonorCells(it), lv=liveForDonor(s.id);
     const status = lv ? 'UPDATE' : 'NEW', isNew = !lv;
-    const before = lv || {primary_industry:'',additional_industries:'',flags:'',notes:'',last_edited_by:''};
+    const before = lv || {primary_industry:'',additional_industries:'',flags:'',notes:'',entity_type:'',last_edited_by:''};
     const compose_payload = { kind:'donor', id:s.id, status, cells, intended:it };
-    const rows = ['primary_industry','additional_industries','flags','notes','last_edited_by']
+    const rows = ['primary_industry','additional_industries','flags','notes','entity_type','last_edited_by']
       .map(col=>diffRow(col, before[col]||'', cells[col]||'', isNew)).join('');
     return `<div class="diff" data-compose='${esc(JSON.stringify(compose_payload))}'>
       <h3>${esc(s.name||s.id)} <span class="status ${status}">${status}</span></h3>
@@ -627,7 +655,7 @@ function buildBatch(){
   const lo=(state.live&&state.live.donor_overrides)||{}, lc=(state.live&&state.live.committee_tags)||{};
   return Array.from(state.staged.values()).map(s=> s.kind==='donor' ? {
     kind:'donor', donor_id:s.id, primary_industry:s.primary_industry, additional_industries:s.additional_industries,
-    flags:s.flags, notes:s.notes, edited:s.edited, snapshot:lo[s.id]||null,
+    flags:s.flags, notes:s.notes, entity_type:s.entity_type||'', edited:s.edited, snapshot:lo[s.id]||null,
   } : {
     kind:'committee', committee_id:s.id, committee_name:s.committee_name||s.name,
     industry_tags:s.industry_tags, edited:s.edited, snapshot:lc[s.id]||null,
@@ -763,6 +791,34 @@ async function maybeSelftest(){
     const d=document.createElement('div'); d.id='confirmtest-done'; d.style.display='none';
     d.textContent=JSON.stringify({donor:r&&r.donor_id}); document.body.appendChild(d);
     return;
+  }
+  // #entitytest — entity_type proof: dropdown populates from the seeded vocab,
+  // blank-in-(c) (no inference from a labor-* industry), and the chosen entity_type
+  // flows through staging into the write batch. Inline-add + live UPDATE are proven
+  // at the Sheet-setup gate (need the live 'Entity Types' tab / column).
+  if(location.hash==='#entitytest'){
+    setView('lookup');
+    try{ await loadLive(); }catch(e){}
+    const vocabKeys=(state.vocab.entity_types||[]).map(e=>e.key);
+    // (c) auto-classified labor donor -> entity_type must seed BLANK (no inference)
+    state.lookupQ='seiu-local-73'; await doLookup();
+    editor.openEdit('donor:seiu-local-73');
+    const cEntitySeed=(document.getElementById('f-entity')||{}).value;        // expect ''
+    const entityOptCount=document.querySelectorAll('#f-entity option').length; // 1 blank + 8 starters
+    // set entity_type and confirm it flows to the staged item + the write batch
+    promotePrimary('labor-trades');
+    document.getElementById('f-entity').value='labor';
+    saveDonorEdit('seiu-local-73');
+    const staged=editor.getStaged().find(x=>x.id==='seiu-local-73');
+    const batch=buildBatch().find(b=>b.donor_id==='seiu-local-73');
+    // (b) override-backed donor -> entity dropdown present (seed-from-live proven live)
+    state.lookupQ='illinois-realtors'; await doLookup();
+    editor.openEdit('donor:illinois-realtors');
+    const bHasEntitySelect=!!document.getElementById('f-entity');
+    const m=document.createElement('div'); m.id='entitytest-done'; m.style.display='none';
+    m.textContent=JSON.stringify({vocabKeys, cEntitySeed, entityOptCount,
+      stagedEntity:staged&&staged.entity_type, stagedEdited:staged&&staged.edited,
+      batchEntity:batch&&batch.entity_type, bHasEntitySelect}); document.body.appendChild(m); return;
   }
   // #mastertest — master-view proof: look up a CLASSIFIED donor in each state and
   // prove (b) seeds from the curated split, (c) pre-fills NOTHING and blocks staging

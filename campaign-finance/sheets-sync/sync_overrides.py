@@ -158,6 +158,10 @@ def read_donor_overrides(sheet) -> dict[str, dict]:
             override['notes'] = row['notes'].strip()
         if row.get('last_edited_by'):
             override['last_edited_by'] = row['last_edited_by'].strip()
+        # entity_type — WHAT the donor is (orthogonal to industry). Read by NAME, so
+        # tolerated-absent on a 6-column tab; only carried when the cell is non-empty.
+        if row.get('entity_type'):
+            override['entity_type'] = str(row['entity_type']).strip()
         out[did] = override
     return out
 
@@ -458,7 +462,8 @@ def apply_clusters(data: dict, clusters: dict, mergemap: dict) -> dict:
 # ============================================================
 def merge_overrides(data: dict, overrides: dict[str, dict],
                     industry_vocab: dict, flag_vocab: dict,
-                    mergemap: Optional[dict] = None) -> dict:
+                    mergemap: Optional[dict] = None,
+                    entity_vocab: Optional[dict] = None) -> dict:
     mergemap = mergemap or {}
     changes = {'donors_updated': 0, 'donors_skipped': 0, 'vocab_updated': 0}
 
@@ -469,6 +474,13 @@ def merge_overrides(data: dict, overrides: dict[str, dict],
     if flag_vocab:
         for k, v in flag_vocab.items():
             data.setdefault('flag_types', {})[k] = {**data.get('flag_types', {}).get(k, {}), **v}
+            changes['vocab_updated'] += 1
+    # entity_type vocab — operator-added types from the 'Entity Types' tab. The
+    # code-constant starter set is NOT baked here (it lives in compose/serve and is
+    # unioned at serve time); only the tab's growth tail lands in the data.
+    if entity_vocab:
+        for k, v in entity_vocab.items():
+            data.setdefault('entity_types', {})[k] = {**data.get('entity_types', {}).get(k, {}), **v}
             changes['vocab_updated'] += 1
 
     for did, override in overrides.items():
@@ -491,6 +503,10 @@ def merge_overrides(data: dict, overrides: dict[str, dict],
             donor['flags'] = override['flags']
         if 'notes' in override:
             donor['notes'] = override['notes']
+        if 'entity_type' in override:
+            # DISTINCT key from ingest's `type` (build_rollups keys off type=='Aggregate');
+            # entity_type is editorial-only and never read by the rollup/render path yet.
+            donor['entity_type'] = override['entity_type']
         if 'last_edited_by' in override:
             donor['_last_edited_by'] = override['last_edited_by']
         changes['donors_updated'] += 1
@@ -528,6 +544,8 @@ def main():
     print(f"  {len(overrides)} override entries")
     industry_vocab = read_vocab(sheet, 'Industry Tags', 'key')
     flag_vocab = read_vocab(sheet, 'Flag Types', 'key')
+    entity_vocab = read_vocab(sheet, 'Entity Types', 'key')   # absent tab -> {} (tolerated)
+    print(f"  {len(entity_vocab)} operator-added entity types")
     merges = read_donor_merges(sheet)
     print(f"  {len(merges)} donor-merge pairs")
     clusters = read_donor_clusters(sheet)
@@ -538,7 +556,8 @@ def main():
     print(f"  {merge_changes}")
 
     print("Merging overrides + vocab…")
-    changes = merge_overrides(data, overrides, industry_vocab, flag_vocab, mergemap)
+    changes = merge_overrides(data, overrides, industry_vocab, flag_vocab, mergemap,
+                              entity_vocab=entity_vocab)
     print(f"  {changes}")
 
     print("Tagging committees (industry)…")

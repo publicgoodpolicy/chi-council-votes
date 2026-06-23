@@ -68,6 +68,8 @@ INDEX_HTML = HERE / 'index.html'
 # default sheet id matches build_all.sh; creds are the existing readonly key.
 SHEETS_DIR = CF_ROOT / 'sheets-sync'
 sys.path.insert(0, str(SHEETS_DIR))           # so read_live_tabs can import sync_overrides
+sys.path.insert(0, str(HERE))                 # so we can import the shared composer constants
+import compose                                # noqa: E402  STARTER_ENTITY_TYPES (shared vocab seed)
 DEFAULT_SHEET_ID = '1tUJNv7S611xM-VO7LcZlOStbJ8O7LQ5deYjsHeVAwQ8'
 DEFAULT_CREDS = SHEETS_DIR / 'creds.json'
 
@@ -217,16 +219,27 @@ def read_vocab(data: dict) -> dict:
         s = (v or {}).get('severity')
         if s:
             sev.add(s)
+    # entity_types: UNION of the code-constant starter set with the operator-added
+    # 'Entity Types' tab (data['entity_types']). Constant WINS for starter keys; the
+    # tab contributes only NEW keys -> core can't be clobbered, labels can't disagree.
+    ent = {}
+    for e in compose.STARTER_ENTITY_TYPES:
+        ent[e['key']] = {'key': e['key'], 'label': e['label']}
+    for key, v in (data.get('entity_types') or {}).items():
+        if key not in ent:
+            ent[key] = {'key': key, 'label': (v or {}).get('label', key)}
     inds.sort(key=lambda x: x['label'].lower())
     flags.sort(key=lambda x: x['label'].lower())
-    return {'industries': inds, 'flags': flags, 'severities': sorted(sev)}
+    ents = sorted(ent.values(), key=lambda x: x['label'].lower())
+    return {'industries': inds, 'flags': flags, 'severities': sorted(sev),
+            'entity_types': ents}
 
 
 def build_payload() -> dict:
     """Read both files and assemble the full read-only worklist payload."""
     donor_rows, committee_rows = {}, {}
     per_file_meta = {}
-    vocab_ind, vocab_flag, vocab_sev = {}, {}, set()
+    vocab_ind, vocab_flag, vocab_sev, vocab_ent = {}, {}, set(), {}
     for tool, path in DATA_FILES.items():
         if not path.exists():
             raise SystemExit(f"Data file not found: {path}")
@@ -246,6 +259,8 @@ def build_payload() -> dict:
             vocab_ind[it['key']] = it
         for it in v['flags']:
             vocab_flag[it['key']] = it
+        for it in v['entity_types']:
+            vocab_ent.setdefault(it['key'], it)        # constant-first order preserved
         vocab_sev.update(v['severities'])
 
     donors = union_donors(donor_rows)
@@ -278,6 +293,7 @@ def build_payload() -> dict:
     }
     vocab = {'industries': sorted(vocab_ind.values(), key=lambda x: x['label'].lower()),
              'flags': sorted(vocab_flag.values(), key=lambda x: x['label'].lower()),
+             'entity_types': sorted(vocab_ent.values(), key=lambda x: x['label'].lower()),
              'severities': sorted(vocab_sev)}
     return {'meta': meta, 'donors': donors, 'committees': committees, 'vocab': vocab}
 
@@ -418,7 +434,7 @@ def read_live_tabs(sheet_id: str, creds_file) -> dict:
         return ws.get_all_records()
 
     donor_cols = ['primary_industry', 'additional_industries', 'flags',
-                  'notes', 'last_edited_by']
+                  'notes', 'last_edited_by', 'entity_type']   # entity_type read by name (absent-tolerant)
     donors = {}
     for r in rows('Donor Overrides'):
         did = str(r.get('donor_id') or '').strip()
@@ -492,6 +508,13 @@ class WorklistHandler(BaseHTTPRequestHandler):
                 if not items:
                     continue
                 live = wo.read_live_rows(sheet, spec)
+                # union-aware add-only guard: seed the code-constant starter keys into
+                # the live read so build_plan's existing collision check treats them as
+                # already-existing (no machinery change). Only specs with seed_keys
+                # (entity_vocab) carry these; for entity_type the seed dedupes the
+                # starter set against inline-adds.
+                for sk in spec.get('seed_keys', []):
+                    live.setdefault(sk, {'label': ''})
                 plan = wo.build_plan(items, live, spec)
                 plans[kind] = plan
                 if plan['blocked']:
