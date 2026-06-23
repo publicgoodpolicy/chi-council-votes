@@ -120,6 +120,9 @@
   .cl-mem:last-child{border-bottom:none;}
   .cl-mem .nm{font-weight:600;}
   .cl-mem .sub{font-size:11.5px; color:var(--muted);}
+  .cl-mem .cl-prad{display:inline-flex; align-items:center; margin:0; cursor:pointer;}
+  .cl-mem .cl-pmark{font-size:11.5px; font-weight:700; color:var(--teal); text-transform:uppercase; letter-spacing:.03em;}
+  .cl-legend{font-size:11.5px; color:var(--muted); margin:2px 0 6px;}
   .cl-mem select{padding:3px 6px; border:1px solid var(--line); border-radius:6px; font:inherit; font-size:12px; background:#fff;}
   .cl-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:9px 0;}
   .cl-grid input{width:100%; padding:6px 9px; border:1px solid var(--line); border-radius:6px; font:inherit; font-size:14px;}
@@ -659,6 +662,32 @@ function renderLookup(list, note){
 // ============================================================
 let __clusterTimer=null;
 const CL = ()=>state.cluster;
+// Single source of truth for the builder form: members, name, parent (canonical),
+// roles, relationship all live on state.cluster. The dry-run enable predicate, the
+// per-row label, and the displayed values ALL derive from it — no second copy.
+const VALID_ROLES=['related','alt-name','affiliated-pac','subsidiary'];
+// Honest enable predicate: returns the FIRST failing pre-write contract item as the
+// hint, so the disabled-state message names the real condition (not a stale guess).
+function clusterReady(c){
+  if(c.members.length<2) return {ok:false, hint:'select ≥2 members'};
+  if(!c.name.trim()) return {ok:false, hint:'name the cluster'};
+  if(!c.parent || c.members.indexOf(c.parent)===-1) return {ok:false, hint:'pick a parent'};
+  if(c.members.some(id=>id!==c.parent && c.roles[id] && VALID_ROLES.indexOf(c.roles[id])===-1))
+    return {ok:false, hint:'invalid role on a member'};
+  return {ok:true, hint:''};
+}
+// Surgical re-derive for the INPUT path (typing the name, picking a role): update the
+// gate button + hint from the single state WITHOUT a full re-render, so the <input>
+// keeps focus/cursor. Also drops a now-stale dry-run preview (CL().plan was set null by
+// the caller) so a Confirm button can never outlive the form it described — closing the
+// "displayed != written" gap. Structural changes (add/remove member, change parent) use
+// the full render() path, which rebuilds every dependent view from the same state.
+function clusterSyncControls(){
+  const c=CL(), rd=clusterReady(c);
+  const btn=document.getElementById('cl-review'); if(btn) btn.disabled=!rd.ok;
+  const hint=document.getElementById('cl-hint'); if(hint) hint.textContent=rd.hint;
+  const plan=document.getElementById('cl-plan'); if(plan && !c.plan) plan.innerHTML='';
+}
 function doClusterSearch(){
   const q=state.clusterQ.trim(), ind=state.clusterInd, et=state.clusterEtype;
   if(!q && !ind && !et){ state.clusterHits=[]; render(); return Promise.resolve(); }
@@ -679,9 +708,9 @@ function clusterToggle(id){
   c.plan=null; render();
 }
 function clusterSetParent(id){ CL().parent=id; CL().plan=null; render(); }
-function clusterSetRole(id,role){ CL().roles[id]=role; CL().plan=null; }
-function clusterSetName(v){ CL().name=v; CL().plan=null; }
-function clusterSetRel(v){ CL().relationship=v; CL().plan=null; }
+function clusterSetRole(id,role){ CL().roles[id]=role; CL().plan=null; clusterSyncControls(); }
+function clusterSetName(v){ CL().name=v; CL().plan=null; clusterSyncControls(); }
+function clusterSetRel(v){ CL().relationship=v; CL().plan=null; clusterSyncControls(); }
 function clusterReset(){ state.cluster={members:[],byId:new Map(),name:'',parent:'',roles:{},relationship:'affiliated entities',plan:null}; render(); }
 function clusterBatchItem(){ const c=CL(); return {kind:'cluster', cluster_name:c.name, members:c.members.slice(),
   parent_id:c.parent, roles:Object.assign({},c.roles), relationship:c.relationship||'affiliated entities'}; }
@@ -714,17 +743,21 @@ function clusterResultRow(r){
     <div class="actions"><button class="cl-add${inC?' in':''}" onclick="clusterToggle('${esc(r.donor_id)}')">${inC?'✓ in cluster — remove':'＋ add to cluster'}</button></div>
   </div>`;
 }
-function clusterRoleOptions(sel){ return ['related','alt-name','affiliated-pac','subsidiary'].map(x=>`<option value="${x}"${x===sel?' selected':''}>${x}</option>`).join(''); }
+function clusterRoleOptions(sel){ return VALID_ROLES.map(x=>`<option value="${x}"${x===sel?' selected':''}>${x}</option>`).join(''); }
 function clusterBuilderHTML(){
   const c=CL(); if(!c.members.length) return '';
+  // The radio is the parent SELECTOR (aria/title only — no per-row 'parent' word). The
+  // role/label column reads from the single canonical: it shows 'parent' IFF this row is
+  // c.parent, else the member's actual role. Label and radio cannot disagree — both
+  // derive from c.parent — so changing the radio re-renders and the label tracks with no lag.
   const rows=c.members.map(id=>{ const d=c.byId.get(id)||{name:id}; const isP=c.parent===id;
     return `<div class="cl-mem">
-      <label style="font-size:12px"><input type="radio" name="cl-parent" ${isP?'checked':''} onchange="clusterSetParent('${esc(id)}')"> parent</label>
+      <label class="cl-prad" title="set as canonical parent"><input type="radio" name="cl-parent" aria-label="set as canonical parent for ${esc(d.name||id)}" ${isP?'checked':''} onchange="clusterSetParent('${esc(id)}')"></label>
       <div><span class="nm">${esc(d.name||id)}</span> <span class="sub">${esc(id)}</span></div>
-      ${isP?`<span class="sub">canonical</span>`:`<select onchange="clusterSetRole('${esc(id)}',this.value)">${clusterRoleOptions(c.roles[id]||'related')}</select>`}
+      ${isP?`<span class="cl-pmark">parent</span>`:`<select onchange="clusterSetRole('${esc(id)}',this.value)">${clusterRoleOptions(c.roles[id]||'related')}</select>`}
       <button class="cl-add in" onclick="clusterToggle('${esc(id)}')">remove</button>
     </div>`; }).join('');
-  const ready=c.members.length>=2 && c.name.trim();
+  const rd=clusterReady(c);
   return `<div class="cl-builder">
     <h3>New cluster — ${c.members.length} member${c.members.length===1?'':'s'} selected</h3>
     <div class="cl-grid">
@@ -733,11 +766,12 @@ function clusterBuilderHTML(){
       <div><label style="font-size:11.5px;text-transform:uppercase;color:var(--muted)">relationship</label>
         <input id="cl-rel" value="${esc(c.relationship)}" oninput="clusterSetRel(this.value)"></div>
     </div>
+    <div class="cl-legend">◉ marks the canonical <b>parent</b> — pick one; the rest take a role.</div>
     ${rows}
     <div class="ed-actions" style="margin-top:10px">
-      <button class="act accept" onclick="clusterReview()" ${ready?'':'disabled'}>Review cluster (dry-run)</button>
+      <button class="act accept" id="cl-review" onclick="clusterReview()" ${rd.ok?'':'disabled'}>Review cluster (dry-run)</button>
       <button class="act" onclick="clusterReset()">Clear</button>
-      ${c.members.length<2?'<span class="cl-warn">select ≥2 members</span>':(!c.name.trim()?'<span class="cl-warn">name the cluster</span>':'')}
+      <span class="cl-warn" id="cl-hint">${esc(rd.hint)}</span>
     </div>
     <div id="cl-plan">${c.plan?renderClusterPlanHTML(c.plan):''}</div>
   </div>`;
@@ -1004,6 +1038,71 @@ async function maybeSelftest(){
       council_present:pf.present_count, council_dollars:pf.rolled_up_dollars,
       forms:pf.forms_cluster, dues_excluded:(p.preview||{}).dues_excluded,
       rows:(p.rows||[]).length}); document.body.appendChild(m); return;
+  }
+  // #clusterformtest — HUMAN-PATH form test (FIX-3a-1). Drives the Cluster builder
+  // the way a curator does: CLICK add buttons, TYPE the name via input events, CLICK
+  // the parent radio — never programmatic state-set. Catches the display-vs-validation
+  // desync (enable predicate left stale because the input path never re-derived it;
+  // per-row 'parent' label not tracking the canonical) that the programmatic
+  // #clustertest could not. Version-robust selectors: FAILS on pre-fix, PASSES after.
+  if(location.hash==='#clusterformtest'){
+    const R={};
+    setView('cluster');
+    state.clusterInd='labor-teachers'; await doClusterSearch();
+    R.searchHits=state.clusterHits.length;
+    const reviewBtn=()=>Array.from(document.querySelectorAll('#list .cl-builder .ed-actions button')).find(b=>/Review cluster/i.test(b.textContent))||null;
+    const hintEl=()=>document.querySelector('#list .cl-builder .ed-actions .cl-warn');
+    const memRows=()=>Array.from(document.querySelectorAll('#list .cl-builder .cl-mem'));
+    const fire=(el,type)=>el.dispatchEvent(new Event(type,{bubbles:true}));
+    const clickAdd=()=>{ const b=document.querySelector('#list .row .cl-add:not(.in)'); if(b){ b.click(); return true; } return false; };
+    // 1. select 2 members by CLICKING the add buttons (each click re-renders the list)
+    clickAdd(); clickAdd();
+    R.members=CL().members.length;
+    // 2. before naming, the dry-run gate must be disabled
+    R.disabledBeforeName = reviewBtn()? reviewBtn().disabled : null;
+    // 3. TYPE a name via an input event — must enable in ONE pass, no remove/replace dance
+    let nm=document.getElementById('cl-name'); if(nm){ nm.value='Teachers Family'; fire(nm,'input'); }
+    R.enabledAfterType = reviewBtn()? !reviewBtn().disabled : null;     // pre-fix: false; post-fix: true
+    // 4. per-row label tracks the radio: a row shows 'parent' IFF its radio is checked
+    const inv1=memRows().map(r=>{ const rb=r.querySelector('input[type=radio]'); return {checked:!!(rb&&rb.checked), shows:/parent/i.test(r.textContent)}; });
+    R.labelTracksRadio = inv1.length>0 && inv1.every(x=>x.checked===x.shows);
+    R.rowsShowingParent = inv1.filter(x=>x.shows).length;              // must be exactly 1
+    // 5. change the parent radio: the old parent row stops showing 'parent', the new one starts
+    const radios=document.querySelectorAll('#list .cl-builder .cl-mem input[type=radio]');
+    const prevParent=CL().parent;
+    if(radios[1]) radios[1].click();
+    R.parentMoved = CL().parent!==prevParent && CL().parent===CL().members[1];
+    const inv2=memRows().map(r=>{ const rb=r.querySelector('input[type=radio]'); return rb&&rb.checked===/parent/i.test(r.textContent); });
+    R.labelTracksAfterChange = inv2.length>0 && inv2.every(Boolean);
+    // 6. clear the name -> disabled + the hint names the REAL failing condition
+    nm=document.getElementById('cl-name'); if(nm){ nm.value=''; fire(nm,'input'); }
+    R.disabledAfterClear = reviewBtn()? reviewBtn().disabled : null;
+    R.hintOnClear = ((hintEl()&&hintEl().textContent)||'').trim();     // expect 'name the cluster'
+    // 7. retype -> re-enables (no dance)
+    nm=document.getElementById('cl-name'); if(nm){ nm.value='Teachers Family'; fire(nm,'input'); }
+    R.reEnabled = reviewBtn()? !reviewBtn().disabled : null;
+    // 8. (guarded; needs live creds) dry-run displayed==staged, and editing invalidates a stale plan
+    R.dryRun='skipped';
+    try{
+      await clusterReview();
+      const p=CL().plan||{};
+      if(p.cluster_id || (p.rows&&p.rows.length)){
+        R.planParentMatches = p.parent===CL().parent;
+        R.planMembersMatch = (p.members||p.rows||[]).length===CL().members.length;
+        nm=document.getElementById('cl-name'); if(nm){ nm.value='Teachers Family v2'; fire(nm,'input'); }
+        const planBox=document.getElementById('cl-plan');
+        R.stalePlanCleared = !!planBox && planBox.innerHTML.trim()==='';
+        R.dryRun='ran';
+      }
+    }catch(e){ R.dryRunErr=String((e&&e.message)||e); }
+    // overall verdict: the CORE human-path checks (creds-independent)
+    R.pass = R.disabledBeforeName===true && R.enabledAfterType===true &&
+             R.labelTracksRadio===true && R.rowsShowingParent===1 &&
+             R.parentMoved===true && R.labelTracksAfterChange===true &&
+             R.disabledAfterClear===true && /name the cluster/i.test(R.hintOnClear) &&
+             R.reEnabled===true;
+    const m=document.createElement('div'); m.id='clusterformtest-done'; m.style.display='none';
+    m.textContent=JSON.stringify(R); document.body.appendChild(m); return;
   }
   if(location.hash==='#mastertest'){
     setView('lookup');
