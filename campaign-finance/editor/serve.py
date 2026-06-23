@@ -353,6 +353,7 @@ def _donor_rows_for(tool: str, data: dict) -> list[dict]:
             'industries': donor.get('industries', []) or [],
             'flags': donor.get('flags', []) or [],
             'notes': donor.get('notes') or '',
+            'entity_type': donor.get('entity_type', '') or '',   # for filter/display (clustering)
             'last_edited_by': donor.get('_last_edited_by', '') or '',
             'tool': tool,
         })
@@ -391,30 +392,114 @@ def build_donor_index() -> list[dict]:
                 m['flags'] = r['flags']
             if not m['notes'] and r['notes']:
                 m['notes'] = r['notes']
-            for k in ('name', 'occupation', 'employer', 'city', 'last_edited_by'):
+            for k in ('name', 'occupation', 'employer', 'city', 'last_edited_by', 'entity_type'):
                 if not m[k] and r[k]:
                     m[k] = r[k]
     return list(merged.values())
 
 
-def search_donor_index(index: list[dict], q: str, cap: int = 50) -> list[dict]:
-    """Substring/id search over the master index. Exact donor_id match is pinned
-    first; the rest rank by total_given. Empty query returns nothing (the lookup is
-    explicit — it is NOT the default queue)."""
+def search_donor_index(index: list[dict], q: str, cap: int = 100,
+                       ind: str = '', etype: str = '') -> list[dict]:
+    """Substring/id search over the master index, with optional industry-tag and
+    entity_type FILTERS (for the clustering discovery surface: filter to e.g. all
+    labor-teachers donors and browse without typing). Exact donor_id match is pinned
+    first; the rest rank by total_given. With NO query and NO filter, returns nothing
+    (lookup is explicit, not the default queue); a filter alone is a valid browse."""
     q = (q or '').strip().lower()
-    if not q:
+    ind = (ind or '').strip()
+    etype = (etype or '').strip()
+    if not q and not ind and not etype:
         return []
     scored = []
     for r in index:
-        if r['donor_id'].lower() == q:
-            scored.append((0, r))
+        if ind and ind not in (r.get('industries') or []):
             continue
-        hay = ' '.join((r['donor_id'], r['name'], r['employer'],
-                        r['occupation'], r['city'])).lower()
-        if q in hay:
+        if etype and (r.get('entity_type') or '') != etype:
+            continue
+        if q:
+            if r['donor_id'].lower() == q:
+                scored.append((0, r)); continue
+            hay = ' '.join((r['donor_id'], r['name'], r['employer'],
+                            r['occupation'], r['city'])).lower()
+            if q not in hay:
+                continue
             scored.append((1, r))
+        else:
+            scored.append((1, r))            # filter-only browse
     scored.sort(key=lambda t: (t[0], -t[1]['total_given']))
     return [r for _, r in scored[:cap]]
+
+
+# ============================================================
+# CLUSTER ROLLUP PREVIEW  (HALT-3a) — the dry-run's per-file dollar figure, computed
+# the SAME way the rendered rollup is: build_rollups.by_parent sums each present
+# member's contributions EXCLUDING is_aggregate / EXCLUDED_CYCLES / dues / Aggregate-
+# type donors. We mirror that filter EXACTLY so the dry-run number equals what the
+# build will render, and so the gate-4 hand-sum matches. No union total, ever — each
+# file's figure is that file's present members only.
+# ============================================================
+def _excluded_cycles() -> set:
+    """Single source: build_rollups.EXCLUDED_CYCLES (imported, not duplicated)."""
+    try:
+        import build_rollups as br
+        return set(br.EXCLUDED_CYCLES)
+    except Exception:
+        return {'pre-2011', 'undated'}
+
+
+def per_file_donor_totals() -> dict:
+    """{tool: {donor_id: dues/cycle/aggregate-excluded total}} — one pass per file,
+    using build_rollups.by_parent's exact exclusion set so a cluster preview equals
+    the rendered rollup."""
+    excl = _excluded_cycles()
+    out = {}
+    for tool, path in DATA_FILES.items():
+        data = load(path)
+        donors = data.get('donors', {})
+        agg = {k for k, v in donors.items() if v.get('type') == 'Aggregate'}
+        t = {}
+        for c in data.get('contributions', []):
+            if c.get('is_aggregate'):
+                continue
+            if c.get('cycle') in excl:
+                continue
+            if c.get('contribution_type') == 'IE Committee Dues Transfer':
+                continue
+            did = c.get('donor_id')
+            if not did or did in agg or did not in donors:
+                continue
+            t[did] = t.get(did, 0) + (c.get('amount') or 0)
+        out[tool] = t
+    return out
+
+
+def cluster_preview(plan: dict, per_file_totals: dict) -> dict:
+    """Per-file rollup + cross-dataset resolution for a cluster plan's members. Mirrors
+    apply_clusters: members absent from a file are dropped; <2 present => the cluster
+    won't form in that file; the parent reparents to the first present member when the
+    chosen parent is absent. The total is Σ present members' (dues/cycle/aggregate-
+    excluded) contributions — recomputed per file, never a stored/union total."""
+    members, parent = plan['members'], plan['parent']
+    per_file = {}
+    for tool, path in DATA_FILES.items():
+        donors = load(path).get('donors', {})
+        totals = per_file_totals.get(tool, {})
+        present = [m for m in members if m in donors]
+        eff_parent = parent if parent in present else (present[0] if present else None)
+        per_file[tool] = {
+            'present': present,
+            'present_count': len(present),
+            'absent': [m for m in members if m not in donors],
+            'rolled_up_dollars': round(sum(totals.get(m, 0) for m in present), 2),
+            'forms_cluster': len(present) >= 2,
+            'parent_present': parent in donors,
+            'effective_parent': eff_parent,          # who apply_clusters will reparent to
+            'reparented': bool(eff_parent and eff_parent != parent),
+        }
+    return {'per_file': per_file, 'dues_excluded': True,
+            'basis': 'by_parent filter: excludes IE Committee Dues Transfer, '
+                     'pre-2011/undated cycles, aggregate rows & Aggregate-type donors; '
+                     'present members only, recomputed per file (no union total)'}
 
 
 def read_live_tabs(sheet_id: str, creds_file) -> dict:
@@ -457,6 +542,7 @@ def read_live_tabs(sheet_id: str, creds_file) -> dict:
 class WorklistHandler(BaseHTTPRequestHandler):
     payload_json: bytes = b'{}'              # set in main() once, cached
     donor_index: list = []                   # master lookup set (full universe), cached
+    per_file_totals: dict = {}               # {tool:{donor_id: dues-excl total}} for cluster preview
     sheet_id: str = DEFAULT_SHEET_ID
     creds_file = DEFAULT_CREDS
     _live_cache: bytes = None               # lazy: first /api/live request reads the Sheet
@@ -502,6 +588,25 @@ class WorklistHandler(BaseHTTPRequestHandler):
             sheet = wo.open_sheet_rw(cls.sheet_id, cls.creds_file)
             do_write = (path == '/api/write')
             plans, results, blocked = {}, {}, False
+
+            # CLUSTER write path (HALT-3a) — dedicated multi-row writer, NOT the
+            # single-key spec machinery. Runs before/alongside the spec loop; cluster
+            # items never match a SPECS kind so the loop ignores them.
+            cluster_items = [b for b in batch if b.get('kind') == 'cluster']
+            if cluster_items:
+                existing_ids = wo.read_cluster_ids(sheet)      # fresh-read collision guard basis
+                cplans = []
+                for it in cluster_items:
+                    cp = wo.build_cluster_plan(it, existing_ids)
+                    cp['preview'] = cluster_preview(cp, cls.per_file_totals)
+                    if cp['blocked']:
+                        blocked = True
+                    if do_write and not cp['blocked']:
+                        cp['result'] = wo.execute_cluster_plan(sheet, cp)
+                        existing_ids.append(cp['cluster_id'])  # next mint in same batch sees it
+                    cplans.append(cp)
+                plans['cluster'] = cplans
+
             # split by surface; each tab gets its OWN fresh read immediately before
             for kind, spec in wo.SPECS.items():
                 items = [b for b in batch if b.get('kind', 'donor') == kind]
@@ -536,8 +641,11 @@ class WorklistHandler(BaseHTTPRequestHandler):
         classification so the editor can render it. Empty q -> no hits."""
         qs = parse_qs(urlsplit(self.path).query)
         q = (qs.get('q', ['']) or [''])[0]
-        hits = search_donor_index(type(self).donor_index, q)
-        return json.dumps({'q': q, 'count': len(hits), 'hits': hits},
+        ind = (qs.get('ind', ['']) or [''])[0]
+        etype = (qs.get('etype', ['']) or [''])[0]
+        hits = search_donor_index(type(self).donor_index, q, ind=ind, etype=etype)
+        return json.dumps({'q': q, 'ind': ind, 'etype': etype,
+                           'count': len(hits), 'hits': hits},
                           ensure_ascii=False).encode('utf-8')
 
     def _live_json(self) -> bytes:
@@ -571,6 +679,8 @@ def main():
     WorklistHandler.payload_json = json.dumps(payload, ensure_ascii=False).encode('utf-8')
     print("Building master donor index (full universe — lookup surface)…")
     WorklistHandler.donor_index = build_donor_index()
+    print("Computing per-file dues-excluded totals (cluster preview)…")
+    WorklistHandler.per_file_totals = per_file_donor_totals()
     WorklistHandler.sheet_id = args.sheet_id
     WorklistHandler.creds_file = args.creds_file
 

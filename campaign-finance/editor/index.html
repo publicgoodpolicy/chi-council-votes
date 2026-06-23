@@ -110,6 +110,26 @@
   .cand:hover{background:var(--sage); color:#fff;}
   .ed-err{margin-top:8px; font-size:12.5px; color:var(--opp); font-weight:600; display:none;}
   .ed-err.show{display:block;}
+
+  /* clustering (HALT-3a): discovery filters + builder panel */
+  .cl-filters{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:6px 0 12px;}
+  .cl-filters select{padding:7px 10px; border:1px solid var(--line); border-radius:8px; background:var(--card); color:var(--ink); font:inherit; font-size:13px;}
+  .cl-builder{position:sticky; top:64px; z-index:5; background:var(--tan); border:1px solid #d9c3a6; border-radius:10px; padding:12px 14px; margin-bottom:14px;}
+  .cl-builder h3{font-family:'Recoleta','Georgia',serif; font-size:16px; margin:0 0 8px;}
+  .cl-mem{display:grid; grid-template-columns:auto 1fr auto auto; gap:9px; align-items:center; padding:5px 0; border-bottom:1px solid #e4d3ba; font-size:13px;}
+  .cl-mem:last-child{border-bottom:none;}
+  .cl-mem .nm{font-weight:600;}
+  .cl-mem .sub{font-size:11.5px; color:var(--muted);}
+  .cl-mem select{padding:3px 6px; border:1px solid var(--line); border-radius:6px; font:inherit; font-size:12px; background:#fff;}
+  .cl-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:9px 0;}
+  .cl-grid input{width:100%; padding:6px 9px; border:1px solid var(--line); border-radius:6px; font:inherit; font-size:14px;}
+  .cl-add{cursor:pointer; font:inherit; font-size:12px; font-weight:600; border-radius:7px; padding:4px 10px; border:1px solid var(--sage); background:#fff; color:var(--teal);}
+  .cl-add.in{background:var(--sage); color:#fff;}
+  .cl-pf{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px;}
+  .cl-pf .box{background:#fff; border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:12.5px;}
+  .cl-pf .box .big{font-family:'Recoleta','Georgia',serif; font-size:18px;}
+  .cl-chk{font-size:12px; margin-top:6px;} .cl-chk .ok{color:var(--new);} .cl-chk .no{color:var(--opp);}
+  .cl-warn{font-size:12px; color:var(--upd);}
 </style>
 </head>
 <body>
@@ -131,6 +151,7 @@
       <div class="tab active" data-view="donors" id="tab-donors" onclick="setView('donors')">Donors</div>
       <div class="tab" data-view="committees" id="tab-committees" onclick="setView('committees')">Committees</div>
       <div class="tab" data-view="lookup" id="tab-lookup" onclick="setView('lookup')">Find donor</div>
+      <div class="tab" data-view="cluster" id="tab-cluster" onclick="setView('cluster')">Cluster</div>
       <div class="tab" data-view="review" id="tab-review" onclick="setView('review')">Review &amp; diff</div>
     </div>
     <div class="search"><input id="search" type="text" placeholder="Filter by name / employer / city…" autocomplete="off"></div>
@@ -161,6 +182,9 @@ const state = {
   // master-view lookup (full donor set) — kept SEPARATE from data.donors so the
   // worklist stays unclassified-only; looked-up donors resolve via lookupById.
   lookupHits:[], lookupById:new Map(), lookupQ:'',
+  // clustering (HALT-3a): discovery filter state + the cluster being built
+  clusterHits:[], clusterById:new Map(), clusterQ:'', clusterInd:'', clusterEtype:'',
+  cluster:{ members:[], byId:new Map(), name:'', parent:'', roles:{}, relationship:'affiliated entities', plan:null },
 };
 
 const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -581,6 +605,7 @@ function render(){
 
   if(state.view==='review'){ renderReview(list,note); return; }
   if(state.view==='lookup'){ renderLookup(list,note); return; }
+  if(state.view==='cluster'){ renderCluster(list,note); return; }
 
   const isD = state.view==='donors';
   const rows = isD ? state.data.donors : state.data.committees;
@@ -623,6 +648,140 @@ function renderLookup(list, note){
   if(!q){ list.innerHTML=`<div class="empty">Type a name or donor_id above to find any donor — including ones already classified.</div>`; return; }
   if(!state.lookupHits.length){ list.innerHTML=`<div class="empty">No donors match “${esc(state.lookupQ.trim())}”.</div>`; return; }
   list.innerHTML = state.lookupHits.map(donorRow).join('');
+}
+
+// ============================================================
+// CLUSTERING (HALT-3a) — find donors (rendered + filtered by entity_type/tag),
+// MANUALLY select >=2 related members, name + parent + relationship, review a
+// dry-run (rows + per-file dues-excluded rollup + cross-dataset resolution), then
+// confirm a multi-row write to the Donor Clusters tab. Suggest-only proposer is 3b.
+// Reuses the master-view /api/donor search (now filter-capable) — one component.
+// ============================================================
+let __clusterTimer=null;
+const CL = ()=>state.cluster;
+function doClusterSearch(){
+  const q=state.clusterQ.trim(), ind=state.clusterInd, et=state.clusterEtype;
+  if(!q && !ind && !et){ state.clusterHits=[]; render(); return Promise.resolve(); }
+  const qs='?q='+encodeURIComponent(q)+'&ind='+encodeURIComponent(ind)+'&etype='+encodeURIComponent(et);
+  return fetch(DONORS+qs).then(r=>r.json()).then(j=>{
+    state.clusterHits=j.hits||[];
+    (j.hits||[]).forEach(h=>state.clusterById.set(h.donor_id,h));
+    render();
+  }).catch(e=>{ const l=document.getElementById('list'); if(l) l.innerHTML=`<div class="err">search failed: ${esc(e.message)}</div>`; });
+}
+function clusterFilterInd(v){ state.clusterInd=v; doClusterSearch(); }
+function clusterFilterEtype(v){ state.clusterEtype=v; doClusterSearch(); }
+function clusterHas(id){ return CL().members.indexOf(id)!==-1; }
+function clusterToggle(id){
+  const c=CL(), i=c.members.indexOf(id);
+  if(i===-1){ c.members.push(id); const h=state.clusterById.get(id); if(h) c.byId.set(id,h); if(!c.parent) c.parent=id; }
+  else { c.members.splice(i,1); delete c.roles[id]; if(c.parent===id) c.parent=c.members[0]||''; }
+  c.plan=null; render();
+}
+function clusterSetParent(id){ CL().parent=id; CL().plan=null; render(); }
+function clusterSetRole(id,role){ CL().roles[id]=role; CL().plan=null; }
+function clusterSetName(v){ CL().name=v; CL().plan=null; }
+function clusterSetRel(v){ CL().relationship=v; CL().plan=null; }
+function clusterReset(){ state.cluster={members:[],byId:new Map(),name:'',parent:'',roles:{},relationship:'affiliated entities',plan:null}; render(); }
+function clusterBatchItem(){ const c=CL(); return {kind:'cluster', cluster_name:c.name, members:c.members.slice(),
+  parent_id:c.parent, roles:Object.assign({},c.roles), relationship:c.relationship||'affiliated entities'}; }
+async function clusterReview(){
+  const out=document.getElementById('cl-plan'); if(out) out.innerHTML=`<div class="note-banner">Reading the live Donor Clusters tab and planning…</div>`;
+  try{ const res=await postJSON(WRITE_PLAN,{batch:[clusterBatchItem()]}); CL().plan=((res.plans||{}).cluster||[])[0]||{error:res.error}; render(); }
+  catch(e){ if(out) out.innerHTML=`<div class="err">${esc(e.message)}</div>`; }
+}
+async function clusterConfirm(){
+  const out=document.getElementById('cl-plan'); if(out) out.innerHTML=`<div class="note-banner">Writing the new cluster to the Donor Clusters tab…</div>`;
+  try{ const res=await postJSON(WRITE,{batch:[clusterBatchItem()]}); const p=((res.plans||{}).cluster||[])[0]||{};
+    if(p.result){ const cid=p.result.cluster_id, n=p.result.appended;
+      document.getElementById('list').innerHTML=`<div class="diff" style="border-color:var(--sage)"><h3>✓ wrote cluster ${esc(cid)} <span class="status NEW">${n} rows</span></h3>
+        <div class="meta-line">Appended ${n} member rows to Donor Clusters (non-destructive). Picked up on each tool's next build.</div></div>`+propagationPromptHTML();
+      clusterReset();
+    } else { CL().plan=p; render(); }
+  } catch(e){ if(out) out.innerHTML=`<div class="err">${esc(e.message)}</div>`; }
+}
+function clusterResultRow(r){
+  const inC=clusterHas(r.donor_id);
+  const idLine=[r.occupation,r.employer,r.city].filter(Boolean).map(esc);
+  return `<div class="row">
+    <div class="rank"></div>
+    <div>
+      <div class="name">${esc(r.name)||esc(r.donor_id)}${clsBadge(r)}</div>
+      ${idLine.length?`<div class="meta-line">${idLine.join('<span class="sep">•</span>')}</div>`:''}
+      <div class="badges">${toolBadges(r.tools)}</div>
+    </div>
+    <div class="amt"><div class="big">${usd(r.total_given)}</div><div class="small">${r.contribution_count} contrib.</div></div>
+    <div class="actions"><button class="cl-add${inC?' in':''}" onclick="clusterToggle('${esc(r.donor_id)}')">${inC?'✓ in cluster — remove':'＋ add to cluster'}</button></div>
+  </div>`;
+}
+function clusterRoleOptions(sel){ return ['related','alt-name','affiliated-pac','subsidiary'].map(x=>`<option value="${x}"${x===sel?' selected':''}>${x}</option>`).join(''); }
+function clusterBuilderHTML(){
+  const c=CL(); if(!c.members.length) return '';
+  const rows=c.members.map(id=>{ const d=c.byId.get(id)||{name:id}; const isP=c.parent===id;
+    return `<div class="cl-mem">
+      <label style="font-size:12px"><input type="radio" name="cl-parent" ${isP?'checked':''} onchange="clusterSetParent('${esc(id)}')"> parent</label>
+      <div><span class="nm">${esc(d.name||id)}</span> <span class="sub">${esc(id)}</span></div>
+      ${isP?`<span class="sub">canonical</span>`:`<select onchange="clusterSetRole('${esc(id)}',this.value)">${clusterRoleOptions(c.roles[id]||'related')}</select>`}
+      <button class="cl-add in" onclick="clusterToggle('${esc(id)}')">remove</button>
+    </div>`; }).join('');
+  const ready=c.members.length>=2 && c.name.trim();
+  return `<div class="cl-builder">
+    <h3>New cluster — ${c.members.length} member${c.members.length===1?'':'s'} selected</h3>
+    <div class="cl-grid">
+      <div><label style="font-size:11.5px;text-transform:uppercase;color:var(--muted)">cluster name</label>
+        <input id="cl-name" value="${esc(c.name)}" placeholder="e.g. Chicago Teachers Union" oninput="clusterSetName(this.value)"></div>
+      <div><label style="font-size:11.5px;text-transform:uppercase;color:var(--muted)">relationship</label>
+        <input id="cl-rel" value="${esc(c.relationship)}" oninput="clusterSetRel(this.value)"></div>
+    </div>
+    ${rows}
+    <div class="ed-actions" style="margin-top:10px">
+      <button class="act accept" onclick="clusterReview()" ${ready?'':'disabled'}>Review cluster (dry-run)</button>
+      <button class="act" onclick="clusterReset()">Clear</button>
+      ${c.members.length<2?'<span class="cl-warn">select ≥2 members</span>':(!c.name.trim()?'<span class="cl-warn">name the cluster</span>':'')}
+    </div>
+    <div id="cl-plan">${c.plan?renderClusterPlanHTML(c.plan):''}</div>
+  </div>`;
+}
+function renderClusterPlanHTML(p){
+  if(p.error) return `<div class="err">${esc(p.error)}</div>`;
+  const chk=Object.entries(p.contract||{}).map(([k,v])=>`<span class="${v?'ok':'no'}">${v?'✓':'✗'} ${esc(k)}</span>`).join(' · ');
+  const errs=(p.errors||[]).length?`<div class="err" style="margin:6px 0">${p.errors.map(esc).join('<br>')}</div>`:'';
+  const pf=(p.preview&&p.preview.per_file)||{};
+  const boxes=Object.entries(pf).map(([tool,x])=>`<div class="box"><b>${esc(tool)}</b><div class="big">${usd(x.rolled_up_dollars)}</div>
+    <div class="meta-line">${x.present_count} of ${p.members.length} members present${x.forms_cluster?'':' — <span class="cl-warn">will not form (&lt;2)</span>'}</div>
+    ${x.reparented?`<div class="cl-warn">parent absent → reparents to ${esc(x.effective_parent||'')}</div>`:''}
+    ${x.absent.length?`<div class="sub" style="font-size:11px;color:var(--muted)">absent: ${x.absent.map(esc).join(', ')}</div>`:''}</div>`).join('');
+  const rows=(p.rows||[]).map(r=>`<tr><td class="col">${esc(r.donor_id)}</td><td>${esc(r.role)}</td><td>${esc(r.canonical_id)}</td></tr>`).join('');
+  const canWrite=!p.blocked;
+  return `<div class="diff" style="margin-top:10px">
+    <h3>Dry-run — cluster ${esc(p.cluster_id)} <span class="status ${canWrite?'NEW':''}" ${canWrite?'':'style="background:var(--opp)"'}>${canWrite?'WRITABLE':'BLOCKED'}</span></h3>
+    ${errs}
+    <div class="cl-chk">${chk}</div>
+    <div class="cl-pf">${boxes}</div>
+    <div class="meta-line" style="margin-top:6px">${esc((p.preview||{}).basis||'')}</div>
+    <table class="cells" style="margin-top:8px"><tr><th>donor_id</th><th>role</th><th>canonical_id</th></tr>${rows}</table>
+    <div class="meta-line">No dollar column is written — the total recomputes per file at build time.</div>
+    ${canWrite?`<div class="ed-actions"><button class="act accept" onclick="clusterConfirm()">Confirm write cluster (${p.rows.length} rows)</button></div>`:''}
+  </div>`;
+}
+function renderCluster(list, note){
+  note.textContent='Cluster — find related donors, select ≥2, name + pick a parent, review the per-file rollup, then write to the shared Donor Clusters tab (non-destructive).';
+  const indOpts=`<option value="">— any industry —</option>`+(state.vocab.industries||[]).map(i=>`<option value="${esc(i.key)}"${i.key===state.clusterInd?' selected':''}>${esc(i.label)}</option>`).join('');
+  const etOpts=`<option value="">— any entity type —</option>`+(state.vocab.entity_types||[]).map(e=>`<option value="${esc(e.key)}"${e.key===state.clusterEtype?' selected':''}>${esc(e.label)}</option>`).join('');
+  const filters=`<div class="cl-filters">
+    <select onchange="clusterFilterInd(this.value)">${indOpts}</select>
+    <select onchange="clusterFilterEtype(this.value)">${etOpts}</select>
+    <span class="meta-line">filter by industry / entity type, or type above — no query required</span></div>`;
+  const builder=clusterBuilderHTML();
+  let results;
+  if(!state.clusterQ.trim() && !state.clusterInd && !state.clusterEtype){
+    results=`<div class="empty">Filter by industry or entity type (e.g. labor-teachers), or type a name, to list donors to cluster.</div>`;
+  } else if(!state.clusterHits.length){
+    results=`<div class="empty">No donors match the current filter.</div>`;
+  } else {
+    results=`<p class="count-note">${state.clusterHits.length} donor(s) — click “add to cluster”.</p>`+state.clusterHits.map(clusterResultRow).join('');
+  }
+  list.innerHTML = filters + builder + results;
 }
 
 function renderReview(list, note){
@@ -722,6 +881,7 @@ function setView(v){
   const sb=document.getElementById('search');
   sb.value='';
   sb.placeholder = v==='lookup' ? 'Look up ANY donor by name or donor_id (classified too)…'
+                : v==='cluster' ? 'Filter donors to cluster (name / id) — or use the dropdowns…'
                                 : 'Filter by name / employer / city…';
   if(v==='lookup'){
     state.lookupQ=''; state.lookupHits=[]; state.lookupById=new Map();
@@ -729,12 +889,14 @@ function setView(v){
     // if it fails (no creds/offline) curated donors degrade to (c) — never silently authoritative.
     if(!state.live){ loadLive().then(()=>render()).catch(()=>render()); }
   }
+  if(v==='cluster'){ state.clusterQ=''; state.cluster.plan=null; }
   render();
 }
 function refresh(){ render(); }
 
 document.getElementById('search').addEventListener('input', e=>{
   if(state.view==='lookup'){ state.lookupQ=e.target.value; clearTimeout(__lookupTimer); __lookupTimer=setTimeout(doLookup,250); }
+  else if(state.view==='cluster'){ state.clusterQ=e.target.value; clearTimeout(__clusterTimer); __clusterTimer=setTimeout(doClusterSearch,250); }
   else { state.q=e.target.value; render(); }
 });
 
@@ -823,6 +985,26 @@ async function maybeSelftest(){
   // #mastertest — master-view proof: look up a CLASSIFIED donor in each state and
   // prove (b) seeds from the curated split, (c) pre-fills NOTHING and blocks staging
   // until a primary is promoted. Guarded; never runs without the hash.
+  // #clustertest — clustering dry-run proof: filter to labor-teachers, select CTU
+  // variants, name + parent, review. Asserts contract passes, per-file rollup forms,
+  // dues-excluded basis present. No live write (gate 2).
+  if(location.hash==='#clustertest'){
+    setView('cluster');
+    state.clusterInd='labor-teachers'; await doClusterSearch();
+    ['chicago-teachers-union','ctu-local-1-pac','chicago-teacher-s-union-pac'].forEach(id=>{
+      if(state.clusterById.get(id) || state.clusterHits.find(h=>h.donor_id===id)) clusterToggle(id);
+    });
+    clusterSetName('CTU Test Cluster'); clusterSetParent('chicago-teachers-union');
+    await clusterReview();
+    const p=CL().plan||{};
+    const pf=(p.preview&&p.preview.per_file&&p.preview.per_file.council)||{};
+    const m=document.createElement('div'); m.id='clustertest-done'; m.style.display='none';
+    m.textContent=JSON.stringify({cluster_id:p.cluster_id, blocked:p.blocked, errors:p.errors,
+      contract:p.contract, members:(p.members||[]).length, parent:p.parent,
+      council_present:pf.present_count, council_dollars:pf.rolled_up_dollars,
+      forms:pf.forms_cluster, dues_excluded:(p.preview||{}).dues_excluded,
+      rows:(p.rows||[]).length}); document.body.appendChild(m); return;
+  }
   if(location.hash==='#mastertest'){
     setView('lookup');
     try{ await loadLive(); }catch(e){}

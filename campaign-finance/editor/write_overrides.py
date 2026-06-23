@@ -28,6 +28,7 @@ changes.
 from __future__ import annotations
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -327,6 +328,120 @@ def execute_plan(sheet, plan: dict, spec: dict = DONOR_SPEC) -> list:
             results.append({'id': k, 'action': 'updated' if data else 'no-change',
                             'cells': list(rec['changed'].keys())})
     return results
+
+
+# ============================================================
+# CLUSTER WRITE PATH  (HALT-3a) — multi-row, NOT the single-key kind-spec machinery.
+# Donor Clusters is N rows per cluster sharing a cluster_id; build_plan/execute_plan
+# are single-row upserts keyed on one column and CANNOT model it. This is a dedicated
+# create-only writer: mint a fresh id, validate the write contract, append N member
+# rows. Non-destructive (append only; never rewrites/deletes existing rows or touches
+# any other tab). The total is recomputed per-file by apply_clusters at build time —
+# NO dollar column is ever written here (contract item 5).
+# ============================================================
+CLUSTER_TAB = 'Donor Clusters'
+CLUSTER_COLUMNS = ['cluster_id', 'cluster_name', 'canonical_id',
+                   'donor_id', 'role', 'relationship']
+CLUSTER_ID_RE = re.compile(r'^rollup-ed-(\d+)$')   # shape-strict editor namespace
+# VALID_ROLES mirrors sync_overrides (single source of the role vocabulary).
+CLUSTER_VALID_ROLES = {'parent', 'alt-name', 'affiliated-pac', 'subsidiary', 'related'}
+DEFAULT_RELATIONSHIP = 'affiliated entities'
+
+# B4 — entity_type read-only structural guard: the cluster writer targets a tab with
+# NO entity_type column, so it structurally cannot write entity_type. Assert it so a
+# future schema change can't silently let clustering stamp entity_type.
+assert 'entity_type' not in CLUSTER_COLUMNS, 'cluster writer must never touch entity_type'
+
+
+def read_cluster_ids(sheet) -> list:
+    """Fresh read of every existing cluster_id (the concurrent-edit guard's basis)."""
+    ws = sheet.worksheet(CLUSTER_TAB)
+    return [str(r.get('cluster_id') or '').strip()
+            for r in ws.get_all_records() if str(r.get('cluster_id') or '').strip()]
+
+
+def mint_cluster_id(existing_ids) -> str:
+    """Next id in the editor namespace: rollup-ed-NNN, floor 001. Shape-strict scan —
+    only rollup-ed-<digits> contributes to the max; any other id (incl. the build's
+    rollup-NNN block) is ignored, so editor and build namespaces never collide."""
+    mx = 0
+    for c in existing_ids:
+        m = CLUSTER_ID_RE.match(str(c))
+        if m:
+            mx = max(mx, int(m.group(1)))
+    return 'rollup-ed-%03d' % (mx + 1)
+
+
+def build_cluster_plan(item: dict, existing_ids) -> dict:
+    """Validate one cluster item against the write contract (1-6), mint a fresh id,
+    and compose the N member rows. Returns {cluster_id, rows, members, parent, errors,
+    contract, blocked}. Pure/Sheet-free except for the supplied existing_ids."""
+    errors = []
+    name = (item.get('cluster_name') or '').strip()
+    # dedupe members, preserve order
+    seen, members = set(), []
+    for m in (item.get('members') or []):
+        m = (m or '').strip()
+        if m and m not in seen:
+            seen.add(m); members.append(m)
+    parent = (item.get('parent_id') or '').strip()
+    rel = (item.get('relationship') or DEFAULT_RELATIONSHIP).strip() or DEFAULT_RELATIONSHIP
+    roles_in = item.get('roles') or {}
+
+    if not name:
+        errors.append('cluster_name is required')
+    if len(members) < 2:
+        errors.append('a cluster needs >= 2 distinct members')
+    if parent and parent not in members:
+        errors.append('parent must be one of the selected members')
+    if not parent and members:
+        parent = members[0]
+
+    existing = set(str(c) for c in existing_ids)
+    cid = mint_cluster_id(existing_ids)
+    if cid in existing:                       # fresh-read collision guard (belt-and-suspenders)
+        errors.append(f'cluster_id collision: {cid} already exists')
+
+    rows, nparent = [], 0
+    for m in members:
+        role = 'parent' if m == parent else (roles_in.get(m) or 'related')
+        if role not in CLUSTER_VALID_ROLES:
+            role = 'related'
+        if role == 'parent':
+            nparent += 1
+        rows.append({'cluster_id': cid, 'cluster_name': name, 'canonical_id': parent,
+                     'donor_id': m, 'role': role, 'relationship': rel})
+    if nparent != 1:
+        errors.append(f'exactly one parent row required (got {nparent})')
+
+    contract = {
+        '1_shared_cluster_id': len({r['cluster_id'] for r in rows}) == 1 if rows else False,
+        '2_consistent_canonical': len({r['canonical_id'] for r in rows}) == 1 if rows else False,
+        '3_exactly_one_parent': nparent == 1,
+        '4_cluster_name_present': bool(name),
+        # structural no-dollar guard: every row key is a contract column (none is a $ field)
+        '5_no_dollar_column': all(set(r) <= set(CLUSTER_COLUMNS) for r in rows),
+        '6_min_two_members': len(members) >= 2,
+    }
+    blocked = bool(errors) or not all(contract.values())
+    return {'cluster_id': cid, 'rows': rows, 'members': members, 'parent': parent,
+            'relationship': rel, 'errors': errors, 'contract': contract, 'blocked': blocked}
+
+
+def execute_cluster_plan(sheet, plan: dict) -> dict:
+    """Append the cluster's member rows (RAW), in the live header's column order.
+    Append-only: existing rows and all other tabs are never touched. Refuses a blocked
+    plan. B4: asserts no row carries an entity_type cell before writing."""
+    if plan.get('blocked'):
+        raise RuntimeError('cluster blocked: ' + '; '.join(plan.get('errors') or ['contract failed']))
+    for r in plan['rows']:                     # B4 runtime guard
+        assert 'entity_type' not in r, 'cluster row must never carry entity_type'
+    ws = sheet.worksheet(CLUSTER_TAB)
+    header = ws.row_values(1)
+    body = [[r.get(c, '') for c in header] for r in plan['rows']]
+    ws.append_rows(body, value_input_option='RAW')
+    return {'cluster_id': plan['cluster_id'], 'appended': len(body),
+            'rows': len(plan['rows'])}
 
 
 if __name__ == '__main__':
