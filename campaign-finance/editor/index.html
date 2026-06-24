@@ -148,8 +148,18 @@
   .cl-section{margin-top:12px;}
   .cl-h4{font-family:'Recoleta','Georgia',serif; font-size:14px; margin:0 0 4px;}
   .cl-exist-list{max-height:30vh; overflow:auto; border:1px solid var(--line); border-radius:8px; background:#fff;}
-  .cl-exist-row{display:flex; gap:8px; align-items:baseline; padding:4px 10px; border-bottom:1px solid var(--line); font-size:12.5px;}
+  .cl-exist-row{display:flex; gap:8px; align-items:baseline; padding:5px 10px; border-bottom:1px solid var(--line); font-size:12.5px; cursor:pointer;}
   .cl-exist-row:last-child{border-bottom:none;} .cl-exist-row .nm{font-weight:600;} .cl-exist-row .sub{color:var(--muted); font-size:11px;}
+  .cl-exist-row:hover{background:#faf4ea;} .cl-exist-row.open{background:#f3ead9;}
+  .cl-exist-row .cl-caret{color:var(--muted); font-size:10px; width:10px;}
+  /* FIX-3a-3 inspect: search box + opened-cluster detail (read-only; EDIT-1 adds controls here) */
+  .cl-exist-search{width:100%; box-sizing:border-box; padding:6px 9px; margin:0 0 7px; border:1px solid var(--line); border-radius:7px; font:inherit; font-size:13px;}
+  .cl-detail{padding:6px 10px 9px 28px; background:#fffdf8; border-bottom:1px solid var(--line);}
+  .cl-detail .meta-line{margin-bottom:5px;}
+  .cl-detail-mem{display:flex; gap:9px; align-items:baseline; padding:2px 0; font-size:12.5px;}
+  .cl-detail-role{flex:0 0 92px; font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:.03em; color:var(--muted);}
+  .cl-detail-role.parent{color:var(--teal);}
+  .cl-detail-nm .sub{color:var(--muted); font-size:11px;}
 </style>
 </head>
 <body>
@@ -209,6 +219,9 @@ const state = {
   // + render-on-open. clusterKnown=null means "not loaded yet"; clusterByDonor maps a
   // donor_id -> its existing cluster {cluster_id, cluster_name, role}.
   clusterKnown:null, clusterByDonor:{}, clusterLoadErr:'', clusterBrowse:false,
+  // FIX-3a-3: inspect existing clusters — search over the 540 + which one is opened.
+  // Read-only; clusterOpenId is the expanded cluster (HALT-EDIT-1 adds controls into it).
+  clusterExistQ:'', clusterOpenId:'',
   cluster:{ members:[], byId:new Map(), name:'', parent:'', roles:{}, relationship:'affiliated entities', plan:null },
 };
 
@@ -859,10 +872,56 @@ function clusterExistingHTML(){
   const errNote = state.clusterLoadErr
     ? `<div class="cl-warn" style="margin:6px 0">existing-cluster check unavailable (${esc(state.clusterLoadErr)}) — the overlap guard is inactive until this loads.</div>` : '';
   const cl=state.clusterKnown;
-  const items=cl.map(c=>`<div class="cl-exist-row"><span class="nm">${esc(c.cluster_name||c.cluster_id)}</span> <span class="sub">${esc(c.cluster_id)} · ${c.members.length} member${c.members.length===1?'':'s'}</span></div>`).join('');
+  // FIX-3a-3: search box + a SEPARATE rows container (#cl-exist-rows). The input lives
+  // OUTSIDE that container, so filtering re-renders only the rows and the input keeps
+  // focus/caret (same single-source / no-full-render discipline as FIX-3a-1).
   return `<div class="cl-section"><h4 class="cl-h4">Existing clusters (${cl.length})</h4>${errNote}
-    <div class="cl-exist-list">${items||'<div class="empty">none yet</div>'}</div></div>`;
+    <input id="cl-exist-q" class="cl-exist-search" placeholder="search existing clusters by name or id…" value="${esc(state.clusterExistQ||'')}" oninput="clusterExistFilter(this.value)">
+    <div class="cl-exist-list"><div id="cl-exist-rows">${clusterExistRowsHTML()}</div></div></div>`;
 }
+// FIX-3a-3 inspect: match a cluster against the search query (name, id, or member id).
+function clusterMatchExist(c, q){
+  if(!q) return true;
+  return (c.cluster_name||'').toLowerCase().includes(q) ||
+         (c.cluster_id||'').toLowerCase().includes(q) ||
+         c.members.some(m=>(m.donor_id||'').toLowerCase().includes(q));
+}
+function clusterExistRowsHTML(){
+  const q=(state.clusterExistQ||'').trim().toLowerCase();
+  const list=(state.clusterKnown||[]).filter(c=>clusterMatchExist(c,q));
+  if(!list.length) return '<div class="empty">No clusters match.</div>';
+  return list.map(clusterExistRowHTML).join('');
+}
+function clusterExistRowHTML(c){
+  const open = state.clusterOpenId===c.cluster_id;
+  const head = `<div class="cl-exist-row${open?' open':''}" onclick="clusterToggleOpen('${esc(c.cluster_id)}')">
+    <span class="cl-caret">${open?'▾':'▸'}</span>
+    <span class="nm">${esc(c.cluster_name||c.cluster_id)}</span>
+    <span class="sub">${esc(c.cluster_id)} · ${c.members.length} member${c.members.length===1?'':'s'}</span></div>`;
+  return head + (open?clusterDetailHTML(c):'');
+}
+// The opened-cluster inspect view. READ-ONLY here — no controls. HALT-EDIT-1 adds its
+// edit controls INTO this view, so keep the per-member row structure stable. Parent is
+// the canonical (donor_id===canonical_id), falling back to an explicit role==='parent'.
+function clusterDetailHTML(c){
+  const rows=c.members.map(m=>{
+    const isP = (c.canonical_id && m.donor_id===c.canonical_id) || m.role==='parent';
+    const known=state.clusterById.get(m.donor_id);
+    const nm = known&&known.name ? esc(known.name)+' ' : '';   // name only if already cached (no fetch)
+    return `<div class="cl-detail-mem">
+      <span class="cl-detail-role${isP?' parent':''}">${isP?'parent':esc(m.role||'related')}</span>
+      <span class="cl-detail-nm">${nm}<span class="sub">${esc(m.donor_id)}</span></span>
+    </div>`;
+  }).join('');
+  const rel=(c.members[0]&&c.members[0].relationship)||'';
+  return `<div class="cl-detail" id="cl-detail-${esc(c.cluster_id)}">
+    <div class="meta-line">canonical parent: <b>${esc(c.canonical_id||'—')}</b>${rel?' · relationship: '+esc(rel):''}</div>
+    ${rows}</div>`;
+}
+function clusterToggleOpen(id){ state.clusterOpenId = (state.clusterOpenId===id ? '' : id); clusterRenderExistRows(); }
+function clusterExistFilter(v){ state.clusterExistQ=v; clusterRenderExistRows(); }
+// surgical: rebuild ONLY the rows container, so the search input keeps focus while typing.
+function clusterRenderExistRows(){ const el=document.getElementById('cl-exist-rows'); if(el) el.innerHTML=clusterExistRowsHTML(); }
 // section B: the unclustered candidate pool (browse top donors, drop ones already clustered).
 function clusterPoolHTML(){
   const pool=(state.clusterHits||[]).filter(h=>!donorCluster(h.donor_id));
@@ -1006,6 +1065,7 @@ function setView(v){
   }
   if(v==='cluster'){
     state.clusterQ=''; state.clusterInd=''; state.clusterEtype=''; state.cluster.plan=null;
+    state.clusterExistQ=''; state.clusterOpenId='';   // FIX-3a-3: clean inspect state on open
     // load existing clusters FIRST (the overlap guard + badges depend on it), THEN the
     // render-on-open candidate pool — so the pool is filtered against known clusters.
     if(state.clusterKnown===null) loadClusters().then(()=>doClusterSearch());
@@ -1261,6 +1321,56 @@ async function maybeSelftest(){
                R.stagedAfter===1 && /^1 staged/.test(R.badgeAfter);
     }catch(e){ R.error=String((e&&e.message)||e); R.pass=false; }
     const m=document.createElement('div'); m.id='stagedcleartest-done'; m.style.display='none';
+    m.textContent=JSON.stringify(R); document.body.appendChild(m); return;
+  }
+  // #clusterinspecttest — FIX-3a-3: inspect existing clusters (read-only). Drives the tab
+  // via real DOM events: search narrows the existing-cluster list by name; clicking a
+  // cluster opens its members with roles + the parent marked; clearing the search restores
+  // the full list; re-clicking closes. Asserts the detail is READ-ONLY (no controls) so
+  // HALT-EDIT-1 owns the write surface. FAILS pre-fix (no search box / not clickable).
+  if(location.hash==='#clusterinspecttest'){
+    const R={};
+    try{
+      const fire=(el,type)=>el.dispatchEvent(new Event(type,{bubbles:true}));
+      const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+      const waitFor=async(fn,t=60)=>{ for(let i=0;i<t;i++){ if(fn())return true; await sleep(100);} return false; };
+      const rows=()=>Array.from(document.querySelectorAll('#cl-exist-rows .cl-exist-row'));
+      setView('cluster');
+      await waitFor(()=>state.clusterKnown!==null && document.getElementById('cl-exist-q') && rows().length>0);
+      R.searchBox = !!document.getElementById('cl-exist-q');
+      R.totalRows = rows().length;                                  // ~540
+      // search narrows the list; the input keeps focus during the surgical re-render
+      const q=document.getElementById('cl-exist-q'); q.focus();
+      q.value='chicago teachers union'; fire(q,'input');
+      const fr=rows();
+      R.filteredRows = fr.length; R.narrowed = fr.length>0 && fr.length<R.totalRows;
+      R.allMatch = fr.every(r=>/chicago teachers union/i.test(r.textContent));
+      R.focusKept = document.activeElement===q;
+      // click into the first filtered cluster -> members with roles + parent marked
+      fr[0].click();
+      const openId=state.clusterOpenId; R.opened=!!openId;
+      const cluster=(state.clusterKnown||[]).find(c=>c.cluster_id===openId)||{members:[],canonical_id:''};
+      const detail=document.getElementById('cl-detail-'+openId);
+      R.detailShown=!!detail;
+      const memEls=detail?Array.from(detail.querySelectorAll('.cl-detail-mem')):[];
+      R.detailMemberCount=memEls.length; R.memberCountMatches=memEls.length===cluster.members.length;
+      R.exactlyOneParent = detail ? detail.querySelectorAll('.cl-detail-role.parent').length===1 : false;
+      let parentId='';
+      if(detail){ const pmem=memEls.find(m=>m.querySelector('.cl-detail-role.parent')); const sub=pmem&&pmem.querySelector('.cl-detail-nm .sub'); parentId=sub?sub.textContent.trim():''; }
+      R.parentIsCanonical = !!cluster.canonical_id && parentId===cluster.canonical_id;
+      R.detailReadOnly = !!detail && detail.querySelectorAll('input,button,select,textarea').length===0;
+      // clearing the search restores the full list
+      q.value=''; fire(q,'input');
+      R.clearRestores = rows().length===R.totalRows;
+      // re-clicking the opened cluster closes its detail
+      const openRow=rows().find(r=>r.classList.contains('open')); if(openRow) openRow.click();
+      R.closesOnReclick = !document.getElementById('cl-detail-'+openId);
+      R.pass = R.searchBox && R.totalRows>1 && R.narrowed===true && R.allMatch===true && R.focusKept===true &&
+               R.opened===true && R.detailShown===true && R.detailMemberCount>0 && R.memberCountMatches===true &&
+               R.exactlyOneParent===true && R.parentIsCanonical===true && R.detailReadOnly===true &&
+               R.clearRestores===true && R.closesOnReclick===true;
+    }catch(e){ R.error=String((e&&e.message)||e); R.pass=false; }
+    const m=document.createElement('div'); m.id='clusterinspecttest-done'; m.style.display='none';
     m.textContent=JSON.stringify(R); document.body.appendChild(m); return;
   }
   if(location.hash==='#mastertest'){
