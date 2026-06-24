@@ -175,6 +175,10 @@
   .cl-integ.ok{background:#eef6ec; color:#2f6b2f;} .cl-integ.no{background:#fbe9e7; color:var(--opp); font-weight:600;}
   .cl-integ-row{font-size:12.5px; margin:5px 0; padding:5px 8px; background:#fff; border:1px solid var(--upd); border-radius:6px;}
   .cl-res-mem{display:inline-block; margin:2px 8px 2px 0; font-size:12px;} .cl-res-mem.parent{font-weight:700; color:var(--teal);}
+  .cl-edit-danger{display:flex; gap:8px; align-items:center; margin:10px 0 2px; padding-top:8px; border-top:1px dashed var(--line);}
+  .cl-mini.cl-danger{border-color:var(--opp); color:var(--opp);}
+  .act.cl-danger{background:var(--opp); border-color:var(--opp); color:#fff;}
+  .cl-edit-panel-danger{border-color:var(--opp); background:#fbe9e7;}
 </style>
 </head>
 <body>
@@ -952,6 +956,10 @@ function clusterDetailHTML(c){
       <input id="cl-add-q-${esc(cid)}" class="cl-mini-input" placeholder="add member — search donor by name / id…" oninput="clusterEditAddSearch('${esc(cid)}')">
       <div id="cl-add-results-${esc(cid)}" class="cl-add-results">${clusterAddResultsHTML(cid)}</div>
     </div>
+    <div class="cl-edit-danger">
+      <button class="cl-mini cl-danger" onclick="clusterEditDelete('${esc(cid)}')">Delete this cluster</button>
+      <span class="sub">removes the whole cluster — its ${c.members.length} member${c.members.length===1?'':'s'} revert to unclustered</span>
+    </div>
     ${ep}</div>`;
 }
 function clusterAddResultsHTML(cid){
@@ -969,6 +977,7 @@ function clusterEditRename(cid){ const el=document.getElementById('cl-rename-'+c
 function clusterEditRole(cid,did,role){ const op={op:'change_role', cluster_id:cid, donor_id:did, role:role}; if(role==='parent') op.demote_role='alt-name'; clusterEditOp(op); }
 function clusterEditRemove(cid,did){ clusterEditOp({op:'remove_member', cluster_id:cid, donor_id:did}); }
 function clusterEditAdd(cid,did){ clusterEditOp({op:'add_member', cluster_id:cid, donor_id:did, role:'related'}); }
+function clusterEditDelete(cid){ clusterEditOp({op:'delete_cluster', cluster_id:cid}); }
 function clusterEditSetNominate(v){ const op=Object.assign({}, state.clusterEditOpItem||{}); op.nominate_parent=v; clusterEditOp(op); }
 function clusterEditSetDemote(v){ const op=Object.assign({}, state.clusterEditOpItem||{}); op.demote_role=v; clusterEditOp(op); }
 function clusterEditAddSearch(cid){
@@ -990,13 +999,35 @@ function clusterEditConfirm(){
   const out=document.getElementById('cl-edit-out'); if(out) out.innerHTML='<div class="note-banner">Writing the edit to the Donor Clusters tab…</div>';
   return postJSON(WRITE, {batch:[Object.assign({kind:'cluster-edit'}, op)]}).then(res=>{
     const p=((res.plans||{})['cluster-edit']||[])[0] || {};
-    if(p.result){ state.clusterEditPlan=null; state.clusterEditOpItem=null; state.clusterKnown=null; loadClusters().then(()=>render()); }
+    if(p.result){ if(op.op==='delete_cluster') state.clusterOpenId='';   // cluster is gone — close the detail
+      state.clusterEditPlan=null; state.clusterEditOpItem=null; state.clusterKnown=null; loadClusters().then(()=>render()); }
     else { p.cluster_id=op.cluster_id; state.clusterEditPlan=p; render(); }
   }).catch(e=>{ state.clusterEditPlan={cluster_id:op.cluster_id, blocked:true, errors:[e.message]}; render(); });
 }
 function clusterEditCancel(){ state.clusterEditPlan=null; state.clusterEditOpItem=null; render(); }
 function clusterEditPanelHTML(ep){
   if(ep.error) return `<div class="cl-edit-panel"><div class="err">${esc(ep.error)}</div><div class="ed-actions"><button class="act" onclick="clusterEditCancel()">Cancel</button></div></div>`;
+  // delete_cluster gets its own destructive-action panel (distinct from member edits).
+  if(ep.op==='delete_cluster'){
+    const can=!ep.blocked;
+    const dm=ep.deleted_members||[];
+    const derrs=(ep.errors||[]).length?`<div class="err" style="margin:6px 0">${ep.errors.map(esc).join('<br>')}</div>`:'';
+    const dpf=(ep.preview&&ep.preview.per_file)||{};
+    const dboxes=Object.entries(dpf).map(([tool,x])=>`<div class="box"><b>${esc(tool)}</b><div class="big">${usd(x.rolled_up_dollars)}</div><div class="meta-line">${x.present_count} present — rollup removed</div></div>`).join('');
+    const list=dm.map(m=>`<span class="cl-res-mem">${esc(m)}</span>`).join('');
+    return `<div class="cl-edit-panel cl-edit-panel-danger" id="cl-edit-out">
+      <div class="cl-edit-head"><b>delete cluster</b> ${esc(ep.cluster_name||'')} <span class="sub">(${esc(ep.cluster_id)})</span> <span class="status"${can?' style="background:var(--opp)"':' style="background:var(--opp)"'}>${can?'DELETE':'BLOCKED'}</span></div>
+      ${derrs}
+      <div class="cl-block">⛔ Deletes ALL ${dm.length} row${dm.length===1?'':'s'} of this cluster. The cluster ceases to exist; its members revert to <b>unclustered</b> and roll up individually again. Contributions are untouched. Not undoable through the editor (re-create to restore).</div>
+      <div class="meta-line" style="margin-top:6px">members reverting to unclustered:</div><div style="margin:3px 0">${list}</div>
+      <div class="meta-line" style="margin-top:6px">rollup removed (this cluster's by_parent entry):</div>
+      <div class="cl-pf" style="margin-top:4px">${dboxes}</div>
+      <div class="ed-actions" style="margin-top:8px">
+        ${can?`<button class="act accept cl-danger" onclick="clusterEditConfirm()">Confirm delete (${dm.length} rows)</button>`:''}
+        <button class="act" onclick="clusterEditCancel()">Cancel</button>
+      </div>
+    </div>`;
+  }
   const can=!ep.blocked, integ=ep.parent_integrity||{}, op=state.clusterEditOpItem||{};
   const errs=(ep.errors||[]).length?`<div class="err" style="margin:6px 0">${ep.errors.map(esc).join('<br>')}</div>`:'';
   const opsList=(ep.ops||[]).map(o=>{
@@ -1569,13 +1600,26 @@ async function maybeSelftest(){
       await waitFor(()=>Array.from(document.querySelectorAll('#cl-add-results-'+CID+' .cl-add-res')).some(r=>/seiu-il-council/.test(r.textContent)));
       const exRes=Array.from(document.querySelectorAll('#cl-add-results-'+CID+' .cl-add-res')).find(r=>/seiu-il-council/.test(r.textContent));
       R.addClusteredBadged = !!exRes && !!exRes.querySelector('.cl-exbadge') && !exRes.querySelector('.cl-mini');
+      await reset();
+
+      // --- DELETE CLUSTER (HALT-EDIT-2): distinct danger control; dry-run bypasses the parent-guard ---
+      const delBtn=detail().querySelector('.cl-edit-danger .cl-danger');
+      R.deleteBtnPresent=!!delBtn; if(delBtn) delBtn.click();
+      await waitFor(()=>plan() && plan().op==='delete_cluster');
+      R.deleteWritable = !plan().blocked && (plan().ops||[]).some(o=>o.action==='delete' && o.scope==='all');
+      R.deleteBypassesParentGuard = (plan().parent_integrity||{}).whole_cluster_delete===true;
+      R.deleteAllMembers = (plan().deleted_members||[]).length===R.memberCount && (plan().resulting.members||[]).length===0;
+      R.deletePanelDanger = !!document.querySelector('#cl-edit-out.cl-edit-panel-danger');
+      await reset();
 
       R.pass = R.opened && R.memberCount>2 &&
         R.renameWritable===true &&
         R.roleWritable===true && R.roleOneParent===true && R.roleMembershipUnchanged===true &&
         R.promoteOneParent===true && R.promoteDemotedAltName===true && R.promoteCanonRewritten===true &&
         R.removeParentRefused===true && R.nominateSelectShown===true && R.removeParentNominated===true &&
-        R.addBtnPresent===true && R.addWritable===true && R.addClusteredBadged===true;
+        R.addBtnPresent===true && R.addWritable===true && R.addClusteredBadged===true &&
+        R.deleteBtnPresent===true && R.deleteWritable===true && R.deleteBypassesParentGuard===true &&
+        R.deleteAllMembers===true && R.deletePanelDanger===true;
     }catch(e){ R.error=String((e&&e.message)||e); R.pass=false; }
     const m=document.createElement('div'); m.id='clustereddittest-done'; m.style.display='none';
     m.textContent=JSON.stringify(R); document.body.appendChild(m); return;

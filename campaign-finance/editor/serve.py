@@ -628,8 +628,14 @@ class WorklistHandler(BaseHTTPRequestHandler):
                 for it in edit_items:
                     ep = wo.build_cluster_edit_plan(it, by_cid.get((it.get('cluster_id') or '').strip()), by_donor)
                     res = ep.get('resulting') or {}
-                    ep['preview'] = cluster_preview({'members': res.get('members', []),
-                                                     'parent': res.get('parent', '')}, cls.per_file_totals)
+                    # delete_cluster: preview the rollup that is REMOVED (over the deleted members),
+                    # not the empty post-delete membership.
+                    if ep.get('op') == 'delete_cluster':
+                        dm = ep.get('deleted_members') or []
+                        ep['preview'] = cluster_preview({'members': dm, 'parent': dm[0] if dm else ''}, cls.per_file_totals)
+                    else:
+                        ep['preview'] = cluster_preview({'members': res.get('members', []),
+                                                         'parent': res.get('parent', '')}, cls.per_file_totals)
                     if ep['blocked']:
                         blocked = True
                     if do_write and not ep['blocked']:

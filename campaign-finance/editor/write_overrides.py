@@ -481,7 +481,7 @@ def execute_cluster_plan(sheet, plan: dict) -> dict:
 # ENFORCED: every op must leave EXACTLY ONE parent (never zero, never two). Touches
 # ONLY Donor Clusters rows — never contributions, never entity_type.
 # ============================================================
-CLUSTER_EDIT_OPS = {'add_member', 'remove_member', 'change_role', 'rename'}
+CLUSTER_EDIT_OPS = {'add_member', 'remove_member', 'change_role', 'rename', 'delete_cluster'}
 _NONPARENT_ROLES = CLUSTER_VALID_ROLES - {'parent'}
 
 
@@ -514,6 +514,21 @@ def build_cluster_edit_plan(op_item: dict, cluster, all_by_donor=None) -> dict:
                 'errors': [f'cluster {cid!r} not found — edit requires an existing cluster'], 'blocked': True}
 
     members, roles, parent, name, rel = _cluster_state(cluster)
+
+    # delete_cluster removes the WHOLE cluster. The parent-integrity guard below exists for
+    # clusters that CONTINUE to exist (a survivor must have exactly one parent) — a deleted
+    # cluster is gone, not parentless. So this RETURNS EARLY, bypassing that guard, and emits a
+    # single scope:'all' delete of every row matching cluster_id. Members revert to unclustered
+    # on the next build (apply_clusters no longer sees them). Contributions are never touched.
+    if op == 'delete_cluster':
+        return {'op': op, 'cluster_id': cid, 'cluster_name': name, 'relationship': rel,
+                'ops': [{'action': 'delete', 'scope': 'all'}],
+                'resulting': {'members': [], 'roles': {}, 'parent': '', 'name': name},
+                'deleted_members': list(members),
+                'parent_integrity': {'whole_cluster_delete': True, 'exactly_one_parent': None,
+                                     'note': 'whole-cluster delete — zero parents is the intended end state'},
+                'errors': [], 'blocked': False}
+
     r_members, r_roles, r_parent, r_name = list(members), dict(roles), parent, name
     ops, errors = [], []
 
@@ -642,12 +657,18 @@ def execute_cluster_edit_plan(sheet, plan: dict) -> dict:
                 if n:
                     batch.append({'range': rowcol_to_a1(n, colidx[o['field']]), 'values': [[o['to']]]})
         elif o['action'] == 'delete':
-            n = rownum.get(o['donor_id'])
-            if n:
-                deletes.append(n)
+            if o.get('scope') == 'all':                        # whole-cluster delete: every row of this cluster_id
+                deletes.extend(cid_rows)
+            else:
+                n = rownum.get(o['donor_id'])
+                if n:
+                    deletes.append(n)
     if batch:
         ws.batch_update(batch, value_input_option='RAW')
-    for n in sorted(deletes, reverse=True):
+    deletes = sorted(set(deletes), reverse=True)               # descending so row numbers stay valid
+    # B4: every row we delete belongs to the TARGET cluster_id (no other cluster touched).
+    assert all(n in cid_rows for n in deletes), 'delete targeted a row outside the cluster'
+    for n in deletes:
         ws.delete_rows(n)
     return {'cluster_id': cid, 'op': plan['op'], 'appended': appended,
             'updated': len(batch), 'deleted': len(deletes)}
