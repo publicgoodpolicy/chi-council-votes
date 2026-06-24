@@ -100,6 +100,10 @@
   .cls-badge.curated{background:#e7f0ee; color:var(--teal); border-color:#9ec4bf;}
   .cls-badge.auto{background:#f3e8d4; color:#8a5a12; border-color:#dcc59a;}
   .cls-badge.none{background:var(--hint-bg); color:var(--muted); border-color:var(--line);}
+  .cls-badge.entity{background:#eee9f3; color:#5b4a72; border-color:#cabfdc; text-transform:none; letter-spacing:0;}
+  details.vocab-add{margin-top:10px;}
+  details.vocab-add>summary{cursor:pointer; font-size:12px; color:var(--muted); padding:4px 0; user-select:none;}
+  details.vocab-add[open]>summary{color:var(--ink,#333); font-weight:600;}
   .cls-banner{margin:2px 0 8px; padding:8px 11px; border-radius:8px; font-size:12.5px; line-height:1.4;}
   .cls-banner.curated{background:#e7f0ee; border:1px solid #9ec4bf; color:#2c4f4b;}
   .cls-banner.auto{background:#f6edda; border:1px solid #dcc59a; color:#6b4d1c;}
@@ -372,6 +376,14 @@ function clsBadge(r){
   if(cs.state==='c') return `<span class="cls-badge auto">auto · ${esc(cs.inds.join(', '))}</span>`;
   return `<span class="cls-badge none">unclassified</span>`;
 }
+// entity_type chip — orthogonal to industry; rendered only when set (optional field).
+// Label resolves through the live vocab; falls back to the raw key.
+function entityBadge(r){
+  const e=((r&&r.entity_type)||'').trim();
+  if(!e) return '';
+  const lbl=((state.vocab.entity_types||[]).find(x=>x.key===e)||{}).label||e;
+  return `<span class="cls-badge entity">${esc(lbl)}</span>`;
+}
 
 function intendedDonor(s){
   const ed=new Set(s.edited||[]);
@@ -437,7 +449,7 @@ function donorRow(r,i){
   return `<div class="row${staged?' staged':''}">
     <div class="rank">${i+1}</div>
     <div>
-      <div class="name">${esc(r.name)||'<em>(unnamed)</em>'}${clsBadge(r)}</div>
+      <div class="name">${esc(r.name)||'<em>(unnamed)</em>'}${clsBadge(r)}${entityBadge(r)}</div>
       ${idLine.length?`<div class="meta-line">${idLine.join('<span class="sep">•</span>')}</div>`:''}
       ${r.committees_funded?`<div class="funded">funds: ${esc(r.committees_funded)}</div>`:''}
       ${pertool}
@@ -511,9 +523,11 @@ function donorEditor(r){
       <button class="act accept" onclick="saveDonorEdit('${esc(r.donor_id)}')">Stage these</button>
       <button class="act" onclick="editor.openEdit(null)">Cancel</button>
     </div>
-    ${vocabIndustryFormHTML()}
-    ${vocabFlagFormHTML()}
-    ${vocabEntityFormHTML()}
+    <details class="vocab-add"><summary>Add new industry / flag / entity type</summary>
+      ${vocabIndustryFormHTML()}
+      ${vocabFlagFormHTML()}
+      ${vocabEntityFormHTML()}
+    </details>
   </div>`;
 }
 function saveDonorEdit(id){

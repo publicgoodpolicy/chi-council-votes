@@ -240,10 +240,30 @@ def build_payload() -> dict:
     donor_rows, committee_rows = {}, {}
     per_file_meta = {}
     vocab_ind, vocab_flag, vocab_sev, vocab_ent = {}, {}, set(), {}
+    # CURRENT (flat) classification per donor, captured straight from the donor dicts
+    # the rows are built from — so the Donors-list column reads identically to
+    # /api/donor. Cross-file precedence MIRRORS build_donor_index exactly: council
+    # first; election promotes `industries` only when council's is un-classified, and
+    # backfills a blank entity_type. (No primary/additional split — the data JSON has
+    # none; that lives only in the live Sheet.)
+    cls_by_did: dict[str, dict] = {}
     for tool, path in DATA_FILES.items():
         if not path.exists():
             raise SystemExit(f"Data file not found: {path}")
         data = load(path)
+        for did, donor in data.get('donors', {}).items():
+            if did.startswith('_'):
+                continue
+            inds = donor.get('industries', []) or []
+            ent = donor.get('entity_type', '') or ''
+            cur = cls_by_did.get(did)
+            if cur is None:
+                cls_by_did[did] = {'industries': inds, 'entity_type': ent}
+            else:
+                if (not _is_classified(cur['industries'])) and _is_classified(inds):
+                    cur['industries'] = inds
+                if not cur['entity_type'] and ent:
+                    cur['entity_type'] = ent
         d_rows = build_worklist(data, min_amount=0)        # same read model as the CSV
         c_rows = committee_worklist(data)
         donor_rows[tool] = d_rows
@@ -265,6 +285,13 @@ def build_payload() -> dict:
 
     donors = union_donors(donor_rows)
     committees = union_committees(committee_rows)
+
+    # Attach each donor's current flat classification (same source + precedence as
+    # /api/donor) so the Donors list can show its classification state via clsBadge.
+    for m in donors:
+        c = cls_by_did.get(m['donor_id'], {})
+        m['industries'] = c.get('industries', [])
+        m['entity_type'] = c.get('entity_type', '')
 
     # overlap reconciliation: union = A + B - overlap  ->  overlap = A + B - union
     d_overlap = sum(len(v) for v in donor_rows.values()) - len(donors)
