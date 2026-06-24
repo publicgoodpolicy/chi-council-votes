@@ -644,6 +644,29 @@ class WorklistHandler(BaseHTTPRequestHandler):
                     eplans.append(ep)
                 plans['cluster-edit'] = eplans
 
+            # CLUSTER MERGE path (HALT-MERGE) — combine B into survivor A in ONE ordered plan
+            # (appends → A-row updates → delete B LAST). Composes the EDIT-1/EDIT-2 primitives.
+            merge_items = [b for b in batch if b.get('kind') == 'cluster-merge']
+            if merge_items:
+                clusters = wo.read_clusters(sheet)             # fresh grouped read of both clusters
+                by_cid = {c['cluster_id']: c for c in clusters}
+                by_donor = {m['donor_id']: {'cluster_id': c['cluster_id'], 'cluster_name': c['cluster_name']}
+                            for c in clusters for m in c['members']}
+                mplans = []
+                for it in merge_items:
+                    mp = wo.build_cluster_merge_plan(it, by_cid.get((it.get('cluster_id') or '').strip()),
+                                                     by_cid.get((it.get('absorb_id') or '').strip()), by_donor)
+                    res = mp.get('resulting') or {}
+                    mp['preview'] = cluster_preview({'members': res.get('members', []),
+                                                     'parent': res.get('parent', '')}, cls.per_file_totals)
+                    if mp['blocked']:
+                        blocked = True
+                    if do_write and not mp['blocked']:
+                        mp['result'] = wo.execute_cluster_merge_plan(sheet, mp)
+                        cls._clusters_cache = None             # membership changed -> /api/clusters must re-read
+                    mplans.append(mp)
+                plans['cluster-merge'] = mplans
+
             # split by surface; each tab gets its OWN fresh read immediately before
             for kind, spec in wo.SPECS.items():
                 items = [b for b in batch if b.get('kind', 'donor') == kind]

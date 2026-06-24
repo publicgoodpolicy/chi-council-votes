@@ -674,6 +674,156 @@ def execute_cluster_edit_plan(sheet, plan: dict) -> dict:
             'updated': len(batch), 'deleted': len(deletes)}
 
 
+# ============================================================
+# CLUSTER MERGE  (HALT-MERGE) — combine cluster B INTO survivor A (A keeps its stable id;
+# B is deleted). Composes the EDIT-1/EDIT-2 primitives' LOGIC into ONE plan: bulk-add B's
+# members to A (deduped), demote former parents to alt-name, rewrite canonical_id + name on
+# the result, then delete_cluster(B). Ports v6 performCombine with live-write discipline.
+# ORDERING IS LOAD-BEARING: B's deletes run LAST, only after every append+update succeeds, so
+# the forbidden "B deleted but A not merged" state is structurally impossible. A mid-merge
+# failure leaves B intact + A augmented (no row lost) and is re-runnable — reported LOUDLY.
+# ============================================================
+def build_cluster_merge_plan(item: dict, cluster_a, cluster_b, all_by_donor=None) -> dict:
+    """Plan ONE merge of B into A. Pure / Sheet-free. Returns one ordered op list (appends →
+    A-row updates → B delete LAST), the combined result, donors_in_both, and parent-integrity."""
+    A = (item.get('cluster_id') or '').strip()        # survivor — keeps its id (no renumber)
+    B = (item.get('absorb_id') or '').strip()         # absorbed — deleted
+    chosen = (item.get('parent') or '').strip()
+    name = (item.get('cluster_name') or '').strip()
+    errors = []
+    if not cluster_a:
+        errors.append(f'survivor cluster {A!r} not found')
+    if not cluster_b:
+        errors.append(f'absorbed cluster {B!r} not found')
+    if A and A == B:
+        errors.append('cannot merge a cluster into itself')
+    if errors:
+        return {'op': 'merge', 'cluster_id': A, 'absorb_id': B, 'ops': [], 'errors': errors, 'blocked': True}
+
+    a_members, a_roles, a_parent, a_name, a_rel = _cluster_state(cluster_a)
+    b_members, b_roles, b_parent, b_name, b_rel = _cluster_state(cluster_b)
+    a_set = set(a_members)
+    donors_in_both = [m for m in b_members if m in a_set]   # decision 4: include once, flag, don't block
+    b_only = [m for m in b_members if m not in a_set]
+    result_members = a_members + b_only                    # A wins on dups
+
+    def cur_role(m):
+        return a_roles[m] if m in a_roles else b_roles.get(m, 'related')
+    if not chosen:
+        chosen = a_parent                                  # default survivor parent = A's
+    if not name:
+        name = a_name
+
+    def final_role(m):                                     # one parent; every other former parent -> alt-name
+        if m == chosen:
+            return 'parent'
+        return 'alt-name' if cur_role(m) == 'parent' else cur_role(m)
+
+    if chosen not in result_members:
+        errors.append(f'chosen parent {chosen!r} is not a member of either cluster')
+
+    # ORDERED ops — appends, then A-row updates, then B delete LAST.
+    ops = []
+    for m in b_only:
+        ops.append({'action': 'append', 'donor_id': m, 'role': final_role(m)})
+    ops.append({'action': 'update', 'field': 'canonical_id', 'to': chosen, 'scope': 'a_rows'})
+    ops.append({'action': 'update', 'field': 'cluster_name', 'to': name, 'scope': 'a_rows'})
+    for m in a_members:                                     # role changes among A's existing members
+        if final_role(m) != a_roles.get(m):
+            ops.append({'action': 'update', 'field': 'role', 'donor_id': m, 'to': final_role(m)})
+    ops.append({'action': 'delete', 'scope': 'b_all'})     # LAST — destructive step after all else
+
+    result_roles = {m: final_role(m) for m in result_members}
+    nparent = sum(1 for m in result_members if result_roles[m] == 'parent')
+    if nparent != 1:
+        errors.append(f'parent-integrity: result has {nparent} parents (must be exactly 1)')
+    if len(result_members) < 2:
+        errors.append('result has < 2 members')
+
+    return {'op': 'merge', 'cluster_id': A, 'absorb_id': B, 'survivor_id': A, 'parent': chosen,
+            'cluster_name': name, 'relationship': a_rel, 'ops': ops,
+            'resulting': {'members': result_members, 'roles': result_roles, 'parent': chosen, 'name': name},
+            'donors_in_both': donors_in_both,
+            'a_name': a_name, 'b_name': b_name, 'a_parent': a_parent, 'b_parent': b_parent,
+            'parent_integrity': {'exactly_one_parent': nparent == 1, 'parent_count': nparent, 'parent': chosen},
+            'errors': errors, 'blocked': bool(errors)}
+
+
+def execute_cluster_merge_plan(sheet, plan: dict, _stop_before_delete: bool = False) -> dict:
+    """Apply the merge in ONE call, addressing rows by fresh-read key, deletes LAST. On a
+    mid-merge failure raises a LOUD, actionable error naming the phase + recovery — never a
+    silent partial. Phases: append (B-only → A) → update (A's rows) → delete (all B rows).
+    `_stop_before_delete` (TEST-ONLY) raises after append+update but before any delete, to
+    exercise the real partial-failure state + recovery; production callers never set it."""
+    if plan.get('blocked'):
+        raise RuntimeError('merge blocked: ' + '; '.join(plan.get('errors') or ['contract failed']))
+    from gspread.utils import rowcol_to_a1
+    A, B = plan['cluster_id'], plan['absorb_id']
+    ws = sheet.worksheet(CLUSTER_TAB)
+    header = ws.row_values(1)
+    colidx = {name: i + 1 for i, name in enumerate(header) if name}
+    assert 'entity_type' not in colidx, 'cluster tab must never carry entity_type'   # B4
+    records = ws.get_all_records()
+    a_rownum, a_rows, b_rows, a_rel = {}, [], [], DEFAULT_RELATIONSHIP
+    for i, r in enumerate(records):
+        rcid = str(r.get('cluster_id') or '').strip()
+        n = i + 2
+        if rcid == A:
+            a_rows.append(n); a_rownum[str(r.get('donor_id') or '').strip()] = n
+            if r.get('relationship'):
+                a_rel = str(r.get('relationship')).strip()
+        elif rcid == B:
+            b_rows.append(n)
+    if not a_rows:
+        raise RuntimeError(f'merge: survivor {A} not found on a fresh read')
+    if not b_rows:
+        raise RuntimeError(f'merge: absorbed {B} not found on a fresh read')
+
+    phase, done = 'append', {'appended': 0, 'updated': 0, 'deleted': 0}
+    try:
+        for o in plan['ops']:                              # PHASE 1 — appends to A
+            if o['action'] == 'append':
+                row = {'cluster_id': A, 'cluster_name': plan['resulting']['name'],
+                       'canonical_id': plan['resulting']['parent'], 'donor_id': o['donor_id'],
+                       'role': o['role'], 'relationship': a_rel}
+                assert 'entity_type' not in row, 'cluster row must never carry entity_type'
+                ws.append_row([row.get(c, '') for c in header], value_input_option='RAW')
+                done['appended'] += 1
+        phase = 'update'                                   # PHASE 2 — A's existing rows
+        batch = []
+        for o in plan['ops']:
+            if o['action'] == 'update':
+                if o.get('scope') == 'a_rows':
+                    for n in a_rows:
+                        batch.append({'range': rowcol_to_a1(n, colidx[o['field']]), 'values': [[o['to']]]})
+                elif o.get('donor_id'):
+                    n = a_rownum.get(o['donor_id'])
+                    if n:
+                        batch.append({'range': rowcol_to_a1(n, colidx[o['field']]), 'values': [[o['to']]]})
+        if batch:
+            ws.batch_update(batch, value_input_option='RAW')
+            done['updated'] = len(batch)
+        if _stop_before_delete:                            # TEST-ONLY: simulate a 429 before any delete
+            raise RuntimeError('injected pre-delete failure (test harness)')
+        phase = 'delete'                                   # PHASE 3 — delete B, LAST
+        b_del = sorted(set(b_rows), reverse=True)
+        assert all(n in b_rows for n in b_del), 'merge delete targeted a row outside B'
+        for n in b_del:
+            ws.delete_rows(n); done['deleted'] += 1
+    except Exception as e:
+        if phase in ('append', 'update'):
+            raise RuntimeError(
+                f"MERGE INCOMPLETE during {phase} phase ({type(e).__name__}: {e}). "
+                f"Survivor {A} was AUGMENTED ({done['appended']} of B's members added); absorbed "
+                f"{B} is INTACT (not deleted) — no member rows lost. RE-RUN the merge to complete "
+                f"(it dedups already-added members).") from e
+        raise RuntimeError(
+            f"MERGE PARTIAL during delete ({type(e).__name__}: {e}). Survivor {A} is COMPLETE; "
+            f"absorbed {B} is PARTIALLY deleted ({done['deleted']} rows removed) — RE-RUN "
+            f"delete_cluster({B}) (or the merge) to finish removing {B}.") from e
+    return {'op': 'merge', 'cluster_id': A, 'absorbed': B, **done}
+
+
 if __name__ == '__main__':
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)

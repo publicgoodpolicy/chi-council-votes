@@ -179,6 +179,12 @@
   .cl-mini.cl-danger{border-color:var(--opp); color:var(--opp);}
   .act.cl-danger{background:var(--opp); border-color:var(--opp); color:#fff;}
   .cl-edit-panel-danger{border-color:var(--opp); background:#fbe9e7;}
+  /* HALT-MERGE: merge section in the opened (survivor) cluster view */
+  .cl-merge{margin:10px 0 2px; padding:8px 10px; border:1px solid var(--teal); border-radius:8px; background:#f2faf9;}
+  .cl-merge-head{font-size:12.5px; margin-bottom:6px;}
+  .cl-merge-parent{font-size:12.5px; margin:6px 0; display:flex; gap:14px; flex-wrap:wrap; align-items:center;}
+  .cl-merge-parent label{display:inline-flex; align-items:center; gap:4px; cursor:pointer;}
+  .cl-merge-name{font-size:12.5px; margin:4px 0; display:flex; gap:6px; align-items:center;} .cl-merge-name .cl-mini-input{flex:1 1 auto;}
 </style>
 </head>
 <body>
@@ -244,6 +250,9 @@ const state = {
   // HALT-EDIT-1: in-flight cluster edit — the assembled op + its dry-run plan (nothing
   // writes until Confirm); the add-member search state lives here too.
   clusterEditOpItem:null, clusterEditPlan:null, clusterAddQ:'', clusterAddHits:[],
+  // HALT-MERGE: in-flight merge of cluster B into the opened survivor A — B picker, chosen
+  // parent + editable name, dry-run plan. Nothing writes until Confirm.
+  clusterMergeBId:'', clusterMergeParent:'', clusterMergeName:'', clusterMergeBQ:'', clusterMergePlan:null,
   cluster:{ members:[], byId:new Map(), name:'', parent:'', roles:{}, relationship:'affiliated entities', plan:null },
 };
 
@@ -956,11 +965,102 @@ function clusterDetailHTML(c){
       <input id="cl-add-q-${esc(cid)}" class="cl-mini-input" placeholder="add member — search donor by name / id…" oninput="clusterEditAddSearch('${esc(cid)}')">
       <div id="cl-add-results-${esc(cid)}" class="cl-add-results">${clusterAddResultsHTML(cid)}</div>
     </div>
+    ${clusterMergeSectionHTML(c)}
     <div class="cl-edit-danger">
       <button class="cl-mini cl-danger" onclick="clusterEditDelete('${esc(cid)}')">Delete this cluster</button>
       <span class="sub">removes the whole cluster — its ${c.members.length} member${c.members.length===1?'':'s'} revert to unclustered</span>
     </div>
     ${ep}</div>`;
+}
+// HALT-MERGE: combine another cluster (B) into this survivor (A keeps its id; B is deleted).
+function clusterMergeSectionHTML(c){
+  const aid=c.cluster_id;
+  if(state.clusterMergeBId && state.clusterMergePlan && state.clusterMergePlan.cluster_id!==aid){ /* merge belongs to another open cluster */ }
+  const bid=state.clusterMergeBId;
+  if(!bid){
+    return `<div class="cl-merge">
+      <div class="cl-merge-head">Merge another cluster into this one <span class="sub">— this cluster survives & keeps its id; the other is deleted</span></div>
+      <input id="cl-merge-q-${esc(aid)}" class="cl-mini-input" placeholder="find the cluster to absorb — by name or id…" oninput="clusterMergeSearchB('${esc(aid)}')">
+      <div id="cl-merge-results-${esc(aid)}" class="cl-add-results">${clusterMergeResultsHTML(aid)}</div>
+    </div>`;
+  }
+  const B=(state.clusterKnown||[]).find(x=>x.cluster_id===bid)||{members:[],cluster_name:bid,canonical_id:''};
+  const aParent=c.canonical_id, bParent=B.canonical_id;
+  const chosen=state.clusterMergeParent||aParent;
+  const aPnm=(c.members.find(m=>m.donor_id===aParent)||{}).name||aParent;
+  const bPnm=(B.members.find(m=>m.donor_id===bParent)||{}).name||bParent;
+  const mp=(state.clusterMergePlan && state.clusterMergePlan.cluster_id===aid) ? clusterMergePanelHTML(state.clusterMergePlan) : '';
+  return `<div class="cl-merge">
+    <div class="cl-merge-head">Merging <b>${esc(B.cluster_name||bid)}</b> <span class="sub">(${esc(bid)}, ${B.members.length} members)</span> into this cluster
+      <button class="cl-mini" onclick="clusterMergeCancel()">cancel</button></div>
+    <div class="cl-merge-parent">survivor parent —
+      <label><input type="radio" name="cl-merge-p-${esc(aid)}" ${chosen===aParent?'checked':''} onchange="clusterMergeSetParent('${esc(aid)}','${esc(aParent)}')"> ${esc(aPnm)} <span class="sub">(this · ${esc(c.cluster_name)})</span></label>
+      <label><input type="radio" name="cl-merge-p-${esc(aid)}" ${chosen===bParent?'checked':''} onchange="clusterMergeSetParent('${esc(aid)}','${esc(bParent)}')"> ${esc(bPnm)} <span class="sub">(${esc(B.cluster_name)})</span></label></div>
+    <div class="cl-merge-name">name <input id="cl-merge-name-${esc(aid)}" class="cl-mini-input" value="${esc(state.clusterMergeName||c.cluster_name||'')}" oninput="clusterMergeSetName(this.value)"></div>
+    <div class="ed-actions" style="margin-top:6px"><button class="act accept" onclick="clusterMergeDryRun('${esc(aid)}')">Review merge (dry-run)</button></div>
+    ${mp}</div>`;
+}
+function clusterMergeResultsHTML(aid){
+  const q=(state.clusterMergeBQ||'').trim().toLowerCase();
+  if(!q) return '<div class="sub" style="padding:4px 0">type to find a cluster to absorb…</div>';
+  const list=(state.clusterKnown||[]).filter(c=>c.cluster_id!==aid && clusterMatchExist(c,q)).slice(0,8);
+  if(!list.length) return '<div class="sub" style="padding:4px 0">no clusters match</div>';
+  return list.map(c=>`<div class="cl-add-res"><span>${esc(c.cluster_name||c.cluster_id)} <span class="sub">${esc(c.cluster_id)} · ${c.members.length} members</span></span><button class="cl-mini" onclick="clusterMergePickB('${esc(aid)}','${esc(c.cluster_id)}')">select</button></div>`).join('');
+}
+function clusterMergeRenderResults(aid){ const el=document.getElementById('cl-merge-results-'+aid); if(el) el.innerHTML=clusterMergeResultsHTML(aid); }
+function clusterMergeSearchB(aid){ const el=document.getElementById('cl-merge-q-'+aid); state.clusterMergeBQ=el?el.value:''; clusterMergeRenderResults(aid); }
+function clusterMergePickB(aid,bid){ state.clusterMergeBId=bid; state.clusterMergeParent=''; state.clusterMergeName=''; state.clusterMergePlan=null; state.clusterEditPlan=null; render(); }
+function clusterMergeSetParent(aid,pid){
+  state.clusterMergeParent=pid;
+  const A=(state.clusterKnown||[]).find(c=>c.cluster_id===aid), B=(state.clusterKnown||[]).find(c=>c.cluster_id===state.clusterMergeBId);
+  state.clusterMergeName = (A&&A.canonical_id===pid)?A.cluster_name:((B&&B.canonical_id===pid)?B.cluster_name:state.clusterMergeName);
+  state.clusterMergePlan=null; render();
+}
+function clusterMergeSetName(v){ state.clusterMergeName=v; }   // surgical: input keeps focus; plan re-derived on Review
+function clusterMergeDryRun(aid){
+  const nm=document.getElementById('cl-merge-name-'+aid); if(nm) state.clusterMergeName=nm.value;
+  state.clusterEditPlan=null;
+  const op={kind:'cluster-merge', cluster_id:aid, absorb_id:state.clusterMergeBId, parent:state.clusterMergeParent, cluster_name:state.clusterMergeName};
+  return postJSON(WRITE_PLAN,{batch:[op]}).then(res=>{ const p=((res.plans||{})['cluster-merge']||[])[0]||{error:res.error||'no plan'}; p.cluster_id=aid; state.clusterMergePlan=p; render(); })
+    .catch(e=>{ state.clusterMergePlan={cluster_id:aid, blocked:true, errors:[e.message]}; render(); });
+}
+function clusterMergeConfirm(aid){
+  const op={kind:'cluster-merge', cluster_id:aid, absorb_id:state.clusterMergeBId, parent:state.clusterMergeParent, cluster_name:state.clusterMergeName};
+  const out=document.getElementById('cl-edit-out'); if(out) out.innerHTML='<div class="note-banner">Merging clusters on the Donor Clusters tab…</div>';
+  return postJSON(WRITE,{batch:[op]}).then(res=>{
+    if(res.mode==='ERROR'){ state.clusterMergePlan={cluster_id:aid, error:res.error}; render(); return; }   // LOUD partial-failure surface
+    const p=((res.plans||{})['cluster-merge']||[])[0]||{};
+    if(p.result){ state.clusterMergeBId=''; state.clusterMergeParent=''; state.clusterMergeName=''; state.clusterMergeBQ=''; state.clusterMergePlan=null; state.clusterKnown=null; loadClusters().then(()=>render()); }
+    else { p.cluster_id=aid; state.clusterMergePlan=p; render(); }
+  }).catch(e=>{ state.clusterMergePlan={cluster_id:aid, error:String((e&&e.message)||e)}; render(); });
+}
+function clusterMergeCancel(){ state.clusterMergeBId=''; state.clusterMergeParent=''; state.clusterMergeName=''; state.clusterMergeBQ=''; state.clusterMergePlan=null; render(); }
+function clusterMergePanelHTML(mp){
+  if(mp.error) return `<div class="cl-edit-panel cl-edit-panel-danger" id="cl-edit-out"><div class="err"><b>⚠ Merge error — read carefully:</b><br>${esc(mp.error)}</div><div class="ed-actions"><button class="act" onclick="clusterMergeCancel()">Close</button></div></div>`;
+  const can=!mp.blocked, integ=mp.parent_integrity||{};
+  const errs=(mp.errors||[]).length?`<div class="err" style="margin:6px 0">${mp.errors.map(esc).join('<br>')}</div>`:'';
+  const dib=(mp.donors_in_both||[]);
+  const dibBox=dib.length?`<div class="cl-integ-row"><b>⚠ ${dib.length} donor(s) in BOTH clusters</b> — included once in the result: ${dib.map(esc).join(', ')}</div>`:'';
+  const res=mp.resulting||{members:[],roles:{}};
+  const resMembers=(res.members||[]).map(m=>{const role=(res.roles||{})[m]||'related';return `<span class="cl-res-mem${role==='parent'?' parent':''}">${esc(m)} <span class="sub">${esc(role)}</span></span>`;}).join('');
+  const appends=(mp.ops||[]).filter(o=>o.action==='append').map(o=>`${esc(o.donor_id)} (${esc(o.role)})`);
+  const demotions=(mp.ops||[]).filter(o=>o.field==='role').map(o=>`${esc(o.donor_id)}→${esc(o.to)}`);
+  const pf=(mp.preview&&mp.preview.per_file)||{};
+  const boxes=Object.entries(pf).map(([t,x])=>`<div class="box"><b>${esc(t)}</b><div class="big">${usd(x.rolled_up_dollars)}</div><div class="meta-line">${x.present_count} present</div></div>`).join('');
+  return `<div class="cl-edit-panel" id="cl-edit-out">
+    <div class="cl-edit-head"><b>merge</b> ${esc(mp.b_name||mp.absorb_id)} → ${esc(mp.cluster_name||'')} <span class="status ${can?'NEW':''}"${can?'':' style="background:var(--opp)"'}>${can?'WRITABLE':'BLOCKED'}</span></div>
+    ${errs}${dibBox}
+    <div class="meta-line">survivor <b>${esc(mp.survivor_id)}</b> · parent <b>${esc(mp.parent)}</b> · ${esc(mp.absorb_id)} deleted LAST</div>
+    <div class="meta-line" style="margin-top:4px">adds ${appends.length}: ${appends.join(', ')||'(none)'}</div>
+    ${demotions.length?`<div class="meta-line">demotions: ${demotions.join(', ')}</div>`:''}
+    <div class="cl-integ ${integ.exactly_one_parent?'ok':'no'}" style="margin-top:4px">parent-integrity: ${integ.exactly_one_parent?'✓ exactly one parent ('+esc(integ.parent)+')':'✗ '+(integ.parent_count||0)+' parents'}</div>
+    <div class="meta-line" style="margin-top:4px">result membership (${(res.members||[]).length}): ${resMembers}</div>
+    <div class="cl-pf" style="margin-top:6px">${boxes}</div>
+    <div class="ed-actions" style="margin-top:8px">
+      ${can?`<button class="act accept" onclick="clusterMergeConfirm('${esc(mp.survivor_id)}')">Confirm merge</button>`:''}
+      <button class="act" onclick="clusterMergeCancel()">Cancel</button>
+    </div>
+  </div>`;
 }
 function clusterAddResultsHTML(cid){
   const q=(state.clusterAddQ||'').trim();
@@ -988,7 +1088,7 @@ function clusterEditAddSearch(cid){
     .catch(()=>{ state.clusterAddHits=[]; clusterRenderAddResults(cid); });
 }
 function clusterEditOp(opItem){
-  state.clusterEditOpItem=opItem;
+  state.clusterEditOpItem=opItem; state.clusterMergePlan=null;   // one panel at a time (shared #cl-edit-out)
   return postJSON(WRITE_PLAN, {batch:[Object.assign({kind:'cluster-edit'}, opItem)]}).then(res=>{
     const p=((res.plans||{})['cluster-edit']||[])[0] || {error:res.error||'no plan'};
     p.cluster_id=opItem.cluster_id; state.clusterEditPlan=p; render();
@@ -1062,7 +1162,8 @@ function clusterEditPanelHTML(ep){
     </div>
   </div>`;
 }
-function clusterToggleOpen(id){ state.clusterOpenId = (state.clusterOpenId===id ? '' : id); state.clusterEditPlan=null; state.clusterEditOpItem=null; state.clusterAddQ=''; state.clusterAddHits=[]; clusterRenderExistRows(); }
+function clusterToggleOpen(id){ state.clusterOpenId = (state.clusterOpenId===id ? '' : id); state.clusterEditPlan=null; state.clusterEditOpItem=null; state.clusterAddQ=''; state.clusterAddHits=[];
+  state.clusterMergeBId=''; state.clusterMergeParent=''; state.clusterMergeName=''; state.clusterMergeBQ=''; state.clusterMergePlan=null; clusterRenderExistRows(); }
 function clusterExistFilter(v){ state.clusterExistQ=v; clusterRenderExistRows(); }
 // surgical: rebuild ONLY the rows container, so the search input keeps focus while typing.
 function clusterRenderExistRows(){ const el=document.getElementById('cl-exist-rows'); if(el) el.innerHTML=clusterExistRowsHTML(); }
@@ -1210,6 +1311,7 @@ function setView(v){
   if(v==='cluster'){
     state.clusterQ=''; state.clusterInd=''; state.clusterEtype=''; state.cluster.plan=null;
     state.clusterExistQ=''; state.clusterOpenId='';   // FIX-3a-3: clean inspect state on open
+    state.clusterMergeBId=''; state.clusterMergeParent=''; state.clusterMergeName=''; state.clusterMergeBQ=''; state.clusterMergePlan=null;
     // load existing clusters FIRST (the overlap guard + badges depend on it), THEN the
     // render-on-open candidate pool — so the pool is filtered against known clusters.
     if(state.clusterKnown===null) loadClusters().then(()=>doClusterSearch());
@@ -1622,6 +1724,78 @@ async function maybeSelftest(){
         R.deleteAllMembers===true && R.deletePanelDanger===true;
     }catch(e){ R.error=String((e&&e.message)||e); R.pass=false; }
     const m=document.createElement('div'); m.id='clustereddittest-done'; m.style.display='none';
+    m.textContent=JSON.stringify(R); document.body.appendChild(m); return;
+  }
+  // #clustermergetest — HALT-MERGE dry-run coverage (no live write). DATA-DRIVEN: picks two
+  // disjoint existing clusters as survivor A + absorbed B (so it survives fixture drift like the
+  // real SEIU merge), opens A, selects B, dry-runs, and asserts combined membership + survivor id
+  // + one-parent + DELETES-LAST ordering + donors_in_both array + recomputed rollup, then switches
+  // the parent to B's and re-dry-runs to assert A's parent demotes and B's becomes parent.
+  if(location.hash==='#clustermergetest'){
+    const R={};
+    try{
+      const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+      const waitFor=async(fn,t=80)=>{ for(let i=0;i<t;i++){ if(fn())return true; await sleep(100);} return false; };
+      const fire=(el,ty)=>el.dispatchEvent(new Event(ty,{bubbles:true}));
+      const mplan=()=>state.clusterMergePlan;
+      setView('cluster');
+      await waitFor(()=>state.clusterKnown!==null && document.getElementById('cl-exist-q'));
+      // pick the first two DISJOINT clusters (share no member) as A (survivor) and B (absorbed)
+      const ids=m=>m.members.map(x=>x.donor_id);
+      const known=(state.clusterKnown||[]);
+      const cA=known[0];
+      const cB=known.slice(1).find(c=>{ const s=new Set(ids(cA)); return c.members.length>=2 && !ids(c).some(d=>s.has(d)); });
+      const A=cA.cluster_id, B=cB.cluster_id;
+      const expectedCombined=new Set([...ids(cA), ...ids(cB)]).size;
+      const detail=()=>document.getElementById('cl-detail-'+A);
+      const reviewBtn=()=>detail().querySelector('.cl-merge .ed-actions .act.accept');
+      const kc=cid=>(state.clusterKnown||[]).find(c=>c.cluster_id===cid)||{};
+      const q=document.getElementById('cl-exist-q'); q.value=A; fire(q,'input');
+      await waitFor(()=>document.querySelector('#cl-exist-rows .cl-exist-row'));
+      const row=Array.from(document.querySelectorAll('#cl-exist-rows .cl-exist-row')).find(r=>r.textContent.indexOf(A)>=0);
+      if(row) row.click();
+      await waitFor(()=>!!detail() && !!document.getElementById('cl-merge-q-'+A));
+      R.mergeSectionShown=!!document.getElementById('cl-merge-q-'+A);
+      const mq=document.getElementById('cl-merge-q-'+A); mq.value=B; fire(mq,'input');
+      await waitFor(()=>Array.from(document.querySelectorAll('#cl-merge-results-'+A+' .cl-add-res')).some(r=>r.textContent.indexOf(B)>=0));
+      const bres=Array.from(document.querySelectorAll('#cl-merge-results-'+A+' .cl-add-res')).find(r=>r.textContent.indexOf(B)>=0);
+      bres.querySelector('.cl-mini').click();
+      await waitFor(()=>state.clusterMergeBId===B && document.querySelector('.cl-merge-parent'));
+      R.bSelected=state.clusterMergeBId===B;
+      R.parentChooserShown=document.querySelectorAll('.cl-merge-parent input[type=radio]').length===2;
+      const aParent=kc(A).canonical_id, bParent=kc(B).canonical_id;
+      // dry-run with default parent (A)
+      reviewBtn().click();
+      await waitFor(()=>mplan() && mplan().op==='merge');
+      const p=mplan();
+      R.mergeWritable=!p.blocked;
+      R.combinedCount=(p.resulting.members||[]).length;
+      R.combinedMatches=R.combinedCount===expectedCombined;
+      R.survivorIsA=p.survivor_id===A;
+      R.oneParent=(p.parent_integrity||{}).exactly_one_parent===true;
+      R.deletesLast=(p.ops||[]).length>0 && p.ops[p.ops.length-1].action==='delete' && p.ops[p.ops.length-1].scope==='b_all';
+      R.donorsInBothIsArray=Array.isArray(p.donors_in_both);
+      R.rollupPresent=!!(((p.preview||{}).per_file||{}).council);
+      R.defaultParentIsA=p.parent===aParent;
+      // switch survivor parent to B's, re-dry-run
+      const radios=document.querySelectorAll('.cl-merge-parent input[type=radio]');
+      radios[1].click();
+      await waitFor(()=>state.clusterMergeParent===bParent);
+      reviewBtn().click();
+      await waitFor(()=>mplan() && mplan().parent===bParent);
+      const p2=mplan();
+      R.parentSwitched=p2.parent===bParent;
+      R.aParentDemoted=(p2.resulting.roles||{})[aParent]==='alt-name';
+      R.bParentIsParent=(p2.resulting.roles||{})[bParent]==='parent';
+      R.stillOneParent=(p2.parent_integrity||{}).exactly_one_parent===true;
+      R.deletesLast2=p2.ops[p2.ops.length-1].action==='delete' && p2.ops[p2.ops.length-1].scope==='b_all';
+      clusterMergeCancel();
+      R.pass = R.mergeSectionShown && R.bSelected===true && R.parentChooserShown===true &&
+        R.mergeWritable===true && R.combinedMatches===true && R.combinedCount>=4 && R.survivorIsA===true && R.oneParent===true &&
+        R.deletesLast===true && R.donorsInBothIsArray===true && R.rollupPresent===true && R.defaultParentIsA===true &&
+        R.parentSwitched===true && R.aParentDemoted===true && R.bParentIsParent===true && R.stillOneParent===true && R.deletesLast2===true;
+    }catch(e){ R.error=String((e&&e.message)||e); R.pass=false; }
+    const m=document.createElement('div'); m.id='clustermergetest-done'; m.style.display='none';
     m.textContent=JSON.stringify(R); document.body.appendChild(m); return;
   }
   if(location.hash==='#mastertest'){
