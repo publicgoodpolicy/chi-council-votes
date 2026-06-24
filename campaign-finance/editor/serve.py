@@ -59,6 +59,12 @@ DATA_FILES = {
     'election': CF_ROOT / 'election-data.json',
 }
 
+# Per-contribution row shape served by /api/contributions — MATCHES the public
+# tool's shards/council-contributions.json field-for-field (the editor's data rows
+# also carry `is_self`, which is projected out here to keep the shapes identical).
+CONTRIB_FIELDS = ('id', 'donor_id', 'committee_id', 'amount', 'date',
+                  'cycle', 'contribution_type', 'source_filing')
+
 HERE = Path(__file__).resolve().parent
 INDEX_HTML = HERE / 'index.html'
 
@@ -598,6 +604,8 @@ class WorklistHandler(BaseHTTPRequestHandler):
             self._send(200, self._live_json(), 'application/json; charset=utf-8')
         elif path in ('/api/clusters', '/api/clusters/'):
             self._send(200, self._clusters_json(), 'application/json; charset=utf-8')
+        elif path in ('/api/contributions', '/api/contributions/'):
+            self._send(200, self._contributions_json(), 'application/json; charset=utf-8')
         elif path in ('/', '/index.html'):
             if INDEX_HTML.exists():
                 self._send(200, INDEX_HTML.read_bytes(), 'text/html; charset=utf-8')
@@ -605,6 +613,36 @@ class WorklistHandler(BaseHTTPRequestHandler):
                 self._send(404, b'index.html not found', 'text/plain; charset=utf-8')
         else:
             self._send(404, b'not found', 'text/plain; charset=utf-8')
+
+    def _contributions_json(self) -> bytes:
+        """GET /api/contributions?donor_id= — READ-ONLY per-donor contribution drill.
+        No write path, no Sheet contact.
+
+        Rows are emitted in the public council-contributions.json shape
+        (CONTRIB_FIELDS), and come from the SINGLE file matching the donor's headline
+        — the higher dues-excluded total, council first on a tie — exactly the
+        max-selection union_donors/build_donor_index use. So the count reconciles
+        with the donor's reported contribution_count, and the cross-file IE layer
+        (duplicated across both files) is never double-counted. IE Committee Dues
+        Transfer rows are excluded — the same footprint rule as every dollar/count
+        figure in the tool. employer is NOT here (it's a donor-record attribute; R3
+        reads it from the donor object). The id keys on the donor record verbatim —
+        no normalization — so it stays consistent with suffixed IE ids (orthogonal
+        to PROBE-4). Unknown id or zero contributions -> 200 with an empty array."""
+        qs = parse_qs(urlsplit(self.path).query)
+        did = (qs.get('donor_id') or [''])[0].strip()
+        best_total, best_rows, best_tool = -1.0, [], ''
+        if did:
+            for tool, path in DATA_FILES.items():            # council first -> wins ties
+                rows = [c for c in load(path).get('contributions', [])
+                        if c.get('donor_id') == did
+                        and c.get('contribution_type') != 'IE Committee Dues Transfer']
+                tot = sum((c.get('amount') or 0) for c in rows)
+                if tot > best_total:
+                    best_total, best_rows, best_tool = tot, rows, tool
+        shaped = [{k: c.get(k) for k in CONTRIB_FIELDS} for c in best_rows]
+        out = {'donor_id': did, 'tool': best_tool, 'contributions': shaped}
+        return json.dumps(out, ensure_ascii=False).encode('utf-8')
 
     def do_POST(self):
         # The ONLY mutating surface (H3). /api/write-plan is dry-run (no write);
