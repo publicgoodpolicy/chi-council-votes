@@ -615,6 +615,29 @@ class WorklistHandler(BaseHTTPRequestHandler):
                     cplans.append(cp)
                 plans['cluster'] = cplans
 
+            # CLUSTER EDIT path (HALT-EDIT-1) — modify EXISTING clusters. Inverted guard:
+            # operate on a fresh grouped read; the writer re-reads raw rows for key-addressed
+            # row ops. Parent-integrity enforced in the plan; preview = resulting rollup.
+            edit_items = [b for b in batch if b.get('kind') == 'cluster-edit']
+            if edit_items:
+                clusters = wo.read_clusters(sheet)             # fresh grouped read
+                by_cid = {c['cluster_id']: c for c in clusters}
+                by_donor = {m['donor_id']: {'cluster_id': c['cluster_id'], 'cluster_name': c['cluster_name']}
+                            for c in clusters for m in c['members']}
+                eplans = []
+                for it in edit_items:
+                    ep = wo.build_cluster_edit_plan(it, by_cid.get((it.get('cluster_id') or '').strip()), by_donor)
+                    res = ep.get('resulting') or {}
+                    ep['preview'] = cluster_preview({'members': res.get('members', []),
+                                                     'parent': res.get('parent', '')}, cls.per_file_totals)
+                    if ep['blocked']:
+                        blocked = True
+                    if do_write and not ep['blocked']:
+                        ep['result'] = wo.execute_cluster_edit_plan(sheet, ep)
+                        cls._clusters_cache = None             # membership changed -> /api/clusters must re-read
+                    eplans.append(ep)
+                plans['cluster-edit'] = eplans
+
             # split by surface; each tab gets its OWN fresh read immediately before
             for kind, spec in wo.SPECS.items():
                 items = [b for b in batch if b.get('kind', 'donor') == kind]
@@ -672,12 +695,18 @@ class WorklistHandler(BaseHTTPRequestHandler):
                 import write_overrides as wo
                 sheet = so.open_sheet(cls.sheet_id, creds_file=str(cls.creds_file))
                 clusters = wo.read_clusters(sheet)
+                # READ-ONLY name-join (HALT-EDIT-1): the Donor Clusters tab has no name
+                # column, so resolve each member's display name from the in-memory donor
+                # index (built at startup). Pure read; no write, no extra fetch.
+                names = {d['donor_id']: d.get('name', '') for d in (cls.donor_index or [])}
                 by_donor = {}                                # donor_id -> its cluster (last wins; overlaps are now 0)
                 for c in clusters:
                     for m in c['members']:
+                        m['name'] = names.get(m['donor_id'], '')
                         by_donor[m['donor_id']] = {'cluster_id': c['cluster_id'],
                                                    'cluster_name': c['cluster_name'],
-                                                   'role': m['role']}
+                                                   'role': m['role'],
+                                                   'name': names.get(m['donor_id'], '')}
                 cls._clusters_cache = json.dumps({'ok': True, 'count': len(clusters),
                                                   'clusters': clusters, 'by_donor': by_donor},
                                                  ensure_ascii=False).encode('utf-8')

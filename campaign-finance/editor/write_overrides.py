@@ -473,6 +473,186 @@ def execute_cluster_plan(sheet, plan: dict) -> dict:
             'rows': len(plan['rows'])}
 
 
+# ============================================================
+# CLUSTER EDIT  (HALT-EDIT-1) — modify an EXISTING cluster's rows under its existing
+# cluster_id (NOT a fresh mint). The INVERSE of the create guard: the id must be
+# PRESENT. One writer, four ops (add_member / remove_member / change_role / rename);
+# the future MERGE tool composes these same primitives in bulk. Parent-integrity is
+# ENFORCED: every op must leave EXACTLY ONE parent (never zero, never two). Touches
+# ONLY Donor Clusters rows — never contributions, never entity_type.
+# ============================================================
+CLUSTER_EDIT_OPS = {'add_member', 'remove_member', 'change_role', 'rename'}
+_NONPARENT_ROLES = CLUSTER_VALID_ROLES - {'parent'}
+
+
+def _cluster_state(cluster: dict):
+    """From a grouped cluster {cluster_name, canonical_id, members:[{donor_id,role,
+    relationship}]}, derive (members[ordered], roles{}, parent, name, relationship).
+    Parent = the role=='parent' member, falling back to canonical_id."""
+    members = [m['donor_id'] for m in cluster['members']]
+    roles = {m['donor_id']: ((m.get('role') or '').strip().lower() or 'related')
+             for m in cluster['members']}
+    name = (cluster.get('cluster_name') or '').strip()
+    canon = (cluster.get('canonical_id') or '').strip()
+    parent = next((d for d in members if roles.get(d) == 'parent'), '') or canon
+    rel = ((cluster['members'][0].get('relationship') if cluster['members'] else '')
+           or DEFAULT_RELATIONSHIP)
+    return members, roles, parent, name, rel
+
+
+def build_cluster_edit_plan(op_item: dict, cluster, all_by_donor=None) -> dict:
+    """Plan ONE edit op against an EXISTING cluster (grouped, from read_clusters).
+    Pure / Sheet-free. Returns {op, cluster_id, ops:[row-ops], resulting{members,roles,
+    parent,name}, parent_integrity, errors, blocked}. ENFORCES exactly-one-parent and
+    >=2 members; blocks (does not warn) on violation."""
+    op = (op_item.get('op') or '').strip()
+    cid = (op_item.get('cluster_id') or '').strip()
+    if op not in CLUSTER_EDIT_OPS:
+        return {'op': op, 'cluster_id': cid, 'ops': [], 'errors': [f'unknown op: {op!r}'], 'blocked': True}
+    if not cluster:
+        return {'op': op, 'cluster_id': cid, 'ops': [],
+                'errors': [f'cluster {cid!r} not found — edit requires an existing cluster'], 'blocked': True}
+
+    members, roles, parent, name, rel = _cluster_state(cluster)
+    r_members, r_roles, r_parent, r_name = list(members), dict(roles), parent, name
+    ops, errors = [], []
+
+    if op == 'rename':
+        new = (op_item.get('cluster_name') or '').strip()
+        if not new:
+            errors.append('cluster_name is required')
+        else:
+            r_name = new
+            ops.append({'action': 'update', 'field': 'cluster_name', 'to': new, 'scope': 'all'})
+
+    elif op == 'add_member':
+        did = (op_item.get('donor_id') or '').strip()
+        role = (op_item.get('role') or 'related').strip().lower()
+        if role not in _NONPARENT_ROLES:
+            role = 'related'                                   # add never sets the parent
+        if not did:
+            errors.append('donor_id is required')
+        elif did in members:
+            errors.append(f'{did} is already in this cluster')
+        else:
+            other = (all_by_donor or {}).get(did)
+            if other and other.get('cluster_id') != cid:
+                errors.append(f'{did} is already in cluster {other.get("cluster_id")} '
+                              f'({other.get("cluster_name", "")}) — combine via merge, not a second cluster')
+            else:
+                r_members.append(did); r_roles[did] = role
+                ops.append({'action': 'append', 'donor_id': did, 'role': role})
+
+    elif op == 'remove_member':
+        did = (op_item.get('donor_id') or '').strip()
+        nominate = (op_item.get('nominate_parent') or '').strip()
+        if did not in members:
+            errors.append(f'{did} is not in this cluster')
+        elif len(members) - 1 < 2:
+            errors.append('a cluster needs >= 2 members; removing this would leave <2 — '
+                          'delete the whole cluster instead (a separate, future op)')
+        else:
+            r_members = [m for m in r_members if m != did]; r_roles.pop(did, None)
+            ops.append({'action': 'delete', 'donor_id': did})
+            if did == parent:                                  # removing the parent -> must nominate
+                if not nominate:
+                    errors.append('removing the parent requires nominating a replacement parent')
+                elif nominate not in r_members:
+                    errors.append(f'nominated parent {nominate!r} is not a remaining member')
+                else:
+                    r_parent = nominate; r_roles[nominate] = 'parent'
+                    ops.append({'action': 'update', 'field': 'role', 'donor_id': nominate, 'to': 'parent'})
+                    ops.append({'action': 'update', 'field': 'canonical_id', 'to': nominate, 'scope': 'all'})
+
+    elif op == 'change_role':
+        did = (op_item.get('donor_id') or '').strip()
+        role = (op_item.get('role') or '').strip().lower()
+        demote = (op_item.get('demote_role') or 'alt-name').strip().lower()
+        if demote not in _NONPARENT_ROLES:
+            demote = 'alt-name'
+        if did not in members:
+            errors.append(f'{did} is not in this cluster')
+        elif role not in CLUSTER_VALID_ROLES:
+            errors.append(f'invalid role: {role!r}')
+        elif role == 'parent':
+            if did != parent:                                  # promote: demote the old parent in the same op
+                r_roles[parent] = demote; r_roles[did] = 'parent'; r_parent = did
+                ops.append({'action': 'update', 'field': 'role', 'donor_id': parent, 'to': demote})
+                ops.append({'action': 'update', 'field': 'role', 'donor_id': did, 'to': 'parent'})
+                ops.append({'action': 'update', 'field': 'canonical_id', 'to': did, 'scope': 'all'})
+        elif did == parent:
+            errors.append('cannot demote the parent directly — promote another member to parent '
+                          '(that demotes this one in the same op)')
+        else:
+            r_roles[did] = role
+            ops.append({'action': 'update', 'field': 'role', 'donor_id': did, 'to': role})
+
+    # PARENT-INTEGRITY (enforced): exactly one parent, >= 2 members in the result.
+    nparent = sum(1 for m in r_members if r_roles.get(m) == 'parent')
+    integ = {'old_parent': parent, 'new_parent': r_parent, 'parent_count': nparent,
+             'exactly_one_parent': nparent == 1, 'canonical_rewritten': r_parent != parent,
+             'demoted_to': (r_roles.get(parent) if r_parent != parent else None)}
+    if nparent != 1:
+        errors.append(f'parent-integrity violated: result has {nparent} parents (must be exactly 1)')
+    if len(r_members) < 2:
+        errors.append('parent-integrity: result has < 2 members')
+
+    return {'op': op, 'cluster_id': cid, 'cluster_name': r_name, 'relationship': rel, 'ops': ops,
+            'resulting': {'members': r_members, 'roles': r_roles, 'parent': r_parent, 'name': r_name},
+            'parent_integrity': integ, 'errors': errors, 'blocked': bool(errors)}
+
+
+def execute_cluster_edit_plan(sheet, plan: dict) -> dict:
+    """Apply the planned row ops to the EXISTING cluster, addressing rows by the
+    (cluster_id, donor_id) KEY from a FRESH read — never a cached index. Order: appends
+    (to the end, no shift) -> cell updates (by row number) -> deletes (descending, so
+    numbers stay valid). Refuses a blocked plan. B4: the tab has no entity_type column."""
+    if plan.get('blocked'):
+        raise RuntimeError('cluster edit blocked: ' + '; '.join(plan.get('errors') or ['contract failed']))
+    from gspread.utils import rowcol_to_a1
+    cid = plan['cluster_id']
+    ws = sheet.worksheet(CLUSTER_TAB)
+    header = ws.row_values(1)
+    colidx = {name: i + 1 for i, name in enumerate(header) if name}
+    assert 'entity_type' not in colidx, 'cluster tab must never carry entity_type'   # B4
+    records = ws.get_all_records()
+    rownum, cid_rows, rel = {}, [], DEFAULT_RELATIONSHIP
+    for i, r in enumerate(records):
+        if str(r.get('cluster_id') or '').strip() == cid:
+            n = i + 2                                          # +2: 1-based + header row
+            cid_rows.append(n)
+            rownum[str(r.get('donor_id') or '').strip()] = n
+            if r.get('relationship'):
+                rel = str(r.get('relationship')).strip()
+    batch, deletes, appended = [], [], 0
+    for o in plan['ops']:
+        if o['action'] == 'append':
+            row = {'cluster_id': cid, 'cluster_name': plan['resulting']['name'],
+                   'canonical_id': plan['resulting']['parent'], 'donor_id': o['donor_id'],
+                   'role': o['role'], 'relationship': rel}
+            assert 'entity_type' not in row, 'cluster row must never carry entity_type'
+            ws.append_row([row.get(c, '') for c in header], value_input_option='RAW')
+            appended += 1
+        elif o['action'] == 'update':
+            if o.get('scope') == 'all':
+                for n in cid_rows:
+                    batch.append({'range': rowcol_to_a1(n, colidx[o['field']]), 'values': [[o['to']]]})
+            else:
+                n = rownum.get(o['donor_id'])
+                if n:
+                    batch.append({'range': rowcol_to_a1(n, colidx[o['field']]), 'values': [[o['to']]]})
+        elif o['action'] == 'delete':
+            n = rownum.get(o['donor_id'])
+            if n:
+                deletes.append(n)
+    if batch:
+        ws.batch_update(batch, value_input_option='RAW')
+    for n in sorted(deletes, reverse=True):
+        ws.delete_rows(n)
+    return {'cluster_id': cid, 'op': plan['op'], 'appended': appended,
+            'updated': len(batch), 'deleted': len(deletes)}
+
+
 if __name__ == '__main__':
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)

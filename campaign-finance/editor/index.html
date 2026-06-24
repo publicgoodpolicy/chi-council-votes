@@ -159,7 +159,22 @@
   .cl-detail-mem{display:flex; gap:9px; align-items:baseline; padding:2px 0; font-size:12.5px;}
   .cl-detail-role{flex:0 0 92px; font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:.03em; color:var(--muted);}
   .cl-detail-role.parent{color:var(--teal);}
-  .cl-detail-nm .sub{color:var(--muted); font-size:11px;}
+  .cl-detail-nm{flex:1 1 auto;} .cl-detail-nm .sub{color:var(--muted); font-size:11px;}
+  /* HALT-EDIT-1: inline edit controls + dry-run panel inside the opened-cluster view */
+  .cl-mini{cursor:pointer; font:inherit; font-size:11px; font-weight:600; border-radius:6px; padding:2px 8px; border:1px solid var(--line); background:#fff; color:var(--teal);}
+  .cl-mini-sel{padding:2px 5px; border:1px solid var(--line); border-radius:6px; font:inherit; font-size:11px; background:#fff;}
+  .cl-mini-input{padding:4px 8px; border:1px solid var(--line); border-radius:6px; font:inherit; font-size:12.5px;}
+  .cl-edit-rename{display:flex; gap:6px; align-items:center; margin:4px 0 8px;} .cl-edit-rename .cl-mini-input{flex:1 1 auto;}
+  .cl-edit-add{margin:8px 0 2px;} .cl-edit-add .cl-mini-input{width:100%; box-sizing:border-box;}
+  .cl-add-results{margin-top:4px;}
+  .cl-add-res{display:flex; justify-content:space-between; align-items:center; gap:8px; padding:3px 0; font-size:12px; border-bottom:1px solid var(--line);}
+  .cl-edit-panel{margin-top:9px; padding:9px 11px; border:1px solid var(--teal); border-radius:8px; background:#f6fbfa;}
+  .cl-edit-head{font-size:13px; margin-bottom:4px;}
+  .cl-ops{margin:3px 0 6px 18px; font-size:12px;} .cl-ops li{margin:1px 0;}
+  .cl-integ{font-size:12px; padding:5px 8px; border-radius:6px; margin:4px 0;}
+  .cl-integ.ok{background:#eef6ec; color:#2f6b2f;} .cl-integ.no{background:#fbe9e7; color:var(--opp); font-weight:600;}
+  .cl-integ-row{font-size:12.5px; margin:5px 0; padding:5px 8px; background:#fff; border:1px solid var(--upd); border-radius:6px;}
+  .cl-res-mem{display:inline-block; margin:2px 8px 2px 0; font-size:12px;} .cl-res-mem.parent{font-weight:700; color:var(--teal);}
 </style>
 </head>
 <body>
@@ -220,8 +235,11 @@ const state = {
   // donor_id -> its existing cluster {cluster_id, cluster_name, role}.
   clusterKnown:null, clusterByDonor:{}, clusterLoadErr:'', clusterBrowse:false,
   // FIX-3a-3: inspect existing clusters — search over the 540 + which one is opened.
-  // Read-only; clusterOpenId is the expanded cluster (HALT-EDIT-1 adds controls into it).
+  // clusterOpenId is the expanded cluster (HALT-EDIT-1 adds edit controls into it).
   clusterExistQ:'', clusterOpenId:'',
+  // HALT-EDIT-1: in-flight cluster edit — the assembled op + its dry-run plan (nothing
+  // writes until Confirm); the add-member search state lives here too.
+  clusterEditOpItem:null, clusterEditPlan:null, clusterAddQ:'', clusterAddHits:[],
   cluster:{ members:[], byId:new Map(), name:'', parent:'', roles:{}, relationship:'affiliated entities', plan:null },
 };
 
@@ -900,25 +918,120 @@ function clusterExistRowHTML(c){
     <span class="sub">${esc(c.cluster_id)} · ${c.members.length} member${c.members.length===1?'':'s'}</span></div>`;
   return head + (open?clusterDetailHTML(c):'');
 }
-// The opened-cluster inspect view. READ-ONLY here — no controls. HALT-EDIT-1 adds its
-// edit controls INTO this view, so keep the per-member row structure stable. Parent is
-// the canonical (donor_id===canonical_id), falling back to an explicit role==='parent'.
+// The opened-cluster EDIT view (HALT-EDIT-1, on FIX-3a-3's inspect surface). Each member
+// row carries a role <select> (change_role) + remove; rename + add-member at the edges;
+// every control assembles an op and DRY-RUNS it — nothing writes until Confirm. Parent is
+// the canonical (donor_id===canonical_id), falling back to role==='parent'.
+const EDIT_ROLES=['parent','related','alt-name','affiliated-pac','subsidiary'];
+function memberName(m){ return m.name || (state.clusterById.get(m.donor_id)||{}).name || ''; }
 function clusterDetailHTML(c){
+  const cid=c.cluster_id, parent=c.canonical_id;
   const rows=c.members.map(m=>{
-    const isP = (c.canonical_id && m.donor_id===c.canonical_id) || m.role==='parent';
-    const known=state.clusterById.get(m.donor_id);
-    const nm = known&&known.name ? esc(known.name)+' ' : '';   // name only if already cached (no fetch)
+    const isP = (parent && m.donor_id===parent) || m.role==='parent';
+    const cur = isP ? 'parent' : (m.role||'related');
+    const nm = memberName(m);
+    const sel = `<select class="cl-mini-sel" onchange="clusterEditRole('${esc(cid)}','${esc(m.donor_id)}',this.value)">`+
+      EDIT_ROLES.map(r=>`<option value="${r}"${r===cur?' selected':''}>${r}</option>`).join('')+`</select>`;
     return `<div class="cl-detail-mem">
-      <span class="cl-detail-role${isP?' parent':''}">${isP?'parent':esc(m.role||'related')}</span>
-      <span class="cl-detail-nm">${nm}<span class="sub">${esc(m.donor_id)}</span></span>
+      <span class="cl-detail-role${isP?' parent':''}">${isP?'parent':esc(cur)}</span>
+      <span class="cl-detail-nm">${nm?esc(nm)+' ':''}<span class="sub">${esc(m.donor_id)}</span></span>
+      ${sel}
+      <button class="cl-mini" onclick="clusterEditRemove('${esc(cid)}','${esc(m.donor_id)}')">remove</button>
     </div>`;
   }).join('');
   const rel=(c.members[0]&&c.members[0].relationship)||'';
-  return `<div class="cl-detail" id="cl-detail-${esc(c.cluster_id)}">
-    <div class="meta-line">canonical parent: <b>${esc(c.canonical_id||'—')}</b>${rel?' · relationship: '+esc(rel):''}</div>
-    ${rows}</div>`;
+  const ep=(state.clusterEditPlan && state.clusterEditPlan.cluster_id===cid) ? clusterEditPanelHTML(state.clusterEditPlan) : '';
+  return `<div class="cl-detail" id="cl-detail-${esc(cid)}">
+    <div class="meta-line">canonical parent: <b>${esc(parent||'—')}</b>${rel?' · relationship: '+esc(rel):''}</div>
+    <div class="cl-edit-rename">
+      <input id="cl-rename-${esc(cid)}" class="cl-mini-input" value="${esc(c.cluster_name||'')}">
+      <button class="cl-mini" onclick="clusterEditRename('${esc(cid)}')">rename</button>
+    </div>
+    ${rows}
+    <div class="cl-edit-add">
+      <input id="cl-add-q-${esc(cid)}" class="cl-mini-input" placeholder="add member — search donor by name / id…" oninput="clusterEditAddSearch('${esc(cid)}')">
+      <div id="cl-add-results-${esc(cid)}" class="cl-add-results">${clusterAddResultsHTML(cid)}</div>
+    </div>
+    ${ep}</div>`;
 }
-function clusterToggleOpen(id){ state.clusterOpenId = (state.clusterOpenId===id ? '' : id); clusterRenderExistRows(); }
+function clusterAddResultsHTML(cid){
+  const q=(state.clusterAddQ||'').trim();
+  if(!q) return '';
+  return (state.clusterAddHits||[]).slice(0,8).map(h=>{
+    const ex=donorCluster(h.donor_id);
+    return `<div class="cl-add-res"><span>${esc(h.name||h.donor_id)} <span class="sub">${esc(h.donor_id)}</span>${ex?` <span class="cl-exbadge">in ${esc(ex.cluster_name||ex.cluster_id)}</span>`:''}</span>`+
+      `${ex?'<span class="sub">already clustered</span>':`<button class="cl-mini" onclick="clusterEditAdd('${esc(cid)}','${esc(h.donor_id)}')">add</button>`}</div>`;
+  }).join('') || '<div class="sub" style="padding:4px 0">no matches</div>';
+}
+function clusterRenderAddResults(cid){ const el=document.getElementById('cl-add-results-'+cid); if(el) el.innerHTML=clusterAddResultsHTML(cid); }
+// ---- edit op assembly: each builds an op and dry-runs it (no write) ----
+function clusterEditRename(cid){ const el=document.getElementById('cl-rename-'+cid); clusterEditOp({op:'rename', cluster_id:cid, cluster_name:el?el.value:''}); }
+function clusterEditRole(cid,did,role){ const op={op:'change_role', cluster_id:cid, donor_id:did, role:role}; if(role==='parent') op.demote_role='alt-name'; clusterEditOp(op); }
+function clusterEditRemove(cid,did){ clusterEditOp({op:'remove_member', cluster_id:cid, donor_id:did}); }
+function clusterEditAdd(cid,did){ clusterEditOp({op:'add_member', cluster_id:cid, donor_id:did, role:'related'}); }
+function clusterEditSetNominate(v){ const op=Object.assign({}, state.clusterEditOpItem||{}); op.nominate_parent=v; clusterEditOp(op); }
+function clusterEditSetDemote(v){ const op=Object.assign({}, state.clusterEditOpItem||{}); op.demote_role=v; clusterEditOp(op); }
+function clusterEditAddSearch(cid){
+  const el=document.getElementById('cl-add-q-'+cid); const q=el?el.value.trim():'';
+  state.clusterAddQ=q;
+  if(!q){ state.clusterAddHits=[]; clusterRenderAddResults(cid); return; }
+  fetch(DONORS+'?q='+encodeURIComponent(q)).then(r=>r.json()).then(j=>{ state.clusterAddHits=j.hits||[]; clusterRenderAddResults(cid); })
+    .catch(()=>{ state.clusterAddHits=[]; clusterRenderAddResults(cid); });
+}
+function clusterEditOp(opItem){
+  state.clusterEditOpItem=opItem;
+  return postJSON(WRITE_PLAN, {batch:[Object.assign({kind:'cluster-edit'}, opItem)]}).then(res=>{
+    const p=((res.plans||{})['cluster-edit']||[])[0] || {error:res.error||'no plan'};
+    p.cluster_id=opItem.cluster_id; state.clusterEditPlan=p; render();
+  }).catch(e=>{ state.clusterEditPlan={cluster_id:opItem.cluster_id, blocked:true, errors:[e.message]}; render(); });
+}
+function clusterEditConfirm(){
+  const op=state.clusterEditOpItem; if(!op) return;
+  const out=document.getElementById('cl-edit-out'); if(out) out.innerHTML='<div class="note-banner">Writing the edit to the Donor Clusters tab…</div>';
+  return postJSON(WRITE, {batch:[Object.assign({kind:'cluster-edit'}, op)]}).then(res=>{
+    const p=((res.plans||{})['cluster-edit']||[])[0] || {};
+    if(p.result){ state.clusterEditPlan=null; state.clusterEditOpItem=null; state.clusterKnown=null; loadClusters().then(()=>render()); }
+    else { p.cluster_id=op.cluster_id; state.clusterEditPlan=p; render(); }
+  }).catch(e=>{ state.clusterEditPlan={cluster_id:op.cluster_id, blocked:true, errors:[e.message]}; render(); });
+}
+function clusterEditCancel(){ state.clusterEditPlan=null; state.clusterEditOpItem=null; render(); }
+function clusterEditPanelHTML(ep){
+  if(ep.error) return `<div class="cl-edit-panel"><div class="err">${esc(ep.error)}</div><div class="ed-actions"><button class="act" onclick="clusterEditCancel()">Cancel</button></div></div>`;
+  const can=!ep.blocked, integ=ep.parent_integrity||{}, op=state.clusterEditOpItem||{};
+  const errs=(ep.errors||[]).length?`<div class="err" style="margin:6px 0">${ep.errors.map(esc).join('<br>')}</div>`:'';
+  const opsList=(ep.ops||[]).map(o=>{
+    if(o.action==='append') return `append <b>${esc(o.donor_id)}</b> (role ${esc(o.role)})`;
+    if(o.action==='delete') return `delete <b>${esc(o.donor_id)}</b>`;
+    if(o.action==='update') return `set <b>${esc(o.field)}</b>${o.donor_id?' of '+esc(o.donor_id):''} → <code>${esc(o.to)}</code>${o.scope==='all'?' (all rows)':''}`;
+    return esc(JSON.stringify(o));
+  }).map(s=>`<li>${s}</li>`).join('');
+  let extra='';
+  if(ep.op==='remove_member' && (ep.errors||[]).some(e=>/nominat/i.test(e))){
+    const nominees=((ep.resulting&&ep.resulting.members)||[]);
+    extra=`<div class="cl-integ-row">nominate a new parent: <select onchange="clusterEditSetNominate(this.value)"><option value="">— choose —</option>${nominees.map(m=>`<option value="${esc(m)}"${op.nominate_parent===m?' selected':''}>${esc(m)}</option>`).join('')}</select></div>`;
+  }
+  if(ep.op==='change_role' && integ.canonical_rewritten && integ.old_parent && integ.new_parent && integ.old_parent!==integ.new_parent){
+    extra=`<div class="cl-integ-row">demote old parent <b>${esc(integ.old_parent)}</b> to: <select onchange="clusterEditSetDemote(this.value)">${['alt-name','related','affiliated-pac','subsidiary'].map(r=>`<option value="${r}"${(op.demote_role||'alt-name')===r?' selected':''}>${r}</option>`).join('')}</select></div>`;
+  }
+  const integBox=`<div class="cl-integ ${integ.exactly_one_parent?'ok':'no'}">parent-integrity: ${integ.exactly_one_parent?'✓ exactly one parent':'✗ '+(integ.parent_count||0)+' parents'}${integ.canonical_rewritten?` · parent ${esc(integ.old_parent)} → <b>${esc(integ.new_parent)}</b>${integ.demoted_to?' (old demoted to '+esc(integ.demoted_to)+')':''} · canonical_id rewritten on all rows`:''}</div>`;
+  const res=ep.resulting||{members:[],roles:{}};
+  const resMembers=(res.members||[]).map(m=>{ const role=(res.roles||{})[m]||'related'; return `<span class="cl-res-mem${role==='parent'?' parent':''}">${esc(m)} <span class="sub">${esc(role)}</span></span>`; }).join('');
+  const pf=(ep.preview&&ep.preview.per_file)||{};
+  const boxes=Object.entries(pf).map(([tool,x])=>`<div class="box"><b>${esc(tool)}</b><div class="big">${usd(x.rolled_up_dollars)}</div><div class="meta-line">${x.present_count} present${x.forms_cluster?'':' — <span class="cl-warn">won&#39;t form</span>'}</div></div>`).join('');
+  return `<div class="cl-edit-panel" id="cl-edit-out">
+    <div class="cl-edit-head"><b>${esc(ep.op||'edit')}</b> on ${esc(ep.cluster_id)} <span class="status ${can?'NEW':''}"${can?'':' style="background:var(--opp)"'}>${can?'WRITABLE':'BLOCKED'}</span></div>
+    ${errs}${extra}
+    <div class="meta-line">row changes:</div><ul class="cl-ops">${opsList||'<li>(none)</li>'}</ul>
+    ${integBox}
+    <div class="meta-line" style="margin-top:6px">resulting membership: ${resMembers}</div>
+    <div class="cl-pf" style="margin-top:6px">${boxes}</div>
+    <div class="ed-actions" style="margin-top:8px">
+      ${can?`<button class="act accept" onclick="clusterEditConfirm()">Confirm write</button>`:''}
+      <button class="act" onclick="clusterEditCancel()">Cancel</button>
+    </div>
+  </div>`;
+}
+function clusterToggleOpen(id){ state.clusterOpenId = (state.clusterOpenId===id ? '' : id); state.clusterEditPlan=null; state.clusterEditOpItem=null; state.clusterAddQ=''; state.clusterAddHits=[]; clusterRenderExistRows(); }
 function clusterExistFilter(v){ state.clusterExistQ=v; clusterRenderExistRows(); }
 // surgical: rebuild ONLY the rows container, so the search input keeps focus while typing.
 function clusterRenderExistRows(){ const el=document.getElementById('cl-exist-rows'); if(el) el.innerHTML=clusterExistRowsHTML(); }
@@ -1358,7 +1471,8 @@ async function maybeSelftest(){
       let parentId='';
       if(detail){ const pmem=memEls.find(m=>m.querySelector('.cl-detail-role.parent')); const sub=pmem&&pmem.querySelector('.cl-detail-nm .sub'); parentId=sub?sub.textContent.trim():''; }
       R.parentIsCanonical = !!cluster.canonical_id && parentId===cluster.canonical_id;
-      R.detailReadOnly = !!detail && detail.querySelectorAll('input,button,select,textarea').length===0;
+      // HALT-EDIT-1: the opened view is now the EDIT surface — one role <select> per member.
+      R.detailHasEditControls = !!detail && detail.querySelectorAll('select.cl-mini-sel').length===memEls.length && memEls.length>0;
       // clearing the search restores the full list
       q.value=''; fire(q,'input');
       R.clearRestores = rows().length===R.totalRows;
@@ -1367,10 +1481,103 @@ async function maybeSelftest(){
       R.closesOnReclick = !document.getElementById('cl-detail-'+openId);
       R.pass = R.searchBox && R.totalRows>1 && R.narrowed===true && R.allMatch===true && R.focusKept===true &&
                R.opened===true && R.detailShown===true && R.detailMemberCount>0 && R.memberCountMatches===true &&
-               R.exactlyOneParent===true && R.parentIsCanonical===true && R.detailReadOnly===true &&
+               R.exactlyOneParent===true && R.parentIsCanonical===true && R.detailHasEditControls===true &&
                R.clearRestores===true && R.closesOnReclick===true;
     }catch(e){ R.error=String((e&&e.message)||e); R.pass=false; }
     const m=document.createElement('div'); m.id='clusterinspecttest-done'; m.style.display='none';
+    m.textContent=JSON.stringify(R); document.body.appendChild(m); return;
+  }
+  // #clustereddittest — HALT-EDIT-1 DRY-RUN coverage (no live write). Drives the edit
+  // controls in the opened-cluster view via DOM events and asserts each op's dry-run plan +
+  // parent-integrity: rename, change-role (incl promote→demote), remove-parent (refuse then
+  // nominate), add (unclustered writable / already-clustered blocked). All via /api/write-plan
+  // — nothing is written. FAILS pre-fix (no edit controls / no cluster-edit route).
+  if(location.hash==='#clustereddittest'){
+    const R={}; const CID='rollup-477';
+    try{
+      const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+      const waitFor=async(fn,t=60)=>{ for(let i=0;i<t;i++){ if(fn())return true; await sleep(100);} return false; };
+      const detail=()=>document.getElementById('cl-detail-'+CID);
+      const plan=()=>state.clusterEditPlan;
+      const memRows=()=>detail()?Array.from(detail().querySelectorAll('.cl-detail-mem')):[];
+      const fire=(el,t)=>el.dispatchEvent(new Event(t,{bubbles:true}));
+      const reset=async()=>{ clusterEditCancel(); await waitFor(()=>!plan() && detail()); };
+      setView('cluster');
+      await waitFor(()=>state.clusterKnown!==null && document.getElementById('cl-exist-q'));
+      // open rollup-477 via the search + click path
+      const q=document.getElementById('cl-exist-q'); q.value='chicago teachers union'; fire(q,'input');
+      await waitFor(()=>document.querySelector('#cl-exist-rows .cl-exist-row'));
+      const row=Array.from(document.querySelectorAll('#cl-exist-rows .cl-exist-row')).find(r=>/rollup-477/.test(r.textContent));
+      if(row) row.click();
+      await waitFor(()=>!!detail() && memRows().length>0);
+      R.opened=!!detail(); R.memberCount=memRows().length;
+
+      // --- RENAME ---
+      const rin=document.getElementById('cl-rename-'+CID); rin.value='CTU TEST RENAME';
+      detail().querySelector('.cl-edit-rename .cl-mini').click();
+      await waitFor(()=>plan() && plan().op==='rename');
+      R.renameWritable = !plan().blocked && (plan().ops||[]).some(o=>o.field==='cluster_name' && o.scope==='all');
+      await reset();
+
+      // --- CHANGE-ROLE non-parent: membership unchanged => dollars unchanged (by_parent sums by member, not role) ---
+      const origMembers = ((state.clusterKnown||[]).find(c=>c.cluster_id===CID).members||[]).map(m=>m.donor_id).sort();
+      const np = memRows().find(m=>!m.querySelector('.cl-detail-role.parent'));
+      const npId = np.querySelector('.cl-detail-nm .sub').textContent.trim();
+      let sel=np.querySelector('.cl-mini-sel'); sel.value='subsidiary'; fire(sel,'change');
+      await waitFor(()=>plan() && plan().op==='change_role');
+      R.roleWritable = !plan().blocked && (plan().ops||[]).some(o=>o.field==='role' && o.donor_id===npId && o.to==='subsidiary');
+      R.roleOneParent = !!(plan().parent_integrity||{}).exactly_one_parent;
+      R.roleMembershipUnchanged = JSON.stringify((plan().resulting.members||[]).slice().sort())===JSON.stringify(origMembers);
+      await reset();
+
+      // --- CHANGE-ROLE promote (demote old parent default alt-name; never 2 parents) ---
+      const np2 = memRows().find(m=>!m.querySelector('.cl-detail-role.parent'));
+      sel=np2.querySelector('.cl-mini-sel'); sel.value='parent'; fire(sel,'change');
+      await waitFor(()=>plan() && plan().op==='change_role' && (plan().parent_integrity||{}).canonical_rewritten);
+      const pi=plan().parent_integrity||{};
+      R.promoteOneParent = pi.exactly_one_parent===true && pi.parent_count===1;
+      R.promoteDemotedAltName = pi.demoted_to==='alt-name';
+      R.promoteCanonRewritten = pi.canonical_rewritten===true && (plan().ops||[]).some(o=>o.field==='canonical_id'&&o.scope==='all');
+      await reset();
+
+      // --- REMOVE PARENT: refuse without nominate, then succeed with nominate ---
+      const pRow = memRows().find(m=>m.querySelector('.cl-detail-role.parent'));
+      pRow.querySelector('.cl-mini').click();   // remove button
+      await waitFor(()=>plan() && plan().op==='remove_member');
+      R.removeParentRefused = plan().blocked===true && (plan().errors||[]).some(e=>/nominat/i.test(e)) && (plan().parent_integrity||{}).parent_count===0;
+      const nomSel = document.querySelector('#cl-edit-out .cl-integ-row select');
+      R.nominateSelectShown = !!nomSel;
+      const nominee=(plan().resulting.members||[])[0];
+      nomSel.value=nominee; fire(nomSel,'change');
+      await waitFor(()=>plan() && !plan().blocked);
+      R.removeParentNominated = !plan().blocked && (plan().parent_integrity||{}).new_parent===nominee && (plan().parent_integrity||{}).exactly_one_parent===true;
+      await reset();
+
+      // --- ADD unclustered (writable). Donor-agnostic: click whatever UNclustered result
+      // appears (an add button only renders for a donor not already in any cluster). ---
+      const aq=document.getElementById('cl-add-q-'+CID); aq.value='teachers union'; fire(aq,'input');
+      await waitFor(()=>document.querySelector('#cl-add-results-'+CID+' .cl-add-res .cl-mini'));
+      const addBtn=document.querySelector('#cl-add-results-'+CID+' .cl-add-res .cl-mini');
+      R.addBtnPresent=!!addBtn; if(addBtn) addBtn.click();
+      await waitFor(()=>plan() && plan().op==='add_member');
+      R.addWritable = !plan().blocked && (plan().ops||[]).some(o=>o.action==='append') &&
+        (plan().resulting.members||[]).length===R.memberCount+1;
+      await reset();
+
+      // --- ADD already-clustered (blocked: badged, no add button) ---
+      const aq2=document.getElementById('cl-add-q-'+CID); aq2.value='seiu-il-council'; fire(aq2,'input');
+      await waitFor(()=>Array.from(document.querySelectorAll('#cl-add-results-'+CID+' .cl-add-res')).some(r=>/seiu-il-council/.test(r.textContent)));
+      const exRes=Array.from(document.querySelectorAll('#cl-add-results-'+CID+' .cl-add-res')).find(r=>/seiu-il-council/.test(r.textContent));
+      R.addClusteredBadged = !!exRes && !!exRes.querySelector('.cl-exbadge') && !exRes.querySelector('.cl-mini');
+
+      R.pass = R.opened && R.memberCount>2 &&
+        R.renameWritable===true &&
+        R.roleWritable===true && R.roleOneParent===true && R.roleMembershipUnchanged===true &&
+        R.promoteOneParent===true && R.promoteDemotedAltName===true && R.promoteCanonRewritten===true &&
+        R.removeParentRefused===true && R.nominateSelectShown===true && R.removeParentNominated===true &&
+        R.addBtnPresent===true && R.addWritable===true && R.addClusteredBadged===true;
+    }catch(e){ R.error=String((e&&e.message)||e); R.pass=false; }
+    const m=document.createElement('div'); m.id='clustereddittest-done'; m.style.display='none';
     m.textContent=JSON.stringify(R); document.body.appendChild(m); return;
   }
   if(location.hash==='#mastertest'){
