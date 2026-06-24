@@ -978,6 +978,12 @@ function renderPlan(out, res, wrote){
   }
   if(wrote && res.mode==='LIVE-WRITE'){
     const rr=res.results||{}; const flat=[].concat(...order.map(k=>(rr[k]||[]).map(x=>({...x,kind:k}))));
+    // FIX-3a-2 (flag 3 / D1): the written rows are now committed — drop them from the
+    // staged set so a later visit can't re-submit them, and re-derive the header pill.
+    // Held rows (blocked, never written) stay staged. Root cause was (ii): staged was
+    // not cleared on write-success AND the pill wasn't re-derived; this fixes both.
+    flat.forEach(x=>state.staged.delete(key(x.kind, x.id)));
+    updateBadge();
     html = `<div class="rt"><b>✓ wrote ${flat.length} row(s)</b>: ${flat.map(x=>esc(x.id)+' ('+esc(x.kind)+':'+esc(x.action)+')').join(', ')}</div>` + html + propagationPromptHTML();
   } else if(!anyBlocked && totW){
     html += `<div class="ed-actions"><button class="act accept" id="btn-confirm" onclick="runConfirm()">Confirm live write (${totW} row${totW===1?'':'s'})</button></div>`;
@@ -1224,6 +1230,37 @@ async function maybeSelftest(){
       R.manyMembers>=3 && R.memListExists===true && R.memListScrolls===true && R.selectionReachable===true;
     }catch(e){ R.error=String((e&&e.message)||e); R.pass=false; }   // pre-fix: features absent -> clean fail verdict
     const m=document.createElement('div'); m.id='clusterformtest-done'; m.style.display='none';
+    m.textContent=JSON.stringify(R); document.body.appendChild(m); return;
+  }
+  // #stagedcleartest — flag 3 / D1: after a successful LIVE-WRITE the staged set must be
+  // EMPTIED (not just the pill blanked), so written items can't be re-submitted, while HELD
+  // rows stay staged. Drives the REAL staging API + the REAL renderPlan with a synthetic
+  // server LIVE-WRITE response (no live Sheet mutation — the real write path is covered by
+  // #confirmtest). FAILS pre-fix (staged kept full), PASSES after.
+  if(location.hash==='#stagedcleartest'){
+    const R={};
+    try{
+      const D=state.data.donors;
+      const a=D.find(x=>x.donor_id==='illinois-realtors')||D.find(x=>x.suggested_industry)||D[0];
+      const b=D.find(x=>x.suggested_industry && x.donor_id!==a.donor_id)||D.find(x=>x.donor_id!==a.donor_id);
+      stageDonorAccept(a.donor_id); stageDonorAccept(b.donor_id);
+      R.stagedBefore=state.staged.size;
+      setView('review'); await loadLive(); render();   // write-out renders only once live tabs are read
+      const badge=()=>document.getElementById('staged-badge');
+      R.badgeBefore=((badge()&&badge().textContent)||'').trim();
+      // synthetic server result: donor 'a' WRITTEN, donor 'b' not in results (held/unwritten)
+      const fakeRes={ mode:'LIVE-WRITE',
+        plans:{donor:{round_trip:{rows:1,mismatches:0}, writable:[{id:a.donor_id,kind:'donor',status:'UPDATE',changed:{},cells:{}}], held:[], blocked:false}},
+        results:{donor:[{id:a.donor_id, action:'updated'}]} };
+      renderPlan(document.getElementById('write-out'), fakeRes, true);
+      R.writtenRemoved=!state.staged.has('donor:'+a.donor_id);     // committed -> dropped
+      R.heldRemains=state.staged.has('donor:'+b.donor_id);         // never written -> stays
+      R.stagedAfter=state.staged.size;
+      R.badgeAfter=((badge()&&badge().textContent)||'').trim();
+      R.pass = R.stagedBefore===2 && R.writtenRemoved===true && R.heldRemains===true &&
+               R.stagedAfter===1 && /^1 staged/.test(R.badgeAfter);
+    }catch(e){ R.error=String((e&&e.message)||e); R.pass=false; }
+    const m=document.createElement('div'); m.id='stagedcleartest-done'; m.style.display='none';
     m.textContent=JSON.stringify(R); document.body.appendChild(m); return;
   }
   if(location.hash==='#mastertest'){
