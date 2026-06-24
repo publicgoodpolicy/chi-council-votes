@@ -399,16 +399,20 @@ def build_donor_index() -> list[dict]:
 
 
 def search_donor_index(index: list[dict], q: str, cap: int = 100,
-                       ind: str = '', etype: str = '') -> list[dict]:
+                       ind: str = '', etype: str = '', browse: bool = False) -> list[dict]:
     """Substring/id search over the master index, with optional industry-tag and
     entity_type FILTERS (for the clustering discovery surface: filter to e.g. all
     labor-teachers donors and browse without typing). Exact donor_id match is pinned
     first; the rest rank by total_given. With NO query and NO filter, returns nothing
-    (lookup is explicit, not the default queue); a filter alone is a valid browse."""
+    (lookup is explicit, not the default queue) UNLESS browse=True (Cluster-tab
+    render-on-open), which returns the top donors by total_given as a candidate pool;
+    a filter alone is a valid browse."""
     q = (q or '').strip().lower()
     ind = (ind or '').strip()
     etype = (etype or '').strip()
     if not q and not ind and not etype:
+        if browse:
+            return sorted(index, key=lambda r: -r['total_given'])[:cap]
         return []
     scored = []
     for r in index:
@@ -546,6 +550,7 @@ class WorklistHandler(BaseHTTPRequestHandler):
     sheet_id: str = DEFAULT_SHEET_ID
     creds_file = DEFAULT_CREDS
     _live_cache: bytes = None               # lazy: first /api/live request reads the Sheet
+    _clusters_cache: bytes = None           # lazy: first /api/clusters read; invalidated on a cluster write
 
     def _send(self, status, body: bytes, ctype: str):
         self.send_response(status)
@@ -564,6 +569,8 @@ class WorklistHandler(BaseHTTPRequestHandler):
             self._send(200, self._donor_search_json(), 'application/json; charset=utf-8')
         elif path in ('/api/live', '/api/live/'):
             self._send(200, self._live_json(), 'application/json; charset=utf-8')
+        elif path in ('/api/clusters', '/api/clusters/'):
+            self._send(200, self._clusters_json(), 'application/json; charset=utf-8')
         elif path in ('/', '/index.html'):
             if INDEX_HTML.exists():
                 self._send(200, INDEX_HTML.read_bytes(), 'text/html; charset=utf-8')
@@ -604,6 +611,7 @@ class WorklistHandler(BaseHTTPRequestHandler):
                     if do_write and not cp['blocked']:
                         cp['result'] = wo.execute_cluster_plan(sheet, cp)
                         existing_ids.append(cp['cluster_id'])  # next mint in same batch sees it
+                        cls._clusters_cache = None             # a new cluster landed -> /api/clusters must re-read
                     cplans.append(cp)
                 plans['cluster'] = cplans
 
@@ -638,15 +646,45 @@ class WorklistHandler(BaseHTTPRequestHandler):
     def _donor_search_json(self) -> bytes:
         """GET /api/donor?q=<id-or-name> — master-view lookup over the FULL donor
         set (read-only; NOT gated by is_unclassified). Returns each hit's current
-        classification so the editor can render it. Empty q -> no hits."""
+        classification so the editor can render it. Empty q -> no hits, UNLESS
+        &browse=1 (Cluster-tab render-on-open): then an empty query returns the top
+        donors by total_given as a candidate pool. Lookup/Find-donor never sends
+        browse, so their explicit-lookup default is unchanged."""
         qs = parse_qs(urlsplit(self.path).query)
         q = (qs.get('q', ['']) or [''])[0]
         ind = (qs.get('ind', ['']) or [''])[0]
         etype = (qs.get('etype', ['']) or [''])[0]
-        hits = search_donor_index(type(self).donor_index, q, ind=ind, etype=etype)
-        return json.dumps({'q': q, 'ind': ind, 'etype': etype,
+        browse = (qs.get('browse', ['']) or [''])[0] in ('1', 'true')
+        hits = search_donor_index(type(self).donor_index, q, ind=ind, etype=etype, browse=browse)
+        return json.dumps({'q': q, 'ind': ind, 'etype': etype, 'browse': browse,
                            'count': len(hits), 'hits': hits},
                           ensure_ascii=False).encode('utf-8')
+
+    def _clusters_json(self) -> bytes:
+        """GET /api/clusters — READ-ONLY snapshot of existing clusters + a by_donor index
+        so the Cluster tab can show what is already clustered and hard-block duplicate
+        mints (FIX-3a-2). No write verb (sync_overrides.open_sheet is READONLY-scoped).
+        Cached per-process; invalidated when the editor writes a new cluster."""
+        cls = type(self)
+        if cls._clusters_cache is None:
+            try:
+                import sync_overrides as so                  # lazy: gspread only on demand
+                import write_overrides as wo
+                sheet = so.open_sheet(cls.sheet_id, creds_file=str(cls.creds_file))
+                clusters = wo.read_clusters(sheet)
+                by_donor = {}                                # donor_id -> its cluster (last wins; overlaps are now 0)
+                for c in clusters:
+                    for m in c['members']:
+                        by_donor[m['donor_id']] = {'cluster_id': c['cluster_id'],
+                                                   'cluster_name': c['cluster_name'],
+                                                   'role': m['role']}
+                cls._clusters_cache = json.dumps({'ok': True, 'count': len(clusters),
+                                                  'clusters': clusters, 'by_donor': by_donor},
+                                                 ensure_ascii=False).encode('utf-8')
+            except Exception as e:                           # surface, don't crash the server
+                return json.dumps({'ok': False,
+                                   'error': f'{type(e).__name__}: {e}'}).encode('utf-8')
+        return cls._clusters_cache
 
     def _live_json(self) -> bytes:
         cls = type(self)

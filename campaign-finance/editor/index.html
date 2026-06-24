@@ -114,8 +114,12 @@
   /* clustering (HALT-3a): discovery filters + builder panel */
   .cl-filters{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:6px 0 12px;}
   .cl-filters select{padding:7px 10px; border:1px solid var(--line); border-radius:8px; background:var(--card); color:var(--ink); font:inherit; font-size:13px;}
-  .cl-builder{position:sticky; top:64px; z-index:5; background:var(--tan); border:1px solid #d9c3a6; border-radius:10px; padding:12px 14px; margin-bottom:14px;}
+  .cl-builder{position:sticky; top:64px; z-index:5; background:var(--tan); border:1px solid #d9c3a6; border-radius:10px; padding:12px 14px; margin-bottom:14px;
+    max-height:calc(100vh - 80px); display:flex; flex-direction:column;}   /* FIX-3a-2 C1: never eat the viewport */
   .cl-builder h3{font-family:'Recoleta','Georgia',serif; font-size:16px; margin:0 0 8px;}
+  /* FIX-3a-2 C1: the member list scrolls inside the panel so the name/parent header + the
+     donor selection list below the panel stay reachable for many-member labor families. */
+  .cl-mem-list{overflow:auto; max-height:34vh; min-height:0;}
   .cl-mem{display:grid; grid-template-columns:auto 1fr auto auto; gap:9px; align-items:center; padding:5px 0; border-bottom:1px solid #e4d3ba; font-size:13px;}
   .cl-mem:last-child{border-bottom:none;}
   .cl-mem .nm{font-weight:600;}
@@ -133,6 +137,19 @@
   .cl-pf .box .big{font-family:'Recoleta','Georgia',serif; font-size:18px;}
   .cl-chk{font-size:12px; margin-top:6px;} .cl-chk .ok{color:var(--new);} .cl-chk .no{color:var(--opp);}
   .cl-warn{font-size:12px; color:var(--upd);}
+  /* FIX-3a-2 A2/B1: existing-cluster visibility + overlap hard-block styling */
+  .cl-exbadge{display:inline-block; font-size:10.5px; font-weight:600; padding:1px 7px; margin-left:7px; border-radius:99px;
+    background:#f3e2c8; color:#8a5a12; border:1px solid #e2c79a; vertical-align:middle;}
+  .row.cl-exrow{opacity:.92;}
+  .cl-mem-ex{background:#fbeeda;}
+  .cl-exwarn{display:inline-block; font-size:11px; font-weight:600; color:var(--opp); margin-left:8px;}
+  .cl-block{margin:8px 0 2px; padding:9px 11px; border:1px solid var(--opp); border-radius:8px; background:#fbe9e7; color:#7a1f12; font-size:12.5px;}
+  .cl-block .sub{display:block; margin-top:5px; color:#7a1f12; font-weight:400;}
+  .cl-section{margin-top:12px;}
+  .cl-h4{font-family:'Recoleta','Georgia',serif; font-size:14px; margin:0 0 4px;}
+  .cl-exist-list{max-height:30vh; overflow:auto; border:1px solid var(--line); border-radius:8px; background:#fff;}
+  .cl-exist-row{display:flex; gap:8px; align-items:baseline; padding:4px 10px; border-bottom:1px solid var(--line); font-size:12.5px;}
+  .cl-exist-row:last-child{border-bottom:none;} .cl-exist-row .nm{font-weight:600;} .cl-exist-row .sub{color:var(--muted); font-size:11px;}
 </style>
 </head>
 <body>
@@ -174,6 +191,7 @@ const ORIGIN = (location.protocol === 'http:' ? '' : 'http://localhost:8765');
 const API  = ORIGIN + '/api/worklist';
 const DONORS = ORIGIN + '/api/donor';            // master lookup — full donor set (read-only)
 const LIVE = ORIGIN + '/api/live';
+const CLUSTERS = ORIGIN + '/api/clusters';       // existing clusters (read-only) — overlap guard + render-on-open
 const WRITE_PLAN = ORIGIN + '/api/write-plan';   // dry-run (no write)
 const WRITE      = ORIGIN + '/api/write';        // live write (explicit confirm)
 const EDITOR_STAMP = 'editor-ui';
@@ -187,6 +205,10 @@ const state = {
   lookupHits:[], lookupById:new Map(), lookupQ:'',
   // clustering (HALT-3a): discovery filter state + the cluster being built
   clusterHits:[], clusterById:new Map(), clusterQ:'', clusterInd:'', clusterEtype:'',
+  // FIX-3a-2: existing clusters (read-only /api/clusters) drive the overlap hard-block
+  // + render-on-open. clusterKnown=null means "not loaded yet"; clusterByDonor maps a
+  // donor_id -> its existing cluster {cluster_id, cluster_name, role}.
+  clusterKnown:null, clusterByDonor:{}, clusterLoadErr:'', clusterBrowse:false,
   cluster:{ members:[], byId:new Map(), name:'', parent:'', roles:{}, relationship:'affiliated entities', plan:null },
 };
 
@@ -670,11 +692,32 @@ const VALID_ROLES=['related','alt-name','affiliated-pac','subsidiary'];
 // hint, so the disabled-state message names the real condition (not a stale guess).
 function clusterReady(c){
   if(c.members.length<2) return {ok:false, hint:'select ≥2 members'};
+  // FIX-3a-2 HARD-BLOCK (checked first once ≥2 selected, so it's unmissable): never mint a
+  // NEW cluster over already-clustered members — exactly the duplicate/fragmented-rollup
+  // sprawl this fix prevents. The path to combine existing clusters is MERGE (future), not a
+  // parallel new cluster. Selection stays allowed (curator can see the member + where it
+  // lives); only the mint is blocked.
+  const clashed = c.members.map(id=>({id, ex:donorCluster(id)})).filter(x=>x.ex);
+  if(clashed.length){
+    const names=[...new Set(clashed.map(x=>x.ex.cluster_name||x.ex.cluster_id))];
+    return {ok:false, blocked_overlap:true, clashed,
+            hint:'already in '+names.slice(0,2).join(', ')+(names.length>2?'…':'')+' — combine via merge, not a new cluster'};
+  }
   if(!c.name.trim()) return {ok:false, hint:'name the cluster'};
   if(!c.parent || c.members.indexOf(c.parent)===-1) return {ok:false, hint:'pick a parent'};
   if(c.members.some(id=>id!==c.parent && c.roles[id] && VALID_ROLES.indexOf(c.roles[id])===-1))
     return {ok:false, hint:'invalid role on a member'};
   return {ok:true, hint:''};
+}
+// FIX-3a-2: a donor's existing cluster (read-only /api/clusters), or null if unclustered
+// / not-yet-loaded. The overlap guard fails OPEN only when the cluster read is unavailable
+// (offline/no creds) — see loadClusters; in the normal creds-present path it is authoritative.
+function donorCluster(id){ return state.clusterByDonor[id] || null; }
+function loadClusters(){
+  return fetch(CLUSTERS).then(r=>r.json()).then(j=>{
+    if(j.ok){ state.clusterKnown=j.clusters||[]; state.clusterByDonor=j.by_donor||{}; state.clusterLoadErr=''; }
+    else { state.clusterKnown=[]; state.clusterByDonor={}; state.clusterLoadErr=j.error||'cluster read unavailable'; }
+  }).catch(e=>{ state.clusterKnown=[]; state.clusterByDonor={}; state.clusterLoadErr=String(e.message||e); });
 }
 // Surgical re-derive for the INPUT path (typing the name, picking a role): update the
 // gate button + hint from the single state WITHOUT a full re-render, so the <input>
@@ -690,8 +733,11 @@ function clusterSyncControls(){
 }
 function doClusterSearch(){
   const q=state.clusterQ.trim(), ind=state.clusterInd, et=state.clusterEtype;
-  if(!q && !ind && !et){ state.clusterHits=[]; render(); return Promise.resolve(); }
-  const qs='?q='+encodeURIComponent(q)+'&ind='+encodeURIComponent(ind)+'&etype='+encodeURIComponent(et);
+  // FIX-3a-2 render-on-open: an empty query/filter is NO LONGER a dead end — it browses
+  // the top donors (server &browse=1) as the candidate pool. Cluster-tab only; Find-donor
+  // never sends browse, so its explicit-lookup default is untouched.
+  const browse=(!q && !ind && !et); state.clusterBrowse=browse;
+  const qs='?q='+encodeURIComponent(q)+'&ind='+encodeURIComponent(ind)+'&etype='+encodeURIComponent(et)+(browse?'&browse=1':'');
   return fetch(DONORS+qs).then(r=>r.json()).then(j=>{
     state.clusterHits=j.hits||[];
     (j.hits||[]).forEach(h=>state.clusterById.set(h.donor_id,h));
@@ -726,16 +772,18 @@ async function clusterConfirm(){
       document.getElementById('list').innerHTML=`<div class="diff" style="border-color:var(--sage)"><h3>✓ wrote cluster ${esc(cid)} <span class="status NEW">${n} rows</span></h3>
         <div class="meta-line">Appended ${n} member rows to Donor Clusters (non-destructive). Picked up on each tool's next build.</div></div>`+propagationPromptHTML();
       clusterReset();
+      state.clusterKnown=null; loadClusters().then(()=>render());   // new cluster + its members are now "clustered"
     } else { CL().plan=p; render(); }
   } catch(e){ if(out) out.innerHTML=`<div class="err">${esc(e.message)}</div>`; }
 }
 function clusterResultRow(r){
   const inC=clusterHas(r.donor_id);
+  const ex=donorCluster(r.donor_id);          // FIX-3a-2: already in an existing cluster?
   const idLine=[r.occupation,r.employer,r.city].filter(Boolean).map(esc);
-  return `<div class="row">
+  return `<div class="row${ex?' cl-exrow':''}">
     <div class="rank"></div>
     <div>
-      <div class="name">${esc(r.name)||esc(r.donor_id)}${clsBadge(r)}</div>
+      <div class="name">${esc(r.name)||esc(r.donor_id)}${clsBadge(r)}${ex?`<span class="cl-exbadge" title="already clustered — combine via merge, not a new cluster">in ${esc(ex.cluster_name||ex.cluster_id)}</span>`:''}</div>
       ${idLine.length?`<div class="meta-line">${idLine.join('<span class="sep">•</span>')}</div>`:''}
       <div class="badges">${toolBadges(r.tools)}</div>
     </div>
@@ -751,13 +799,17 @@ function clusterBuilderHTML(){
   // c.parent, else the member's actual role. Label and radio cannot disagree — both
   // derive from c.parent — so changing the radio re-renders and the label tracks with no lag.
   const rows=c.members.map(id=>{ const d=c.byId.get(id)||{name:id}; const isP=c.parent===id;
-    return `<div class="cl-mem">
+    const ex=donorCluster(id);                  // FIX-3a-2: member already in an existing cluster?
+    return `<div class="cl-mem${ex?' cl-mem-ex':''}">
       <label class="cl-prad" title="set as canonical parent"><input type="radio" name="cl-parent" aria-label="set as canonical parent for ${esc(d.name||id)}" ${isP?'checked':''} onchange="clusterSetParent('${esc(id)}')"></label>
-      <div><span class="nm">${esc(d.name||id)}</span> <span class="sub">${esc(id)}</span></div>
+      <div><span class="nm">${esc(d.name||id)}</span> <span class="sub">${esc(id)}</span>${ex?`<span class="cl-exwarn">⚠ already in ${esc(ex.cluster_name||ex.cluster_id)}</span>`:''}</div>
       ${isP?`<span class="cl-pmark">parent</span>`:`<select onchange="clusterSetRole('${esc(id)}',this.value)">${clusterRoleOptions(c.roles[id]||'related')}</select>`}
       <button class="cl-add in" onclick="clusterToggle('${esc(id)}')">remove</button>
     </div>`; }).join('');
   const rd=clusterReady(c);
+  const blockBanner = rd.blocked_overlap ? `<div class="cl-block" id="cl-block">⛔ Can't create a new cluster over already-clustered members:
+    ${rd.clashed.map(x=>`<div>• <b>${esc(x.id)}</b> is already in <b>${esc(x.ex.cluster_name||x.ex.cluster_id)}</b></div>`).join('')}
+    <div class="sub">To combine existing clusters, use <b>merge</b> (a future capability) — not a parallel new cluster. Remove these members to proceed.</div></div>` : '';
   return `<div class="cl-builder">
     <h3>New cluster — ${c.members.length} member${c.members.length===1?'':'s'} selected</h3>
     <div class="cl-grid">
@@ -767,7 +819,8 @@ function clusterBuilderHTML(){
         <input id="cl-rel" value="${esc(c.relationship)}" oninput="clusterSetRel(this.value)"></div>
     </div>
     <div class="cl-legend">◉ marks the canonical <b>parent</b> — pick one; the rest take a role.</div>
-    ${rows}
+    <div class="cl-mem-list">${rows}</div>
+    ${blockBanner}
     <div class="ed-actions" style="margin-top:10px">
       <button class="act accept" id="cl-review" onclick="clusterReview()" ${rd.ok?'':'disabled'}>Review cluster (dry-run)</button>
       <button class="act" onclick="clusterReset()">Clear</button>
@@ -798,6 +851,25 @@ function renderClusterPlanHTML(p){
     ${canWrite?`<div class="ed-actions"><button class="act accept" onclick="clusterConfirm()">Confirm write cluster (${p.rows.length} rows)</button></div>`:''}
   </div>`;
 }
+// FIX-3a-2 render-on-open section A: what's already clustered (read-only /api/clusters),
+// so the curator doesn't blind-duplicate an existing cluster. Degrades to an explicit
+// "guard inactive" note if the cluster read is unavailable (offline / no creds).
+function clusterExistingHTML(){
+  if(state.clusterKnown===null) return `<div class="cl-section"><h4 class="cl-h4">Existing clusters</h4><div class="empty">Loading existing clusters…</div></div>`;
+  const errNote = state.clusterLoadErr
+    ? `<div class="cl-warn" style="margin:6px 0">existing-cluster check unavailable (${esc(state.clusterLoadErr)}) — the overlap guard is inactive until this loads.</div>` : '';
+  const cl=state.clusterKnown;
+  const items=cl.map(c=>`<div class="cl-exist-row"><span class="nm">${esc(c.cluster_name||c.cluster_id)}</span> <span class="sub">${esc(c.cluster_id)} · ${c.members.length} member${c.members.length===1?'':'s'}</span></div>`).join('');
+  return `<div class="cl-section"><h4 class="cl-h4">Existing clusters (${cl.length})</h4>${errNote}
+    <div class="cl-exist-list">${items||'<div class="empty">none yet</div>'}</div></div>`;
+}
+// section B: the unclustered candidate pool (browse top donors, drop ones already clustered).
+function clusterPoolHTML(){
+  const pool=(state.clusterHits||[]).filter(h=>!donorCluster(h.donor_id));
+  return `<div class="cl-section"><h4 class="cl-h4">Unclustered donors — candidate pool (${pool.length})</h4>
+    <p class="count-note">Top unclustered donors by total given. Filter by industry / entity type, or type a name, to narrow.</p>
+    ${pool.length?pool.map(clusterResultRow).join(''):'<div class="empty">No unclustered donors in the candidate pool.</div>'}</div>`;
+}
 function renderCluster(list, note){
   note.textContent='Cluster — find related donors, select ≥2, name + pick a parent, review the per-file rollup, then write to the shared Donor Clusters tab (non-destructive).';
   const indOpts=`<option value="">— any industry —</option>`+(state.vocab.industries||[]).map(i=>`<option value="${esc(i.key)}"${i.key===state.clusterInd?' selected':''}>${esc(i.label)}</option>`).join('');
@@ -807,13 +879,16 @@ function renderCluster(list, note){
     <select onchange="clusterFilterEtype(this.value)">${etOpts}</select>
     <span class="meta-line">filter by industry / entity type, or type above — no query required</span></div>`;
   const builder=clusterBuilderHTML();
+  const onOpen = (!state.clusterQ.trim() && !state.clusterInd && !state.clusterEtype);
   let results;
-  if(!state.clusterQ.trim() && !state.clusterInd && !state.clusterEtype){
-    results=`<div class="empty">Filter by industry or entity type (e.g. labor-teachers), or type a name, to list donors to cluster.</div>`;
+  if(onOpen){
+    // FIX-3a-2 render-on-open: existing clusters (so the curator sees what's already
+    // clustered and won't duplicate) + an unclustered candidate pool. Filter/search narrows.
+    results = clusterExistingHTML() + clusterPoolHTML();
   } else if(!state.clusterHits.length){
     results=`<div class="empty">No donors match the current filter.</div>`;
   } else {
-    results=`<p class="count-note">${state.clusterHits.length} donor(s) — click “add to cluster”.</p>`+state.clusterHits.map(clusterResultRow).join('');
+    results=`<p class="count-note">${state.clusterHits.length} donor(s) — click “add to cluster”. Donors already in a cluster are badged and can't be re-clustered (combine via merge).</p>`+state.clusterHits.map(clusterResultRow).join('');
   }
   list.innerHTML = filters + builder + results;
 }
@@ -923,7 +998,13 @@ function setView(v){
     // if it fails (no creds/offline) curated donors degrade to (c) — never silently authoritative.
     if(!state.live){ loadLive().then(()=>render()).catch(()=>render()); }
   }
-  if(v==='cluster'){ state.clusterQ=''; state.cluster.plan=null; }
+  if(v==='cluster'){
+    state.clusterQ=''; state.clusterInd=''; state.clusterEtype=''; state.cluster.plan=null;
+    // load existing clusters FIRST (the overlap guard + badges depend on it), THEN the
+    // render-on-open candidate pool — so the pool is filtered against known clusters.
+    if(state.clusterKnown===null) loadClusters().then(()=>doClusterSearch());
+    else doClusterSearch();
+  }
   render();
 }
 function refresh(){ render(); }
@@ -1039,68 +1120,109 @@ async function maybeSelftest(){
       forms:pf.forms_cluster, dues_excluded:(p.preview||{}).dues_excluded,
       rows:(p.rows||[]).length}); document.body.appendChild(m); return;
   }
-  // #clusterformtest — HUMAN-PATH form test (FIX-3a-1). Drives the Cluster builder
-  // the way a curator does: CLICK add buttons, TYPE the name via input events, CLICK
-  // the parent radio — never programmatic state-set. Catches the display-vs-validation
-  // desync (enable predicate left stale because the input path never re-derived it;
-  // per-row 'parent' label not tracking the canonical) that the programmatic
-  // #clustertest could not. Version-robust selectors: FAILS on pre-fix, PASSES after.
+  // #clusterformtest — HUMAN-PATH Cluster-tab test (FIX-3a-1 + FIX-3a-2). Drives the tab
+  // via real DOM events (click/type), never programmatic state-set. Covers: render-on-open
+  // (existing clusters + unclustered pool before any filter), filter-narrows, the form
+  // desync fix (enable-on-type, parent-label tracks radio, honest hint), the A2 overlap
+  // HARD-BLOCK (already-clustered members can't mint a new cluster — combine via merge),
+  // and the C1 panel scroll. Needs a live server WITH creds (A1 /api/clusters). FAILS
+  // pre-FIX-3a-2, PASSES after.
   if(location.hash==='#clusterformtest'){
     const R={};
-    setView('cluster');
-    state.clusterInd='labor-teachers'; await doClusterSearch();
-    R.searchHits=state.clusterHits.length;
+    try{
+    const fire=(el,type)=>el.dispatchEvent(new Event(type,{bubbles:true}));
+    const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+    const waitFor=async(fn,tries=60)=>{ for(let i=0;i<tries;i++){ if(fn())return true; await sleep(100);} return false; };
     const reviewBtn=()=>Array.from(document.querySelectorAll('#list .cl-builder .ed-actions button')).find(b=>/Review cluster/i.test(b.textContent))||null;
     const hintEl=()=>document.querySelector('#list .cl-builder .ed-actions .cl-warn');
     const memRows=()=>Array.from(document.querySelectorAll('#list .cl-builder .cl-mem'));
-    const fire=(el,type)=>el.dispatchEvent(new Event(type,{bubbles:true}));
-    const clickAdd=()=>{ const b=document.querySelector('#list .row .cl-add:not(.in)'); if(b){ b.click(); return true; } return false; };
-    // 1. select 2 members by CLICKING the add buttons (each click re-renders the list)
-    clickAdd(); clickAdd();
+    const setName=v=>{ const nm=document.getElementById('cl-name'); if(nm){ nm.value=v; fire(nm,'input'); } };
+    const clickSel=sel=>{ const b=document.querySelector(sel); if(b){ b.click(); return true; } return false; };
+    const clickUnclustered=()=>clickSel('#list .row:not(.cl-exrow) .cl-add:not(.in)');
+
+    // ===== PHASE 0 — render-on-open: existing clusters + unclustered pool BEFORE any filter
+    setView('cluster');
+    await waitFor(()=>state.clusterKnown!==null && document.querySelector('#list .cl-exist-list'));
+    R.existingShown = !!document.querySelector('#list .cl-exist-list') && (state.clusterKnown||[]).length>0;
+    R.poolShown = /candidate pool/i.test((document.getElementById('list')||{}).textContent||'');
+    R.openExistingCount = (state.clusterKnown||[]).length;
+
+    // ===== PHASE 1 — filter narrows, clearing it returns the render-on-open view
+    state.clusterInd='labor-teachers'; await doClusterSearch();
+    R.filterNarrows = !document.querySelector('#list .cl-exist-list') && state.clusterHits.length>0;
+    state.clusterInd=''; await doClusterSearch();
+    R.clearReturns = !!document.querySelector('#list .cl-exist-list');
+
+    // ===== PHASE 2 — form desync fix on UNCLUSTERED members (A2 would block clustered ones)
+    state.clusterInd='labor-teachers'; await doClusterSearch();
+    clusterReset(); state.clusterInd='labor-teachers'; await doClusterSearch();
+    clickUnclustered(); clickUnclustered();
     R.members=CL().members.length;
-    // 2. before naming, the dry-run gate must be disabled
+    R.membersUnclustered = CL().members.length>0 && CL().members.every(id=>!donorCluster(id));
     R.disabledBeforeName = reviewBtn()? reviewBtn().disabled : null;
-    // 3. TYPE a name via an input event — must enable in ONE pass, no remove/replace dance
-    let nm=document.getElementById('cl-name'); if(nm){ nm.value='Teachers Family'; fire(nm,'input'); }
+    setName('Test Family A');
     R.enabledAfterType = reviewBtn()? !reviewBtn().disabled : null;     // pre-fix: false; post-fix: true
-    // 4. per-row label tracks the radio: a row shows 'parent' IFF its radio is checked
     const inv1=memRows().map(r=>{ const rb=r.querySelector('input[type=radio]'); return {checked:!!(rb&&rb.checked), shows:/parent/i.test(r.textContent)}; });
     R.labelTracksRadio = inv1.length>0 && inv1.every(x=>x.checked===x.shows);
-    R.rowsShowingParent = inv1.filter(x=>x.shows).length;              // must be exactly 1
-    // 5. change the parent radio: the old parent row stops showing 'parent', the new one starts
+    R.rowsShowingParent = inv1.filter(x=>x.shows).length;              // exactly 1
     const radios=document.querySelectorAll('#list .cl-builder .cl-mem input[type=radio]');
-    const prevParent=CL().parent;
-    if(radios[1]) radios[1].click();
+    const prevParent=CL().parent; if(radios[1]) radios[1].click();
     R.parentMoved = CL().parent!==prevParent && CL().parent===CL().members[1];
     const inv2=memRows().map(r=>{ const rb=r.querySelector('input[type=radio]'); return rb&&rb.checked===/parent/i.test(r.textContent); });
     R.labelTracksAfterChange = inv2.length>0 && inv2.every(Boolean);
-    // 6. clear the name -> disabled + the hint names the REAL failing condition
-    nm=document.getElementById('cl-name'); if(nm){ nm.value=''; fire(nm,'input'); }
+    setName('');
     R.disabledAfterClear = reviewBtn()? reviewBtn().disabled : null;
-    R.hintOnClear = ((hintEl()&&hintEl().textContent)||'').trim();     // expect 'name the cluster'
-    // 7. retype -> re-enables (no dance)
-    nm=document.getElementById('cl-name'); if(nm){ nm.value='Teachers Family'; fire(nm,'input'); }
+    R.hintOnClear = ((hintEl()&&hintEl().textContent)||'').trim();     // 'name the cluster'
+    setName('Test Family A');
     R.reEnabled = reviewBtn()? !reviewBtn().disabled : null;
-    // 8. (guarded; needs live creds) dry-run displayed==staged, and editing invalidates a stale plan
+    // dry-run displayed==staged, and editing the form invalidates a stale preview
     R.dryRun='skipped';
-    try{
-      await clusterReview();
-      const p=CL().plan||{};
+    try{ await clusterReview(); const p=CL().plan||{};
       if(p.cluster_id || (p.rows&&p.rows.length)){
         R.planParentMatches = p.parent===CL().parent;
         R.planMembersMatch = (p.members||p.rows||[]).length===CL().members.length;
-        nm=document.getElementById('cl-name'); if(nm){ nm.value='Teachers Family v2'; fire(nm,'input'); }
-        const planBox=document.getElementById('cl-plan');
-        R.stalePlanCleared = !!planBox && planBox.innerHTML.trim()==='';
+        setName('Test Family A v2');
+        const pb=document.getElementById('cl-plan'); R.stalePlanCleared = !!pb && pb.innerHTML.trim()==='';
         R.dryRun='ran';
       }
     }catch(e){ R.dryRunErr=String((e&&e.message)||e); }
-    // overall verdict: the CORE human-path checks (creds-independent)
-    R.pass = R.disabledBeforeName===true && R.enabledAfterType===true &&
-             R.labelTracksRadio===true && R.rowsShowingParent===1 &&
-             R.parentMoved===true && R.labelTracksAfterChange===true &&
-             R.disabledAfterClear===true && /name the cluster/i.test(R.hintOnClear) &&
-             R.reEnabled===true;
+
+    // ===== PHASE 3 — A2 overlap HARD-BLOCK on an already-clustered donor
+    clusterReset();
+    state.clusterInd=''; state.clusterQ='chicago-teachers'; await doClusterSearch();
+    R.overlapBadge = !!document.querySelector('#list .row.cl-exrow .cl-exbadge');   // result row marked
+    clickSel('#list .row.cl-exrow .cl-add:not(.in)');                               // add a clustered donor
+    clickSel('#list .row .cl-add:not(.in)');                                        // + one more (reach >=2)
+    R.overlapMembers = CL().members.length;
+    R.overlapBlockShown = !!document.querySelector('#list .cl-block');
+    R.overlapGateBlocked = reviewBtn()? reviewBtn().disabled : null;
+    R.overlapHint = ((hintEl()&&hintEl().textContent)||'').trim();
+    setName('Should Not Mint');                                                     // naming must NOT unblock
+    R.overlapBlocksDespiteName = reviewBtn()? reviewBtn().disabled : null;
+    state.clusterQ='';
+
+    // ===== PHASE 4 — C1 many-member panel scroll; selection list stays reachable
+    clusterReset();
+    state.clusterInd='labor-teachers'; await doClusterSearch();
+    let added=0; while(clickUnclustered() && ++added<8){}
+    R.manyMembers = CL().members.length;
+    const memList=document.querySelector('#list .cl-builder .cl-mem-list');
+    R.memListExists = !!memList;
+    R.memListScrolls = !!memList && memList.scrollHeight > memList.clientHeight + 1;
+    R.selectionReachable = document.querySelectorAll('#list .row .cl-add').length > 0;
+
+    R.pass =
+      R.existingShown===true && R.poolShown===true &&
+      R.filterNarrows===true && R.clearReturns===true &&
+      R.members===2 && R.membersUnclustered===true &&
+      R.disabledBeforeName===true && R.enabledAfterType===true &&
+      R.labelTracksRadio===true && R.rowsShowingParent===1 &&
+      R.parentMoved===true && R.labelTracksAfterChange===true &&
+      R.disabledAfterClear===true && /name the cluster/i.test(R.hintOnClear) && R.reEnabled===true &&
+      R.overlapBadge===true && R.overlapMembers>=2 && R.overlapBlockShown===true &&
+      R.overlapGateBlocked===true && /merge/i.test(R.overlapHint) && R.overlapBlocksDespiteName===true &&
+      R.manyMembers>=3 && R.memListExists===true && R.memListScrolls===true && R.selectionReachable===true;
+    }catch(e){ R.error=String((e&&e.message)||e); R.pass=false; }   // pre-fix: features absent -> clean fail verdict
     const m=document.createElement('div'); m.id='clusterformtest-done'; m.style.display='none';
     m.textContent=JSON.stringify(R); document.body.appendChild(m); return;
   }

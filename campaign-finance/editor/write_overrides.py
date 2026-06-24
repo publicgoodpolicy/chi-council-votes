@@ -360,6 +360,35 @@ def read_cluster_ids(sheet) -> list:
             for r in ws.get_all_records() if str(r.get('cluster_id') or '').strip()]
 
 
+def read_clusters(sheet) -> list:
+    """READ-ONLY: every existing cluster as grouped membership, so the editor's Cluster
+    tab can SEE what is already clustered and refuse to mint a duplicate (FIX-3a-2). Same
+    get_all_records() read as read_cluster_ids — NO write verb. Covers BOTH the build's
+    rollup-NNN block and the editor's rollup-ed-NNN namespace (no id filtering). Returns
+    [{cluster_id, cluster_name, canonical_id, members:[{donor_id, role, relationship}]}],
+    in first-seen order."""
+    ws = sheet.worksheet(CLUSTER_TAB)
+    groups, order = {}, []
+    for r in ws.get_all_records():
+        cid = str(r.get('cluster_id') or '').strip()
+        did = str(r.get('donor_id') or '').strip()
+        if not cid or not did:
+            continue
+        g = groups.get(cid)
+        if g is None:
+            g = groups[cid] = {'cluster_id': cid,
+                               'cluster_name': str(r.get('cluster_name') or '').strip(),
+                               'canonical_id': str(r.get('canonical_id') or '').strip(),
+                               'members': []}
+            order.append(cid)
+        elif not g['cluster_name'] and r.get('cluster_name'):
+            g['cluster_name'] = str(r.get('cluster_name')).strip()
+        g['members'].append({'donor_id': did,
+                             'role': str(r.get('role') or '').strip(),
+                             'relationship': str(r.get('relationship') or '').strip()})
+    return [groups[c] for c in order]
+
+
 def mint_cluster_id(existing_ids) -> str:
     """Next id in the editor namespace: rollup-ed-NNN, floor 001. Shape-strict scan —
     only rollup-ed-<digits> contributes to the max; any other id (incl. the build's
