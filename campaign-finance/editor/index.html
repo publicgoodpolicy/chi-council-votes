@@ -104,6 +104,14 @@
   details.vocab-add{margin-top:10px;}
   details.vocab-add>summary{cursor:pointer; font-size:12px; color:var(--muted); padding:4px 0; user-select:none;}
   details.vocab-add[open]>summary{color:var(--ink,#333); font-weight:600;}
+  .dd-caret{color:var(--muted); font-size:10px;}
+  .donor-detail{grid-column:1 / 4; margin-top:8px; border-top:1px dashed var(--line); padding-top:8px;}
+  .dd-head{font-size:12px; color:var(--muted); margin-bottom:6px;}
+  .dd-scroll{max-height:280px; overflow:auto; border:1px solid var(--line); border-radius:6px;}
+  .dd-table{width:100%; border-collapse:collapse; font-size:12px;}
+  .dd-table th{position:sticky; top:0; background:#faf7f2; text-align:left; font-weight:600; color:var(--muted); padding:5px 8px; border-bottom:1px solid var(--line);}
+  .dd-table td{padding:4px 8px; border-bottom:1px solid var(--hint-bg);}
+  .dd-table td.r,.dd-table th.r{text-align:right; white-space:nowrap;}
   .cls-banner{margin:2px 0 8px; padding:8px 11px; border-radius:8px; font-size:12.5px; line-height:1.4;}
   .cls-banner.curated{background:#e7f0ee; border:1px solid #9ec4bf; color:#2c4f4b;}
   .cls-banner.auto{background:#f6edda; border:1px solid #dcc59a; color:#6b4d1c;}
@@ -236,6 +244,7 @@ const API  = ORIGIN + '/api/worklist';
 const DONORS = ORIGIN + '/api/donor';            // master lookup — full donor set (read-only)
 const LIVE = ORIGIN + '/api/live';
 const CLUSTERS = ORIGIN + '/api/clusters';       // existing clusters (read-only) — overlap guard + render-on-open
+const CONTRIB = ORIGIN + '/api/contributions';   // per-donor contribution drill (read-only, R2)
 const WRITE_PLAN = ORIGIN + '/api/write-plan';   // dry-run (no write)
 const WRITE      = ORIGIN + '/api/write';        // live write (explicit confirm)
 const EDITOR_STAMP = 'editor-ui';
@@ -244,6 +253,9 @@ const state = {
   data:null, vocab:{industries:[],flags:[],entity_types:[]}, live:null,
   staged:new Map(),               // key `${kind}:${id}` -> staged item (user EDITS + `edited` set)
   view:'donors', q:'', editing:null,
+  // R3: donor contribution drill — inline detail opened on click, cached by donor_id
+  // so re-expanding never refetches (mirrors the cluster tool's fetch-once-read-cache).
+  donorDetailId:null, contribByDonor:{},
   // master-view lookup (full donor set) — kept SEPARATE from data.donors so the
   // worklist stays unclassified-only; looked-up donors resolve via lookupById.
   lookupHits:[], lookupById:new Map(), lookupQ:'',
@@ -433,6 +445,7 @@ function flagOptions(sel){ return `<option value="">— flag —</option>`+state
 
 function donorRow(r,i){
   const k=key('donor',r.donor_id), staged=isStaged('donor',r.donor_id), editing=state.editing===k;
+  const did=r.donor_id, detailOpen=state.donorDetailId===did;
   const idLine=[r.occupation,r.employer,r.city].filter(Boolean).map(esc);
   const pertool = (r.tools&&r.tools.length>1 && r.per_tool)
     ? `<div class="pertool">council ${usd(r.per_tool.council?r.per_tool.council.total_given:0)} · election ${usd(r.per_tool.election?r.per_tool.election.total_given:0)} <span style="color:var(--neu)">(ranked by max)</span></div>` : '';
@@ -456,10 +469,45 @@ function donorRow(r,i){
       <div class="badges">${toolBadges(r.tools)}</div>
       ${hint}
     </div>
-    <div class="amt"><div class="big">${usd(r.total_given)}</div><div class="small">${r.contribution_count} contribution${r.contribution_count===1?'':'s'}</div></div>
+    <div class="amt" onclick="openDonorDetail('${esc(did)}')" style="cursor:pointer" title="show contribution detail">
+      <div class="big">${usd(r.total_given)}</div>
+      <div class="small">${r.contribution_count} contribution${r.contribution_count===1?'':'s'} <span class="dd-caret">${detailOpen?'▴':'▾'}</span></div>
+    </div>
     ${actions}
     ${editor_html}
+    ${detailOpen?donorDetailHTML(r):''}
   </div>`;
+}
+
+// Donor contribution drill — mirrors the cluster tool's render-on-open → inline
+// detail pattern (openCluster/cl-detail). First open fetches /api/contributions and
+// caches it by donor_id; re-opening reads cache (NO refetch); clicking the open
+// donor again collapses it. scrollIntoView on open matches cluster-open parity.
+function openDonorDetail(did){
+  if(state.donorDetailId===did){ state.donorDetailId=null; render(); return; }   // toggle closed
+  state.donorDetailId=did;
+  if(state.contribByDonor[did]){ render(); scrollDonorDetail(did); return; }      // cache hit -> no network
+  state.contribByDonor[did]={loading:true};
+  render(); scrollDonorDetail(did);
+  fetch(CONTRIB+'?donor_id='+encodeURIComponent(did)).then(r=>r.json())
+    .then(j=>{ state.contribByDonor[did]=j; if(state.donorDetailId===did) render(); })
+    .catch(e=>{ state.contribByDonor[did]={error:String((e&&e.message)||e)}; if(state.donorDetailId===did) render(); });
+}
+function scrollDonorDetail(did){ setTimeout(()=>{ const d=document.getElementById('dd-'+did); if(d) d.scrollIntoView({behavior:'smooth',block:'nearest'}); },60); }
+function donorDetailHTML(r){
+  const did=r.donor_id, d=state.contribByDonor[did];
+  const wrap=inner=>`<div class="donor-detail" id="dd-${esc(did)}">${inner}</div>`;
+  if(!d || d.loading) return wrap(`<div class="sub">loading contributions…</div>`);
+  if(d.error) return wrap(`<div class="err">contributions failed: ${esc(d.error)}</div>`);
+  const rows=d.contributions||[];
+  const dates=rows.map(c=>c.date).filter(Boolean).sort();
+  const range=dates.length?`${esc(dates[0])} → ${esc(dates[dates.length-1])}`:'—';
+  // employer comes from the already-loaded donor object (donor-record attribute, not
+  // a per-contribution field — see R2 pre-step), date range from the returned rows.
+  const head=`<div class="dd-head">${r.employer?`employer <b>${esc(r.employer)}</b> · `:''}${rows.length} contribution${rows.length===1?'':'s'} · ${range}${d.tool?` · <span class="sub">from ${esc(d.tool)} record</span>`:''}</div>`;
+  if(!rows.length) return wrap(head+`<div class="sub" style="padding:6px 0">no contributions on record</div>`);
+  const body=rows.map(c=>`<tr><td>${esc(c.date||'—')}</td><td class="r">${usd(c.amount)}</td><td>${esc(c.committee_id||'')}</td><td>${esc(c.cycle||'')}</td><td>${esc(c.contribution_type||'')}</td></tr>`).join('');
+  return wrap(head+`<div class="dd-scroll"><table class="dd-table"><thead><tr><th>date</th><th class="r">amount</th><th>committee</th><th>cycle</th><th>type</th></tr></thead><tbody>${body}</tbody></table></div>`);
 }
 
 // Current-state banner — makes the donor's existing classification explicit, and
