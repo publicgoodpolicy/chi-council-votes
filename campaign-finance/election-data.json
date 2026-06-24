@@ -2555,7 +2555,9 @@
       "office": "school_board_member",
       "district": "District 1A",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-pierre-sb-d02": {
@@ -2576,7 +2578,9 @@
       "office": "school_board_member",
       "district": "District 1B",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-custer-sb-president": {
@@ -2712,7 +2716,9 @@
       "office": "school_board_member",
       "district": "District 1B",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-henderson-sb-president": {
@@ -2949,7 +2955,9 @@
       "office": "school_board_member",
       "district": "District 2B",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-rios-sierra-sb-d05": {
@@ -2970,7 +2978,9 @@
       "office": "school_board_member",
       "district": "District 3A",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-gonzales-sb-d05": {
@@ -2991,7 +3001,9 @@
       "office": "school_board_member",
       "district": "District 3A",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-basco-sb-d04": {
@@ -3012,7 +3024,9 @@
       "office": "school_board_member",
       "district": "District 2B",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-rivas-sb-d06": {
@@ -3148,7 +3162,9 @@
       "office": "school_board_member",
       "district": "District 4A",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-blaise-sb-d10": {
@@ -3169,7 +3185,9 @@
       "office": "school_board_member",
       "district": "District 5B",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-thotakura-sb-d11": {
@@ -3213,7 +3231,9 @@
       "office": "school_board_member",
       "district": "District 6A",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-kimble-sb-d12": {
@@ -3234,7 +3254,9 @@
       "office": "school_board_member",
       "district": "District 6B",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-smith-sb-d19": {
@@ -3278,7 +3300,9 @@
       "office": "school_board_member",
       "district": "District 7A",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     },
     "cand-boyle-sb-d18": {
@@ -3368,7 +3392,9 @@
       "office": "school_board_member",
       "district": "District 8B",
       "type": "candidate",
-      "industry_tags": [],
+      "industry_tags": [
+        "candidate-account"
+      ],
       "donor_id": null
     }
   },
@@ -6262,6 +6288,7 @@
       "city": "Chicago, IL",
       "parent_id": "seiu-il-council",
       "committee_id": "ie-committee-18574",
+      "_last_edited_by": "editor-ui",
       "cluster_id": "rollup-372",
       "cluster_name": "SEIU Illinois State Council",
       "cluster_role": "affiliated-pac",
@@ -10951,10 +10978,10 @@
       "flags": [],
       "notes": null,
       "city": null,
-      "parent_id": "service-employees-international-union-member-contributions",
+      "parent_id": "seiu-il-council",
       "committee_id": null,
-      "cluster_id": "rollup-370",
-      "cluster_name": "Service Employees International Union (member contributions)",
+      "cluster_id": "rollup-372",
+      "cluster_name": "SEIU Illinois State Council",
       "cluster_role": "alt-name",
       "cluster_is_parent": false
     },
@@ -14811,12 +14838,16 @@
       "id": "michael-sacks",
       "name": "Michael Sacks",
       "type": "Other",
-      "industries": [],
+      "industries": [
+        "finance"
+      ],
       "flags": [],
       "notes": null,
       "city": null,
       "parent_id": "sacks-michael",
       "committee_id": null,
+      "entity_type": "individual",
+      "_last_edited_by": "editor-ui",
       "cluster_id": "rollup-472",
       "cluster_name": "Sacks, Michael",
       "cluster_role": "alt-name",
@@ -14949,14 +14980,15 @@
       "name": "DAVID A. WEINBERG",
       "type": "Other",
       "industries": [
-        "individual",
-        "unclassified"
+        "charter-schools"
       ],
       "flags": [],
       "notes": null,
       "city": null,
       "parent_id": "david-a-weinberg",
-      "committee_id": null
+      "committee_id": null,
+      "entity_type": "individual",
+      "_last_edited_by": "editor-ui"
     },
     "lawrence-andolino": {
       "id": "lawrence-andolino",
@@ -16703,13 +16735,13 @@
       ],
       "notes": null,
       "city": null,
-      "parent_id": "service-employees-international-union-member-contributions",
+      "parent_id": "seiu-il-council",
       "committee_id": null,
       "ie_funding": "dues",
-      "cluster_id": "rollup-370",
-      "cluster_name": "Service Employees International Union (member contributions)",
-      "cluster_role": "parent",
-      "cluster_is_parent": true
+      "cluster_id": "rollup-372",
+      "cluster_name": "SEIU Illinois State Council",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "incs-action": {
       "id": "incs-action",
@@ -22416,7 +22448,8 @@
       "name": "Illinois REALTORS",
       "type": "Other",
       "industries": [
-        "real-estate"
+        "real-estate",
+        "lobby-business"
       ],
       "flags": [],
       "notes": null,
@@ -34359,13 +34392,15 @@
       "name": "36th Ward Dems",
       "type": "PAC",
       "industries": [
-        "unclassified"
+        "establishment-pol"
       ],
       "flags": [],
       "notes": null,
       "city": "Chicgo, IL",
       "parent_id": "36th-ward-dems",
       "committee_id": null,
+      "entity_type": "political-organization",
+      "_last_edited_by": "editor-ui",
       "cluster_id": "rollup-481",
       "cluster_name": "36th Ward Dems",
       "cluster_role": "parent",
@@ -41809,12 +41844,16 @@
       "id": "ibew-illinois-pac",
       "name": "IBEW Illinois PAC",
       "type": "Other",
-      "industries": [],
+      "industries": [
+        "labor-trades"
+      ],
       "flags": [],
       "notes": null,
       "city": null,
       "parent_id": "ibew-illinois-pac",
-      "committee_id": null
+      "committee_id": null,
+      "entity_type": "labor",
+      "_last_edited_by": "editor-ui"
     },
     "zachary-rudzki": {
       "id": "zachary-rudzki",
@@ -153127,7 +153166,7 @@
         "name": "36th Ward Dems",
         "type": "PAC",
         "industries": [
-          "unclassified"
+          "establishment-pol"
         ],
         "direct": 260141.0,
         "independent": 0.0,
@@ -154229,7 +154268,7 @@
         "total": 894079.31,
         "count": 18,
         "committees": 9,
-        "members": 8,
+        "members": 10,
         "by_cycle": {
           "2027": {
             "direct": 50000.0,
@@ -180364,8 +180403,7 @@
         "name": "DAVID A. WEINBERG",
         "type": "Other",
         "industries": [
-          "individual",
-          "unclassified"
+          "charter-schools"
         ],
         "direct": 1291900.0,
         "independent": 0.0,
@@ -222654,7 +222692,9 @@
       "ibew-illinois-pac": {
         "name": "IBEW Illinois PAC",
         "type": "Other",
-        "industries": [],
+        "industries": [
+          "labor-trades"
+        ],
         "direct": 1000.0,
         "independent": 0.0,
         "total": 1000.0,
@@ -226121,20 +226161,20 @@
     "by_industry": {
       "individual": {
         "all": {
-          "direct": 20879464.31
+          "direct": 19587564.31
         },
         "by_cycle": {
           "2027": {
-            "direct": 6976143.31
+            "direct": 6580943.31
           },
           "2023": {
-            "direct": 4853221.0
+            "direct": 4393621.0
           },
           "2015": {
-            "direct": 4610000.0
+            "direct": 4570000.0
           },
           "2019": {
-            "direct": 4440100.0
+            "direct": 4043000.0
           }
         }
       },
@@ -226153,38 +226193,38 @@
       },
       "unclassified": {
         "all": {
-          "direct": 5735456.38
+          "direct": 4286556.38
         },
         "by_cycle": {
           "2027": {
-            "direct": 1516106.64
+            "direct": 1003906.64
           },
           "2023": {
-            "direct": 1721432.56
+            "direct": 1221832.56
           },
           "2015": {
-            "direct": 1070023.11
+            "direct": 1030023.11
           },
           "2019": {
-            "direct": 1427894.07
+            "direct": 1030794.07
           }
         }
       },
       "establishment-pol": {
         "all": {
-          "direct": 463700.35,
+          "direct": 620700.35,
           "independent": 120943.54
         },
         "by_cycle": {
           "2027": {
-            "direct": 350559.35
+            "direct": 467559.35
           },
           "2019": {
             "direct": 50141.0,
             "independent": 18207.06
           },
           "2023": {
-            "direct": 63000.0
+            "direct": 103000.0
           },
           "2015": {
             "independent": 102736.48
@@ -226234,11 +226274,11 @@
       },
       "labor-trades": {
         "all": {
-          "direct": 742685.78
+          "direct": 743685.78
         },
         "by_cycle": {
           "2027": {
-            "direct": 164567.73
+            "direct": 165567.73
           },
           "2015": {
             "direct": 203500.0
@@ -226319,20 +226359,20 @@
       },
       "finance": {
         "all": {
-          "direct": 4392100.0
+          "direct": 5631700.0
         },
         "by_cycle": {
           "2015": {
-            "direct": 3060000.0
+            "direct": 3260000.0
           },
           "2019": {
-            "direct": 324000.0
+            "direct": 335200.0
           },
           "2023": {
-            "direct": 323800.0
+            "direct": 1337600.0
           },
           "2027": {
-            "direct": 684300.0
+            "direct": 698900.0
           }
         }
       },
@@ -226354,6 +226394,30 @@
           },
           "2027": {
             "direct": 3710800.81
+          }
+        }
+      },
+      "charter-schools": {
+        "all": {
+          "direct": 1291900.0,
+          "independent": 1876811.07
+        },
+        "by_cycle": {
+          "2015": {
+            "direct": 40000.0,
+            "independent": 27905.2
+          },
+          "2019": {
+            "direct": 397100.0,
+            "independent": 61716.93
+          },
+          "2023": {
+            "direct": 459600.0,
+            "independent": 173853.28
+          },
+          "2027": {
+            "direct": 395200.0,
+            "independent": 1613335.66
           }
         }
       },
@@ -226385,30 +226449,18 @@
       },
       "lobby-business": {
         "all": {
+          "direct": 4185000.0,
           "independent": 65.35
         },
         "by_cycle": {
-          "2015": {
-            "independent": 65.35
-          }
-        }
-      },
-      "charter-schools": {
-        "all": {
-          "independent": 1876811.07
-        },
-        "by_cycle": {
-          "2015": {
-            "independent": 27905.2
-          },
           "2019": {
-            "independent": 61716.93
+            "direct": 1435000.0
           },
           "2023": {
-            "independent": 173853.28
+            "direct": 2750000.0
           },
-          "2027": {
-            "independent": 1613335.66
+          "2015": {
+            "independent": 65.35
           }
         }
       }
@@ -228617,7 +228669,7 @@
       "election_date": "2027-02-23"
     }
   },
-  "generated_at": "2026-06-22T14:44:50Z",
+  "generated_at": "2026-06-24T20:13:00Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "current_cycle": "2027",
   "default_cycle": "all",
@@ -229202,24 +229254,6 @@
       },
       "total": 10000.0
     },
-    "rollup-370": {
-      "name": "Service Employees International Union (member contributions)",
-      "relationship": "affiliated entities",
-      "canonical_id": "service-employees-international-union-member-contributions",
-      "members": [
-        "service-employees-international-union-member-contributions",
-        "s-e-i-u-international-union"
-      ],
-      "roles": {
-        "service-employees-international-union-member-contributions": "parent",
-        "s-e-i-u-international-union": "alt-name"
-      },
-      "member_totals": {
-        "service-employees-international-union-member-contributions": 0.0,
-        "s-e-i-u-international-union": 902675.12
-      },
-      "total": 902675.12
-    },
     "rollup-371": {
       "name": "JIM C. WALTON",
       "relationship": "affiliated entities",
@@ -229250,7 +229284,9 @@
         "seiu-illinois-council-pac-fund",
         "s-e-i-u-illinois-state-council",
         "seiu-state-council",
-        "s-e-i-u-illinois-council-pac"
+        "s-e-i-u-illinois-council-pac",
+        "service-employees-international-union-member-contributions",
+        "s-e-i-u-international-union"
       ],
       "roles": {
         "seiu-il-council": "parent",
@@ -229260,7 +229296,9 @@
         "seiu-illinois-council-pac-fund": "affiliated-pac",
         "s-e-i-u-illinois-state-council": "alt-name",
         "seiu-state-council": "alt-name",
-        "s-e-i-u-illinois-council-pac": "affiliated-pac"
+        "s-e-i-u-illinois-council-pac": "affiliated-pac",
+        "service-employees-international-union-member-contributions": "alt-name",
+        "s-e-i-u-international-union": "alt-name"
       },
       "member_totals": {
         "seiu-il-council": 5780844.29,
@@ -229270,9 +229308,11 @@
         "seiu-illinois-council-pac-fund": 61442.06,
         "s-e-i-u-illinois-state-council": 3739605.11,
         "seiu-state-council": 547500.0,
-        "s-e-i-u-illinois-council-pac": 6412.25
+        "s-e-i-u-illinois-council-pac": 6412.25,
+        "service-employees-international-union-member-contributions": 0.0,
+        "s-e-i-u-international-union": 902675.12
       },
-      "total": 11169610.94
+      "total": 12072286.06
     },
     "rollup-376": {
       "name": "Alvarez & Associates",
