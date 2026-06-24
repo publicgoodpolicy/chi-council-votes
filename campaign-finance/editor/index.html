@@ -132,6 +132,11 @@
   .cl-grid input{width:100%; padding:6px 9px; border:1px solid var(--line); border-radius:6px; font:inherit; font-size:14px;}
   .cl-add{cursor:pointer; font:inherit; font-size:12px; font-weight:600; border-radius:7px; padding:4px 10px; border:1px solid var(--sage); background:#fff; color:var(--teal);}
   .cl-add.in{background:var(--sage); color:#fff;}
+  /* FIX-EDIT-3 flag 1: secondary "push into existing cluster" affordance + its inline picker.
+     Distinct class from .cl-add so existing Cluster-tab selectors (.cl-add:not(.in)) ignore it. */
+  .cl-addex{cursor:pointer; font:inherit; font-size:12px; font-weight:600; border-radius:7px; padding:4px 10px; margin-left:6px; border:1px dashed var(--neu); background:#fff; color:var(--muted);}
+  .cl-addex:hover{border-color:var(--teal); color:var(--teal);}
+  .cl-add-target{margin-top:8px; padding:8px; border:1px solid var(--line); border-radius:8px; background:var(--cream);}
   .cl-pf{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px;}
   .cl-pf .box{background:#fff; border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:12.5px;}
   .cl-pf .box .big{font-family:'Recoleta','Georgia',serif; font-size:18px;}
@@ -238,6 +243,10 @@ const state = {
   // master-view lookup (full donor set) — kept SEPARATE from data.donors so the
   // worklist stays unclassified-only; looked-up donors resolve via lookupById.
   lookupHits:[], lookupById:new Map(), lookupQ:'',
+  // FIX-EDIT-3 flag 2: Find-donor render-on-open (top-100 by total given via &browse=1)
+  // + industry/entity_type filters; lookupBrowse=true means the resting top-100 default
+  // (no query, no filter). Live search hits the FULL set (existing /api/donor?q=).
+  lookupInd:'', lookupEtype:'', lookupBrowse:false,
   // clustering (HALT-3a): discovery filter state + the cluster being built
   clusterHits:[], clusterById:new Map(), clusterQ:'', clusterInd:'', clusterEtype:'',
   // FIX-3a-2: existing clusters (read-only /api/clusters) drive the overlap hard-block
@@ -250,6 +259,10 @@ const state = {
   // HALT-EDIT-1: in-flight cluster edit — the assembled op + its dry-run plan (nothing
   // writes until Confirm); the add-member search state lives here too.
   clusterEditOpItem:null, clusterEditPlan:null, clusterAddQ:'', clusterAddHits:[],
+  // FIX-EDIT-3 flag 1: add-from-unclustered entry point — the donor being routed into an
+  // existing cluster + the target-cluster search query. Picking a target opens that cluster
+  // and runs the SAME proven add_member dry-run path (no new write logic).
+  clusterAddTargetFor:'', clusterAddTargetQ:'',
   // HALT-MERGE: in-flight merge of cluster B into the opened survivor A — B picker, chosen
   // parent + editable name, dry-run plan. Nothing writes until Confirm.
   clusterMergeBId:'', clusterMergeParent:'', clusterMergeName:'', clusterMergeBQ:'', clusterMergePlan:null,
@@ -700,23 +713,48 @@ function matches(r,q){ return [r.name,r.employer,r.occupation,r.city,r.committee
 // ============================================================
 let __lookupTimer=null;
 function doLookup(){
-  const q=state.lookupQ.trim();
-  if(!q){ state.lookupHits=[]; state.lookupById=new Map(); render(); return Promise.resolve(); }
-  return fetch(DONORS+'?q='+encodeURIComponent(q)).then(r=>r.json()).then(j=>{
+  const q=state.lookupQ.trim(), ind=state.lookupInd||'', et=state.lookupEtype||'';
+  // FIX-EDIT-3 flag 2: empty query + no filter is NO LONGER a dead end — browse the top
+  // donors by total given (server &browse=1) as a resting default; typing or filtering
+  // searches/narrows the FULL donor set. Mirrors the Cluster tab's render-on-open, scoped
+  // to Find-donor (the Donors/Cluster tabs are untouched).
+  const browse=(!q && !ind && !et); state.lookupBrowse=browse;
+  const qs='?q='+encodeURIComponent(q)+'&ind='+encodeURIComponent(ind)+'&etype='+encodeURIComponent(et)+(browse?'&browse=1':'');
+  return fetch(DONORS+qs).then(r=>r.json()).then(j=>{
     state.lookupHits = j.hits||[];
     // resolvable by the shared editor (donorById) WITHOUT polluting the worklist
     state.lookupById = new Map((j.hits||[]).map(h=>[h.donor_id,h]));
     render();
   }).catch(e=>{ const l=document.getElementById('list'); if(l) l.innerHTML=`<div class="err">lookup failed: ${esc(e.message)}</div>`; });
 }
+function lookupFilterInd(v){ state.lookupInd=v; doLookup(); }
+function lookupFilterEtype(v){ state.lookupEtype=v; doLookup(); }
 function renderLookup(list, note){
-  const q=state.lookupQ.trim();
-  note.textContent = q
-    ? `${state.lookupHits.length.toLocaleString()} match “${state.lookupQ.trim()}” across the full donor set (classified + unclassified). Edit opens the same classifier the queue uses.`
-    : `Master view — look up ANY donor by name or donor_id, classified or not, and edit through the existing write path. The queue (Donors tab) stays unclassified-only.`;
-  if(!q){ list.innerHTML=`<div class="empty">Type a name or donor_id above to find any donor — including ones already classified.</div>`; return; }
-  if(!state.lookupHits.length){ list.innerHTML=`<div class="empty">No donors match “${esc(state.lookupQ.trim())}”.</div>`; return; }
-  list.innerHTML = state.lookupHits.map(donorRow).join('');
+  const q=state.lookupQ.trim(), ind=state.lookupInd||'', et=state.lookupEtype||'';
+  const browse=(!q && !ind && !et);
+  note.textContent = browse
+    ? `Master view — top 100 donors by total given. Type above to search the FULL donor set, or filter by industry / entity type. Edit opens the same classifier the queue uses.`
+    : `${state.lookupHits.length.toLocaleString()} ${q?`match “${esc(state.lookupQ.trim())}” `:''}across the full donor set${(ind||et)?' (filtered)':''}. Edit opens the same classifier the queue uses.`;
+  // industry / entity_type filters — mirror the Cluster tab. The SELECTS live inside #list
+  // (onchange, not typed) so re-render is safe; the live-search box is the shared #search
+  // input in the header, OUTSIDE #list, so typing never rebuilds the field you're in.
+  const indOpts=`<option value="">— any industry —</option>`+(state.vocab.industries||[]).map(i=>`<option value="${esc(i.key)}"${i.key===ind?' selected':''}>${esc(i.label)}</option>`).join('');
+  const etOpts=`<option value="">— any entity type —</option>`+(state.vocab.entity_types||[]).map(e=>`<option value="${esc(e.key)}"${e.key===et?' selected':''}>${esc(e.label)}</option>`).join('');
+  const filters=`<div class="cl-filters">
+    <select onchange="lookupFilterInd(this.value)">${indOpts}</select>
+    <select onchange="lookupFilterEtype(this.value)">${etOpts}</select>
+    <span class="meta-line">${browse?'top 100 by total given — ':''}filter, or type above to search the whole donor set</span></div>`;
+  let body;
+  if(browse){
+    body = state.lookupHits.length
+      ? `<p class="count-note">Top ${state.lookupHits.length} donors by total given. Type to search the full set, or filter.</p>`+state.lookupHits.map(donorRow).join('')
+      : `<div class="empty">Loading top donors…</div>`;
+  } else if(!state.lookupHits.length){
+    body = `<div class="empty">No donors match the current search / filter.</div>`;
+  } else {
+    body = state.lookupHits.map(donorRow).join('');
+  }
+  list.innerHTML = filters + body;
 }
 
 // ============================================================
@@ -824,16 +862,51 @@ function clusterResultRow(r){
   const inC=clusterHas(r.donor_id);
   const ex=donorCluster(r.donor_id);          // FIX-3a-2: already in an existing cluster?
   const idLine=[r.occupation,r.employer,r.city].filter(Boolean).map(esc);
+  // FIX-EDIT-3 flag 1: target-cluster picker is open for THIS donor (push-into-existing).
+  const picking = state.clusterAddTargetFor===r.donor_id;
   return `<div class="row${ex?' cl-exrow':''}">
     <div class="rank"></div>
     <div>
       <div class="name">${esc(r.name)||esc(r.donor_id)}${clsBadge(r)}${ex?`<span class="cl-exbadge" title="already clustered — combine via merge, not a new cluster">in ${esc(ex.cluster_name||ex.cluster_id)}</span>`:''}</div>
       ${idLine.length?`<div class="meta-line">${idLine.join('<span class="sep">•</span>')}</div>`:''}
       <div class="badges">${toolBadges(r.tools)}</div>
+      ${picking?clusterAddTargetHTML(r.donor_id):''}
     </div>
     <div class="amt"><div class="big">${usd(r.total_given)}</div><div class="small">${r.contribution_count} contrib.</div></div>
-    <div class="actions"><button class="cl-add${inC?' in':''}" onclick="clusterToggle('${esc(r.donor_id)}')">${inC?'✓ in cluster — remove':'＋ add to cluster'}</button></div>
+    <div class="actions"><button class="cl-add${inC?' in':''}" onclick="clusterToggle('${esc(r.donor_id)}')">${inC?'✓ in cluster — remove':'＋ new cluster'}</button>${ex?'':`<button class="cl-addex" onclick="clusterAddToExisting('${esc(r.donor_id)}')">↳ add to existing…</button>`}</div>
   </div>`;
+}
+// FIX-EDIT-3 flag 1: the inverse of the opened-cluster add-search — start from an
+// UNCLUSTERED donor and push it into an existing cluster. The picker reuses FIX-3a-3's
+// cluster match (clusterMatchExist); picking a target runs the PROVEN add_member path
+// (clusterEditAdd → dry-run → confirm in the standard #cl-edit-out panel). No new write
+// logic, no cluster suggestion (that's 3b) — manual target selection only.
+function clusterAddTargetHTML(did){
+  return `<div class="cl-add-target">
+    <div class="cl-merge-head">Add <b>${esc(did)}</b> to an existing cluster <span class="sub">— search by name or id</span>
+      <button class="cl-mini" onclick="clusterAddTargetCancel()">cancel</button></div>
+    <input id="cl-addtarget-q" class="cl-mini-input" placeholder="find the cluster to add into…" value="${esc(state.clusterAddTargetQ||'')}" oninput="clusterAddTargetSearch(this.value)">
+    <div id="cl-addtarget-results" class="cl-add-results">${clusterAddTargetResultsHTML()}</div>
+  </div>`;
+}
+function clusterAddTargetResultsHTML(){
+  const q=(state.clusterAddTargetQ||'').trim().toLowerCase();
+  if(!q) return '<div class="sub" style="padding:4px 0">type to find a cluster to add into…</div>';
+  const list=(state.clusterKnown||[]).filter(c=>clusterMatchExist(c,q)).slice(0,8);
+  if(!list.length) return '<div class="sub" style="padding:4px 0">no clusters match</div>';
+  const did=state.clusterAddTargetFor;
+  return list.map(c=>`<div class="cl-add-res"><span>${esc(c.cluster_name||c.cluster_id)} <span class="sub">${esc(c.cluster_id)} · ${c.members.length} members</span></span><button class="cl-mini" onclick="clusterAddTargetPick('${esc(c.cluster_id)}','${esc(did)}')">add here</button></div>`).join('');
+}
+function clusterAddToExisting(did){ state.clusterAddTargetFor=did; state.clusterAddTargetQ=''; render();
+  setTimeout(()=>{ const el=document.getElementById('cl-addtarget-q'); if(el) el.focus(); },0); }
+function clusterAddTargetCancel(){ state.clusterAddTargetFor=''; state.clusterAddTargetQ=''; render(); }
+// surgical: re-render ONLY the results container so the search input keeps focus/caret.
+function clusterAddTargetSearch(v){ state.clusterAddTargetQ=v; const el=document.getElementById('cl-addtarget-results'); if(el) el.innerHTML=clusterAddTargetResultsHTML(); }
+function clusterAddTargetPick(cid, did){
+  state.clusterAddTargetFor=''; state.clusterAddTargetQ='';
+  state.clusterOpenId=cid;          // open the target so its #cl-edit-out panel hosts the dry-run
+  clusterEditAdd(cid, did);         // PROVEN EDIT-1 path: already-clustered hard-block + dry-run + confirm
+  setTimeout(()=>{ const d=document.getElementById('cl-detail-'+cid); if(d) d.scrollIntoView({behavior:'smooth',block:'center'}); },60);
 }
 function clusterRoleOptions(sel){ return VALID_ROLES.map(x=>`<option value="${x}"${x===sel?' selected':''}>${x}</option>`).join(''); }
 function clusterBuilderHTML(){
@@ -1304,13 +1377,16 @@ function setView(v){
                                 : 'Filter by name / employer / city…';
   if(v==='lookup'){
     state.lookupQ=''; state.lookupHits=[]; state.lookupById=new Map();
+    state.lookupInd=''; state.lookupEtype=''; state.lookupBrowse=false;   // flag 2: clean filter state on open
     // need the live read to tell a CURATED override (b) from an AUTO guess (c);
     // if it fails (no creds/offline) curated donors degrade to (c) — never silently authoritative.
     if(!state.live){ loadLive().then(()=>render()).catch(()=>render()); }
+    doLookup();   // flag 2: render-on-open top-100 (browse); the master index needs no creds
   }
   if(v==='cluster'){
     state.clusterQ=''; state.clusterInd=''; state.clusterEtype=''; state.cluster.plan=null;
     state.clusterExistQ=''; state.clusterOpenId='';   // FIX-3a-3: clean inspect state on open
+    state.clusterAddTargetFor=''; state.clusterAddTargetQ='';   // FIX-EDIT-3 flag 1: clean add-from-unclustered picker
     state.clusterMergeBId=''; state.clusterMergeParent=''; state.clusterMergeName=''; state.clusterMergeBQ=''; state.clusterMergePlan=null;
     // load existing clusters FIRST (the overlap guard + badges depend on it), THEN the
     // render-on-open candidate pool — so the pool is filtered against known clusters.
@@ -1796,6 +1872,105 @@ async function maybeSelftest(){
         R.parentSwitched===true && R.aParentDemoted===true && R.bParentIsParent===true && R.stillOneParent===true && R.deletesLast2===true;
     }catch(e){ R.error=String((e&&e.message)||e); R.pass=false; }
     const m=document.createElement('div'); m.id='clustermergetest-done'; m.style.display='none';
+    m.textContent=JSON.stringify(R); document.body.appendChild(m); return;
+  }
+  // #lookupbrowsetest — FIX-EDIT-3 flag 2 HUMAN-PATH proof (no creds; master index is local).
+  // Drives Find-donor via real DOM events: render-on-open top-100 by total given BEFORE any
+  // search; the shared #search input (OUTSIDE #list) live-searches the FULL set and keeps
+  // focus; a donor outside the top-100 is findable; clearing returns to top-100; the
+  // industry filter narrows the full set and clears back to browse. FAILS pre-fix (empty q
+  // dead-ended), PASSES after.
+  if(location.hash==='#lookupbrowsetest'){
+    const R={};
+    try{
+      const fire=(el,t)=>el.dispatchEvent(new Event(t,{bubbles:true}));
+      const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+      const waitFor=async(fn,t=60)=>{ for(let i=0;i<t;i++){ if(fn())return true; await sleep(100);} return false; };
+      setView('lookup');
+      // PHASE 0 — render-on-open: top-100 by total given, descending, BEFORE any search
+      await waitFor(()=>state.lookupBrowse && state.lookupHits.length>0);
+      R.browseOnOpen = state.lookupBrowse===true && state.lookupHits.length>0 && state.lookupHits.length<=100;
+      R.rowsRendered = document.querySelectorAll('#list .row').length>0;
+      const tg=state.lookupHits.map(h=>h.total_given);
+      R.sortedDesc = tg.every((v,i)=>i===0||tg[i-1]>=v);
+      const topIds=new Set(state.lookupHits.map(h=>h.donor_id));
+      // PHASE 1 — live search the FULL set via the REAL #search input (outside #list); focus survives
+      const sb=document.getElementById('search'); sb.focus();
+      sb.value='seiu'; fire(sb,'input');   // debounced doLookup (250ms) -> full-set q search
+      await waitFor(()=>!state.lookupBrowse && state.lookupHits.length>0 && state.lookupHits.some(h=>/seiu/i.test(h.donor_id+h.name)));
+      R.searchHitsFullSet = state.lookupHits.length>0 && state.lookupHits.every(h=>/seiu/i.test([h.donor_id,h.name,h.employer,h.occupation,h.city].join(' ')));
+      R.beyondTop100 = state.lookupHits.some(h=>!topIds.has(h.donor_id));   // a hit not in the resting top-100
+      R.searchInputAlive = document.activeElement && document.activeElement.id==='search';  // input lives outside #list -> caret preserved
+      // PHASE 2 — clearing the search returns to the top-100 browse
+      sb.value=''; fire(sb,'input');
+      await waitFor(()=>state.lookupBrowse && state.lookupHits.length>0);
+      R.clearReturnsBrowse = state.lookupBrowse===true && state.lookupHits.length>0;
+      // PHASE 3 — industry filter narrows the full set; clearing it returns to browse
+      const firstInd=(state.vocab.industries||[])[0];
+      if(firstInd){
+        const indSel=document.querySelector('#list .cl-filters select');
+        indSel.value=firstInd.key; fire(indSel,'change');               // onchange -> lookupFilterInd
+        // wait for the async filter fetch to SETTLE (lookupInd flips synchronously, but hits
+        // only update once /api/donor resolves) before asserting the narrowed result set.
+        await waitFor(()=>state.lookupInd===firstInd.key && !state.lookupBrowse && state.lookupHits.length>0 && state.lookupHits.every(h=>(h.industries||[]).indexOf(firstInd.key)>=0));
+        R.filterNarrows = state.lookupBrowse===false && state.lookupHits.length>0 && state.lookupHits.every(h=>(h.industries||[]).indexOf(firstInd.key)>=0);
+        const indSel2=document.querySelector('#list .cl-filters select');
+        indSel2.value=''; fire(indSel2,'change');
+        await waitFor(()=>state.lookupBrowse);
+        R.filterClears = state.lookupBrowse===true;
+      } else { R.filterNarrows=true; R.filterClears=true; }
+      R.pass = R.browseOnOpen && R.rowsRendered && R.sortedDesc && R.searchHitsFullSet &&
+        R.beyondTop100 && R.searchInputAlive && R.clearReturnsBrowse && R.filterNarrows && R.filterClears;
+    }catch(e){ R.error=String((e&&e.message)||e); R.pass=false; }
+    const m=document.createElement('div'); m.id='lookupbrowsetest-done'; m.style.display='none';
+    m.textContent=JSON.stringify(R); document.body.appendChild(m); return;
+  }
+  // #clusteraddfromunclusteredtest — FIX-EDIT-3 flag 1 HUMAN-PATH proof (live creds; READ-ONLY
+  // dry-run, never confirms — same discipline as #clustereddittest). From the unclustered
+  // pool: "↳ add to existing…" opens a target-cluster picker (reuses FIX-3a-3 search); picking
+  // a cluster opens it and runs the PROVEN add_member dry-run (append row + recomputed rollup,
+  // WRITABLE) in the standard #cl-edit-out panel. No new write logic; nothing is written.
+  if(location.hash==='#clusteraddfromunclusteredtest'){
+    const R={};
+    try{
+      const fire=(el,t)=>el.dispatchEvent(new Event(t,{bubbles:true}));
+      const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+      const waitFor=async(fn,t=80)=>{ for(let i=0;i<t;i++){ if(fn())return true; await sleep(100);} return false; };
+      setView('cluster');
+      await waitFor(()=>state.clusterKnown!==null && document.querySelector('#list .row:not(.cl-exrow)'));
+      const poolRow=document.querySelector('#list .row:not(.cl-exrow)');
+      R.poolPresent=!!poolRow;
+      const addExBtn=poolRow.querySelector('.cl-addex');   // flag 1 entry point on an unclustered row
+      R.addExButtonPresent=!!addExBtn;
+      addExBtn.click();                                    // open the target-cluster picker
+      await waitFor(()=>document.getElementById('cl-addtarget-q'));
+      R.pickerOpened=!!document.getElementById('cl-addtarget-q');
+      const did=state.clusterAddTargetFor; R.targetDonor=did;
+      R.donorUnclustered = !donorCluster(did);             // entry point only offered for unclustered donors
+      // search for a target cluster (first known) and pick it
+      const target=state.clusterKnown[0]; const needle=(target.cluster_name||target.cluster_id);
+      const tq=document.getElementById('cl-addtarget-q'); tq.focus(); tq.value=needle; fire(tq,'input');
+      await waitFor(()=>document.querySelector('#cl-addtarget-results .cl-add-res .cl-mini'));
+      R.targetResultsShown=!!document.querySelector('#cl-addtarget-results .cl-add-res .cl-mini');
+      R.pickerInputAlive = document.activeElement && document.activeElement.id==='cl-addtarget-q';  // surgical: typing re-renders only #cl-addtarget-results, so the input keeps focus
+      document.querySelector('#cl-addtarget-results .cl-add-res .cl-mini').click();   // "add here"
+      // PROVEN add_member dry-run runs in the opened target cluster's #cl-edit-out panel
+      await waitFor(()=>state.clusterEditPlan && state.clusterEditPlan.op==='add_member');
+      const ep=state.clusterEditPlan;
+      R.opensTargetCluster = state.clusterOpenId===ep.cluster_id;
+      R.addMemberDryRun = ep.op==='add_member';
+      R.appendsRow = (ep.ops||[]).some(o=>o.action==='append' && o.donor_id===did);
+      R.rollupPreview = !!(ep.preview && ep.preview.per_file && Object.keys(ep.preview.per_file).length);
+      R.writable = !ep.blocked;
+      R.resultingHasDonor = ((ep.resulting&&ep.resulting.members)||[]).indexOf(did)>=0;
+      R.panelShown = !!document.querySelector('#cl-edit-out');
+      R.pickerClosed = state.clusterAddTargetFor==='';   // picker state cleared on pick
+      clusterEditCancel();   // READ-ONLY: never confirm against the live sheet
+      R.pass = R.poolPresent && R.addExButtonPresent && R.pickerOpened && R.donorUnclustered &&
+        R.targetResultsShown && R.pickerInputAlive && R.opensTargetCluster && R.addMemberDryRun &&
+        R.appendsRow && R.rollupPreview && R.writable && R.resultingHasDonor && R.panelShown && R.pickerClosed;
+    }catch(e){ R.error=String((e&&e.message)||e); R.pass=false; }
+    const m=document.createElement('div'); m.id='clusteraddfromunclusteredtest-done'; m.style.display='none';
     m.textContent=JSON.stringify(R); document.body.appendChild(m); return;
   }
   if(location.hash==='#mastertest'){
