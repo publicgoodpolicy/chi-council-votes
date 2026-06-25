@@ -169,7 +169,8 @@ def is_unclassified(donor):
     The single shared definition — used for the main file AND the dedup file so the two
     worklists stay consistent."""
     inds = donor.get('industries', [])
-    return (not inds) or ('unclassified' in inds) or (inds == ['unclassified'])
+    # unclassified iff no substantive tag present (empty or all-'unclassified'); a real co-tag reads classified
+    return (not inds) or all(t == 'unclassified' for t in inds)
 
 
 def worklist_id_set(data, min_amount=0.0):
