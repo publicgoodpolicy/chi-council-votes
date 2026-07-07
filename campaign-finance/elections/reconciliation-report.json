@@ -8,10 +8,10 @@
     "scope": "elections candidate committees (v1); IE and council lanes deferred"
   },
   "headline": {
-    "d2_itemized_total": 2904833.88,
+    "d2_itemized_total": 2896457.88,
     "ours_itemized_total": 2886130.43,
-    "residual": -18703.45,
-    "dollar_weighted_match_pct": 99.36,
+    "residual": -10327.45,
+    "dollar_weighted_match_pct": 99.64,
     "committees_candidate": 29,
     "committees_with_sbe_id": 29,
     "committees_no_sbe_id": 0,
@@ -26,7 +26,7 @@
     "over_threshold": [
       {
         "committee": "cand-biggs-sb-president",
-        "residual": -8976.0
+        "residual": -600.0
       },
       {
         "committee": "cand-boyle-sb-d18",
@@ -83,16 +83,6 @@
         ]
       },
       {
-        "committee": "cand-biggs-sb-president",
-        "periods": [
-          {
-            "beg": "2024-06-01",
-            "end": "2024-06-30",
-            "d2_itemized": 5300.0
-          }
-        ]
-      },
-      {
         "committee": "cand-dones-sb-d06",
         "periods": [
           {
@@ -114,7 +104,8 @@
       }
     ],
     "join_failures": 0,
-    "filings_missing_totals": 1
+    "filings_missing_totals": 1,
+    "overlap_superseded": 2
   },
   "no_sbe_id_committees": [],
   "join_failures": [],
@@ -470,49 +461,48 @@
       "committee_name": "Citizens for Biggs",
       "sbe_committee_id": "39881",
       "superseded_filings": 3,
+      "overlap_superseded": [
+        {
+          "superseded_doc": "926262",
+          "superseded_period": [
+            "2024-04-01",
+            "2024-06-30"
+          ],
+          "superseding_doc": "926773",
+          "superseding_period": [
+            "2024-06-01",
+            "2024-06-30"
+          ],
+          "superseding_rcvd": "2024-07-15 15:02:14",
+          "superseded_itemized": 8376.0
+        }
+      ],
       "state": "RESIDUAL",
       "flags": [
         "PENDING-A1",
-        "OVER-THRESHOLD",
-        "COVERAGE-MISS"
+        "OVER-THRESHOLD"
       ],
-      "periods_count": 9,
-      "d2_itemized": 126409.34,
+      "periods_count": 8,
+      "d2_itemized": 118033.34,
       "ours_itemized": 117433.34,
-      "residual": -8976.0,
+      "residual": -600.0,
       "d2_inkind": 10448.5,
       "ours_inkind": 10448.5,
       "inkind_delta": 0.0,
       "aggregate": 600.0,
       "pending": 45501.0,
       "last_period_end": "2026-03-31",
-      "coverage_miss_periods": [
-        {
-          "beg": "2024-06-01",
-          "end": "2024-06-30",
-          "d2_itemized": 5300.0
-        }
-      ],
+      "coverage_miss_periods": [],
       "per_period": [
-        {
-          "beg": "2024-04-01",
-          "end": "2024-06-30",
-          "d2_itemized": 8376.0,
-          "ours_itemized": 5100.0,
-          "residual": -3276.0,
-          "d2_inkind": 0.0,
-          "ours_inkind": 447.5,
-          "coverage_miss": false
-        },
         {
           "beg": "2024-06-01",
           "end": "2024-06-30",
           "d2_itemized": 5300.0,
-          "ours_itemized": 0.0,
-          "residual": -5300.0,
+          "ours_itemized": 5100.0,
+          "residual": -200.0,
           "d2_inkind": 447.5,
-          "ours_inkind": 0.0,
-          "coverage_miss": true
+          "ours_inkind": 447.5,
+          "coverage_miss": false
         },
         {
           "beg": "2024-07-01",
@@ -1879,9 +1869,25 @@
       "committee_name": "Debby For District 2B",
       "sbe_committee_id": "39834",
       "superseded_filings": 4,
+      "overlap_superseded": [
+        {
+          "superseded_doc": "973336",
+          "superseded_period": [
+            "2025-04-01",
+            "2025-04-19"
+          ],
+          "superseding_doc": "973427",
+          "superseding_period": [
+            "2025-04-01",
+            "2025-04-21"
+          ],
+          "superseding_rcvd": "2025-04-21 14:39:57",
+          "superseded_itemized": 0.0
+        }
+      ],
       "state": "RECONCILED",
       "flags": [],
-      "periods_count": 7,
+      "periods_count": 6,
       "d2_itemized": 1500.0,
       "ours_itemized": 1500.0,
       "residual": 0.0,
@@ -1926,16 +1932,6 @@
         {
           "beg": "2025-01-01",
           "end": "2025-03-31",
-          "d2_itemized": 0.0,
-          "ours_itemized": 0.0,
-          "residual": 0.0,
-          "d2_inkind": 0.0,
-          "ours_inkind": 0.0,
-          "coverage_miss": false
-        },
-        {
-          "beg": "2025-04-01",
-          "end": "2025-04-19",
           "d2_itemized": 0.0,
           "ours_itemized": 0.0,
           "residual": 0.0,

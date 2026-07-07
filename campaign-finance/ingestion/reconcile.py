@@ -58,13 +58,24 @@ def _read_tsv(path):
 
 
 def build_filing_registry(fileddocs_path, sbe_ids):
-    """From FiledDocs, per SBE committee, collect D-2 period reports and dedupe
-    amendments: group by (RptPdBegDate, RptPdEndDate), keep the max RcvdDateTime
-    (the final version). Returns:
+    """From FiledDocs, per SBE committee, resolve D-2 period reports to a final
+    comparison set in two passes:
+      pass 1 -- exact-tuple amendment dedupe: group by (RptPdBegDate, RptPdEndDate),
+                keep the max RcvdDateTime (the final version of that filing).
+      pass 2 -- overlap-supersede: among the pass-1 finals, a later-received filing
+                whose period window overlaps an earlier-received one supersedes it.
+                SBE carries no amendment-linkage column, and a later-received
+                overlapping filing has been observed to hold the corrected Schedule
+                A while the superseded original retains none; window + receipt order
+                is the best available key.
+    Returns:
       finals    : sbe_id -> {(beg, end): final FiledDocs.ID}
-      superseded: sbe_id -> count of amendments dropped
-    RcvdDateTime is fixed-width 'YYYY-MM-DD HH:MM:SS', so lexicographic max is
-    chronological max.
+      superseded: sbe_id -> count of pass-1 amendments dropped
+      all_doc_ids: every FiledDocs.ID for our committees (any DocName)
+      overlap_superseded: sbe_id -> [ {superseded_doc, superseded_period,
+                    superseding_doc, superseding_period, superseding_rcvd} ]
+    RcvdDateTime is fixed-width 'YYYY-MM-DD HH:MM:SS', so lexicographic order is
+    chronological order.
     """
     groups = defaultdict(lambda: defaultdict(list))  # sbe -> (beg,end) -> [(rcvd, id)]
     all_doc_ids = set()  # every FiledDocs.ID for our committees (any DocName)
@@ -76,19 +87,37 @@ def build_filing_registry(fileddocs_path, sbe_ids):
         if row[idx['DocName']] in D2_PERIOD_DOCNAMES:
             period = (row[idx['RptPdBegDate']][:10], row[idx['RptPdEndDate']][:10])
             groups[cid][period].append((row[idx['RcvdDateTime']], row[idx['ID']]))
-    finals, superseded = {}, {}
+    finals, superseded, overlap_superseded = {}, {}, {}
     for cid, per in groups.items():
-        fin, sup = {}, 0
+        # pass 1: exact-tuple amendment dedupe (max RcvdDateTime per identical window)
+        pass1, sup = {}, 0
         for period, filings in per.items():
             filings.sort()
-            fin[period] = filings[-1][1]
+            pass1[period] = (filings[-1][0], filings[-1][1])  # (rcvd, docid)
             sup += len(filings) - 1
+        # pass 2: overlap-supersede -- a later-received final filing whose window
+        # overlaps an earlier-received one supersedes it (windows: b1<=e2 and b2<=e1)
+        fin, ovsup = {}, []
+        for period, (rcvd, docid) in pass1.items():
+            laters = [(p2, r2, d2) for p2, (r2, d2) in pass1.items()
+                      if d2 != docid and r2 > rcvd
+                      and period[0] <= p2[1] and p2[0] <= period[1]]
+            if laters:
+                sp, sr, sd = max(laters, key=lambda t: t[1])  # latest-received superseder
+                ovsup.append({'superseded_doc': docid, 'superseded_period': list(period),
+                              'superseding_doc': sd, 'superseding_period': list(sp),
+                              'superseding_rcvd': sr})
+            else:
+                fin[period] = docid
         finals[cid] = fin
         superseded[cid] = sup
-    return finals, superseded, all_doc_ids
+        if ovsup:
+            overlap_superseded[cid] = ovsup
+    return finals, superseded, all_doc_ids, overlap_superseded
 
 
-def build_d2_amounts(d2totals_path, sbe_ids, final_ids_by_committee, all_doc_ids):
+def build_d2_amounts(d2totals_path, sbe_ids, final_ids_by_committee, all_doc_ids,
+                     extra_doc_ids=frozenset()):
     """From D2Totals, join each committee's final D-2 filings to their sworn
     itemized + in-kind totals via FiledDocID -> FiledDocs.ID. Returns:
       d2_item : sbe_id -> {(beg,end): itemized total}
@@ -98,6 +127,9 @@ def build_d2_amounts(d2totals_path, sbe_ids, final_ids_by_committee, all_doc_ids
       missing_totals: final D-2 period filings that have no D2Totals row -- a
                       filed-but-empty report, treated as $0 (informational, not
                       a failure; never silently dropped)
+      extra_amount: docid -> (itemized, in-kind) for the docids in extra_doc_ids
+                    (the overlap-superseded filings), so the report can disclose
+                    the sworn amount that the supersede removed from the compare.
     itemized = IndivContribI + XferInI + LoanRcvI + OtherRctI.
     """
     # docid -> (sbe, period) for our final filings only
@@ -106,6 +138,7 @@ def build_d2_amounts(d2totals_path, sbe_ids, final_ids_by_committee, all_doc_ids
         for period, docid in periods.items():
             doc_to_period[docid] = (sbe, period)
     seen_amount = {}  # docid -> (item, ink)
+    extra_amount = {}
     join_failures = []
     for idx, row in _read_tsv(d2totals_path):
         cid = row[idx['CommitteeID']]
@@ -116,11 +149,17 @@ def build_d2_amounts(d2totals_path, sbe_ids, final_ids_by_committee, all_doc_ids
             join_failures.append({'sbe_committee_id': cid,
                                   'd2totals_id': row[idx['ID']],
                                   'filed_doc_id': docid})
-        if doc_to_period.get(docid, (None,))[0] != cid:
-            continue  # not one of this committee's final period filings
+        is_final = doc_to_period.get(docid, (None,))[0] == cid
+        is_extra = docid in extra_doc_ids
+        if not (is_final or is_extra):
+            continue
         item = (_num(row[idx['IndivContribI']]) + _num(row[idx['XferInI']])
                 + _num(row[idx['LoanRcvI']]) + _num(row[idx['OtherRctI']]))
-        seen_amount[docid] = (item, _num(row[idx['InKindI']]))
+        pair = (item, _num(row[idx['InKindI']]))
+        if is_final:
+            seen_amount[docid] = pair
+        if is_extra:
+            extra_amount[docid] = pair
     d2_item = defaultdict(dict)
     d2_ink = defaultdict(dict)
     missing_totals = []
@@ -133,16 +172,17 @@ def build_d2_amounts(d2totals_path, sbe_ids, final_ids_by_committee, all_doc_ids
                 d2_ink[sbe][period] = 0.0
                 missing_totals.append({'sbe_committee_id': sbe, 'period': list(period),
                                        'filed_doc_id': docid})
-    return d2_item, d2_ink, join_failures, missing_totals
+    return d2_item, d2_ink, join_failures, missing_totals, extra_amount
 
 
 def reconcile_committee(periods, contribs, d2_item, d2_ink, threshold):
     """Compare one committee's contributions against its sworn per-period totals.
 
     Each contribution is assigned to the first period (chronologically) whose
-    [beg, end] window contains its date, so it counts once even where filing
-    periods overlap (an amendment that shifts a period begin date creates such an
-    overlap; we do not special-case it -- the instrument reports faithfully).
+    [beg, end] window contains its date, so it counts once. Overlapping windows
+    are resolved upstream by build_filing_registry's overlap-supersede pass; this
+    first-match assignment remains as a belt-and-suspenders against any residual
+    overlap.
     """
     last_end = max(e for _, e in periods)
     ours_item = defaultdict(float)   # period -> our itemized
@@ -242,11 +282,17 @@ def run(data_path, d2totals_path, fileddocs_path, pulled, threshold):
             no_sbe_id.append(k)
     sbe_ids = set(sbe_to_internal)
 
-    # 2-3. Filing registry (D-2 period reports, amendments deduped).
-    finals, superseded, all_doc_ids = build_filing_registry(fileddocs_path, sbe_ids)
-    # 4. Sworn totals joined by FiledDocID.
-    d2_item, d2_ink, join_failures, missing_totals = build_d2_amounts(
-        d2totals_path, sbe_ids, finals, all_doc_ids)
+    # 2-3. Filing registry (exact-tuple amendment dedupe, then overlap-supersede).
+    finals, superseded, all_doc_ids, overlap_superseded = build_filing_registry(
+        fileddocs_path, sbe_ids)
+    superseded_docs = {e['superseded_doc'] for lst in overlap_superseded.values() for e in lst}
+    # 4. Sworn totals joined by FiledDocID (+ superseded filings, for disclosure).
+    d2_item, d2_ink, join_failures, missing_totals, extra_amount = build_d2_amounts(
+        d2totals_path, sbe_ids, finals, all_doc_ids, superseded_docs)
+    # enrich the overlap-supersede disclosures with the superseded filing's sworn total
+    for lst in overlap_superseded.values():
+        for e in lst:
+            e['superseded_itemized'] = round(extra_amount.get(e['superseded_doc'], (0.0, 0.0))[0], 2)
 
     contribs_by_committee = defaultdict(list)
     for c in contributions:
@@ -268,6 +314,8 @@ def run(data_path, d2totals_path, fileddocs_path, pulled, threshold):
             'sbe_committee_id': sbe,
             'superseded_filings': superseded.get(sbe, 0),
         }
+        if sbe in overlap_superseded:
+            block['overlap_superseded'] = overlap_superseded[sbe]
         if not periods:
             block['state'] = 'TOO-NEW'
             block['flags'] = []
@@ -326,6 +374,7 @@ def run(data_path, d2totals_path, fileddocs_path, pulled, threshold):
             'coverage_miss_committees': coverage_miss,
             'join_failures': len(join_failures),
             'filings_missing_totals': len(missing_totals),
+            'overlap_superseded': sum(len(v) for v in overlap_superseded.values()),
         },
         'no_sbe_id_committees': sorted(no_sbe_id),
         'join_failures': join_failures,
@@ -354,7 +403,8 @@ def print_summary(report, threshold):
           f"aggregate: ${h['aggregate_total']:,.2f}")
     print(f"  in-kind: D2 ${h['inkind_d2_total']:,.2f}  ours ${h['inkind_ours_total']:,.2f}")
     print(f"  join failures: {h['join_failures']}   "
-          f"filed-but-empty D-2s (treated $0): {h['filings_missing_totals']}")
+          f"filed-but-empty D-2s (treated $0): {h['filings_missing_totals']}   "
+          f"overlap-superseded: {h['overlap_superseded']}")
     print('-' * 72)
     print(f"  {'committee':<28}{'state':<11}{'D-2':>12}{'ours':>12}{'residual':>11}")
     print('-' * 72)

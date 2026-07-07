@@ -129,12 +129,20 @@ is embedded in the report as the "data current as of" stamp the methodology page
 publishes — never omit or fudge it.
 
 **How it works**: FiledDocs gives each committee's D-2 period reports (DocName ∈
-Quarterly / Semiannual / Pre-election / Annual / Final); amendments are deduped
-per `(RptPdBegDate, RptPdEndDate)` keeping the latest `RcvdDateTime`. D2Totals
-supplies the sworn itemized total (`IndivContribI + XferInI + LoanRcvI +
-OtherRctI`) per filing, joined by `FiledDocID`. Our side sums contributions typed
-Individual Contribution / Transfer In / Loan Received / Other Receipt dated inside
-each period; in-kind is compared separately, `Aggregate` is totalled separately.
+Quarterly / Semiannual / Pre-election / Annual / Final), resolved to a final set in
+two passes: (1) **exact-tuple amendment dedupe** — same `(RptPdBegDate,
+RptPdEndDate)`, keep the latest `RcvdDateTime`; (2) **overlap-supersede** — a
+later-received filing whose period window overlaps an earlier-received one
+supersedes it. Pass 2 exists because SBE provides no amendment-linkage column, and
+a later-received overlapping filing has been observed to carry the corrected
+Schedule A substance while the superseded original retains none (e.g. a full-quarter
+report replaced by a narrower re-file). Overlap-superseded filings are disclosed
+per committee in the report (`overlap_superseded`, with the superseding filing and
+the sworn amount removed). D2Totals supplies the sworn itemized total
+(`IndivContribI + XferInI + LoanRcvI + OtherRctI`) per filing, joined by
+`FiledDocID`. Our side sums contributions typed Individual Contribution / Transfer
+In / Loan Received / Other Receipt dated inside each period; in-kind is compared
+separately, `Aggregate` is totalled separately.
 
 **Committee states** (published on the methodology page — names are load-bearing):
 - `RECONCILED` — every closed period reconciles to within $1 (in-kind included).
