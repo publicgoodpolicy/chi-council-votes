@@ -570,6 +570,8 @@ def merge_into_data(data: dict, parsed: dict, ward, linkage: dict = None) -> dic
             existing = data['donors'][did]
             existing_industries = existing.get('industries') or [existing.get('industry', 'unclassified')]
             if existing_industries and existing_industries != ['unclassified']:
+                if len(existing_industries) > 1:
+                    existing_industries = [t for t in existing_industries if t != 'unclassified']
                 donor['industries'] = existing_industries
             if existing.get('flags'):
                 donor['flags'] = existing['flags']

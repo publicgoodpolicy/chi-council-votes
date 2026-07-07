@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-06-24T20:12:37Z",
+  "generated_at": "2026-07-07T03:48:00Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "itemization_threshold": 150,
   "cycles": {
@@ -11025,8 +11025,7 @@
       "name": "Chicagoland Chamber of Commerce PAC",
       "type": "PAC",
       "industries": [
-        "establishment-pol",
-        "unclassified"
+        "establishment-pol"
       ],
       "flags": [],
       "notes": null,
@@ -16564,8 +16563,7 @@
       "name": "Illinois Hotel Motel PAC",
       "type": "PAC",
       "industries": [
-        "establishment-pol",
-        "unclassified"
+        "establishment-pol"
       ],
       "flags": [],
       "notes": null,
@@ -87706,8 +87704,7 @@
       "name": "Chicago Association of Realtors PAC",
       "type": "PAC",
       "industries": [
-        "real-estate",
-        "unclassified"
+        "real-estate"
       ],
       "flags": [],
       "notes": null,
@@ -361575,8 +361572,7 @@
         "name": "Illinois Hotel Motel PAC",
         "type": "PAC",
         "industries": [
-          "establishment-pol",
-          "unclassified"
+          "establishment-pol"
         ],
         "direct": 251250.0,
         "independent": 0.0,
@@ -612210,20 +612206,20 @@
     "by_industry": {
       "unclassified": {
         "all": {
-          "direct": 14296079.63
+          "direct": 13836929.63
         },
         "by_cycle": {
           "2023": {
-            "direct": 4315528.73
+            "direct": 4177828.73
           },
           "2027": {
-            "direct": 3280061.0
+            "direct": 3219311.0
           },
           "2019": {
-            "direct": 3900773.78
+            "direct": 3749273.78
           },
           "2015": {
-            "direct": 2799716.12
+            "direct": 2690516.12
           }
         }
       },

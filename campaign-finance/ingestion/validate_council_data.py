@@ -72,6 +72,12 @@ def validate(d):
             warnings.append(f"committee {k}: independent_expenditure with blank committee_name "
                             f"(would render as a nameless recipient)")
 
+    cotag = [k for k, r in donors.items()
+             if r.get('industries') and 'unclassified' in r['industries']
+             and any(t != 'unclassified' for t in r['industries'])]
+    if cotag:
+        errors.append(f"co-tag violation: 'unclassified' alongside substantive tags: {cotag}")
+
     return errors, warnings
 
 
