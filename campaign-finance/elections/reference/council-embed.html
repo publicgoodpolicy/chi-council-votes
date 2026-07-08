@@ -1153,22 +1153,8 @@ const FEEDBACK_CONFIG = {
       h += '<div class="ipg-cf-empty">No itemized donors in this category for this committee.</div>';
     }
 
-    // Aggregate small-dollar donors (separate row style)
-    aggregates.forEach(a=>{
-      const d=state.cf.donors[a.donor_id]; if(!d) return;
-      const aggRows=contribs.filter(c=>c.donor_id===a.donor_id);
-      const totalAggDonors=aggRows.reduce((s,c)=>s+(c.donor_count||0),0);
-      const totalAggContribs=aggRows.reduce((s,c)=>s+(c.contribution_count||c.donor_count||0),0);
-      const sub = totalAggContribs && totalAggContribs!==totalAggDonors
-        ? totalAggContribs.toLocaleString()+' contributions · under $150 each · not individually itemized'
-        : 'Under $150 each · not individually itemized';
-      h+='<div class="ipg-cf-row ipg-cf-agg ipg-cf-clickable" data-donor-id="'+a.donor_id+'">'
-        +'<div><div class="name">'+(totalAggDonors||'Many')+' small-dollar donors</div>'
-        +'<div class="sub">'+sub+'</div>'
-        +'<div class="ipg-cf-tags">'+renderIndustryChips(d)+'</div>'
-        +'</div>'
-        +'<div class="amount">'+fmtMoney(a.total)+'</div></div>';
-    });
+    // Small-dollar aggregate rows removed: the SBE-bulk source itemizes every
+    // receipt, so no Aggregate-typed donors remain to render (HALT-MIG-1).
 
     return h;
   }
@@ -2462,7 +2448,7 @@ function recTagChips(){
       <h4 class="ipg-meth-sub">What counts as a contribution shown here</h4>
       <p>We include itemized contributions as reported to the SBE. A few handling notes:</p>
       <ul>
-        <li><strong>Small-dollar contributions are aggregated, not itemized.</strong> Contributions below $150 are summed into a single per-committee, per-cycle &ldquo;small-dollar donors&rdquo; total rather than listed individually. This keeps the focus on the larger, traceable money and avoids cluttering the view with thousands of small entries. This aggregate is <strong>excluded</strong> from the donor-network and &ldquo;Follow the money&rdquo; relationship views, because it represents many people rather than a single identifiable donor. Internal aggregate roll-up totals &mdash; which stand in for a group of records rather than a single donor &mdash; are excluded from those relationship views for the same reason.</li>
+        <li><strong>Itemization follows the SBE record.</strong> Contribution data is pulled directly from Illinois State Board of Elections filings, and our itemization and disclosure boundaries follow the filings themselves &mdash; every contribution the SBE itemizes, we itemize and attribute to the named donor. (Donor-cluster roll-up totals &mdash; which stand in for a group of related records rather than a single identifiable donor &mdash; remain excluded from the donor-network and &ldquo;Follow the money&rdquo; relationship views.)</li>
         <li>Amounts and dates reflect what was reported in the filings. Filers occasionally amend, misreport, or duplicate entries; see <em>Limitations</em> below.</li>
       </ul>
 

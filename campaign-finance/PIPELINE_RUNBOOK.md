@@ -121,8 +121,16 @@ python3 campaign-finance/ingestion/reconcile.py \
 from the Illinois State Board of Elections. Pull them after the quarterly filing
 deadlines — the **16th–20th of Jan / Apr / Jul / Oct** — once committees' D-2s
 for the closed quarter have posted. They live in the gitignored `raw/sbe-summary/`.
-**SBE bulk exports are Windows-1252 encoded; `reconcile.py` reads them as
-`latin-1`** (a UTF-8 read crashes on the en-dash byte).
+**SBE bulk exports are Windows-1252 (cp1252) encoded.** The correct read depends
+on what fields you consume: **name-bearing reads must use `cp1252`** — latin-1
+mis-decodes the `0x80-0x9F` range (e.g. `0x92`, the smart apostrophe in
+`O'Connor`, becomes a control char and corrupts the donor name). **latin-1 is
+acceptable only for ASCII-content fields**: `reconcile.py` reads `D2Totals` /
+`FiledDocs` as latin-1 because the fields it consumes (ids, dates, DocNames,
+amounts) are ASCII, so the distinction never bites there. cp1252 has five
+unmapped bytes (`0x81, 0x8D, 0x8F, 0x90, 0x9D`) that crash a strict decode;
+`convert_bulk_receipts.py` pre-scans for them and fails loudly rather than
+silently corrupt (see the council-migration section).
 
 **`--pulled` is required** (`YYYY-MM-DD`): the date you pulled the bulk files. It
 is embedded in the report as the "data current as of" stamp the methodology page
@@ -180,3 +188,59 @@ absorb drift. There is no auto-annotate path by design.
 `IE Committee Receipt` and `IE Committee Dues Transfer`, which map differently and
 carry decades-long D-2 histories — and the **council lane** are deliberately out of
 v1 scope. v1 covers elections candidate committees only.
+
+---
+
+## Council contribution source: SBE bulk migration (`convert_bulk_receipts.py`)
+
+Council contributions are sourced from the **SBE bulk Receipts export**, not the
+old per-committee CSVs (which are unrecoverable). `convert_bulk_receipts.py`
+converts the bulk into per-committee CSVs that `ingest.py` consumes unchanged.
+
+**Ruled scope** (what a committee's contribution set is): rows attached (by
+`FiledDocID`) to its **final D-2 filings** — the five period DocNames, exact-tuple
+amendment dedupe then overlap-supersede (`reconcile.build_filing_registry`) —
+**plus** rows on **A-1 filings dated after the committee's last final-period end**
+(the pending tail). There are **no** row-level `(date, amount, name)` keys; that
+naive method over-counts amendments by ~$1.43M.
+
+**Output goes to `raw/receipts-council/`**, NOT `raw/receipts/` — the latter holds
+the bulk `.txt` that `ingest_ie` still needs, and globbing both would fail
+`ingest`'s `REQUIRED_COLUMNS`. `ingest` then runs with `--raw-dir raw/receipts-council/`.
+
+**Encoding**: the converter reads the bulk as `cp1252` (name-bearing) after a
+byte pre-scan for the five cp1252-unmapped values — a future pull carrying one
+fails loudly instead of corrupting a name. See the reconcile encoding note above.
+
+### The canonical council rebuild chain (order is load-bearing)
+
+```
+convert_bulk_receipts.py  --bulk <receipts.txt> --fileddocs <FiledDocs.txt> \
+                          --committee-map council-data.json --out-dir raw/receipts-council
+ingest.py                 --raw-dir raw/receipts-council --ward-map ward-map.json --data-file council-data.json
+repair_clusters.py        council-data.json      # absent-member churn from re-ingest
+transform_slice1.py       council-data.json      # parent_id on ALL donors — MUST precede ingest_ie
+transform_slice2.py       council-data.json
+ingest_ie.py              --council … (re-applies the IE layer, which the direct re-ingest strips)
+enrich_committee_names.py --council …
+sync_overrides.py         --data-file council-data.json …   # clusters re-apply from the Sheet
+build_rollups.py          council-data.json      # rollups LAST — after overrides
+build_shards.py           council-data.json campaign-finance/shards
+validate_council_data.py  council-data.json      # hard-fail guard, 0/0
+```
+
+Notes: `transform_slice1` must precede `ingest_ie` (its internal `build_rollups`
+reads `parent_id` on every donor); `repair_clusters` must precede `slice1` (a
+re-ingest can orphan a cluster's parent donor). `ward-map.json` must map **every**
+council committee's SBE id → ward (council-mode `ingest` matches by ward), or an
+unmapped committee hits an interactive prompt. `build_rollups` / `build_shards`
+run last because cluster membership feeds parent attribution and the shards are
+the embed's deploy surface.
+
+### Pull-set archival rule
+
+A council rebuild is pinned to **one dated pull-set of four SBE bulk files**
+(Receipts + Expenditures + `D2Totals` + `FiledDocs`), all from the same pull.
+Archive them together, dated, in gitignored `raw/` — they are the migration's
+source-of-record and the only way to reproduce a given build's vintage. Never
+mix files across pulls in one rebuild.
