@@ -294,27 +294,67 @@ var ixcVM = D.spendSubtab(index, 'school_board', 'industry-candidate');
 var flagsVM = D.spendSubtab(index, 'school_board', 'flags');
 ok('browse-donors resolves with BOTH donor rows and IE-PAC spender rows',
   donorsVM.rows.length > 0 && donorsVM.rows.some(function (r) { return r.kind === 'donor'; }) && donorsVM.rows.some(function (r) { return r.kind === 'ie'; }));
-ok('spend-by-candidate resolves', candsVM.candidates.length > 0);
+ok('spend-by-candidate resolves (grouped API: race groups + candidates within)',
+  candsVM.groups.length > 0 && candsVM.groups.reduce(function (s, g) { return s + g.candidates.length; }, 0) > 0);
 ok('industry-totals resolves and includes uncategorized (never folded)',
   indsVM.industries.length > 0 && indsVM.industries.some(function (x) { return x.industry === 'unclassified' || x.industry === 'uncategorized'; }));
 ok('industries-by-candidate resolves', ixcVM.rows.length > 0);
 ok('flag-totals resolves (array; may be empty for this office)', Array.isArray(flagsVM.flags));
-// KEY: spend-by-candidate surfaces IE money for a COMMITTEE-LESS candidate
-var clIE = candsVM.candidates.filter(function (c) { return !c.hasCommittee && (c.figures.independentSupport > 0 || c.figures.independentOpposition > 0); });
-ok('spend-by-candidate surfaces IE money for a committee-LESS candidate', clIE.length >= 1);
-if (clIE.length) console.log('       (e.g. ' + clIE[0].name + ': support $' + Math.round(clIE[0].figures.independentSupport) + ' / oppose $' + Math.round(clIE[0].figures.independentOpposition) + ', no committee)');
+// KEY (fixture-injected): spend-by-candidate surfaces IE money for a COMMITTEE-LESS
+// candidate. Every real committee-less candidate carries $0 IE, so this invariant is
+// vacuous against live data and would silently lose value on any data shift. We exercise
+// it against an in-memory fixture instead: one obviously-synthetic committee-less
+// candidate given synthetic IE support, run through the same load + spendSubtab path.
+// The fixture is a deep copy — real `json` is never mutated.
+(function () {
+  var fx = JSON.parse(JSON.stringify(json));
+  var FX_RACE = 'sb-d13', FX_ID = 'zzz-fixture-cmteless-cand', FX_IE = 98765;   // synthetic
+  fx.candidates.push({ id: FX_ID, race_id: FX_RACE, name: 'Zzy Fixturetest (SYNTHETIC)',
+    committee_id: null, status: 'filed', prior_election: null, incumbent: false,
+    vacating_for: null, bio: {}, positions: null });
+  // date sits inside the school_board election window (real rows are cycle 2027 / dated 2024)
+  fx.independent_expenditures.push({ id: 'ie-fixture-synth-1', spender_committee_id: 'ie-committee-22729',
+    target_committee_id: null, target_candidate_id: FX_ID, target_race_id: FX_RACE, target_ward: null,
+    match_method: 'exact', needs_review: false, stance: 'support', amount: FX_IE, date: '2024-09-26',
+    cycle: '2027', source_filing: '9B', filed_doc_id: 'fixture', purpose: 'SYNTHETIC fixture' });
+  var fvm = D.spendSubtab(D.loadData(fx, { office: 'school_board' }), 'school_board', 'candidates');
+  var fc = null; fvm.groups.forEach(function (g) { g.candidates.forEach(function (c) { if (c.id === FX_ID) fc = c; }); });
+  ok('spend-by-candidate surfaces IE money for a committee-LESS candidate (fixture-injected)',
+    !!fc && fc.hasCommittee === false && Math.round(fc.figures.independentSupport) === FX_IE);
+  if (fc) console.log('       (synthetic committee-less candidate surfaced with $' + Math.round(fc.figures.independentSupport) + ' IE support)');
+})();
 // three figures shown separately (never summed)
 var candHtml = R.renderSpend(candsVM);
 ok('spend-by-candidate shows three separate figures (contrib/support/oppose)',
   /contrib<\/span>/.test(candHtml) && /support<\/span>/.test(candHtml) && /oppose<\/span>/.test(candHtml));
-// neutral order (alphabetical by surname), never by amount
-function snk(n) { return String(n).replace(/,?\s*(jr|sr|ii|iii|iv)\.?$/i, '').trim().split(/\s+/).pop().toLowerCase(); }
-var inOrder = candsVM.candidates.map(function (c) { return c.name; });
-var alpha = inOrder.slice().sort(function (a, b) { return snk(a).localeCompare(snk(b)) || a.localeCompare(b); });
-ok('candidates ordered neutrally (alphabetical by surname), not by amount', JSON.stringify(inOrder) === JSON.stringify(alpha));
-// office scope: no council/ward candidate in the spend view
-ok('spend-by-candidate is office-scoped (no ward/council candidates)',
-  candsVM.candidates.every(function (c) { return !/^ward-/.test(c.raceSlug); }));
+// Ordering (E-7): candidates are ranked by DESCENDING direct contributions.total within
+// each race group, and IE is DELIBERATELY EXCLUDED from the rank — ranking by a fused
+// direct+IE figure would be a per-candidate stream fusion, firewall-inconsistent. Assert
+// both halves positively: (1) every group is contributions.total-descending; (2) the
+// exclusion is active — some group has a lower-ranked candidate carrying a LARGER IE
+// figure than the one above it (proving IE does not drive rank). Both computed from data.
+var allDesc = candsVM.groups.every(function (g) {
+  for (var i = 0; i < g.candidates.length - 1; i++) {
+    if (g.candidates[i].figures.contributions.total < g.candidates[i + 1].figures.contributions.total) return false;
+  }
+  return true;
+});
+ok('candidates ranked by descending direct contributions within each race group', allDesc);
+var ieExcludedPair = null;
+candsVM.groups.forEach(function (g) {
+  for (var i = 0; i < g.candidates.length - 1; i++) {
+    if (!ieExcludedPair && g.candidates[i + 1].figures.independentSupport > g.candidates[i].figures.independentSupport) {
+      ieExcludedPair = { race: g.race.label, higher: g.candidates[i].name, lower: g.candidates[i + 1].name };
+    }
+  }
+});
+ok('IE is excluded from rank (a lower-ranked candidate carries larger IE than the one above)', !!ieExcludedPair);
+if (ieExcludedPair) console.log('       (' + ieExcludedPair.race + ': ' + ieExcludedPair.higher + ' ranks above ' + ieExcludedPair.lower + ', who has larger IE)');
+// office scope: every group is a school-board race (president or member); the school_board
+// page spans two offices, and no ward/council/mayor race may leak in. (Race info lives at
+// the group level in the grouped API; candidates no longer carry raceSlug.)
+ok('spend-by-candidate is office-scoped (all groups are school_board races)',
+  candsVM.groups.length > 0 && candsVM.groups.every(function (g) { return /^school_board/.test(g.race.office); }));
 // browse-donors rows open the RIGHT modal
 var donorsHtml = R.renderSpend(donorsVM);
 ok('browse-donors: donor rows open the footprint modal (data-funder)', /class="crow funder-row" type="button" data-funder=/.test(donorsHtml));
