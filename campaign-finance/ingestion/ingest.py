@@ -61,7 +61,6 @@ from typing import Optional
 # ============================================================
 DEFAULT_RAW_DIR = Path('raw/receipts')
 DEFAULT_DATA_FILE = Path('council-data.json')
-ITEMIZATION_THRESHOLD = 150  # amounts below this aggregated as "small-dollar"
 
 REQUIRED_COLUMNS = {
     'CommitteeID', 'CommitteeName', 'ContributedBy',
@@ -390,85 +389,6 @@ def self_funding_check(donor_name: str, committee_name: str) -> bool:
 
 
 # ============================================================
-# AGGREGATION (small-dollar tail)
-# ============================================================
-def aggregate_small_dollar(parsed: dict) -> dict:
-    """Replace under-$150 itemized contributions with one aggregate row per
-    (committee, cycle). Matches the existing council-data.json convention.
-
-    The aggregate donor is the shared global ID '_small-dollar-donors' so
-    cross-alder rollups work correctly.
-    """
-    out_contributions = []
-    aggregates: dict = defaultdict(lambda: {
-        'total': 0.0, 'donor_count': 0, 'contribution_count': 0,
-    })
-
-    # Track unique donors per (committee, cycle) for accurate donor counts
-    seen_small_donors: dict = defaultdict(set)
-
-    for c in parsed['contributions']:
-        if c['amount'] >= ITEMIZATION_THRESHOLD or c.get('is_in_kind') or c.get('is_loan'):
-            # Itemize this one
-            out_contributions.append(c)
-        else:
-            # Aggregate this one. Key by (committee, cycle).
-            key = (c['committee_id'], c['cycle'])
-            aggregates[key]['total'] += c['amount']
-            aggregates[key]['contribution_count'] += 1
-            seen_small_donors[key].add(c['donor_id'])
-
-    # Update donor counts
-    for key, agg in aggregates.items():
-        agg['donor_count'] = len(seen_small_donors[key])
-
-    # Build aggregate contribution rows
-    for (committee_id, cycle), agg in aggregates.items():
-        if agg['total'] <= 0:
-            continue
-        out_contributions.append({
-            'id': f"c-agg-{committee_id}-{cycle or 'unknown'}",
-            'donor_id': '_small-dollar-donors',
-            'committee_id': committee_id,
-            'amount': round(agg['total'], 2),
-            'date': None,  # not a single date
-            'cycle': cycle,
-            'contribution_type': 'Aggregate',
-            'source_filing': 'SBE Bulk (aggregated)',
-            'is_aggregate': True,
-            'donor_count': agg['donor_count'],
-            'contribution_count': agg['contribution_count'],
-        })
-
-    # Filter donors: drop those whose contributions were all aggregated
-    # (we don't want to keep records for small-dollar individuals)
-    itemized_donor_ids = {c['donor_id'] for c in out_contributions}
-    out_donors = {
-        did: d for did, d in parsed['donors'].items()
-        if did in itemized_donor_ids
-    }
-
-    # Ensure the global small-dollar donor exists if we have aggregates
-    if any(c.get('is_aggregate') for c in out_contributions):
-        if '_small-dollar-donors' not in out_donors:
-            out_donors['_small-dollar-donors'] = {
-                'id': '_small-dollar-donors',
-                'name': 'Small-dollar donors (under $150 each)',
-                'type': 'Aggregate',
-                'industries': ['small-dollar'],
-                'flags': [],
-                'notes': 'Aggregate row: donors below the SBE itemization threshold ($150). '
-                         'Names not disclosed in the public record.',
-            }
-
-    return {
-        **parsed,
-        'donors': out_donors,
-        'contributions': out_contributions,
-    }
-
-
-# ============================================================
 # MERGE INTO COUNCIL-DATA.JSON
 # ============================================================
 def _apply_linkage(cm: dict, linkage: dict) -> None:
@@ -594,10 +514,13 @@ def merge_into_data(data: dict, parsed: dict, ward, linkage: dict = None) -> dic
     ]
     data['contributions'].extend(parsed['contributions'])
 
-    # 6. Remove orphaned donors (zero contributions in any committee)
+    # 6. Remove orphaned donors (zero contributions in any committee). The old
+    # `not did.startswith('_')` guard protected the small-dollar aggregate donor
+    # during the merge transient; with aggregation removed there is no such donor,
+    # so a zero-contribution '_'-prefixed record is a true orphan (ITEM-1).
     contrib_donor_ids = {c['donor_id'] for c in data['contributions']}
     orphans = [did for did in list(data['donors'].keys())
-               if did not in contrib_donor_ids and not did.startswith('_')]
+               if did not in contrib_donor_ids]
     for did in orphans:
         del data['donors'][did]
     if orphans:
@@ -722,13 +645,8 @@ def main():
                     print("  Invalid ward number. Skipping.")
                     continue
 
-        # Aggregate small-dollar tail
-        parsed = aggregate_small_dollar(parsed)
-        print(f"  After small-dollar aggregation: "
-              f"{len(parsed['donors'])} donors, "
-              f"{len(parsed['contributions'])} contribution rows")
-
-        # Merge
+        # Merge (all rows itemized — no small-dollar aggregation; SBE's own
+        # Schedule A boundary is adopted, ITEM-1 2026-07-07)
         merge_into_data(data, parsed, ward, linkage=link)
         total_changes['committees'] += 1
         total_changes['donors'] += len(parsed['donors'])

@@ -36,8 +36,8 @@ ok('renders DeBerry card', /Ebony DeBerry/.test(page));
 ok('renders Leon card', /Bruce Leon/.test(page));
 ok('neutral order: DeBerry before Leon', page.indexOf('Ebony DeBerry') < page.indexOf('Bruce Leon'));
 ok('Leon contributions $620,403', page.indexOf('$620,403') >= 0);
-ok('Leon self-funded $620,000 (selfline)', page.indexOf('$620,000') >= 0);
-ok('Leon third-party $403', page.indexOf('$403') >= 0);
+ok('Leon self-funded $620,025 (selfline)', page.indexOf('$620,025') >= 0);
+ok('Leon third-party $378', page.indexOf('$378') >= 0);
 ok('Leon independent support $24,766', page.indexOf('$24,766') >= 0);
 ok('DeBerry contributions $534,950', page.indexOf('$534,950') >= 0);
 ok('DeBerry independent opposition $126,078', page.indexOf('$126,078') >= 0);
@@ -86,7 +86,7 @@ var debC = D.candidateContributors(index, 'deberry-sb-d03', null);
 ok('Leon contributor lines sum EXACTLY to $620,403', sumLines(leonC) === 620403 && Math.round(leonC.total) === 620403);
 ok('DeBerry contributor lines sum EXACTLY to $534,950', sumLines(debC) === 534950 && Math.round(debC.total) === 534950);
 ok('Leon contributor list flags a self/loan line', leonC.lines.some(function (l) { return l.isSelf; }));
-ok('contributor list includes a small-dollar aggregate line', leonC.lines.some(function (l) { return l.isAggregate; }) && debC.lines.some(function (l) { return l.isAggregate; }));
+ok('contributor list has NO small-dollar aggregate line (every contribution itemized)', leonC.lines.some(function (l) { return l.isAggregate; }) === false && debC.lines.some(function (l) { return l.isAggregate; }) === false);
 
 var debOpp = D.candidateIE(index, 'deberry-sb-d03', 'oppose', null);
 ok('DeBerry opposition drill-down totals $126,078 with >=1 spender', Math.round(debOpp.total) === 126078 && debOpp.spenders.length >= 1);
@@ -133,18 +133,17 @@ console.log('\n=== B3-REVISE-2 assertions (unified donor rows) ===');
 var debCd = D.candidateContributors(index, 'deberry-sb-d03', null);
 var realLine = debCd.lines.filter(function (l) { return !l.isSelf && !l.isAggregate; })[0];
 var selfLine = debCd.lines.filter(function (l) { return l.isSelf; })[0] || leonC.lines.filter(function (l) { return l.isSelf; })[0];
-var aggLine = debCd.lines.filter(function (l) { return l.isAggregate; })[0];
 ok('DeBerry has a real (non-self, non-aggregate) contributor line', !!realLine && !!realLine.parent_id);
 // A real contributor row renders EXACTLY like a PAC funder row: clickable + tagged.
 var realRow = R.donorRow(realLine);
 ok('real contributor row is clickable (funder-row + data-funder) and tagged',
   /class="crow funder-row" type="button" data-funder="/.test(realRow) && /class="tagchip ind"/.test(realRow));
 // Exceptions stay non-clickable + no industry tag.
-var selfRow = R.donorRow(selfLine), aggRow = R.donorRow(aggLine);
+var selfRow = R.donorRow(selfLine);
 ok('self-funding/loan line is a plain labeled line (no button, no industry tag)',
   /class="crow plain"/.test(selfRow) && selfRow.indexOf('funder-row') < 0 && selfRow.indexOf('tagchip ind') < 0);
-ok('small-dollar aggregate line is a plain labeled line (no button, no tag)',
-  /class="crow plain"/.test(aggRow) && aggRow.indexOf('funder-row') < 0 && aggRow.indexOf('tagchip ind') < 0);
+ok('no small-dollar aggregate line exists (every contribution itemized)',
+  debCd.lines.some(function (l) { return l.isAggregate; }) === false);
 // The same shared row path means contributor + funder rows are byte-identical for a donor.
 ok('contributor row == funder row for the same donor (one shared path)',
   R.donorRow({ parent_id: 'x', name: 'Acme PAC', industries: ['labor-trades'], flags: [], total: 100, count: 1 }) ===
@@ -203,9 +202,10 @@ var realCount = debCd2.lines.filter(function (l) { return !l.isSelf && !l.isAggr
 var funderBtns = (debPanel.match(/class="crow funder-row" type="button" data-funder=/g) || []).length;
 ok('every real donor (top 25 + expanded remainder) is a clickable row', funderBtns === realCount && realCount > 25);
 ok('"Show all N donors" toggle reveals the remainder inline', /Show all \d+ donors/.test(debPanel) && /class="contrib tall"/.test(debPanel));
-ok('small-dollar aggregate is a plain non-clickable line at the bottom',
-  /class="crow plain"><div class="who">Small-dollar donors/.test(debPanel));
-ok('full set (real + self + small-dollar) sums EXACTLY to the headline ($534,950)',
+ok('NO small-dollar aggregate line in the panel (every contribution itemized)',
+  debPanel.indexOf('class="crow plain"><div class="who">Small-dollar donors') < 0 &&
+  debCd2.lines.some(function (l) { return l.isAggregate; }) === false);
+ok('full set (real + self) sums EXACTLY to the headline ($534,950)',
   Math.round(debCd2.lines.reduce(function (s, l) { return s + l.total; }, 0)) === 534950);
 
 console.log('\n=== B3-REVISE-4 assertions (resolved IE committee names) ===');

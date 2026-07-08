@@ -388,7 +388,7 @@
       (realCount > 8 ? '<input class="donor-search" type="search" placeholder="Search donors…" aria-label="Search donors" data-donor-search>' : '') +
       top + moreHtml + aggHtml +
       '<p class="contrib-note">Rolled up by affiliation; lines sum to the contributions figure. Click a donor to see ' +
-      'their full footprint. Small-dollar (under $150) donors are disclosed only in aggregate.</p></div></div>';
+      'their full footprint. Every itemized contribution in the SBE filings is listed individually.</p></div></div>';
   }
 
   // IE drill-down — THREE explicit tiers so a funder never reads as a direct

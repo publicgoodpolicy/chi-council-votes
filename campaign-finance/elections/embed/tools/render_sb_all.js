@@ -28,14 +28,14 @@ RACES.forEach(function (r) { ok(r + ' VM present (electionIds ' + (VM[r] ? VM[r]
 
 console.log('\n=== Diagnostic-C POST-FIX oracles ===');
 var z24 = fig('sb-d07', 'zaccor-sb-d07', '2024'), z26 = fig('sb-d07', 'zaccor-sb-d07', '2026');
-ok('Zaccor 2024 contrib $492,236.85/164', M(z24.contributions) === 492237 && z24.contributionsCount === 164);
-ok('Zaccor 2024 self $6,867.54/6', M(z24.selfFunding) === 6868 && z24.selfFundingCount === 6);
+ok('Zaccor 2024 contrib $494,641.85/202', M(z24.contributions) === 494642 && z24.contributionsCount === 202);
+ok('Zaccor 2024 self $6,930.54/8', M(z24.selfFunding) === 6931 && z24.selfFundingCount === 8);
 ok('Zaccor 2024 ie_oppose $173,817.00/4', M(z24.independentOpposition) === 173817 && z24.independentOppositionCount === 4);
 ok('Zaccor 2026 contrib $6,650/6 · self $4,777.78/5 · ie 0',
   M(z26.contributions) === 6650 && z26.contributionsCount === 6 && M(z26.selfFunding) === 4778 && z26.selfFundingCount === 5 && z26.independentSupport === 0 && z26.independentOpposition === 0);
 
 var r24 = fig('sb-d08', 'rosenfeld-sb-d08', '2024'), r26 = fig('sb-d08', 'rosenfeld-sb-d08', '2026');
-ok('Rosenfeld 2024 contrib $227,960.80/180', M(r24.contributions) === 227961 && r24.contributionsCount === 180);
+ok('Rosenfeld 2024 contrib $228,710.80/188', M(r24.contributions) === 228711 && r24.contributionsCount === 188);
 ok('Rosenfeld 2024 self $26,900/2', M(r24.selfFunding) === 26900 && r24.selfFundingCount === 2);
 ok('Rosenfeld 2024 ie_support $146,025.64/11', M(r24.independentSupport) === 146026 && r24.independentSupportCount === 11);
 ok('Rosenfeld 2026 contrib $103,514.93/68 · self 0 · ie 0',
@@ -49,7 +49,7 @@ ok('Pope 2026 contrib $500/1 · self 0', M(p26.contributions) === 500 && p26.con
 
 var rs24 = fig('sb-d05', 'rios-sierra-sb-d05', '2024'), rs26 = fig('sb-d05', 'rios-sierra-sb-d05', '2026');
 ok('Rios-Sierra 2024 none', rs24 === null);
-ok('Rios-Sierra 2026 contrib $57/1', M(rs26.contributions) === 57 && rs26.contributionsCount === 1);
+ok('Rios-Sierra 2026 contrib $157/2', M(rs26.contributions) === 157 && rs26.contributionsCount === 2);
 
 console.log('\n=== state machine renders ===');
 var popeLast = R.renderRaceElections(VM['sb-d04'], '2024');
@@ -86,7 +86,7 @@ ok('figures have 4 distinct numeric stream fields, no summed total',
   !('total' in z24) && !('combined' in z24));
 
 console.log('\n=== undated reconciliation: 2024 + 2026 + undated == all-years contributor total ===');
-[['sb-d07', 'zaccor-sb-d07', 2468], ['sb-d08', 'rosenfeld-sb-d08', 750], ['sb-d05', 'rios-sierra-sb-d05', 100], ['sb-d04', 'pope-sb-d04', 0]].forEach(function (t) {
+[['sb-d07', 'zaccor-sb-d07', 0], ['sb-d08', 'rosenfeld-sb-d08', 0], ['sb-d05', 'rios-sierra-sb-d05', 0], ['sb-d04', 'pope-sb-d04', 0]].forEach(function (t) {
   var race = t[0], cid = t[1], expUndated = t[2];
   var cand = VM[race].candidates.filter(function (x) { return x.id === cid; })[0];
   var dated = 0;

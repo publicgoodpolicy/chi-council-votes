@@ -157,9 +157,24 @@ separately, `Aggregate` is totalled separately.
   when the dollar residual is under threshold.
 
 **Exit codes** (support future CI gating; not gated on today): `0` clean; `1` a
-committee exceeds threshold **or** a coverage-miss was flagged; `2` structural
-failure (missing input file, malformed `--pulled`, or a `FiledDocID` that joins to
-no filing).
+committee exceeds threshold **or** a coverage-miss was flagged **or** a known-gaps
+annotation is stale; `2` structural failure (missing input file, malformed
+`--pulled`, or a `FiledDocID` that joins to no filing).
+
+**Known-gaps ledger (`elections/known-gaps.json`, public by design).** Some
+residuals are SBE-side: a committee's sworn D-2 cover total exceeds its own filed
+Schedule A itemization, so no ingest or source change can close them. Pass
+`--known-gaps` and reconcile matches each flag against the ledger on
+`(committee, period, residual-to-the-cent)`; a match becomes the `DISCLOSED` state,
+excluded from the exit-code triggers and listed distinctly. **Lifecycle:**
+*discovery* — the monthly reconcile run flags a period (a previously-RECONCILED
+committee can start flagging); *investigation* — the falsification ladder: is the
+row in raw? → ingest lane; filed after our pull? → re-pull; sworn with no Schedule A
+rows in any SBE source? → SBE-side; *annotation* — an **editorial act requiring the
+SBE-side verdict plus evidence**, never a way to silence an undiagnosed flag. Match
+is exact to the cent, so any drift re-fires the flag; a ledger entry that matches no
+current flag is **stale** and fails loudly (exit 1) — annotations may never silently
+absorb drift. There is no auto-annotate path by design.
 
 **v2 (not yet built)**: the **IE-committee lane** — receipts typed
 `IE Committee Receipt` and `IE Committee Dues Transfer`, which map differently and

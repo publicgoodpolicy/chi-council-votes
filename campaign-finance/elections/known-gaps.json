@@ -1,0 +1,15 @@
+{
+  "description": "Investigated, disclosed divergences between SBE committees' sworn D-2 cover totals and their own itemized Schedule A filings. Annotations are editorial acts with an evidence requirement -- see PIPELINE_RUNBOOK.md. Match is exact on (committee, period, residual-to-the-cent); any drift re-fires the flag; a ledger entry matching no current flag fails loudly (stale).",
+  "sign_convention": "amount is the period residual = ours - d2 (negative when the committee swore more than we itemize).",
+  "gaps": [
+    {
+      "committee": "cand-dones-sb-d06",
+      "period_beg": "2024-04-01",
+      "period_end": "2024-06-30",
+      "amount": -500.00,
+      "reason": "SBE-side: committee's sworn IndivContribI on filing 926379 ($500) exceeds its own itemized Schedule A rows; no itemized row exists in any SBE source (bulk receipts or per-committee CSV). Unrecoverable by ingest.",
+      "evidence": "PROBE-ITEM-1 Stage 2 (2026-07-07); PROBE-RESID v2 lineage",
+      "annotated": "2026-07-07"
+    }
+  ]
+}

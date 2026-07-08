@@ -265,10 +265,15 @@ def reconcile_committee(periods, contribs, d2_item, d2_ink, threshold):
     }
 
 
-def run(data_path, d2totals_path, fileddocs_path, pulled, threshold):
+def run(data_path, d2totals_path, fileddocs_path, pulled, threshold, known_gaps_path=None):
     data = json.load(open(data_path))
     committees = data.get('committees', {})
     contributions = data.get('contributions', [])
+
+    # Known-gaps ledger: investigated SBE-side divergences to disclose. Exact-match
+    # on (committee, period, residual); no auto-annotate path exists by design.
+    known_gaps = json.load(open(known_gaps_path)).get('gaps', []) if known_gaps_path else []
+    gap_matched = [False] * len(known_gaps)
 
     # 1. Candidate committees; split by SBE-id presence (NO-SBE-ID never dropped).
     cand = {k: v for k, v in committees.items() if k.startswith('cand-')}
@@ -305,6 +310,7 @@ def run(data_path, d2totals_path, fileddocs_path, pulled, threshold):
     n_reconciled = n_residual = n_too_new = 0
     over_threshold = []
     coverage_miss = []
+    disclosed_committees = []
 
     for sbe, internal in sorted(sbe_to_internal.items(), key=lambda kv: kv[1]):
         meta = cand[internal]
@@ -335,11 +341,36 @@ def run(data_path, d2totals_path, fileddocs_path, pulled, threshold):
             n_reconciled += 1
         else:
             n_residual += 1
-        if 'OVER-THRESHOLD' in rec['flags']:
-            over_threshold.append({'committee': internal, 'residual': rec['residual']})
-        if 'COVERAGE-MISS' in rec['flags']:
-            coverage_miss.append({'committee': internal,
-                                  'periods': rec['coverage_miss_periods']})
+        # Known-gaps disclosure: match per-period residuals against the ledger on
+        # (committee, period, residual-to-the-cent). Matched periods become DISCLOSED
+        # and are excluded from the over-threshold / coverage-miss exit triggers.
+        disclosed = []
+        for pp in rec['per_period']:
+            for gi, g in enumerate(known_gaps):
+                if (g['committee'] == internal and g['period_beg'] == pp['beg']
+                        and g['period_end'] == pp['end']
+                        and abs(round(g['amount'], 2) - pp['residual']) < 0.005):
+                    gap_matched[gi] = True
+                    disclosed.append({'beg': pp['beg'], 'end': pp['end'],
+                                      'residual': pp['residual'], 'reason': g['reason'],
+                                      'annotated': g.get('annotated')})
+        if disclosed:
+            block['disclosed'] = disclosed
+            block['flags'].append('DISCLOSED')
+            disclosed_committees.append({'committee': internal, 'periods': disclosed})
+        disc_resid = round(sum(p['residual'] for p in disclosed), 2)
+        disc_set = {(p['beg'], p['end']) for p in disclosed}
+        eff_resid = round(rec['residual'] - disc_resid, 2)
+        if abs(eff_resid) > threshold:
+            over_threshold.append({'committee': internal, 'residual': eff_resid})
+        cov_nondisc = [p for p in rec['coverage_miss_periods']
+                       if (p['beg'], p['end']) not in disc_set]
+        if cov_nondisc:
+            coverage_miss.append({'committee': internal, 'periods': cov_nondisc})
+
+    # Stale annotations: ledger entries that matched no current flag. These fail
+    # loudly (exit 1) — an annotation may never silently absorb drift.
+    stale_annotations = [g for gi, g in enumerate(known_gaps) if not gap_matched[gi]]
 
     tot_d2 = round(tot_d2, 2); tot_ours = round(tot_ours, 2)
     residual = round(tot_ours - tot_d2, 2)
@@ -375,10 +406,14 @@ def run(data_path, d2totals_path, fileddocs_path, pulled, threshold):
             'join_failures': len(join_failures),
             'filings_missing_totals': len(missing_totals),
             'overlap_superseded': sum(len(v) for v in overlap_superseded.values()),
+            'disclosed': len(disclosed_committees),
+            'stale_annotations': len(stale_annotations),
         },
         'no_sbe_id_committees': sorted(no_sbe_id),
         'join_failures': join_failures,
         'filings_missing_totals': missing_totals,
+        'disclosed': disclosed_committees,
+        'stale_annotations': stale_annotations,
         'committees': committees_out,
     }
     return report
@@ -405,6 +440,8 @@ def print_summary(report, threshold):
     print(f"  join failures: {h['join_failures']}   "
           f"filed-but-empty D-2s (treated $0): {h['filings_missing_totals']}   "
           f"overlap-superseded: {h['overlap_superseded']}")
+    print(f"  disclosed (annotated SBE-side gaps): {h['disclosed']}   "
+          f"stale annotations: {h['stale_annotations']}")
     print('-' * 72)
     print(f"  {'committee':<28}{'state':<11}{'D-2':>12}{'ours':>12}{'residual':>11}")
     print('-' * 72)
@@ -417,6 +454,7 @@ def print_summary(report, threshold):
         fl = ''.join('*' if f == 'OVER-THRESHOLD' else '' for f in v['flags'])
         fl += ' PEND' if 'PENDING-A1' in v['flags'] else ''
         fl += ' MISS' if 'COVERAGE-MISS' in v['flags'] else ''
+        fl += ' DISC' if 'DISCLOSED' in v['flags'] else ''
         print(f"  {internal:<28}{v['state']:<11}{v['d2_itemized']:>12,.2f}"
               f"{v['ours_itemized']:>12,.2f}{v['residual']:>11,.2f}{fl}")
     print('-' * 72)
@@ -429,6 +467,15 @@ def print_summary(report, threshold):
         for c in h['coverage_miss_committees']:
             for p in c['periods']:
                 print(f"    {c['committee']}  {p['beg']}..{p['end']}  D-2 ${p['d2_itemized']:,.2f}")
+    if report.get('disclosed'):
+        print("  DISCLOSED (annotated SBE-side gaps -- excluded from exit triggers):")
+        for c in report['disclosed']:
+            for p in c['periods']:
+                print(f"    {c['committee']}  {p['beg']}..{p['end']}  residual ${p['residual']:,.2f}")
+    if report.get('stale_annotations'):
+        print(f"  *** STALE ANNOTATIONS: {len(report['stale_annotations'])} ledger "
+              f"entr{'y' if len(report['stale_annotations'])==1 else 'ies'} match no current "
+              f"flag -- re-investigate (annotations may not absorb drift)")
     print('=' * 72)
 
 
@@ -444,6 +491,9 @@ def main():
     ap.add_argument('--pulled', required=True,
                     help='date the SBE bulk files were pulled (YYYY-MM-DD); embedded as '
                          'the report\'s "data current as of" stamp')
+    ap.add_argument('--known-gaps', default=None,
+                    help='optional known-gaps ledger JSON; matched SBE-side gaps become '
+                         'DISCLOSED (excluded from exit triggers); stale entries fail loudly')
     args = ap.parse_args()
 
     try:
@@ -453,7 +503,8 @@ def main():
         sys.exit(2)
 
     try:
-        report = run(args.data, args.d2totals, args.fileddocs, args.pulled, args.threshold)
+        report = run(args.data, args.d2totals, args.fileddocs, args.pulled, args.threshold,
+                     args.known_gaps)
     except FileNotFoundError as e:
         print(f"error: missing input file: {e}", file=sys.stderr)
         sys.exit(2)
@@ -468,6 +519,10 @@ def main():
     if h['join_failures'] > 0:
         print(f"STRUCTURAL: {h['join_failures']} FiledDocID join failure(s)", file=sys.stderr)
         sys.exit(2)
+    if h['stale_annotations'] > 0:
+        print(f"STALE: {h['stale_annotations']} known-gaps annotation(s) match no current "
+              f"flag -- re-investigate", file=sys.stderr)
+        sys.exit(1)
     if h['over_threshold'] or h['coverage_miss_committees']:
         sys.exit(1)
     sys.exit(0)
