@@ -13,6 +13,39 @@
   'use strict';
   var ROOT_ID = 'ipg-elect-root';
   var DEFAULT_SRC = 'https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/main/campaign-finance/election-data.json';
+  // Verification artifacts, fetched at runtime from the same raw-CDN base as the data, so
+  // the methodology page's numbers can never drift from the artifacts it cites (they deploy
+  // together on push, paste-free). URLs are baked; they don't drift.
+  var ART_BASE = DEFAULT_SRC.replace(/election-data\.json$/, 'elections/');
+  var RECON_URL = ART_BASE + 'reconciliation-report.json';
+  var GAPS_URL = ART_BASE + 'known-gaps.json';
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+    'September', 'October', 'November', 'December'];
+  function fmtPulled(iso) {
+    var p = String(iso || '').split('-');
+    return (p.length === 3 && MONTHS[+p[1] - 1]) ? (MONTHS[+p[1] - 1] + ' ' + (+p[2]) + ', ' + p[0]) : null;
+  }
+  // Build the `verify` object for methodologyView. URLs are ALWAYS returned (baked); on any
+  // fetch/parse failure the numeric fields are omitted, so the view renders its neutral
+  // fallback — never a stale or default number. Isolated from the main data fetch: a failure
+  // here degrades only the methodology numbers, never the candidate views.
+  function loadVerify(cb) {
+    var base = { reconUrl: RECON_URL, gapsUrl: GAPS_URL };
+    if (typeof fetch === 'undefined') { cb(base); return; }
+    var get = function (u) { return fetch(u).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }); };
+    Promise.all([get(RECON_URL), get(GAPS_URL)]).then(function (res) {
+      var h = (res[0] && res[0].headline) || {}, run = (res[0] && res[0].run) || {};
+      var glist = (res[1] && res[1].gaps) || [];
+      var pulled = fmtPulled(run.pulled);
+      if (pulled == null || h.dollar_weighted_match_pct == null || h.committees_with_sbe_id == null) { cb(base); return; }
+      base.pulled = pulled;
+      base.matchRate = h.dollar_weighted_match_pct;
+      base.nCommittees = h.committees_with_sbe_id;
+      base.nGaps = glist.length;
+      base.disclosedTotal = glist.reduce(function (s, g) { return s + Math.abs(g.amount || 0); }, 0);
+      cb(base);
+    }).catch(function () { cb(base); });
+  }
 
   function injectStyles() {
     if (typeof document === 'undefined' || document.getElementById('ipg-elect-css')) return;
@@ -91,9 +124,11 @@
     var cycles = ElectData.availableCycles(index);
     var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors', spendElection: 'all',
       donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, raceFilter: 'all', electionView: null,
-      expandedCandidateId: null };   // X-2: the ONE grouped row expanded to its inline funder card (accordion-of-one)
+      expandedCandidateId: null,   // X-2: the ONE grouped row expanded to its inline funder card (accordion-of-one)
+      verify: { reconUrl: RECON_URL, gapsUrl: GAPS_URL } };   // methodology fields; numbers fill in async
     var browseSearchTimer = null;
     state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, office));
+    loadVerify(function (v) { state.verify = v; draw(); });   // runtime-plumb the methodology numbers
 
     function draw() {
       var omVM = ElectData.viewModels.officeRaces(index, state.office);
@@ -103,7 +138,7 @@
       root.innerHTML = ElectRender.renderPage({
         office: state.office, topView: state.topView, cycles: cycles, cycle: state.cycle,
         officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend,
-        electionView: state.electionView
+        electionView: state.electionView, verify: state.verify
       });
     }
 

@@ -310,6 +310,14 @@
       '.ipg-elect footer h3{font-family:var(--display);font-weight:600;color:var(--ink);font-size:15px;margin:0 0 8px;}' +
       '.ipg-elect footer p{margin:0 0 12px;max-width:74ch;}.ipg-elect footer .src{font-size:11.5px;}' +
       '@media (max-width:560px){.ipg-elect .barrow{grid-template-columns:1fr;gap:4px;}.ipg-elect .barval{text-align:left;}.ipg-elect .selfline{padding-left:0;}}' +
+      '.ipg-elect .methodology{max-width:70ch;line-height:1.6;}' +
+      '.ipg-elect .methodology h2{font-family:var(--display);font-size:26px;margin:8px 0 12px;}' +
+      '.ipg-elect .methodology h3{font-size:15px;font-weight:600;margin:24px 0 6px;}' +
+      '.ipg-elect .methodology p{margin:0 0 12px;max-width:74ch;}' +
+      '.ipg-elect .methodology ul{margin:0 0 12px;padding-left:20px;}' +
+      '.ipg-elect .methodology li{margin:0 0 8px;max-width:74ch;}' +
+      '.ipg-elect .methodology a{color:var(--teal);}' +
+      '.ipg-elect .methodology .mfield{font-weight:600;white-space:nowrap;}' +
       '</style>';
   }
 
@@ -882,12 +890,13 @@
 
   function masthead(office, topView) {
     var m = MAST[office] || MAST.school_board;
-    var byrace = topView !== 'spend';
+    var isByrace = topView !== 'spend' && topView !== 'methodology';
     return '<header class="masthead"><p class="eyebrow"><span class="box" aria-hidden="true"></span>' + esc(m.kicker) + '</p>' +
       '<h1>Who’s running, and who’s funding them</h1><p class="lede">' + m.lede + '</p>' +
       '<div class="topnav" role="tablist" aria-label="View">' +
-      '<button role="tab" data-view="byrace" aria-selected="' + byrace + '">By race</button>' +
-      '<button role="tab" data-view="spend" aria-selected="' + (!byrace) + '">Election spend</button></div></header>';
+      '<button role="tab" data-view="byrace" aria-selected="' + isByrace + '">By race</button>' +
+      '<button role="tab" data-view="spend" aria-selected="' + (topView === 'spend') + '">Election spend</button>' +
+      '<button role="tab" data-view="methodology" aria-selected="' + (topView === 'methodology') + '">Methodology</button></div></header>';
   }
 
   function footer() {
@@ -902,6 +911,104 @@
       '<p class="src">Source: Illinois State Board of Elections filings, via Illinois Sunshine (Reform for Illinois). ' +
       'Donor classification is in progress; uncategorized donors are shown as not-yet-categorized. Independent ' +
       'expenditures reflect filings matched to candidates in this tool.</p></footer>';
+  }
+
+  // ---- Methodology view: "How this tool is built" (approved copy 2026-07-08, verbatim). ----
+  // The verification numbers (pulled date, match rate, committee count, disclosed gaps) come
+  // from `verify`, which the app shell fetches at RUNTIME from the public
+  // reconciliation-report.json and known-gaps.json — so this page cannot drift from the
+  // artifacts it cites (they update together on push, paste-free). Fallback rule: when those
+  // numbers are absent (either fetch failed), the prose stays intact and the numeric claims
+  // degrade to a neutral "see the reconciliation report" construction — NEVER a stale or
+  // default number. The two artifact URLs are always rendered as links.
+  function methodologyView(verify) {
+    verify = verify || {};
+    var reconUrl = verify.reconUrl || '', gapsUrl = verify.gapsUrl || '';
+    var reconLink = reconUrl
+      ? '<a href="' + esc(reconUrl) + '" target="_blank" rel="noopener">the full reconciliation report</a>'
+      : 'the full reconciliation report';
+    var gapsLink = gapsUrl
+      ? '<a href="' + esc(gapsUrl) + '" target="_blank" rel="noopener">the known-gaps ledger</a>'
+      : 'the known-gaps ledger';
+    var hasNums = verify.pulled != null && verify.matchRate != null && verify.nCommittees != null &&
+      verify.nGaps != null && verify.disclosedTotal != null;
+    var mf = function (v) { return '<span class="mfield">' + esc(String(v)) + '</span>'; };
+    var asOf = hasNums
+      ? 'Data current as of ' + mf(verify.pulled) + '.'
+      : 'Data current as of our most recent quarterly pull; see ' + reconLink + ' for the exact date.';
+    var verifyPara;
+    if (hasNums) {
+      var gapWord = (verify.nGaps === 1) ? 'known gap' : 'known gaps';
+      verifyPara = 'As of ' + mf(verify.pulled) + ', our itemized data matches ' + mf(verify.matchRate + '%') +
+        ' of sworn direct-contribution dollars across ' + mf(verify.nCommittees) +
+        ' candidate committees, and every divergence is individually accounted for: ' +
+        mf(verify.nGaps + ' ' + gapWord) + ', totaling ' + mf(money(verify.disclosedTotal)) +
+        ', where a committee’s sworn cover total exceeds what its own itemized schedules account for ' +
+        '— a divergence in the source filings themselves, which we disclose rather than reconstruct.';
+    } else {
+      verifyPara = 'Every update, our itemized data is reconciled against each committee’s sworn ' +
+        'direct-contribution totals, period by period, and every divergence is individually accounted for and ' +
+        'disclosed — where a committee’s sworn cover total exceeds what its own itemized schedules account ' +
+        'for, a divergence in the source filings themselves, which we disclose rather than reconstruct. See ' +
+        reconLink + ' for the current match rate and ' + gapsLink + ' for each disclosed divergence.';
+    }
+    return '<div class="methodology">' +
+      '<h2>How this tool is built</h2>' +
+      '<h3>What it covers</h3>' +
+      '<p>This tool tracks campaign finance for Chicago’s school board elections. It includes every candidate ' +
+      'who formed a fundraising committee with the Illinois State Board of Elections (SBE) — including ' +
+      'candidates who later withdrew, were removed from the ballot, or never qualified. Whether someone ' +
+      'appears on the ballot is shown as a status on their page; it is never a filter on whose money we track. ' +
+      'Committees are shown per election cycle; a candidate’s committee history is shown as their committee ' +
+      'filed it.</p>' +
+      '<h3>Where the data comes from</h3>' +
+      '<p>Everything here derives from committees’ own filings with the Illinois State Board of Elections: ' +
+      'itemized receipts (Schedule A), quarterly disclosure reports (D-2), interim large-contribution reports ' +
+      '(A-1), and independent-expenditure filings. We pull SBE’s published data after each quarterly filing ' +
+      'deadline. ' + asOf + '</p>' +
+      '<h3>Itemization follows the filings</h3>' +
+      '<p>Contribution data is pulled directly from Illinois State Board of Elections filings; itemization and ' +
+      'disclosure boundaries follow the filings themselves. Every contribution a committee itemizes on its ' +
+      'Schedule A appears here individually, attributed to the named donor as the committee reported it. We do ' +
+      'not add donors SBE doesn’t disclose, and we do not summarize away donors it does.</p>' +
+      '<h3>Three kinds of money, kept separate</h3>' +
+      '<p>Campaign money reaches voters through distinct legal channels, and this tool never blends them:</p>' +
+      '<ul>' +
+      '<li><b>Direct contributions</b> — money given to a candidate’s own committee. This is what candidate ' +
+      'pages, donor pages, and totals show unless explicitly labeled otherwise.</li>' +
+      '<li><b>Independent expenditures supporting a candidate</b> — money spent by outside committees, legally ' +
+      'barred from coordinating with the candidate.</li>' +
+      '<li><b>Independent expenditures opposing a candidate</b> — outside money spent against them.</li>' +
+      '</ul>' +
+      '<p>These three streams are shown side by side, on shared scales, but never summed per candidate. A ' +
+      'candidate does not control — and may not even welcome — money spent independently about them, so adding ' +
+      'it to their fundraising would assert a relationship the law itself denies. Candidate rankings and totals ' +
+      'are direct contributions only. (For the same reason, a candidate’s own committee is never treated as an ' +
+      'independent spender.)</p>' +
+      '<h3>Amendments, timing, and “pending”</h3>' +
+      '<p>Committees amend their filings. When they do, we use the latest version: a later-received filing ' +
+      'supersedes earlier filings covering the same or overlapping periods. Contributions reported on interim ' +
+      'A-1 filings after a committee’s most recent quarterly report are included and marked as pending that ' +
+      'committee’s next quarterly disclosure.</p>' +
+      '<h3>We check our numbers against the committees’ own sworn totals</h3>' +
+      '<p>Every data update, we reconcile the itemized contributions we hold against each committee’s sworn ' +
+      'quarterly totals — the figures the committee itself filed under oath — period by period. ' + verifyPara +
+      '</p>' +
+      '<p>Both verification artifacts are public: ' + reconLink + ' and ' + gapsLink + ', which records each ' +
+      'disclosed divergence with its evidence. This verification covers direct contributions to candidate ' +
+      'committees; independent-expenditure filings are ingested from SBE but not yet independently reconciled ' +
+      'the same way.</p>' +
+      '<h3>Industry tags and donor groupings are editorial</h3>' +
+      '<p>SBE filings identify donors; they don’t categorize them. Industry tags, donor groupings (for example, ' +
+      'connecting a person’s individual giving with their business’s), and related-donor rollups are editorial ' +
+      'classifications made by our researchers, reviewed against public records. Where we group related donors, ' +
+      'the grouping stands in for a set of records rather than a single identifiable donor, and such rollups are ' +
+      'excluded from the donor-network and relationship views.</p>' +
+      '<h3>Correlation, not causation</h3>' +
+      '<p>This tool shows who gave, who spent, and how officials and candidates are positioned — side by side. ' +
+      'Proximity of money and outcomes is a starting point for questions, not an answer to them. Nothing here ' +
+      'asserts that any contribution caused any decision.</p>' +
+      '</div>';
   }
 
   function spendPlaceholder() {
@@ -1133,10 +1240,16 @@
   // Full inner HTML for the mount container — used by the browser app AND the
   // future SEO pre-render (same pure output).
   function renderPage(state) {
+    var inner;
+    if (state.topView === 'methodology') {
+      // Tool-wide static page — renders regardless of office/data readiness.
+      inner = methodologyView(state.verify);
+      return '<div class="wrap">' + masthead(state.office, state.topView) +
+        '<section>' + inner + '</section>' + footer() + '</div>';
+    }
     var ready = state.officeRaces && state.officeRaces.groups.some(function (g) {
       return g.races.some(function (r) { return r.hasFinance; });
     });
-    var inner;
     if (!ready) {
       inner = officeComingSoon(state.office);     // city_council / mayor: clean coming-soon, never a crash
     } else {
@@ -1159,6 +1272,7 @@
     masthead: masthead, footer: footer,
     renderOfficeNav: renderOfficeNav, renderRaceView: renderRaceView, renderRaceElections: renderRaceElections,
     renderComingSoon: renderComingSoon, spendPlaceholder: spendPlaceholder, renderSpend: renderSpend,
+    methodologyView: methodologyView,
     renderFunderModal: renderFunderModal, renderCommitteeProfile: renderCommitteeProfile,
     tagsHtml: tagsHtml, readableText: readableText,
     donorRow: donorRow, contributorPanel: contributorPanel, iePanel: iePanel,
