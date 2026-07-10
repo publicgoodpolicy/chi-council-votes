@@ -32,6 +32,20 @@ def truthy(v): return str(v).strip().lower() in TRUTHY
 def extract_ward(blob):
     m=re.search(r'(\d{1,2})(?:st|nd|rd|th)?\s*ward',blob,re.I) or re.search(r'ward\s*(\d{1,2})',blob,re.I)
     return int(m.group(1)) if m else None
+def _district_key(s):
+    # Normalize a registry district value to a bare compare-token: "District 1A" -> "1a",
+    # "12" -> "12", "District 5" -> "5", None/president -> None. School-board members carry
+    # a subdistrict LABEL (District 1A..10B) — the numeric+optional-letter is the identity.
+    if not s: return None
+    m=re.search(r'(\d{1,2})\s*([ab])?',str(s),re.I)
+    return (m.group(1)+(m.group(2) or '').lower()) if m else None
+def extract_district(blob):
+    # Best-effort district token from free-text Office/CandidateName; DECLINE (None) on
+    # absence. Anchored on the word "district" (or an explicit subdistrict-letter form like
+    # "1A"/"10B") so a bare number is NOT read as a district — mirrors extract_ward's keyword
+    # anchor. Used only to break a ward-absent/district-present same-name collision.
+    m=re.search(r'district\s*(\d{1,2})\s*([ab])?',blob,re.I) or re.search(r'\b(\d{1,2})([ab])\b',blob,re.I)
+    return (m.group(1)+(m.group(2) or '').lower()) if m else None
 def cycle_for(date,cycles):
     if not date: return 'undated'
     rs=sorted(((k,c['start'],c['end']) for k,c in cycles.items()),key=lambda r:r[1])
@@ -109,12 +123,23 @@ def _tgt(e,method,needs_review):
             'match_method':method,'needs_review':needs_review}
 def _resolve(hits,office,cand,method):
     # one hit = identity-grade (needs_review False); a same-name COLLISION broken by
-    # ward/Office is flagged for review; an unresolved collision -> name_fallback.
+    # ward/district/Office is flagged for review; an unresolved collision -> name_fallback.
     if len(hits)==1: return _tgt(hits[0],method,False)
-    ward=extract_ward((office or '')+' '+(cand or ''))
+    blob=(office or '')+' '+(cand or '')
+    ward=extract_ward(blob)
     if ward is not None:
         w=[e for e in hits if e['ward']==ward]
         if len(w)==1: return _tgt(w[0],method,True)
+    # WARD-ABSENT / DISTRICT-PRESENT: school-board hits carry `district`, not `ward`, so the
+    # ward branch above can never break a same-name school-board collision. Break it on an
+    # EXACT district-token match instead (best-effort; decline on absence). Vintage-safe by
+    # construction: a row token that doesn't equal the entry's district-key simply declines
+    # to name_fallback. Preventive — no current expenditure resolves into a same-name cohort,
+    # so this is dormant until such a collision exists (cohort B).
+    dk=extract_district(blob)
+    if dk is not None:
+        dd=[e for e in hits if _district_key(e.get('district'))==dk]
+        if len(dd)==1: return _tgt(dd[0],method,True)
     return _tgt(hits[0],'name_fallback',True)
 def match_target_registry(row,by_committee,by_name,by_folded,by_surname):
     F=FIELD_MAP['exp']
