@@ -98,11 +98,24 @@
   function kebab(s) {
     return String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
   }
+  // Elections whose race slugs are the public/canonical ones — emitted BARE so existing
+  // URLs never change. Any OTHER election (the historical 2024 school board; boundaries
+  // redrawn with no crosswalk) gets its year prefixed, so cross-cycle district labels can
+  // never collide on the slug->id map. Keying off election_id makes the map collision-proof
+  // (Gate-1 ruling) without touching a single existing slug.
+  var BARE_SLUG_ELECTIONS = { '2026-school-board': 1, '2027-municipal': 1 };
+  function electionSlugPrefix(race) {
+    if (!race.election_id || BARE_SLUG_ELECTIONS[race.election_id]) return '';
+    var m = /^(\d{4})-/.exec(race.election_id);
+    return m ? m[1] + '-' : '';
+  }
   function raceSlug(race) {
-    if (race.district) return kebab(race.district);              // "District 2A" -> "district-2a"
-    if (race.ward) return 'ward-' + race.ward;                   // ward "23"      -> "ward-23"
-    return kebab({ school_board_president: 'school-board-president', mayor: 'mayor',
+    var base;
+    if (race.district) base = kebab(race.district);              // "District 2A" -> "district-2a"
+    else if (race.ward) base = 'ward-' + race.ward;             // ward "23"      -> "ward-23"
+    else base = kebab({ school_board_president: 'school-board-president', mayor: 'mayor',
                    city_clerk: 'city-clerk', city_treasurer: 'city-treasurer' }[race.office] || race.office);
+    return electionSlugPrefix(race) + base;                      // "2024-district-3" for the 2024 backfill
   }
   function candidateSlug(cand, race) { return kebab(cand.name) + '-' + raceSlug(race); }
   function raceCode(race) {           // short chip label
@@ -817,12 +830,33 @@
   }
 
   // Grouped race list for the office nav + picker (browse layer).
+  // Dormant-election gate (HALT-P1-A): the set of election_ids that actually carry
+  // candidacies. A cycle-scoped election with none (the 2024 backfill, before P1-B) must
+  // NOT surface as empty race shells in ANY office-scoped race ENUMERATION (nav, browse,
+  // spend grouping). Candidate-driven listers are auto-safe (a candidacy-less race yields
+  // no rows); only functions that walk the race list need this. Gated at the ELECTION level
+  // so a genuinely forming race in a LIVE election (e.g. a 2027-municipal ward with no
+  // filers yet) still shows. Byte-identical today: both current elections have candidacies;
+  // only 2024 lacks. Memoized per index.
+  function liveElectionSet(index) {
+    if (index._memo && index._memo.liveElections) return index._memo.liveElections;
+    var s = {};
+    (index.candidates || []).forEach(function (c) {
+      var r = index.raceById[c.race_id]; if (r && r.election_id) s[r.election_id] = 1;
+    });
+    if (index._memo) index._memo.liveElections = s;
+    return s;
+  }
+  function raceIsLive(index, r) { return !r.election_id || !!liveElectionSet(index)[r.election_id]; }
+
   function officeRaces(index, office) {
     var groups = OFFICE_GROUPS[office] || [];
     return {
       office: office,
       groups: groups.map(function (g) {
-        var rs = index.races.filter(function (r) { return g.offices.indexOf(r.office) >= 0; }).sort(byRaceOrder);
+        var rs = index.races.filter(function (r) {
+          return g.offices.indexOf(r.office) >= 0 && raceIsLive(index, r);
+        }).sort(byRaceOrder);
         return {
           label: g.label,
           races: rs.map(function (r) {
@@ -839,7 +873,7 @@
 
   function raceBrowse(index, office, cycle) {
     var offices = OFFICE_RACE_OFFICES[office] || [];
-    var races = index.races.filter(function (r) { return offices.indexOf(r.office) >= 0; }).sort(byRaceOrder);
+    var races = index.races.filter(function (r) { return offices.indexOf(r.office) >= 0 && raceIsLive(index, r); }).sort(byRaceOrder);
     return {
       office: office, cycle: cycle || null,
       races: races.map(function (r) {
@@ -1018,7 +1052,7 @@
   // formula) is attached so the inline card's bars fill against the candidate's own race.
   function spendByCandidateGrouped(index, office, cycle, win, raceFilter, expandedId) {
     var offs = OFFICE_RACE_OFFICES[office] || [];
-    var scoped = (index.races || []).filter(function (r) { return offs.indexOf(r.office) >= 0; });
+    var scoped = (index.races || []).filter(function (r) { return offs.indexOf(r.office) >= 0 && raceIsLive(index, r); });
     scoped.sort(function (a, b) { return raceOrderKey(a) - raceOrderKey(b); });
     var groups = scoped
       .filter(function (r) { return !raceFilter || raceFilter === 'all' || r.id === raceFilter; })

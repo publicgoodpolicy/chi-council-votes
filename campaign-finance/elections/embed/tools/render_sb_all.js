@@ -69,7 +69,7 @@ console.log('\n=== invariant 7 (combined All-Elections, FIREWALL): cross-electio
 var zAll = R.renderRaceElections(VM['sb-d07'], 'all');
 ok('Zaccor All: combined header "across both elections (2024 + 2026)"', /across both elections \(2024 \+ 2026\)/.test(zAll));
 ok('Zaccor All: firewall framing (redrawn boundaries; NOT single-race spending)',
-  /redrawn district boundaries/.test(zAll) && /not single-race spending/.test(zAll));
+  /redrawn between them/.test(zAll) && /not single-race spending/.test(zAll));   // HALT-P1-A: :777 copy harmonized (Gate-A A.1 ruling)
 ok('Zaccor All: 2024 provenance "2024: District 4" preserved in combined', /2024: District 4/.test(zAll));
 ok('Zaccor All: NOT segmented (no per-election blocks, no undated line)',
   zAll.indexOf('elec-block-h') < 0 && zAll.indexOf('Undated small-dollar') < 0);

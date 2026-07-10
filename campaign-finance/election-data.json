@@ -1,6 +1,12 @@
 {
   "elections": [
     {
+      "id": "2024-school-board",
+      "label": "2024 Chicago Board of Education",
+      "date": "2024-11-05",
+      "runoff_date": null
+    },
+    {
       "id": "2026-school-board",
       "label": "2026 Chicago Board of Education",
       "date": "2026-11-03",
@@ -223,6 +229,106 @@
       "geo_key": 20,
       "geo_source": "schoolboard.geojson",
       "status": "filed"
+    },
+    {
+      "id": "sb-2024-d1",
+      "election_id": "2024-school-board",
+      "office": "school_board_member",
+      "district": "District 1",
+      "label": "School Board, District 1 (2024)",
+      "geo_key": null,
+      "geo_source": null,
+      "status": "certified"
+    },
+    {
+      "id": "sb-2024-d2",
+      "election_id": "2024-school-board",
+      "office": "school_board_member",
+      "district": "District 2",
+      "label": "School Board, District 2 (2024)",
+      "geo_key": null,
+      "geo_source": null,
+      "status": "certified"
+    },
+    {
+      "id": "sb-2024-d3",
+      "election_id": "2024-school-board",
+      "office": "school_board_member",
+      "district": "District 3",
+      "label": "School Board, District 3 (2024)",
+      "geo_key": null,
+      "geo_source": null,
+      "status": "certified"
+    },
+    {
+      "id": "sb-2024-d4",
+      "election_id": "2024-school-board",
+      "office": "school_board_member",
+      "district": "District 4",
+      "label": "School Board, District 4 (2024)",
+      "geo_key": null,
+      "geo_source": null,
+      "status": "certified"
+    },
+    {
+      "id": "sb-2024-d5",
+      "election_id": "2024-school-board",
+      "office": "school_board_member",
+      "district": "District 5",
+      "label": "School Board, District 5 (2024)",
+      "geo_key": null,
+      "geo_source": null,
+      "status": "certified"
+    },
+    {
+      "id": "sb-2024-d6",
+      "election_id": "2024-school-board",
+      "office": "school_board_member",
+      "district": "District 6",
+      "label": "School Board, District 6 (2024)",
+      "geo_key": null,
+      "geo_source": null,
+      "status": "certified"
+    },
+    {
+      "id": "sb-2024-d7",
+      "election_id": "2024-school-board",
+      "office": "school_board_member",
+      "district": "District 7",
+      "label": "School Board, District 7 (2024)",
+      "geo_key": null,
+      "geo_source": null,
+      "status": "certified"
+    },
+    {
+      "id": "sb-2024-d8",
+      "election_id": "2024-school-board",
+      "office": "school_board_member",
+      "district": "District 8",
+      "label": "School Board, District 8 (2024)",
+      "geo_key": null,
+      "geo_source": null,
+      "status": "certified"
+    },
+    {
+      "id": "sb-2024-d9",
+      "election_id": "2024-school-board",
+      "office": "school_board_member",
+      "district": "District 9",
+      "label": "School Board, District 9 (2024)",
+      "geo_key": null,
+      "geo_source": null,
+      "status": "certified"
+    },
+    {
+      "id": "sb-2024-d10",
+      "election_id": "2024-school-board",
+      "office": "school_board_member",
+      "district": "District 10",
+      "label": "School Board, District 10 (2024)",
+      "geo_key": null,
+      "geo_source": null,
+      "status": "certified"
     },
     {
       "id": "mayor",
@@ -230577,7 +230683,7 @@
       "color": "#5a6a7a"
     }
   },
-  "seed_generated_at": "2026-07-07T17:17:49",
+  "seed_generated_at": "2026-07-10T09:00:29",
   "cycles": {
     "2015": {
       "label": "2011 \u2013 2015 cycle",

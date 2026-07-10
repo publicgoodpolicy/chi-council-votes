@@ -86,6 +86,12 @@ def repo():
 
 
 ELECTIONS = [
+    # 2024: the FIRST elected CPS board -- 10 single-member districts, no elected president
+    # (the 2024 president was appointed). Districts redrawn for 2026 (10 -> 20 subdistricts +
+    # an elected president); NO boundary crosswalk (ruled). Dormant in HALT-P1-A: races exist
+    # but carry no candidacies until P1-B backfills them.
+    {"id": "2024-school-board", "label": "2024 Chicago Board of Education",
+     "date": "2024-11-05", "runoff_date": None},
     {"id": "2026-school-board", "label": "2026 Chicago Board of Education",
      "date": "2026-11-03", "runoff_date": None},
     {"id": "2027-municipal", "label": "2027 Chicago Municipal General",
@@ -169,6 +175,17 @@ def generate_races(repo_root):
                           "office": "school_board_member", "district": str(n),
                           "label": "School Board, District %d" % n,
                           "geo_key": n, "geo_source": None, "status": "filed"})
+
+    # 2024 school board (dormant backfill, HALT-P1-A): 10 single-member districts, NO
+    # president. Hand-authored, not geojson-derived -- the 2024 boundaries are a past map
+    # with no crosswalk to 2026, so geo is synthetic (geo_key/geo_source=None, the same
+    # fallback the 2026 else-branch uses). Cycle-scoped ids/slugs (sb-2024-dN) keep these
+    # disjoint from the 2026 subdistricts. No candidacies until P1-B.
+    for n in range(1, 11):
+        races.append({"id": "sb-2024-d%d" % n, "election_id": "2024-school-board",
+                      "office": "school_board_member", "district": "District %d" % n,
+                      "label": "School Board, District %d (2024)" % n,
+                      "geo_key": None, "geo_source": None, "status": "certified"})
 
     for oid, office, label in [("mayor", "mayor", "Mayor"),
                                ("city-clerk", "city_clerk", "City Clerk"),

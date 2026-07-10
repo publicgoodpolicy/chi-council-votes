@@ -751,14 +751,21 @@
     return ({ school_board_member: 'board-member', school_board_president: 'board president',
               alderperson: 'alderperson', mayor: 'mayor', school_board_president_label: 'board president' })[o] || o;
   }
-  function elecCombinedBlock(c, scale, raceOffice) {
+  function elecCombinedBlock(c, scale, raceOffice, thisId) {
     var ev = c.combined;
     if (!ev || !elecHasMoney(ev.figures)) return '';
     var win = ev.win || {};
     var winAttrs = ' data-win-start="' + esc(win.start || '') + '" data-win-end="' + esc(win.end || '') + '"';
     var base = 'eleccomb-' + esc(c.slug);
-    var e24 = c.byElection['2024'];
-    var has24 = e24 && elecHasMoney(e24.figures);
+    // Prior-election money = the present byElection bucket(s) other than the current
+    // ("this") election. Generalized off the id set so P1-B/D can load more than two
+    // elections without a code change; today only 2024/2026 exist, so this resolves to the
+    // 2024 bucket and the output is identical. Was: c.byElection['2024'].
+    var priorKey = Object.keys(c.byElection || {}).filter(function (k) {
+      return k !== thisId && elecHasMoney((c.byElection[k] || {}).figures);
+    }).sort().reverse()[0] || null;
+    var ePrior = priorKey ? c.byElection[priorKey] : null;
+    var has24 = !!ePrior;
     var pe = c.priorElection || {};
     // STRUCTURAL office-change detection: the prior election's office differs from the
     // current race office (e.g. a 2024 board-MEMBER seat -> the 2026 board-PRESIDENT seat).
@@ -774,9 +781,10 @@
         '<b>not single-race spending</b>. Per-election detail is in the This / Last tabs.';
     } else if (has24) {
       meta = '· across both elections (2024 + 2026)';
-      prov = 'This total combines <b>two separate elections under redrawn district boundaries</b> — ' +
-        esc(e24.label) + ' and 2026 — so it spans two <b>different</b> districts. It is a cross-election sum, ' +
-        '<b>not single-race spending</b>. Per-election detail is in the This / Last tabs.';
+      prov = 'This total combines <b>two separate elections</b> — ' + esc(ePrior.label) +
+        ' and 2026. Board districts were <b>redrawn between them</b>, so it spans two different ' +
+        'district maps; it is a <b>cross-election sum, not single-race spending</b>. Per-election ' +
+        'detail is in the This / Last tabs.';
     } else {
       meta = '· 2026 election only';
       prov = 'From the 2026 election only (no 2024 election money to combine).';
@@ -809,11 +817,12 @@
         var f = c.combined && c.combined.figures; if (!f) return;
         combScale = Math.max(combScale, f.contributions, f.selfFunding, f.independentSupport, f.independentOpposition);
       });
-      body = '<p class="contrib-note"><b>“All elections” combines each candidate’s 2024 and 2026 money</b> into one total ' +
-        'per stream (streams still separate). The districts were <b>redrawn between the two elections</b>, so a combined ' +
-        'total spans two different districts — it is a <b>cross-election sum, not single-race spending</b>. The 2024 ' +
+      var thisId = (vm.electionIds || [])[0];   // "this" (current) election = newest id
+      body = '<p class="contrib-note"><b>“All elections” combines each candidate’s totals</b> into one total ' +
+        'per stream (streams still separate). Board districts were <b>redrawn between the 2024 and 2026 elections</b>, so a combined ' +
+        'total spans two different district maps — it is a <b>cross-election sum, not single-race spending</b>. The 2024 ' +
         'portion keeps its “2024: District N” label.</p>' +
-        vm.candidates.map(function (c) { return elecCombinedBlock(c, combScale, vm.race.office); }).filter(Boolean).join('');
+        vm.candidates.map(function (c) { return elecCombinedBlock(c, combScale, vm.race.office, thisId); }).filter(Boolean).join('');
     } else {
       body = vm.candidates.map(function (c) { return elecCandBlock(c, active, roleOf[active], scale); }).join('');
     }
@@ -961,6 +970,10 @@
       'appears on the ballot is shown as a status on their page; it is never a filter on whose money we track. ' +
       'Committees are shown per election cycle; a candidate’s committee history is shown as their committee ' +
       'filed it.</p>' +
+      '<h3>Districts were redrawn between elections</h3>' +
+      '<p>Board districts were redrawn between the 2024 election (10 districts) and 2026 ' +
+      '(20 districts plus an elected president); a district number does not refer to the ' +
+      'same geography across cycles.</p>' +
       '<h3>Where the data comes from</h3>' +
       '<p>Everything here derives from committees’ own filings with the Illinois State Board of Elections: ' +
       'itemized receipts (Schedule A), quarterly disclosure reports (D-2), interim large-contribution reports ' +
