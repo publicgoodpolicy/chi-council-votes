@@ -136,6 +136,7 @@
       '.ipg-elect .chip-status{font-size:11px;font-weight:500;border-radius:20px;padding:2px 10px;background:var(--tan);color:var(--ink-soft);margin-left:4px;}' +
       '.ipg-elect .chip-status.s-elected{background:#E5EFE9;color:var(--teal);}' +
       '.ipg-elect .chip-status.wi{background:#F4E3DC;color:var(--coral);}' +
+      '.ipg-elect .result-note{font-size:12px;color:var(--ink-soft);margin:2px 0 8px;}' +
       '.ipg-elect .committee{font-size:12.5px;color:var(--ink-soft);margin:0 0 18px;}' +
       '.ipg-elect .bars{display:flex;flex-direction:column;gap:13px;}' +
       '.ipg-elect .barrow{display:grid;grid-template-columns:170px 1fr 140px;align-items:center;gap:12px;}' +
@@ -622,9 +623,17 @@
   function statusPill(c) {
     if (!c.result) return '';
     var lbl = RESULT_LABEL[c.result] || c.result;
-    var title = c.result === 'challenged' ? ' title="' + esc(CHALLENGED_TITLE) + '"' : '';
-    return '<span class="chip-status s-' + esc(c.result) + '"' + title + '>' + esc(lbl) + '</span>' +
+    return '<span class="chip-status s-' + esc(c.result) + '">' + esc(lbl) + '</span>' +
       (c.writeIn ? '<span class="chip-status wi">Write-in</span>' : '');
+  }
+  // Always-visible explainer for a result that needs one (challenged). Replaces a native
+  // `title` tooltip, which was undiscoverable on hover — the explainer renders inline so it
+  // always does its work (Ishan's ruling: keep the label CBOE-native, let the explainer carry
+  // the meaning). Keyed by result; only `challenged` has one today.
+  var RESULT_NOTE = { challenged: CHALLENGED_TITLE };
+  function resultNote(c) {
+    var s = c.result && RESULT_NOTE[c.result];
+    return s ? '<p class="result-note">' + esc(s) + '</p>' : '';
   }
   // Four-way finance facet copy, keyed by the data-side finance_facet enum. committee_receipts
   // needs no line (the committee + bars render the money); the other three are the ruled strings.
@@ -664,7 +673,7 @@
         (c.committee.sunshineUrl ? ' · <a href="' + esc(c.committee.sunshineUrl) + '" target="_blank" rel="noopener">Illinois Sunshine ↗</a>' : '') + '</p>'
       : '';
     return '<article class="card" id="cand-' + esc(c.slug) + '">' +
-      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' + chips + '</div>' + committeeLine +
+      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' + chips + '</div>' + resultNote(c) + committeeLine +
       '<div class="bars">' + contribBar + contribPanel + supportBar + supportPanel + opposeBar + opposePanel + '</div>' + selfLine +
       '<p class="caption">Independent support and opposition are spending by outside groups, reported by those ' +
       'groups and not coordinated with the campaign. Figures are shown separately, never added together.</p></article>';
@@ -685,7 +694,7 @@
     // not yet identified (no facet).
     var fl = facetLine(c);
     return '<article class="card"><div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' +
-      (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') + statusPill(c) + '</div>' +
+      (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') + statusPill(c) + '</div>' + resultNote(c) +
       (fl || '<p class="committee">Finance data still populating — committee not yet identified.</p>') + '</article>';
   }
 
