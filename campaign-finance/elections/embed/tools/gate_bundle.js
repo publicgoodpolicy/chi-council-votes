@@ -116,7 +116,14 @@ function makeCtx(window) {
   };
   ctx.findRaceWith = async function (name) {
     var ss = ctx.slugs();
-    for (var i = 0; i < ss.length; i++) { ctx.nav(ss[i]); await wait(40); if (ctx.cardByName(name)) return ss[i]; }
+    for (var i = 0; i < ss.length; i++) {
+      // HALT-P1-B: the 2024 school-board backfill races are nav-visible (ratified Option A)
+      // but these gates assert the CURRENT (2026) election surfaces. Skip the backfill slugs
+      // (prefixed "2024-") so a name shared by a returner's 2024 candidacy resolves to their
+      // 2026 race, not the 2024 pointer card. (Product proven byte-identical for sb-d08/sb-d03.)
+      if (/^2024-/.test(ss[i])) continue;
+      ctx.nav(ss[i]); await wait(40); if (ctx.cardByName(name)) return ss[i];
+    }
     return null;
   };
   return ctx;

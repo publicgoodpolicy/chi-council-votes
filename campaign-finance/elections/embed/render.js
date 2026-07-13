@@ -133,6 +133,9 @@
       '.ipg-elect .cand-name{font-family:var(--display);font-weight:600;font-size:21px;margin:0;}' +
       '.ipg-elect .chip-inc{font-size:11px;font-weight:500;color:var(--teal);background:#E5EFE9;border-radius:20px;padding:2px 10px;}' +
       '.ipg-elect .chip-self{font-size:11px;font-weight:500;color:var(--coral);background:#F4E3DC;border-radius:20px;padding:2px 10px;}' +
+      '.ipg-elect .chip-status{font-size:11px;font-weight:500;border-radius:20px;padding:2px 10px;background:var(--tan);color:var(--ink-soft);margin-left:4px;}' +
+      '.ipg-elect .chip-status.s-elected{background:#E5EFE9;color:var(--teal);}' +
+      '.ipg-elect .chip-status.wi{background:#F4E3DC;color:var(--coral);}' +
       '.ipg-elect .committee{font-size:12.5px;color:var(--ink-soft);margin:0 0 18px;}' +
       '.ipg-elect .bars{display:flex;flex-direction:column;gap:13px;}' +
       '.ipg-elect .barrow{display:grid;grid-template-columns:170px 1fr 140px;align-items:center;gap:12px;}' +
@@ -610,10 +613,36 @@
 
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
 
+  // HALT-P1-B: the 2024 CBOE-native RESULT axis renders as its own pill (separate from the
+  // filing-lifecycle status), with a write-in marker carried BESIDE the base result, never
+  // fused. Copy lives here (presentation) keyed by the data-side enum (data carries semantics).
+  var RESULT_LABEL = { elected: 'Elected', defeated: 'Defeated', withdrawn: 'Withdrawn',
+    removed: 'Removed', challenged: 'Challenged' };
+  var CHALLENGED_TITLE = 'Ballot petitions challenged; objection sustained before certification';
+  function statusPill(c) {
+    if (!c.result) return '';
+    var lbl = RESULT_LABEL[c.result] || c.result;
+    var title = c.result === 'challenged' ? ' title="' + esc(CHALLENGED_TITLE) + '"' : '';
+    return '<span class="chip-status s-' + esc(c.result) + '"' + title + '>' + esc(lbl) + '</span>' +
+      (c.writeIn ? '<span class="chip-status wi">Write-in</span>' : '');
+  }
+  // Four-way finance facet copy, keyed by the data-side finance_facet enum. committee_receipts
+  // needs no line (the committee + bars render the money); the other three are the ruled strings.
+  var FINANCE_FACET = {
+    committee_no_itemized: 'No itemized contributions reported.',
+    no_committee: 'No campaign committee on file with the Illinois State Board of Elections.',
+    on_current_record: 'Campaign finance for this candidate is reported under their current committee — see their 2026 race entry.'
+  };
+  function facetLine(c) {
+    var s = FINANCE_FACET[c.financeFacet];
+    return s ? '<p class="committee facet-' + esc(c.financeFacet) + '">' + esc(s) + '</p>' : '';
+  }
+
   function card(c, scale, idPrefix) {
     var f = c.figures;
     var mostlySelf = f.contributions.total > 0 && (f.contributions.selfFunded / f.contributions.total) >= 0.5;
     var chips = (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') +
+      statusPill(c) +
       (mostlySelf ? '<span class="chip-self">Mostly self-funded</span>' : '');
     var base = (idPrefix || 'd-') + esc(c.slug);   // raceView passes nothing -> 'd-' (byte-identical); grouped passes 'g-'
     var hasSup = f.independentSupport > 0, hasOpp = f.independentOpposition > 0;
@@ -650,9 +679,14 @@
   }
 
   function pendingCard(c) {
+    // A committee-less card. For 2024 records an explicit finance_facet drives the ruled
+    // copy (on_current_record pointer / no-itemized / no-committee); the "still populating"
+    // fallback stays for its legitimate use — a 2026 candidate whose committee is genuinely
+    // not yet identified (no facet).
+    var fl = facetLine(c);
     return '<article class="card"><div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' +
-      (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') + '</div>' +
-      '<p class="committee">Finance data still populating — committee not yet identified.</p></article>';
+      (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') + statusPill(c) + '</div>' +
+      (fl || '<p class="committee">Finance data still populating — committee not yet identified.</p>') + '</article>';
   }
 
   // ---- This / Last / All-Elections toggle (vm = data.viewModels.raceElections) ----
@@ -863,8 +897,12 @@
     var anyPending = vm.candidates.some(function (c) { return !c.hasFinance; });
     var cards = vm.candidates.map(function (c) { return c.hasFinance ? card(c, scale) : pendingCard(c); }).join('');
     return head +
-      (anyPending ? '<p class="field-note">▸ <span><b>Field still being added.</b> Candidates with registered ' +
-        'committees are shown; others appear as they file and finance is processed.</span></p>' : '') +
+      // The "field still being added" note describes a filling-in current race. A certified
+      // 2024 race is a complete past field (every candidacy authored in one commit, each with
+      // an explicit finance facet), so the note is suppressed there.
+      (anyPending && vm.race.election_id !== '2024-school-board'
+        ? '<p class="field-note">▸ <span><b>Field still being added.</b> Candidates with registered ' +
+          'committees are shown; others appear as they file and finance is processed.</span></p>' : '') +
       legend() + '<div style="height:18px"></div>' + cards;
   }
 

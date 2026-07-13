@@ -278,7 +278,7 @@ def build_candidates(race_map, race_ids):
         rid = c.get("race_id")
         if rid not in race_ids:
             bad.append((candidate_id, rid))
-        cands.append({
+        rec = {
             "id": c.get("candidate_id", candidate_id),
             "race_id": rid,
             "name": c.get("name"),
@@ -289,7 +289,18 @@ def build_candidates(race_map, race_ids):
             "vacating_for": c.get("vacating_for"),
             "bio": c.get("bio", {}),
             "positions": None,
-        })
+        }
+        # HALT-P1-B: the 2024 CBOE-native RESULT axis (elected/defeated/withdrawn/
+        # removed/challenged) is a SEPARATE field from the filing-lifecycle `status`,
+        # alongside an explicit finance_facet enum, a write-in marker, and the empty-
+        # committee sbe reference. Propagated CONDITIONALLY so pre-P1-B candidate_stubs
+        # (which carry none of these keys) still produce byte-identical records.
+        for k in ("result", "finance_facet", "committee_sbe_ref"):
+            if c.get(k) is not None:
+                rec[k] = c[k]
+        if c.get("write_in"):
+            rec["write_in"] = True
+        cands.append(rec)
     return cands, bad
 
 

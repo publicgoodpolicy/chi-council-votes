@@ -98,6 +98,17 @@ def build_target_index(d):
     by_committee={}; by_name=defaultdict(list); by_folded=defaultdict(list); by_surname=defaultdict(list)
     for cand in d.get('candidates',[]):
         r=races_by_id.get(cand.get('race_id'),{})
+        # HALT-P1-B SCOPE GUARD (ratified deviation from "IE code untouched"): the IE
+        # target index resolves against the CURRENT elections only. The 2024 school-board
+        # backfill candidacies are excluded until P1-E wires 2024-IE routing deliberately.
+        # Without this, authoring the 2024 registry silently re-routes/unmatches live 2026
+        # IE targets -- the dormant same-name district-collision branch (_resolve) activates
+        # (e.g. the 29 Carlos Rivas surname_plus_given rows go unmatched, cohort-B names
+        # newly match). Gate 4.5.4 IE byte-identity (295/29/4, 328 rows, $2,934,615.20) IS
+        # the dormancy proof. SATISFACTION CONDITION: removing this guard is P1-E's FIRST
+        # act, cross-referenced with the §8.1 corroboration-fragility ledger entry.
+        if r.get('election_id')=='2024-school-board':
+            continue
         w=r.get('ward'); ward=int(w) if w not in (None,'') else None
         mt=_mtoks(cand.get('name'))
         entry={'candidate_id':cand.get('id'),'race_id':cand.get('race_id'),

@@ -818,6 +818,10 @@
         return {
           id: c.id, slug: candidateSlug(c, race), name: c.name,
           incumbent: !!c.incumbent, status: c.status,
+          // HALT-P1-B: 2024 CBOE-native result axis + write-in marker + finance_facet enum
+          // (+ empty-committee sbe ref) pass through to render; null/absent for 2026 records.
+          result: c.result || null, writeIn: !!c.write_in,
+          financeFacet: c.finance_facet || null, committeeSbeRef: c.committee_sbe_ref || null,
           hasFinance: hasFinance, stillPopulating: !hasFinance,
           committee: hasFinance ? committeeMeta(index, c.id) : null,
           figures: hasFinance ? candidateFigures(index, c.id, cycle) : null,
@@ -1019,11 +1023,24 @@
   // 2) Spend by candidate — keyed on the CANDIDATE (target_candidate_id), NOT the
   // committee join, so a name-matched candidate with no committee still shows their
   // IE total. Three figures kept separate. Neutral (alphabetical) order.
+  // HALT-P1-B AGGREGATE SCOPE GUARD (ratified, Option A / nav-visible-election-scoped):
+  // the office-scoped ANALYTICAL views (spend-by-candidate, the industry/flag cross-tabs,
+  // self-funding) report the CURRENT election only. The 2024 school-board backfill stays
+  // browsable as its own race pages — raceIsLive/officeRaces keep it NAV-VISIBLE — but is
+  // excluded from these 2026 aggregates, so populating it (P1-B) does not leak 2024 money
+  // into the 2026 spend/industry/self totals. Before P1-B the 2024 races were empty, so
+  // this leak was latent; gate_bundle 74/0 with the guard IS the dormancy proof (the 2026
+  // aggregates are byte-identical to pre-P1-B). SATISFACTION CONDITION: removing this guard
+  // is part of P1-D's cycle-parity work (ledger cross-ref; paired with the ingest_ie IE
+  // scope-guard whose removal opens P1-E — two guards, two arc-stages).
+  var AGG_EXCLUDED_ELECTIONS = { '2024-school-board': 1 };
+  function inAggScope(race) { return !race || !AGG_EXCLUDED_ELECTIONS[race.election_id]; }
+
   function spendByCandidate(index, office, cycle, win) {
     var offs = OFFICE_RACE_OFFICES[office] || [], out = [];
     for (var i = 0; i < index.candidates.length; i++) {
       var c = index.candidates[i], race = index.raceById[c.race_id] || {};
-      if (offs.indexOf(race.office) < 0) continue;
+      if (offs.indexOf(race.office) < 0 || !inAggScope(race)) continue;
       if (c.vacating_for) continue;                  // vacating incumbents listed in their new race
       var f = candidateFigures(index, c.id, cycle, win);  // works for committee-less candidates (direct 0)
       if (!(f.contributions.total > 0 || f.independentSupport > 0 || f.independentOpposition > 0)) continue;
@@ -1052,7 +1069,7 @@
   // formula) is attached so the inline card's bars fill against the candidate's own race.
   function spendByCandidateGrouped(index, office, cycle, win, raceFilter, expandedId) {
     var offs = OFFICE_RACE_OFFICES[office] || [];
-    var scoped = (index.races || []).filter(function (r) { return offs.indexOf(r.office) >= 0 && raceIsLive(index, r); });
+    var scoped = (index.races || []).filter(function (r) { return offs.indexOf(r.office) >= 0 && raceIsLive(index, r) && inAggScope(r); });
     scoped.sort(function (a, b) { return raceOrderKey(a) - raceOrderKey(b); });
     var groups = scoped
       .filter(function (r) { return !raceFilter || raceFilter === 'all' || r.id === raceFilter; })
@@ -1098,7 +1115,7 @@
     }
     for (var i = 0; i < index.candidates.length; i++) {
       var cand = index.candidates[i], race = index.raceById[cand.race_id] || {};
-      if (offs.indexOf(race.office) < 0 || cand.vacating_for) continue;
+      if (offs.indexOf(race.office) < 0 || cand.vacating_for || !inAggScope(race)) continue;
       var cid = cand.id;
       var dr = index.directByCandidate[cid] || [];
       for (var d = 0; d < dr.length; d++) {
