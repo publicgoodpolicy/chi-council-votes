@@ -117,7 +117,7 @@
     },
     "39820": {"candidate_id":"dones-sb-d06","name":"Jason Dónes","race_id":"sb-d06","incumbent":false,"status":"filed","prior_election":{"election":"2024","label":"2024: District 3"},"bio":{}},
     "39786": {"candidate_id":"rivas-sb-d06","name":"Carlos A. Rivas Jr.","race_id":"sb-d06","incumbent":true,"status":"filed","prior_election":{"election":"2024","label":"2024: District 3"},"bio":{}},
-    "41076": {"candidate_id":"sherratt-sb-d07","name":"Elen Sherratt","race_id":"sb-d07","incumbent":false,"status":"filed","bio":{}},
+    "41076": {"candidate_id":"sherratt-sb-d07","name":"Ellen Sherratt","race_id":"sb-d07","incumbent":false,"status":"filed","bio":{}},
     "39866": {"candidate_id":"zaccor-sb-d07","name":"Karen Zaccor","race_id":"sb-d07","incumbent":true,"status":"filed","prior_election":{"election":"2024","label":"2024: District 4"},"bio":{}},
     "39858": {"candidate_id":"rosenfeld-sb-d08","name":"Ellen Rosenfeld","race_id":"sb-d08","incumbent":true,"status":"filed","prior_election":{"election":"2024","label":"2024: District 4"},"bio":{}},
     "39853": {"candidate_id":"brown-sb-d09","name":"Aaron \"Jitu\" Brown","race_id":"sb-d09","incumbent":true,"status":"filed","prior_election":{"election":"2024","label":"2024: District 5"},"bio":{}},
@@ -1511,6 +1511,9 @@
     "parrott-sheffer-sb-2024-d10": {"candidate_id":"parrott-sheffer-sb-2024-d10","name":"Adam Parrott-Sheffer","race_id":"sb-2024-d10","committee_id":"39765","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
     "smith-sb-2024-d10": {"candidate_id":"smith-sb-2024-d10","name":"Che 'Rhymefest' Smith","race_id":"sb-2024-d10","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
     "walton-sb-2024-d10": {"candidate_id":"walton-sb-2024-d10","name":"James M. Walton Jr.","race_id":"sb-2024-d10","committee_id":"39874","incumbent":false,"status":"filed","result":"withdrawn","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "ward-sb-2024-d10": {"candidate_id":"ward-sb-2024-d10","name":"Nathaniel Ward","race_id":"sb-2024-d10","committee_id":null,"incumbent":false,"status":"filed","result":"removed","finance_facet":"no_committee","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}}
+    "ward-sb-2024-d10": {"candidate_id":"ward-sb-2024-d10","name":"Nathaniel Ward","race_id":"sb-2024-d10","committee_id":null,"incumbent":false,"status":"filed","result":"removed","finance_facet":"no_committee","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
+    "cand-dominguez-sb-president": {"candidate_id": "cand-dominguez-sb-president", "name": "Hilario Dominguez", "race_id": "sb-president", "committee_id": null, "incumbent": false, "status": "filed", "bio": {"source": "filed candidate, committee pending"}},
+    "cand-luczak-sb-d01": {"candidate_id": "cand-luczak-sb-d01", "name": "Margie B. Luczak", "race_id": "sb-d01", "committee_id": null, "incumbent": false, "status": "filed", "bio": {"source": "filed candidate, committee pending"}},
+    "cand-morales-sb-d03": {"candidate_id": "cand-morales-sb-d03", "name": "Hector Morales", "race_id": "sb-d03", "committee_id": null, "incumbent": false, "status": "filed", "bio": {"source": "filed candidate, committee pending"}}
   }
 }
