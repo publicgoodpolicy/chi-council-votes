@@ -61,6 +61,13 @@ DEFAULT_DATA_PATH = Path(__file__).parent.parent / 'council-data.json'
 # Recognized rollup roles; anything else falls back to 'related'.
 VALID_ROLES = {'parent', 'alt-name', 'affiliated-pac', 'subsidiary', 'related'}
 
+# Recognized person-link evidence classes (HALT-P1-C, ratified 2026-07-13). 'shared-committee'
+# is primary. 'name-match' is deliberately NOT a class — name agreement is corroboration
+# recorded inside the `evidence` cell, never the class (4 returner pairs carry name variance).
+# Unlike VALID_ROLES, an unknown class does NOT fall back: the Person Links tab is authority
+# for a firewalled entity (by_person, direct-only), so a typo must STOP the build loudly.
+VALID_PERSON_EVIDENCE_CLASSES = {'shared-committee', 'district-lineage', 'documented'}
+
 
 # ============================================================
 # SHEET PARSING
@@ -290,6 +297,69 @@ def read_donor_clusters(sheet) -> dict[str, dict]:
             # a 'parent' row nominates the canonical when the column is missing
             if role == 'parent' and not g['canonical_id']:
                 g['canonical_id'] = did
+    return groups
+
+
+def _candidacy_election_index(data):
+    """{candidate_id: election_id}, resolved candidate.race_id -> race.election_id.
+    The substrate for the person-link role trip-wire."""
+    race_elec = {r['id']: r.get('election_id') for r in data.get('races', [])}
+    return {c['id']: race_elec.get(c.get('race_id')) for c in data.get('candidates', [])}
+
+
+def read_person_links(sheet, data):
+    """Read the Person Links tab (HALT-P1-C). Membership model: ONE row per
+    (person, candidacy). Columns:
+      person_id | candidacy_id | role | evidence_class | evidence | approved_by | approved_date | notes
+
+    Returns {person_id: {'candidacies': [ {candidacy_id, election_id, evidence_class,
+             evidence, approved_by, approved_date, notes}, ... ]}}.
+
+    Modeled on read_donor_clusters, with THREE loud trip-wires — SystemExit, never a
+    warning: the Person Links tab is authority for by_person (a firewalled, direct-only
+    entity), so a bad row must stop the build, not silently degrade it.
+      1. candidacy_id must resolve to a candidate record;
+      2. role must EQUAL that candidacy's election id VERBATIM (ratified: role is the
+         election id, machine-asserted here so nothing goes stale at cycle turnover);
+      3. evidence_class must be in VALID_PERSON_EVIDENCE_CLASSES.
+    Absent tab is tolerated (returns {}), consistent with _worksheet_records.
+    """
+    rows = _worksheet_records(sheet, 'Person Links')
+    if rows is None:
+        return {}
+    elec_of = _candidacy_election_index(data)
+    groups: dict[str, dict] = {}
+    for i, row in enumerate(rows, start=2):  # sheet row 1 is the header
+        pid = (str(row.get('person_id') or '')).strip()
+        cand = (str(row.get('candidacy_id') or '')).strip()
+        if not pid and not cand:
+            continue  # fully blank spacer row
+        if not pid or not cand:
+            raise SystemExit(f"[person-links] row {i}: person_id and candidacy_id are both "
+                             f"required (got person_id={pid!r} candidacy_id={cand!r})")
+        role = (str(row.get('role') or '')).strip()
+        ecl = (str(row.get('evidence_class') or '')).strip()
+        if cand not in elec_of:
+            raise SystemExit(f"[person-links] row {i}: candidacy_id {cand!r} resolves to no "
+                             f"candidate record")
+        actual = elec_of[cand]
+        if role != actual:
+            raise SystemExit(f"[person-links] row {i}: role {role!r} != candidacy {cand!r}'s "
+                             f"election id {actual!r} (role must be the election id verbatim)")
+        if ecl not in VALID_PERSON_EVIDENCE_CLASSES:
+            raise SystemExit(f"[person-links] row {i}: evidence_class {ecl!r} not in "
+                             f"{sorted(VALID_PERSON_EVIDENCE_CLASSES)}")
+        g = groups.setdefault(pid, {'candidacies': []})
+        if any(m['candidacy_id'] == cand for m in g['candidacies']):
+            raise SystemExit(f"[person-links] row {i}: duplicate candidacy_id {cand!r} for "
+                             f"person {pid!r}")
+        g['candidacies'].append({
+            'candidacy_id': cand, 'election_id': role, 'evidence_class': ecl,
+            'evidence': (str(row.get('evidence') or '')).strip(),
+            'approved_by': (str(row.get('approved_by') or '')).strip(),
+            'approved_date': (str(row.get('approved_date') or '')).strip(),
+            'notes': (str(row.get('notes') or '')).strip(),
+        })
     return groups
 
 
@@ -568,6 +638,14 @@ def main():
     print("Applying rollups (clusters)…")
     cluster_changes = apply_clusters(data, clusters, mergemap)
     print(f"  {cluster_changes}")
+
+    # Person links (HALT-P1-C) — elections-only: guarded on candidates so the SAME Sheet
+    # served to the council build (no candidates/races) never trips the candidacy trip-wires.
+    if data.get('candidates'):
+        person_links = read_person_links(sheet, data)
+        n_rows = sum(len(g['candidacies']) for g in person_links.values())
+        print(f"  {len(person_links)} persons / {n_rows} person-link rows")
+        data['person_links'] = person_links
 
     if args.dry_run:
         print("Dry run — not writing.")

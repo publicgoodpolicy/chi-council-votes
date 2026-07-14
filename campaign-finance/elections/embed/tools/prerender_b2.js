@@ -5,6 +5,13 @@
  * self-contained preview HTML (no fetch/CDN needed — open it directly to
  * eyeball), and assert the prototype-fidelity output. Run from embed/:
  *   node tools/prerender_b2.js
+ *
+ * HALT-P1-C: District 2A (sb-d03) is now a TOGGLE race (its returners Leon+DeBerry
+ * carry verified person-links), so the page renders the This/Last/All view. The
+ * District-2A block below asserts the figures/drill-downs under the COMBINED ('all')
+ * tab, where the all-years totals live — same numbers, toggle DOM. Base-view DOM
+ * coverage (flat cards, cand-…-slug, d- bars) is preserved by the sb-d01 fixture
+ * (a non-toggle race) in the B2-BASEVIEW block.
  */
 'use strict';
 var path = require('path');
@@ -19,7 +26,9 @@ var indexAll = D.loadData(json);                            // unscoped, for sco
 var OFFICE = 'school_board';
 var omVM = D.viewModels.officeRaces(index, OFFICE);
 var rv = D.viewModels.raceView(index, index.raceBySlug['district-2a'], null);
-var page = R.renderPage({ office: OFFICE, topView: 'byrace', officeRaces: omVM, activeSlug: 'district-2a', raceView: rv });
+// District 2A is a TOGGLE race (HALT-P1-C): render the COMBINED ('all') election tab, whose
+// per-candidate combined cards carry the all-years totals the base view used to show.
+var page = R.renderPage({ office: OFFICE, topView: 'byrace', officeRaces: omVM, activeSlug: 'district-2a', raceView: rv, electionView: 'all' });
 
 var full = '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
   '<meta name="viewport" content="width=device-width,initial-scale=1"><title>School Board — preview</title>' +
@@ -43,15 +52,36 @@ ok('DeBerry contributions $534,950', page.indexOf('$534,950') >= 0);
 ok('DeBerry independent opposition $126,078', page.indexOf('$126,078') >= 0);
 ok('self-funding hatch segment (seg self)', /class="seg self"/.test(page));
 ok('three figure bars present', /From contributors/.test(page) && /Independent support/.test(page) && /Independent opposition/.test(page));
-ok('Leon "Mostly self-funded" chip', /chip-self/.test(page));
+// "Mostly self-funded" is a base-view chip (absent from the toggle DOM); assert the
+// underlying fact at the data layer instead — Leon's self-funding dwarfs his third-party gifts.
+(function () {
+  var lc = D.candidateContributors(index, 'leon-sb-d03', null);
+  var self = lc.lines.filter(function (l) { return l.isSelf; }).reduce(function (s, l) { return s + l.total; }, 0);
+  var other = lc.lines.filter(function (l) { return !l.isSelf; }).reduce(function (s, l) { return s + l.total; }, 0);
+  ok('Leon is mostly self-funded (data: self $' + Math.round(self) + ' >> third-party $' + Math.round(other) + ')', self > other * 10);
+})();
 ok('DeBerry "Incumbent" chip', /chip-inc/.test(page));
 ok('exact disclaimer copy (footer)', /separately and never added together/.test(page));
-ok('locked slug scheme: cand-bruce-leon-district-2a', /id="cand-bruce-leon-district-2a"/.test(page));
+ok('toggle race: renders the This/Last/All control', /data-electionview/.test(page));
+ok('combined slug scheme: eleccomb-bruce-leon-district-2a', /id="eleccomb-bruce-leon-district-2a"/.test(page));
 ok('District 2A chip is active', /data-slug="district-2a" aria-pressed="true"/.test(page));
 ok('coming-soon races marked (· soon)', /· soon/.test(page));
 ok('President + districts in ONE selector (no office sub-tabs)',
   /data-slug="school-board-president"/.test(page) && /data-slug="district-2a"/.test(page) && page.indexOf('aria-label="Office section"') < 0);
 ok('figures NOT summed (no grand-total markup)', page.indexOf('Total raised') < 0 && page.indexOf('grand total') < 0);
+
+console.log('\n=== B2-BASEVIEW assertions (a non-toggle race still renders the flat base view) ===');
+// sb-d01 (District 1A: Bannon, Luczak) has no person-linked returner, so it stays a base-view
+// race — preserving the flat-card coverage District 2A gave before it became a toggle race.
+var rv1 = D.viewModels.raceView(index, index.raceBySlug['district-1a'], null);
+ok('sb-d01 is a base-view race (no election toggle)', rv1.elections === null);
+var page1 = R.renderPage({ office: OFFICE, topView: 'byrace', officeRaces: omVM, activeSlug: 'district-1a', raceView: rv1 });
+ok('base view renders candidate cards (Bannon)', /Ed Bannon/.test(page1));
+ok('base-view slug scheme: cand-ed-bannon-district-1a', /id="cand-ed-bannon-district-1a"/.test(page1));
+ok('base view: "· all years" meta, NO election toggle', /· all years/.test(page1) && page1.indexOf('data-electionview') < 0);
+ok('base view: contributor panel + clickable d- bars', /class="contrib"/.test(page1) && /class="barrow click"/.test(page1) && /aria-controls="d-/.test(page1));
+ok('base view: candidate Sunshine link present', /Illinois Sunshine ↗/.test(page1));
+ok('base view: figures NOT summed (no grand-total)', page1.indexOf('Total raised') < 0 && page1.indexOf('grand total') < 0);
 
 console.log('\n=== B2-FIXES assertions ===');
 // Vacating incumbents: Custer (sb-d02 / District 1B) and Biggs (sb-d12 / District 6B)
@@ -98,7 +128,7 @@ ok('DeBerry committee Sunshine URL builds', /^https:\/\/illinoissunshine\.org\/c
 ok('IE spender Sunshine URL builds (encoded sbe id)', !!debOpp.spenders[0].sunshineUrl && /illinoissunshine\.org\/committees\//.test(debOpp.spenders[0].sunshineUrl));
 
 ok('page renders contributor panels', /class="contrib"/.test(page) && /Who gave to this campaign/.test(page));
-ok('bars are clickable disclosures (caret + aria-controls)', /class="barrow click"/.test(page) && /aria-controls="d-/.test(page));
+ok('bars are clickable disclosures (caret + aria-controls)', /class="barrow click"/.test(page) && /aria-controls="eleccomb-/.test(page));
 ok('candidate committee Sunshine link present in card', /Illinois Sunshine ↗/.test(page));
 
 console.log('\n=== B3-REVISE assertions (three tiers + footprint + tags) ===');
@@ -107,7 +137,7 @@ var sp0 = debOpp.spenders[0];
 ok('Tier 1 lists the IE committee with amount+stance (not funders)',
   /Outside spending opposing <b>Ebony DeBerry<\/b>/.test(page) ||
   /class="ie-cmte-toggle"[^>]*>[^<]*<span class="caret"[^>]*>▸<\/span> <b>\$126,078 against<\/b> opposing Ebony DeBerry/.test(page));
-ok('Tier 1 committee row has aria-controls to a Tier-2 panel', /class="ie-cmte-toggle" type="button" aria-expanded="false" aria-controls="d-/.test(page));
+ok('Tier 1 committee row has aria-controls to a Tier-2 panel', /class="ie-cmte-toggle" type="button" aria-expanded="false" aria-controls="eleccomb-/.test(page));
 ok('Tier 1 committee row carries a Sunshine link', /class="ie-cmte-head">[\s\S]{0,400}?class="paclink"/.test(page));
 // Tier 2: funders, with the explicit "gave this committee over time, not this race" framing
 ok('Tier 2 shows the plain-language identity line ("Funded primarily by ...")', /class="ie-lead">Funded primarily by /.test(page));
@@ -310,7 +340,7 @@ ok('flag-totals resolves (array; may be empty for this office)', Array.isArray(f
   var fx = JSON.parse(JSON.stringify(json));
   var FX_RACE = 'sb-d13', FX_ID = 'zzz-fixture-cmteless-cand', FX_IE = 98765;   // synthetic
   fx.candidates.push({ id: FX_ID, race_id: FX_RACE, name: 'Zzy Fixturetest (SYNTHETIC)',
-    committee_id: null, status: 'filed', prior_election: null, incumbent: false,
+    committee_id: null, status: 'filed', incumbent: false,
     vacating_for: null, bio: {}, positions: null });
   // date sits inside the school_board election window (real rows are cycle 2027 / dated 2024)
   fx.independent_expenditures.push({ id: 'ie-fixture-synth-1', spender_committee_id: 'ie-committee-22729',

@@ -687,14 +687,15 @@
 
   // ---- This / Last / All-Elections toggle (per-candidate buckets) ----
   // Reads the precomputed rollups.by_candidate_election (built globally in
-  // build_rollups, bucketed by FILING DATE). Scoped to the loaded 2024-cohort
-  // races (sb-d04..sb-d09): their candidates' 2024 status is verified (returning
-  // incumbents carry prior_election; appointees/challengers are confirmed 2024
-  // non-candidates). Other SB races (e.g. sb-d03 Leon) have 2024 returners that
-  // still LACK prior_election and would mislabel as "did not run", so they stay on
-  // the all-years view until verified. Widen this set as cohorts are verified.
-  var TOGGLE_RACES = { 'sb-d04': 1, 'sb-d05': 1, 'sb-d06': 1, 'sb-d07': 1, 'sb-d08': 1, 'sb-d09': 1,
-                       'sb-d10': 1, 'sb-d11': 1, 'sb-d12': 1, 'sb-president': 1 };
+  // build_rollups, bucketed by FILING DATE). Scoped to the races carrying a person-link-
+  // VERIFIED 2024 returner (HALT-P1-C, D2 extend-to-17): the 9 formerly-annotated returners
+  // (sb-d04..d12 + President) PLUS the 8 newly-signed ones (sb-d02/d03/d13/d14/d15/d18/d19).
+  // Every returner's prior carriage is published under rollups.by_person[*].prior, so their
+  // "Last election (2024)" tab renders the derived "2024: District N" label — none mislabel as
+  // "did not run". Races with no verified returner stay off (their 2024 tab would be empty).
+  var TOGGLE_RACES = { 'sb-d02': 1, 'sb-d03': 1, 'sb-d04': 1, 'sb-d05': 1, 'sb-d06': 1, 'sb-d07': 1,
+                       'sb-d08': 1, 'sb-d09': 1, 'sb-d10': 1, 'sb-d11': 1, 'sb-d12': 1, 'sb-d13': 1,
+                       'sb-d14': 1, 'sb-d15': 1, 'sb-d18': 1, 'sb-d19': 1, 'sb-president': 1 };
 
   // Map one by_candidate_election bucket to the FOUR SEPARATE streams the render
   // bars consume. contributions (third-party) and self_funding are kept distinct;
@@ -720,6 +721,26 @@
       amt += c.amount || 0; n++;
     }
     return { amount: round2(amt), count: n };
+  }
+
+  // Prior-election carriage (label / office / qualifier) for a candidate, DERIVED at rollup
+  // time and published under rollups.by_person[*].prior (HALT-P1-C — the per-record
+  // prior_election field is retired). Keyed onto the person's CURRENT (latest-election)
+  // candidacy id, which is exactly where the "Last election" header + office-change detection
+  // used to read c.prior_election. Memoized on the index. Shape is drop-in: {label,office,qualifier}.
+  function priorByCandidate(index) {
+    if (index._priorByCand) return index._priorByCand;
+    var m = {}, bp = (index.rollups && index.rollups.by_person) || {};
+    for (var pid in bp) {
+      if (!bp.hasOwnProperty(pid)) continue;
+      var p = bp[pid], membs = (p.members || []).slice();
+      if (!membs.length || !p.prior) continue;
+      membs.sort(function (a, b) { return (a.election_id || '') < (b.election_id || '') ? -1 : 1; });
+      var cur = membs[membs.length - 1];               // latest election = the current candidacy
+      if (cur && cur.candidacy_id) m[cur.candidacy_id] = p.prior;
+    }
+    index._priorByCand = m;
+    return m;
   }
 
   function raceElections(index, raceId) {
@@ -783,7 +804,7 @@
         industries: candidateIndustries(index, c.id, null, combinedWin)
       };
       return { id: c.id, slug: candidateSlug(c, race), name: c.name, incumbent: !!c.incumbent,
-               priorElection: c.prior_election || null, undated: undatedSmallDollar(index, c.id),
+               priorElection: priorByCandidate(index)[c.id] || null, undated: undatedSmallDollar(index, c.id),
                byElection: byElection, combined: combined };
     });
     return { race: { id: race.id, slug: raceSlug(race), label: race.label, office: race.office },

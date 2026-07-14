@@ -78,7 +78,79 @@ def validate(d):
     if cotag:
         errors.append(f"co-tag violation: 'unclassified' alongside substantive tags: {cotag}")
 
+    errors.extend(validate_person_links(d))
     return errors, warnings
+
+
+def validate_person_links(d):
+    """HALT-P1-C — the person-entity firewall, as four STRUCTURAL invariants (relations that
+    hold at any data vintage, never pinned dollars — so the Q2 re-ingest can't false-trip them).
+    Election-only: returns [] when by_person is absent (council data has none)."""
+    errs = []
+    roll = d.get('rollups') or {}
+    bp = roll.get('by_person')
+    if not bp:
+        return errs
+    bc = roll.get('by_candidate') or {}
+    cands = {c['id']: c for c in d.get('candidates', [])}
+    races = {r['id']: r for r in d.get('races', [])}
+
+    def elec_of(cid):
+        c = cands.get(cid)
+        return races.get(c.get('race_id'), {}).get('election_id') if c else None
+
+    def rkeys(o):
+        s = set()
+        if isinstance(o, dict):
+            for k, v in o.items():
+                s.add(k); s |= rkeys(v)
+        elif isinstance(o, list):
+            for v in o:
+                s |= rkeys(v)
+        return s
+
+    # INV-PERSON-2: the firewall — NO 'independent' (nor IE streams) anywhere, recursively.
+    leaked = {'independent', 'ie_support', 'ie_oppose'} & rkeys(bp)
+    if leaked:
+        errs.append(f"INV-PERSON-2: firewalled key(s) present in by_person: {sorted(leaked)}")
+
+    prior_members = set()
+    for pid, p in bp.items():
+        membs = p.get('members') or []
+        # INV-PERSON-3: membership referential integrity.
+        if not membs:
+            errs.append(f"INV-PERSON-3: person '{pid}' has no members")
+        if not (p.get('display_name') or '').strip():
+            errs.append(f"INV-PERSON-3: person '{pid}' has empty display_name")
+        for m in membs:
+            cid = m.get('candidacy_id')
+            if cid not in cands:
+                errs.append(f"INV-PERSON-3: person '{pid}' member '{cid}' is not a candidate record")
+            elif m.get('election_id') != elec_of(cid):
+                errs.append(f"INV-PERSON-3: person '{pid}' member '{cid}' election_id "
+                            f"{m.get('election_id')!r} != actual {elec_of(cid)!r}")
+        # INV-PERSON-1: dedup identity — total is the deduped committee sum, never per-candidacy.
+        owned = [m['candidacy_id'] for m in membs if m.get('owns_committee')]
+        sig = round(sum((bc.get(c, {}).get('all', {}) or {}).get('direct', 0.0) for c in owned), 2)
+        tot = round((p.get('direct', {}) or {}).get('total', 0.0), 2)
+        if abs(sig - tot) > 0.01:
+            errs.append(f"INV-PERSON-1: person '{pid}' direct.total {tot} != Σ by_candidate owned "
+                        f"direct {sig} (double-count / dedup break)")
+        if len(membs) >= 2 and tot > 0:
+            earliest = sorted(membs, key=lambda m: m.get('election_id') or '')[0]['candidacy_id']
+            prior_members.add(earliest)
+
+    # INV-PERSON-4: the facet<->link biconditional (the documentary cohort coupling, enforced).
+    facet = {c['id'] for c in d.get('candidates', []) if c.get('finance_facet') == 'on_current_record'}
+    only_facet = facet - prior_members
+    only_link = prior_members - facet
+    if only_facet:
+        errs.append(f"INV-PERSON-4: on_current_record candidacies with no money-carrying person "
+                    f"link on the prior side: {sorted(only_facet)}")
+    if only_link:
+        errs.append(f"INV-PERSON-4: person-link prior members not flagged on_current_record: "
+                    f"{sorted(only_link)}")
+    return errs
 
 
 def summary(d):

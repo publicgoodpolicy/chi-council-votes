@@ -144,6 +144,21 @@ def build(d):
             windows={}
         cands={c['id']:c for c in d.get('candidates',[])}
         race_office={r['id']:r.get('office') for r in d.get('races',[])}
+        # Prior-election bucket labels for by_candidate_election DERIVE FROM PERSON LINKS
+        # (HALT-P1-C: the prior_election.label field is retired). For each returner, the 2024
+        # window of the CURRENT (2026) candidacy is labelled from the LINKED 2024 candidacy's
+        # race district — reproducing "2024: District N" byte-for-byte for the 9 formerly-
+        # annotated returners and extending the same label to the 8 newly signed off (D2).
+        _races_by_id={r['id']:r for r in d.get('races',[])}
+        prior_win_label={}   # current(2026) candidacy_id -> {window_id: "YYYY: District N"}
+        for _pid,_g in (d.get('person_links') or {}).items():
+            _ms=sorted(_g.get('candidacies',[]),key=lambda m:m['election_id'] or '')
+            if len(_ms)<2: continue
+            _cur=_ms[-1]['candidacy_id']; _pri=_ms[0]
+            _pr=_races_by_id.get((cands.get(_pri['candidacy_id']) or {}).get('race_id'),{})
+            _yr=(_pri['election_id'] or '').split('-')[0]
+            if _pr.get('district'):
+                prior_win_label.setdefault(_cur,{})[_yr]=f"{_yr}: {_pr['district']}"
         # Stamp the ONE relational self-funding decision on each candidate-recipient
         # contribution row (election-only; council rows get NO stamp). candidateContributors
         # READS c['is_self'] instead of deciding from donor-global attributes -> render
@@ -164,8 +179,7 @@ def build(d):
             if not wins: return None
             w=_bucket(date,wins)
             if not w: return None
-            pe=cands[cid].get('prior_election') or {}
-            label=pe['label'] if pe.get('election')==w['id'] and pe.get('label') else w['label']
+            label=prior_win_label.get(cid,{}).get(w['id']) or w['label']
             return by_candidate_election.setdefault(cid,{}).setdefault(w['id'],{
                 'label':label,'contributions':{'amount':0.0,'count':0},
                 'self_funding':{'amount':0.0,'count':0},
@@ -189,6 +203,73 @@ def build(d):
             stream='ie_support' if ie.get('stance')=='support' else 'ie_oppose'
             eb[stream]['amount']=rnd(eb[stream]['amount']+(ie.get('amount') or 0.0)); eb[stream]['count']+=1
 
+        # ---- by_person (HALT-P1-C, ADDITIVE, election-only) ----
+        # The Person entity: DIRECT receipts ONLY. There is NO 'independent' key anywhere in
+        # by_person, recursively (the firewall) — IE display is a separate P1-D stream. Money is
+        # DEDUPED over the person's committee set: each committee is counted once. A returner's
+        # 2024 candidacy owns no committee (its money already sits on the 2026 sibling, split by
+        # date window), so it is never re-added — the single contributions pass below keys on the
+        # committee, so double-counting is structurally impossible. C4/C5 carriage (prior label/
+        # office/qualifier) DERIVES from the linked prior candidacy record (ratified: derive,
+        # don't store — never read the retired prior_election field).
+        by_person={}
+        plinks=d.get('person_links') or {}
+        if plinks:
+            races_by_id={r['id']:r for r in d.get('races',[])}
+            # committee slug by owning candidate_id -> reverse to slug->person + per-slug windows
+            cbyc={cm.get('candidate_id'):slug for slug,cm in comms.items() if cm.get('candidate_id')}
+            slug_person={}; slug_wins={}
+            for ppid,g in plinks.items():
+                for m in g.get('candidacies',[]):
+                    slug=cbyc.get(m['candidacy_id'])
+                    if not slug: continue
+                    slug_person[slug]=ppid
+                    crec=cands.get((comms.get(slug) or {}).get('candidate_id'))
+                    ot=_office_type(race_office.get(crec.get('race_id'))) if crec else None
+                    slug_wins[slug]=windows.get(ot) if ot else None
+            acc={ppid:{'total':0.0,'by_election':{},'by_year':{},
+                       'don_total':{},'don_elec':{},'don_year':{}} for ppid in plinks}
+            # ONE contributions pass over person-owned committees (same filters as by_candidate
+            # 'direct'), so acc['total'] independently reproduces Σ by_candidate[c].direct — the
+            # dedup identity the validator (INV-PERSON-1) then asserts.
+            for c in contribs:
+                if c.get('is_aggregate'): continue
+                if c['cycle'] in EXCLUDED_CYCLES: continue
+                if c.get('contribution_type')=='IE Committee Dues Transfer': continue
+                slug=c.get('committee_id'); ppid=slug_person.get(slug)
+                if not ppid: continue
+                dv=donors.get(c.get('donor_id'))
+                if dv is None or c['donor_id'] in agg: continue
+                amt=c.get('amount') or 0.0; did=c['donor_id']; date=c.get('date') or ''
+                yr=date[:4] if len(date)>=4 and date[:4].isdigit() else 'undated'
+                w=_bucket(date,slug_wins.get(slug)) if slug_wins.get(slug) else None
+                eid=w['id'] if w else None
+                a=acc[ppid]
+                a['total']=rnd(a['total']+amt)
+                a['by_year'][yr]=rnd(a['by_year'].get(yr,0.0)+amt)
+                dt=a['don_total'].setdefault(did,{'amount':0.0,'count':0}); dt['amount']=rnd(dt['amount']+amt); dt['count']+=1
+                dy=a['don_year'].setdefault(yr,{}).setdefault(did,{'amount':0.0,'count':0}); dy['amount']=rnd(dy['amount']+amt); dy['count']+=1
+                if eid:
+                    a['by_election'][eid]=rnd(a['by_election'].get(eid,0.0)+amt)
+                    de=a['don_elec'].setdefault(eid,{}).setdefault(did,{'amount':0.0,'count':0}); de['amount']=rnd(de['amount']+amt); de['count']+=1
+            for ppid,g in plinks.items():
+                membs=sorted(g.get('candidacies',[]),key=lambda m:m['election_id'] or '')
+                members=[{'candidacy_id':m['candidacy_id'],'election_id':m['election_id'],
+                          'owns_committee':m['candidacy_id'] in cbyc} for m in membs]
+                recent=membs[-1]['candidacy_id'] if membs else None
+                display_name=(cands.get(recent) or {}).get('name')
+                prior=None
+                if len(membs)>=2:                       # earliest linked candidacy = the prior one
+                    pc=cands.get(membs[0]['candidacy_id']) or {}
+                    pr=races_by_id.get(pc.get('race_id'),{})
+                    yr=(membs[0]['election_id'] or '').split('-')[0]
+                    prior={'label':(f"{yr}: {pr['district']}" if pr.get('district') else yr),
+                           'office':pr.get('office'),'qualifier':pc.get('election_note') or ''}
+                a=acc[ppid]
+                by_person[ppid]={'display_name':display_name,'members':members,'prior':prior,
+                    'direct':{'total':a['total'],'by_election':a['by_election'],'by_year':a['by_year']},
+                    'donors':{'total':a['don_total'],'by_election':a['don_elec'],'by_year':a['don_year']}}
+
     for pid,r in by_parent.items():
         r['committees']=len(pcom.get(pid,()))
     d.setdefault('rollups',{})
@@ -199,6 +280,7 @@ def build(d):
         d['rollups']['by_candidate']=by_candidate
         d['rollups']['by_race']=by_race
         d['rollups']['by_candidate_election']=by_candidate_election
+        d['rollups']['by_person']=by_person
     # build_rollups runs last in both the build_all derived step and ingest_ie, so
     # this is the single place that always fires on a (re)build. Stamp real build
     # time — the field was previously static and falsely read as "stale".
@@ -206,7 +288,8 @@ def build(d):
     return {'by_parent':len(by_parent),'by_industry':len(by_industry),
             'by_alder':len(by_alder),'ies':len(ies),
             'by_candidate':len(by_candidate),'by_race':len(by_race),
-            'by_candidate_election':len(by_candidate_election)}
+            'by_candidate_election':len(by_candidate_election),
+            'by_person':len(d['rollups'].get('by_person',{}))}
 
 if __name__=='__main__':
     SRC=sys.argv[1] if len(sys.argv)>1 else 'council-data.json'; OUT=sys.argv[2] if len(sys.argv)>2 else SRC

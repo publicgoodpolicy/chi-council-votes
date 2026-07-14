@@ -243,7 +243,6 @@ def build_candidates(race_map, race_ids):
             "name": c.get("name"),
             "committee_id": committee_id,
             "status": c.get("status", "declared"),
-            "prior_election": c.get("prior_election"),
             "incumbent": bool(c.get("incumbent", False)),
             "vacating_for": c.get("vacating_for"),
             "bio": c.get("bio", {}),
@@ -264,7 +263,6 @@ def build_candidates(race_map, race_ids):
             "name": c.get("name"),
             "committee_id": c.get("committee_id"),
             "status": c.get("status", "incumbent-pending"),
-            "prior_election": c.get("prior_election"),
             "incumbent": bool(c.get("incumbent", True)),
             "vacating_for": c.get("vacating_for"),
             "bio": c.get("bio", {}),
@@ -284,7 +282,6 @@ def build_candidates(race_map, race_ids):
             "name": c.get("name"),
             "committee_id": c.get("committee_id"),
             "status": c.get("status", "filed"),
-            "prior_election": c.get("prior_election"),
             "incumbent": bool(c.get("incumbent", False)),
             "vacating_for": c.get("vacating_for"),
             "bio": c.get("bio", {}),
@@ -293,9 +290,11 @@ def build_candidates(race_map, race_ids):
         # HALT-P1-B: the 2024 CBOE-native RESULT axis (elected/defeated/withdrawn/
         # removed/challenged) is a SEPARATE field from the filing-lifecycle `status`,
         # alongside an explicit finance_facet enum, a write-in marker, and the empty-
-        # committee sbe reference. Propagated CONDITIONALLY so pre-P1-B candidate_stubs
+        # committee sbe reference. HALT-P1-C adds election_note — the editorial prior-cycle
+        # qualifier relocated here from the retired prior_election.qualifier (derive-don't-store:
+        # by_person joins it at rollup time). Propagated CONDITIONALLY so pre-P1-B candidate_stubs
         # (which carry none of these keys) still produce byte-identical records.
-        for k in ("result", "finance_facet", "committee_sbe_ref"):
+        for k in ("result", "finance_facet", "committee_sbe_ref", "election_note"):
             if c.get(k) is not None:
                 rec[k] = c[k]
         if c.get("write_in"):

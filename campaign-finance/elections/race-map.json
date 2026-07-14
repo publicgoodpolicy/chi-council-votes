@@ -15,7 +15,6 @@
       "race_id": "sb-president",
       "incumbent": false,
       "status": "filed",
-      "prior_election": {"election": "2024", "label": "2024: District 6", "office": "school_board_member"},
       "bio": {}
     },
     "39805": {
@@ -24,7 +23,6 @@
       "race_id": "sb-president",
       "incumbent": false,
       "status": "filed",
-      "prior_election": {"election": "2024", "label": "2024: District 1", "office": "school_board_member"},
       "bio": {}
     },
     "40912": {
@@ -115,14 +113,14 @@
       "status": "filed",
       "bio": {}
     },
-    "39820": {"candidate_id":"dones-sb-d06","name":"Jason Dónes","race_id":"sb-d06","incumbent":false,"status":"filed","prior_election":{"election":"2024","label":"2024: District 3"},"bio":{}},
-    "39786": {"candidate_id":"rivas-sb-d06","name":"Carlos A. Rivas Jr.","race_id":"sb-d06","incumbent":true,"status":"filed","prior_election":{"election":"2024","label":"2024: District 3"},"bio":{}},
+    "39820": {"candidate_id":"dones-sb-d06","name":"Jason Dónes","race_id":"sb-d06","incumbent":false,"status":"filed","bio":{}},
+    "39786": {"candidate_id":"rivas-sb-d06","name":"Carlos A. Rivas Jr.","race_id":"sb-d06","incumbent":true,"status":"filed","bio":{}},
     "41076": {"candidate_id":"sherratt-sb-d07","name":"Ellen Sherratt","race_id":"sb-d07","incumbent":false,"status":"filed","bio":{}},
-    "39866": {"candidate_id":"zaccor-sb-d07","name":"Karen Zaccor","race_id":"sb-d07","incumbent":true,"status":"filed","prior_election":{"election":"2024","label":"2024: District 4"},"bio":{}},
-    "39858": {"candidate_id":"rosenfeld-sb-d08","name":"Ellen Rosenfeld","race_id":"sb-d08","incumbent":true,"status":"filed","prior_election":{"election":"2024","label":"2024: District 4"},"bio":{}},
-    "39853": {"candidate_id":"brown-sb-d09","name":"Aaron \"Jitu\" Brown","race_id":"sb-d09","incumbent":true,"status":"filed","prior_election":{"election":"2024","label":"2024: District 5"},"bio":{}},
-    "37001": {"candidate_id":"blaise-sb-d10","name":"Michilla \"Kyla\" Blaise","race_id":"sb-d10","incumbent":true,"status":"filed","prior_election":{"election":"2024","label":"2024: District 5","qualifier":"Withdrew from the 2024 District 5 race; later appointed to the board."},"bio":{}},
-    "39855": {"candidate_id":"thotakura-sb-d11","name":"Anusha Thotakura","race_id":"sb-d11","incumbent":true,"status":"filed","prior_election":{"election":"2024","label":"2024: District 6"},"bio":{}},
+    "39866": {"candidate_id":"zaccor-sb-d07","name":"Karen Zaccor","race_id":"sb-d07","incumbent":true,"status":"filed","bio":{}},
+    "39858": {"candidate_id":"rosenfeld-sb-d08","name":"Ellen Rosenfeld","race_id":"sb-d08","incumbent":true,"status":"filed","bio":{}},
+    "39853": {"candidate_id":"brown-sb-d09","name":"Aaron \"Jitu\" Brown","race_id":"sb-d09","incumbent":true,"status":"filed","bio":{}},
+    "37001": {"candidate_id":"blaise-sb-d10","name":"Michilla \"Kyla\" Blaise","race_id":"sb-d10","incumbent":true,"status":"filed","bio":{}},
+    "39855": {"candidate_id":"thotakura-sb-d11","name":"Anusha Thotakura","race_id":"sb-d11","incumbent":true,"status":"filed","bio":{}},
     "41131": {"candidate_id":"anderson-sb-d11","name":"Brenda Lee Anderson","race_id":"sb-d11","incumbent":false,"status":"filed","bio":{}},
     "41134": {"candidate_id":"kimble-sb-d12","name":"Brittany B. Kimble","race_id":"sb-d12","incumbent":false,"status":"filed","bio":{}}
   },
@@ -1482,7 +1480,7 @@
     "gioiosa-sb-2024-d4": {"candidate_id":"gioiosa-sb-2024-d4","name":"Carmen Gioiosa","race_id":"sb-2024-d4","committee_id":"39975","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
     "rosenfeld-sb-2024-d4": {"candidate_id":"rosenfeld-sb-2024-d4","name":"Ellen Rosenfeld","race_id":"sb-2024-d4","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
     "zaccor-sb-2024-d4": {"candidate_id":"zaccor-sb-2024-d4","name":"Karen Zaccor","race_id":"sb-2024-d4","committee_id":null,"incumbent":false,"status":"filed","result":"defeated","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "blaise-sb-2024-d5": {"candidate_id":"blaise-sb-2024-d5","name":"Michilla 'Kyla' Blaise","race_id":"sb-2024-d5","committee_id":null,"incumbent":false,"status":"filed","result":"withdrawn","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
+    "blaise-sb-2024-d5": {"candidate_id":"blaise-sb-2024-d5","name":"Michilla 'Kyla' Blaise","race_id":"sb-2024-d5","committee_id":null,"incumbent":false,"status":"filed","result":"withdrawn","finance_facet":"on_current_record","election_note":"Withdrew from the 2024 District 5 race; later appointed to the board.","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
     "brown-sb-2024-d5": {"candidate_id":"brown-sb-2024-d5","name":"Aaron 'Jitu' Brown","race_id":"sb-2024-d5","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
     "hargrove-sb-2024-d5": {"candidate_id":"hargrove-sb-2024-d5","name":"Anthony Hargrove","race_id":"sb-2024-d5","committee_id":null,"incumbent":false,"status":"filed","result":"removed","finance_facet":"committee_no_itemized","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"},"committee_sbe_ref":"39831"},
     "jones-sb-2024-d5": {"candidate_id":"jones-sb-2024-d5","name":"Kernetha Jones","race_id":"sb-2024-d5","committee_id":null,"incumbent":false,"status":"filed","result":"removed","finance_facet":"no_committee","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"},"write_in":true},

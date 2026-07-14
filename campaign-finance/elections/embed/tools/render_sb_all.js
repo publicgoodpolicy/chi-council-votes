@@ -99,7 +99,10 @@ console.log('\n=== undated reconciliation: 2024 + 2026 + undated == all-years co
     Math.abs(dated + cand.undated.amount - allYears) < 0.01 && M(cand.undated.amount) === expUndated);
 });
 
-console.log('\n=== invariant 6: empty prior_election AND non-zero 2024 money (expect ONLY Pope) ===');
+// HALT-P1-C: c.priorElection is now DERIVED from rollups.by_person (person-links), not the
+// retired per-record prior_election field. The invariant is unchanged — Pope has no person-link
+// yet holds 2024 money (the pull-driven, bucket-blind discriminator), so remains the sole flag.
+console.log('\n=== invariant 6: NO person-link prior AND non-zero 2024 money (expect ONLY Pope) ===');
 var flagged = [];
 RACES.forEach(function (race) {
   VM[race].candidates.forEach(function (c) {
