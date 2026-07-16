@@ -1,0 +1,4 @@
+{
+  "note": "HALT-SLUG-A: Sheet donor ids whose sorted-token key matches >= 2 election donors \u2014 never auto-aliased (uniqueness gate). Hand-resolve or cluster.",
+  "entries": []
+}

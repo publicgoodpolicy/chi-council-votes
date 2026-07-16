@@ -49,7 +49,7 @@ DEPENDENCIES
 """
 
 from __future__ import annotations
-import argparse, json, os, sys
+import argparse, json, os, re, sys
 from collections import defaultdict
 from pathlib import Path
 from typing import Optional
@@ -587,6 +587,59 @@ def merge_overrides(data: dict, overrides: dict[str, dict],
 # ============================================================
 # MAIN
 # ============================================================
+def build_slug_alias_map(data, sheet_ids, mergemap):
+    """HALT-SLUG-A — the elections↔council person-slug matcher (ALIAS, not rewrite).
+
+    Illinois records a person's name two ways by form: direct itemized contributions arrive as
+    'Last, First' (slugged surname-given); IE-committee Schedule-A funders as 'First Last'
+    (slugged given-surname). So `ingest_ie` mints a DUPLICATE election donor id for a person
+    already present under the council/Sheet id. This maps each such Sheet id -> its unique
+    election donor by a SORTED-TOKEN key, GATED BY UNIQUENESS:
+      * 0 election donors share the key  -> no alias (Sheet id stays unmatched — today's skip)
+      * exactly 1                         -> ALIAS the Sheet id to that donor
+      * >= 2                              -> no alias + editorial worklist (never guess which person)
+    The alias is folded into the mergemap, which merge_overrides (`did = mergemap.get(did, did)`)
+    and apply_clusters (`m2 = mergemap.get(m, m)`) already resolve through — so the Sheet's
+    classification + cluster membership reach the election donor with no consumer surgery. The
+    minted donor_id is never rewritten; both filed spellings stay visible via `slug_aliases`.
+    Returns (alias {sheet_id: donor_id}, worklist [{sheet_id, hits}]).
+    """
+    donors = data.get('donors', {})
+
+    def sk(s):
+        return tuple(sorted(re.findall(r'[a-z0-9]+', (s or '').lower())))
+
+    by_key: dict = {}
+    for d in donors:
+        k = sk(d)
+        if len(k) >= 2:                 # single-token slugs are too collision-prone to auto-alias
+            by_key.setdefault(k, []).append(d)
+
+    alias, worklist = {}, []
+    for sid in sheet_ids:
+        if mergemap.get(sid, sid) in donors:   # already resolvable (exact, or an existing merge)
+            continue
+        k = sk(sid)
+        if len(k) < 2:
+            continue
+        hits = by_key.get(k, [])
+        if len(hits) == 1:
+            alias[sid] = hits[0]
+        elif len(hits) >= 2:                    # uniqueness gate: ambiguous -> never guess
+            worklist.append({'sheet_id': sid, 'hits': sorted(hits)})
+    return alias, worklist
+
+
+def write_slug_worklist(worklist, path):
+    """Persist the ambiguous person-slug matches (>=2 donors share the key) for editorial
+    resolution. Deterministic (sorted, no timestamp) so it diffs cleanly build-to-build."""
+    payload = {'note': ('HALT-SLUG-A: Sheet donor ids whose sorted-token key matches >= 2 election '
+                        'donors — never auto-aliased (uniqueness gate). Hand-resolve or cluster.'),
+               'entries': sorted(worklist, key=lambda e: e['sheet_id'])}
+    with open(path, 'w') as f:
+        json.dump(payload, f, indent=2, ensure_ascii=True)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                   formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -625,6 +678,22 @@ def main():
     merge_changes, mergemap = apply_merges(data, merges)
     print(f"  {merge_changes}")
 
+    # Person-slug alias (HALT-SLUG-A) — elections-only (council Sheet ids match exactly; ratified:
+    # no council-side write). Points a given-surname election donor (IE-funder duplicate) at its
+    # surname-given Sheet id via a uniqueness-gated sorted-token match, folded into the mergemap
+    # BEFORE overrides/clusters consume it. Alias, not rewrite: donor_id persists; the Sheet id is
+    # recorded in `slug_aliases` (both filed spellings visible, merge inspectable).
+    slug_worklist = []
+    if data.get('candidates'):
+        sheet_ids = set(overrides) | {m for c in clusters.values() for m in (c.get('members') or [])}
+        slug_alias, slug_worklist = build_slug_alias_map(data, sheet_ids, mergemap)
+        for sid, did in slug_alias.items():
+            aka = data['donors'][did].setdefault('slug_aliases', [])
+            if sid not in aka:
+                aka.append(sid)
+        mergemap = {**mergemap, **slug_alias}
+        print(f"  person-slug: {len(slug_alias)} aliased, {len(slug_worklist)} ambiguous → worklist")
+
     print("Merging overrides + vocab…")
     changes = merge_overrides(data, overrides, industry_vocab, flag_vocab, mergemap,
                               entity_vocab=entity_vocab)
@@ -651,6 +720,10 @@ def main():
         print("Dry run — not writing.")
         return
 
+    if data.get('candidates'):
+        wl_path = str(Path(__file__).parent.parent / 'elections' / 'slug-alias-worklist.json')
+        write_slug_worklist(slug_worklist, wl_path)
+        print(f"Wrote {wl_path} ({len(slug_worklist)} entries)")
     with open(data_path, 'w') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
     print(f"Wrote {data_path}")

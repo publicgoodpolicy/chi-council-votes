@@ -5225,12 +5225,12 @@
       "occupation": "Executive",
       "employer": "2FiLLC",
       "city": "Winnetka, IL",
+      "parent_id": "james-s-frank",
+      "committee_id": null,
       "cluster_id": "rollup-367",
-      "cluster_is_parent": false,
       "cluster_name": "James S. Frank",
       "cluster_role": "alt-name",
-      "parent_id": "james-s-frank",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "frank-karen": {
       "id": "frank-karen",
@@ -5257,12 +5257,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "sposato-nicholas",
+      "committee_id": "ie-committee-19830",
       "cluster_id": "rollup-414",
-      "cluster_is_parent": false,
       "cluster_name": "Sposato, Nicholas",
       "cluster_role": "alt-name",
-      "parent_id": "sposato-nicholas",
-      "committee_id": "ie-committee-19830"
+      "cluster_is_parent": false
     },
     "gonzalez-christian": {
       "id": "gonzalez-christian",
@@ -6125,7 +6125,11 @@
       "notes": null,
       "city": "Elmhurst, IL",
       "parent_id": "administrative-district-council-1-of-illinois",
-      "committee_id": null
+      "committee_id": null,
+      "cluster_id": "rollup-444",
+      "cluster_name": "Administrative District Council 1 of Illinois, Bricklayers and Allied",
+      "cluster_role": "parent",
+      "cluster_is_parent": true
     },
     "alvarez-mike": {
       "id": "alvarez-mike",
@@ -6152,12 +6156,12 @@
       "flags": [],
       "notes": null,
       "city": "Westchester, IL",
+      "parent_id": "architectural-ornamental-iron-workers-local-63-ipal-fund",
+      "committee_id": null,
       "cluster_id": "rollup-450",
-      "cluster_is_parent": false,
       "cluster_name": "Architectural & Ornamental Iron Workers Local 63 IPAL Fund",
       "cluster_role": "alt-name",
-      "parent_id": "architectural-ornamental-iron-workers-local-63-ipal-fund",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "aussem-daniel": {
       "id": "aussem-daniel",
@@ -6234,12 +6238,12 @@
       "flags": [],
       "notes": null,
       "city": "Forest Park, IL",
+      "parent_id": "bridge-structural-and-reinforcing-ironworkers-local-1",
+      "committee_id": null,
       "cluster_id": "rollup-514",
-      "cluster_is_parent": true,
       "cluster_name": "Ironworkers Local Union #1",
       "cluster_role": "parent",
-      "parent_id": "bridge-structural-and-reinforcing-ironworkers-local-1",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "bruno-lynn": {
       "id": "bruno-lynn",
@@ -6277,12 +6281,12 @@
       "flags": [],
       "notes": null,
       "city": "Burr Ridge, IL",
+      "parent_id": "chicago-cook-county-building-trades-council",
+      "committee_id": null,
       "cluster_id": "rollup-467",
-      "cluster_is_parent": false,
       "cluster_name": "Chicago & Cook County Building Trades Council",
       "cluster_role": "alt-name",
-      "parent_id": "chicago-cook-county-building-trades-council",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "chicago-federation-of-labor-industrial-union-council": {
       "id": "chicago-federation-of-labor-industrial-union-council",
@@ -6307,12 +6311,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "chicago-teachers-union",
+      "committee_id": null,
       "cluster_id": "rollup-477",
-      "cluster_is_parent": false,
       "cluster_name": "Chicago Teachers Union",
       "cluster_role": "affiliated-pac",
-      "parent_id": "chicago-teachers-union",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "chicago-teachers-union-pac-illinois-federation-of-teachers": {
       "id": "chicago-teachers-union-pac-illinois-federation-of-teachers",
@@ -6324,12 +6328,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "chicago-teachers-union",
+      "committee_id": null,
       "cluster_id": "rollup-477",
-      "cluster_is_parent": false,
       "cluster_name": "Chicago Teachers Union",
       "cluster_role": "affiliated-pac",
-      "parent_id": "chicago-teachers-union",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "chicagoland-operators-join-labor-management-pac": {
       "id": "chicagoland-operators-join-labor-management-pac",
@@ -6354,12 +6358,12 @@
       "flags": [],
       "notes": null,
       "city": "Countryside, IL",
+      "parent_id": "chicago-land-operators-joint-labor-management-pac",
+      "committee_id": null,
       "cluster_id": "rollup-476",
-      "cluster_is_parent": false,
       "cluster_name": "Chicago Land Operators Joint Labor",
       "cluster_role": "affiliated-pac",
-      "parent_id": "chicago-land-operators-joint-labor-management-pac",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "chodak-david": {
       "id": "chodak-david",
@@ -6423,12 +6427,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "cook-county-college-teachers-union",
+      "committee_id": null,
       "cluster_id": "rollup-488",
-      "cluster_is_parent": true,
       "cluster_name": "Cook County College Teachers Union",
       "cluster_role": "parent",
-      "parent_id": "cook-county-college-teachers-union",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "cook-joe": {
       "id": "cook-joe",
@@ -6709,7 +6713,9 @@
       "notes": null,
       "city": "Chicago, IL",
       "parent_id": "friends-of-ram",
-      "committee_id": null
+      "committee_id": null,
+      "entity_type": "candidate-committee",
+      "_last_edited_by": "editor-ui"
     },
     "friends-of-robert-martwick": {
       "id": "friends-of-robert-martwick",
@@ -6824,17 +6830,17 @@
       "name": "I.U.O.E. Local 399",
       "type": "PAC",
       "industries": [
-        "labor-trades"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "iuoe-local-399",
+      "committee_id": null,
       "cluster_id": "rollup-513",
-      "cluster_is_parent": false,
       "cluster_name": "IUOE Local 399",
       "cluster_role": "alt-name",
-      "parent_id": "iuoe-local-399",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "international-brotherhood-of-electrical-workers-local-134": {
       "id": "international-brotherhood-of-electrical-workers-local-134",
@@ -6846,12 +6852,15 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "international-brotherhood-of-electrical-workers-local-134",
+      "committee_id": null,
+      "slug_aliases": [
+        "local-134-international-brotherhood-of-electrical-workers"
+      ],
       "cluster_id": "rollup-452",
-      "cluster_is_parent": true,
       "cluster_name": "Local 134 International Brotherhood of Electrical Workers",
       "cluster_role": "parent",
-      "parent_id": "international-brotherhood-of-electrical-workers-local-134",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "j-a-auto-body-inc": {
       "id": "j-a-auto-body-inc",
@@ -7168,12 +7177,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "painters-district-council-14",
+      "committee_id": null,
       "cluster_id": "rollup-530",
-      "cluster_is_parent": true,
       "cluster_name": "Painters District Council No.14",
       "cluster_role": "parent",
-      "parent_id": "painters-district-council-14",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "peters-andrew": {
       "id": "peters-andrew",
@@ -7254,12 +7263,12 @@
       "flags": [],
       "notes": null,
       "city": "Oak Brook, IL",
+      "parent_id": "roofers-waterproofers-local-11",
+      "committee_id": null,
       "cluster_id": "rollup-494",
-      "cluster_is_parent": false,
       "cluster_name": "Roofers & Waterproofers Local 11",
       "cluster_role": "alt-name",
-      "parent_id": "roofers-waterproofers-local-11",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "rowell-jay": {
       "id": "rowell-jay",
@@ -7299,12 +7308,12 @@
       "occupation": "Business Executive",
       "employer": "GCM Grosvenor",
       "city": "Chicago, IL",
+      "parent_id": "sacks-michael",
+      "committee_id": null,
       "cluster_id": "rollup-472",
-      "cluster_is_parent": true,
       "cluster_name": "Sacks, Michael",
       "cluster_role": "parent",
-      "parent_id": "sacks-michael",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "schalla-douglas-barbara": {
       "id": "schalla-douglas-barbara",
@@ -7359,12 +7368,13 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "seiu-il-council",
+      "committee_id": "ie-committee-18574",
+      "_last_edited_by": "editor-ui",
       "cluster_id": "rollup-372",
-      "cluster_is_parent": false,
       "cluster_name": "SEIU Illinois State Council",
       "cluster_role": "affiliated-pac",
-      "parent_id": "seiu-il-council",
-      "committee_id": "ie-committee-18574"
+      "cluster_is_parent": false
     },
     "seman-david": {
       "id": "seman-david",
@@ -7415,12 +7425,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "sposato-nicholas",
+      "committee_id": null,
       "cluster_id": "rollup-414",
-      "cluster_is_parent": true,
       "cluster_name": "Sposato, Nicholas",
       "cluster_role": "parent",
-      "parent_id": "sposato-nicholas",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "stryker-brian": {
       "id": "stryker-brian",
@@ -7445,12 +7455,12 @@
       "flags": [],
       "notes": null,
       "city": "Park Ridge, IL",
+      "parent_id": "teamsters-local-union-700",
+      "committee_id": null,
       "cluster_id": "rollup-436",
-      "cluster_is_parent": false,
       "cluster_name": "Teamsters Local Union 700",
       "cluster_role": "alt-name",
-      "parent_id": "teamsters-local-union-700",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "teamsters-volunteers-in-politics": {
       "id": "teamsters-volunteers-in-politics",
@@ -7462,12 +7472,12 @@
       "flags": [],
       "notes": null,
       "city": "Willow Springs, IL",
+      "parent_id": "teamsters-volunteers-in-politics",
+      "committee_id": null,
       "cluster_id": "rollup-470",
-      "cluster_is_parent": true,
       "cluster_name": "Teamsters Volunteers in Politics",
       "cluster_role": "parent",
-      "parent_id": "teamsters-volunteers-in-politics",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "tenner-sean": {
       "id": "tenner-sean",
@@ -7494,12 +7504,12 @@
       "flags": [],
       "notes": null,
       "city": "Des Plaines, IL",
+      "parent_id": "ufcw-local-881",
+      "committee_id": null,
       "cluster_id": "rollup-496",
-      "cluster_is_parent": true,
       "cluster_name": "UFCW Local 881",
       "cluster_role": "parent",
-      "parent_id": "ufcw-local-881",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "unite-here-local-1": {
       "id": "unite-here-local-1",
@@ -7511,12 +7521,15 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "unite-here-local-1",
+      "committee_id": null,
+      "slug_aliases": [
+        "local-1-unite-here"
+      ],
       "cluster_id": "rollup-499",
-      "cluster_is_parent": true,
       "cluster_name": "Unite Here Local 1",
       "cluster_role": "parent",
-      "parent_id": "unite-here-local-1",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "villegas-gilbert": {
       "id": "villegas-gilbert",
@@ -7528,12 +7541,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "gilbert-villegas-for-congress",
+      "committee_id": null,
       "cluster_id": "rollup-459",
-      "cluster_is_parent": false,
       "cluster_name": "Gilbert Villegas for Congress",
       "cluster_role": "alt-name",
-      "parent_id": "gilbert-villegas-for-congress",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "vojas-stephanie": {
       "id": "vojas-stephanie",
@@ -7653,12 +7666,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "cook-county-college-teachers-union",
+      "committee_id": null,
       "cluster_id": "rollup-488",
-      "cluster_is_parent": false,
       "cluster_name": "Cook County College Teachers Union",
       "cluster_role": "alt-name",
-      "parent_id": "cook-county-college-teachers-union",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "debby-for-district-2": {
       "id": "debby-for-district-2",
@@ -8346,12 +8359,15 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "cozen-o-connor",
+      "committee_id": null,
+      "slug_aliases": [
+        "o-connor-cozen"
+      ],
       "cluster_id": "rollup-369",
-      "cluster_is_parent": true,
       "cluster_name": "Cozen O'Connor",
       "cluster_role": "parent",
-      "parent_id": "cozen-o-connor",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "barrow-lionel": {
       "id": "barrow-lionel",
@@ -8851,12 +8867,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "seiu-il-council",
+      "committee_id": null,
       "cluster_id": "rollup-372",
-      "cluster_is_parent": false,
       "cluster_name": "SEIU Illinois State Council",
       "cluster_role": "affiliated-pac",
-      "parent_id": "seiu-il-council",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "tremblay-jay": {
       "id": "tremblay-jay",
@@ -8930,17 +8946,17 @@
       "name": "Mid-America Carpenters Regional Council Political Action Committee",
       "type": "Individual",
       "industries": [
-        "labor-trades"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "mid-america-carpenters-regional-council-pac",
+      "committee_id": null,
       "cluster_id": "rollup-479",
-      "cluster_is_parent": false,
       "cluster_name": "Mid-America Carpenters Regional Council",
       "cluster_role": "affiliated-pac",
-      "parent_id": "mid-america-carpenters-regional-council-pac",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "committee-to-elect-adam-parrott-sheffer": {
       "id": "committee-to-elect-adam-parrott-sheffer",
@@ -9099,12 +9115,12 @@
       "flags": [],
       "notes": null,
       "city": "Westchester, IL",
+      "parent_id": "architectural-ornamental-iron-workers-local-63-ipal-fund",
+      "committee_id": null,
       "cluster_id": "rollup-450",
-      "cluster_is_parent": false,
       "cluster_name": "Architectural & Ornamental Iron Workers Local 63 IPAL Fund",
       "cluster_role": "affiliated-pac",
-      "parent_id": "architectural-ornamental-iron-workers-local-63-ipal-fund",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "brian-hopkins-for-chicago": {
       "id": "brian-hopkins-for-chicago",
@@ -12470,7 +12486,10 @@
       "city": null,
       "parent_id": "seiu-local-880",
       "committee_id": null,
-      "_last_edited_by": "editor-ui"
+      "_last_edited_by": "editor-ui",
+      "slug_aliases": [
+        "local-880-seiu"
+      ]
     },
     "seiu-local-1": {
       "id": "seiu-local-1",
@@ -12499,12 +12518,12 @@
       ],
       "flags": [],
       "notes": null,
+      "parent_id": "seiu-local-73",
+      "committee_id": null,
       "cluster_id": "rollup-489",
-      "cluster_is_parent": true,
       "cluster_name": "SEIU Local 73",
       "cluster_role": "parent",
-      "parent_id": "seiu-local-73",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "seiu-local-hcii": {
       "id": "seiu-local-hcii",
@@ -13098,7 +13117,10 @@
       "notes": null,
       "city": null,
       "parent_id": "leonard-sposato",
-      "committee_id": null
+      "committee_id": null,
+      "slug_aliases": [
+        "sposato-leonard"
+      ]
     },
     "ernie-malek": {
       "id": "ernie-malek",
@@ -13183,17 +13205,17 @@
       "name": "Cook County College Teachers Union-COPE",
       "type": "Individual",
       "industries": [
-        "labor-teachers"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "cook-county-college-teachers-union",
+      "committee_id": null,
       "cluster_id": "rollup-488",
-      "cluster_is_parent": false,
       "cluster_name": "Cook County College Teachers Union",
       "cluster_role": "alt-name",
-      "parent_id": "cook-county-college-teachers-union",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "barbara-mini": {
       "id": "barbara-mini",
@@ -13618,12 +13640,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "chicago-teachers-union",
+      "committee_id": null,
       "cluster_id": "rollup-477",
-      "cluster_is_parent": false,
       "cluster_name": "Chicago Teachers Union",
       "cluster_role": "affiliated-pac",
-      "parent_id": "chicago-teachers-union",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "tim-s-snowplowing-inc": {
       "id": "tim-s-snowplowing-inc",
@@ -13866,12 +13888,17 @@
       "id": "citizens-for-esther-golar",
       "name": "Citizens for Esther Golar",
       "type": "Other",
-      "industries": [],
+      "industries": [
+        "unclassified"
+      ],
       "flags": [],
       "notes": null,
       "city": null,
       "parent_id": "citizens-for-esther-golar",
-      "committee_id": null
+      "committee_id": null,
+      "slug_aliases": [
+        "golar-citizens-for-esther"
+      ]
     },
     "intl-union-of-operating-engineers-local-union-150": {
       "id": "intl-union-of-operating-engineers-local-union-150",
@@ -13894,12 +13921,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "chicago-federation-of-labor-and-industrial-union-council-pac",
+      "committee_id": null,
       "cluster_id": "rollup-498",
-      "cluster_is_parent": false,
       "cluster_name": "Chicago Federation of Labor and Industrial Union Council PAC",
       "cluster_role": "alt-name",
-      "parent_id": "chicago-federation-of-labor-and-industrial-union-council-pac",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "cook-county-farm-bureau": {
       "id": "cook-county-farm-bureau",
@@ -14331,12 +14358,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "iuoe-local-399",
+      "committee_id": null,
       "cluster_id": "rollup-513",
-      "cluster_is_parent": false,
       "cluster_name": "IUOE Local 399",
       "cluster_role": "affiliated-pac",
-      "parent_id": "iuoe-local-399",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "walgreen-co": {
       "id": "walgreen-co",
@@ -14825,12 +14852,14 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "chicagoland-chamber-of-commerce",
+      "committee_id": null,
+      "entity_type": "industry-trade-body",
+      "_last_edited_by": "editor-ui",
       "cluster_id": "rollup-490",
-      "cluster_is_parent": true,
       "cluster_name": "Chicagoland Chamber of Commerce",
       "cluster_role": "parent",
-      "parent_id": "chicagoland-chamber-of-commerce",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "flood-brothers": {
       "id": "flood-brothers",
@@ -17230,7 +17259,10 @@
       "notes": null,
       "city": null,
       "parent_id": "craig-duchossois",
-      "committee_id": null
+      "committee_id": null,
+      "slug_aliases": [
+        "duchossois-craig"
+      ]
     },
     "cari-sacks": {
       "id": "cari-sacks",
@@ -17834,7 +17866,9 @@
       "flags": [],
       "notes": null,
       "parent_id": "incs-action",
-      "committee_id": null
+      "committee_id": null,
+      "entity_type": "political-organization",
+      "_last_edited_by": "editor-ui"
     },
     "kenneth-tuchman": {
       "id": "kenneth-tuchman",
@@ -19749,12 +19783,15 @@
       "id": "iuoe-local-399",
       "name": "IUOE Local 399",
       "type": "Other",
-      "industries": [],
+      "industries": [
+        "labor-trades"
+      ],
       "flags": [],
       "notes": null,
       "city": null,
       "parent_id": "iuoe-local-399",
       "committee_id": null,
+      "_last_edited_by": "editor-ui",
       "cluster_id": "rollup-513",
       "cluster_name": "IUOE Local 399",
       "cluster_role": "parent",
@@ -22530,6 +22567,9 @@
       "city": null,
       "parent_id": "jesse-rosas",
       "committee_id": null,
+      "slug_aliases": [
+        "rosas-jesse"
+      ],
       "cluster_id": "rollup-044",
       "cluster_name": "Jesse Rosas",
       "cluster_role": "parent",
@@ -23470,7 +23510,10 @@
       "notes": null,
       "city": null,
       "parent_id": "joseph-berrios-31st-ward-committeeman",
-      "committee_id": null
+      "committee_id": null,
+      "slug_aliases": [
+        "berrios-joseph-31st-ward-committeeman"
+      ]
     },
     "wight-construction-services-inc": {
       "id": "wight-construction-services-inc",
@@ -24804,9 +24847,12 @@
       "city": null,
       "parent_id": "citizens-for-bridget-gainer",
       "committee_id": null,
+      "slug_aliases": [
+        "gainer-bridget"
+      ],
       "cluster_id": "rollup-160",
       "cluster_name": "Citizens for Bridget Gainer",
-      "cluster_role": "alt-name",
+      "cluster_role": "related",
       "cluster_is_parent": false
     },
     "david-munoz": {
@@ -25454,12 +25500,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "chicagoland-chamber-of-commerce",
+      "committee_id": null,
       "cluster_id": "rollup-490",
-      "cluster_is_parent": false,
       "cluster_name": "Chicagoland Chamber of Commerce",
       "cluster_role": "affiliated-pac",
-      "parent_id": "chicagoland-chamber-of-commerce",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "linebarger-goggin-blair-sampson-llp": {
       "id": "linebarger-goggin-blair-sampson-llp",
@@ -25950,7 +25996,10 @@
       "notes": null,
       "city": null,
       "parent_id": "chicago-city-council-latino-caucus",
-      "committee_id": null
+      "committee_id": null,
+      "slug_aliases": [
+        "latino-caucus-chicago-city-council"
+      ]
     },
     "truck-king-hauling-contractors-inc": {
       "id": "truck-king-hauling-contractors-inc",
@@ -26430,12 +26479,17 @@
       "id": "the-burnham-committee",
       "name": "The Burnham Committee",
       "type": "Other",
-      "industries": [],
+      "industries": [
+        "unclassified"
+      ],
       "flags": [],
       "notes": null,
       "city": null,
       "parent_id": "the-burnham-committee",
-      "committee_id": null
+      "committee_id": null,
+      "slug_aliases": [
+        "burnham-committee-the"
+      ]
     },
     "freedom-title": {
       "id": "freedom-title",
@@ -27342,7 +27396,10 @@
       "notes": null,
       "city": null,
       "parent_id": "cesar-santoy",
-      "committee_id": null
+      "committee_id": null,
+      "slug_aliases": [
+        "santoy-cesar"
+      ]
     },
     "brenda-karhoff": {
       "id": "brenda-karhoff",
@@ -27367,12 +27424,12 @@
       "flags": [],
       "notes": null,
       "city": "Darrien, IL",
+      "parent_id": "wight-company",
+      "committee_id": null,
       "cluster_id": "rollup-403",
-      "cluster_is_parent": true,
       "cluster_name": "Wight & Company",
       "cluster_role": "parent",
-      "parent_id": "wight-company",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "aztec-supply": {
       "id": "aztec-supply",
@@ -27612,12 +27669,12 @@
       "flags": [],
       "notes": null,
       "city": "Burr Ridge, IL",
+      "parent_id": "liuna-chicago-laborers-district-council-pac",
+      "committee_id": null,
       "cluster_id": "rollup-478",
-      "cluster_is_parent": true,
       "cluster_name": "LiUNA Chicago Laborers District Council",
       "cluster_role": "parent",
-      "parent_id": "liuna-chicago-laborers-district-council-pac",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "make-it-marino": {
       "id": "make-it-marino",
@@ -28599,7 +28656,10 @@
       "notes": null,
       "city": null,
       "parent_id": "mike-zalewski",
-      "committee_id": null
+      "committee_id": null,
+      "slug_aliases": [
+        "zalewski-mike"
+      ]
     },
     "lr-management-company-llc": {
       "id": "lr-management-company-llc",
@@ -28649,8 +28709,7 @@
       "name": "Progress Chicago",
       "type": "Other",
       "industries": [
-        "charter-schools",
-        "lobby-business"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -28658,7 +28717,10 @@
       "parent_id": "progress-chicago",
       "committee_id": null,
       "entity_type": "political-organization",
-      "_last_edited_by": "editor-ui"
+      "_last_edited_by": "editor-ui",
+      "slug_aliases": [
+        "chicago-progress"
+      ]
     },
     "capital-hall-partners-llc": {
       "id": "capital-hall-partners-llc",
@@ -28706,7 +28768,10 @@
       "notes": null,
       "city": null,
       "parent_id": "friends-of-michael-alvarez",
-      "committee_id": null
+      "committee_id": null,
+      "slug_aliases": [
+        "alvarez-friends-of-michael"
+      ]
     },
     "illinois-risk-mgmt-services": {
       "id": "illinois-risk-mgmt-services",
@@ -32719,9 +32784,12 @@
       "city": null,
       "parent_id": "citizens-for-dan-cronin",
       "committee_id": null,
+      "slug_aliases": [
+        "cronin-dan"
+      ],
       "cluster_id": "rollup-178",
       "cluster_name": "Citizens for Dan Cronin",
-      "cluster_role": "alt-name",
+      "cluster_role": "related",
       "cluster_is_parent": false
     },
     "patrick-brady": {
@@ -34761,12 +34829,12 @@
       "flags": [],
       "notes": null,
       "city": "Evanston, IL",
+      "parent_id": "neighborhood-building-owners-alliance-pac",
+      "committee_id": null,
       "cluster_id": "rollup-518",
-      "cluster_is_parent": true,
       "cluster_name": "Neighborhood Building Owners Alliance Political Action Committee",
       "cluster_role": "parent",
-      "parent_id": "neighborhood-building-owners-alliance-pac",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "steven-brummel": {
       "id": "steven-brummel",
@@ -35497,12 +35565,14 @@
       "flags": [],
       "notes": null,
       "city": "Chicgo, IL",
+      "parent_id": "36th-ward-dems",
+      "committee_id": null,
+      "entity_type": "political-organization",
+      "_last_edited_by": "editor-ui",
       "cluster_id": "rollup-481",
-      "cluster_is_parent": true,
       "cluster_name": "36th Ward Dems",
       "cluster_role": "parent",
-      "parent_id": "36th-ward-dems",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "jaime-cruz": {
       "id": "jaime-cruz",
@@ -36619,7 +36689,10 @@
       "notes": null,
       "city": null,
       "parent_id": "william-silverstein",
-      "committee_id": null
+      "committee_id": null,
+      "slug_aliases": [
+        "silverstein-william"
+      ]
     },
     "john-mclinden": {
       "id": "john-mclinden",
@@ -36851,12 +36924,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "chicago-federation-of-labor-and-industrial-union-council-pac",
+      "committee_id": null,
       "cluster_id": "rollup-498",
-      "cluster_is_parent": true,
       "cluster_name": "Chicago Federation of Labor and Industrial Union Council PAC",
       "cluster_role": "parent",
-      "parent_id": "chicago-federation-of-labor-and-industrial-union-council-pac",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "chicagoland-apartment-association-pac": {
       "id": "chicagoland-apartment-association-pac",
@@ -36896,12 +36969,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "mid-america-carpenters-regional-council-pac",
+      "committee_id": null,
       "cluster_id": "rollup-479",
-      "cluster_is_parent": true,
       "cluster_name": "Mid-America Carpenters Regional Council",
       "cluster_role": "parent",
-      "parent_id": "mid-america-carpenters-regional-council-pac",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "urt-united-road-towing-inc": {
       "id": "urt-united-road-towing-inc",
@@ -37333,6 +37406,9 @@
       "city": null,
       "parent_id": "ibew-local-134-pac",
       "committee_id": null,
+      "slug_aliases": [
+        "local-134-pac-ibew"
+      ],
       "cluster_id": "rollup-510",
       "cluster_name": "IBEW Local 134",
       "cluster_role": "parent",
@@ -38280,12 +38356,12 @@
       "flags": [],
       "notes": null,
       "city": "Countryside, IL",
+      "parent_id": "chicago-land-operators-joint-labor-management-pac",
+      "committee_id": null,
       "cluster_id": "rollup-476",
-      "cluster_is_parent": true,
       "cluster_name": "Chicago Land Operators Joint Labor",
       "cluster_role": "parent",
-      "parent_id": "chicago-land-operators-joint-labor-management-pac",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "mcgrath-city-hyundai": {
       "id": "mcgrath-city-hyundai",
@@ -39111,7 +39187,10 @@
       "notes": null,
       "city": null,
       "parent_id": "peter-villegas",
-      "committee_id": null
+      "committee_id": null,
+      "slug_aliases": [
+        "villegas-peter"
+      ]
     },
     "nubia-duarte": {
       "id": "nubia-duarte",
@@ -40211,7 +40290,10 @@
       "notes": null,
       "city": "Lincolnwood, IL",
       "parent_id": "citizens-for-gene-schulter",
-      "committee_id": null
+      "committee_id": null,
+      "slug_aliases": [
+        "schulter-citizens-for-gene"
+      ]
     },
     "exp-us-services-inc": {
       "id": "exp-us-services-inc",
@@ -41709,12 +41791,12 @@
       "flags": [],
       "notes": null,
       "city": "Westchester, IL",
+      "parent_id": "architectural-ornamental-iron-workers-local-63-ipal-fund",
+      "committee_id": null,
       "cluster_id": "rollup-450",
-      "cluster_is_parent": true,
       "cluster_name": "Architectural & Ornamental Iron Workers Local 63 IPAL Fund",
       "cluster_role": "parent",
-      "parent_id": "architectural-ornamental-iron-workers-local-63-ipal-fund",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "george-ferraro-sr": {
       "id": "george-ferraro-sr",
@@ -42866,6 +42948,9 @@
       "city": null,
       "parent_id": "save-our-local-businesses-illinois-pac",
       "committee_id": null,
+      "slug_aliases": [
+        "save-our-local-illinois-businesses-pac"
+      ],
       "cluster_id": "rollup-525",
       "cluster_name": "Save Our Local Businesses",
       "cluster_role": "parent",
@@ -44939,6 +45024,9 @@
       "city": null,
       "parent_id": "fraternal-order-of-police",
       "committee_id": null,
+      "slug_aliases": [
+        "chicago-fop-lodge-7"
+      ],
       "cluster_id": "rollup-480",
       "cluster_name": "Fraternal Order of Police",
       "cluster_role": "alt-name",
@@ -45321,12 +45409,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "chicago-latino-public-affairs-committee",
+      "committee_id": null,
       "cluster_id": "rollup-456",
-      "cluster_is_parent": true,
       "cluster_name": "Chicago Latino Public Affairs Committee",
       "cluster_role": "parent",
-      "parent_id": "chicago-latino-public-affairs-committee",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "citizens-to-elect-felix-cardona-jr-election-comitee": {
       "id": "citizens-to-elect-felix-cardona-jr-election-comitee",
@@ -45496,12 +45584,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "government-navigation-group-inc",
+      "committee_id": null,
       "cluster_id": "rollup-355",
-      "cluster_is_parent": true,
       "cluster_name": "Government Navigation Group Inc.",
       "cluster_role": "parent",
-      "parent_id": "government-navigation-group-inc",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "graffe-gonzalez-marlene": {
       "id": "graffe-gonzalez-marlene",
@@ -45740,12 +45828,12 @@
       "occupation": "CEO",
       "employer": "GCM Grovesnor",
       "city": "Chicago, IL",
+      "parent_id": "sacks-michael",
+      "committee_id": null,
       "cluster_id": "rollup-472",
-      "cluster_is_parent": false,
       "cluster_name": "Sacks, Michael",
       "cluster_role": "alt-name",
-      "parent_id": "sacks-michael",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "santiago-ivannava": {
       "id": "santiago-ivannava",
@@ -45878,12 +45966,12 @@
       "flags": [],
       "notes": null,
       "city": "Westchester, IL",
+      "parent_id": "architectural-ornamental-iron-workers-local-63-ipal-fund",
+      "committee_id": null,
       "cluster_id": "rollup-450",
-      "cluster_is_parent": false,
       "cluster_name": "Architectural & Ornamental Iron Workers Local 63 IPAL Fund",
       "cluster_role": "alt-name",
-      "parent_id": "architectural-ornamental-iron-workers-local-63-ipal-fund",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "baker-jacquelin": {
       "id": "baker-jacquelin",
@@ -46012,12 +46100,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "chicago-teachers-union",
+      "committee_id": null,
       "cluster_id": "rollup-477",
-      "cluster_is_parent": false,
       "cluster_name": "Chicago Teachers Union",
       "cluster_role": "related",
-      "parent_id": "chicago-teachers-union",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "chicago-teachers-union-pac-illinois-federation-of-teachers-id-444": {
       "id": "chicago-teachers-union-pac-illinois-federation-of-teachers-id-444",
@@ -46449,8 +46537,15 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "seiu-local-73-b-pac-account",
-      "committee_id": null
+      "parent_id": "seiu-local-73",
+      "committee_id": null,
+      "slug_aliases": [
+        "local-73-seiu-b-pac-account"
+      ],
+      "cluster_id": "rollup-489",
+      "cluster_name": "SEIU Local 73",
+      "cluster_role": "related",
+      "cluster_is_parent": false
     },
     "sekendur-audrey": {
       "id": "sekendur-audrey",
@@ -47508,12 +47603,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "citizens-for-bridget-gainer",
+      "committee_id": null,
       "cluster_id": "rollup-160",
-      "cluster_is_parent": true,
       "cluster_name": "Citizens for Bridget Gainer",
       "cluster_role": "parent",
-      "parent_id": "citizens-for-bridget-gainer",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "citizens-for-sara-feigenholtz": {
       "id": "citizens-for-sara-feigenholtz",
@@ -47526,7 +47621,10 @@
       "notes": null,
       "city": "Chicago, IL",
       "parent_id": "citizens-for-sara-feigenholtz",
-      "committee_id": null
+      "committee_id": null,
+      "slug_aliases": [
+        "feigenholtz-citizens-for-sara"
+      ]
     },
     "classen-maurice": {
       "id": "classen-maurice",
@@ -48923,12 +49021,12 @@
       "occupation": "Employee",
       "employer": "GCM Grosvenor",
       "city": "Chicago, IL",
+      "parent_id": "cari-sacks",
+      "committee_id": null,
       "cluster_id": "rollup-191",
-      "cluster_is_parent": false,
       "cluster_name": "Cari Sacks",
       "cluster_role": "alt-name",
-      "parent_id": "cari-sacks",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "schoenburg-samuel": {
       "id": "schoenburg-samuel",
@@ -50702,12 +50800,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "chicago-federation-of-labor-and-industrial-union-council-pac",
+      "committee_id": null,
       "cluster_id": "rollup-498",
-      "cluster_is_parent": false,
       "cluster_name": "Chicago Federation of Labor and Industrial Union Council PAC",
       "cluster_role": "affiliated-pac",
-      "parent_id": "chicago-federation-of-labor-and-industrial-union-council-pac",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "cook-county-colleges-teachers-union-cope-local-1600": {
       "id": "cook-county-colleges-teachers-union-cope-local-1600",
@@ -51052,12 +51150,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "painters-district-council-14",
+      "committee_id": null,
       "cluster_id": "rollup-530",
-      "cluster_is_parent": false,
       "cluster_name": "Painters District Council No.14",
       "cluster_role": "affiliated-pac",
-      "parent_id": "painters-district-council-14",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "pandurangi-vibha": {
       "id": "pandurangi-vibha",
@@ -51996,12 +52094,12 @@
       "flags": [],
       "notes": null,
       "city": "Oak Brook, IL",
+      "parent_id": "roofers-waterproofers-local-11",
+      "committee_id": null,
       "cluster_id": "rollup-494",
-      "cluster_is_parent": true,
       "cluster_name": "Roofers & Waterproofers Local 11",
       "cluster_role": "parent",
-      "parent_id": "roofers-waterproofers-local-11",
-      "committee_id": null
+      "cluster_is_parent": true
     },
     "rudbeck-thomas": {
       "id": "rudbeck-thomas",
@@ -52812,12 +52910,12 @@
       "flags": [],
       "notes": null,
       "city": "Westchester, IL",
+      "parent_id": "architectural-ornamental-iron-workers-local-63-ipal-fund",
+      "committee_id": null,
       "cluster_id": "rollup-450",
-      "cluster_is_parent": false,
       "cluster_name": "Architectural & Ornamental Iron Workers Local 63 IPAL Fund",
       "cluster_role": "alt-name",
-      "parent_id": "architectural-ornamental-iron-workers-local-63-ipal-fund",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "julia-ramirez-for-12": {
       "id": "julia-ramirez-for-12",
@@ -52983,12 +53081,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
+      "parent_id": "international-brotherhood-of-teamsters-local-705",
+      "committee_id": null,
       "cluster_id": "rollup-432",
-      "cluster_is_parent": false,
       "cluster_name": "International Brotherhood of Teamsters Local 705 PAC",
       "cluster_role": "alt-name",
-      "parent_id": "international-brotherhood-of-teamsters-local-705",
-      "committee_id": null
+      "cluster_is_parent": false
     },
     "torres-jeanette": {
       "id": "torres-jeanette",
@@ -53834,8 +53932,12 @@
       ],
       "flags": [],
       "notes": null,
-      "parent_id": "bridge-structural-and-reinforcing-ironworkers-local-union-1",
-      "committee_id": null
+      "parent_id": "bridge-structural-and-reinforcing-ironworkers-local-1",
+      "committee_id": null,
+      "cluster_id": "rollup-514",
+      "cluster_name": "Ironworkers Local Union #1",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "carpentry-advancement-political-action-committee-fund": {
       "id": "carpentry-advancement-political-action-committee-fund",
@@ -55115,8 +55217,12 @@
       "flags": [],
       "notes": null,
       "city": "Elmhurst, IL",
-      "parent_id": "administrative-district-council-1-of-il",
-      "committee_id": null
+      "parent_id": "administrative-district-council-1-of-illinois",
+      "committee_id": null,
+      "cluster_id": "rollup-444",
+      "cluster_name": "Administrative District Council 1 of Illinois, Bricklayers and Allied",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "allegretti-michael": {
       "id": "allegretti-michael",
@@ -55738,8 +55844,12 @@
       "flags": [],
       "notes": null,
       "city": "Oak Brook, IL",
-      "parent_id": "roofers-waterproofers-local-11-pac",
-      "committee_id": null
+      "parent_id": "roofers-waterproofers-local-11",
+      "committee_id": null,
+      "cluster_id": "rollup-494",
+      "cluster_name": "Roofers & Waterproofers Local 11",
+      "cluster_role": "affiliated-pac",
+      "cluster_is_parent": false
     },
     "scoles-eric": {
       "id": "scoles-eric",
@@ -56469,7 +56579,10 @@
       "notes": null,
       "city": "Chicago, IL",
       "parent_id": "citizens-for-waguespack",
-      "committee_id": null
+      "committee_id": null,
+      "slug_aliases": [
+        "waguespack-citizens-for"
+      ]
     },
     "doubleday-matthew": {
       "id": "doubleday-matthew",
@@ -56776,7 +56889,10 @@
       "notes": null,
       "city": "Chicago, IL",
       "parent_id": "citizens-for-john-cullerton",
-      "committee_id": null
+      "committee_id": null,
+      "slug_aliases": [
+        "cullerton-citizens-for-john"
+      ]
     },
     "clayborne-james": {
       "id": "clayborne-james",
@@ -57747,13 +57863,16 @@
       "name": "Murphy, Thomas",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
       "parent_id": "murphy-thomas",
-      "committee_id": null
+      "committee_id": null,
+      "slug_aliases": [
+        "thomas-murphy"
+      ]
     },
     "murray-cynthia": {
       "id": "murray-cynthia",
@@ -59550,8 +59669,12 @@
       "occupation": "not employed",
       "employer": "not employed",
       "city": "Chicago, IL",
-      "parent_id": "sacks-cari-b",
-      "committee_id": null
+      "parent_id": "cari-sacks",
+      "committee_id": null,
+      "cluster_id": "rollup-191",
+      "cluster_name": "Cari Sacks",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "schmidt-john-r": {
       "id": "schmidt-john-r",
@@ -170015,7 +170138,9 @@
       "citizens-for-esther-golar": {
         "name": "Citizens for Esther Golar",
         "type": "Other",
-        "industries": [],
+        "industries": [
+          "unclassified"
+        ],
         "direct": 250.0,
         "independent": 0.0,
         "total": 250.0,
@@ -171041,7 +171166,9 @@
       "iuoe-local-399": {
         "name": "IUOE Local 399",
         "type": "Other",
-        "industries": [],
+        "industries": [
+          "labor-trades"
+        ],
         "direct": 39700.0,
         "independent": 0.0,
         "total": 39700.0,
@@ -174358,12 +174485,12 @@
         "industries": [
           "labor-trades"
         ],
-        "direct": 8450.0,
+        "direct": 8950.0,
         "independent": 0.0,
-        "total": 8450.0,
-        "count": 12,
-        "committees": 3,
-        "members": 2,
+        "total": 8950.0,
+        "count": 13,
+        "committees": 4,
+        "members": 3,
         "by_cycle": {
           "2015": {
             "direct": 250.0,
@@ -174378,10 +174505,10 @@
             "count": 4
           },
           "2023": {
-            "direct": 4350.0,
+            "direct": 4850.0,
             "independent": 0.0,
-            "total": 4350.0,
-            "count": 5
+            "total": 4850.0,
+            "count": 6
           },
           "2027": {
             "direct": 2000.0,
@@ -176856,12 +176983,12 @@
           "individual",
           "finance"
         ],
-        "direct": 878400.0,
+        "direct": 885300.0,
         "independent": 0.0,
-        "total": 878400.0,
-        "count": 18,
-        "committees": 5,
-        "members": 2,
+        "total": 885300.0,
+        "count": 19,
+        "committees": 6,
+        "members": 3,
         "by_cycle": {
           "2015": {
             "direct": 825000.0,
@@ -176882,10 +177009,10 @@
             "count": 2
           },
           "2027": {
-            "direct": 28400.0,
+            "direct": 35300.0,
             "independent": 0.0,
-            "total": 28400.0,
-            "count": 6
+            "total": 35300.0,
+            "count": 7
           }
         }
       },
@@ -182056,17 +182183,17 @@
         }
       },
       "administrative-district-council-1-of-illinois": {
-        "name": "Administrative District Council 1 of Illinois",
+        "name": "Administrative District Council 1 of Illinois, Bricklayers and Allied",
         "type": "PAC",
         "industries": [
           "labor-trades"
         ],
-        "direct": 6000.0,
+        "direct": 7000.0,
         "independent": 0.0,
-        "total": 6000.0,
-        "count": 9,
-        "committees": 3,
-        "members": 1,
+        "total": 7000.0,
+        "count": 10,
+        "committees": 4,
+        "members": 2,
         "by_cycle": {
           "2019": {
             "direct": 1000.0,
@@ -182081,10 +182208,10 @@
             "count": 6
           },
           "2027": {
-            "direct": 500.0,
+            "direct": 1500.0,
             "independent": 0.0,
-            "total": 500.0,
-            "count": 1
+            "total": 1500.0,
+            "count": 2
           }
         }
       },
@@ -182982,12 +183109,12 @@
         "industries": [
           "labor-trades"
         ],
-        "direct": 9750.0,
+        "direct": 11750.0,
         "independent": 0.0,
-        "total": 9750.0,
-        "count": 12,
-        "committees": 4,
-        "members": 6,
+        "total": 11750.0,
+        "count": 13,
+        "committees": 5,
+        "members": 7,
         "by_cycle": {
           "2015": {
             "direct": 500.0,
@@ -183008,10 +183135,10 @@
             "count": 2
           },
           "2027": {
-            "direct": 6500.0,
+            "direct": 8500.0,
             "independent": 0.0,
-            "total": 6500.0,
-            "count": 5
+            "total": 8500.0,
+            "count": 6
           }
         }
       },
@@ -191977,7 +192104,9 @@
       "the-burnham-committee": {
         "name": "The Burnham Committee",
         "type": "Other",
-        "industries": [],
+        "industries": [
+          "unclassified"
+        ],
         "direct": 200.0,
         "independent": 0.0,
         "total": 200.0,
@@ -195554,8 +195683,7 @@
         "name": "Progress Chicago",
         "type": "Other",
         "industries": [
-          "charter-schools",
-          "lobby-business"
+          "unclassified"
         ],
         "direct": 409000.0,
         "independent": 0.0,
@@ -196004,12 +196132,12 @@
         "industries": [
           "labor-service"
         ],
-        "direct": 6000.0,
+        "direct": 11000.0,
         "independent": 0.0,
-        "total": 6000.0,
-        "count": 2,
-        "committees": 2,
-        "members": 2,
+        "total": 11000.0,
+        "count": 3,
+        "committees": 3,
+        "members": 3,
         "by_cycle": {
           "2019": {
             "direct": 1000.0,
@@ -196018,6 +196146,12 @@
             "count": 1
           },
           "2023": {
+            "direct": 5000.0,
+            "independent": 0.0,
+            "total": 5000.0,
+            "count": 1
+          },
+          "2027": {
             "direct": 5000.0,
             "independent": 0.0,
             "total": 5000.0,
@@ -222312,27 +222446,6 @@
           }
         }
       },
-      "bridge-structural-and-reinforcing-ironworkers-local-union-1": {
-        "name": "Bridge Structural and Reinforcing Ironworkers Local Union #1",
-        "type": "Individual",
-        "industries": [
-          "labor-trades"
-        ],
-        "direct": 500.0,
-        "independent": 0.0,
-        "total": 500.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1,
-        "by_cycle": {
-          "2023": {
-            "direct": 500.0,
-            "independent": 0.0,
-            "total": 500.0,
-            "count": 1
-          }
-        }
-      },
       "carpentry-advancement-political-action-committee-fund": {
         "name": "Carpentry Advancement Political Action Committee Fund",
         "type": "Individual",
@@ -229593,27 +229706,6 @@
           }
         }
       },
-      "administrative-district-council-1-of-il": {
-        "name": "Administrative District Council 1 of IL",
-        "type": "PAC",
-        "industries": [
-          "labor-trades"
-        ],
-        "direct": 1000.0,
-        "independent": 0.0,
-        "total": 1000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1,
-        "by_cycle": {
-          "2027": {
-            "direct": 1000.0,
-            "independent": 0.0,
-            "total": 1000.0,
-            "count": 1
-          }
-        }
-      },
       "allegretti-michael": {
         "name": "Allegretti, Michael",
         "type": "Individual",
@@ -230555,27 +230647,6 @@
             "direct": 517.75,
             "independent": 0.0,
             "total": 517.75,
-            "count": 1
-          }
-        }
-      },
-      "roofers-waterproofers-local-11-pac": {
-        "name": "Roofers & Waterproofers Local 11 PAC",
-        "type": "PAC",
-        "industries": [
-          "labor-trades"
-        ],
-        "direct": 2000.0,
-        "independent": 0.0,
-        "total": 2000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1,
-        "by_cycle": {
-          "2027": {
-            "direct": 2000.0,
-            "independent": 0.0,
-            "total": 2000.0,
             "count": 1
           }
         }
@@ -234465,27 +234536,6 @@
           }
         }
       },
-      "seiu-local-73-b-pac-account": {
-        "name": "SEIU Local 73 B-PAC Account",
-        "type": "PAC",
-        "industries": [
-          "labor-service"
-        ],
-        "direct": 5000.0,
-        "independent": 0.0,
-        "total": 5000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1,
-        "by_cycle": {
-          "2027": {
-            "direct": 5000.0,
-            "independent": 0.0,
-            "total": 5000.0,
-            "count": 1
-          }
-        }
-      },
       "sekendur-audrey": {
         "name": "Sekendur, Audrey",
         "type": "Individual",
@@ -237619,7 +237669,7 @@
         "name": "Murphy, Thomas",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
         "direct": 250.0,
         "independent": 0.0,
@@ -249333,27 +249383,6 @@
           }
         }
       },
-      "sacks-cari-b": {
-        "name": "Sacks, Cari B",
-        "type": "Individual",
-        "industries": [
-          "individual"
-        ],
-        "direct": 6900.0,
-        "independent": 0.0,
-        "total": 6900.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1,
-        "by_cycle": {
-          "2027": {
-            "direct": 6900.0,
-            "independent": 0.0,
-            "total": 6900.0,
-            "count": 1
-          }
-        }
-      },
       "schmidt-john-r": {
         "name": "Schmidt, John R",
         "type": "Individual",
@@ -255238,20 +255267,20 @@
     "by_industry": {
       "unclassified": {
         "all": {
-          "direct": 4018441.8
+          "direct": 4472791.8
         },
         "by_cycle": {
           "2015": {
-            "direct": 1001773.11
+            "direct": 1007523.11
           },
           "2019": {
-            "direct": 601183.72
+            "direct": 1020333.72
           },
           "2023": {
-            "direct": 1282613.91
+            "direct": 1291613.91
           },
           "2027": {
-            "direct": 1132871.06
+            "direct": 1153321.06
           }
         }
       },
@@ -255279,22 +255308,22 @@
       },
       "labor-teachers": {
         "all": {
-          "direct": 3183525.19,
+          "direct": 3170825.19,
           "independent": 31499.88
         },
         "by_cycle": {
           "2015": {
-            "direct": 610022.0,
+            "direct": 604522.0,
             "independent": 31499.88
           },
           "2019": {
-            "direct": 391000.0
+            "direct": 386000.0
           },
           "2023": {
-            "direct": 19300.0
+            "direct": 18800.0
           },
           "2027": {
-            "direct": 2163203.19
+            "direct": 2161503.19
           }
         }
       },
@@ -255345,26 +255374,26 @@
       },
       "labor-trades": {
         "all": {
-          "direct": 796135.78
+          "direct": 767185.78
         },
         "by_cycle": {
           "2015": {
             "direct": 203500.0
           },
           "2019": {
-            "direct": 18200.0
+            "direct": 13750.0
           },
           "2023": {
-            "direct": 376368.05
+            "direct": 370368.05
           },
           "2027": {
-            "direct": 198067.73
+            "direct": 179567.73
           }
         }
       },
       "lobby-business": {
         "all": {
-          "direct": 4629750.0,
+          "direct": 4220750.0,
           "independent": 65.35
         },
         "by_cycle": {
@@ -255373,7 +255402,7 @@
             "independent": 65.35
           },
           "2019": {
-            "direct": 1844000.0
+            "direct": 1435000.0
           },
           "2023": {
             "direct": 2780000.0
@@ -255404,7 +255433,7 @@
       },
       "individual": {
         "all": {
-          "direct": 20051813.1
+          "direct": 20051563.1
         },
         "by_cycle": {
           "2015": {
@@ -255417,7 +255446,7 @@
             "direct": 4405536.0
           },
           "2027": {
-            "direct": 7033277.1
+            "direct": 7033027.1
           }
         }
       },
@@ -255457,7 +255486,7 @@
       },
       "charter-schools": {
         "all": {
-          "direct": 1753310.35,
+          "direct": 1344310.35,
           "independent": 1876811.07
         },
         "by_cycle": {
@@ -255466,7 +255495,7 @@
             "independent": 27905.2
           },
           "2019": {
-            "direct": 812760.35,
+            "direct": 403760.35,
             "independent": 61716.93
           },
           "2023": {
@@ -274199,7 +274228,7 @@
       "election_date": "2027-02-23"
     }
   },
-  "generated_at": "2026-07-13T23:41:01Z",
+  "generated_at": "2026-07-16T14:34:26Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "current_cycle": "2027",
   "default_cycle": "all",
@@ -274354,7 +274383,7 @@
       ],
       "roles": {
         "citizens-for-bridget-gainer": "parent",
-        "bridget-gainer": "alt-name"
+        "bridget-gainer": "related"
       },
       "member_totals": {
         "citizens-for-bridget-gainer": 2500.0,
@@ -274390,7 +274419,7 @@
       ],
       "roles": {
         "citizens-for-dan-cronin": "parent",
-        "dan-cronin": "alt-name"
+        "dan-cronin": "related"
       },
       "member_totals": {
         "citizens-for-dan-cronin": 1950.0,
@@ -274422,17 +274451,20 @@
       "canonical_id": "cari-sacks",
       "members": [
         "cari-sacks",
-        "sacks-cari"
+        "sacks-cari",
+        "sacks-cari-b"
       ],
       "roles": {
         "cari-sacks": "parent",
-        "sacks-cari": "alt-name"
+        "sacks-cari": "alt-name",
+        "sacks-cari-b": "alt-name"
       },
       "member_totals": {
         "cari-sacks": 864600.0,
-        "sacks-cari": 13800.0
+        "sacks-cari": 13800.0,
+        "sacks-cari-b": 6900.0
       },
-      "total": 878400.0
+      "total": 885300.0
     },
     "rollup-209": {
       "name": "Citizens for Mariyana Spyropoulos",
@@ -274764,11 +274796,11 @@
       },
       "member_totals": {
         "james-s-frank": 4518000.81,
-        "frank-jim": 70100.0,
+        "frank-jim": 115800.0,
         "jim-s-frank": 3090466.0,
         "jim-frank": 1500.0
       },
-      "total": 7680066.81
+      "total": 7725766.81
     },
     "rollup-369": {
       "name": "Cozen O'Connor",
@@ -274953,11 +274985,11 @@
         "wight-construction-services-inc": "alt-name"
       },
       "member_totals": {
-        "wight-company": 4000.0,
+        "wight-company": 4500.0,
         "wight-co": 3500.0,
         "wight-construction-services-inc": 200.0
       },
-      "total": 7700.0
+      "total": 8200.0
     },
     "rollup-404": {
       "name": "Zitella Development Corp",
@@ -275166,6 +275198,24 @@
       },
       "total": 2000.0
     },
+    "rollup-444": {
+      "name": "Administrative District Council 1 of Illinois, Bricklayers and Allied",
+      "relationship": "affiliated entities",
+      "canonical_id": "administrative-district-council-1-of-illinois",
+      "members": [
+        "administrative-district-council-1-of-illinois",
+        "administrative-district-council-1-of-il"
+      ],
+      "roles": {
+        "administrative-district-council-1-of-illinois": "parent",
+        "administrative-district-council-1-of-il": "alt-name"
+      },
+      "member_totals": {
+        "administrative-district-council-1-of-illinois": 6000.0,
+        "administrative-district-council-1-of-il": 1000.0
+      },
+      "total": 7000.0
+    },
     "rollup-450": {
       "name": "Architectural & Ornamental Iron Workers Local 63 IPAL Fund",
       "relationship": "affiliated entities",
@@ -275185,13 +275235,13 @@
         "iron-workers-local-63": "alt-name"
       },
       "member_totals": {
-        "architectural-ornamental-iron-workers-local-63-ipal-fund": 2000.0,
+        "architectural-ornamental-iron-workers-local-63-ipal-fund": 2500.0,
         "architectural-ornamental-iron-workers-local-63": 1250.0,
         "architectural-and-ornamental-iron-workers-local-63": 500.0,
         "architectural-ornamental-ironworkers-local-63-ipal-fund": 500.0,
         "iron-workers-local-63": 500.0
       },
-      "total": 4750.0
+      "total": 5250.0
     },
     "rollup-452": {
       "name": "Local 134 International Brotherhood of Electrical Workers",
@@ -275243,9 +275293,9 @@
       },
       "member_totals": {
         "gilbert-villegas-for-congress": 42454.61,
-        "villegas-gilbert": 2250.0
+        "villegas-gilbert": 2500.0
       },
-      "total": 44704.61
+      "total": 44954.61
     },
     "rollup-460": {
       "name": "DLA Piper LLP",
@@ -275388,11 +275438,11 @@
         "teamsters-vounteers-in-politics": "alt-name"
       },
       "member_totals": {
-        "teamsters-volunteers-in-politics": 22744.91,
+        "teamsters-volunteers-in-politics": 23744.91,
         "volunteers-in-politics": 1000.0,
         "teamsters-vounteers-in-politics": 28000.0
       },
-      "total": 51744.91
+      "total": 52744.91
     },
     "rollup-472": {
       "name": "Sacks, Michael",
@@ -275411,12 +275461,12 @@
         "michael-j-sacks": "alt-name"
       },
       "member_totals": {
-        "sacks-michael": 85300.0,
-        "sacks-michael-j": 14600.0,
+        "sacks-michael": 92200.0,
+        "sacks-michael-j": 21500.0,
         "michael-sacks": 1239600.0,
         "michael-j-sacks": 875000.0
       },
-      "total": 2214500.0
+      "total": 2228300.0
     },
     "rollup-475": {
       "name": "SEIU Healthcare IL IN PAC",
@@ -275456,12 +275506,12 @@
         "chicagoland-operators-joint-labor-management-pac": "affiliated-pac"
       },
       "member_totals": {
-        "chicago-land-operators-joint-labor-management-pac": 31958.0,
+        "chicago-land-operators-joint-labor-management-pac": 32958.0,
         "chicago-land-operators": 22000.0,
         "chicago-land-operators-pac": 14450.0,
         "chicagoland-operators-joint-labor-management-pac": 42574.0
       },
-      "total": 110982.0
+      "total": 111982.0
     },
     "rollup-477": {
       "name": "Chicago Teachers Union",
@@ -275489,12 +275539,12 @@
         "chicago-teachers-union": 298322.0,
         "chicago-teachers-union-pac": 607930.53,
         "ctu-pac": 1500.0,
-        "chicago-teachers-union-pac-illinois-federation-of-teachers": 162909.19999999998,
-        "chicago-teachers-union-local-1-pac": 671881.5600000002,
+        "chicago-teachers-union-pac-illinois-federation-of-teachers": 283234.52999999997,
+        "chicago-teachers-union-local-1-pac": 864544.14,
         "chicago-teachers-union-dues": 0.0,
         "chicago-teachers-union-local-1-pac-committee-id-34464": 252900.41
       },
-      "total": 1995443.7
+      "total": 2308431.61
     },
     "rollup-478": {
       "name": "LiUNA Chicago Laborers District Council",
@@ -275537,9 +275587,9 @@
       },
       "member_totals": {
         "mid-america-carpenters-regional-council-pac": 8000.0,
-        "mid-america-carpenters-regional-council-political-action-committee": 12000.0
+        "mid-america-carpenters-regional-council-political-action-committee": 15000.0
       },
-      "total": 20000.0
+      "total": 23000.0
     },
     "rollup-480": {
       "name": "Fraternal Order of Police",
@@ -275670,17 +275720,20 @@
       "canonical_id": "seiu-local-73",
       "members": [
         "seiu-local-73",
-        "s-e-i-u-local-73-b-pac"
+        "s-e-i-u-local-73-b-pac",
+        "seiu-local-73-b-pac-account"
       ],
       "roles": {
         "seiu-local-73": "parent",
-        "s-e-i-u-local-73-b-pac": "affiliated-pac"
+        "s-e-i-u-local-73-b-pac": "affiliated-pac",
+        "seiu-local-73-b-pac-account": "related"
       },
       "member_totals": {
-        "seiu-local-73": 25000.0,
-        "s-e-i-u-local-73-b-pac": 1000.0
+        "seiu-local-73": 30000.0,
+        "s-e-i-u-local-73-b-pac": 1000.0,
+        "seiu-local-73-b-pac-account": 5000.0
       },
-      "total": 26000.0
+      "total": 36000.0
     },
     "rollup-490": {
       "name": "Chicagoland Chamber of Commerce",
@@ -275695,10 +275748,10 @@
         "chicagoland-chamber-of-commerce-pac": "affiliated-pac"
       },
       "member_totals": {
-        "chicagoland-chamber-of-commerce": 33250.0,
+        "chicagoland-chamber-of-commerce": 35750.0,
         "chicagoland-chamber-of-commerce-pac": 10000.0
       },
-      "total": 43250.0
+      "total": 45750.0
     },
     "rollup-491": {
       "name": "Laborers' Political League Education Fund",
@@ -275778,6 +275831,7 @@
       "canonical_id": "roofers-waterproofers-local-11",
       "members": [
         "roofers-waterproofers-local-11",
+        "roofers-waterproofers-local-11-pac",
         "roofers-and-waterproofers-local-11-pac",
         "roofers-and-waterproofers-local-11",
         "united-union-of-roofers-local-11",
@@ -275786,6 +275840,7 @@
       ],
       "roles": {
         "roofers-waterproofers-local-11": "parent",
+        "roofers-waterproofers-local-11-pac": "affiliated-pac",
         "roofers-and-waterproofers-local-11-pac": "affiliated-pac",
         "roofers-and-waterproofers-local-11": "alt-name",
         "united-union-of-roofers-local-11": "alt-name",
@@ -275794,13 +275849,14 @@
       },
       "member_totals": {
         "roofers-waterproofers-local-11": 1000.0,
+        "roofers-waterproofers-local-11-pac": 2000.0,
         "roofers-and-waterproofers-local-11-pac": 2500.0,
         "roofers-and-waterproofers-local-11": 2000.0,
         "united-union-of-roofers-local-11": 1250.0,
         "roofers-and-waterproofers-local-11pac": 2000.0,
         "united-union-of-roofers-waterproofers-and-allied-workers-local-11": 1000.0
       },
-      "total": 9750.0
+      "total": 11750.0
     },
     "rollup-496": {
       "name": "UFCW Local 881",
@@ -275858,9 +275914,9 @@
       "member_totals": {
         "chicago-federation-of-labor-and-industrial-union-council-pac": 18952.0,
         "chicago-federation-of-labor-industrial-union-council-pac": 4402.35,
-        "chicago-federation-of-labor": 17362.01
+        "chicago-federation-of-labor": 18362.01
       },
-      "total": 40716.36
+      "total": 41716.36
     },
     "rollup-499": {
       "name": "Unite Here Local 1",
@@ -276060,17 +276116,20 @@
       "canonical_id": "bridge-structural-and-reinforcing-ironworkers-local-1",
       "members": [
         "bridge-structural-and-reinforcing-ironworkers-local-1",
+        "bridge-structural-and-reinforcing-ironworkers-local-union-1",
         "bridge-structural-reinforcing"
       ],
       "roles": {
         "bridge-structural-and-reinforcing-ironworkers-local-1": "parent",
+        "bridge-structural-and-reinforcing-ironworkers-local-union-1": "alt-name",
         "bridge-structural-reinforcing": "alt-name"
       },
       "member_totals": {
         "bridge-structural-and-reinforcing-ironworkers-local-1": 5350.0,
+        "bridge-structural-and-reinforcing-ironworkers-local-union-1": 500.0,
         "bridge-structural-reinforcing": 3100.0
       },
-      "total": 8450.0
+      "total": 8950.0
     },
     "rollup-516": {
       "name": "Friends of Luis Arroyo",
@@ -276103,10 +276162,10 @@
         "neighborhood-building-owners-alliance": "alt-name"
       },
       "member_totals": {
-        "neighborhood-building-owners-alliance-pac": 9250.0,
+        "neighborhood-building-owners-alliance-pac": 10250.0,
         "neighborhood-building-owners-alliance": 1000.0
       },
-      "total": 10250.0
+      "total": 11250.0
     },
     "rollup-520": {
       "name": "Illinois Nurses Association PAC",
