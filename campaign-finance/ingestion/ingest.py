@@ -458,7 +458,10 @@ def merge_into_data(data: dict, parsed: dict, ward, linkage: dict = None) -> dic
             _apply_linkage(cm, linkage)
     else:
         if linkage is not None:
-            committee_id_str = f"cand-{linkage['candidate_id']}" if linkage.get('candidate_id') \
+            _cid = linkage.get('candidate_id')
+            # HALT-Q2R: don't re-prefix candidate_ids that already begin 'cand-' (committee-less
+            # stubs promoted to mappings keep the cand- prefix; f"cand-{cand-...}" would double it).
+            committee_id_str = (_cid if str(_cid).startswith('cand-') else f"cand-{_cid}") if _cid \
                 else f"cmte-{parsed['committee_id']}"
         else:
             committee_id_str = f"ward-{ward}-{slug(parsed['committee_name'])}"

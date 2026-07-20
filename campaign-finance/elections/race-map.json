@@ -3,8 +3,15 @@
   "_status_values": "declared | filed | certified | withdrawn | disqualified | incumbent-pending",
   "_example_remove_before_use": true,
   "mappings": {
+    "41108": {"candidate_id":"cand-williams-sb-d09","name":"LaPamela Williams","race_id":"sb-d09","incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "41203": {"candidate_id":"cand-lenhof-sb-d04","name":"Kyna Lenhof","race_id":"sb-d04","incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "41220": {"candidate_id":"cand-diaz-chavez-sb-d14","name":"Erika Díaz-Chávez","race_id":"sb-d14","incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "41231": {"candidate_id":"cand-dunneback-sb-d18","name":"Katherine Dunneback","race_id":"sb-d18","incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "41233": {"candidate_id":"cand-luczak-sb-d01","name":"Margie B. Luczak","race_id":"sb-d01","incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "40744": {"candidate_id":"cand-white-sb-d11","name":"Isaiah White","race_id":"sb-d11","incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "39831": {"candidate_id":"cand-hargrove-sb-d10","name":"Anthony Hargrove","race_id":"sb-d10","incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
     "39789": {"candidate_id":"ayala-sb-d13","name":"Jesus Ayala Jr","race_id":"sb-d13","incumbent":false,"status":"filed","bio":{}},
-    "39844": {"candidate_id":"lopez-sb-d14","name":"Yesenia Lopez","race_id":"sb-d14","incumbent":true,"status":"filed","bio":{}},
+    "39844": {"candidate_id":"lopez-sb-d14","name":"Yesenia Lopez","race_id":"sb-d14","incumbent":true,"status":"filed","bio":{},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
     "39873": {"candidate_id":"gutierrez-sb-d15","name":"Angel Gutierrez","race_id":"sb-d15","incumbent":true,"status":"filed","bio":{}},
     "41111": {"candidate_id":"gonzalez-sb-d16","name":"Juan Ignacio Gonzalez","race_id":"sb-d16","incumbent":false,"status":"filed","bio":{}},
     "39843": {"candidate_id":"boyle-sb-d18","name":"Therese Boyle","race_id":"sb-d18","incumbent":true,"status":"filed","bio":{}},
@@ -40,7 +47,7 @@
       "incumbent": false,
       "status": "filed",
       "bio": {}
-    },
+    ,"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
     "38810": {
       "candidate_id": "bannon-sb-d01",
       "name": "Ed Bannon",
@@ -48,7 +55,7 @@
       "incumbent": true,
       "status": "filed",
       "bio": {}
-    },
+    ,"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
     "41087": {
       "candidate_id": "peralta-sb-d02",
       "name": "Claudia Peralta",
@@ -56,7 +63,7 @@
       "incumbent": false,
       "status": "filed",
       "bio": {}
-    },
+    ,"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
     "39783": {
       "candidate_id": "pierre-sb-d02",
       "name": "Michelle Pierre",
@@ -112,16 +119,16 @@
       "incumbent": true,
       "status": "filed",
       "bio": {}
-    },
-    "39820": {"candidate_id":"dones-sb-d06","name":"Jason Dónes","race_id":"sb-d06","incumbent":false,"status":"filed","bio":{}},
+    ,"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
+    "39820": {"candidate_id":"dones-sb-d06","name":"Jason Dónes","race_id":"sb-d06","incumbent":false,"status":"filed","bio":{},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
     "39786": {"candidate_id":"rivas-sb-d06","name":"Carlos A. Rivas Jr.","race_id":"sb-d06","incumbent":true,"status":"filed","bio":{}},
     "41076": {"candidate_id":"sherratt-sb-d07","name":"Ellen Sherratt","race_id":"sb-d07","incumbent":false,"status":"filed","bio":{}},
-    "39866": {"candidate_id":"zaccor-sb-d07","name":"Karen Zaccor","race_id":"sb-d07","incumbent":true,"status":"filed","bio":{}},
+    "39866": {"candidate_id":"zaccor-sb-d07","name":"Karen Zaccor","race_id":"sb-d07","incumbent":true,"status":"filed","bio":{},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
     "39858": {"candidate_id":"rosenfeld-sb-d08","name":"Ellen Rosenfeld","race_id":"sb-d08","incumbent":true,"status":"filed","bio":{}},
     "39853": {"candidate_id":"brown-sb-d09","name":"Aaron \"Jitu\" Brown","race_id":"sb-d09","incumbent":true,"status":"filed","bio":{}},
-    "37001": {"candidate_id":"blaise-sb-d10","name":"Michilla \"Kyla\" Blaise","race_id":"sb-d10","incumbent":true,"status":"filed","bio":{}},
-    "39855": {"candidate_id":"thotakura-sb-d11","name":"Anusha Thotakura","race_id":"sb-d11","incumbent":true,"status":"filed","bio":{}},
-    "41131": {"candidate_id":"anderson-sb-d11","name":"Brenda Lee Anderson","race_id":"sb-d11","incumbent":false,"status":"filed","bio":{}},
+    "37001": {"candidate_id":"blaise-sb-d10","name":"Michilla \"Kyla\" Blaise","race_id":"sb-d10","incumbent":true,"status":"filed","bio":{},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
+    "39855": {"candidate_id":"thotakura-sb-d11","name":"Anusha Thotakura","race_id":"sb-d11","incumbent":true,"status":"filed","bio":{},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
+    "41131": {"candidate_id":"anderson-sb-d11","name":"Brenda Lee Anderson","race_id":"sb-d11","incumbent":false,"status":"filed","bio":{},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
     "41134": {"candidate_id":"kimble-sb-d12","name":"Brittany B. Kimble","race_id":"sb-d12","incumbent":false,"status":"filed","bio":{}}
   },
   "incumbent_stubs": {
@@ -1394,7 +1401,7 @@
         },
         "source": "ipg-rep-finder REPS.school (current officeholder; candidacy not confirmed)"
       }
-    },
+    ,"ballot_status":"removed","ballot_status_as_of":"2026-07-14"},
     "inc-sb-d17": {
       "candidate_id": "inc-sb-d17",
       "name": "Ángel Luis Vélez Rodríguez",
@@ -1406,7 +1413,7 @@
         "current_roles": [],
         "board_role": "Appointed"
       }
-    },
+    ,"ballot_status":"removed","ballot_status_as_of":"2026-07-14"},
     "inc-sb-d18": {
       "candidate_id": "inc-sb-d18",
       "name": "Therese Boyle",
@@ -1449,20 +1456,14 @@
     }
   },
   "candidate_stubs": {
-    "cand-diaz-chavez-sb-d14": {"candidate_id":"cand-diaz-chavez-sb-d14","name":"Erika Díaz-Chávez","race_id":"sb-d14","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
     "cand-preston-sb-d17": {"candidate_id":"cand-preston-sb-d17","name":"Brittany Bailey Preston","race_id":"sb-d17","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "cand-dunneback-sb-d18": {"candidate_id":"cand-dunneback-sb-d18","name":"Katherine Dunneback","race_id":"sb-d18","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "cand-alston-sb-d19": {"candidate_id":"cand-alston-sb-d19","name":"Krista Nichols Alston","race_id":"sb-d19","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "cand-walton-sb-d19": {"candidate_id":"cand-walton-sb-d19","name":"Tameka Walton","race_id":"sb-d19","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "cand-anderson-sb-d20": {"candidate_id":"cand-anderson-sb-d20","name":"Connie Anderson","race_id":"sb-d20","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "cand-chatonda-sb-d20": {"candidate_id":"cand-chatonda-sb-d20","name":"Rosita Chatonda","race_id":"sb-d20","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "cand-alston-sb-d19": {"candidate_id":"cand-alston-sb-d19","name":"Krista Nichols Alston","race_id":"sb-d19","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"},"ballot_status":"removed","ballot_status_as_of":"2026-07-14"},
+    "cand-walton-sb-d19": {"candidate_id":"cand-walton-sb-d19","name":"Tameka Walton","race_id":"sb-d19","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
+    "cand-anderson-sb-d20": {"candidate_id":"cand-anderson-sb-d20","name":"Connie Anderson","race_id":"sb-d20","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
+    "cand-chatonda-sb-d20": {"candidate_id":"cand-chatonda-sb-d20","name":"Rosita Chatonda","race_id":"sb-d20","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"},"ballot_status":"removed","ballot_status_as_of":"2026-07-14"},
     "cand-watson-sb-d20": {"candidate_id":"cand-watson-sb-d20","name":"Patrick Watson","race_id":"sb-d20","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "cand-lenhof-sb-d04": {"candidate_id":"cand-lenhof-sb-d04","name":"Kyna Lenhof","race_id":"sb-d04","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
     "cand-alvarez-sb-d07": {"candidate_id":"cand-alvarez-sb-d07","name":"Angel Alvarez","race_id":"sb-d07","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "cand-williams-sb-d09": {"candidate_id":"cand-williams-sb-d09","name":"LaPamela Williams","race_id":"sb-d09","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "cand-hargrove-sb-d10": {"candidate_id":"cand-hargrove-sb-d10","name":"Anthony Hargrove","race_id":"sb-d10","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "cand-white-sb-d11": {"candidate_id":"cand-white-sb-d11","name":"Isaiah White","race_id":"sb-d11","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "cand-neal-sb-d12": {"candidate_id":"cand-neal-sb-d12","name":"Michael L. Neal","race_id":"sb-d12","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
+    "cand-neal-sb-d12": {"candidate_id":"cand-neal-sb-d12","name":"Michael L. Neal","race_id":"sb-d12","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
     "custer-sb-2024-d1": {"candidate_id":"custer-sb-2024-d1","name":"Jennifer Custer","race_id":"sb-2024-d1","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
     "hernandez-sb-2024-d1": {"candidate_id":"hernandez-sb-2024-d1","name":"Charles (Chuck) Hernandez","race_id":"sb-2024-d1","committee_id":"39871","incumbent":false,"status":"filed","result":"withdrawn","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
     "pierre-sb-2024-d1": {"candidate_id":"pierre-sb-2024-d1","name":"Michelle N. Pierre","race_id":"sb-2024-d1","committee_id":null,"incumbent":false,"status":"filed","result":"defeated","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
@@ -1482,7 +1483,7 @@
     "zaccor-sb-2024-d4": {"candidate_id":"zaccor-sb-2024-d4","name":"Karen Zaccor","race_id":"sb-2024-d4","committee_id":null,"incumbent":false,"status":"filed","result":"defeated","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
     "blaise-sb-2024-d5": {"candidate_id":"blaise-sb-2024-d5","name":"Michilla 'Kyla' Blaise","race_id":"sb-2024-d5","committee_id":null,"incumbent":false,"status":"filed","result":"withdrawn","finance_facet":"on_current_record","election_note":"Withdrew from the 2024 District 5 race; later appointed to the board.","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
     "brown-sb-2024-d5": {"candidate_id":"brown-sb-2024-d5","name":"Aaron 'Jitu' Brown","race_id":"sb-2024-d5","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "hargrove-sb-2024-d5": {"candidate_id":"hargrove-sb-2024-d5","name":"Anthony Hargrove","race_id":"sb-2024-d5","committee_id":null,"incumbent":false,"status":"filed","result":"removed","finance_facet":"committee_no_itemized","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"},"committee_sbe_ref":"39831"},
+    "hargrove-sb-2024-d5": {"candidate_id":"hargrove-sb-2024-d5","name":"Anthony Hargrove","race_id":"sb-2024-d5","committee_id":"39831","incumbent":false,"status":"filed","result":"removed","finance_facet":"committee_no_itemized","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"},"committee_sbe_ref":"39831"},
     "jones-sb-2024-d5": {"candidate_id":"jones-sb-2024-d5","name":"Kernetha Jones","race_id":"sb-2024-d5","committee_id":null,"incumbent":false,"status":"filed","result":"removed","finance_facet":"no_committee","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"},"write_in":true},
     "shkoukani-sb-2024-d5": {"candidate_id":"shkoukani-sb-2024-d5","name":"Jousef M. Shkoukani","race_id":"sb-2024-d5","committee_id":null,"incumbent":false,"status":"filed","result":"removed","finance_facet":"no_committee","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"},"write_in":true},
     "biggs-sb-2024-d6": {"candidate_id":"biggs-sb-2024-d6","name":"Jessica Biggs","race_id":"sb-2024-d6","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
@@ -1510,8 +1511,7 @@
     "smith-sb-2024-d10": {"candidate_id":"smith-sb-2024-d10","name":"Che 'Rhymefest' Smith","race_id":"sb-2024-d10","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
     "walton-sb-2024-d10": {"candidate_id":"walton-sb-2024-d10","name":"James M. Walton Jr.","race_id":"sb-2024-d10","committee_id":"39874","incumbent":false,"status":"filed","result":"withdrawn","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
     "ward-sb-2024-d10": {"candidate_id":"ward-sb-2024-d10","name":"Nathaniel Ward","race_id":"sb-2024-d10","committee_id":null,"incumbent":false,"status":"filed","result":"removed","finance_facet":"no_committee","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "cand-dominguez-sb-president": {"candidate_id": "cand-dominguez-sb-president", "name": "Hilario Dominguez", "race_id": "sb-president", "committee_id": null, "incumbent": false, "status": "filed", "bio": {"source": "filed candidate, committee pending"}},
-    "cand-luczak-sb-d01": {"candidate_id": "cand-luczak-sb-d01", "name": "Margie B. Luczak", "race_id": "sb-d01", "committee_id": null, "incumbent": false, "status": "filed", "bio": {"source": "filed candidate, committee pending"}},
-    "cand-morales-sb-d03": {"candidate_id": "cand-morales-sb-d03", "name": "Hector Morales", "race_id": "sb-d03", "committee_id": null, "incumbent": false, "status": "filed", "bio": {"source": "filed candidate, committee pending"}}
+    "cand-dominguez-sb-president": {"candidate_id": "cand-dominguez-sb-president", "name": "Hilario Dominguez", "race_id": "sb-president", "committee_id": null, "incumbent": false, "status": "filed", "bio": {"source": "filed candidate, committee pending"},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
+    "cand-morales-sb-d03": {"candidate_id": "cand-morales-sb-d03", "name": "Hector Morales", "race_id": "sb-d03", "committee_id": null, "incumbent": false, "status": "filed", "bio": {"source": "filed candidate, committee pending"},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"}
   }
 }

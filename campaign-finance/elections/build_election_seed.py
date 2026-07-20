@@ -237,7 +237,7 @@ def build_candidates(race_map, race_ids):
             bad.append((committee_id, rid))
         if c.get("incumbent"):
             incumbent_races.add(rid)
-        cands.append({
+        rec = {
             "id": c.get("candidate_id"),
             "race_id": rid,
             "name": c.get("name"),
@@ -247,7 +247,13 @@ def build_candidates(race_map, race_ids):
             "vacating_for": c.get("vacating_for"),
             "bio": c.get("bio", {}),
             "positions": None,
-        })
+        }
+        # HALT-Q2R: ballot_status (F1) is the CBOE ballot-lifecycle axis, mirrored
+        # from race-map so it survives regeneration (the mirror is load-bearing).
+        for k in ("ballot_status", "ballot_status_as_of"):
+            if c.get(k) is not None:
+                rec[k] = c[k]
+        cands.append(rec)
 
     for candidate_id, c in stubs.items():
         if candidate_id.startswith("_") or not isinstance(c, dict):
@@ -257,7 +263,7 @@ def build_candidates(race_map, race_ids):
             continue
         if rid not in race_ids:
             bad.append((candidate_id, rid))
-        cands.append({
+        rec = {
             "id": c.get("candidate_id", candidate_id),
             "race_id": rid,
             "name": c.get("name"),
@@ -267,7 +273,12 @@ def build_candidates(race_map, race_ids):
             "vacating_for": c.get("vacating_for"),
             "bio": c.get("bio", {}),
             "positions": None,
-        })
+        }
+        # HALT-Q2R: ballot_status (F1) mirrored from race-map (load-bearing).
+        for k in ("ballot_status", "ballot_status_as_of"):
+            if c.get(k) is not None:
+                rec[k] = c[k]
+        cands.append(rec)
 
     cand_stubs = race_map.get("candidate_stubs", {})
     for candidate_id, c in cand_stubs.items():
@@ -294,7 +305,8 @@ def build_candidates(race_map, race_ids):
         # qualifier relocated here from the retired prior_election.qualifier (derive-don't-store:
         # by_person joins it at rollup time). Propagated CONDITIONALLY so pre-P1-B candidate_stubs
         # (which carry none of these keys) still produce byte-identical records.
-        for k in ("result", "finance_facet", "committee_sbe_ref", "election_note"):
+        for k in ("result", "finance_facet", "committee_sbe_ref", "election_note",
+                  "ballot_status", "ballot_status_as_of"):
             if c.get(k) is not None:
                 rec[k] = c[k]
         if c.get("write_in"):

@@ -10,6 +10,15 @@
       "reason": "SBE-side: committee's sworn IndivContribI on filing 926379 ($500) exceeds its own itemized Schedule A rows; no itemized row exists in any SBE source (bulk receipts or per-committee CSV). Unrecoverable by ingest.",
       "evidence": "PROBE-ITEM-1 Stage 2 (2026-07-07); PROBE-RESID v2 lineage",
       "annotated": "2026-07-07"
+    },
+    {
+      "committee": "cand-hargrove-sb-d10",
+      "period_beg": "2026-01-01",
+      "period_end": "2026-03-31",
+      "amount": -250.00,
+      "reason": "SBE-side: committee's sworn itemized total for 1/1/2026–3/31/2026 includes a $250 Schedule A receipt (paper-filed D-2, received 4/1/2026) that does not appear in any SBE electronic receipts source.",
+      "evidence": "HALT-Q2R (2026-07-20). Q1-2026 D-2: fixtures/hargrove-39831-q1-2026-d2.pdf sha256 5623426a0b147059a6ab4243ce19a7db5ca79674a4edac1adc920d4ea6199f8e; Final D-2: fixtures/hargrove-39831-final-d2.pdf sha256 46a66615e3338f69ce4b977e3d41ef0800889552d5b398643468e0cab51e0f9d; corroborated by FiledDocs 7.17 (Q1 Quarterly rcvd 2026-04-01) + D2Totals join.",
+      "annotated": "2026-07-20"
     }
   ]
 }

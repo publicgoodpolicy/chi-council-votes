@@ -137,8 +137,16 @@ def validate_person_links(d):
             errs.append(f"INV-PERSON-1: person '{pid}' direct.total {tot} != Σ by_candidate owned "
                         f"direct {sig} (double-count / dedup break)")
         if len(membs) >= 2 and tot > 0:
-            earliest = sorted(membs, key=lambda m: m.get('election_id') or '')[0]['candidacy_id']
-            prior_members.add(earliest)
+            # Money-aware prior_members (HALT-Q2R: D1 unchanged, implementation corrected).
+            # Couple on_current_record ONLY when the PRIOR election window itself carries money.
+            # A returner whose prior candidacy has no itemized money (committee_no_itemized — e.g.
+            # a shared committee that only filed in the current cycle) is legitimately NOT
+            # on_current_record and must be exempt. by_election is keyed by 4-digit year.
+            earliest_m = sorted(membs, key=lambda m: m.get('election_id') or '')[0]
+            prior_year = (earliest_m.get('election_id') or '').split('-')[0]
+            byel = (p.get('direct', {}) or {}).get('by_election', {})
+            if byel.get(prior_year, 0) > 0:
+                prior_members.add(earliest_m['candidacy_id'])
 
     # INV-PERSON-4: the facet<->link biconditional (the documentary cohort coupling, enforced).
     facet = {c['id'] for c in d.get('candidates', []) if c.get('finance_facet') == 'on_current_record'}

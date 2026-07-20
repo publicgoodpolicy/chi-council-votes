@@ -69,16 +69,22 @@ var FIXTURES = {
     parity: { support: 663609, oppose: 401217 },
     // self-funding negative case (relational is_self, 8f148b2): a funder who self-funds
     // their OWN race must NOT be flagged self in another candidate's drill.
-    selfLeak: { funder: 'Leon', leakRace: 'Rosenfeld', ownRace: 'Leon' },
+    // ownRace anchor made specific (HALT-Q2R): after Q2, the bare 'Leon' substring also
+    // matches a donor card in the President race, so cardByName('Leon') resolved there first.
+    // 'Bruce Leon' anchors to his own race uniquely. (substring-anchor fragility -> P1-R runbook.)
+    selfLeak: { funder: 'Leon', leakRace: 'Rosenfeld', ownRace: 'Bruce Leon' },
     // Browse-Donors filters (E-1): a search term that hits a known rollup, and a donor type.
     browseFilters: { search: 'frank', searchHit: 'Frank', type: 'Individual' },
     // Industry-tag color + curated label (E-5): canonical color + curated label, not the slug.
     tagColor: { industry: 'real-estate', hex: '#a23a2e', label: 'Real Estate / Developers', slugText: '>real estate<' },
     // Industry three-level drill (E-6): the IE-funded industry, its IE spender, a direct industry.
-    industryDrill: { ieIndustry: 'charter-schools', ieSpender: 'ie-committee-26066', directIndustry: 'labor-teachers' },
+    // HALT-Q2R repin: +$931k direct made 'individual' the top bar; charter-schools -> #2 but
+    // still the SOLE independent-distinguished bar (top IE category, $1.88M by_industry IE unchanged).
+    industryDrill: { ieIndustry: 'charter-schools', ieSpender: 'ie-committee-26066', directIndustry: 'labor-teachers',
+      topBar: 'individual', topBarVal: '$2,153,469', ieRank: 2, ieVal: '$1,630,979' },
     // Grouped spend-by-candidate (E-7): President first, district order, within-race ranking, race filter.
     candidateGroups: { firstRaceText: 'President', raceCount: 21,
-      presidentOrder: ['Jennifer Custer', 'Sendhil Revuluri', 'Jessica Biggs', 'Victor Henderson'], singleRace: 'sb-d06' }
+      presidentOrder: ['Victor Henderson', 'Jennifer Custer', 'Sendhil Revuluri', 'Jessica Biggs'], singleRace: 'sb-d06' }
   }
 };
 
@@ -345,8 +351,12 @@ async function assertIndustryDrill(T, ctx, fx) {
   T.ok('[E6.L1] industry chart renders (sorted clickable bars)',
     !!ctx.root().querySelector('.indchart') && !!ctx.root().querySelector('[data-industry-drill]'));
   var bars = [].slice.call(ctx.root().querySelectorAll('[data-industry-drill]'));
-  T.ok('[E6.L1] charter-schools is largest (first bar) + distinguished as independent',
-    bars[0].getAttribute('data-industry-drill') === d.ieIndustry && /independent/.test(bars[0].textContent) && !!bars[0].querySelector('.seg.indep'));
+  T.ok('[E6.L1] ' + d.topBar + ' is largest (first bar, direct — no indep seg) [repin: was charter-schools pre-Q2]',
+    bars[0].getAttribute('data-industry-drill') === d.topBar && bars[0].textContent.indexOf(d.topBarVal) >= 0 && !bars[0].querySelector('.seg.indep'));
+  T.ok('[E6.L1] charter-schools is #' + d.ieRank + ' ' + d.ieVal + ', distinguished as independent',
+    bars[d.ieRank - 1].getAttribute('data-industry-drill') === d.ieIndustry && bars[d.ieRank - 1].textContent.indexOf(d.ieVal) >= 0 && /independent/.test(bars[d.ieRank - 1].textContent) && !!bars[d.ieRank - 1].querySelector('.seg.indep'));
+  T.ok('[E6.L1] charter-schools remains the top IE category (sole independent-distinguished bar; by_industry IE $1.88M unchanged)',
+    bars.filter(function (b) { return b.querySelector('.seg.indep'); }).map(function (b) { return b.getAttribute('data-industry-drill'); })[0] === d.ieIndustry);
   T.ok('[E6.L1] no support/oppose split at Level 1 (aggregate only)',
     ctx.root().querySelector('.spend-body').innerHTML.indexOf('Spent to support') < 0);
   // Level 1 -> 2: click the IE industry bar -> filtered spender list

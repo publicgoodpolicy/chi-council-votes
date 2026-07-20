@@ -1,34 +1,34 @@
 {
   "run": {
     "data_file": "campaign-finance/election-data.json",
-    "d2totals_file": "raw/sbe-summary/D2Totals - 7.6.26.txt",
-    "fileddocs_file": "raw/sbe-summary/FiledDocs - 7.6.26.txt",
-    "pulled": "2026-07-06",
+    "d2totals_file": "raw/sbe-summary/D2Totals - 7.17.26.txt",
+    "fileddocs_file": "raw/sbe-summary/FiledDocs - 7.17.26.txt",
+    "pulled": "2026-07-17",
     "threshold": 500.0,
     "scope": "elections candidate committees (v1); IE and council lanes deferred"
   },
   "headline": {
-    "d2_itemized_total": 2896457.88,
-    "ours_itemized_total": 2895957.88,
-    "residual": -500.0,
-    "dollar_weighted_match_pct": 99.98,
-    "committees_candidate": 29,
-    "committees_with_sbe_id": 29,
+    "d2_itemized_total": 5477436.05,
+    "ours_itemized_total": 5476686.05,
+    "residual": -750.0,
+    "dollar_weighted_match_pct": 99.99,
+    "committees_candidate": 53,
+    "committees_with_sbe_id": 53,
     "committees_no_sbe_id": 0,
-    "committees_with_periods": 28,
-    "reconciled": 27,
-    "residual_state": 1,
-    "too_new": 1,
-    "pending_a1_total": 424801.0,
+    "committees_with_periods": 53,
+    "reconciled": 51,
+    "residual_state": 2,
+    "too_new": 0,
+    "pending_a1_total": 60250.0,
     "aggregate_total": 0.0,
-    "inkind_d2_total": 1710405.31,
-    "inkind_ours_total": 1708655.31,
+    "inkind_d2_total": 2429482.51,
+    "inkind_ours_total": 2427732.51,
     "over_threshold": [],
     "coverage_miss_committees": [],
     "join_failures": 0,
-    "filings_missing_totals": 1,
+    "filings_missing_totals": 3,
     "overlap_superseded": 2,
-    "disclosed": 1,
+    "disclosed": 2,
     "stale_annotations": 0
   },
   "no_sbe_id_committees": [],
@@ -41,6 +41,22 @@
         "2024-06-30"
       ],
       "filed_doc_id": "922860"
+    },
+    {
+      "sbe_committee_id": "39794",
+      "period": [
+        "2026-01-01",
+        "2026-03-31"
+      ],
+      "filed_doc_id": "1006891"
+    },
+    {
+      "sbe_committee_id": "39794",
+      "period": [
+        "2026-04-01",
+        "2026-06-30"
+      ],
+      "filed_doc_id": "1016354"
     }
   ],
   "disclosed": [
@@ -55,6 +71,18 @@
           "annotated": "2026-07-07"
         }
       ]
+    },
+    {
+      "committee": "cand-hargrove-sb-d10",
+      "periods": [
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "residual": -250.0,
+          "reason": "SBE-side: committee's sworn itemized total for 1/1/2026\u20133/31/2026 includes a $250 Schedule A receipt (paper-filed D-2, received 4/1/2026) that does not appear in any SBE electronic receipts source.",
+          "annotated": "2026-07-20"
+        }
+      ]
     }
   ],
   "stale_annotations": [],
@@ -62,21 +90,21 @@
     "cand-anderson-sb-d11": {
       "committee_name": "Community for Brenda Anderson",
       "sbe_committee_id": "41131",
-      "superseded_filings": 0,
+      "superseded_filings": 2,
       "state": "RECONCILED",
       "flags": [
         "PENDING-A1"
       ],
-      "periods_count": 1,
-      "d2_itemized": 0.0,
-      "ours_itemized": 0,
+      "periods_count": 2,
+      "d2_itemized": 2355.0,
+      "ours_itemized": 2355.0,
       "residual": 0.0,
-      "d2_inkind": 0.0,
-      "ours_inkind": 0,
+      "d2_inkind": 750.0,
+      "ours_inkind": 750.0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 1500.0,
-      "last_period_end": "2026-03-31",
+      "pending": 2000.0,
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -88,6 +116,16 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 2355.0,
+          "ours_itemized": 2355.0,
+          "residual": 0.0,
+          "d2_inkind": 750.0,
+          "ours_inkind": 750.0,
+          "coverage_miss": false
         }
       ]
     },
@@ -96,19 +134,17 @@
       "sbe_committee_id": "39789",
       "superseded_filings": 1,
       "state": "RECONCILED",
-      "flags": [
-        "PENDING-A1"
-      ],
-      "periods_count": 9,
-      "d2_itemized": 4793.0,
-      "ours_itemized": 4793.0,
+      "flags": [],
+      "periods_count": 10,
+      "d2_itemized": 7668.0,
+      "ours_itemized": 7668.0,
       "residual": 0.0,
-      "d2_inkind": 2986.49,
-      "ours_inkind": 2986.49,
+      "d2_inkind": 11607.46,
+      "ours_inkind": 11607.46,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 1500.0,
-      "last_period_end": "2026-03-31",
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -200,6 +236,16 @@
           "d2_inkind": 875.06,
           "ours_inkind": 875.06,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 2875.0,
+          "ours_itemized": 2875.0,
+          "residual": 0.0,
+          "d2_inkind": 8620.97,
+          "ours_inkind": 8620.97,
+          "coverage_miss": false
         }
       ]
     },
@@ -209,16 +255,16 @@
       "superseded_filings": 0,
       "state": "RECONCILED",
       "flags": [],
-      "periods_count": 15,
+      "periods_count": 16,
       "d2_itemized": 76195.0,
       "ours_itemized": 76195.0,
       "residual": 0.0,
-      "d2_inkind": 10238.27,
-      "ours_inkind": 10238.27,
+      "d2_inkind": 10445.11,
+      "ours_inkind": 10445.11,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
       "pending": 0.0,
-      "last_period_end": "2026-03-31",
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -370,6 +416,16 @@
           "d2_inkind": 371.35,
           "ours_inkind": 371.35,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 206.84,
+          "ours_inkind": 206.84,
+          "coverage_miss": false
         }
       ]
     },
@@ -377,9 +433,31 @@
       "committee_name": "Friends for Daniel Basco",
       "sbe_committee_id": "41211",
       "superseded_filings": 0,
-      "state": "TOO-NEW",
+      "state": "RECONCILED",
       "flags": [],
-      "periods_count": 0
+      "periods_count": 1,
+      "d2_itemized": 500.0,
+      "ours_itemized": 500.0,
+      "residual": 0.0,
+      "d2_inkind": 6500.0,
+      "ours_inkind": 6500.0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-06-08",
+          "end": "2026-06-30",
+          "d2_itemized": 500.0,
+          "ours_itemized": 500.0,
+          "residual": 0.0,
+          "d2_inkind": 6500.0,
+          "ours_inkind": 6500.0,
+          "coverage_miss": false
+        }
+      ]
     },
     "cand-biggs-sb-president": {
       "committee_name": "Citizens for Biggs",
@@ -402,19 +480,17 @@
         }
       ],
       "state": "RECONCILED",
-      "flags": [
-        "PENDING-A1"
-      ],
-      "periods_count": 8,
-      "d2_itemized": 118033.34,
-      "ours_itemized": 118033.34,
+      "flags": [],
+      "periods_count": 9,
+      "d2_itemized": 219159.34,
+      "ours_itemized": 219159.34,
       "residual": 0.0,
       "d2_inkind": 10448.5,
       "ours_inkind": 10448.5,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 45501.0,
-      "last_period_end": "2026-03-31",
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -496,6 +572,16 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 101126.0,
+          "ours_itemized": 101126.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
         }
       ]
     },
@@ -505,16 +591,16 @@
       "superseded_filings": 4,
       "state": "RECONCILED",
       "flags": [],
-      "periods_count": 18,
-      "d2_itemized": 25145.75,
-      "ours_itemized": 25145.75,
+      "periods_count": 19,
+      "d2_itemized": 29745.75,
+      "ours_itemized": 29745.75,
       "residual": 0.0,
       "d2_inkind": 477.76,
       "ours_inkind": 477.76,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
       "pending": 0.0,
-      "last_period_end": "2026-03-31",
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -696,6 +782,16 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 4600.0,
+          "ours_itemized": 4600.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
         }
       ]
     },
@@ -704,19 +800,17 @@
       "sbe_committee_id": "39843",
       "superseded_filings": 0,
       "state": "RECONCILED",
-      "flags": [
-        "PENDING-A1"
-      ],
-      "periods_count": 8,
-      "d2_itemized": 61562.08,
-      "ours_itemized": 61562.08,
+      "flags": [],
+      "periods_count": 9,
+      "d2_itemized": 100562.08,
+      "ours_itemized": 100562.08,
       "residual": 0.0,
       "d2_inkind": 21076.1,
       "ours_inkind": 21076.1,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 39000.0,
-      "last_period_end": "2026-03-31",
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -798,6 +892,76 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 39000.0,
+          "ours_itemized": 39000.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-brown-sb-2024-d4": {
+      "committee_name": "Friends of Kimberly Brown",
+      "sbe_committee_id": "39809",
+      "superseded_filings": 1,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 4,
+      "d2_itemized": 18868.33,
+      "ours_itemized": 18868.33,
+      "residual": 0.0,
+      "d2_inkind": 6399.0,
+      "ours_inkind": 6399.0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2025-01-14",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "d2_itemized": 10233.59,
+          "ours_itemized": 10233.59,
+          "residual": 0.0,
+          "d2_inkind": 1399.0,
+          "ours_inkind": 1399.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 6325.0,
+          "ours_itemized": 6325.0,
+          "residual": 0.0,
+          "d2_inkind": 5000.0,
+          "ours_inkind": 5000.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 2309.74,
+          "ours_itemized": 2309.74,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-01-14",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
         }
       ]
     },
@@ -807,16 +971,16 @@
       "superseded_filings": 2,
       "state": "RECONCILED",
       "flags": [],
-      "periods_count": 8,
-      "d2_itemized": 23325.0,
-      "ours_itemized": 23325.0,
+      "periods_count": 9,
+      "d2_itemized": 25625.0,
+      "ours_itemized": 25625.0,
       "residual": 0.0,
       "d2_inkind": 67502.49,
       "ours_inkind": 67502.49,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
       "pending": 0.0,
-      "last_period_end": "2026-03-31",
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -898,6 +1062,126 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 2300.0,
+          "ours_itemized": 2300.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-cullerton-hooper-sb-2024-d2": {
+      "committee_name": "Maggie for Chicago Schools",
+      "sbe_committee_id": "39824",
+      "superseded_filings": 7,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 9,
+      "d2_itemized": 197586.0,
+      "ours_itemized": 197586.0,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2024-04-26",
+          "end": "2024-06-30",
+          "d2_itemized": 45750.0,
+          "ours_itemized": 45750.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 78106.0,
+          "ours_itemized": 78106.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 73730.0,
+          "ours_itemized": 73730.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
         }
       ]
     },
@@ -909,16 +1193,16 @@
       "flags": [
         "PENDING-A1"
       ],
-      "periods_count": 8,
-      "d2_itemized": 213637.15,
-      "ours_itemized": 213637.15,
+      "periods_count": 9,
+      "d2_itemized": 272937.15,
+      "ours_itemized": 272937.15,
       "residual": 0.0,
       "d2_inkind": 57914.76,
       "ours_inkind": 57914.76,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 48700.0,
-      "last_period_end": "2026-03-31",
+      "pending": 11000.0,
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -1000,6 +1284,126 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 59300.0,
+          "ours_itemized": 59300.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-day-sb-2024-d4": {
+      "committee_name": "Friends of Thomas Day",
+      "sbe_committee_id": "39810",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 9,
+      "d2_itemized": 16375.0,
+      "ours_itemized": 16375.0,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2024-04-10",
+          "end": "2024-06-30",
+          "d2_itemized": 11700.0,
+          "ours_itemized": 11700.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 3500.0,
+          "ours_itemized": 3500.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 1175.0,
+          "ours_itemized": 1175.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
         }
       ]
     },
@@ -1009,16 +1413,16 @@
       "superseded_filings": 0,
       "state": "RECONCILED",
       "flags": [],
-      "periods_count": 8,
-      "d2_itemized": 89156.01,
-      "ours_itemized": 89156.01,
+      "periods_count": 9,
+      "d2_itemized": 90145.51,
+      "ours_itemized": 90145.51,
       "residual": 0.0,
-      "d2_inkind": 445794.11,
-      "ours_inkind": 445794.11,
+      "d2_inkind": 447160.87,
+      "ours_inkind": 447160.87,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
       "pending": 0.0,
-      "last_period_end": "2026-03-31",
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -1100,6 +1504,136 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 989.5,
+          "ours_itemized": 989.5,
+          "residual": 0.0,
+          "d2_inkind": 1366.76,
+          "ours_inkind": 1366.76,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-diaz-chavez-sb-d14": {
+      "committee_name": "Friends of Erika Diaz-Chavez",
+      "sbe_committee_id": "41220",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 1,
+      "d2_itemized": 0.0,
+      "ours_itemized": 0,
+      "residual": 0.0,
+      "d2_inkind": 890.0,
+      "ours_inkind": 890.0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-06-03",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 890.0,
+          "ours_inkind": 890.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-don-sb-2024-d7": {
+      "committee_name": "Raquel for Education",
+      "sbe_committee_id": "39972",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 7,
+      "d2_itemized": 2828.0,
+      "ours_itemized": 2828.0,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-01-14",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2024-08-08",
+          "end": "2024-09-30",
+          "d2_itemized": 2828.0,
+          "ours_itemized": 2828.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-01-14",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
         }
       ]
     },
@@ -1112,16 +1646,16 @@
         "COVERAGE-MISS",
         "DISCLOSED"
       ],
-      "periods_count": 8,
-      "d2_itemized": 301951.67,
-      "ours_itemized": 301451.67,
+      "periods_count": 9,
+      "d2_itemized": 309231.67,
+      "ours_itemized": 308731.67,
       "residual": -500.0,
       "d2_inkind": 163703.5,
       "ours_inkind": 161953.5,
       "inkind_delta": -1750.0,
       "aggregate": 0.0,
       "pending": 0.0,
-      "last_period_end": "2026-03-31",
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [
         {
           "beg": "2024-04-01",
@@ -1209,6 +1743,16 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 7280.0,
+          "ours_itemized": 7280.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
         }
       ],
       "disclosed": [
@@ -1221,6 +1765,226 @@
         }
       ]
     },
+    "cand-doyle-sb-2024-d2": {
+      "committee_name": "Community for Kate Doyle",
+      "sbe_committee_id": "39802",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 7,
+      "d2_itemized": 99833.5,
+      "ours_itemized": 99833.5,
+      "residual": 0.0,
+      "d2_inkind": 6123.0,
+      "ours_inkind": 6123.0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2025-11-18",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2024-04-03",
+          "end": "2024-06-30",
+          "d2_itemized": 34463.75,
+          "ours_itemized": 34463.75,
+          "residual": 0.0,
+          "d2_inkind": 4327.0,
+          "ours_inkind": 4327.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 45794.25,
+          "ours_itemized": 45794.25,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 19575.5,
+          "ours_itemized": 19575.5,
+          "residual": 0.0,
+          "d2_inkind": 1796.0,
+          "ours_inkind": 1796.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-11-18",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-dunneback-sb-d18": {
+      "committee_name": "Friends of Kate Dunneback",
+      "sbe_committee_id": "41231",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 1,
+      "d2_itemized": 1200.0,
+      "ours_itemized": 1200.0,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-06-18",
+          "end": "2026-06-30",
+          "d2_itemized": 1200.0,
+          "ours_itemized": 1200.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-gioiosa-sb-2024-d4": {
+      "committee_name": "Carmen Gioiosa For District 4",
+      "sbe_committee_id": "39975",
+      "superseded_filings": 1,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 8,
+      "d2_itemized": 4225.0,
+      "ours_itemized": 4225.0,
+      "residual": 0.0,
+      "d2_inkind": 7288.5,
+      "ours_inkind": 7288.5,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2024-08-01",
+          "end": "2024-09-30",
+          "d2_itemized": 1325.0,
+          "ours_itemized": 1325.0,
+          "residual": 0.0,
+          "d2_inkind": 7288.5,
+          "ours_inkind": 7288.5,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 2900.0,
+          "ours_itemized": 2900.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
     "cand-gonzales-sb-d05": {
       "committee_name": "Practical Progressive, Pete",
       "sbe_committee_id": "41125",
@@ -1229,16 +1993,16 @@
       "flags": [
         "PENDING-A1"
       ],
-      "periods_count": 1,
-      "d2_itemized": 0.0,
-      "ours_itemized": 0,
+      "periods_count": 2,
+      "d2_itemized": 17150.0,
+      "ours_itemized": 17150.0,
       "residual": 0.0,
-      "d2_inkind": 0.0,
-      "ours_inkind": 0,
+      "d2_inkind": 1901.59,
+      "ours_inkind": 1901.59,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 10500.0,
-      "last_period_end": "2026-03-31",
+      "pending": 1000.0,
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -1249,6 +2013,16 @@
           "residual": 0.0,
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 17150.0,
+          "ours_itemized": 17150.0,
+          "residual": 0.0,
+          "d2_inkind": 1901.59,
+          "ours_inkind": 1901.59,
           "coverage_miss": false
         }
       ]
@@ -1261,16 +2035,16 @@
       "flags": [
         "PENDING-A1"
       ],
-      "periods_count": 1,
-      "d2_itemized": 1000.0,
-      "ours_itemized": 1000.0,
+      "periods_count": 2,
+      "d2_itemized": 4650.0,
+      "ours_itemized": 4650.0,
       "residual": 0.0,
-      "d2_inkind": 0.0,
-      "ours_inkind": 0,
+      "d2_inkind": 8467.5,
+      "ours_inkind": 8467.5,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 3000.0,
-      "last_period_end": "2026-03-31",
+      "pending": 2000.0,
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -1282,6 +2056,16 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 3650.0,
+          "ours_itemized": 3650.0,
+          "residual": 0.0,
+          "d2_inkind": 8467.5,
+          "ours_inkind": 8467.5,
+          "coverage_miss": false
         }
       ]
     },
@@ -1290,19 +2074,17 @@
       "sbe_committee_id": "39873",
       "superseded_filings": 6,
       "state": "RECONCILED",
-      "flags": [
-        "PENDING-A1"
-      ],
-      "periods_count": 8,
-      "d2_itemized": 99750.0,
-      "ours_itemized": 99750.0,
+      "flags": [],
+      "periods_count": 9,
+      "d2_itemized": 134750.0,
+      "ours_itemized": 134750.0,
       "residual": 0.0,
       "d2_inkind": 15568.32,
       "ours_inkind": 15568.32,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 31200.0,
-      "last_period_end": "2026-03-31",
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -1384,32 +2166,321 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 35000.0,
+          "ours_itemized": 35000.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-hargrove-sb-d10": {
+      "committee_name": "Neighbors for Anthony Hargrove",
+      "sbe_committee_id": "39831",
+      "superseded_filings": 1,
+      "state": "RESIDUAL",
+      "flags": [
+        "PENDING-A1",
+        "COVERAGE-MISS",
+        "DISCLOSED"
+      ],
+      "periods_count": 5,
+      "d2_itemized": 250.0,
+      "ours_itemized": 0,
+      "residual": -250.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 12950.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 250.0
+        }
+      ],
+      "per_period": [
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 250.0,
+          "ours_itemized": 0.0,
+          "residual": -250.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": true
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ],
+      "disclosed": [
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "residual": -250.0,
+          "reason": "SBE-side: committee's sworn itemized total for 1/1/2026\u20133/31/2026 includes a $250 Schedule A receipt (paper-filed D-2, received 4/1/2026) that does not appear in any SBE electronic receipts source.",
+          "annotated": "2026-07-20"
         }
       ]
     },
     "cand-henderson-sb-president": {
-      "committee_name": "Vic For The Kidz",
+      "committee_name": "Vic For The Kids",
       "sbe_committee_id": "41112",
       "superseded_filings": 0,
       "state": "RECONCILED",
       "flags": [
         "PENDING-A1"
       ],
-      "periods_count": 1,
-      "d2_itemized": 0.0,
-      "ours_itemized": 0,
+      "periods_count": 2,
+      "d2_itemized": 656550.0,
+      "ours_itemized": 656550.0,
       "residual": 0.0,
       "d2_inkind": 0.0,
       "ours_inkind": 0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 90900.0,
-      "last_period_end": "2026-03-31",
+      "pending": 1000.0,
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
           "beg": "2026-03-03",
           "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 656550.0,
+          "ours_itemized": 656550.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-hernandez-sb-2024-d1": {
+      "committee_name": "Friends of Chuck Hernandez",
+      "sbe_committee_id": "39871",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 8,
+      "d2_itemized": 29700.0,
+      "ours_itemized": 29700.0,
+      "residual": 0.0,
+      "d2_inkind": 3000.0,
+      "ours_inkind": 3000.0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-03-31",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2024-05-27",
+          "end": "2024-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 25500.0,
+          "ours_itemized": 25500.0,
+          "residual": 0.0,
+          "d2_inkind": 3000.0,
+          "ours_inkind": 3000.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 3700.0,
+          "ours_itemized": 3700.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 500.0,
+          "ours_itemized": 500.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-jones-sb-2024-d10": {
+      "committee_name": "Committee to Elect Rev. Robert Jones",
+      "sbe_committee_id": "39838",
+      "superseded_filings": 5,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 6,
+      "d2_itemized": 129116.13,
+      "ours_itemized": 129116.13,
+      "residual": 0.0,
+      "d2_inkind": 398035.83,
+      "ours_inkind": 398035.83,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2025-07-14",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2024-05-03",
+          "end": "2024-06-30",
+          "d2_itemized": 2500.0,
+          "ours_itemized": 2500.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 7606.13,
+          "ours_itemized": 7606.13,
+          "residual": 0.0,
+          "d2_inkind": 57837.05,
+          "ours_inkind": 57837.05,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 119010.0,
+          "ours_itemized": 119010.0,
+          "residual": 0.0,
+          "d2_inkind": 340198.78,
+          "ours_inkind": 340198.78,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-07-14",
           "d2_itemized": 0.0,
           "ours_itemized": 0.0,
           "residual": 0.0,
@@ -1425,16 +2496,16 @@
       "superseded_filings": 0,
       "state": "RECONCILED",
       "flags": [],
-      "periods_count": 1,
-      "d2_itemized": 0.0,
-      "ours_itemized": 0,
+      "periods_count": 2,
+      "d2_itemized": 1250.0,
+      "ours_itemized": 1250.0,
       "residual": 0.0,
-      "d2_inkind": 0.0,
-      "ours_inkind": 0,
+      "d2_inkind": 10648.27,
+      "ours_inkind": 10648.27,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
       "pending": 0.0,
-      "last_period_end": "2026-03-31",
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -1446,6 +2517,46 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 1250.0,
+          "ours_itemized": 1250.0,
+          "residual": 0.0,
+          "d2_inkind": 10648.27,
+          "ours_inkind": 10648.27,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-lenhof-sb-d04": {
+      "committee_name": "Kyna for the Kids",
+      "sbe_committee_id": "41203",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 1,
+      "d2_itemized": 200.0,
+      "ours_itemized": 200.0,
+      "residual": 0.0,
+      "d2_inkind": 5501.34,
+      "ours_inkind": 5501.34,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-06-02",
+          "end": "2026-06-30",
+          "d2_itemized": 200.0,
+          "ours_itemized": 200.0,
+          "residual": 0.0,
+          "d2_inkind": 5501.34,
+          "ours_inkind": 5501.34,
+          "coverage_miss": false
         }
       ]
     },
@@ -1455,7 +2566,7 @@
       "superseded_filings": 0,
       "state": "RECONCILED",
       "flags": [],
-      "periods_count": 8,
+      "periods_count": 9,
       "d2_itemized": 620403.0,
       "ours_itemized": 620403.0,
       "residual": 0.0,
@@ -1464,7 +2575,7 @@
       "inkind_delta": 0.0,
       "aggregate": 0.0,
       "pending": 0.0,
-      "last_period_end": "2026-03-31",
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -1546,6 +2657,126 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-lewis-sb-2024-d9": {
+      "committee_name": "Neighbors for Miquel Lewis",
+      "sbe_committee_id": "39849",
+      "superseded_filings": 1,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 9,
+      "d2_itemized": 84515.0,
+      "ours_itemized": 84515.0,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2024-05-07",
+          "end": "2024-06-30",
+          "d2_itemized": 3220.0,
+          "ours_itemized": 3220.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 41875.0,
+          "ours_itemized": 41875.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 39420.0,
+          "ours_itemized": 39420.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
         }
       ]
     },
@@ -1555,7 +2786,7 @@
       "superseded_filings": 0,
       "state": "RECONCILED",
       "flags": [],
-      "periods_count": 8,
+      "periods_count": 9,
       "d2_itemized": 76101.0,
       "ours_itemized": 76101.0,
       "residual": 0.0,
@@ -1564,7 +2795,7 @@
       "inkind_delta": 0.0,
       "aggregate": 0.0,
       "pending": 0.0,
-      "last_period_end": "2026-03-31",
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -1646,6 +2877,228 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-luczak-sb-d01": {
+      "committee_name": "Friends of Margie Luczak",
+      "sbe_committee_id": "41233",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [
+        "PENDING-A1"
+      ],
+      "periods_count": 1,
+      "d2_itemized": 0.0,
+      "ours_itemized": 0,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 4000.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-06-22",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-norington-reaves-sb-2024-d10": {
+      "committee_name": "Karin for Kids",
+      "sbe_committee_id": "39876",
+      "superseded_filings": 3,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 9,
+      "d2_itemized": 135340.0,
+      "ours_itemized": 135340.0,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2024-06-04",
+          "end": "2024-06-30",
+          "d2_itemized": 200.0,
+          "ours_itemized": 200.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 41525.0,
+          "ours_itemized": 41525.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 93615.0,
+          "ours_itemized": 93615.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-parrott-sheffer-sb-2024-d10": {
+      "committee_name": "Adam Parrott-Sheffer",
+      "sbe_committee_id": "39765",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 5,
+      "d2_itemized": 78401.38,
+      "ours_itemized": 78401.38,
+      "residual": 0.0,
+      "d2_inkind": 317.76,
+      "ours_inkind": 317.76,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2025-01-01",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2024-03-06",
+          "end": "2024-03-31",
+          "d2_itemized": 25542.78,
+          "ours_itemized": 25542.78,
+          "residual": 0.0,
+          "d2_inkind": 317.76,
+          "ours_inkind": 317.76,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "d2_itemized": 25302.82,
+          "ours_itemized": 25302.82,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 8350.0,
+          "ours_itemized": 8350.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 19205.78,
+          "ours_itemized": 19205.78,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-01-01",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
         }
       ]
     },
@@ -1657,16 +3110,16 @@
       "flags": [
         "PENDING-A1"
       ],
-      "periods_count": 1,
-      "d2_itemized": 14400.0,
-      "ours_itemized": 14400.0,
+      "periods_count": 2,
+      "d2_itemized": 19040.0,
+      "ours_itemized": 19040.0,
       "residual": 0.0,
       "d2_inkind": 0.0,
       "ours_inkind": 0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
       "pending": 1000.0,
-      "last_period_end": "2026-03-31",
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -1674,6 +3127,16 @@
           "end": "2026-03-31",
           "d2_itemized": 14400.0,
           "ours_itemized": 14400.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 4640.0,
+          "ours_itemized": 4640.0,
           "residual": 0.0,
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
@@ -1687,16 +3150,16 @@
       "superseded_filings": 0,
       "state": "RECONCILED",
       "flags": [],
-      "periods_count": 9,
+      "periods_count": 10,
       "d2_itemized": 69750.84,
       "ours_itemized": 69750.84,
       "residual": 0.0,
-      "d2_inkind": 1600.31,
-      "ours_inkind": 1600.31,
+      "d2_inkind": 3210.31,
+      "ours_inkind": 3210.31,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
       "pending": 0.0,
-      "last_period_end": "2026-03-31",
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -1788,6 +3251,116 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 1610.0,
+          "ours_inkind": 1610.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-ponce-sb-2024-d8": {
+      "committee_name": "Friends of Felix Ponce",
+      "sbe_committee_id": "39945",
+      "superseded_filings": 2,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 8,
+      "d2_itemized": 200040.0,
+      "ours_itemized": 200040.0,
+      "residual": 0.0,
+      "d2_inkind": 194005.93,
+      "ours_inkind": 194005.93,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-05-15",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2024-07-24",
+          "end": "2024-09-30",
+          "d2_itemized": 4700.0,
+          "ours_itemized": 4700.0,
+          "residual": 0.0,
+          "d2_inkind": 46456.24,
+          "ours_inkind": 46456.24,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 195340.0,
+          "ours_itemized": 195340.0,
+          "residual": 0.0,
+          "d2_inkind": 147549.69,
+          "ours_inkind": 147549.69,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-05-15",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
         }
       ]
     },
@@ -1813,16 +3386,16 @@
       ],
       "state": "RECONCILED",
       "flags": [],
-      "periods_count": 6,
-      "d2_itemized": 1500.0,
-      "ours_itemized": 1500.0,
+      "periods_count": 7,
+      "d2_itemized": 6813.5,
+      "ours_itemized": 6813.5,
       "residual": 0.0,
-      "d2_inkind": 0.0,
-      "ours_inkind": 0,
+      "d2_inkind": 286.62,
+      "ours_inkind": 286.62,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
       "pending": 0.0,
-      "last_period_end": "2026-03-31",
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -1884,6 +3457,16 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 5313.5,
+          "ours_itemized": 5313.5,
+          "residual": 0.0,
+          "d2_inkind": 286.62,
+          "ours_inkind": 286.62,
+          "coverage_miss": false
         }
       ]
     },
@@ -1895,16 +3478,16 @@
       "flags": [
         "PENDING-A1"
       ],
-      "periods_count": 2,
-      "d2_itemized": 229150.0,
-      "ours_itemized": 229150.0,
+      "periods_count": 3,
+      "d2_itemized": 268477.0,
+      "ours_itemized": 268477.0,
       "residual": 0.0,
-      "d2_inkind": 0.0,
-      "ours_inkind": 0,
+      "d2_inkind": 35934.0,
+      "ours_inkind": 35934.0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 17000.0,
-      "last_period_end": "2026-03-31",
+      "pending": 6500.0,
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -1926,6 +3509,16 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 39327.0,
+          "ours_itemized": 39327.0,
+          "residual": 0.0,
+          "d2_inkind": 35934.0,
+          "ours_inkind": 35934.0,
+          "coverage_miss": false
         }
       ]
     },
@@ -1935,16 +3528,16 @@
       "superseded_filings": 0,
       "state": "RECONCILED",
       "flags": [],
-      "periods_count": 1,
-      "d2_itemized": 100.0,
-      "ours_itemized": 100.0,
+      "periods_count": 2,
+      "d2_itemized": 6300.0,
+      "ours_itemized": 6300.0,
       "residual": 0.0,
-      "d2_inkind": 57.0,
-      "ours_inkind": 57.0,
+      "d2_inkind": 104.33,
+      "ours_inkind": 104.33,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
       "pending": 0.0,
-      "last_period_end": "2026-03-31",
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -1955,6 +3548,16 @@
           "residual": 0.0,
           "d2_inkind": 57.0,
           "ours_inkind": 57.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 6200.0,
+          "ours_itemized": 6200.0,
+          "residual": 0.0,
+          "d2_inkind": 47.33,
+          "ours_inkind": 47.33,
           "coverage_miss": false
         }
       ]
@@ -1967,16 +3570,16 @@
       "flags": [
         "PENDING-A1"
       ],
-      "periods_count": 9,
-      "d2_itemized": 114903.34,
-      "ours_itemized": 114903.34,
+      "periods_count": 10,
+      "d2_itemized": 150453.34,
+      "ours_itemized": 150453.34,
       "residual": 0.0,
-      "d2_inkind": 4221.77,
-      "ours_inkind": 4221.77,
+      "d2_inkind": 4846.77,
+      "ours_inkind": 4846.77,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 30200.0,
-      "last_period_end": "2026-03-31",
+      "pending": 4000.0,
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -2068,6 +3671,16 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 35550.0,
+          "ours_itemized": 35550.0,
+          "residual": 0.0,
+          "d2_inkind": 625.0,
+          "ours_inkind": 625.0,
+          "coverage_miss": false
         }
       ]
     },
@@ -2076,19 +3689,17 @@
       "sbe_committee_id": "39858",
       "superseded_filings": 0,
       "state": "RECONCILED",
-      "flags": [
-        "PENDING-A1"
-      ],
-      "periods_count": 8,
-      "d2_itemized": 295774.93,
-      "ours_itemized": 295774.93,
+      "flags": [],
+      "periods_count": 9,
+      "d2_itemized": 370232.93,
+      "ours_itemized": 370232.93,
       "residual": 0.0,
       "d2_inkind": 13350.8,
       "ours_inkind": 13350.8,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 50000.0,
-      "last_period_end": "2026-03-31",
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -2170,6 +3781,16 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 74458.0,
+          "ours_itemized": 74458.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
         }
       ]
     },
@@ -2181,16 +3802,16 @@
       "flags": [
         "PENDING-A1"
       ],
-      "periods_count": 1,
-      "d2_itemized": 17800.0,
-      "ours_itemized": 17800.0,
+      "periods_count": 2,
+      "d2_itemized": 44880.0,
+      "ours_itemized": 44880.0,
       "residual": 0.0,
-      "d2_inkind": 0.0,
-      "ours_inkind": 0,
+      "d2_inkind": 512.5,
+      "ours_inkind": 512.5,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 13300.0,
-      "last_period_end": "2026-03-31",
+      "pending": 14800.0,
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -2198,6 +3819,136 @@
           "end": "2026-03-31",
           "d2_itemized": 17800.0,
           "ours_itemized": 17800.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 27080.0,
+          "ours_itemized": 27080.0,
+          "residual": 0.0,
+          "d2_inkind": 512.5,
+          "ours_inkind": 512.5,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-smith-sb-2024-d6": {
+      "committee_name": "Friends of Andre Smith",
+      "sbe_committee_id": "39705",
+      "superseded_filings": 4,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 10,
+      "d2_itemized": 62130.04,
+      "ours_itemized": 62130.04,
+      "residual": 0.0,
+      "d2_inkind": 6330.0,
+      "ours_inkind": 6330.0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2024-01-22",
+          "end": "2024-03-31",
+          "d2_itemized": 16215.59,
+          "ours_itemized": 16215.59,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "d2_itemized": 5406.0,
+          "ours_itemized": 5406.0,
+          "residual": 0.0,
+          "d2_inkind": 3000.0,
+          "ours_inkind": 3000.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 5000.0,
+          "ours_itemized": 5000.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 27508.45,
+          "ours_itemized": 27508.45,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 1000.0,
+          "ours_itemized": 1000.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 7000.0,
+          "ours_itemized": 7000.0,
+          "residual": 0.0,
+          "d2_inkind": 3330.0,
+          "ours_inkind": 3330.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
           "residual": 0.0,
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
@@ -2210,19 +3961,17 @@
       "sbe_committee_id": "39788",
       "superseded_filings": 3,
       "state": "RECONCILED",
-      "flags": [
-        "PENDING-A1"
-      ],
-      "periods_count": 9,
-      "d2_itemized": 170347.77,
-      "ours_itemized": 170347.77,
+      "flags": [],
+      "periods_count": 10,
+      "d2_itemized": 226642.77,
+      "ours_itemized": 226642.77,
       "residual": 0.0,
       "d2_inkind": 2229.3,
       "ours_inkind": 2229.3,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 41500.0,
-      "last_period_end": "2026-03-31",
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -2314,6 +4063,126 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 56295.0,
+          "ours_itemized": 56295.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-thomas-sb-2024-d9": {
+      "committee_name": "Friends For Lanetta Thomas",
+      "sbe_committee_id": "39794",
+      "superseded_filings": 1,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 9,
+      "d2_itemized": 9333.01,
+      "ours_itemized": 9333.01,
+      "residual": 0.0,
+      "d2_inkind": 8335.83,
+      "ours_inkind": 8335.83,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "d2_itemized": 4023.5,
+          "ours_itemized": 4023.5,
+          "residual": 0.0,
+          "d2_inkind": 4000.0,
+          "ours_inkind": 4000.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 2000.0,
+          "ours_itemized": 2000.0,
+          "residual": 0.0,
+          "d2_inkind": 4335.83,
+          "ours_inkind": 4335.83,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 1422.76,
+          "ours_itemized": 1422.76,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 1886.75,
+          "ours_itemized": 1886.75,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
         }
       ]
     },
@@ -2323,16 +4192,16 @@
       "superseded_filings": 0,
       "state": "RECONCILED",
       "flags": [],
-      "periods_count": 8,
-      "d2_itemized": 129500.0,
-      "ours_itemized": 129500.0,
+      "periods_count": 9,
+      "d2_itemized": 136000.0,
+      "ours_itemized": 136000.0,
       "residual": 0.0,
       "d2_inkind": 381183.13,
       "ours_inkind": 381183.13,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
       "pending": 0.0,
-      "last_period_end": "2026-03-31",
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -2414,25 +4283,535 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 6500.0,
+          "ours_itemized": 6500.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-villalobos-sb-2024-d7": {
+      "committee_name": "Eva is ALL About Our Kids",
+      "sbe_committee_id": "39840",
+      "superseded_filings": 1,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 8,
+      "d2_itemized": 31200.0,
+      "ours_itemized": 31200.0,
+      "residual": 0.0,
+      "d2_inkind": 2500.0,
+      "ours_inkind": 2500.0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-03-31",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "d2_itemized": 7650.0,
+          "ours_itemized": 7650.0,
+          "residual": 0.0,
+          "d2_inkind": 2500.0,
+          "ours_inkind": 2500.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 22600.0,
+          "ours_itemized": 22600.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 950.0,
+          "ours_itemized": 950.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-walton-sb-2024-d10": {
+      "committee_name": "Friends of James M Walton, Jr",
+      "sbe_committee_id": "39874",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 9,
+      "d2_itemized": 2550.0,
+      "ours_itemized": 2550.0,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2024-06-03",
+          "end": "2024-06-30",
+          "d2_itemized": 1800.0,
+          "ours_itemized": 1800.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 750.0,
+          "ours_itemized": 750.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-white-sb-d11": {
+      "committee_name": "Friends of Isaiah White",
+      "sbe_committee_id": "40744",
+      "superseded_filings": 1,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 4,
+      "d2_itemized": 50109.29,
+      "ours_itemized": 50109.29,
+      "residual": 0.0,
+      "d2_inkind": 625.0,
+      "ours_inkind": 625.0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 16304.0,
+          "ours_itemized": 16304.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 12250.0,
+          "ours_itemized": 12250.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 13700.0,
+          "ours_itemized": 13700.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 7855.29,
+          "ours_itemized": 7855.29,
+          "residual": 0.0,
+          "d2_inkind": 625.0,
+          "ours_inkind": 625.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-williams-sb-2024-d9": {
+      "committee_name": "Friends of Lamont Williams",
+      "sbe_committee_id": "37248",
+      "superseded_filings": 10,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 17,
+      "d2_itemized": 234588.49,
+      "ours_itemized": 234588.49,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-03-31",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2022-02-22",
+          "end": "2022-03-31",
+          "d2_itemized": 16500.0,
+          "ours_itemized": 16500.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-04-01",
+          "end": "2022-06-30",
+          "d2_itemized": 196331.35,
+          "ours_itemized": 196331.35,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-07-01",
+          "end": "2022-09-30",
+          "d2_itemized": 1000.0,
+          "ours_itemized": 1000.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-10-01",
+          "end": "2022-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-01-01",
+          "end": "2023-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-04-01",
+          "end": "2023-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-07-01",
+          "end": "2023-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-10-01",
+          "end": "2023-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-01-01",
+          "end": "2024-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 10792.4,
+          "ours_itemized": 10792.4,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 9964.74,
+          "ours_itemized": 9964.74,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-williams-sb-d09": {
+      "committee_name": "LaPamela for Our Schools",
+      "sbe_committee_id": "41108",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 2,
+      "d2_itemized": 0.0,
+      "ours_itemized": 0,
+      "residual": 0.0,
+      "d2_inkind": 1125.0,
+      "ours_inkind": 1125.0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-02-27",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 1125.0,
+          "ours_inkind": 1125.0,
+          "coverage_miss": false
         }
       ]
     },
     "cand-zaccor-sb-d07": {
       "committee_name": "Neighbors for Karen Zaccor for ERSB",
       "sbe_committee_id": "39866",
-      "superseded_filings": 4,
+      "superseded_filings": 5,
       "state": "RECONCILED",
       "flags": [],
-      "periods_count": 8,
-      "d2_itemized": 142178.0,
-      "ours_itemized": 142178.0,
+      "periods_count": 9,
+      "d2_itemized": 145478.0,
+      "ours_itemized": 145478.0,
       "residual": 0.0,
-      "d2_inkind": 370822.17,
-      "ours_inkind": 370822.17,
+      "d2_inkind": 371944.8,
+      "ours_inkind": 371944.8,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
       "pending": 0.0,
-      "last_period_end": "2026-03-31",
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -2513,6 +4892,16 @@
           "residual": 0.0,
           "d2_inkind": 599.03,
           "ours_inkind": 599.03,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 3300.0,
+          "ours_itemized": 3300.0,
+          "residual": 0.0,
+          "d2_inkind": 1122.63,
+          "ours_inkind": 1122.63,
           "coverage_miss": false
         }
       ]
