@@ -657,7 +657,7 @@
       });
     });
     var arr = []; for (var k in ind) if (ind.hasOwnProperty(k)) { var x = ind[k]; x.total = round2(x.direct + x.support + x.oppose); arr.push(x); }
-    arr.sort(function (a, b) { return b.total - a.total; });
+    arr.sort(function (a, b) { return b.direct - a.direct; });   // FW-1: per-candidate strip is direct-only
     return arr;
   }
 
@@ -1186,9 +1186,10 @@
     for (var i = 0; i < cands.length; i++) {
       var inds = byCand[cands[i].id]; if (!inds) continue;
       var arr = [];
-      for (var tag in inds) arr.push({ industry: tag, direct: inds[tag].direct, support: inds[tag].support,
-        oppose: inds[tag].oppose, total: round2(inds[tag].direct + inds[tag].support + inds[tag].oppose) });
-      arr.sort(function (a, b) { return b.total - a.total; });
+      for (var tag in inds) { if (inds[tag].direct <= 0) continue;   // FW-1: per-candidate view is direct-only
+        arr.push({ industry: tag, direct: inds[tag].direct, support: inds[tag].support,
+        oppose: inds[tag].oppose, total: round2(inds[tag].direct + inds[tag].support + inds[tag].oppose) }); }
+      arr.sort(function (a, b) { return b.direct - a.direct; });
       if (arr.length) out.push({ name: cands[i].name, slug: cands[i].slug, race: cands[i].race, industries: arr });
     }
     return out;  // neutral order (spendByCandidate is alphabetical)

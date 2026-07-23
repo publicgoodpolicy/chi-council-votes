@@ -287,6 +287,10 @@
       '.ipg-elect .indbar-label{font-size:13.5px;font-weight:500;color:var(--ink);}' +
       '.ipg-elect .indbar-val{font-size:13.5px;font-weight:600;color:var(--teal);font-variant-numeric:tabular-nums;white-space:nowrap;}' +
       '.ipg-elect .indep-tag{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--sage);border:1px solid var(--sage);border-radius:20px;padding:1px 6px;margin-left:6px;vertical-align:middle;}' +
+      '.ipg-elect .indbar-val-lab{font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);}' +
+      '.ipg-elect .indbar-breakdown{margin-top:4px;font-size:11px;color:var(--ink-soft);font-variant-numeric:tabular-nums;line-height:1.5;}' +
+      '.ipg-elect .indbar-breakdown .bd-d{color:var(--teal);}.ipg-elect .indbar-breakdown .bd-s{color:var(--sage);}.ipg-elect .indbar-breakdown .bd-o{color:var(--coral);}' +
+      '.ipg-elect .indbar-breakdown .bd-sep{opacity:.45;}' +
       '.ipg-elect .ind-legend{display:flex;gap:16px;margin:0 0 10px;font-size:11.5px;color:var(--ink-soft);}' +
       '.ipg-elect .ind-legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px;}' +
       '.ipg-elect .sw.indep{background:var(--sage);}' +
@@ -723,11 +727,12 @@
   // Uncategorized donors render as "uncategorized" honestly, never dropped.
   function elecIndustries(industries) {
     if (!industries || !industries.length) return '';
-    var chips = industries.slice(0, 8).map(function (i) {
+    var chips = industries.filter(function (i) { return i.direct > 0; }).slice(0, 8).map(function (i) {
       var label = (i.industry === 'unclassified' || i.industry === 'uncategorized') ? 'uncategorized' : prettyTag(i.industry);
-      return '<span class="tagchip ind">' + esc(label) + ' ' + money(i.total) + '</span>';
+      return '<span class="tagchip ind">' + esc(label) + ' ' + money(i.direct) + '</span>';
     }).join('');
-    return '<p class="contrib-h" style="margin-top:14px">Industries this election</p><div class="ixc">' + chips + '</div>';
+    if (!chips) return '';
+    return '<p class="contrib-h" style="margin-top:14px">Industries this election — direct contributions</p><div class="ixc">' + chips + '</div>';
   }
   // Four separate stream bars (HALT-2.5 model preserved). contributions / IE-support /
   // IE-oppose are CLICKABLE -> the council drill-down panels (contributorPanel/iePanel),
@@ -1190,23 +1195,39 @@
   function industryChart(industries) {
     var max = 1;
     for (var m = 0; m < industries.length; m++) if (industries[m].total > max) max = industries[m].total;
-    var note = '<p class="contrib-note">Total election money by industry — direct contributions and independent ' +
-      'spending, largest first. Click an industry to see who gave or spent. Support and opposition are split only ' +
-      'when you drill into a candidate, never here.</p>';
+    var note = '<p class="contrib-note">Total money deployed by industry — direct contributions plus ' +
+      'independent support and opposition, shown separately. Largest first. Click an industry to see ' +
+      'who gave or spent.</p>';
     var legend = '<div class="ind-legend" aria-hidden="true"><span><i class="sw third"></i>Direct contributions</span>' +
-      '<span><i class="sw indep"></i>Independent spending</span></div>';
+      '<span><i class="sw support"></i>Independent support</span>' +
+      '<span><i class="sw oppose"></i>Independent opposition</span></div>';
     var rows = industries.map(function (x) {
-      var isIE = (x.support + x.oppose) > 0;          // an IE-funded industry (charter-schools)
       var uncat = (x.industry === 'unclassified' || x.industry === 'uncategorized');
       var drill = uncat ? 'uncategorized' : x.industry;
       var label = uncat ? 'uncategorized' : prettyTag(x.industry);
       var w = max > 0 ? Math.min(100, Math.max(1.5, x.total / max * 100)) : 0;
+      // Rule (b): three streams shown as separate labeled segments + a default-visible breakdown
+      // line. Only non-zero streams render (a direct-only industry shows one 'Direct' part, never
+      // empty $0 segments), and the top figure is labeled 'total deployed', never 'independent'.
+      var seg = function (v, cls) { return v > 0 ? '<div class="seg ' + cls + '" style="width:' + (v / x.total * 100) + '%"></div>' : ''; };
+      var segs = seg(x.direct, 'third') + seg(x.support, 'support') + seg(x.oppose, 'oppose');
+      // Largest-remainder apportionment so the displayed parts sum EXACTLY to the displayed total
+      // (money() rounds each stream independently, which can drift by $1 against round(total)).
+      var streams = [];
+      if (x.direct > 0) streams.push({ lab: 'Direct', cls: 'bd-d', raw: x.direct });
+      if (x.support > 0) streams.push({ lab: 'Independent support', cls: 'bd-s', raw: x.support });
+      if (x.oppose > 0) streams.push({ lab: 'Independent opposition', cls: 'bd-o', raw: x.oppose });
+      var disp = streams.map(function (s) { return Math.floor(s.raw); });
+      var leftover = Math.round(x.total) - disp.reduce(function (a, b) { return a + b; }, 0);
+      streams.map(function (s, i) { return i; })
+        .sort(function (a, b) { return (streams[b].raw - Math.floor(streams[b].raw)) - (streams[a].raw - Math.floor(streams[a].raw)); })
+        .slice(0, Math.max(0, leftover)).forEach(function (i) { disp[i] += 1; });
+      var parts = streams.map(function (s, i) { return '<span class="bd ' + s.cls + '">' + s.lab + ' $' + disp[i].toLocaleString('en-US') + '</span>'; });
       return '<button class="indbar" type="button" data-industry-drill="' + esc(drill) + '">' +
-        '<div class="indbar-top"><span class="indbar-label">' + esc(label) +
-          (isIE ? ' <span class="indep-tag">independent</span>' : '') + '</span>' +
-          '<span class="indbar-val">' + money(x.total) + '</span></div>' +
-        '<div class="bartrack"><div class="barfill" style="width:' + w + '%">' +
-          '<div class="seg ' + (isIE ? 'indep' : 'third') + '" style="width:100%"></div></div></div></button>';
+        '<div class="indbar-top"><span class="indbar-label">' + esc(label) + '</span>' +
+          '<span class="indbar-val">' + money(x.total) + ' <span class="indbar-val-lab">total deployed</span></span></div>' +
+        '<div class="bartrack"><div class="barfill" style="width:' + w + '%">' + segs + '</div></div>' +
+        '<div class="indbar-breakdown">' + parts.join(' <span class="bd-sep">·</span> ') + '</div></button>';
     }).join('');
     return note + legend + '<div class="indchart">' + rows + '</div>';
   }
@@ -1256,12 +1277,12 @@
     } else if (tab === 'industries') {
       body = industryChart(vm.industries);   // E-6 Level 1: sorted-bar chart, click -> spenders (Level 2)
     } else if (tab === 'industry-candidate') {
-      body = '<p class="contrib-note">Each candidate’s money by donor/​spender industry (direct + independent). ' +
+      body = '<p class="contrib-note">Each candidate’s direct contributions by donor industry. Independent spending is not candidate money and is shown separately. ' +
         'Uncategorized shown as uncategorized.</p>' +
         vm.rows.map(function (r) {
           return '<div class="srow"><div class="sname">' + esc(r.name) + ' <span class="muted">· ' + esc(r.race) + '</span>' +
-            '<div class="ixc">' + r.industries.map(function (i) {
-              return '<span class="tagchip ind">' + esc(prettyTag(i.industry === 'unclassified' ? 'uncategorized' : i.industry)) + ' ' + money(i.total) + '</span>';
+            '<div class="ixc">' + r.industries.filter(function (i) { return i.direct > 0; }).map(function (i) {
+              return '<span class="tagchip ind">' + esc(prettyTag(i.industry === 'unclassified' ? 'uncategorized' : i.industry)) + ' ' + money(i.direct) + '</span>';
             }).join('') + '</div></div></div>';
         }).join('');
     } else if (tab === 'flags') {

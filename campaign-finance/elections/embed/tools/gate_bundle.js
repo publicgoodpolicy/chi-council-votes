@@ -78,13 +78,16 @@ var FIXTURES = {
     // Industry-tag color + curated label (E-5): canonical color + curated label, not the slug.
     tagColor: { industry: 'real-estate', hex: '#a23a2e', label: 'Real Estate / Developers', slugText: '>real estate<' },
     // Industry three-level drill (E-6): the IE-funded industry, its IE spender, a direct industry.
-    // HALT-Q2R repin: +$931k direct made 'individual' the top bar; charter-schools -> #2 but
-    // still the SOLE independent-distinguished bar (top IE category, $1.88M by_industry IE unchanged).
-    // HALT-BULK-B repin (commit 6337339): individual +$6,300 (weinberg-david, 39786 recency) -> $2,159,769.
-    //   ieVal held RED pending FW-1: the charter-schools bar fuses direct+support+oppose under an
-    //   'independent' tag (data.js:1178) -- do NOT repin the fused value under that label.
+    // HALT-Q2R repin: individual became the top bar; charter-schools -> #2.
+    // HALT-BULK-B repin (6337339): individual +$6,300 (weinberg-david, 39786 recency) -> $2,159,769.
+    // HALT-FW-1 relabel+decompose: the Level-1 bar is the ruled 'total deployed' figure
+    //   (direct+support+oppose), labeled as such (never 'independent'), with the three streams shown as
+    //   default-visible labeled segments + a breakdown line whose parts sum EXACTLY to the total
+    //   (largest-remainder). Values byte-unchanged; ieVal repinned to the rendered total $1,629,547 (of
+    //   which only $16,212 is direct — the old 'independent'-tagged fused display was the defect).
     industryDrill: { ieIndustry: 'charter-schools', ieSpender: 'ie-committee-26066', directIndustry: 'labor-teachers',
-      topBar: 'individual', topBarVal: '$2,159,769', ieRank: 2, ieVal: '$1,630,979' },
+      topBar: 'individual', topBarVal: '$2,159,769', ieRank: 2, ieVal: '$1,629,547',
+      ieDirect: '$16,212', ieSupport: '$1,212,118', ieOppose: '$401,217' },
     // Grouped spend-by-candidate (E-7): President first, district order, within-race ranking, race filter.
     candidateGroups: { firstRaceText: 'President', raceCount: 21,
       presidentOrder: ['Victor Henderson', 'Jennifer Custer', 'Sendhil Revuluri', 'Jessica Biggs'], singleRace: 'sb-d06' }
@@ -354,14 +357,21 @@ async function assertIndustryDrill(T, ctx, fx) {
   T.ok('[E6.L1] industry chart renders (sorted clickable bars)',
     !!ctx.root().querySelector('.indchart') && !!ctx.root().querySelector('[data-industry-drill]'));
   var bars = [].slice.call(ctx.root().querySelectorAll('[data-industry-drill]'));
-  T.ok('[E6.L1] ' + d.topBar + ' is largest (first bar, direct — no indep seg) [repin: was charter-schools pre-Q2]',
-    bars[0].getAttribute('data-industry-drill') === d.topBar && bars[0].textContent.indexOf(d.topBarVal) >= 0 && !bars[0].querySelector('.seg.indep'));
-  T.ok('[E6.L1] ieVal RED pending FW-1 relabel - do not repin under the current independent label',
-    bars[d.ieRank - 1].getAttribute('data-industry-drill') === d.ieIndustry && bars[d.ieRank - 1].textContent.indexOf(d.ieVal) >= 0 && /independent/.test(bars[d.ieRank - 1].textContent) && !!bars[d.ieRank - 1].querySelector('.seg.indep'));
-  T.ok('[E6.L1] charter-schools remains the top IE category (sole independent-distinguished bar; by_industry IE $1.88M unchanged)',
-    bars.filter(function (b) { return b.querySelector('.seg.indep'); }).map(function (b) { return b.getAttribute('data-industry-drill'); })[0] === d.ieIndustry);
-  T.ok('[E6.L1] no support/oppose split at Level 1 (aggregate only)',
-    ctx.root().querySelector('.spend-body').innerHTML.indexOf('Spent to support') < 0);
+  T.ok('[E6.L1] ' + d.topBar + ' is #1 at ' + d.topBarVal + ', direct-only, labeled total deployed (not independent)',
+    bars[0].getAttribute('data-industry-drill') === d.topBar && bars[0].textContent.indexOf(d.topBarVal) >= 0 && /total deployed/.test(bars[0].textContent) && !bars[0].querySelector('.indep-tag'));
+  T.ok('[E6.L1] ' + d.ieIndustry + ' is #' + d.ieRank + ' at ' + d.ieVal + ' TOTAL DEPLOYED, not "independent" (FW-1 repin)',
+    bars[d.ieRank - 1].getAttribute('data-industry-drill') === d.ieIndustry && bars[d.ieRank - 1].textContent.indexOf(d.ieVal) >= 0 && /total deployed/.test(bars[d.ieRank - 1].textContent) && !bars[d.ieRank - 1].querySelector('.indep-tag'));
+  T.ok('[E6.L1] ' + d.ieIndustry + ' decomposed: direct+support+oppose segments + visible breakdown ' + d.ieDirect + ' / ' + d.ieSupport + ' / ' + d.ieOppose,
+    !!bars[d.ieRank - 1].querySelector('.seg.third') && !!bars[d.ieRank - 1].querySelector('.seg.support') && !!bars[d.ieRank - 1].querySelector('.seg.oppose') &&
+    bars[d.ieRank - 1].textContent.indexOf(d.ieDirect) >= 0 && bars[d.ieRank - 1].textContent.indexOf(d.ieSupport) >= 0 && bars[d.ieRank - 1].textContent.indexOf(d.ieOppose) >= 0);
+  T.ok('[E6.L1] all bars: parts sum EXACTLY to total, zero "independent" labels, no per-candidate phrasing (rule a+b, firewall)',
+    ctx.root().querySelector('.spend-body').innerHTML.indexOf('Spent to support') < 0 && bars.length > 0 && bars.every(function (b) {
+      if (b.querySelector('.indep-tag')) return false;
+      var mt = b.querySelector('.indbar-val').textContent.match(/\$[\d,]+/);
+      var tot = mt ? parseInt(mt[0].replace(/[^0-9]/g, ''), 10) : -1;
+      var parts = [].slice.call(b.querySelectorAll('.indbar-breakdown .bd')).map(function (s) { var m = s.textContent.match(/\$[\d,]+/); return m ? parseInt(m[0].replace(/[^0-9]/g, ''), 10) : 0; });
+      return parts.length > 0 && parts.reduce(function (a, c) { return a + c; }, 0) === tot;
+    }));
   // Level 1 -> 2: click the IE industry bar -> filtered spender list
   ctx.click(bars.filter(function (b) { return b.getAttribute('data-industry-drill') === d.ieIndustry; })[0]); await ctx.wait(80);
   T.ok('[E6.L2] industry bar click -> Browse Donors filtered to that industry',
