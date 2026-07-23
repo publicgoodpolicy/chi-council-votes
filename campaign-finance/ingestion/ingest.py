@@ -451,9 +451,7 @@ def merge_into_data(data: dict, parsed: dict, ward, linkage: dict = None) -> dic
         cm['data_quality'] = 'REAL'
         cm['last_updated'] = today
         cm['il_sunshine_url'] = f"https://illinoissunshine.org/committees/{parsed['committee_id']}/"
-        # Clear demo notes if present; preserve cash_on_hand (editor-entered)
-        if cm.get('notes') and 'DEMO' in (cm.get('notes') or '').upper():
-            cm['notes'] = f"Ingested from SBE on {today}."
+        # Preserve cash_on_hand (editor-entered)
         if linkage is not None:
             _apply_linkage(cm, linkage)
     else:
@@ -498,7 +496,7 @@ def merge_into_data(data: dict, parsed: dict, ward, linkage: dict = None) -> dic
                 donor['industries'] = existing_industries
             if existing.get('flags'):
                 donor['flags'] = existing['flags']
-            if existing.get('notes') and 'DEMO' not in existing['notes'].upper():
+            if existing.get('notes'):
                 donor['notes'] = existing['notes']
             # Sheet-owned cluster fields (set by sync_overrides). The fresh parse
             # has none of these; without this, re-ingest orphans clustered donors
