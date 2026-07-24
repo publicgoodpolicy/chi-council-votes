@@ -1,9 +1,9 @@
 {
   "run": {
     "data_file": "campaign-finance/election-data.json",
-    "d2totals_file": "raw/sbe-summary/D2Totals - 7.17.26.txt",
-    "fileddocs_file": "raw/sbe-summary/FiledDocs - 7.17.26.txt",
-    "pulled": "2026-07-17",
+    "d2totals_file": "/Users/ishandaya/bulk-2026-07-23/d2totals_639202695385819853.txt",
+    "fileddocs_file": "/Users/ishandaya/probe-bulk-2026-07-21/raw-bulk/fileddocs_639202311261528856.txt",
+    "pulled": "2026-07-22",
     "threshold": 500.0,
     "scope": "elections candidate committees (v1); IE and council lanes deferred"
   },
@@ -19,7 +19,7 @@
     "reconciled": 51,
     "residual_state": 2,
     "too_new": 0,
-    "pending_a1_total": 60250.0,
+    "pending_a1_total": 67550.0,
     "aggregate_total": 0.0,
     "inkind_d2_total": 2429482.51,
     "inkind_ours_total": 2427732.51,
@@ -3118,7 +3118,7 @@
       "ours_inkind": 0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 1000.0,
+      "pending": 2000.0,
       "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -3578,7 +3578,7 @@
       "ours_inkind": 4846.77,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 4000.0,
+      "pending": 10300.0,
       "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -3957,7 +3957,7 @@
       ]
     },
     "cand-smith-sb-d19": {
-      "committee_name": "Citizens for Che Rhymefest\" Smith\"",
+      "committee_name": "Citizens for Che \"Rhymefest\" Smith",
       "sbe_committee_id": "39788",
       "superseded_filings": 3,
       "state": "RECONCILED",
