@@ -50,9 +50,11 @@ python3 "$MAIN/ingest_votes.py"   --data "$DATA" --map "$MAP" --term "$COUNCIL_T
 python3 "$MAIN/sync_allvotes.py"  --data "$DATA" --map "$MAP" \
                                      --sheet-id "$SHEET_ID" --creds-file "$CREDS"
 
-# ---- 3. Editorial overrides / merges / clusters (Google Sheets — not blocked) -
-say "Apply donor overrides, flags, merges, and clusters"
-python3 "$SHEETS/sync_overrides.py" --sheet-id "$SHEET_ID" --creds-file "$CREDS" --data-file "$DATA"
+# ---- 3. Editorial overrides / merges / clusters — MOVED into the derived-layer
+# section below, to run AFTER the finance ingest and BEFORE build_rollups, matching
+# the canonical council rebuild chain (PIPELINE_RUNBOOK.md). Running it HERE (before
+# ingest) let ingest's donor-union clear the Sheet-only fields entity_type and
+# _last_edited_by with no re-apply after — HALT-BA-1. Do not move it back. ---------
 
 # ---- 4. Campaign finance — only if you've dropped new receipts in raw/ -------
 if [ -d "$RAW" ] && [ -n "$(ls -A "$RAW" 2>/dev/null)" ]; then
@@ -73,9 +75,14 @@ fi
 #       --committees /path/Committees.txt --out "$DATA"
 
 # ---- 5. Derived layers — recomputed every build (idempotent, in place) ------
-say "Rebuild derived layers: parent_id/cycles -> committee registry -> rollups -> shards"
+say "Rebuild derived layers: parent_id/cycles -> committee registry -> overrides -> rollups -> shards"
 python3 "$INGEST/transform_slice1.py" "$DATA"
 python3 "$INGEST/transform_slice2.py" "$DATA"
+# Editorial overrides / merges / clusters (Google Sheets — not blocked). Runs HERE:
+# after ingest (so it re-applies the Sheet-only fields ingest's donor-union drops)
+# and before build_rollups (so rollups see synced classifications) — HALT-BA-1.
+say "Apply donor overrides, flags, merges, and clusters"
+python3 "$SHEETS/sync_overrides.py" --sheet-id "$SHEET_ID" --creds-file "$CREDS" --data-file "$DATA"
 python3 "$INGEST/build_rollups.py"    "$DATA"
 python3 "$INGEST/build_shards.py"     "$DATA" "$SHARDS"
 
