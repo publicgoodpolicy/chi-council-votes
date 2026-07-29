@@ -281,7 +281,8 @@ def build(d):
         d['rollups']['by_race']=by_race
         d['rollups']['by_candidate_election']=by_candidate_election
         d['rollups']['by_person']=by_person
-    # build_rollups runs last in both the build_all derived step and ingest_ie, so
+    # build_rollups runs last (ordering authority: MECHANISM_REFERENCE.md §1) in both
+    # the build_all derived step and ingest_ie, so
     # this is the single place that always fires on a (re)build. Stamp real build
     # time — the field was previously static and falsely read as "stale".
     d['generated_at']=datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')

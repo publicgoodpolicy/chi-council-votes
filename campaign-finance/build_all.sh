@@ -51,8 +51,8 @@ python3 "$MAIN/sync_allvotes.py"  --data "$DATA" --map "$MAP" \
                                      --sheet-id "$SHEET_ID" --creds-file "$CREDS"
 
 # ---- 3. Editorial overrides / merges / clusters — MOVED into the derived-layer
-# section below, to run AFTER the finance ingest and BEFORE build_rollups, matching
-# the canonical council rebuild chain (PIPELINE_RUNBOOK.md). Running it HERE (before
+# section below, to run AFTER the finance ingest and BEFORE build_rollups, per the
+# ordering authority of record (MECHANISM_REFERENCE.md §1). Running it HERE (before
 # ingest) let ingest's donor-union clear the Sheet-only fields entity_type and
 # _last_edited_by with no re-apply after — HALT-BA-1. Do not move it back. ---------
 
@@ -80,7 +80,8 @@ python3 "$INGEST/transform_slice1.py" "$DATA"
 python3 "$INGEST/transform_slice2.py" "$DATA"
 # Editorial overrides / merges / clusters (Google Sheets — not blocked). Runs HERE:
 # after ingest (so it re-applies the Sheet-only fields ingest's donor-union drops)
-# and before build_rollups (so rollups see synced classifications) — HALT-BA-1.
+# and before build_rollups (so rollups see synced classifications) — HALT-BA-1,
+# per the ordering authority of record (MECHANISM_REFERENCE.md §1).
 say "Apply donor overrides, flags, merges, and clusters"
 python3 "$SHEETS/sync_overrides.py" --sheet-id "$SHEET_ID" --creds-file "$CREDS" --data-file "$DATA"
 python3 "$INGEST/build_rollups.py"    "$DATA"

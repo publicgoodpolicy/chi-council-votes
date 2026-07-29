@@ -111,11 +111,12 @@ governing rule below). Export `$REPO`; paths are relative to the repo root.
 **Governing rule — why slice1/slice2 come before `ingest_ie`.** `build_rollups`,
 *including the copy `ingest_ie` runs at its end*, must never run while any donor
 lacks `parent_id`. `transform_slice1` (step 3) guarantees that, so it sits before
-`ingest_ie` here. This is the one difference from the council `build_all.sh`, where
-slice1/slice2 run *after* a prior full build has already assigned `parent_id`.
+`ingest_ie` here. This is the one difference from the council chain (ordering
+authority: `campaign-finance/MECHANISM_REFERENCE.md` §1), where slice1/slice2 run
+*after* a prior full build has already assigned `parent_id`.
 
-**`build_rollups` runs LAST, after `sync_overrides`** (mirroring `build_all.sh`,
-where rollups run last). Only then do the rollups reflect the Sheet: `by_industry`'s
+**`build_rollups` runs LAST, after `sync_overrides`** (per the ordering authority,
+`MECHANISM_REFERENCE.md` §1). Only then do the rollups reflect the Sheet: `by_industry`'s
 `independent`/IE layer is keyed off the IE committees' `industry_tags` (set by
 `sync_overrides`), and `by_*` direct totals reflect the synced donor classifications.
 A `build_rollups` run *before* `sync_overrides` produces a rollup with an empty IE/

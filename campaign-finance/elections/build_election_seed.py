@@ -63,10 +63,10 @@ CANONICAL RUN ORDER (full election build)
 GOVERNING RULE: build_rollups — INCLUDING the copy ingest_ie calls at its end — must
 never run while any donor lacks parent_id. transform_slice1 (step 3) guarantees this,
 which is why slice1/slice2 sit BEFORE ingest_ie here. And build_rollups runs AFTER
-sync_overrides (mirroring build_all.sh, where rollups run last) so the IE/industry
-layer reflects the synced tags; the copy inside ingest_ie at step 5 is just
-intermediate and is overwritten by step 7. This differs from the council build_all.sh
-only in that slice1/slice2 sit before ingest_ie here.
+sync_overrides (per the ordering authority of record, MECHANISM_REFERENCE.md §1) so
+the IE/industry layer reflects the synced tags; the copy inside ingest_ie at step 5 is
+intermediate and is overwritten by step 7. This differs from the council chain
+(MECHANISM_REFERENCE.md §1) only in that slice1/slice2 sit before ingest_ie here.
 
 Requires $REPO (same convention as the council scripts).
 """

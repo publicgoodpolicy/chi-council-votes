@@ -214,6 +214,13 @@ fails loudly instead of corrupting a name. See the reconcile encoding note above
 
 ### The canonical council rebuild chain (order is load-bearing)
 
+**Ordering authority of record: `campaign-finance/MECHANISM_REFERENCE.md` §1** (PS-25/PS-44).
+This section is the operational sequence — run these commands in this order. The
+*requirements* behind the order — which dependencies make it load-bearing and what breaks
+when it is violated — live in the reference, which governs. If this section and the
+reference ever disagree, the reference wins and the disagreement is a defect, fixed in
+the same commit as whatever change caused it (discipline 33).
+
 ```
 convert_bulk_receipts.py  --bulk <receipts.txt> --fileddocs <FiledDocs.txt> \
                           --committee-map council-data.json --out-dir raw/receipts-council
