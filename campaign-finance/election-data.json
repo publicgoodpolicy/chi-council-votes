@@ -2970,7 +2970,7 @@
       "race_id": "sb-2024-d5",
       "election_id": "2024-school-board",
       "name": "Anthony Hargrove",
-      "committee_id": "39831",
+      "committee_id": null,
       "status": "filed",
       "incumbent": false,
       "vacating_for": null,
@@ -4685,10 +4685,10 @@
       "cash_on_hand": null,
       "cash_on_hand_as_of": null,
       "notes": "Ingested from SBE on 2026-07-20.",
-      "candidate_id": "hargrove-sb-2024-d5",
-      "race_id": "sb-2024-d5",
+      "candidate_id": "cand-hargrove-sb-d10",
+      "race_id": "sb-d10",
       "office": "school_board_member",
-      "district": "District 5",
+      "district": "District 5B",
       "type": "candidate",
       "industry_tags": [],
       "donor_id": null
@@ -275058,7 +275058,7 @@
           }
         }
       },
-      "hargrove-sb-2024-d5": {
+      "cand-hargrove-sb-d10": {
         "all": {
           "direct": 15814.25
         },
@@ -275621,11 +275621,11 @@
     "by_race": {
       "sb-d10": {
         "all": {
-          "direct": 34143.51
+          "direct": 49957.76
         },
         "by_cycle": {
           "2027": {
-            "direct": 34143.51
+            "direct": 49957.76
           }
         }
       },
@@ -275762,16 +275762,6 @@
             "direct": 1157709.38,
             "ie_support": 24765.93,
             "ie_oppose": 126078.0
-          }
-        }
-      },
-      "sb-2024-d5": {
-        "all": {
-          "direct": 15814.25
-        },
-        "by_cycle": {
-          "2027": {
-            "direct": 15814.25
           }
         }
       },
@@ -276680,7 +276670,7 @@
           }
         }
       },
-      "hargrove-sb-2024-d5": {
+      "cand-hargrove-sb-d10": {
         "2026": {
           "label": "2026",
           "contributions": {
@@ -295844,12 +295834,12 @@
           {
             "candidacy_id": "hargrove-sb-2024-d5",
             "election_id": "2024-school-board",
-            "owns_committee": true
+            "owns_committee": false
           },
           {
             "candidacy_id": "cand-hargrove-sb-d10",
             "election_id": "2026-school-board",
-            "owns_committee": false
+            "owns_committee": true
           }
         ],
         "prior": {
@@ -296047,7 +296037,7 @@
       "color": "#5a6a7a"
     }
   },
-  "seed_generated_at": "2026-08-03T09:46:11",
+  "seed_generated_at": "2026-08-03T19:25:55",
   "cycles": {
     "2015": {
       "label": "2011 \u2013 2015 cycle",
@@ -296074,7 +296064,7 @@
       "election_date": "2027-02-23"
     }
   },
-  "generated_at": "2026-07-23T03:52:31Z",
+  "generated_at": "2026-08-03T23:25:56Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "current_cycle": "2027",
   "default_cycle": "all",

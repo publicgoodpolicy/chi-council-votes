@@ -584,13 +584,13 @@ def main():
     linkage_map: dict = {}
     if election_mode:
         races_by_id = {r['id']: r for r in data['races']}
-        for cand in data['candidates']:
-            cmte = cand.get('committee_id')
-            if not cmte:
-                continue
+        # HALT-F1 (PS-77/PS-84): committee ownership is resolved DETERMINISTICALLY —
+        # most recent claimant by election date — never by iteration order (the
+        # last-write-wins defect this replaces assigned ownership by luck).
+        for cmte_key, cand in resolve_committee_claimants(data['candidates'], data.get('elections')).items():
             r = races_by_id.get(cand.get('race_id'), {})
             w = r.get('ward')
-            linkage_map[str(cmte)] = {
+            linkage_map[cmte_key] = {
                 'candidate_id': cand.get('id'),
                 'race_id': cand.get('race_id'),
                 'office': r.get('office'),
@@ -676,6 +676,31 @@ def main():
     with open(args.data_file, 'w') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
     print(f"\nWrote {args.data_file}")
+
+
+def resolve_committee_claimants(candidates, elections):
+    """HALT-F1 (PS-77 as amended by PS-84): deterministic committee ownership — for each
+    claimed SBE committee id, the MOST RECENT candidacy BY ELECTION DATE owns the
+    linkage; never iteration order. ONE implementation, TWO+ callers (PS-81/F-b): also
+    imported by restamp_committee_linkage.py (artifact repair) and
+    validate_council_data.py (the INV-LINK expectation) — never copy this logic.
+    COVERAGE LIMIT (PS-82, stated at the site): the expectation derives from
+    candidates[].committee_id CLAIMS (race-map-authored, seed-written) plus stamped
+    election recency. If race-map mis-authors a claim, claim and stamp are wrong
+    together; that residual belongs to the authoring layer (INV-ELECT's namespace and
+    convention checks), not to this resolver.
+    Returns {sbe_committee_id_str: winning candidate record}."""
+    date_of = {e.get('id'): (e.get('date') or '') for e in (elections or [])}
+    winners = {}
+    for cand in (candidates or []):
+        cmte = cand.get('committee_id')
+        if not cmte:
+            continue
+        key = str(cmte)
+        cur = winners.get(key)
+        if cur is None or date_of.get(cand.get('election_id'), '') > date_of.get(cur.get('election_id'), ''):
+            winners[key] = cand
+    return winners
 
 
 if __name__ == '__main__':

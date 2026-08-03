@@ -269,6 +269,21 @@ election-grain consumers read `by_candidate_election`, which exists for exactly 
 Ruled disposition (SCOPE-PIPE): documented, not re-keyed — re-keying would destroy the
 identity role while serving a need the election-keyed rollup already meets.
 
+**Committee ownership is resolved, not ordered** [C4.7, SOURCED; ownership rule RULED]:
+a candidate committee claimed by more than one candidacy belongs to the **most recent
+claimant by election date**, resolved by ONE shared implementation
+(`ingest.resolve_committee_claimants`) with three callers — ingest's linkage map, the
+idempotent artifact re-stamp (`restamp_committee_linkage.py`, which carries no logic of
+its own and so cannot drift), and the INV-LINK gate's expectation — never by iteration
+order, which was F1's defect. The prior candidacy's claim is nulled; its `finance_facet`
+becomes `on_current_record` **only when prior-window money exists on the shared
+committee** (PS-84's conditional — the facet is a reader-facing sentence and must stay
+true; PS-77's letter is amended, not glossed). INV-LINK-1..3 check the stamp, the
+money-requires-a-claim rule, and `owns_committee` against expectations recomputed from
+`candidates[].committee_id` claims (PS-82: different fields, different writers; the
+coverage limit is stated at the check's site — a mis-authored claim defeats both sides
+and belongs to the authoring layer, guarded by INV-ELECT).
+
 **Known reachability failure — the `ie-committee-*` suffix gap** [C4.3, UNVERIFIED —
 **deferred-by-design**]: committee-derived donor identifiers that carry an appended
 committee suffix fall outside the plain name-slug identity space, creating a reachability
@@ -424,7 +439,7 @@ that catch defect classes the existing gates structurally cannot see.
 
 | tag | file | sha256 |
 |---|---|---|
-| S-ing | `campaign-finance/ingestion/ingest.py` | `80bccdda5bc389f7548d451f433e495933feda34f84c5b3705d1e2955a4f4cc2` |
+| S-ing | `campaign-finance/ingestion/ingest.py` | `5e2c2e2175fa8ed4de0d4a7dd2ffdd70208c5df206b50200faf6225359a7d4cf` |
 | S-syn | `campaign-finance/sheets-sync/sync_overrides.py` | `5162f700c72f1fc02b40e65ecf0bbdf3d4955a712eb8525055aa7a0cc06a6098` |
 | S-bld | `campaign-finance/build_all.sh` | `c652ab26b6d4ea58bfffd3b6f4f13e19c70dc05d958553a1a94ce3e48c2db053` |
 | S-t1 | `campaign-finance/ingestion/transform_slice1.py` | `5f807b26245ee22173d3903b9b8a3825f224c47c4f2d7ad11042ee87a6ccb68d` |
@@ -432,7 +447,8 @@ that catch defect classes the existing gates structurally cannot see.
 | S-rep | `campaign-finance/ingestion/repair_clusters.py` | `90cc6912647479510d10d505debb84d18fbd28557bf5996b01a992eb1ddf283c` |
 | S-rol | `campaign-finance/ingestion/build_rollups.py` | `a37a9ee4a1fe93a66dae7c6ecb50e3face70f05078e7fbc97e088a4cafb4fe89` |
 | S-seed | `campaign-finance/elections/build_election_seed.py` | `a2122eab99c8e6db401801a97e43537a4eea62ae1f7b4f13cdb03e8a761a20f7` |
-| S-vld | `campaign-finance/ingestion/validate_council_data.py` | `4ee29d0e19d860164d7f6931cffccf1cfa316a4042afe1f3b67ec97523c08048` |
+| S-vld | `campaign-finance/ingestion/validate_council_data.py` | `6c83c3d5ab25b0ea402f06ae3a0d1e456d0497f23f91527f8ce7276d19900538` |
+| S-rst | `campaign-finance/ingestion/restamp_committee_linkage.py` | `6ceb82f9bbcffa08fdb21904b8585982a6bff7e3982e0b810937e2958019d06e` |
 | S-av | `campaign-finance/sync_allvotes.py` | `2ca09ee7323741919f048e61062d54a62719f56f88f71f99b721fe965c753f69` |
 | S-cemb | `campaign-finance/elections/reference/council-embed.html` | `f1451fa9900a7a645fec202f7226b26b95597b008c119be28747de81b89be111` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
@@ -492,7 +508,10 @@ that catch defect classes the existing gates structurally cannot see.
 | C4.3 | A-probe | 152 (banked open-thread naming; mechanism deliberately not characterized here) |
 | C4.4 | S-syn | 590-630 (uniqueness-gated alias; never rewrite) |
 | C4.5 | S-seed | 257, 284, 309 (the three stamp sites), 354-359 (fatal unknown-race-id), 362-368 (mint-time shared check, fatal) |
-| C4.5 | S-vld | 174-240 (the ONE shared implementation: namespace/convention resolvers + election_mismatches), 243-254 (durable INV-ELECT gate), 82 (wired into validate) |
+| C4.5 | S-vld | 175-241 (the ONE shared implementation: namespace/convention resolvers + election_mismatches), 244-255 (durable INV-ELECT gate), 82 (wired into validate) |
+| C4.7 | S-ing | 681-706 (resolve_committee_claimants — the ONE resolver), 585-599 (deterministic linkage build consuming it) |
+| C4.7 | S-rst | whole script (claims-derived re-stamp; ruled-four-fields write; fifth-field fail-loud; idempotent) |
+| C4.7 | S-vld | 253-319 (INV-LINK-1..3 + coverage-limit statement), 83 (wired into validate) |
 | C4.6 | S-rol | 109-112, 127-130 (by_candidate/by_race keyed (id, cycle) — no election), 132-204 (by_candidate_election, the election-keyed variant) |
 | C4.6 | S-vld | 135-141 (INV-PERSON-1 pins by_candidate.all as dedup identity) |
 | C5.1 | A-fw1 | 7-16 (fix sites exist only in the elections path; artifact layer separate) |
@@ -524,6 +543,8 @@ that catch defect classes the existing gates structurally cannot see.
 | C6.6 (a guard does not consume the field it guards) | PS-82 | SCOPE-PIPE ruling record `4a164c9716cbb67713ac1424b3605f41517789660da7df84eb3ca64b972628f8` |
 | C4.6 disposition (F3 documented, not re-keyed) | ruled at SCOPE-PIPE G1 §3 | same SCOPE-PIPE ruling record `4a164c97…` |
 | C5.5 money/nav semantics (window-scoped money, entity-scoped navigation; divergence resolves upstream) + B1-B7 display ratifications + B7 destination-clause amendment | ruled/ratified at SCOPE-UI G1/G3 | SCOPE-UI decision record `e2f687ce63649c168fd0f7765434017949d68acc3a5613b9101212b5b413ae25` (banked `~/scope-ui-2026-08-03/g1-display-decisions.md`; the G3 authorization carrying the B7 amendment anchors on it) |
+| C4.7 ownership rule (most-recent-by-election; PS-84's conditional facet, amending PS-77's letter) | PS-84 | HALT-F1 ruling record `03721efcf0fe4d744ad580106627a4b3dafd9c65f6ce1c2b28bd833be793756c` |
+| coverage-count stop conditions (pre-ruled expectations, "an unexplained change is a stop") | PS-85 | same HALT-F1 ruling record `03721efc…` |
 | C2.9 (writer-sweep method) | discipline 29 | G1 authorization `4df35187…` |
 | C6.4 (documentation drift is audit-only) | ruled this lane | G1 authorization `4df35187…` (§G1 §6 requirement) |
 | C6.5 (mechanical check's worded-count blind spot) | PS-60 | closing amend `daf8a0f0083651a17d39378600c64ced64d2a685e2db140a6075bf611cb6bfc8` |

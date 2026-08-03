@@ -80,6 +80,7 @@ def validate(d):
 
     errors.extend(validate_person_links(d))
     errors.extend(validate_election_ids(d))
+    errors.extend(validate_committee_linkage(d))
     return errors, warnings
 
 
@@ -249,6 +250,71 @@ def validate_election_ids(d):
     errs, stats = election_mismatches(cands, {r['id']: r for r in races})
     print(f"[validate] INV-ELECT coverage: {stats['checked']} candidates checked; "
           f"INV-ELECT-4 claims {stats['inv4_claimed']}, no-claim {stats['inv4_no_claim']}")
+    return errs
+
+
+# --- HALT-F1 (PS-77/PS-84): committee-linkage ownership checks -------------------------
+# PS-82-independent by construction: the EXPECTATION is recomputed from
+# candidates[].committee_id CLAIMS (race-map-authored, seed-written) ordered by election
+# recency, via ingest.py's ONE shared resolver; the SUBJECT is ingest's stamp on
+# committees{}, the by_candidate keying, and by_person owns_committee — different fields,
+# different writers. COVERAGE LIMIT (PS-81, stated here): if race-map mis-authors a
+# claim, claim and stamp are wrong together — that residual belongs to the authoring
+# layer and is guarded by INV-ELECT's namespace/convention checks, not by this block.
+
+def _load_committee_resolver():
+    import importlib.util, os
+    p = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ingest.py')
+    spec = importlib.util.spec_from_file_location('ingest', p)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.resolve_committee_claimants
+
+
+def validate_committee_linkage(d):
+    """Durable INV-LINK gate — election-only (council data has no candidates/races)."""
+    cands = d.get('candidates') or []
+    if not cands or not d.get('races'):
+        return []
+    errs = []
+    winners = _load_committee_resolver()(cands, d.get('elections'))
+    cand_by_id = {c['id']: c for c in cands}
+    comms = d.get('committees') or {}
+
+    # INV-LINK-1: every candidate-type committee's stamp equals the resolved winner.
+    for key, cm in comms.items():
+        if cm.get('type') != 'candidate' or not cm.get('sbe_committee_id'):
+            continue
+        win = winners.get(str(cm['sbe_committee_id']))
+        if win and cm.get('candidate_id') != win.get('id'):
+            errs.append(f"INV-LINK-1: committee '{key}' stamped candidate_id "
+                        f"{cm.get('candidate_id')!r} != resolved most-recent claimant {win.get('id')!r}")
+
+    # INV-LINK-2: candidacy-grain money requires a candidacy whose OWN claim reaches the
+    # committee the money came through (no money without a matching claim).
+    stamped_by_cand = {}
+    for key, cm in comms.items():
+        if cm.get('candidate_id'):
+            stamped_by_cand.setdefault(cm['candidate_id'], []).append(cm)
+    bc = (d.get('rollups') or {}).get('by_candidate') or {}
+    for cid, v in bc.items():
+        if not ((v.get('all') or {}).get('direct', 0)):
+            continue
+        claim = str(cand_by_id.get(cid, {}).get('committee_id') or '')
+        if not any(claim and claim == str(cm.get('sbe_committee_id') or '')
+                   for cm in stamped_by_cand.get(cid, [])):
+            errs.append(f"INV-LINK-2: by_candidate['{cid}'] carries money but no committee "
+                        f"stamped to it is claimed by its own candidate record")
+
+    # INV-LINK-3: owns_committee agrees with the resolved winners.
+    owner_ids = {w.get('id') for w in winners.values()}
+    for pid, p in ((d.get('rollups') or {}).get('by_person') or {}).items():
+        for m in (p.get('members') or []):
+            cid = m.get('candidacy_id')
+            expect = bool(cand_by_id.get(cid, {}).get('committee_id')) and cid in owner_ids
+            if bool(m.get('owns_committee')) != expect:
+                errs.append(f"INV-LINK-3: person '{pid}' member '{cid}' owns_committee "
+                            f"{m.get('owns_committee')!r} != resolved {expect!r}")
     return errs
 
 

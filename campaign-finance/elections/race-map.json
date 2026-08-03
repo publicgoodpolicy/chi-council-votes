@@ -3,19 +3,126 @@
   "_status_values": "declared | filed | certified | withdrawn | disqualified | incumbent-pending",
   "_example_remove_before_use": true,
   "mappings": {
-    "41108": {"candidate_id":"cand-williams-sb-d09","name":"LaPamela Williams","race_id":"sb-d09","incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "41203": {"candidate_id":"cand-lenhof-sb-d04","name":"Kyna Lenhof","race_id":"sb-d04","incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "41220": {"candidate_id":"cand-diaz-chavez-sb-d14","name":"Erika Díaz-Chávez","race_id":"sb-d14","incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "41231": {"candidate_id":"cand-dunneback-sb-d18","name":"Katherine Dunneback","race_id":"sb-d18","incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "41233": {"candidate_id":"cand-luczak-sb-d01","name":"Margie B. Luczak","race_id":"sb-d01","incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "40744": {"candidate_id":"cand-white-sb-d11","name":"Isaiah White","race_id":"sb-d11","incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "39831": {"candidate_id":"cand-hargrove-sb-d10","name":"Anthony Hargrove","race_id":"sb-d10","incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "39789": {"candidate_id":"ayala-sb-d13","name":"Jesus Ayala Jr","race_id":"sb-d13","incumbent":false,"status":"filed","bio":{}},
-    "39844": {"candidate_id":"lopez-sb-d14","name":"Yesenia Lopez","race_id":"sb-d14","incumbent":true,"status":"filed","bio":{},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
-    "39873": {"candidate_id":"gutierrez-sb-d15","name":"Angel Gutierrez","race_id":"sb-d15","incumbent":true,"status":"filed","bio":{}},
-    "41111": {"candidate_id":"gonzalez-sb-d16","name":"Juan Ignacio Gonzalez","race_id":"sb-d16","incumbent":false,"status":"filed","bio":{}},
-    "39843": {"candidate_id":"boyle-sb-d18","name":"Therese Boyle","race_id":"sb-d18","incumbent":true,"status":"filed","bio":{}},
-    "39788": {"candidate_id":"smith-sb-d19","name":"Che \"Rhymefest\" Smith","race_id":"sb-d19","incumbent":true,"status":"filed","bio":{}},
+    "41108": {
+      "candidate_id": "cand-williams-sb-d09",
+      "name": "LaPamela Williams",
+      "race_id": "sb-d09",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      }
+    },
+    "41203": {
+      "candidate_id": "cand-lenhof-sb-d04",
+      "name": "Kyna Lenhof",
+      "race_id": "sb-d04",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      }
+    },
+    "41220": {
+      "candidate_id": "cand-diaz-chavez-sb-d14",
+      "name": "Erika D\u00edaz-Ch\u00e1vez",
+      "race_id": "sb-d14",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      }
+    },
+    "41231": {
+      "candidate_id": "cand-dunneback-sb-d18",
+      "name": "Katherine Dunneback",
+      "race_id": "sb-d18",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      }
+    },
+    "41233": {
+      "candidate_id": "cand-luczak-sb-d01",
+      "name": "Margie B. Luczak",
+      "race_id": "sb-d01",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      }
+    },
+    "40744": {
+      "candidate_id": "cand-white-sb-d11",
+      "name": "Isaiah White",
+      "race_id": "sb-d11",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      }
+    },
+    "39831": {
+      "candidate_id": "cand-hargrove-sb-d10",
+      "name": "Anthony Hargrove",
+      "race_id": "sb-d10",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      }
+    },
+    "39789": {
+      "candidate_id": "ayala-sb-d13",
+      "name": "Jesus Ayala Jr",
+      "race_id": "sb-d13",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {}
+    },
+    "39844": {
+      "candidate_id": "lopez-sb-d14",
+      "name": "Yesenia Lopez",
+      "race_id": "sb-d14",
+      "incumbent": true,
+      "status": "filed",
+      "bio": {},
+      "ballot_status": "challenged",
+      "ballot_status_as_of": "2026-07-14"
+    },
+    "39873": {
+      "candidate_id": "gutierrez-sb-d15",
+      "name": "Angel Gutierrez",
+      "race_id": "sb-d15",
+      "incumbent": true,
+      "status": "filed",
+      "bio": {}
+    },
+    "41111": {
+      "candidate_id": "gonzalez-sb-d16",
+      "name": "Juan Ignacio Gonzalez",
+      "race_id": "sb-d16",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {}
+    },
+    "39843": {
+      "candidate_id": "boyle-sb-d18",
+      "name": "Therese Boyle",
+      "race_id": "sb-d18",
+      "incumbent": true,
+      "status": "filed",
+      "bio": {}
+    },
+    "39788": {
+      "candidate_id": "smith-sb-d19",
+      "name": "Che \"Rhymefest\" Smith",
+      "race_id": "sb-d19",
+      "incumbent": true,
+      "status": "filed",
+      "bio": {}
+    },
     "39881": {
       "candidate_id": "biggs-sb-president",
       "name": "Jessica Biggs",
@@ -46,24 +153,30 @@
       "race_id": "sb-president",
       "incumbent": false,
       "status": "filed",
-      "bio": {}
-    ,"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
+      "bio": {},
+      "ballot_status": "challenged",
+      "ballot_status_as_of": "2026-07-14"
+    },
     "38810": {
       "candidate_id": "bannon-sb-d01",
       "name": "Ed Bannon",
       "race_id": "sb-d01",
       "incumbent": true,
       "status": "filed",
-      "bio": {}
-    ,"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
+      "bio": {},
+      "ballot_status": "challenged",
+      "ballot_status_as_of": "2026-07-14"
+    },
     "41087": {
       "candidate_id": "peralta-sb-d02",
       "name": "Claudia Peralta",
       "race_id": "sb-d02",
       "incumbent": false,
       "status": "filed",
-      "bio": {}
-    ,"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
+      "bio": {},
+      "ballot_status": "challenged",
+      "ballot_status_as_of": "2026-07-14"
+    },
     "39783": {
       "candidate_id": "pierre-sb-d02",
       "name": "Michelle Pierre",
@@ -118,18 +231,100 @@
       "race_id": "sb-d05",
       "incumbent": true,
       "status": "filed",
+      "bio": {},
+      "ballot_status": "challenged",
+      "ballot_status_as_of": "2026-07-14"
+    },
+    "39820": {
+      "candidate_id": "dones-sb-d06",
+      "name": "Jason D\u00f3nes",
+      "race_id": "sb-d06",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {},
+      "ballot_status": "challenged",
+      "ballot_status_as_of": "2026-07-14"
+    },
+    "39786": {
+      "candidate_id": "rivas-sb-d06",
+      "name": "Carlos A. Rivas Jr.",
+      "race_id": "sb-d06",
+      "incumbent": true,
+      "status": "filed",
       "bio": {}
-    ,"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
-    "39820": {"candidate_id":"dones-sb-d06","name":"Jason Dónes","race_id":"sb-d06","incumbent":false,"status":"filed","bio":{},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
-    "39786": {"candidate_id":"rivas-sb-d06","name":"Carlos A. Rivas Jr.","race_id":"sb-d06","incumbent":true,"status":"filed","bio":{}},
-    "41076": {"candidate_id":"sherratt-sb-d07","name":"Ellen Sherratt","race_id":"sb-d07","incumbent":false,"status":"filed","bio":{}},
-    "39866": {"candidate_id":"zaccor-sb-d07","name":"Karen Zaccor","race_id":"sb-d07","incumbent":true,"status":"filed","bio":{},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
-    "39858": {"candidate_id":"rosenfeld-sb-d08","name":"Ellen Rosenfeld","race_id":"sb-d08","incumbent":true,"status":"filed","bio":{}},
-    "39853": {"candidate_id":"brown-sb-d09","name":"Aaron \"Jitu\" Brown","race_id":"sb-d09","incumbent":true,"status":"filed","bio":{}},
-    "37001": {"candidate_id":"blaise-sb-d10","name":"Michilla \"Kyla\" Blaise","race_id":"sb-d10","incumbent":true,"status":"filed","bio":{},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
-    "39855": {"candidate_id":"thotakura-sb-d11","name":"Anusha Thotakura","race_id":"sb-d11","incumbent":true,"status":"filed","bio":{},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
-    "41131": {"candidate_id":"anderson-sb-d11","name":"Brenda Lee Anderson","race_id":"sb-d11","incumbent":false,"status":"filed","bio":{},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
-    "41134": {"candidate_id":"kimble-sb-d12","name":"Brittany B. Kimble","race_id":"sb-d12","incumbent":false,"status":"filed","bio":{}}
+    },
+    "41076": {
+      "candidate_id": "sherratt-sb-d07",
+      "name": "Ellen Sherratt",
+      "race_id": "sb-d07",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {}
+    },
+    "39866": {
+      "candidate_id": "zaccor-sb-d07",
+      "name": "Karen Zaccor",
+      "race_id": "sb-d07",
+      "incumbent": true,
+      "status": "filed",
+      "bio": {},
+      "ballot_status": "challenged",
+      "ballot_status_as_of": "2026-07-14"
+    },
+    "39858": {
+      "candidate_id": "rosenfeld-sb-d08",
+      "name": "Ellen Rosenfeld",
+      "race_id": "sb-d08",
+      "incumbent": true,
+      "status": "filed",
+      "bio": {}
+    },
+    "39853": {
+      "candidate_id": "brown-sb-d09",
+      "name": "Aaron \"Jitu\" Brown",
+      "race_id": "sb-d09",
+      "incumbent": true,
+      "status": "filed",
+      "bio": {}
+    },
+    "37001": {
+      "candidate_id": "blaise-sb-d10",
+      "name": "Michilla \"Kyla\" Blaise",
+      "race_id": "sb-d10",
+      "incumbent": true,
+      "status": "filed",
+      "bio": {},
+      "ballot_status": "challenged",
+      "ballot_status_as_of": "2026-07-14"
+    },
+    "39855": {
+      "candidate_id": "thotakura-sb-d11",
+      "name": "Anusha Thotakura",
+      "race_id": "sb-d11",
+      "incumbent": true,
+      "status": "filed",
+      "bio": {},
+      "ballot_status": "challenged",
+      "ballot_status_as_of": "2026-07-14"
+    },
+    "41131": {
+      "candidate_id": "anderson-sb-d11",
+      "name": "Brenda Lee Anderson",
+      "race_id": "sb-d11",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {},
+      "ballot_status": "challenged",
+      "ballot_status_as_of": "2026-07-14"
+    },
+    "41134": {
+      "candidate_id": "kimble-sb-d12",
+      "name": "Brittany B. Kimble",
+      "race_id": "sb-d12",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {}
+    }
   },
   "incumbent_stubs": {
     "inc-ward-01": {
@@ -1400,11 +1595,13 @@
           "office": "https://www.cpsboe.org/about/bios"
         },
         "source": "ipg-rep-finder REPS.school (current officeholder; candidacy not confirmed)"
-      }
-    ,"ballot_status":"removed","ballot_status_as_of":"2026-07-14"},
+      },
+      "ballot_status": "removed",
+      "ballot_status_as_of": "2026-07-14"
+    },
     "inc-sb-d17": {
       "candidate_id": "inc-sb-d17",
-      "name": "Ángel Luis Vélez Rodríguez",
+      "name": "\u00c1ngel Luis V\u00e9lez Rodr\u00edguez",
       "race_id": "sb-d17",
       "committee_id": null,
       "incumbent": true,
@@ -1412,8 +1609,10 @@
       "bio": {
         "current_roles": [],
         "board_role": "Appointed"
-      }
-    ,"ballot_status":"removed","ballot_status_as_of":"2026-07-14"},
+      },
+      "ballot_status": "removed",
+      "ballot_status_as_of": "2026-07-14"
+    },
     "inc-sb-d18": {
       "candidate_id": "inc-sb-d18",
       "name": "Therese Boyle",
@@ -1456,62 +1655,748 @@
     }
   },
   "candidate_stubs": {
-    "cand-preston-sb-d17": {"candidate_id":"cand-preston-sb-d17","name":"Brittany Bailey Preston","race_id":"sb-d17","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "cand-alston-sb-d19": {"candidate_id":"cand-alston-sb-d19","name":"Krista Nichols Alston","race_id":"sb-d19","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"},"ballot_status":"removed","ballot_status_as_of":"2026-07-14"},
-    "cand-walton-sb-d19": {"candidate_id":"cand-walton-sb-d19","name":"Tameka Walton","race_id":"sb-d19","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
-    "cand-anderson-sb-d20": {"candidate_id":"cand-anderson-sb-d20","name":"Connie Anderson","race_id":"sb-d20","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
-    "cand-chatonda-sb-d20": {"candidate_id":"cand-chatonda-sb-d20","name":"Rosita Chatonda","race_id":"sb-d20","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"},"ballot_status":"removed","ballot_status_as_of":"2026-07-14"},
-    "cand-watson-sb-d20": {"candidate_id":"cand-watson-sb-d20","name":"Patrick Watson","race_id":"sb-d20","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "cand-alvarez-sb-d07": {"candidate_id":"cand-alvarez-sb-d07","name":"Angel Alvarez","race_id":"sb-d07","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"}},
-    "cand-neal-sb-d12": {"candidate_id":"cand-neal-sb-d12","name":"Michael L. Neal","race_id":"sb-d12","committee_id":null,"incumbent":false,"status":"filed","bio":{"source":"filed candidate, committee pending"},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
-    "custer-sb-2024-d1": {"candidate_id":"custer-sb-2024-d1","name":"Jennifer Custer","race_id":"sb-2024-d1","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "hernandez-sb-2024-d1": {"candidate_id":"hernandez-sb-2024-d1","name":"Charles (Chuck) Hernandez","race_id":"sb-2024-d1","committee_id":"39871","incumbent":false,"status":"filed","result":"withdrawn","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "pierre-sb-2024-d1": {"candidate_id":"pierre-sb-2024-d1","name":"Michelle N. Pierre","race_id":"sb-2024-d1","committee_id":null,"incumbent":false,"status":"filed","result":"defeated","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "cullerton-hooper-sb-2024-d2": {"candidate_id":"cullerton-hooper-sb-2024-d2","name":"Margaret Cullerton Hooper","race_id":"sb-2024-d2","committee_id":"39824","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "deberry-sb-2024-d2": {"candidate_id":"deberry-sb-2024-d2","name":"Ebony L. DeBerry","race_id":"sb-2024-d2","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "doyle-sb-2024-d2": {"candidate_id":"doyle-sb-2024-d2","name":"Kate Doyle","race_id":"sb-2024-d2","committee_id":"39802","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "kleinman-sb-2024-d2": {"candidate_id":"kleinman-sb-2024-d2","name":"Daniel Kleinman","race_id":"sb-2024-d2","committee_id":null,"incumbent":false,"status":"filed","result":"withdrawn","finance_facet":"committee_no_itemized","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"},"committee_sbe_ref":"39449"},
-    "leon-sb-2024-d2": {"candidate_id":"leon-sb-2024-d2","name":"Bruce Leon","race_id":"sb-2024-d2","committee_id":null,"incumbent":false,"status":"filed","result":"defeated","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "dones-sb-2024-d3": {"candidate_id":"dones-sb-2024-d3","name":"Jason C. Dones","race_id":"sb-2024-d3","committee_id":null,"incumbent":false,"status":"filed","result":"defeated","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "ortiz-sb-2024-d3": {"candidate_id":"ortiz-sb-2024-d3","name":"Kirk J. Ortiz","race_id":"sb-2024-d3","committee_id":null,"incumbent":false,"status":"filed","result":"challenged","finance_facet":"no_committee","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "rivas-sb-2024-d3": {"candidate_id":"rivas-sb-2024-d3","name":"Carlos A. Rivas Jr.","race_id":"sb-2024-d3","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "brown-sb-2024-d4": {"candidate_id":"brown-sb-2024-d4","name":"Kimberly Brown","race_id":"sb-2024-d4","committee_id":"39809","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "davis-sb-2024-d4": {"candidate_id":"davis-sb-2024-d4","name":"Andrew A. Davis","race_id":"sb-2024-d4","committee_id":null,"incumbent":false,"status":"filed","result":"defeated","finance_facet":"no_committee","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "day-sb-2024-d4": {"candidate_id":"day-sb-2024-d4","name":"Thomas Day","race_id":"sb-2024-d4","committee_id":"39810","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "gioiosa-sb-2024-d4": {"candidate_id":"gioiosa-sb-2024-d4","name":"Carmen Gioiosa","race_id":"sb-2024-d4","committee_id":"39975","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "rosenfeld-sb-2024-d4": {"candidate_id":"rosenfeld-sb-2024-d4","name":"Ellen Rosenfeld","race_id":"sb-2024-d4","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "zaccor-sb-2024-d4": {"candidate_id":"zaccor-sb-2024-d4","name":"Karen Zaccor","race_id":"sb-2024-d4","committee_id":null,"incumbent":false,"status":"filed","result":"defeated","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "blaise-sb-2024-d5": {"candidate_id":"blaise-sb-2024-d5","name":"Michilla 'Kyla' Blaise","race_id":"sb-2024-d5","committee_id":null,"incumbent":false,"status":"filed","result":"withdrawn","finance_facet":"on_current_record","election_note":"Withdrew from the 2024 District 5 race; later appointed to the board.","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "brown-sb-2024-d5": {"candidate_id":"brown-sb-2024-d5","name":"Aaron 'Jitu' Brown","race_id":"sb-2024-d5","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "hargrove-sb-2024-d5": {"candidate_id":"hargrove-sb-2024-d5","name":"Anthony Hargrove","race_id":"sb-2024-d5","committee_id":"39831","incumbent":false,"status":"filed","result":"removed","finance_facet":"committee_no_itemized","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"},"committee_sbe_ref":"39831"},
-    "jones-sb-2024-d5": {"candidate_id":"jones-sb-2024-d5","name":"Kernetha Jones","race_id":"sb-2024-d5","committee_id":null,"incumbent":false,"status":"filed","result":"removed","finance_facet":"no_committee","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"},"write_in":true},
-    "shkoukani-sb-2024-d5": {"candidate_id":"shkoukani-sb-2024-d5","name":"Jousef M. Shkoukani","race_id":"sb-2024-d5","committee_id":null,"incumbent":false,"status":"filed","result":"removed","finance_facet":"no_committee","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"},"write_in":true},
-    "biggs-sb-2024-d6": {"candidate_id":"biggs-sb-2024-d6","name":"Jessica Biggs","race_id":"sb-2024-d6","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "delgado-sb-2024-d6": {"candidate_id":"delgado-sb-2024-d6","name":"Brenda Delgado","race_id":"sb-2024-d6","committee_id":null,"incumbent":false,"status":"filed","result":"removed","finance_facet":"no_committee","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "smith-sb-2024-d6": {"candidate_id":"smith-sb-2024-d6","name":"Andre Smith","race_id":"sb-2024-d6","committee_id":"39705","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "thotakura-sb-2024-d6": {"candidate_id":"thotakura-sb-2024-d6","name":"Anusha Thotakura","race_id":"sb-2024-d6","committee_id":null,"incumbent":false,"status":"filed","result":"defeated","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "wallace-sb-2024-d6": {"candidate_id":"wallace-sb-2024-d6","name":"Danielle J. Wallace","race_id":"sb-2024-d6","committee_id":null,"incumbent":false,"status":"filed","result":"withdrawn","finance_facet":"committee_no_itemized","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"},"write_in":true,"committee_sbe_ref":"39793"},
-    "ayala-sb-2024-d7": {"candidate_id":"ayala-sb-2024-d7","name":"Jesus Ayala Jr.","race_id":"sb-2024-d7","committee_id":null,"incumbent":false,"status":"filed","result":"removed","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "don-sb-2024-d7": {"candidate_id":"don-sb-2024-d7","name":"Raquel Don","race_id":"sb-2024-d7","committee_id":"39972","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "lopez-sb-2024-d7": {"candidate_id":"lopez-sb-2024-d7","name":"Yesenia Lopez","race_id":"sb-2024-d7","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "luna-sb-2024-d7": {"candidate_id":"luna-sb-2024-d7","name":"Felipe Luna Jr.","race_id":"sb-2024-d7","committee_id":null,"incumbent":false,"status":"filed","result":"removed","finance_facet":"no_committee","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "villalobos-sb-2024-d7": {"candidate_id":"villalobos-sb-2024-d7","name":"Eva A. Villalobos","race_id":"sb-2024-d7","committee_id":"39840","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "gutierrez-sb-2024-d8": {"candidate_id":"gutierrez-sb-2024-d8","name":"Angel Gutierrez","race_id":"sb-2024-d8","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "nix-sb-2024-d8": {"candidate_id":"nix-sb-2024-d8","name":"Darius Dee Nix","race_id":"sb-2024-d8","committee_id":null,"incumbent":false,"status":"filed","result":"withdrawn","finance_facet":"no_committee","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "ponce-sb-2024-d8": {"candidate_id":"ponce-sb-2024-d8","name":"Felix Ponce","race_id":"sb-2024-d8","committee_id":"39945","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "bailey-preston-sb-2024-d9": {"candidate_id":"bailey-preston-sb-2024-d9","name":"Brittany Bailey Preston","race_id":"sb-2024-d9","committee_id":null,"incumbent":false,"status":"filed","result":"challenged","finance_facet":"no_committee","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "boyle-sb-2024-d9": {"candidate_id":"boyle-sb-2024-d9","name":"Therese Boyle","race_id":"sb-2024-d9","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "lewis-sb-2024-d9": {"candidate_id":"lewis-sb-2024-d9","name":"Miquel Lewis","race_id":"sb-2024-d9","committee_id":"39849","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "thomas-sb-2024-d9": {"candidate_id":"thomas-sb-2024-d9","name":"Lanetta M. Thomas","race_id":"sb-2024-d9","committee_id":"39794","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "williams-sb-2024-d9": {"candidate_id":"williams-sb-2024-d9","name":"La'Mont Raymond Williams","race_id":"sb-2024-d9","committee_id":"37248","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "chatonda-sb-2024-d10": {"candidate_id":"chatonda-sb-2024-d10","name":"Rosita Chatonda","race_id":"sb-2024-d10","committee_id":null,"incumbent":false,"status":"filed","result":"withdrawn","finance_facet":"no_committee","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"},"write_in":true},
-    "jones-sb-2024-d10": {"candidate_id":"jones-sb-2024-d10","name":"Robert Jones","race_id":"sb-2024-d10","committee_id":"39838","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "norington-reaves-sb-2024-d10": {"candidate_id":"norington-reaves-sb-2024-d10","name":"Karin Norington-Reaves","race_id":"sb-2024-d10","committee_id":"39876","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "parrott-sheffer-sb-2024-d10": {"candidate_id":"parrott-sheffer-sb-2024-d10","name":"Adam Parrott-Sheffer","race_id":"sb-2024-d10","committee_id":"39765","incumbent":false,"status":"filed","result":"defeated","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "smith-sb-2024-d10": {"candidate_id":"smith-sb-2024-d10","name":"Che 'Rhymefest' Smith","race_id":"sb-2024-d10","committee_id":null,"incumbent":false,"status":"filed","result":"elected","finance_facet":"on_current_record","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "walton-sb-2024-d10": {"candidate_id":"walton-sb-2024-d10","name":"James M. Walton Jr.","race_id":"sb-2024-d10","committee_id":"39874","incumbent":false,"status":"filed","result":"withdrawn","finance_facet":"committee_receipts","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "ward-sb-2024-d10": {"candidate_id":"ward-sb-2024-d10","name":"Nathaniel Ward","race_id":"sb-2024-d10","committee_id":null,"incumbent":false,"status":"filed","result":"removed","finance_facet":"no_committee","bio":{"source":"2024 CBOE certified field (HALT-P1-B, 2026-07-12)"}},
-    "cand-dominguez-sb-president": {"candidate_id": "cand-dominguez-sb-president", "name": "Hilario Dominguez", "race_id": "sb-president", "committee_id": null, "incumbent": false, "status": "filed", "bio": {"source": "filed candidate, committee pending"},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"},
-    "cand-morales-sb-d03": {"candidate_id": "cand-morales-sb-d03", "name": "Hector Morales", "race_id": "sb-d03", "committee_id": null, "incumbent": false, "status": "filed", "bio": {"source": "filed candidate, committee pending"},"ballot_status":"challenged","ballot_status_as_of":"2026-07-14"}
+    "cand-preston-sb-d17": {
+      "candidate_id": "cand-preston-sb-d17",
+      "name": "Brittany Bailey Preston",
+      "race_id": "sb-d17",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      }
+    },
+    "cand-alston-sb-d19": {
+      "candidate_id": "cand-alston-sb-d19",
+      "name": "Krista Nichols Alston",
+      "race_id": "sb-d19",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      },
+      "ballot_status": "removed",
+      "ballot_status_as_of": "2026-07-14"
+    },
+    "cand-walton-sb-d19": {
+      "candidate_id": "cand-walton-sb-d19",
+      "name": "Tameka Walton",
+      "race_id": "sb-d19",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      },
+      "ballot_status": "challenged",
+      "ballot_status_as_of": "2026-07-14"
+    },
+    "cand-anderson-sb-d20": {
+      "candidate_id": "cand-anderson-sb-d20",
+      "name": "Connie Anderson",
+      "race_id": "sb-d20",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      },
+      "ballot_status": "challenged",
+      "ballot_status_as_of": "2026-07-14"
+    },
+    "cand-chatonda-sb-d20": {
+      "candidate_id": "cand-chatonda-sb-d20",
+      "name": "Rosita Chatonda",
+      "race_id": "sb-d20",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      },
+      "ballot_status": "removed",
+      "ballot_status_as_of": "2026-07-14"
+    },
+    "cand-watson-sb-d20": {
+      "candidate_id": "cand-watson-sb-d20",
+      "name": "Patrick Watson",
+      "race_id": "sb-d20",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      }
+    },
+    "cand-alvarez-sb-d07": {
+      "candidate_id": "cand-alvarez-sb-d07",
+      "name": "Angel Alvarez",
+      "race_id": "sb-d07",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      }
+    },
+    "cand-neal-sb-d12": {
+      "candidate_id": "cand-neal-sb-d12",
+      "name": "Michael L. Neal",
+      "race_id": "sb-d12",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      },
+      "ballot_status": "challenged",
+      "ballot_status_as_of": "2026-07-14"
+    },
+    "custer-sb-2024-d1": {
+      "candidate_id": "custer-sb-2024-d1",
+      "name": "Jennifer Custer",
+      "race_id": "sb-2024-d1",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "elected",
+      "finance_facet": "on_current_record",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "hernandez-sb-2024-d1": {
+      "candidate_id": "hernandez-sb-2024-d1",
+      "name": "Charles (Chuck) Hernandez",
+      "race_id": "sb-2024-d1",
+      "committee_id": "39871",
+      "incumbent": false,
+      "status": "filed",
+      "result": "withdrawn",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "pierre-sb-2024-d1": {
+      "candidate_id": "pierre-sb-2024-d1",
+      "name": "Michelle N. Pierre",
+      "race_id": "sb-2024-d1",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "on_current_record",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "cullerton-hooper-sb-2024-d2": {
+      "candidate_id": "cullerton-hooper-sb-2024-d2",
+      "name": "Margaret Cullerton Hooper",
+      "race_id": "sb-2024-d2",
+      "committee_id": "39824",
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "deberry-sb-2024-d2": {
+      "candidate_id": "deberry-sb-2024-d2",
+      "name": "Ebony L. DeBerry",
+      "race_id": "sb-2024-d2",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "elected",
+      "finance_facet": "on_current_record",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "doyle-sb-2024-d2": {
+      "candidate_id": "doyle-sb-2024-d2",
+      "name": "Kate Doyle",
+      "race_id": "sb-2024-d2",
+      "committee_id": "39802",
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "kleinman-sb-2024-d2": {
+      "candidate_id": "kleinman-sb-2024-d2",
+      "name": "Daniel Kleinman",
+      "race_id": "sb-2024-d2",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "withdrawn",
+      "finance_facet": "committee_no_itemized",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      },
+      "committee_sbe_ref": "39449"
+    },
+    "leon-sb-2024-d2": {
+      "candidate_id": "leon-sb-2024-d2",
+      "name": "Bruce Leon",
+      "race_id": "sb-2024-d2",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "on_current_record",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "dones-sb-2024-d3": {
+      "candidate_id": "dones-sb-2024-d3",
+      "name": "Jason C. Dones",
+      "race_id": "sb-2024-d3",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "on_current_record",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "ortiz-sb-2024-d3": {
+      "candidate_id": "ortiz-sb-2024-d3",
+      "name": "Kirk J. Ortiz",
+      "race_id": "sb-2024-d3",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "challenged",
+      "finance_facet": "no_committee",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "rivas-sb-2024-d3": {
+      "candidate_id": "rivas-sb-2024-d3",
+      "name": "Carlos A. Rivas Jr.",
+      "race_id": "sb-2024-d3",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "elected",
+      "finance_facet": "on_current_record",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "brown-sb-2024-d4": {
+      "candidate_id": "brown-sb-2024-d4",
+      "name": "Kimberly Brown",
+      "race_id": "sb-2024-d4",
+      "committee_id": "39809",
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "davis-sb-2024-d4": {
+      "candidate_id": "davis-sb-2024-d4",
+      "name": "Andrew A. Davis",
+      "race_id": "sb-2024-d4",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "no_committee",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "day-sb-2024-d4": {
+      "candidate_id": "day-sb-2024-d4",
+      "name": "Thomas Day",
+      "race_id": "sb-2024-d4",
+      "committee_id": "39810",
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "gioiosa-sb-2024-d4": {
+      "candidate_id": "gioiosa-sb-2024-d4",
+      "name": "Carmen Gioiosa",
+      "race_id": "sb-2024-d4",
+      "committee_id": "39975",
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "rosenfeld-sb-2024-d4": {
+      "candidate_id": "rosenfeld-sb-2024-d4",
+      "name": "Ellen Rosenfeld",
+      "race_id": "sb-2024-d4",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "elected",
+      "finance_facet": "on_current_record",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "zaccor-sb-2024-d4": {
+      "candidate_id": "zaccor-sb-2024-d4",
+      "name": "Karen Zaccor",
+      "race_id": "sb-2024-d4",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "on_current_record",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "blaise-sb-2024-d5": {
+      "candidate_id": "blaise-sb-2024-d5",
+      "name": "Michilla 'Kyla' Blaise",
+      "race_id": "sb-2024-d5",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "withdrawn",
+      "finance_facet": "on_current_record",
+      "election_note": "Withdrew from the 2024 District 5 race; later appointed to the board.",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "brown-sb-2024-d5": {
+      "candidate_id": "brown-sb-2024-d5",
+      "name": "Aaron 'Jitu' Brown",
+      "race_id": "sb-2024-d5",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "elected",
+      "finance_facet": "on_current_record",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "hargrove-sb-2024-d5": {
+      "candidate_id": "hargrove-sb-2024-d5",
+      "name": "Anthony Hargrove",
+      "race_id": "sb-2024-d5",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "removed",
+      "finance_facet": "committee_no_itemized",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      },
+      "committee_sbe_ref": "39831"
+    },
+    "jones-sb-2024-d5": {
+      "candidate_id": "jones-sb-2024-d5",
+      "name": "Kernetha Jones",
+      "race_id": "sb-2024-d5",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "removed",
+      "finance_facet": "no_committee",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      },
+      "write_in": true
+    },
+    "shkoukani-sb-2024-d5": {
+      "candidate_id": "shkoukani-sb-2024-d5",
+      "name": "Jousef M. Shkoukani",
+      "race_id": "sb-2024-d5",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "removed",
+      "finance_facet": "no_committee",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      },
+      "write_in": true
+    },
+    "biggs-sb-2024-d6": {
+      "candidate_id": "biggs-sb-2024-d6",
+      "name": "Jessica Biggs",
+      "race_id": "sb-2024-d6",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "elected",
+      "finance_facet": "on_current_record",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "delgado-sb-2024-d6": {
+      "candidate_id": "delgado-sb-2024-d6",
+      "name": "Brenda Delgado",
+      "race_id": "sb-2024-d6",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "removed",
+      "finance_facet": "no_committee",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "smith-sb-2024-d6": {
+      "candidate_id": "smith-sb-2024-d6",
+      "name": "Andre Smith",
+      "race_id": "sb-2024-d6",
+      "committee_id": "39705",
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "thotakura-sb-2024-d6": {
+      "candidate_id": "thotakura-sb-2024-d6",
+      "name": "Anusha Thotakura",
+      "race_id": "sb-2024-d6",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "on_current_record",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "wallace-sb-2024-d6": {
+      "candidate_id": "wallace-sb-2024-d6",
+      "name": "Danielle J. Wallace",
+      "race_id": "sb-2024-d6",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "withdrawn",
+      "finance_facet": "committee_no_itemized",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      },
+      "write_in": true,
+      "committee_sbe_ref": "39793"
+    },
+    "ayala-sb-2024-d7": {
+      "candidate_id": "ayala-sb-2024-d7",
+      "name": "Jesus Ayala Jr.",
+      "race_id": "sb-2024-d7",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "removed",
+      "finance_facet": "on_current_record",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "don-sb-2024-d7": {
+      "candidate_id": "don-sb-2024-d7",
+      "name": "Raquel Don",
+      "race_id": "sb-2024-d7",
+      "committee_id": "39972",
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "lopez-sb-2024-d7": {
+      "candidate_id": "lopez-sb-2024-d7",
+      "name": "Yesenia Lopez",
+      "race_id": "sb-2024-d7",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "elected",
+      "finance_facet": "on_current_record",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "luna-sb-2024-d7": {
+      "candidate_id": "luna-sb-2024-d7",
+      "name": "Felipe Luna Jr.",
+      "race_id": "sb-2024-d7",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "removed",
+      "finance_facet": "no_committee",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "villalobos-sb-2024-d7": {
+      "candidate_id": "villalobos-sb-2024-d7",
+      "name": "Eva A. Villalobos",
+      "race_id": "sb-2024-d7",
+      "committee_id": "39840",
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "gutierrez-sb-2024-d8": {
+      "candidate_id": "gutierrez-sb-2024-d8",
+      "name": "Angel Gutierrez",
+      "race_id": "sb-2024-d8",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "elected",
+      "finance_facet": "on_current_record",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "nix-sb-2024-d8": {
+      "candidate_id": "nix-sb-2024-d8",
+      "name": "Darius Dee Nix",
+      "race_id": "sb-2024-d8",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "withdrawn",
+      "finance_facet": "no_committee",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "ponce-sb-2024-d8": {
+      "candidate_id": "ponce-sb-2024-d8",
+      "name": "Felix Ponce",
+      "race_id": "sb-2024-d8",
+      "committee_id": "39945",
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "bailey-preston-sb-2024-d9": {
+      "candidate_id": "bailey-preston-sb-2024-d9",
+      "name": "Brittany Bailey Preston",
+      "race_id": "sb-2024-d9",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "challenged",
+      "finance_facet": "no_committee",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "boyle-sb-2024-d9": {
+      "candidate_id": "boyle-sb-2024-d9",
+      "name": "Therese Boyle",
+      "race_id": "sb-2024-d9",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "elected",
+      "finance_facet": "on_current_record",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "lewis-sb-2024-d9": {
+      "candidate_id": "lewis-sb-2024-d9",
+      "name": "Miquel Lewis",
+      "race_id": "sb-2024-d9",
+      "committee_id": "39849",
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "thomas-sb-2024-d9": {
+      "candidate_id": "thomas-sb-2024-d9",
+      "name": "Lanetta M. Thomas",
+      "race_id": "sb-2024-d9",
+      "committee_id": "39794",
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "williams-sb-2024-d9": {
+      "candidate_id": "williams-sb-2024-d9",
+      "name": "La'Mont Raymond Williams",
+      "race_id": "sb-2024-d9",
+      "committee_id": "37248",
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "chatonda-sb-2024-d10": {
+      "candidate_id": "chatonda-sb-2024-d10",
+      "name": "Rosita Chatonda",
+      "race_id": "sb-2024-d10",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "withdrawn",
+      "finance_facet": "no_committee",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      },
+      "write_in": true
+    },
+    "jones-sb-2024-d10": {
+      "candidate_id": "jones-sb-2024-d10",
+      "name": "Robert Jones",
+      "race_id": "sb-2024-d10",
+      "committee_id": "39838",
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "norington-reaves-sb-2024-d10": {
+      "candidate_id": "norington-reaves-sb-2024-d10",
+      "name": "Karin Norington-Reaves",
+      "race_id": "sb-2024-d10",
+      "committee_id": "39876",
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "parrott-sheffer-sb-2024-d10": {
+      "candidate_id": "parrott-sheffer-sb-2024-d10",
+      "name": "Adam Parrott-Sheffer",
+      "race_id": "sb-2024-d10",
+      "committee_id": "39765",
+      "incumbent": false,
+      "status": "filed",
+      "result": "defeated",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "smith-sb-2024-d10": {
+      "candidate_id": "smith-sb-2024-d10",
+      "name": "Che 'Rhymefest' Smith",
+      "race_id": "sb-2024-d10",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "elected",
+      "finance_facet": "on_current_record",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "walton-sb-2024-d10": {
+      "candidate_id": "walton-sb-2024-d10",
+      "name": "James M. Walton Jr.",
+      "race_id": "sb-2024-d10",
+      "committee_id": "39874",
+      "incumbent": false,
+      "status": "filed",
+      "result": "withdrawn",
+      "finance_facet": "committee_receipts",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "ward-sb-2024-d10": {
+      "candidate_id": "ward-sb-2024-d10",
+      "name": "Nathaniel Ward",
+      "race_id": "sb-2024-d10",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "result": "removed",
+      "finance_facet": "no_committee",
+      "bio": {
+        "source": "2024 CBOE certified field (HALT-P1-B, 2026-07-12)"
+      }
+    },
+    "cand-dominguez-sb-president": {
+      "candidate_id": "cand-dominguez-sb-president",
+      "name": "Hilario Dominguez",
+      "race_id": "sb-president",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      },
+      "ballot_status": "challenged",
+      "ballot_status_as_of": "2026-07-14"
+    },
+    "cand-morales-sb-d03": {
+      "candidate_id": "cand-morales-sb-d03",
+      "name": "Hector Morales",
+      "race_id": "sb-d03",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "filed candidate, committee pending"
+      },
+      "ballot_status": "challenged",
+      "ballot_status_as_of": "2026-07-14"
+    }
   }
 }
