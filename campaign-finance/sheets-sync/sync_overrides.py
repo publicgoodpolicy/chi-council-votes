@@ -301,10 +301,14 @@ def read_donor_clusters(sheet) -> dict[str, dict]:
 
 
 def _candidacy_election_index(data):
-    """{candidate_id: election_id}, resolved candidate.race_id -> race.election_id.
-    The substrate for the person-link role trip-wire."""
-    race_elec = {r['id']: r.get('election_id') for r in data.get('races', [])}
-    return {c['id']: race_elec.get(c.get('race_id')) for c in data.get('candidates', [])}
+    """{candidate_id: election_id}, read ONE-HOP from the stamped field (HALT-F5-SEED).
+    The substrate for the person-link role trip-wire.
+    TRUST CHAIN (SCOPE-PIPE G1 §4, ruled): step 8 reads the stamp without re-deriving
+    through races because the stamp is mint-fatal in build_election_seed (unknown race_id
+    and any INV-ELECT mismatch abort before anything is written) and gate-checked by
+    INV-ELECT-1 in validate_council_data. Do NOT add a membership re-check here — that
+    duplicates INV-ELECT-1 at a second site (the PS-81/F-b drift shape)."""
+    return {c['id']: c.get('election_id') for c in data.get('candidates', [])}
 
 
 def read_person_links(sheet, data):

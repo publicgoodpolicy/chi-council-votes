@@ -94,11 +94,13 @@ def validate_person_links(d):
         return errs
     bc = roll.get('by_candidate') or {}
     cands = {c['id']: c for c in d.get('candidates', [])}
-    races = {r['id']: r for r in d.get('races', [])}
 
     def elec_of(cid):
+        # SCOPE-PIPE: one-hop read of the stamped field (HALT-F5-SEED). Not circular
+        # per PS-82: no INV-ELECT check consumes this — election_mismatches derives its
+        # own resolution from races — and INV-ELECT-1 pins stamp==race in this same run.
         c = cands.get(cid)
-        return races.get(c.get('race_id'), {}).get('election_id') if c else None
+        return c.get('election_id') if c else None
 
     def rkeys(o):
         s = set()

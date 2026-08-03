@@ -107,7 +107,8 @@ def build_target_index(d):
         # newly match). Gate 4.5.4 IE byte-identity (295/29/4, 328 rows, $2,934,615.20) IS
         # the dormancy proof. SATISFACTION CONDITION: removing this guard is P1-E's FIRST
         # act, cross-referenced with the §8.1 corroboration-fragility ledger entry.
-        if r.get('election_id')=='2024-school-board':
+        # (Reads the stamped candidate election_id one-hop — HALT-F5-SEED / SCOPE-PIPE.)
+        if cand.get('election_id')=='2024-school-board':
             continue
         w=r.get('ward'); ward=int(w) if w not in (None,'') else None
         mt=_mtoks(cand.get('name'))
