@@ -52,6 +52,11 @@ var FIXTURES = {
     filter: { allLabel: /All elections/, thisLabel: /This election \(2026\)/, lastLabel: /Last election \(2024\)/,
               allId: 'all', thisId: '2026', lastId: '2024' },
     windowEnd: '2026-12-31',
+    // HALT-F2 oracle: the office's per-election windows, stated INDEPENDENTLY of data.js
+    // (mirrors election-windows.json). If data.js's ELECTION_WINDOWS drifts from these,
+    // the [F2] window-scoping checks fail — that drift is the defect being caught.
+    windows: { '2024': { start: null, end: '2024-12-31' },
+               '2026': { start: '2025-01-01', end: '2026-12-31' } },
     incs: {
       committee: 'ie-committee-26066',  // INCS Action Independent Committee
       // exact-figure firewall lines (election label + stance + amount), checked precisely:
@@ -430,6 +435,58 @@ async function assertCandidateGroups(T, ctx, fx) {
   ctx.setFilter(fx.filter.allId); await ctx.wait(40);
 }
 
+// (F2) HALT-F2 / PS-79: EVERY race's per-candidate figures are window-scoped — expressed
+// over the race SET, never an enumerated race list (a hardcoded list of today's races
+// would be TOGGLE_RACES wearing a different name; that coupling was the defect's root).
+// Oracle windows come from the FIXTURE above. Also proves B1: finance on a race whose
+// election has no window entry must throw loud, never render an unwindowed total.
+async function assertWindowScoping(T, ctx, fx) {
+  var W = ctx.window, ED = W.ElectData, RAW = W.PREVIEW_DATA;
+  if (!ED || !RAW) { T.ok('[F2] ElectData + PREVIEW_DATA reachable in page scope', false); return; }
+  var idx = ED.loadData(RAW, { office: fx.office });
+  var checked = 0, unscoped = [], teeth = 0, teethLeaks = [];
+  (idx.races || []).forEach(function (r) {
+    if (String(r.office || '').indexOf(fx.office) !== 0) return;
+    var vm = ED.viewModels.raceView(idx, r.id, null);
+    if (!vm || vm.elections) return;   // toggle races: per-election panels carry their own windows (asserted above)
+    var yr = (/^(\d{4})-/.exec(r.election_id || '') || [])[1];
+    var w = (yr && fx.windows[yr]) || null;
+    vm.candidates.forEach(function (c) {
+      if (!c.hasFinance || !c.figures) return;
+      checked++;
+      var fWin = ED.candidateFigures(idx, c.id, null, w);
+      var fAll = ED.candidateFigures(idx, c.id, null);
+      var scoped = c.figures.contributions.total === fWin.contributions.total &&
+                   c.figures.independentSupport === fWin.independentSupport &&
+                   c.figures.independentOpposition === fWin.independentOpposition;
+      if (!scoped) unscoped.push(r.id + '/' + c.id);
+      if (fAll.contributions.total !== fWin.contributions.total) {
+        teeth++;
+        if (c.figures.contributions.total === fAll.contributions.total) teethLeaks.push(r.id + '/' + c.id);
+      }
+    });
+  });
+  T.ok('[F2] every non-toggle race candidate figure is window-scoped (' + checked + ' checked)' +
+       (unscoped.length ? ' — UNSCOPED: ' + unscoped.join(', ') : ''), checked > 0 && unscoped.length === 0);
+  // Teeth: at least one candidate must carry out-of-window rows that the window excludes —
+  // otherwise this check could pass vacuously. If this ever fires with teeth=0, the
+  // dataset itself changed shape; re-establish the oracle before weakening the assert.
+  T.ok('[F2] teeth: cross-window money exists and is excluded (' + teeth + ' candidates)',
+       teeth >= 1 && teethLeaks.length === 0);
+  // B1: synthesize a race in a year NO window table knows (survives F4 adding municipal
+  // windows), give it a finance-bearing candidate in a DEEP COPY, expect the loud throw.
+  var b1 = 'no-throw';
+  try {
+    var cp = JSON.parse(JSON.stringify(RAW));
+    var offc = ((idx.races || []).filter(function (r) { return String(r.office || '').indexOf(fx.office) === 0; })[0] || {}).office;
+    cp.races.push({ id: 'zz-f2-b1-race', election_id: '1999-zz-fixture', office: offc, label: 'B1 fixture race' });
+    cp.candidates.push({ id: 'zz-f2-b1', race_id: 'zz-f2-b1-race', name: 'ZZ F2 B1 Fixture', committee_id: '99999' });
+    ED.viewModels.raceView(ED.loadData(cp), 'zz-f2-b1-race', null);
+  } catch (e) { b1 = /PS-79\/B1/.test(String(e && e.message)) ? 'threw-b1' : 'threw-other: ' + (e && e.message); }
+  T.ok('[F2/B1] finance without a resolvable window throws loud, never an unwindowed total [' + b1 + ']',
+       b1 === 'threw-b1');
+}
+
 (async function () {
   var html = fs.readFileSync(PREVIEW, 'utf8');
   var dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: true, url: 'http://localhost/' });
@@ -448,6 +505,7 @@ async function assertCandidateGroups(T, ctx, fx) {
   await assertBrowseFilters(T, ctx, fx);
   await assertIndustryDrill(T, ctx, fx);
   await assertCandidateGroups(T, ctx, fx);
+  await assertWindowScoping(T, ctx, fx);
 
   console.log('\n' + T.n + ' checks · ' + (T.fail ? ('FAILED ' + T.fail) : 'ALL PASS'));
   process.exit(T.fail ? 1 : 0);

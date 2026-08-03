@@ -78,7 +78,9 @@ ok('sb-d01 is a base-view race (no election toggle)', rv1.elections === null);
 var page1 = R.renderPage({ office: OFFICE, topView: 'byrace', officeRaces: omVM, activeSlug: 'district-1a', raceView: rv1 });
 ok('base view renders candidate cards (Bannon)', /Ed Bannon/.test(page1));
 ok('base-view slug scheme: cand-ed-bannon-district-1a', /id="cand-ed-bannon-district-1a"/.test(page1));
-ok('base view: "· all years" meta, NO election toggle', /· all years/.test(page1) && page1.indexOf('data-electionview') < 0);
+// HALT-F2 (PS-79 A1): base-view figures are scoped to the race's own election window,
+// and the meta names that election — "all years" would now be a mislabel here.
+ok('base view: election-scoped meta ("· 2026 election"), NO election toggle', /· 2026 election/.test(page1) && page1.indexOf('data-electionview') < 0);
 ok('base view: contributor panel + clickable d- bars', /class="contrib"/.test(page1) && /class="barrow click"/.test(page1) && /aria-controls="d-/.test(page1));
 ok('base view: candidate Sunshine link present', /Illinois Sunshine ↗/.test(page1));
 ok('base view: figures NOT summed (no grand-total)', page1.indexOf('Total raised') < 0 && page1.indexOf('grand total') < 0);

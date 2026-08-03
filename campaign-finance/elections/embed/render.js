@@ -886,8 +886,13 @@
       return '<p class="vacating-note">↳ Current member <b>' + esc(v.name) + '</b> is running for ' +
         '<button class="goto-link" type="button" data-slug="' + esc(v.targetSlug) + '">' + esc(v.targetLabel) + ' →</button></p>';
     }).join('');
+    // HALT-F2: base-path (non-toggle) figures are now scoped to the race's own election
+    // window, so the meta label names that election instead of claiming "all years".
+    // Toggle races keep the historical head byte-identical (their panels are labeled).
+    var metaYr = (/^(\d{4})-/.exec(vm.race.election_id || '') || [])[1];
     var meta = plural(vm.candidates.length, 'candidate', 'candidates') +
-      (vm.cycle ? ' · cycle ' + esc(vm.cycle) : ' · all years');
+      (vm.cycle ? ' · cycle ' + esc(vm.cycle)
+                : ((vm.elections || !metaYr) ? ' · all years' : ' · ' + esc(metaYr) + ' election'));
     var head = '<div class="race-head"><h2>' + esc(vm.race.label) + '</h2>' +
       '<span class="race-meta">' + meta + '</span></div>' + vac;
 

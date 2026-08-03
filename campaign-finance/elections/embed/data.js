@@ -62,6 +62,24 @@
     for (var id in o) { if (o.hasOwnProperty(id) && inWindow(date, o[id])) return id; }
     return null;
   }
+  // A1 (PS-79): a race's OWN election window — the year prefix of race.election_id keyed
+  // into its office's window table. This is the join between the two election-id keyspaces
+  // (full election_id vs short window id) that previously existed nowhere in this file;
+  // windowing is a property of the race's election, never of TOGGLE_RACES membership.
+  function raceWin(race) {
+    var m = /^(\d{4})-/.exec((race && race.election_id) || '');
+    return m ? winFor(race.office, m[1]) : null;
+  }
+  // B1 (PS-79): a per-candidate surface that cannot resolve its window fails LOUD — it
+  // never renders an unwindowed total. Called only where finance exists to filter, so
+  // window-less races with no money (the latent municipal pages, F4) render untouched.
+  function requireWin(race) {
+    var w = raceWin(race);
+    if (!w) throw new Error('[PS-79/B1] race ' + race.id + ' (' + (race.election_id || 'no election id') +
+      ') has finance but no election window - refusing an unwindowed per-candidate total; ' +
+      'add the window to ELECTION_WINDOWS (and election-windows.json)');
+    return w;
+  }
   // Union window across all of an office's elections (earliest start, latest end). An
   // open (null) bound on any window makes that side of the union open. For school_board:
   // [null, 2026-12-31] = 2024 + 2026 — the "All elections" default for the spend tab.
@@ -836,6 +854,10 @@
       elections: TOGGLE_RACES[raceId] ? raceElections(index, raceId) : null,
       candidates: active.map(function (c) {
         var hasFinance = !!c.committee_id;
+        // A1+B1 (PS-79 / HALT-F2): the race's own election window scopes every figure
+        // below. Resolution (and B1's loud failure) live INSIDE this hasFinance guard:
+        // a window-less race with no money still renders its pending/coming-soon state.
+        var win = hasFinance ? requireWin(race) : null;
         return {
           id: c.id, slug: candidateSlug(c, race), name: c.name,
           incumbent: !!c.incumbent, status: c.status,
@@ -845,10 +867,10 @@
           financeFacet: c.finance_facet || null, committeeSbeRef: c.committee_sbe_ref || null,
           hasFinance: hasFinance, stillPopulating: !hasFinance,
           committee: hasFinance ? committeeMeta(index, c.id) : null,
-          figures: hasFinance ? candidateFigures(index, c.id, cycle) : null,
-          contributors: hasFinance ? candidateContributors(index, c.id, cycle) : null,
-          ieSupportDetail: hasFinance ? candidateIE(index, c.id, 'support', cycle) : null,
-          ieOpposeDetail: hasFinance ? candidateIE(index, c.id, 'oppose', cycle) : null
+          figures: hasFinance ? candidateFigures(index, c.id, cycle, win) : null,
+          contributors: hasFinance ? candidateContributors(index, c.id, cycle, win) : null,
+          ieSupportDetail: hasFinance ? candidateIE(index, c.id, 'support', cycle, win) : null,
+          ieOpposeDetail: hasFinance ? candidateIE(index, c.id, 'oppose', cycle, win) : null
         };
       })
     };
@@ -907,7 +929,9 @@
           candidates: (index.candidatesByRace[r.id] || []).slice().sort(byNameNeutral).map(function (c) {
             return {
               id: c.id, name: c.name, incumbent: !!c.incumbent, hasFinance: !!c.committee_id,
-              contributions: c.committee_id ? candidateFigures(index, c.id, cycle).contributions.total : null
+              // A1 (PS-79): same election-window rule as raceView — no per-candidate
+              // figure leaves this file unwindowed, even on the exported browse path.
+              contributions: c.committee_id ? candidateFigures(index, c.id, cycle, requireWin(r)).contributions.total : null
             };
           })
         };
