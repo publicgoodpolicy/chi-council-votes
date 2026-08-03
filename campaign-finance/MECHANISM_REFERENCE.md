@@ -301,6 +301,17 @@ while a render site fuses them in display — that class shipped past every gate
 because the gate checked rendered values, not fused-on-per-candidate structure. The proposed
 fused-per-candidate detector (Proposals) exists to close that seam.
 
+**The elections path renders election-first** [C5.5, SOURCED; money/nav semantics RULED]:
+a global election selector (labels from the ratified `{year} {body}` pattern — a future
+election is a data addition, never a copy edit) scopes race enumeration to one election;
+per-race figures are windowed to the race's own election (PS-79/A1); the per-race
+cross-cycle toggle and the per-tab union time scope are retired, so **no cross-election
+window is resolvable from any UI surface**. Money surfaces are **window-scoped** while
+navigation is **entity-scoped** (ruled at SCOPE-UI): activity booked on another election's
+candidacy ids inside the selected window renders on the money surfaces, and that
+divergence resolves upstream (F1/PS-77, P1-E) — never by narrowing money to entity scope
+or widening navigation to the window.
+
 **Sizing note** [C5.4, SOURCED]: the tools present multiple distinct public surfaces,
 which multiplies render paths, not merely classification consumers. The surface count is
 current state and lives in the handover, not here.
@@ -425,6 +436,9 @@ that catch defect classes the existing gates structurally cannot see.
 | S-av | `campaign-finance/sync_allvotes.py` | `2ca09ee7323741919f048e61062d54a62719f56f88f71f99b721fe965c753f69` |
 | S-cemb | `campaign-finance/elections/reference/council-embed.html` | `f1451fa9900a7a645fec202f7226b26b95597b008c119be28747de81b89be111` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
+| S-edat | `campaign-finance/elections/embed/data.js` | `25c1e2115027aba8931e6725382568a339ba6b9ac972b25d315daa7ba0e232f0` |
+| S-eren | `campaign-finance/elections/embed/render.js` | `c6944b3aec3d0ccf421bf11f794731d8b1c87b92ea3fbd5b81c653b67f8f3bc9` |
+| S-eapp | `campaign-finance/elections/embed/app.js` | `ec42983763f18ca5d6f134bcd51a7578858e79787cbaba9b716daea2714c8f7c` |
 | A-probe | `~/probe-sync-2026-07-24/probe-report.md` | `4c678cf0c14dd370f8b52744bf473000340ce16449a5365841b6ac92d8e5f9bb` |
 | A-add | `~/probe-sync-a-2026-07-24/addendum-a-report.md` | `468ba24f4f418f72c2720608353c83e52694c41637cf9ff16a9b267d37e49ed6` |
 | A-ba1g0 | `~/halt-ba-1-2026-07-24/g0-report.md` | `9aeaa793fd5f4afe59d9ac504f7f00dd219f4417cbafdd3403e5a44f661e812e` |
@@ -484,6 +498,9 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.1 | A-fw1 | 7-16 (fix sites exist only in the elections path; artifact layer separate) |
 | C5.2 | S-cemb | 42-52 (dataUrl + optional sharded mode); S-eemb 19-24 (elections artifact + inlined deploy) |
 | C5.2 | A-ba1g2 | 49 (Rider 2: neither embed renders entity-type / last-editor) |
+| C5.5 | S-edat | 110-116 (selectorOptions — the {year} {body} pattern), 812-830 (officeRaces election scoping via the year-prefix join), 761 (the race's window rides the VM), 778 (priorElection re-homed to the base VM) |
+| C5.5 | S-eren | 791-797 (selectorNav), 647 (the amended on_current_record string — destination clause retired per the SCOPE-UI B7 amendment), 684-686 (the verbatim prior-note) |
+| C5.5 | S-eapp | 136-146 (selector state + read-only ?election= boot), 198-207 (scope switch resets the active race — the ruled B6 resolution) |
 | C5.3 | A-fw1 | 14-16 (artifact not fused), 60-62 (gates check values, not structure) |
 | C5.4 | A-probe | 152 (banked sizing item: multiple surfaces, per-path render compliance) |
 | C6.1 | A-ba1g0 | 56-66 (dollar/repairability distinctions); A-ba1g2 49 (render-invisibility distinction) |
@@ -506,6 +523,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C4.5 validator requirement (stamped fields carry a mismatch validator; Route B from-source constraint) | PS-81 | same HALT-F5-SEED ruling record `bd25b641…` |
 | C6.6 (a guard does not consume the field it guards) | PS-82 | SCOPE-PIPE ruling record `4a164c9716cbb67713ac1424b3605f41517789660da7df84eb3ca64b972628f8` |
 | C4.6 disposition (F3 documented, not re-keyed) | ruled at SCOPE-PIPE G1 §3 | same SCOPE-PIPE ruling record `4a164c97…` |
+| C5.5 money/nav semantics (window-scoped money, entity-scoped navigation; divergence resolves upstream) + B1-B7 display ratifications + B7 destination-clause amendment | ruled/ratified at SCOPE-UI G1/G3 | SCOPE-UI decision record `e2f687ce63649c168fd0f7765434017949d68acc3a5613b9101212b5b413ae25` (banked `~/scope-ui-2026-08-03/g1-display-decisions.md`; the G3 authorization carrying the B7 amendment anchors on it) |
 | C2.9 (writer-sweep method) | discipline 29 | G1 authorization `4df35187…` |
 | C6.4 (documentation drift is audit-only) | ruled this lane | G1 authorization `4df35187…` (§G1 §6 requirement) |
 | C6.5 (mechanical check's worded-count blind spot) | PS-60 | closing amend `daf8a0f0083651a17d39378600c64ced64d2a685e2db140a6075bf611cb6bfc8` |

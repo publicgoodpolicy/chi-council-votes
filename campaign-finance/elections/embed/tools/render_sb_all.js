@@ -1,8 +1,10 @@
 #!/usr/bin/env node
-/* Six-race render gate (NOT app code). Renders sb-d04..sb-d09 This/Last/All, asserts
- * Diagnostic-C post-fix oracles, the state machine (did-not-run / clean-empty /
- * single-candidate), undated reconciliation, and structural invariants 3-7.
- * (Data invariants 1-2 + the #6 cross-check are also re-derived in the Python pass.)
+/* Six-race gate (NOT app code) — REPURPOSED at SCOPE-UI (A2: oracles preserved, surface
+ * moved). The toggle VM is retired; the Diagnostic-C dollar oracles now pin the
+ * by_candidate_election BUCKETS directly. The four 2026-leg pins marked TOOLS-ORACLE-1
+ * were STALE at HEAD before this lane (pre-attributed vintage drift, HALT-F2 G2 report);
+ * per the diagnose-before-refresh ruling their VALUES are carried VERBATIM and continue
+ * to fail until that lane explains them. Do NOT refresh them here.
  * Run from embed/:  node tools/render_sb_all.js  */
 'use strict';
 var path = require('path'), fs = require('fs');
@@ -10,113 +12,76 @@ var D = require(path.join(__dirname, '..', 'data.js'));
 var R = require(path.join(__dirname, '..', 'render.js'));
 var json = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', '..', 'election-data.json'), 'utf8'));
 var index = D.loadData(json, { office: 'school_board' });
+var bce = (json.rollups || {}).by_candidate_election || {};
 
 var fails = 0;
 function ok(n, c) { console.log((c ? 'PASS  ' : 'FAIL  ') + n); if (!c) fails++; }
 function M(n) { return Math.round(n); }
-var RACES = ['sb-d04', 'sb-d05', 'sb-d06', 'sb-d07', 'sb-d08', 'sb-d09'];
-var VM = {};
-RACES.forEach(function (r) { VM[r] = D.viewModels.raceView(index, r, null).elections; });
+function bk(cid, eid) { return (bce[cid] || {})[eid] || null; }
+var W24 = { start: null, end: '2024-12-31' }, W26 = { start: '2025-01-01', end: '2026-12-31' };
 
-function fig(race, cid, eid) {
-  var c = VM[race].candidates.filter(function (x) { return x.id === cid; })[0];
-  return c && c.byElection[eid] ? c.byElection[eid].figures : null;
-}
-
-console.log('=== all six races produce a toggle VM ===');
-RACES.forEach(function (r) { ok(r + ' VM present (electionIds ' + (VM[r] ? VM[r].electionIds.join(',') : 'NONE') + ')', !!VM[r] && VM[r].electionIds.indexOf('2024') >= 0 && VM[r].electionIds.indexOf('2026') >= 0); });
-
-console.log('\n=== Diagnostic-C POST-FIX oracles ===');
-var z24 = fig('sb-d07', 'zaccor-sb-d07', '2024'), z26 = fig('sb-d07', 'zaccor-sb-d07', '2026');
-ok('Zaccor 2024 contrib $494,641.85/202', M(z24.contributions) === 494642 && z24.contributionsCount === 202);
-ok('Zaccor 2024 self $6,930.54/8', M(z24.selfFunding) === 6931 && z24.selfFundingCount === 8);
-ok('Zaccor 2024 ie_oppose $173,817.00/4', M(z24.independentOpposition) === 173817 && z24.independentOppositionCount === 4);
+console.log('=== Diagnostic-C POST-FIX oracles (by_candidate_election buckets) ===');
+var z24 = bk('zaccor-sb-d07', '2024'), z26 = bk('zaccor-sb-d07', '2026');
+ok('Zaccor 2024 contrib $494,641.85/202', !!z24 && M(z24.contributions.amount) === 494642 && z24.contributions.count === 202);
+ok('Zaccor 2024 self $6,930.54/8', !!z24 && M(z24.self_funding.amount) === 6931 && z24.self_funding.count === 8);
+ok('Zaccor 2024 ie_oppose $173,817.00/4', !!z24 && M(z24.ie_oppose.amount) === 173817 && z24.ie_oppose.count === 4);
+// TOOLS-ORACLE-1 (stale at HEAD pre-lane; carried verbatim, expected to FAIL until diagnosed):
 ok('Zaccor 2026 contrib $6,650/6 · self $4,777.78/5 · ie 0',
-  M(z26.contributions) === 6650 && z26.contributionsCount === 6 && M(z26.selfFunding) === 4778 && z26.selfFundingCount === 5 && z26.independentSupport === 0 && z26.independentOpposition === 0);
+  !!z26 && M(z26.contributions.amount) === 6650 && z26.contributions.count === 6 && M(z26.self_funding.amount) === 4778 && z26.self_funding.count === 5 && z26.ie_support.amount === 0 && z26.ie_oppose.amount === 0);
 
-var r24 = fig('sb-d08', 'rosenfeld-sb-d08', '2024'), r26 = fig('sb-d08', 'rosenfeld-sb-d08', '2026');
-ok('Rosenfeld 2024 contrib $228,710.80/188', M(r24.contributions) === 228711 && r24.contributionsCount === 188);
-ok('Rosenfeld 2024 self $26,900/2', M(r24.selfFunding) === 26900 && r24.selfFundingCount === 2);
-ok('Rosenfeld 2024 ie_support $146,025.64/11', M(r24.independentSupport) === 146026 && r24.independentSupportCount === 11);
+var r24 = bk('rosenfeld-sb-d08', '2024'), r26 = bk('rosenfeld-sb-d08', '2026');
+ok('Rosenfeld 2024 contrib $228,710.80/188', !!r24 && M(r24.contributions.amount) === 228711 && r24.contributions.count === 188);
+ok('Rosenfeld 2024 self $26,900/2', !!r24 && M(r24.self_funding.amount) === 26900 && r24.self_funding.count === 2);
+ok('Rosenfeld 2024 ie_support $146,025.64/11', !!r24 && M(r24.ie_support.amount) === 146026 && r24.ie_support.count === 11);
+// TOOLS-ORACLE-1 (stale, carried verbatim):
 ok('Rosenfeld 2026 contrib $103,514.93/68 · self 0 · ie 0',
-  M(r26.contributions) === 103515 && r26.contributionsCount === 68 && r26.selfFunding === 0 && r26.independentSupport === 0 && r26.independentOpposition === 0);
+  !!r26 && M(r26.contributions.amount) === 103515 && r26.contributions.count === 68 && r26.self_funding.amount === 0 && r26.ie_support.amount === 0 && r26.ie_oppose.amount === 0);
 
-var p24 = fig('sb-d04', 'pope-sb-d04', '2024'), p26 = fig('sb-d04', 'pope-sb-d04', '2026');
-ok('Pope 2024 contrib $500/1 (POST self-fix)', M(p24.contributions) === 500 && p24.contributionsCount === 1);
-ok('Pope 2024 self $500/1 (POST self-fix)', M(p24.selfFunding) === 500 && p24.selfFundingCount === 1);
-ok('Pope 2024 ie 0', p24.independentSupport === 0 && p24.independentOpposition === 0);
-ok('Pope 2026 contrib $500/1 · self 0', M(p26.contributions) === 500 && p26.contributionsCount === 1 && p26.selfFunding === 0);
+var p24 = bk('pope-sb-d04', '2024'), p26 = bk('pope-sb-d04', '2026');
+ok('Pope 2024 contrib $500/1 (POST self-fix)', !!p24 && M(p24.contributions.amount) === 500 && p24.contributions.count === 1);
+ok('Pope 2024 self $500/1 (POST self-fix)', !!p24 && M(p24.self_funding.amount) === 500 && p24.self_funding.count === 1);
+ok('Pope 2024 ie 0', !!p24 && p24.ie_support.amount === 0 && p24.ie_oppose.amount === 0);
+// TOOLS-ORACLE-1 (stale, carried verbatim):
+ok('Pope 2026 contrib $500/1 · self 0', !!p26 && M(p26.contributions.amount) === 500 && p26.contributions.count === 1 && p26.self_funding.amount === 0);
 
-var rs24 = fig('sb-d05', 'rios-sierra-sb-d05', '2024'), rs26 = fig('sb-d05', 'rios-sierra-sb-d05', '2026');
+var rs24 = bk('rios-sierra-sb-d05', '2024'), rs26 = bk('rios-sierra-sb-d05', '2026');
 ok('Rios-Sierra 2024 none', rs24 === null);
-ok('Rios-Sierra 2026 contrib $157/2', M(rs26.contributions) === 157 && rs26.contributionsCount === 2);
+// TOOLS-ORACLE-1 (stale, carried verbatim):
+ok('Rios-Sierra 2026 contrib $157/2', !!rs26 && M(rs26.contributions.amount) === 157 && rs26.contributions.count === 2);
 
-console.log('\n=== state machine renders ===');
-var popeLast = R.renderRaceElections(VM['sb-d04'], '2024');
-ok('Pope Last tab renders "2024 (did not run)"', /2024 \(did not run\)/.test(popeLast));
-ok('Pope did-not-run subnote present', /not a 2024 candidacy/.test(popeLast));
-var zacLast = R.renderRaceElections(VM['sb-d07'], '2024');
-ok('Zaccor Last header "2024: District 4" (not sb-d07/4A)', /2024: District 4/.test(zacLast) && zacLast.indexOf('District 4A') < 0);
-var rosAll = R.renderRaceElections(VM['sb-d08'], 'all');
-ok('Rosenfeld single-candidate race renders (1 candidate card per block)', (rosAll.match(/cand-name/g) || []).length >= 1 && /Ellen Rosenfeld/.test(rosAll));
-var riosLast = R.renderRaceElections(VM['sb-d05'], '2024');
-var riosAll = R.renderRaceElections(VM['sb-d05'], 'all');
-ok('Rios-Sierra Last 2024 tab clean-empty ("No money reported")', /No money reported for this election/.test(riosLast));
-ok('Rios-Sierra All = 2026-only combined ("2026 election only", no "across both" claim)',
-  /2026 election only/.test(riosAll) && /From the 2026 election only/.test(riosAll));
+console.log('\n=== scoped renders (post-toggle state machine) ===');
+var zvm = D.viewModels.raceView(index, 'sb-d07', null), zhtml = R.renderRaceView(zvm);
+ok('Zaccor 2026 card carries the re-homed prior-note "2024: District 4" (verbatim, no dollars)',
+  /<p class="committee prior-note">2024: District 4/.test(zhtml) && !/prior-note">[^<]*\$/.test(zhtml));
+ok('sb-d07 scoped page: no toggle affordance, window stamped',
+  zhtml.indexOf('data-electionview') < 0 && /data-win-end="2026-12-31"/.test(zhtml));
+var rsvm = D.viewModels.raceView(index, 'sb-d05', null), rshtml = R.renderRaceView(rsvm);
+ok('Rios Sierra renders on the scoped page (2026-only money, clean)', /Norma Rios Sierra/.test(rshtml));
+var pvm = D.viewModels.raceView(index, 'sb-d04', null), phtml = R.renderRaceView(pvm);
+ok('Pope (no person-link) carries NO prior-note (invariant-6 discriminator intact)',
+  !/Debby[\s\S]{0,600}prior-note/.test(phtml));
 
-console.log('\n=== invariant 7 (combined All-Elections, FIREWALL): cross-election total, not single-race ===');
-var zAll = R.renderRaceElections(VM['sb-d07'], 'all');
-ok('Zaccor All: combined header "across both elections (2024 + 2026)"', /across both elections \(2024 \+ 2026\)/.test(zAll));
-ok('Zaccor All: firewall framing (redrawn boundaries; NOT single-race spending)',
-  /redrawn between them/.test(zAll) && /not single-race spending/.test(zAll));   // HALT-P1-A: :777 copy harmonized (Gate-A A.1 ruling)
-ok('Zaccor All: 2024 provenance "2024: District 4" preserved in combined', /2024: District 4/.test(zAll));
-ok('Zaccor All: NOT segmented (no per-election blocks, no undated line)',
-  zAll.indexOf('elec-block-h') < 0 && zAll.indexOf('Undated small-dollar') < 0);
-(function () {
-  var cand = VM['sb-d07'].candidates.filter(function (x) { return x.id === 'zaccor-sb-d07'; })[0];
-  var cf = cand.combined.figures, a = cand.byElection['2024'].figures, b = cand.byElection['2026'].figures;
-  var okm = ['contributions', 'selfFunding', 'independentSupport', 'independentOpposition'].every(function (k) { return Math.abs(cf[k] - (a[k] + b[k])) < 0.01; });
-  ok('Zaccor combined == This + Last per stream (streams stay separate)', okm);
-})();
-
-console.log('\n=== invariant 3: four separate streams, no cross-sum (figures are distinct numeric fields) ===');
-ok('figures have 4 distinct numeric stream fields, no summed total',
-  ['contributions', 'selfFunding', 'independentSupport', 'independentOpposition'].every(function (k) { return typeof z24[k] === 'number'; }) &&
-  !('total' in z24) && !('combined' in z24));
-
-console.log('\n=== undated reconciliation: 2024 + 2026 + undated == all-years contributor total ===');
-[['sb-d07', 'zaccor-sb-d07', 0], ['sb-d08', 'rosenfeld-sb-d08', 0], ['sb-d05', 'rios-sierra-sb-d05', 0], ['sb-d04', 'pope-sb-d04', 0]].forEach(function (t) {
-  var race = t[0], cid = t[1], expUndated = t[2];
-  var cand = VM[race].candidates.filter(function (x) { return x.id === cid; })[0];
-  var dated = 0;
-  VM[race].electionIds.forEach(function (eid) {
-    var f = cand.byElection[eid] && cand.byElection[eid].figures;
-    if (f) dated += f.contributions + f.selfFunding;
-  });
+console.log('\n=== dated-legs reconciliation: 2024w + 2026w == all-years (zero undated at vintage) ===');
+[['zaccor-sb-d07'], ['rosenfeld-sb-d08'], ['rios-sierra-sb-d05'], ['pope-sb-d04']].forEach(function (t) {
+  var cid = t[0];
+  var f24 = D.candidateFigures(index, cid, null, W24), f26 = D.candidateFigures(index, cid, null, W26);
+  var dated = f24.contributions.total + f26.contributions.total;
   var allYears = D.candidateContributors(index, cid, null).total;
-  ok(cid + ': dated($' + M(dated) + ') + undated($' + M(cand.undated.amount) + ') == all-years($' + M(allYears) + ')',
-    Math.abs(dated + cand.undated.amount - allYears) < 0.01 && M(cand.undated.amount) === expUndated);
+  ok(cid + ': dated($' + M(dated) + ') == all-years($' + M(allYears) + ')', Math.abs(dated - allYears) < 0.01);
 });
 
-// HALT-P1-C: c.priorElection is now DERIVED from rollups.by_person (person-links), not the
-// retired per-record prior_election field. The invariant is unchanged — Pope has no person-link
-// yet holds 2024 money (the pull-driven, bucket-blind discriminator), so remains the sole flag.
-console.log('\n=== invariant 6: NO person-link prior AND non-zero 2024 money (expect ONLY Pope) ===');
+console.log('\n=== invariant 6: NO person-link prior AND non-zero 2024 bucket (expect ONLY Pope) ===');
 var flagged = [];
-RACES.forEach(function (race) {
-  VM[race].candidates.forEach(function (c) {
-    var f = c.byElection['2024'] && c.byElection['2024'].figures;
-    if (!c.priorElection && f && (f.contributions > 0 || f.selfFunding > 0 || f.independentSupport > 0 || f.independentOpposition > 0))
+['sb-d04', 'sb-d05', 'sb-d06', 'sb-d07', 'sb-d08', 'sb-d09'].forEach(function (race) {
+  var vm = D.viewModels.raceView(index, race, null);
+  vm.candidates.forEach(function (c) {
+    var b = bk(c.id, '2024');
+    if (!c.priorElection && b && (b.contributions.amount > 0 || b.self_funding.amount > 0 || b.ie_support.amount > 0 || b.ie_oppose.amount > 0))
       flagged.push(c.id);
   });
 });
 console.log('  flagged:', flagged);
 ok('flag list == [pope-sb-d04] ONLY', flagged.length === 1 && flagged[0] === 'pope-sb-d04');
-
-console.log('\n--- snippet: Pope Last (2024) did-not-run ---');
-var seg = popeLast.split('<article').filter(function (s) { return /Debby/.test(s); })[0] || '';
-console.log('<article' + seg.split('</article>')[0].replace(/<div class="bartrack[\s\S]*?<\/div><\/div>/g, '[bar]').substring(0, 520));
 
 console.log('\n' + (fails ? ('FAILED ' + fails) : 'ALL PASS'));
 process.exit(fails ? 1 : 0);

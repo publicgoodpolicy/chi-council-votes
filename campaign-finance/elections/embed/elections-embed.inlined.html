@@ -119,13 +119,17 @@
   }
   // Resolve a spend-filter selection ('all' | electionId) to a date window. 'all' = union.
   function spendWin(office, sel) { return (sel == null || sel === 'all') ? unionWindow(office) : winFor(office, sel); }
-  // Filter options for the spend tab: All (default) + This/Last per election, newest first.
-  function spendElectionFilter(office, sel) {
-    var opts = [{ id: 'all', label: 'All elections' }];
-    spendElectionIds(office).forEach(function (id, i) {
-      opts.push({ id: id, label: (i === 0 ? 'This election' : 'Last election') + ' (' + id + ')' });
-    });
-    return { active: sel || 'all', options: opts };
+  // Global election selector options (SCOPE-UI): the ratified `{year} {body}` PATTERN —
+  // ids from the office's window table (newest first), body from a per-office-type label.
+  // A future election is a data addition (window entry + body label), never a copy edit.
+  // The former per-spend-tab This/Last/All filter is retired: the global selector is the
+  // ONE control answering the election question, and no cross-election ('all') time scope
+  // is offered anywhere (ruled at SCOPE-UI G1/A1).
+  var OFFICE_BODY_LABEL = { school_board: 'School Board' };
+  function selectorOptions(office) {
+    var t = officeType(office), body = t && OFFICE_BODY_LABEL[t];
+    if (!body) return [];
+    return spendElectionIds(office).map(function (id) { return { id: id, label: id + ' ' + body }; });
   }
 
   // ---- stable, URL-safe slugs (locked scheme: e.g. "bruce-leon-district-2a") ----
@@ -721,43 +725,12 @@
     return false;
   }
 
-  // ---- This / Last / All-Elections toggle (per-candidate buckets) ----
-  // Reads the precomputed rollups.by_candidate_election (built globally in
-  // build_rollups, bucketed by FILING DATE). Scoped to the races carrying a person-link-
-  // VERIFIED 2024 returner (HALT-P1-C, D2 extend-to-17): the 9 formerly-annotated returners
-  // (sb-d04..d12 + President) PLUS the 8 newly-signed ones (sb-d02/d03/d13/d14/d15/d18/d19).
-  // Every returner's prior carriage is published under rollups.by_person[*].prior, so their
-  // "Last election (2024)" tab renders the derived "2024: District N" label — none mislabel as
-  // "did not run". Races with no verified returner stay off (their 2024 tab would be empty).
-  var TOGGLE_RACES = { 'sb-d02': 1, 'sb-d03': 1, 'sb-d04': 1, 'sb-d05': 1, 'sb-d06': 1, 'sb-d07': 1,
-                       'sb-d08': 1, 'sb-d09': 1, 'sb-d10': 1, 'sb-d11': 1, 'sb-d12': 1, 'sb-d13': 1,
-                       'sb-d14': 1, 'sb-d15': 1, 'sb-d18': 1, 'sb-d19': 1, 'sb-president': 1 };
-
-  // Map one by_candidate_election bucket to the FOUR SEPARATE streams the render
-  // bars consume. contributions (third-party) and self_funding are kept distinct;
-  // nothing is summed across the four streams.
-  function bucketFigures(bk) {
-    return {
-      contributions: round2(bk.contributions.amount), contributionsCount: bk.contributions.count,
-      selfFunding: round2(bk.self_funding.amount), selfFundingCount: bk.self_funding.count,
-      independentSupport: round2(bk.ie_support.amount), independentSupportCount: bk.ie_support.count,
-      independentOpposition: round2(bk.ie_oppose.amount), independentOppositionCount: bk.ie_oppose.count
-    };
-  }
-
-  // Dateless small-dollar aggregate for a candidate (the _small-dollar-donors rows):
-  // these carry no filing date so they bucket to NO election; surfaced separately in
-  // the All-Elections view so 2024 + 2026 + undated reconciles to the all-years total.
-  function undatedSmallDollar(index, candId) {
-    var rows = index.directByCandidate[candId] || [], amt = 0, n = 0;
-    for (var i = 0; i < rows.length; i++) {
-      var c = rows[i];
-      if (EXCLUDED_CYCLES[c.cycle] || c.contribution_type === DUES_TYPE) continue;
-      if (c.date) continue;          // dated rows bucket to an election
-      amt += c.amount || 0; n++;
-    }
-    return { amount: round2(amt), count: n };
-  }
+  // The per-race This/Last/All toggle is RETIRED (SCOPE-UI): it asserted a district-level
+  // cross-cycle correspondence the data model denies (disjoint 2024/2026 district
+  // namespaces, no crosswalk). Election scoping is now the GLOBAL selector; per-race
+  // figures are windowed to the race's own election (PS-79/A1, HALT-F2). The undated-
+  // small-dollar aggregate retired with its only consumer (zero undated rows at this
+  // vintage — HALT-F2's check); the concern returns only if undated rows ever appear.
 
   // Prior-election carriage (label / office / qualifier) for a candidate, DERIVED at rollup
   // time and published under rollups.by_person[*].prior (HALT-P1-C — the per-record
@@ -777,74 +750,6 @@
     }
     index._priorByCand = m;
     return m;
-  }
-
-  function raceElections(index, raceId) {
-    var race = index.raceById[raceId];
-    if (!race) return null;
-    var bce = (index.rollups && index.rollups.by_candidate_election) || {};
-    var cands = (index.candidatesByRace[raceId] || []).slice()
-      .filter(function (c) { return !c.vacating_for; }).sort(byNameNeutral);
-    if (!cands.length) return null;
-    // Full election set for the office = union of all bucket keys across all candidates
-    // (NOT just this race), so a race whose candidates only have 2026 money (e.g.
-    // sb-d05) still renders an empty "Last election (2024)" tab.
-    var idset = {};
-    for (var cc in bce) { if (!bce.hasOwnProperty(cc)) continue; for (var e in bce[cc]) if (bce[cc].hasOwnProperty(e)) idset[e] = 1; }
-    var ids = Object.keys(idset).sort().reverse();   // newest first -> ["2026","2024"]
-    if (!ids.length) return null;
-    var toggles = ids.map(function (id, i) {
-      return { id: id, role: i === 0 ? 'this' : 'prior',
-               label: (i === 0 ? 'This election' : 'Last election') + ' (' + id + ')' };
-    });
-    // Combined ("All elections") window = union of the office's election windows
-    // (earliest start, latest end). For school_board: [null, 2026-12-31] = 2024 + 2026.
-    var combinedWin = (function () {
-      var ws = ids.map(function (id) { return winFor(race.office, id); }).filter(Boolean);
-      if (!ws.length) return null;
-      var start = ws.some(function (w) { return w.start == null; }) ? null : ws.map(function (w) { return w.start; }).sort()[0];
-      var ends = ws.map(function (w) { return w.end; });
-      var end = ends.some(function (e) { return e == null; }) ? null : ends.slice().sort().reverse()[0];
-      return { start: start, end: end };
-    })();
-    var SK = ['contributions', 'selfFunding', 'independentSupport', 'independentOpposition'];
-    var candidates = cands.map(function (c) {
-      var b = bce[c.id] || {}, byElection = {};
-      ids.forEach(function (id) {
-        var bk = b[id], win = winFor(race.office, id);
-        // Each election panel carries its date-window-sliced drill-down data (council
-        // components reused): contributor list, IE support/oppose detail, industries.
-        byElection[id] = {
-          label: bk ? (bk.label || id) : id,
-          figures: bk ? bucketFigures(bk) : null,
-          win: win,
-          contributors: candidateContributors(index, c.id, null, win),
-          ieSupportDetail: candidateIE(index, c.id, 'support', null, win),
-          ieOpposeDetail: candidateIE(index, c.id, 'oppose', null, win),
-          industries: candidateIndustries(index, c.id, null, win)
-        };
-      });
-      // Combined figures SUM the per-election buckets (so combined == This + Last per
-      // stream, streams never merged); drill-down uses the union window (= same rows).
-      var cf = { contributions: 0, contributionsCount: 0, selfFunding: 0, selfFundingCount: 0,
-                 independentSupport: 0, independentSupportCount: 0, independentOpposition: 0, independentOppositionCount: 0 };
-      ids.forEach(function (id) {
-        var g = byElection[id].figures; if (!g) return;
-        SK.forEach(function (k) { cf[k] = round2(cf[k] + g[k]); cf[k + 'Count'] += g[k + 'Count']; });
-      });
-      var combined = {
-        figures: cf, win: combinedWin,
-        contributors: candidateContributors(index, c.id, null, combinedWin),
-        ieSupportDetail: candidateIE(index, c.id, 'support', null, combinedWin),
-        ieOpposeDetail: candidateIE(index, c.id, 'oppose', null, combinedWin),
-        industries: candidateIndustries(index, c.id, null, combinedWin)
-      };
-      return { id: c.id, slug: candidateSlug(c, race), name: c.name, incumbent: !!c.incumbent,
-               priorElection: priorByCandidate(index)[c.id] || null, undated: undatedSmallDollar(index, c.id),
-               byElection: byElection, combined: combined };
-    });
-    return { race: { id: race.id, slug: raceSlug(race), label: race.label, office: race.office },
-             electionIds: ids, toggles: toggles, candidates: candidates };
   }
 
   function raceView(index, raceId, cycle) {
@@ -869,7 +774,9 @@
         hasFinance: hasAnyFinance(index, race.id), vacating: vacating
       },
       cycle: cycle || null,
-      elections: TOGGLE_RACES[raceId] ? raceElections(index, raceId) : null,
+      // SCOPE-UI: the race's own election window rides the VM so render can stamp the
+      // container (modals opened from cards inherit it — Gate G, extended to base path).
+      win: raceWin(race),
       candidates: active.map(function (c) {
         var hasFinance = !!c.committee_id;
         // A1+B1 (PS-79 / HALT-F2): the race's own election window scopes every figure
@@ -884,6 +791,9 @@
           result: c.result || null, writeIn: !!c.write_in,
           financeFacet: c.finance_facet || null, committeeSbeRef: c.committee_sbe_ref || null,
           hasFinance: hasFinance, stillPopulating: !hasFinance,
+          // SCOPE-UI (F-1 ruled): the prior-run carriage re-homed verbatim from the
+          // retired toggle path — label + qualifier TEXT only, never dollars.
+          priorElection: priorByCandidate(index)[c.id] || null,
           committee: hasFinance ? committeeMeta(index, c.id) : null,
           figures: hasFinance ? candidateFigures(index, c.id, cycle, win) : null,
           contributors: hasFinance ? candidateContributors(index, c.id, cycle, win) : null,
@@ -901,26 +811,39 @@
   // spend grouping). Candidate-driven listers are auto-safe (a candidacy-less race yields
   // no rows); only functions that walk the race list need this. Gated at the ELECTION level
   // so a genuinely forming race in a LIVE election (e.g. a 2027-municipal ward with no
-  // filers yet) still shows. Byte-identical today: both current elections have candidacies;
-  // only 2024 lacks. Memoized per index.
+  // filers yet) still shows. Post-P1-B both school-board elections carry candidacies, so the
+  // set currently excludes nothing — it admits 2024 (the ratified nav-visible behavior) and
+  // guards only the empty-election-shell case. The global selector scopes the race list
+  // BEFORE this gate sees it. Memoized per index.
   function liveElectionSet(index) {
     if (index._memo && index._memo.liveElections) return index._memo.liveElections;
     var s = {};
     (index.candidates || []).forEach(function (c) {
-      var r = index.raceById[c.race_id]; if (r && r.election_id) s[r.election_id] = 1;
+      // SCOPE-UI: one-hop read of the stamped election_id (HALT-F5-SEED; always present).
+      if (c.election_id) s[c.election_id] = 1;
     });
     if (index._memo) index._memo.liveElections = s;
     return s;
   }
   function raceIsLive(index, r) { return !r.election_id || !!liveElectionSet(index)[r.election_id]; }
 
-  function officeRaces(index, office) {
+  function officeRaces(index, office, sel) {
     var groups = OFFICE_GROUPS[office] || [];
+    // SCOPE-UI: election-first navigation — the race list is scoped to the selected
+    // election via the year-prefix join HALT-F2 established (raceWin's keyspace bridge).
+    // sel defaults to the newest election with a window table; offices with no window
+    // table (municipal, F4) get no selector and an unscoped (status quo) list.
+    var eff = sel || spendElectionIds(office)[0] || null;
+    function inSel(r) {
+      if (!eff) return true;
+      var m = /^(\d{4})-/.exec(r.election_id || '');
+      return !!m && m[1] === eff;
+    }
     return {
-      office: office,
+      office: office, election: eff,
       groups: groups.map(function (g) {
         var rs = index.races.filter(function (r) {
-          return g.offices.indexOf(r.office) >= 0 && raceIsLive(index, r);
+          return g.offices.indexOf(r.office) >= 0 && raceIsLive(index, r) && inSel(r);
         }).sort(byRaceOrder);
         return {
           label: g.label,
@@ -1246,22 +1169,23 @@
   }
 
   // Dispatcher: one call from the thin app for the active subtab. Cycle-aware AND
-  // election-window-aware: `election` is 'all' (default = union of both windows),
-  // '2026' (This) or '2024' (Last). The resolved window drives every figure + the
-  // drill-downs (the spend container carries it so spender modals stay scoped).
+  // election-window-aware: `election` is a concrete election id from the GLOBAL selector
+  // (default = newest). The former 'all' union scope is retired (SCOPE-UI G1/A1) — no
+  // cross-election window is resolvable from the UI. The resolved window drives every
+  // figure + the drill-downs (the spend container carries it so spender modals stay scoped).
   function spendSubtab(index, office, tab, cycle, election, filters, raceFilter, expandedId) {
-    var sel = election || 'all', win = spendWin(office, sel), filter = spendElectionFilter(office, sel);
+    var sel = election || spendElectionIds(office)[0] || null, win = spendWin(office, sel);
     if (tab === 'candidates') {
       var rf = raceFilter || 'all', g = spendByCandidateGrouped(index, office, cycle, win, rf, expandedId);
-      return { tab: tab, election: sel, filter: filter, win: win, groups: g.groups, raceOptions: g.raceOptions, raceFilter: rf };
+      return { tab: tab, election: sel, win: win, groups: g.groups, raceOptions: g.raceOptions, raceFilter: rf };
     }
-    if (tab === 'industries') return { tab: tab, election: sel, filter: filter, win: win, industries: industryTotals(index, office, cycle, win) };
-    if (tab === 'industry-candidate') return { tab: tab, election: sel, filter: filter, win: win, rows: industriesByCandidate(index, office, cycle, win) };
-    if (tab === 'flags') return { tab: tab, election: sel, filter: filter, win: win, flags: flagTotals(index, office, cycle, win) };
+    if (tab === 'industries') return { tab: tab, election: sel, win: win, industries: industryTotals(index, office, cycle, win) };
+    if (tab === 'industry-candidate') return { tab: tab, election: sel, win: win, rows: industriesByCandidate(index, office, cycle, win) };
+    if (tab === 'flags') return { tab: tab, election: sel, win: win, flags: flagTotals(index, office, cycle, win) };
     var df = filters || { search: '', type: 'All', industry: 'All', flag: 'All' };
     var browse = browseDonors(index, cycle, win, df), ieCount = 0;
     for (var bi = 0; bi < browse.length; bi++) if (browse[bi].kind === 'ie') ieCount++;
-    return { tab: 'donors', election: sel, filter: filter, win: win, rows: browse,
+    return { tab: 'donors', election: sel, win: win, rows: browse,
              donorFilters: df, facets: browseDonorFacets(index), ieCount: ieCount,
              industryTags: index.industryTags };   // default
   }
@@ -1285,8 +1209,8 @@
     flagTotals: flagTotals, spendSubtab: spendSubtab,
     isSelfFunded: isSelfFunded,
     kebab: kebab, raceSlug: raceSlug, candidateSlug: candidateSlug, raceCode: raceCode,
-    raceElections: raceElections,
-    viewModels: { raceBrowse: raceBrowse, raceView: raceView, officeRaces: officeRaces, raceElections: raceElections }
+    selectorOptions: selectorOptions,
+    viewModels: { raceBrowse: raceBrowse, raceView: raceView, officeRaces: officeRaces }
   };
 });
 
@@ -1938,7 +1862,7 @@
   var FINANCE_FACET = {
     committee_no_itemized: 'No itemized contributions reported.',
     no_committee: 'No campaign committee on file with the Illinois State Board of Elections.',
-    on_current_record: 'Campaign finance for this candidate is reported under their current committee — see their 2026 race entry.'
+    on_current_record: 'Campaign finance for this candidate is reported under their current committee.'
   };
   function facetLine(c) {
     var s = FINANCE_FACET[c.financeFacet];
@@ -1970,8 +1894,16 @@
       ? '<p class="committee">Committee: ' + esc(c.committee.name) +
         (c.committee.sunshineUrl ? ' · <a href="' + esc(c.committee.sunshineUrl) + '" target="_blank" rel="noopener">Illinois Sunshine ↗</a>' : '') + '</p>'
       : '';
+    // SCOPE-UI (F-1 ruled): the prior-run carriage, re-homed VERBATIM from the retired
+    // toggle path — shipped label + qualifier text only, no new words, never dollars.
+    // (The office-change provenance sentences described the retired combined sum and have
+    // no scoped-card-compatible shipped wording; they ride to the by-person lane.)
+    var priorLine = (c.priorElection && c.priorElection.label)
+      ? '<p class="committee prior-note">' + esc(c.priorElection.label) +
+        (c.priorElection.qualifier ? ' · ' + esc(c.priorElection.qualifier) : '') + '</p>'
+      : '';
     return '<article class="card" id="cand-' + esc(c.slug) + '">' +
-      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' + chips + '</div>' + resultNote(c) + committeeLine +
+      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' + chips + '</div>' + resultNote(c) + committeeLine + priorLine +
       '<div class="bars">' + contribBar + contribPanel + supportBar + supportPanel + opposeBar + opposePanel + '</div>' + selfLine +
       '<p class="caption">Independent support and opposition are spending by outside groups, reported by those ' +
       'groups and not coordinated with the campaign. Figures are shown separately, never added together.</p></article>';
@@ -1996,204 +1928,23 @@
       (fl || '<p class="committee">Finance data still populating — committee not yet identified.</p>') + '</article>';
   }
 
-  // ---- This / Last / All-Elections toggle (vm = data.viewModels.raceElections) ----
-  // Pure: `active` selects which view to emit — an election id ("this"/last) or
-  // "all". Each view shows the FOUR streams as SEPARATE bars (contributions,
-  // self-funding, independent support, independent opposition), NEVER summed.
-  // "All elections" emits each election as its OWN segmented block under its own
-  // (boundary-specific) label — never merged into one cross-election total.
-  function elecScale(vm) {
-    var s = 1, i, e;
-    for (i = 0; i < vm.candidates.length; i++) {
-      var be = vm.candidates[i].byElection;
-      for (e in be) {
-        if (!be.hasOwnProperty(e)) continue;
-        var f = be[e].figures; if (!f) continue;
-        s = Math.max(s, f.contributions, f.selfFunding, f.independentSupport, f.independentOpposition);
-      }
-    }
-    return s;
-  }
-  function elecHasMoney(f) {
-    return !!f && (f.contributions > 0 || f.selfFunding > 0 || f.independentSupport > 0 || f.independentOpposition > 0);
-  }
-  // Per-election industry composition strip (reuses the spend-tab tagchip markup).
-  // Uncategorized donors render as "uncategorized" honestly, never dropped.
-  function elecIndustries(industries) {
-    if (!industries || !industries.length) return '';
-    var chips = industries.filter(function (i) { return i.direct > 0; }).slice(0, 8).map(function (i) {
-      var label = (i.industry === 'unclassified' || i.industry === 'uncategorized') ? 'uncategorized' : prettyTag(i.industry);
-      return '<span class="tagchip ind">' + esc(label) + ' ' + money(i.direct) + '</span>';
-    }).join('');
-    if (!chips) return '';
-    return '<p class="contrib-h" style="margin-top:14px">Industries this election — direct contributions</p><div class="ixc">' + chips + '</div>';
-  }
-  // Four separate stream bars (HALT-2.5 model preserved). contributions / IE-support /
-  // IE-oppose are CLICKABLE -> the council drill-down panels (contributorPanel/iePanel),
-  // date-window-sliced. Self-funding stays a value bar; its distinct non-clickable line
-  // appears inside the contributor drill-down via donorRow's isSelf treatment.
-  function elecStreams(ev, candName, scale, base) {
-    var f = ev.figures;
-    if (!f) return '<p class="contrib-note">No money reported for this election.</p>';
-    var hasC = f.contributions > 0 || f.selfFunding > 0, hasS = f.independentSupport > 0, hasO = f.independentOpposition > 0;
-    var cBar = bar('From contributors', [{ cls: 'third', v: f.contributions }],
-      f.contributionsCount ? plural(f.contributionsCount, 'contribution', 'contributions') : '', scale, hasC ? base + '-c' : null);
-    var cPanel = hasC && ev.contributors ? contributorPanel(ev.contributors, base + '-c') : '';
-    var selfBar = bar('Candidate self-funding', [{ cls: 'self', v: f.selfFunding }],
-      f.selfFundingCount ? plural(f.selfFundingCount, 'gift or loan', 'gifts or loans') : '', scale);
-    var sBar = bar('Independent support', [{ cls: 'support', v: f.independentSupport }],
-      f.independentSupportCount ? plural(f.independentSupportCount, 'expenditure', 'expenditures') : '', scale, hasS ? base + '-s' : null);
-    var sPanel = hasS && ev.ieSupportDetail ? iePanel(ev.ieSupportDetail, candName, base + '-s') : '';
-    var oBar = bar('Independent opposition', [{ cls: 'oppose', v: f.independentOpposition }],
-      f.independentOppositionCount ? plural(f.independentOppositionCount, 'expenditure', 'expenditures') : '', scale, hasO ? base + '-o' : null);
-    var oPanel = hasO && ev.ieOpposeDetail ? iePanel(ev.ieOpposeDetail, candName, base + '-o') : '';
-    return '<div class="bars">' + cBar + cPanel + selfBar + sBar + sPanel + oBar + oPanel + '</div>' +
-      elecIndustries(ev.industries);
-  }
-  // State machine for a candidate's header in a given election. For the prior (Last)
-  // election: (i) prior_election present -> its own label (split-origin safe, never a
-  // 2026 subdistrict id); (ii) no prior_election but 2024 money present -> "did not
-  // run" transparency framing; (iii) no prior + no money -> generic label, empty bars.
-  function elecHeader(c, eid, role) {
-    var ev = c.byElection[eid] || { label: eid, figures: null };
-    if (role === 'prior') {
-      if (c.priorElection && c.priorElection.label) return { header: c.priorElection.label, subnote: c.priorElection.qualifier || '' };
-      if (elecHasMoney(ev.figures)) {
-        return { header: eid + ' (did not run)',
-          subnote: 'Committee activity dated to ' + eid + ' — shown for transparency, not a ' + eid + ' candidacy.' };
-      }
-    }
-    return { header: ev.label || eid, subnote: '' };
-  }
-  function elecCandBlock(c, eid, role, scale) {
-    var ev = c.byElection[eid] || { label: eid, figures: null };
-    var h = elecHeader(c, eid, role);
-    var base = 'elec-' + esc(c.slug) + '-' + esc(eid);
-    // data-win-* lets the app scope a donor-footprint modal opened from this panel to
-    // the election's date window (Gate G), not the whole 4-year cycle.
-    var win = ev.win || {};
-    var winAttrs = ' data-win-start="' + esc(win.start || '') + '" data-win-end="' + esc(win.end || '') + '"';
-    return '<article class="card" id="' + base + '"' + winAttrs + '>' +
-      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' +
-      (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') +
-      '<span class="race-meta">· ' + esc(h.header) + '</span></div>' +
-      (h.subnote ? '<p class="contrib-note">' + esc(h.subnote) + '</p>' : '') +
-      elecStreams(ev, c.name, scale, base) + '</article>';
-  }
-  // (elecAnyMoney / elecUndatedSection removed with the segmented "All elections" view —
-  // All elections is now ONE combined cross-election total per candidate, see
-  // elecCombinedBlock. The dateless small-dollar aggregate is outside both election
-  // windows, so it is excluded from the combined total by construction.)
-  // "All elections" = ONE combined cross-election total per (2026) candidate. FIREWALL:
-  // explicitly labeled as spanning both elections, with the 2024 portion keeping its
-  // "2024: District N" provenance so a returner's combined total visibly comprises two
-  // different districts -- it can never read as single-race spending. Reuses elecStreams
-  // (c.combined has the same shape: figures + windowed drill-down). Streams stay separate.
-  function raceOfficeFriendly(o) {
-    return ({ school_board_member: 'board-member', school_board_president: 'board president',
-              alderperson: 'alderperson', mayor: 'mayor', school_board_president_label: 'board president' })[o] || o;
-  }
-  function elecCombinedBlock(c, scale, raceOffice, thisId) {
-    var ev = c.combined;
-    if (!ev || !elecHasMoney(ev.figures)) return '';
-    var win = ev.win || {};
-    var winAttrs = ' data-win-start="' + esc(win.start || '') + '" data-win-end="' + esc(win.end || '') + '"';
-    var base = 'eleccomb-' + esc(c.slug);
-    // Prior-election money = the present byElection bucket(s) other than the current
-    // ("this") election. Generalized off the id set so P1-B/D can load more than two
-    // elections without a code change; today only 2024/2026 exist, so this resolves to the
-    // 2024 bucket and the output is identical. Was: c.byElection['2024'].
-    var priorKey = Object.keys(c.byElection || {}).filter(function (k) {
-      return k !== thisId && elecHasMoney((c.byElection[k] || {}).figures);
-    }).sort().reverse()[0] || null;
-    var ePrior = priorKey ? c.byElection[priorKey] : null;
-    var has24 = !!ePrior;
-    var pe = c.priorElection || {};
-    // STRUCTURAL office-change detection: the prior election's office differs from the
-    // current race office (e.g. a 2024 board-MEMBER seat -> the 2026 board-PRESIDENT seat).
-    // Generalizes to any future office-changer; NOT a Biggs/Custer special-case.
-    var officeChange = has24 && pe.office && raceOffice && pe.office !== raceOffice;
-    var meta, prov;
-    if (officeChange) {
-      var distN = String(pe.label || '').replace(/^\s*\d+:\s*/, '');   // "2024: District 6" -> "District 6"
-      meta = '· across two offices (2024 + 2026)';
-      prov = 'This total combines ' + esc(c.name) + '’s 2024 campaign for the ' + esc(distN) + ' ' +
-        esc(raceOfficeFriendly(pe.office)) + ' seat and their 2026 campaign for ' + esc(raceOfficeFriendly(raceOffice)) +
-        ' — <b>two different offices</b>. It is a cross-election sum across <b>different offices</b>, ' +
-        '<b>not single-race spending</b>. Per-election detail is in the This / Last tabs.';
-    } else if (has24) {
-      meta = '· across both elections (2024 + 2026)';
-      prov = 'This total combines <b>two separate elections</b> — ' + esc(ePrior.label) +
-        ' and 2026. Board districts were <b>redrawn between them</b>, so it spans two different ' +
-        'district maps; it is a <b>cross-election sum, not single-race spending</b>. Per-election ' +
-        'detail is in the This / Last tabs.';
-    } else {
-      meta = '· 2026 election only';
-      prov = 'From the 2026 election only (no 2024 election money to combine).';
-    }
-    return '<article class="card" id="' + base + '"' + winAttrs + '>' +
-      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' +
-      (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') +
-      '<span class="race-meta">' + meta + '</span></div>' +
-      '<p class="contrib-note">' + prov + '</p>' +
-      elecStreams(ev, c.name, scale, base) + '</article>';
-  }
-  function renderRaceElections(vm, active) {
-    if (!vm || !vm.toggles.length) return '';
-    active = active || vm.toggles[0].id;     // default = "this" (current) election
-    var scale = elecScale(vm);
-    var roleOf = {}; vm.toggles.forEach(function (t) { roleOf[t.id] = t.role; });
-    var tabs = vm.toggles.map(function (t) {
-      return '<button class="subtab" role="tab" data-electionview="' + esc(t.id) + '" aria-selected="' +
-        (active === t.id) + '">' + esc(t.label) + '</button>';
-    }).join('') +
-      '<button class="subtab" role="tab" data-electionview="all" aria-selected="' + (active === 'all') + '">All elections</button>';
-    var nav = '<div class="subnav" role="tablist" aria-label="Election">' + tabs + '</div>';
-    var note = '<p class="contrib-note">Money is bucketed by filing date to each election. The four figures — ' +
-      'contributions, candidate self-funding, independent support, and independent opposition — are shown ' +
-      '<b>separately and never added together</b>.</p>';
-    var body;
-    if (active === 'all') {
-      var combScale = 1;
-      vm.candidates.forEach(function (c) {
-        var f = c.combined && c.combined.figures; if (!f) return;
-        combScale = Math.max(combScale, f.contributions, f.selfFunding, f.independentSupport, f.independentOpposition);
-      });
-      var thisId = (vm.electionIds || [])[0];   // "this" (current) election = newest id
-      body = '<p class="contrib-note"><b>“All elections” combines each candidate’s totals</b> into one total ' +
-        'per stream (streams still separate). Board districts were <b>redrawn between the 2024 and 2026 elections</b>, so a combined ' +
-        'total spans two different district maps — it is a <b>cross-election sum, not single-race spending</b>. The 2024 ' +
-        'portion keeps its “2024: District N” label.</p>' +
-        vm.candidates.map(function (c) { return elecCombinedBlock(c, combScale, vm.race.office, thisId); }).filter(Boolean).join('');
-    } else {
-      body = vm.candidates.map(function (c) { return elecCandBlock(c, active, roleOf[active], scale); }).join('');
-    }
-    return '<div class="elections" data-race="' + esc(vm.race.slug) + '">' + nav + note + legend() +
-      '<div style="height:14px"></div>' + body + '</div>';
-  }
-
   // Race view: head + vacating-incumbent note(s) + legend + candidate cards
   // (neutral order from the data layer; the three figures never summed).
-  function renderRaceView(vm, electionView) {
+  function renderRaceView(vm) {
     if (!vm) return '<div class="soon"><h2>Race not found</h2></div>';
     var vac = (vm.race.vacating || []).map(function (v) {
       return '<p class="vacating-note">↳ Current member <b>' + esc(v.name) + '</b> is running for ' +
         '<button class="goto-link" type="button" data-slug="' + esc(v.targetSlug) + '">' + esc(v.targetLabel) + ' →</button></p>';
     }).join('');
-    // HALT-F2: base-path (non-toggle) figures are now scoped to the race's own election
-    // window, so the meta label names that election instead of claiming "all years".
-    // Toggle races keep the historical head byte-identical (their panels are labeled).
+    // HALT-F2 + SCOPE-UI: every race's figures are scoped to its own election window,
+    // and the meta label names that election ("all years" survives only as the defensive
+    // no-election fallback, which no current race reaches).
     var metaYr = (/^(\d{4})-/.exec(vm.race.election_id || '') || [])[1];
     var meta = plural(vm.candidates.length, 'candidate', 'candidates') +
       (vm.cycle ? ' · cycle ' + esc(vm.cycle)
-                : ((vm.elections || !metaYr) ? ' · all years' : ' · ' + esc(metaYr) + ' election'));
+                : (!metaYr ? ' · all years' : ' · ' + esc(metaYr) + ' election'));
     var head = '<div class="race-head"><h2>' + esc(vm.race.label) + '</h2>' +
       '<span class="race-meta">' + meta + '</span></div>' + vac;
-
-    // Races wired for the per-election toggle (the loaded cohort, gated in data.js
-    // TOGGLE_RACES) render the This/Last/All view instead of the single all-years
-    // cards. electionView (from app state) selects the active tab.
-    if (vm.elections) return head + renderRaceElections(vm.elections, electionView);
 
     if (!vm.candidates.length) {
       return head + '<div class="soon"><h2>Field forming</h2>' +
@@ -2209,14 +1960,18 @@
     }
     var anyPending = vm.candidates.some(function (c) { return !c.hasFinance; });
     var cards = vm.candidates.map(function (c) { return c.hasFinance ? card(c, scale) : pendingCard(c); }).join('');
-    return head +
+    // SCOPE-UI (F-3 ruled): the race's election window rides the container, so funder /
+    // committee modals opened from these cards stay scoped (winFromEl reads the nearest
+    // [data-win-end] ancestor — the base path previously stamped nothing).
+    var winAttrs = vm.win ? (' data-win-start="' + esc(vm.win.start || '') + '" data-win-end="' + esc(vm.win.end || '') + '"') : '';
+    return '<div class="race-scope"' + winAttrs + '>' + head +
       // The "field still being added" note describes a filling-in current race. A certified
       // 2024 race is a complete past field (every candidacy authored in one commit, each with
       // an explicit finance facet), so the note is suppressed there.
       (anyPending && vm.race.election_id !== '2024-school-board'
         ? '<p class="field-note">▸ <span><b>Field still being added.</b> Candidates with registered ' +
           'committees are shown; others appear as they file and finance is processed.</span></p>' : '') +
-      legend() + '<div style="height:18px"></div>' + cards;
+      legend() + '<div style="height:18px"></div>' + cards + '</div>';
   }
 
   function renderComingSoon(label) {
@@ -2246,6 +2001,16 @@
     }).join('');
     return nav + '<div class="districts" role="group" aria-label="Race">' + chips + '</div>' +
       '<p class="picker-note">Races with processed campaign-finance data are live; the rest fill in as candidates file.</p>';
+  }
+
+  // Global election selector (SCOPE-UI): the ratified `{year} {body}` pills. Rendered
+  // only when the office has two or more elections with window-table entries; municipal
+  // pages (no window table, F4) render no selector and are unchanged.
+  function selectorNav(sel) {
+    if (!sel || !sel.options || sel.options.length < 2) return '';
+    return '<div class="subnav elect-select" role="tablist" aria-label="Election">' + sel.options.map(function (o) {
+      return '<button class="subtab" role="tab" data-election="' + esc(o.id) + '" aria-selected="' + (o.id === sel.active) + '">' + esc(o.label) + '</button>';
+    }).join('') + '</div>';
   }
 
   function masthead(office, topView) {
@@ -2397,18 +2162,9 @@
     }).join('') + '</div>';
   }
 
-  // Election filter (This / Last / All-Elections, default All) — the SOLE time selector
-  // for the spend tab (the legacy SBE cycle pills are gone). Same delegated-button
-  // pattern as the subtabs; drives every spend figure + drill-down through the window.
-  function electionFilterNav(filter) {
-    if (!filter || !filter.options || filter.options.length <= 1) return '';
-    return '<div class="subnav elect-filter" role="tablist" aria-label="Election filter">' + filter.options.map(function (o) {
-      return '<button class="subtab" role="tab" data-spendelection="' + esc(o.id) + '" aria-selected="' + (o.id === filter.active) + '">' + esc(o.label) + '</button>';
-    }).join('') + '</div>';
-  }
 
   // Browse-Donors filter controls (E-1): search + donor-type / industry / flag, all defaulting
-  // to All. The time control (electionFilterNav) is separate and sits above — untouched here.
+  // to All. The election scope comes from the GLOBAL selector (SCOPE-UI) — untouched here.
   function donorFilterControls(facets, df) {
     facets = facets || { types: [], industries: [], flags: [] };
     df = df || { search: '', type: 'All', industry: 'All', flag: 'All' };
@@ -2476,7 +2232,7 @@
   }
 
   // E-7 race filter for the grouped spend-by-candidate view. AND-composes with the time control
-  // (electionFilterNav). 'all' = every school-board race; a single race degrades to one section.
+  // 'all' = every in-guard school-board race; a single race degrades to one section.
   function candidateRaceFilter(raceOptions, raceFilter) {
     if (!raceOptions || !raceOptions.length) return '';
     var opt = function (id, label, sel) { return '<option value="' + esc(id) + '"' + (sel ? ' selected' : '') + '>' + esc(label) + '</option>'; };
@@ -2612,7 +2368,7 @@
     // from this tab (donor footprint OR IE-PAC profile) stays scoped to the same window
     // (winFromEl reads the nearest [data-win-end] ancestor).
     var winAttr = vm.win ? (' data-win-start="' + esc(vm.win.start || '') + '" data-win-end="' + esc(vm.win.end || '') + '"') : '';
-    return '<div class="spend"' + winAttr + '>' + electionFilterNav(vm.filter) + spendNav(tab) + '<div class="spend-body">' + body + '</div></div>';
+    return '<div class="spend"' + winAttr + '>' + spendNav(tab) + '<div class="spend-body">' + body + '</div></div>';
   }
 
   // (Cycle/year pills removed from the election views — the This/Last/All election
@@ -2641,10 +2397,10 @@
       inner = officeComingSoon(state.office);     // city_council / mayor: clean coming-soon, never a crash
     } else {
       var byrace = state.topView !== 'spend';
-      var content = byrace
+      var content = selectorNav(state.selector) + (byrace
         ? (renderOfficeNav(state.officeRaces, state.activeSlug) +
-           '<div aria-live="polite">' + (state.raceView ? renderRaceView(state.raceView, state.electionView) : '') + '</div>')
-        : (state.spend ? renderSpend(state.spend) : spendPlaceholder());
+           '<div aria-live="polite">' + (state.raceView ? renderRaceView(state.raceView) : '') + '</div>')
+        : (state.spend ? renderSpend(state.spend) : spendPlaceholder()));
       // The legacy SBE 4-year cycle pills are removed from the election views: they
       // cannot express 2024-vs-2026 (both cycle '2027') and duplicate the election
       // toggle, which is now the SOLE time selector. (Council still uses cycle pills.)
@@ -2657,7 +2413,7 @@
   return {
     styles: styles,
     masthead: masthead, footer: footer,
-    renderOfficeNav: renderOfficeNav, renderRaceView: renderRaceView, renderRaceElections: renderRaceElections,
+    renderOfficeNav: renderOfficeNav, renderRaceView: renderRaceView,
     renderComingSoon: renderComingSoon, spendPlaceholder: spendPlaceholder, renderSpend: renderSpend,
     methodologyView: methodologyView,
     renderFunderModal: renderFunderModal, renderCommitteeProfile: renderCommitteeProfile,
@@ -2794,23 +2550,35 @@
   function start(root, office, index) {
     IDX = index;
     var cycles = ElectData.availableCycles(index);
-    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors', spendElection: 'all',
-      donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, raceFilter: 'all', electionView: null,
+    // SCOPE-UI: the GLOBAL election selector. Options come from the ratified {year} {body}
+    // pattern; default = newest. A read-only ?election= URL param (validated against the
+    // option ids) pre-selects a scope — no history writes, absent/invalid falls back.
+    var selOpts = ElectData.selectorOptions(office);
+    var urlSel = null;
+    try {
+      if (typeof location !== 'undefined' && typeof URLSearchParams !== 'undefined') {
+        var q = new URLSearchParams(location.search).get('election');
+        if (q && selOpts.some(function (o) { return o.id === q; })) urlSel = q;
+      }
+    } catch (e0) {}
+    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors',
+      election: urlSel || (selOpts[0] && selOpts[0].id) || null,
+      donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, raceFilter: 'all',
       expandedCandidateId: null,   // X-2: the ONE grouped row expanded to its inline funder card (accordion-of-one)
       verify: { reconUrl: RECON_URL, gapsUrl: GAPS_URL } };   // methodology fields; numbers fill in async
     var browseSearchTimer = null;
-    state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, office));
+    state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, office, state.election));
     loadVerify(function (v) { state.verify = v; draw(); });   // runtime-plumb the methodology numbers
 
     function draw() {
-      var omVM = ElectData.viewModels.officeRaces(index, state.office);
+      var omVM = ElectData.viewModels.officeRaces(index, state.office, state.election);
       var raceId = index.raceBySlug[state.activeSlug];
       var rv = raceId ? ElectData.viewModels.raceView(index, raceId, state.cycle) : null;
-      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.spendElection, state.donorFilters, state.raceFilter, state.expandedCandidateId) : null;
+      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.election, state.donorFilters, state.raceFilter, state.expandedCandidateId) : null;
       root.innerHTML = ElectRender.renderPage({
         office: state.office, topView: state.topView, cycles: cycles, cycle: state.cycle,
         officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend,
-        electionView: state.electionView, verify: state.verify
+        selector: { options: selOpts, active: state.election }, verify: state.verify
       });
     }
 
@@ -2852,28 +2620,33 @@
         state.donorFilters = { search: '', type: 'All', industry: idr.getAttribute('data-industry-drill'), flag: 'All' };
         draw(); return;
       }
-      // Election filter (This/Last/All) — reslices every spend figure + drill-down by window.
-      var se = cl('[data-spendelection]');
-      if (se) { state.spendElection = se.getAttribute('data-spendelection'); draw(); return; }
+      // GLOBAL election selector (SCOPE-UI): switching scope resets the active race to the
+      // new scope's first race — the 2024/2026 namespaces are disjoint, so preserving a
+      // selection across a switch is impossible by construction (ruled B6 resolution).
+      var es = cl('[data-election]');
+      if (es) {
+        var eid = es.getAttribute('data-election');
+        if (eid !== state.election) {
+          state.election = eid;
+          state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, state.office, state.election));
+          state.expandedCandidateId = null;
+        }
+        draw(); return;
+      }
       // Browse-Donors filters: clear-all (the search input + selects are handled by input/change).
       if (cl('[data-clear-filters]')) { state.donorFilters = { search: '', type: 'All', industry: 'All', flag: 'All' }; draw(); return; }
-      // This/Last/All election toggle — same delegation pattern as the spend subtabs:
-      // update state, redraw (which refreshes both the active-tab state and the view).
-      var ev = cl('[data-electionview]');
-      if (ev) { state.electionView = ev.getAttribute('data-electionview'); draw(); return; }
       // chips AND the vacating-incumbent "→" link both navigate by slug
       var ch = cl('[data-slug]');
-      if (ch) { state.activeSlug = ch.getAttribute('data-slug'); state.electionView = null; state.topView = 'byrace'; draw(); return; }
+      if (ch) { state.activeSlug = ch.getAttribute('data-slug'); state.topView = 'byrace'; draw(); return; }
       var of = cl('.office[data-group]');
       if (of) {
         var label = of.getAttribute('data-group');
-        var omVM = ElectData.viewModels.officeRaces(index, state.office);
+        var omVM = ElectData.viewModels.officeRaces(index, state.office, state.election);
         for (var i = 0; i < omVM.groups.length; i++) {
           if (omVM.groups[i].label === label && omVM.groups[i].races.length) {
             state.activeSlug = groupFirstSlug(omVM.groups[i]); break;
           }
         }
-        state.electionView = null;
         draw(); return;
       }
     });

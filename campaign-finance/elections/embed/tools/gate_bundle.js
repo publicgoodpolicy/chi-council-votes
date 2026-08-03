@@ -49,16 +49,20 @@ var FIXTURES = {
     presidentSlug: 'school-board-president',
     minRaces: 11,                       // President + the sb-d04..d12 district cohort (districts split a/b)
     subtabs: ['donors', 'candidates', 'industries', 'industry-candidate', 'flags'],
-    filter: { allLabel: /All elections/, thisLabel: /This election \(2026\)/, lastLabel: /Last election \(2024\)/,
-              allId: 'all', thisId: '2026', lastId: '2024' },
-    windowEnd: '2026-12-31',
+    // SCOPE-UI: the GLOBAL election selector (ratified {year} {body} labels). The former
+    // per-spend-tab This/Last/All filter and the per-race toggle are retired; 'all' (the
+    // union window) is not resolvable from any UI surface.
+    selector: { ids: ['2026', '2024'], def: '2026',
+                labels: { '2026': /2026 School Board/, '2024': /2024 School Board/ },
+                scopeRaces: { '2026': 21, '2024': 10 } },
     // HALT-F2 oracle: the office's per-election windows, stated INDEPENDENTLY of data.js
     // (mirrors election-windows.json). If data.js's ELECTION_WINDOWS drifts from these,
     // the [F2] window-scoping checks fail — that drift is the defect being caught.
     windows: { '2024': { start: null, end: '2024-12-31' },
                '2026': { start: '2025-01-01', end: '2026-12-31' } },
     incs: {
-      committee: 'ie-committee-26066',  // INCS Action Independent Committee
+      committee: 'ie-committee-26066',  // INCS Action Independent Committee (2024-window spender)
+      scope: '2024',                    // SCOPE-UI: its money is 2024-window; drills run in the 2024 scope
       // exact-figure firewall lines (election label + stance + amount), checked precisely:
       exactLines: [
         { name: 'Jason Dónes', label: '2024: District 3', amount: '$35,153', stance: 'against' },
@@ -71,7 +75,10 @@ var FIXTURES = {
     // by absence (the spender row is correctly missing from the 2026 browse list) —
     // the parity is therefore trivially All == 2024 (see note at assertParity); it is
     // NOT independent 2026 confirmation. Figures are post-rounding display dollars.
-    parity: { support: 663609, oppose: 401217 },
+    // Data-layer parity (SCOPE-UI A2): re-expressed off the UI — per-stream, per-election
+    // windowed figures must sum to the union computed at the data layer (no UI union
+    // surface exists). INCS pins keep the old tripwire: its 2026 leg is 0 by absence.
+    parity: { support: 663608.78, oppose: 401217 },
     // self-funding negative case (relational is_self, 8f148b2): a funder who self-funds
     // their OWN race must NOT be flagged self in another candidate's drill.
     // ownRace anchor made specific (HALT-Q2R): after Q2, the bare 'Leon' substring also
@@ -90,12 +97,13 @@ var FIXTURES = {
     //   default-visible labeled segments + a breakdown line whose parts sum EXACTLY to the total
     //   (largest-remainder). Values byte-unchanged; ieVal repinned to the rendered total $1,629,547 (of
     //   which only $16,212 is direct — the old 'independent'-tagged fused display was the defect).
-    industryDrill: { ieIndustry: 'charter-schools', ieSpender: 'ie-committee-26066', directIndustry: 'labor-teachers',
-      topBar: 'individual', topBarVal: '$2,159,769', ieRank: 2, ieVal: '$1,629,547',
-      ieDirect: '$16,212', ieSupport: '$1,212,118', ieOppose: '$401,217' },
+    industryDrill: { scope: '2024', topBar: 'charter-schools', topBarTotal: 1613335.66,
+      hasDirectSeg: false, ieSupportVal: 1212118.66, ieOpposeVal: 401217,
+      ieIndustry: 'charter-schools', ieRank: 1, ieSpender: 'ie-committee-26066',
+      directIndustry: 'labor-teachers' },
     // Grouped spend-by-candidate (E-7): President first, district order, within-race ranking, race filter.
-    candidateGroups: { firstRaceText: 'President', raceCount: 21,
-      presidentOrder: ['Victor Henderson', 'Jennifer Custer', 'Sendhil Revuluri', 'Jessica Biggs'], singleRace: 'sb-d06' }
+    candidateGroups: { firstRaceText: 'President', raceCount: 21, raceCount2024Scope: 21,
+      presidentOrder: ['Victor Henderson', 'Sendhil Revuluri', 'Jessica Biggs', 'Jennifer Custer'], singleRace: 'sb-d06' }
   }
 };
 
@@ -113,12 +121,12 @@ function makeCtx(window) {
     doc: doc, window: window, wait: wait, click: click, root: root, modal: modal,
     q: function (sel) { return doc.querySelector(sel); },
     nav: function (slug) { click(doc.querySelector('[data-slug="' + slug + '"]')); },
-    tab: function (v) { var b = root().querySelector('[data-electionview="' + v + '"]'); if (b) click(b); return !!b; },
+    selectElection: function (id) { var b = doc.querySelector('[data-election="' + id + '"]'); if (b) click(b); return !!b; },
     cardByName: function (n) { return [].slice.call(root().querySelectorAll('article.card')).filter(function (a) { return a.innerHTML.indexOf(n) >= 0; })[0]; },
     slugs: function () { return [].slice.call(doc.querySelectorAll('[data-slug]')).map(function (e) { return e.getAttribute('data-slug'); }); },
     closeModal: async function () { var c = modal() && modal().querySelector('[data-modal-close]'); if (c) { click(c); await wait(30); } },
     spend: async function () { click(doc.querySelector('[data-view="spend"]')); await wait(70); },
-    setFilter: function (id) { click([].slice.call(root().querySelectorAll('[data-spendelection]')).filter(function (b) { return b.getAttribute('data-spendelection') === id; })[0]); },
+
     openCommittee: async function (id) {
       click(root().querySelector('[data-spendtab="donors"]')); await wait(40);
       var r = root().querySelector('[data-committee="' + id + '"]'); if (!r) return false;
@@ -159,53 +167,69 @@ async function assertRaceSet(T, ctx, fx) {
   T.ok('[races] district cohort present (>= ' + fx.minRaces + ' races: sb-d04..d12 + President)', slugs.length >= fx.minRaces);
 }
 
-// (1) This/Last/All toggle wiring.  [origin: bundle_gate #2-5]
-async function assertToggleWiring(T, ctx, fx) {
+// (SCOPE-UI) Global election selector: presence, ratified labels, default, scope switch,
+// isolation (never interleaved), active-race reset, drill still reachable in 2024 scope.
+// Replaces the retired toggle-wiring + per-election-drill families; expressed over scope
+// COUNTS and slug NAMESPACES, not enumerated race lists.
+async function assertSelector(T, ctx, fx) {
   await ctx.closeModal();
-  ctx.nav(fx.presidentSlug); await ctx.wait(60);
-  T.ok('[toggle] This/Last/All buttons present',
-    !!ctx.root().querySelector('[data-electionview="' + fx.filter.thisId + '"]') &&
-    !!ctx.root().querySelector('[data-electionview="' + fx.filter.lastId + '"]') &&
-    !!ctx.root().querySelector('[data-electionview="all"]'));
-  ctx.tab(fx.filter.lastId); await ctx.wait(50); var hLast = ctx.root().innerHTML;
-  T.ok('[toggle] Last selected via click', ctx.root().querySelector('[data-electionview="' + fx.filter.lastId + '"]').getAttribute('aria-selected') === 'true');
-  ctx.tab(fx.filter.thisId); await ctx.wait(50);
-  T.ok('[toggle] This selected + content changed', ctx.root().querySelector('[data-electionview="' + fx.filter.thisId + '"]').getAttribute('aria-selected') === 'true' && hLast !== ctx.root().innerHTML);
-  ctx.tab('all'); await ctx.wait(50);
-  T.ok('[toggle] All selected', ctx.root().querySelector('[data-electionview="all"]').getAttribute('aria-selected') === 'true');
-}
-
-// (3) per-election drill-down reachable.  [origin: bundle_gate #6-7]
-async function assertPerElectionDrill(T, ctx, fx) {
-  await ctx.closeModal();
-  ctx.nav(fx.presidentSlug); await ctx.wait(60); ctx.tab(fx.filter.lastId); await ctx.wait(50);
+  var sel = fx.selector;
+  var pills = [].slice.call(ctx.doc.querySelectorAll('[data-election]'));
+  T.ok('[selector] two pills present with ratified {year} {body} labels',
+    pills.length === 2 && sel.ids.every(function (id) {
+      return pills.some(function (p) { return p.getAttribute('data-election') === id && sel.labels[id].test(p.textContent); });
+    }));
+  var active = pills.filter(function (p) { return p.getAttribute('aria-selected') === 'true'; })[0];
+  T.ok('[selector] default = ' + sel.def, !!active && active.getAttribute('data-election') === sel.def);
+  var chips = function () { return [].slice.call(ctx.root().querySelectorAll('.districts [data-slug]')).map(function (e) { return e.getAttribute('data-slug'); }); };
+  var c26 = chips();
+  T.ok('[selector] 2026 scope: ' + sel.scopeRaces['2026'] + ' race chips, no 2024- slug',
+    c26.length === sel.scopeRaces['2026'] && c26.every(function (s2) { return !/^2024-/.test(s2); }));
+  ctx.selectElection('2024'); await ctx.wait(70);
+  var c24 = chips();
+  T.ok('[selector] 2024 scope: ' + sel.scopeRaces['2024'] + ' race chips, every slug 2024-prefixed',
+    c24.length === sel.scopeRaces['2024'] && c24.every(function (s2) { return /^2024-/.test(s2); }));
+  T.ok('[selector] scope switch resets the active race into the new scope',
+    (function () { var a = ctx.root().querySelector('.districts [aria-pressed="true"]'); return !!a && /^2024-/.test(a.getAttribute('data-slug')); })());
+  // per-election drill survives on a scoped race card (the retired drill family's coverage)
   var drill = [].slice.call(ctx.root().querySelectorAll('[aria-controls]')).filter(function (b) {
-    var p = ctx.doc.getElementById(b.getAttribute('aria-controls')); return p && /contrib/.test(p.className);
+    var p2 = ctx.doc.getElementById(b.getAttribute('aria-controls')); return p2 && /contrib/.test(p2.className);
   })[0];
-  T.ok('[drill] a per-election drill toggle exists', !!drill);
+  T.ok('[selector] contributor drill toggle exists on a 2024-scope card', !!drill);
   if (drill) {
     var panel = ctx.doc.getElementById(drill.getAttribute('aria-controls'));
     ctx.click(drill); await ctx.wait(40);
-    T.ok('[drill] clicking it opens the drill panel (.open)', panel.classList.contains('open'));
+    T.ok('[selector] clicking it opens the drill panel (.open)', panel.classList.contains('open'));
   }
+  T.ok('[selector] no toggle / per-tab filter affordance anywhere (data-electionview, data-spendelection, "All elections")',
+    ctx.root().innerHTML.indexOf('data-electionview') < 0 && ctx.root().innerHTML.indexOf('data-spendelection') < 0 &&
+    ctx.root().innerHTML.indexOf('All elections') < 0);
+  ctx.selectElection('2026'); await ctx.wait(60);
+  T.ok('[selector] switch back to 2026 restores the 2026 chip set', chips().length === sel.scopeRaces['2026']);
 }
 
 // (4) self-funding renders separately + named-case no-leak.  [origin: bundle_gate #8-11]
 async function assertSelfFundingNoLeak(T, ctx, fx) {
   await ctx.closeModal();
+  ctx.selectElection('2026'); await ctx.wait(60);
   var leakSlug = await ctx.findRaceWith(fx.selfLeak.leakRace);
   T.ok('[self] found ' + fx.selfLeak.leakRace + ' race (' + leakSlug + ')', !!leakSlug);
-  ctx.nav(leakSlug); await ctx.wait(60); ctx.tab('all'); await ctx.wait(50);
+  ctx.nav(leakSlug); await ctx.wait(60);
   var card = ctx.cardByName(fx.selfLeak.leakRace) || { innerHTML: '' };
   T.ok('[self] ' + fx.selfLeak.leakRace + ' self-funding renders separately (own money / loans)',
-    /own money|tagchip self|candidate’s own money/.test(card.innerHTML));
+    /own money|tagchip self|candidate\u2019s own money/.test(card.innerHTML));
   var leak = [].slice.call((ctx.cardByName(fx.selfLeak.leakRace) || ctx.doc.createElement('div')).querySelectorAll('.crow,.selfline'))
     .filter(function (r) { return new RegExp(fx.selfLeak.funder).test(r.textContent) && /own money|tagchip self/.test(r.innerHTML); });
   T.ok('[self] NO LEAK: no ' + fx.selfLeak.funder + ' row in ' + fx.selfLeak.leakRace + ' marked self (relational is_self)', leak.length === 0);
-  var ownSlug = await ctx.findRaceWith(fx.selfLeak.ownRace);
-  ctx.nav(ownSlug); await ctx.wait(60); ctx.tab('all'); await ctx.wait(50);
-  T.ok('[self] ' + fx.selfLeak.ownRace + ' OWN race shows self-funding distinctly',
-    /own money|candidate’s own money/.test((ctx.cardByName(fx.selfLeak.ownRace) || { innerHTML: '' }).innerHTML));
+  // The own-money leg moved with the money (F-2 ruled semantics): Leon's self-funding is
+  // 2024-window, so its render surface is the 2024-scope spend/candidates tab.
+  ctx.selectElection('2024'); await ctx.wait(60);
+  await ctx.spend();
+  ctx.click(ctx.root().querySelector('[data-spendtab="candidates"]')); await ctx.wait(80);
+  var body = ctx.root().querySelector('.spend-body').textContent;
+  T.ok('[self] ' + fx.selfLeak.ownRace + ' 2024-window money renders on the 2024-scope spend tab ($620,403)',
+    body.indexOf(fx.selfLeak.ownRace) >= 0 && body.indexOf('$620,403') >= 0);
+  ctx.selectElection('2026'); await ctx.wait(50);
 }
 
 // Full Spend-tab feature set: the former gate_spend A/B/C/D 24 checks. The INCS
@@ -218,24 +242,27 @@ async function assertSpendTabFeatures(T, ctx, fx) {
   var spendBtn = ctx.q('[data-view="spend"]');
   T.ok('[spend.A] top-nav has a Spend view button', !!spendBtn);
   ctx.click(spendBtn); await ctx.wait(80);
+  ctx.click(ctx.root().querySelector('[data-spendtab="donors"]')); await ctx.wait(50);
   var R = ctx.root().innerHTML;
-  T.ok('[spend.A] election filter nav present (data-spendelection)', R.indexOf('data-spendelection') >= 0);
+  T.ok('[spend.A] NO per-tab election filter (global selector governs; data-spendelection retired)', R.indexOf('data-spendelection') < 0);
   fx.subtabs.forEach(function (t) { T.ok('[spend.A] subtab present: ' + t, R.indexOf('data-spendtab="' + t + '"') >= 0); });
-  T.ok('[spend.A] browse-donors list shows IE PAC spenders', /IE PAC/.test(R));
-  T.ok('[spend.A] browse note (donors+spenders) present', /funded an independent-expenditure committee/.test(R));
-  // B — election filter defaults to All, reslices
-  var fbtns = [].slice.call(ctx.root().querySelectorAll('[data-spendelection]'));
-  var active = fbtns.filter(function (b) { return b.getAttribute('aria-selected') === 'true'; })[0];
-  T.ok('[spend.B] default selected = All elections', active && active.getAttribute('data-spendelection') === fx.filter.allId && fx.filter.allLabel.test(active.textContent));
-  T.ok('[spend.B] filter has This + Last', fbtns.some(function (b) { return fx.filter.thisLabel.test(b.textContent); }) && fbtns.some(function (b) { return fx.filter.lastLabel.test(b.textContent); }));
+  T.ok('[spend.A] browse list renders donor rows under the default (2026) scope', /data-funder/.test(R));
+  // (the 'IE PAC' STRING legitimately remains in the stable facet dropdown; the assert is on ROWS)
+  T.ok('[spend.A] zero IE-committee ROWS under 2026 (all school-board IE is 2024-window)',
+    ctx.root().querySelectorAll('.spend-body [data-committee]').length === 0);
+  // B — the GLOBAL selector governs the spend window and reslices
   ctx.click(ctx.root().querySelector('[data-spendtab="industries"]')); await ctx.wait(60);
-  var indAll = ctx.root().querySelector('.spend-body').textContent;
-  ctx.setFilter(fx.filter.thisId); await ctx.wait(60);
-  var indThis = ctx.root().querySelector('.spend-body').textContent;
-  T.ok('[spend.B] switching to This reslices the industry totals (content changes)', indAll !== indThis);
-  T.ok('[spend.B] This now the selected filter', ctx.root().querySelector('[data-spendelection="' + fx.filter.thisId + '"]').getAttribute('aria-selected') === 'true');
-  // C — firewall drill (exact lines)
-  ctx.setFilter(fx.filter.allId); await ctx.wait(60);
+  var ind26 = ctx.root().querySelector('.spend-body').textContent;
+  ctx.selectElection('2024'); await ctx.wait(70);
+  await ctx.spend(); ctx.click(ctx.root().querySelector('[data-spendtab="industries"]')); await ctx.wait(60);
+  var ind24 = ctx.root().querySelector('.spend-body').textContent;
+  T.ok('[spend.B] switching scope 2026 -> 2024 reslices the industry totals (content changes)', ind26 !== ind24);
+  T.ok('[spend.B] 2024 now the selected scope', (function () { var a = ctx.doc.querySelector('[data-election="2024"]'); return a && a.getAttribute('aria-selected') === 'true'; })());
+  ctx.click(ctx.root().querySelector('[data-spendtab="donors"]')); await ctx.wait(50);
+  var R24 = ctx.root().innerHTML;
+  T.ok('[spend.A/B] browse under 2024 scope shows IE PAC spenders (their money\u2019s window)', /IE PAC/.test(R24));
+  T.ok('[spend.A/B] browse note (donors+spenders) present under 2024', /funded an independent-expenditure committee/.test(R24));
+  // C — firewall drill (exact lines) under the 2024 scope (INCS is a 2024-window spender)
   ctx.click(ctx.root().querySelector('[data-spendtab="donors"]')); await ctx.wait(60);
   var incsRow = ctx.root().querySelector('[data-committee="' + fx.incs.committee + '"]');
   T.ok('[spend.C] INCS Action row present in browse list', !!incsRow);
@@ -257,8 +284,8 @@ async function assertSpendTabFeatures(T, ctx, fx) {
   T.ok('[spend.E3] IE summary boxes — support + oppose SEPARATE cards (+ total + targeted), never fused',
     /elect-statgrid/.test(ieHead) && /Spent to support/.test(ieHead) && /Spent to oppose/.test(ieHead) &&
     /Total independent spend/.test(ieHead) && /Candidates? targeted/.test(ieHead));
-  // D — deep drill: sub-funder -> footprint, window-scoped
-  var winRe = new RegExp('data-win-end="' + fx.windowEnd + '"');
+  // D — deep drill: sub-funder -> footprint, window-scoped to the ACTIVE (2024) scope
+  var winRe = new RegExp('data-win-end="' + fx.windows[fx.incs.scope].end + '"');
   T.ok('[spend.D] committee-profile modal carries the active window (data-win-end)', winRe.test(M));
   var funderRow = ctx.modal().querySelector('[data-funder]');
   T.ok('[spend.D] INCS has clickable funder rows (data-funder, rollup by parent_id)', !!funderRow);
@@ -266,37 +293,55 @@ async function assertSpendTabFeatures(T, ctx, fx) {
   var FM = ctx.modal().innerHTML;
   T.ok('[spend.D] clicking a sub-funder opens the donor footprint (Tier-3)', /Donor footprint/.test(FM));
   T.ok('[spend.D] footprint modal is election-scoped (carries window)', winRe.test(FM));
+  await ctx.closeModal();
+  ctx.selectElection('2026'); await ctx.wait(50);
 }
 
 // (5) IE for/against firewall — every named target renders as a clickable for/against
 // fact.  [origin: bundle_gate #13-17]
 async function assertFirewallFiveNames(T, ctx, fx) {
   await ctx.closeModal();
-  await ctx.spend(); ctx.setFilter(fx.filter.allId); await ctx.wait(50);
+  ctx.selectElection(fx.incs.scope); await ctx.wait(60);
+  await ctx.spend(); await ctx.wait(40);
   var opened = await ctx.openCommittee(fx.incs.committee);
-  if (!opened) { T.ok('[firewall] INCS drill opens under All', false); return; }
+  if (!opened) { T.ok('[firewall] INCS drill opens under the ' + fx.incs.scope + ' scope', false); return; }
   fx.incs.fiveNames.forEach(function (nm) {
     var row = [].slice.call(ctx.modal().querySelectorAll('.crow')).filter(function (r) { return r.textContent.indexOf(nm) >= 0; })[0];
     T.ok('[firewall] INCS drill: ' + nm + ' renders as for/against fact', !!row && /(for|against)/.test(row.textContent));
   });
+  await ctx.closeModal();
+  ctx.selectElection('2026'); await ctx.wait(50);
 }
 
-// (2) All == This + Last per stream.  [origin: bundle_gate #19-20]
+// (SCOPE-UI A2) Parity, re-expressed at the DATA LAYER: per-election windowed figures
+// must sum, per stream, to the union computed at the data layer — no UI union surface
+// exists any more, and none is needed to keep the invariant checked. The INCS pins keep
+// the old tripwire semantics (its 2026 leg is 0 by absence, so union == 2024 leg).
 async function assertParity(T, ctx, fx) {
-  await ctx.closeModal();
-  await ctx.spend();
-  ctx.setFilter(fx.filter.allId); await ctx.wait(50); var oAll = await ctx.openCommittee(fx.incs.committee);
-  var all = oAll ? ctx.ieSummary() : { sup: 0, opp: 0 };
-  ctx.setFilter(fx.filter.thisId); await ctx.wait(50); var oThis = await ctx.openCommittee(fx.incs.committee);
-  var thisE = oThis ? ctx.ieSummary() : { sup: 0, opp: 0 };   // INCS absent in 2026 -> {0,0} (see fixture note)
-  ctx.setFilter(fx.filter.lastId); await ctx.wait(50); var oLast = await ctx.openCommittee(fx.incs.committee);
-  var lastE = oLast ? ctx.ieSummary() : { sup: 0, opp: 0 };
-  console.log('   INCS support  All=' + all.sup + '  This=' + thisE.sup + '  Last=' + lastE.sup);
-  console.log('   INCS oppose   All=' + all.opp + '  This=' + thisE.opp + '  Last=' + lastE.opp);
-  // NOTE: This(2026) leg is 0 by absence (INCS only spent in 2024), so this parity is
-  // trivially All == Last. It is the FIREWALL sum check, not independent 2026 confirmation.
-  T.ok('[parity] All == This + Last per stream (support)', all.sup === thisE.sup + lastE.sup && all.sup === fx.parity.support);
-  T.ok('[parity] All == This + Last per stream (oppose)', all.opp === thisE.opp + lastE.opp && all.opp === fx.parity.oppose);
+  var W = ctx.window, ED = W.ElectData, RAW = W.PREVIEW_DATA;
+  if (!ED || !RAW) { T.ok('[parity] ElectData + PREVIEW_DATA reachable', false); return; }
+  var idx = ED.loadData(RAW, { office: fx.office });
+  var w24 = fx.windows['2024'], w26 = fx.windows['2026'];
+  var wU = { start: null, end: fx.windows['2026'].end };   // union, constructed from the FIXTURE
+  var bce = (RAW.rollups || {}).by_candidate_election || {};
+  function r2(x) { return Math.round(x * 100) / 100; }
+  var checked = 0, bad = [];
+  Object.keys(bce).forEach(function (cid) {
+    checked++;
+    var f24 = ED.candidateFigures(idx, cid, null, w24), f26 = ED.candidateFigures(idx, cid, null, w26), fU = ED.candidateFigures(idx, cid, null, wU);
+    if (r2(f24.contributions.total + f26.contributions.total) !== r2(fU.contributions.total)) bad.push(cid + ':contrib');
+    if (r2(f24.independentSupport + f26.independentSupport) !== r2(fU.independentSupport)) bad.push(cid + ':ieS');
+    if (r2(f24.independentOpposition + f26.independentOpposition) !== r2(fU.independentOpposition)) bad.push(cid + ':ieO');
+  });
+  T.ok('[parity] per-election figures sum to the data-layer union, per stream (' + checked + ' candidates)' +
+       (bad.length ? ' — BAD: ' + bad.slice(0, 4).join(', ') : ''), checked > 0 && bad.length === 0);
+  var pU = ED.committeeProfile(idx, fx.incs.committee, wU);
+  var p26 = ED.committeeProfile(idx, fx.incs.committee, w26);
+  var p24 = ED.committeeProfile(idx, fx.incs.committee, w24);
+  console.log('   INCS support  Union=' + pU.support + '  2026=' + p26.support + '  2024=' + p24.support);
+  console.log('   INCS oppose   Union=' + pU.oppose + '  2026=' + p26.oppose + '  2024=' + p24.oppose);
+  T.ok('[parity] INCS support: union == 2026 + 2024 == pinned', r2(pU.support) === r2(p26.support + p24.support) && r2(pU.support) === fx.parity.support);
+  T.ok('[parity] INCS oppose: union == 2026 + 2024 == pinned', r2(pU.oppose) === r2(p26.oppose + p24.oppose) && r2(pU.oppose) === fx.parity.oppose);
 }
 
 // (E-1) Browse-Donors filters: present, apply, compose (AND), flag-excludes-IE, uncategorized
@@ -304,7 +349,8 @@ async function assertParity(T, ctx, fx) {
 async function assertBrowseFilters(T, ctx, fx) {
   var bf = fx.browseFilters;
   await ctx.closeModal();
-  await ctx.spend(); ctx.setFilter(fx.filter.allId); await ctx.wait(40);
+  ctx.selectElection('2026'); await ctx.wait(50);
+  await ctx.spend(); await ctx.wait(40);
   ctx.click(ctx.root().querySelector('[data-spendtab="donors"]')); await ctx.wait(50);
   var donorRows = function () { return ctx.root().querySelectorAll('.spend-body [data-funder]').length; };
   var ieRows = function () { return ctx.root().querySelectorAll('.spend-body [data-committee]').length; };
@@ -338,11 +384,14 @@ async function assertBrowseFilters(T, ctx, fx) {
     T.ok('[filters] uncategorized renders rows OR an honest empty state (never blank)',
       donorRows() > 0 || /No donors or spenders match/.test(ctx.root().querySelector('.spend-body').textContent));
     ctx.click(ctx.root().querySelector('[data-clear-filters]')); await ctx.wait(50); }
-  setSel('[data-donor-type]', bf.type); await ctx.wait(50); var typeAll = donorRows();
-  ctx.setFilter(fx.filter.lastId); await ctx.wait(50);
-  T.ok('[filters] composes with the time window (type persists + re-slices on Last)',
-    ctx.root().querySelector('[data-donor-type]').value === bf.type && donorRows() > 0 && donorRows() <= typeAll);
-  ctx.setFilter(fx.filter.allId); await ctx.wait(40); ctx.click(ctx.root().querySelector('[data-clear-filters]')); await ctx.wait(40);
+  setSel('[data-donor-type]', bf.type); await ctx.wait(50); var type26 = donorRows();
+  ctx.selectElection('2024'); await ctx.wait(70);
+  await ctx.spend(); await ctx.wait(30); ctx.click(ctx.root().querySelector('[data-spendtab="donors"]')); await ctx.wait(50);
+  T.ok('[filters] composes with the scope window (type persists + re-slices under 2024)',
+    ctx.root().querySelector('[data-donor-type]').value === bf.type && donorRows() > 0 && donorRows() !== type26);
+  ctx.selectElection('2026'); await ctx.wait(60); await ctx.spend(); await ctx.wait(30);
+  ctx.click(ctx.root().querySelector('[data-spendtab="donors"]')); await ctx.wait(40);
+  ctx.click(ctx.root().querySelector('[data-clear-filters]')); await ctx.wait(40);
   // (E-5) industry pill renders canonical color + curated label, not the dasherized slug.
   setSel('[data-donor-industry]', fx.tagColor.industry); await ctx.wait(50);
   var body = ctx.root().querySelector('.spend-body').innerHTML;
@@ -355,40 +404,41 @@ async function assertBrowseFilters(T, ctx, fx) {
 // dispatch-by-kind, streams separate, no empty boxes (the firewall checks).  [NEW surface]
 async function assertIndustryDrill(T, ctx, fx) {
   var d = fx.industryDrill;
+  function fmt(v) { return '$' + Math.round(v).toLocaleString('en-US'); }
   await ctx.closeModal();
-  await ctx.spend(); ctx.setFilter(fx.filter.allId); await ctx.wait(40);
+  // The union ('all') surface retired with the global selector; the IE-industry drill runs
+  // in the scope that holds the money (2024 — charter-schools is entirely 2024-window).
+  ctx.selectElection(d.scope); await ctx.wait(60);
+  await ctx.spend(); await ctx.wait(40);
   ctx.click(ctx.root().querySelector('[data-spendtab="industries"]')); await ctx.wait(70);
-  // Level 1 — the chart
   T.ok('[E6.L1] industry chart renders (sorted clickable bars)',
     !!ctx.root().querySelector('.indchart') && !!ctx.root().querySelector('[data-industry-drill]'));
   var bars = [].slice.call(ctx.root().querySelectorAll('[data-industry-drill]'));
-  T.ok('[E6.L1] ' + d.topBar + ' is #1 at ' + d.topBarVal + ', direct-only, labeled total deployed (not independent)',
-    bars[0].getAttribute('data-industry-drill') === d.topBar && bars[0].textContent.indexOf(d.topBarVal) >= 0 && /total deployed/.test(bars[0].textContent) && !bars[0].querySelector('.indep-tag'));
-  T.ok('[E6.L1] ' + d.ieIndustry + ' is #' + d.ieRank + ' at ' + d.ieVal + ' TOTAL DEPLOYED, not "independent" (FW-1 repin)',
-    bars[d.ieRank - 1].getAttribute('data-industry-drill') === d.ieIndustry && bars[d.ieRank - 1].textContent.indexOf(d.ieVal) >= 0 && /total deployed/.test(bars[d.ieRank - 1].textContent) && !bars[d.ieRank - 1].querySelector('.indep-tag'));
-  T.ok('[E6.L1] ' + d.ieIndustry + ' decomposed: direct+support+oppose segments + visible breakdown ' + d.ieDirect + ' / ' + d.ieSupport + ' / ' + d.ieOppose,
-    !!bars[d.ieRank - 1].querySelector('.seg.third') && !!bars[d.ieRank - 1].querySelector('.seg.support') && !!bars[d.ieRank - 1].querySelector('.seg.oppose') &&
-    bars[d.ieRank - 1].textContent.indexOf(d.ieDirect) >= 0 && bars[d.ieRank - 1].textContent.indexOf(d.ieSupport) >= 0 && bars[d.ieRank - 1].textContent.indexOf(d.ieOppose) >= 0);
+  T.ok('[E6.L1] ' + d.topBar + ' is #' + d.ieRank + ' at ' + fmt(d.topBarTotal) + ' TOTAL DEPLOYED, not "independent" (FW-1 form)',
+    bars[d.ieRank - 1].getAttribute('data-industry-drill') === d.ieIndustry &&
+    bars[d.ieRank - 1].textContent.indexOf(fmt(d.topBarTotal)) >= 0 &&
+    /total deployed/.test(bars[d.ieRank - 1].textContent) && !bars[d.ieRank - 1].querySelector('.indep-tag'));
+  T.ok('[E6.L1] ' + d.ieIndustry + ' decomposed: support+oppose segments (no direct this scope) + visible breakdown ' + fmt(d.ieSupportVal) + ' / ' + fmt(d.ieOpposeVal),
+    !!bars[d.ieRank - 1].querySelector('.seg.support') && !!bars[d.ieRank - 1].querySelector('.seg.oppose') &&
+    (d.hasDirectSeg ? !!bars[d.ieRank - 1].querySelector('.seg.third') : true) &&
+    bars[d.ieRank - 1].textContent.indexOf(fmt(d.ieSupportVal)) >= 0 && bars[d.ieRank - 1].textContent.indexOf(fmt(d.ieOpposeVal)) >= 0);
   T.ok('[E6.L1] all bars: parts sum EXACTLY to total, zero "independent" labels, no per-candidate phrasing (rule a+b, firewall)',
     ctx.root().querySelector('.spend-body').innerHTML.indexOf('Spent to support') < 0 && bars.length > 0 && bars.every(function (b) {
       if (b.querySelector('.indep-tag')) return false;
       var mt = b.querySelector('.indbar-val').textContent.match(/\$[\d,]+/);
       var tot = mt ? parseInt(mt[0].replace(/[^0-9]/g, ''), 10) : -1;
-      var parts = [].slice.call(b.querySelectorAll('.indbar-breakdown .bd')).map(function (s) { var m = s.textContent.match(/\$[\d,]+/); return m ? parseInt(m[0].replace(/[^0-9]/g, ''), 10) : 0; });
+      var parts = [].slice.call(b.querySelectorAll('.indbar-breakdown .bd')).map(function (s2) { var m = s2.textContent.match(/\$[\d,]+/); return m ? parseInt(m[0].replace(/[^0-9]/g, ''), 10) : 0; });
       return parts.length > 0 && parts.reduce(function (a, c) { return a + c; }, 0) === tot;
     }));
-  // Level 1 -> 2: click the IE industry bar -> filtered spender list
   ctx.click(bars.filter(function (b) { return b.getAttribute('data-industry-drill') === d.ieIndustry; })[0]); await ctx.wait(80);
   T.ok('[E6.L2] industry bar click -> Browse Donors filtered to that industry',
     ctx.root().querySelector('[data-donor-industry]') && ctx.root().querySelector('[data-donor-industry]').value === d.ieIndustry);
   var incsRow = ctx.root().querySelector('.spend-body [data-committee="' + d.ieSpender + '"]');
   T.ok('[E6.L2] IE industry spenders include the IE committee (INCS)', !!incsRow);
-  // Level 2 -> 3: IE spender -> support/oppose SEPARATE
   ctx.click(incsRow); await ctx.wait(70);
   var M = ctx.modal() ? ctx.modal().innerHTML : '';
   T.ok('[E6.L3] IE spender -> support + oppose SEPARATE boxes (firewall)', /Spent to support/.test(M) && /Spent to oppose/.test(M));
   await ctx.closeModal();
-  // Direct industry -> donor spender -> footprint with NO empty support/oppose boxes
   ctx.click(ctx.root().querySelector('[data-spendtab="industries"]')); await ctx.wait(70);
   ctx.click([].slice.call(ctx.root().querySelectorAll('[data-industry-drill]')).filter(function (b) { return b.getAttribute('data-industry-drill') === d.directIndustry; })[0]); await ctx.wait(80);
   var donorRow = ctx.root().querySelector('.spend-body [data-funder]');
@@ -400,6 +450,7 @@ async function assertIndustryDrill(T, ctx, fx) {
   await ctx.closeModal();
   ctx.click(ctx.root().querySelector('[data-spendtab="donors"]')); await ctx.wait(40);
   ctx.click(ctx.root().querySelector('[data-clear-filters]')); await ctx.wait(40);
+  ctx.selectElection('2026'); await ctx.wait(50);
 }
 
 // (E-7) Grouped spend-by-candidate: sections ordered President -> d01..d20, within-race ranking
@@ -408,7 +459,8 @@ async function assertIndustryDrill(T, ctx, fx) {
 async function assertCandidateGroups(T, ctx, fx) {
   var cg = fx.candidateGroups;
   await ctx.closeModal();
-  await ctx.spend(); ctx.setFilter(fx.filter.allId); await ctx.wait(40);
+  ctx.selectElection('2026'); await ctx.wait(50);
+  await ctx.spend(); await ctx.wait(40);
   ctx.click(ctx.root().querySelector('[data-spendtab="candidates"]')); await ctx.wait(80);
   var groups = [].slice.call(ctx.root().querySelectorAll('.racegroup'));
   var heads = [].slice.call(ctx.root().querySelectorAll('.racehead')).map(function (h) { return h.textContent; });
@@ -428,11 +480,18 @@ async function assertCandidateGroups(T, ctx, fx) {
   T.ok('[E7] race filter present (data-race-filter)', !!sel);
   sel.value = cg.singleRace; sel.dispatchEvent(new ctx.window.Event('change', { bubbles: true })); await ctx.wait(70);
   T.ok('[E7] race filter -> single race section (graceful)', ctx.root().querySelectorAll('.racegroup').length === 1);
-  ctx.setFilter(fx.filter.lastId); await ctx.wait(70);
-  T.ok('[E7] race filter composes with time window (still one section, value retained)',
+  // Compose with the SCOPE: the race filter persists across a selector switch.
+  ctx.selectElection('2024'); await ctx.wait(70);
+  await ctx.spend(); await ctx.wait(30); ctx.click(ctx.root().querySelector('[data-spendtab="candidates"]')); await ctx.wait(70);
+  T.ok('[E7] race filter composes with the scope switch (single section retained under 2024)',
     ctx.root().querySelector('[data-race-filter]').value === cg.singleRace && ctx.root().querySelectorAll('.racegroup').length === 1);
-  var rs = ctx.root().querySelector('[data-race-filter]'); rs.value = 'all'; rs.dispatchEvent(new ctx.window.Event('change', { bubbles: true })); await ctx.wait(40);
-  ctx.setFilter(fx.filter.allId); await ctx.wait(40);
+  // F-2 ruled semantics pinned: the 2024 SCOPE's money view still groups by the
+  // aggregate-eligible (2026) races, windowed to 2024 — money is window-scoped,
+  // navigation is entity-scoped, and the divergence resolves upstream (F1 / P1-E).
+  var rs = ctx.root().querySelector('[data-race-filter]'); rs.value = 'all'; rs.dispatchEvent(new ctx.window.Event('change', { bubbles: true })); await ctx.wait(60);
+  T.ok('[E7] 2024-scope money view: ' + cg.raceCount2024Scope + ' sections (window-scoped money over in-guard races)',
+    ctx.root().querySelectorAll('.racegroup').length === cg.raceCount2024Scope);
+  ctx.selectElection('2026'); await ctx.wait(60);
 }
 
 // (F2) HALT-F2 / PS-79: EVERY race's per-candidate figures are window-scoped — expressed
@@ -496,8 +555,7 @@ async function assertWindowScoping(T, ctx, fx) {
 
   await assertBoot(T, ctx, fx);
   await assertRaceSet(T, ctx, fx);
-  await assertToggleWiring(T, ctx, fx);
-  await assertPerElectionDrill(T, ctx, fx);
+  await assertSelector(T, ctx, fx);
   await assertSelfFundingNoLeak(T, ctx, fx);
   await assertSpendTabFeatures(T, ctx, fx);
   await assertFirewallFiveNames(T, ctx, fx);

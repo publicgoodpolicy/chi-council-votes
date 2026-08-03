@@ -24,11 +24,13 @@ var index = D.loadData(json, { office: 'school_board' });   // the embed is per-
 var indexAll = D.loadData(json);                            // unscoped, for scope comparison
 
 var OFFICE = 'school_board';
+var W24 = { start: null, end: '2024-12-31' };
 var omVM = D.viewModels.officeRaces(index, OFFICE);
 var rv = D.viewModels.raceView(index, index.raceBySlug['district-2a'], null);
 // District 2A is a TOGGLE race (HALT-P1-C): render the COMBINED ('all') election tab, whose
 // per-candidate combined cards carry the all-years totals the base view used to show.
-var page = R.renderPage({ office: OFFICE, topView: 'byrace', officeRaces: omVM, activeSlug: 'district-2a', raceView: rv, electionView: 'all' });
+var page = R.renderPage({ office: OFFICE, topView: 'byrace', officeRaces: omVM, activeSlug: 'district-2a', raceView: rv,
+  selector: { options: D.selectorOptions(OFFICE), active: '2026' } });
 
 var full = '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
   '<meta name="viewport" content="width=device-width,initial-scale=1"><title>School Board — preview</title>' +
@@ -44,13 +46,18 @@ console.log('=== B2 render assertions (school_board, District 2A active) ===');
 ok('renders DeBerry card', /Ebony DeBerry/.test(page));
 ok('renders Leon card', /Bruce Leon/.test(page));
 ok('neutral order: DeBerry before Leon', page.indexOf('Ebony DeBerry') < page.indexOf('Bruce Leon'));
-ok('Leon contributions $620,403', page.indexOf('$620,403') >= 0);
-ok('Leon self-funded $620,025 (selfline)', page.indexOf('$620,025') >= 0);
-ok('Leon third-party $378', page.indexOf('$378') >= 0);
-ok('Leon independent support $24,766', page.indexOf('$24,766') >= 0);
-ok('DeBerry contributions $534,950', page.indexOf('$534,950') >= 0);
-ok('DeBerry independent opposition $126,078', page.indexOf('$126,078') >= 0);
-ok('self-funding hatch segment (seg self)', /class="seg self"/.test(page));
+// SCOPE-UI / F-2: the combined all-years figures no longer render on race pages —
+// district-2a is scoped to the 2026 window. Leon's money is entirely 2024-window, so
+// his honest 2026 card shows $0 (the largest F-2 instance); DeBerry shows her
+// 2026-window rows. The same dollars are pinned at the DATA layer, per window.
+ok('scoped page: Leon renders WITHOUT the 2024-window $620,403 (F-2 pinned)', /Bruce Leon/.test(page) && page.indexOf('$620,403') < 0);
+ok('scoped page: DeBerry 2026-window contributions render ($2,781)', page.indexOf('$2,781') >= 0);
+ok('Leon 2024-window figures intact at the data layer ($620,403 / self $620,025 / third $378 / ieS $24,766)',
+  (function () { var f = D.candidateFigures(index, 'leon-sb-d03', null, W24);
+    return Math.round(f.contributions.total) === 620403 && Math.round(f.contributions.selfFunded) === 620025 &&
+           Math.round(f.contributions.thirdParty) === 378 && Math.round(f.independentSupport) === 24766; })());
+ok('DeBerry 2024-window opposition intact at the data layer ($126,078)',
+  Math.round(D.candidateFigures(index, 'deberry-sb-d03', null, W24).independentOpposition) === 126078);
 ok('three figure bars present', /From contributors/.test(page) && /Independent support/.test(page) && /Independent opposition/.test(page));
 // "Mostly self-funded" is a base-view chip (absent from the toggle DOM); assert the
 // underlying fact at the data layer instead — Leon's self-funding dwarfs his third-party gifts.
@@ -62,8 +69,8 @@ ok('three figure bars present', /From contributors/.test(page) && /Independent s
 })();
 ok('DeBerry "Incumbent" chip', /chip-inc/.test(page));
 ok('exact disclaimer copy (footer)', /separately and never added together/.test(page));
-ok('toggle race: renders the This/Last/All control', /data-electionview/.test(page));
-ok('combined slug scheme: eleccomb-bruce-leon-district-2a', /id="eleccomb-bruce-leon-district-2a"/.test(page));
+ok('SCOPE-UI: global selector renders (no per-race toggle control)', /data-election="2026"/.test(page) && page.indexOf('data-electionview') < 0);
+ok('scoped base card id: cand-bruce-leon-district-2a (combined blocks retired)', /id="cand-bruce-leon-district-2a"/.test(page));
 ok('District 2A chip is active', /data-slug="district-2a" aria-pressed="true"/.test(page));
 ok('coming-soon races marked (· soon)', /· soon/.test(page));
 ok('President + districts in ONE selector (no office sub-tabs)',
@@ -74,7 +81,7 @@ console.log('\n=== B2-BASEVIEW assertions (a non-toggle race still renders the f
 // sb-d01 (District 1A: Bannon, Luczak) has no person-linked returner, so it stays a base-view
 // race — preserving the flat-card coverage District 2A gave before it became a toggle race.
 var rv1 = D.viewModels.raceView(index, index.raceBySlug['district-1a'], null);
-ok('sb-d01 is a base-view race (no election toggle)', rv1.elections === null);
+ok('sb-d01 (like every race post-toggle) has no elections VM key', rv1.elections === undefined);
 var page1 = R.renderPage({ office: OFFICE, topView: 'byrace', officeRaces: omVM, activeSlug: 'district-1a', raceView: rv1 });
 ok('base view renders candidate cards (Bannon)', /Ed Bannon/.test(page1));
 ok('base-view slug scheme: cand-ed-bannon-district-1a', /id="cand-ed-bannon-district-1a"/.test(page1));
@@ -98,7 +105,7 @@ ok('sb-d12 does NOT show a Biggs candidate card', d12.indexOf('cand-jessica-bigg
 ok('sb-d12 vacating note: Biggs -> Board President',
   /Current member <b>Jessica Biggs<\/b> is running for/.test(d12) && /data-slug="school-board-president"/.test(d12));
 ok('sb-president (now toggle) lists Custer AND Biggs as candidates',
-  /Jennifer Custer/.test(pres) && /Jessica Biggs/.test(pres) && /data-electionview/.test(pres));
+  /Jennifer Custer/.test(pres) && /Jessica Biggs/.test(pres) && pres.indexOf('data-electionview') < 0);
 
 // View toggle: active chip + view move on topView change
 var spendPage = R.renderPage({ office: OFFICE, topView: 'spend', officeRaces: omVM, activeSlug: 'district-2a', raceView: rv });
@@ -109,7 +116,7 @@ ok('toggle: By-race tab active when topView=byrace',
   /data-view="byrace" aria-selected="true"/.test(page) && /data-view="spend" aria-selected="false"/.test(page));
 
 // Cycle label
-ok('race-view meta uses the "all years" unfiltered label', /· all years/.test(page) && page.indexOf('current cycle') < 0);
+ok('race-view meta names the election (\u00b7 2026 election), never "current cycle"', /\u00b7 2026 election/.test(page) && page.indexOf('current cycle') < 0);
 
 console.log('\n=== B3 assertions (drill-downs + Sunshine) ===');
 function sumLines(cd) { return Math.round(cd.lines.reduce(function (s, l) { return s + l.total; }, 0)); }
@@ -130,21 +137,20 @@ ok('DeBerry committee Sunshine URL builds', /^https:\/\/illinoissunshine\.org\/c
 ok('IE spender Sunshine URL builds (encoded sbe id)', !!debOpp.spenders[0].sunshineUrl && /illinoissunshine\.org\/committees\//.test(debOpp.spenders[0].sunshineUrl));
 
 ok('page renders contributor panels', /class="contrib"/.test(page) && /Who gave to this campaign/.test(page));
-ok('bars are clickable disclosures (caret + aria-controls)', /class="barrow click"/.test(page) && /aria-controls="eleccomb-/.test(page));
+ok('bars are clickable disclosures (caret + aria-controls)', /class="barrow click"/.test(page) && /aria-controls="d-/.test(page));
 ok('candidate committee Sunshine link present in card', /Illinois Sunshine ↗/.test(page));
 
 console.log('\n=== B3-REVISE assertions (three tiers + footprint + tags) ===');
 var sp0 = debOpp.spenders[0];
 // Tier 1: committee, amount, stance, Sunshine — NOT the funders yet
-ok('Tier 1 lists the IE committee with amount+stance (not funders)',
-  /Outside spending opposing <b>Ebony DeBerry<\/b>/.test(page) ||
-  /class="ie-cmte-toggle"[^>]*>[^<]*<span class="caret"[^>]*>▸<\/span> <b>\$126,078 against<\/b> opposing Ebony DeBerry/.test(page));
-ok('Tier 1 committee row has aria-controls to a Tier-2 panel', /class="ie-cmte-toggle" type="button" aria-expanded="false" aria-controls="eleccomb-/.test(page));
-ok('Tier 1 committee row carries a Sunshine link', /class="ie-cmte-head">[\s\S]{0,400}?class="paclink"/.test(page));
-// Tier 2: funders, with the explicit "gave this committee over time, not this race" framing
-ok('Tier 2 shows the plain-language identity line ("Funded primarily by ...")', /class="ie-lead">Funded primarily by /.test(page));
-ok('Tier 2 has the explicit framing (gave this committee over time, not this race)',
-  /Amounts below are what each donor gave <b>this committee<\/b> over time — not money spent on this race\./.test(page));
+// F-2 FULL EXTENT, PINNED: no race page renders an IE panel at this vintage — every
+// school-board IE row is 2024-window and targets a 2026 candidacy id (P1-B matching),
+// so in-window IE is zero on every reachable race card in BOTH scopes. The Tier-1/2/3
+// IE-panel DOM returns to race pages when P1-E re-routes 2024 targets; until then the
+// IE surfaces are the 2024-scope spend tab + committee profiles (gate_bundle-covered).
+ok('F-2 PINNED: no IE-panel DOM (ie-cmte-toggle) on either scoped page', page.indexOf('ie-cmte-toggle') < 0 && page1.indexOf('ie-cmte-toggle') < 0);
+ok('Tier-2 invariants intact at the data layer (spender + second-hop funders + receipt-vs-spend)',
+  sp0.topFunders.length >= 1 && sp0.funderTotal > 0);
 ok('Tier 2 funder rows are clickable (data-funder) -> Tier 3', /class="crow funder-row" type="button" data-funder="/.test(page));
 // Funder amounts are PAC RECEIPTS, not race spend: top funder gave the PAC far
 // more than the PAC spent opposing DeBerry ($126,078).
@@ -254,7 +260,7 @@ ok('footprint IE row shows resolved name + "Funded primarily by" subtitle',
   /INCS Action Independent Committee/.test(frankHtml) && /class="sub">Funded primarily by/.test(frankHtml));
 ok('footprint IE row no longer shows the bare placeholder text', frankHtml.indexOf('>IE committee 26066') < 0);
 // IE drill-down on the page shows the resolved name (DeBerry opposition spender = 26066).
-ok('IE drill-down (page) shows the resolved committee name', /INCS Action Independent Committee/.test(page));
+ok('IE committee name resolves (INCS Action Independent Committee)', D.committeeProfile(index, 'ie-committee-26066').name === 'INCS Action Independent Committee');
 // Genuinely-unnamed committee (39901) keeps the framed-identity fallback, never a bare id.
 var prof39901Html = R.renderCommitteeProfile(D.committeeProfile(index, 'ie-committee-39901'));
 ok('genuinely-unnamed IE (39901) falls back to framed identity, never a bare id',
@@ -304,7 +310,7 @@ ok('scoped footprint keeps in-scope IE (26066) + the direct candidate gift',
 console.log('\n=== B3-REVISE-6 assertions (resolved names + funder-tail expansion) ===');
 // All 3 formerly-unnamed committees now resolved from Illinois Sunshine (at source).
 ok('39901 -> "Urban Center Action" (Leon support spender, now named)', D.committeeProfile(index, 'ie-committee-39901').name === 'Urban Center Action');
-ok('page shows the resolved name "Urban Center Action"', /Urban Center Action/.test(page));
+ok('resolved names reach the render layer via committee profiles (Urban Center Action)', /Urban Center Action/.test(R.renderCommitteeProfile(D.committeeProfile(index, 'ie-committee-39901', W24))));
 ok('539 -> "Illinois Farm Bureau ACTIVATOR"', (json.committees['ie-committee-539'] || {}).committee_name === 'Illinois Farm Bureau ACTIVATOR');
 ok('36936 -> "Areyto Political Action Committee"', (json.committees['ie-committee-36936'] || {}).committee_name === 'Areyto Political Action Committee');
 ok('NO IE committee remains a bare placeholder', Object.keys(json.committees).every(function (k) {
@@ -324,8 +330,11 @@ var candsVM = D.spendSubtab(index, 'school_board', 'candidates');
 var indsVM = D.spendSubtab(index, 'school_board', 'industries');
 var ixcVM = D.spendSubtab(index, 'school_board', 'industry-candidate');
 var flagsVM = D.spendSubtab(index, 'school_board', 'flags');
-ok('browse-donors resolves with BOTH donor rows and IE-PAC spender rows',
-  donorsVM.rows.length > 0 && donorsVM.rows.some(function (r) { return r.kind === 'donor'; }) && donorsVM.rows.some(function (r) { return r.kind === 'ie'; }));
+ok('browse-donors resolves with donor rows (2026 scope; IE rows live in the 2024 window)',
+  donorsVM.rows.length > 0 && donorsVM.rows.some(function (r) { return r.kind === 'donor'; }));
+ok('browse-donors under the 2024 window resolves BOTH donor rows and IE-PAC spender rows',
+  (function () { var v = D.spendSubtab(index, 'school_board', 'donors', null, '2024');
+    return v.rows.some(function (r) { return r.kind === 'donor'; }) && v.rows.some(function (r) { return r.kind === 'ie'; }); })());
 ok('spend-by-candidate resolves (grouped API: race groups + candidates within)',
   candsVM.groups.length > 0 && candsVM.groups.reduce(function (s, g) { return s + g.candidates.length; }, 0) > 0);
 ok('industry-totals resolves and includes uncategorized (never folded)',
@@ -349,7 +358,8 @@ ok('flag-totals resolves (array; may be empty for this office)', Array.isArray(f
     target_committee_id: null, target_candidate_id: FX_ID, target_race_id: FX_RACE, target_ward: null,
     match_method: 'exact', needs_review: false, stance: 'support', amount: FX_IE, date: '2024-09-26',
     cycle: '2027', source_filing: '9B', filed_doc_id: 'fixture', purpose: 'SYNTHETIC fixture' });
-  var fvm = D.spendSubtab(D.loadData(fx, { office: 'school_board' }), 'school_board', 'candidates');
+  // SCOPE-UI: the injected IE is dated 2024-09-26, so its money's window is '2024' (F-2 semantics).
+  var fvm = D.spendSubtab(D.loadData(fx, { office: 'school_board' }), 'school_board', 'candidates', null, '2024');
   var fc = null; fvm.groups.forEach(function (g) { g.candidates.forEach(function (c) { if (c.id === FX_ID) fc = c; }); });
   ok('spend-by-candidate surfaces IE money for a committee-LESS candidate (fixture-injected)',
     !!fc && fc.hasCommittee === false && Math.round(fc.figures.independentSupport) === FX_IE);
@@ -373,7 +383,10 @@ var allDesc = candsVM.groups.every(function (g) {
 });
 ok('candidates ranked by descending direct contributions within each race group', allDesc);
 var ieExcludedPair = null;
-candsVM.groups.forEach(function (g) {
+// SCOPE-UI: rank-vs-IE divergence needs IE in-window — use the 2024 selection (F-2: the
+// school-board IE is all 2024-window).
+var cands24VM = D.spendSubtab(index, 'school_board', 'candidates', null, '2024');
+cands24VM.groups.forEach(function (g) {
   for (var i = 0; i < g.candidates.length - 1; i++) {
     if (!ieExcludedPair && g.candidates[i + 1].figures.independentSupport > g.candidates[i].figures.independentSupport) {
       ieExcludedPair = { race: g.race.label, higher: g.candidates[i].name, lower: g.candidates[i + 1].name };
@@ -390,7 +403,8 @@ ok('spend-by-candidate is office-scoped (all groups are school_board races)',
 // browse-donors rows open the RIGHT modal
 var donorsHtml = R.renderSpend(donorsVM);
 ok('browse-donors: donor rows open the footprint modal (data-funder)', /class="crow funder-row" type="button" data-funder=/.test(donorsHtml));
-ok('browse-donors: IE-PAC rows open the committee-profile modal (data-committee)', /class="crow funder-row" type="button" data-committee=/.test(donorsHtml));
+ok('browse-donors: IE-PAC rows open the committee-profile modal (data-committee — 2024 window, where the IE rows live)',
+  /class="crow funder-row" type="button" data-committee=/.test(R.renderSpend(D.spendSubtab(index, 'school_board', 'donors', null, '2024'))));
 // industries-by-candidate: uncategorized shown, never blank
 var ixcHtml = R.renderSpend(ixcVM);
 ok('industries-by-candidate surfaces uncategorized (never blank/folded)',
@@ -413,7 +427,9 @@ ok('cycle data functions still accept a cycle arg (data layer intact)', cyclesAv
 ok('cycle filter degrades cleanly (single cycle: 2027 == current)',
   Math.round(D.candidateFigures(index, 'deberry-sb-d03', '2027').contributions.total) === Math.round(D.candidateFigures(index, 'deberry-sb-d03', null).contributions.total));
 (function () {
-  function dir(cyc) { return D.spendSubtab(index, 'school_board', 'industries', cyc).industries.reduce(function (s, x) { return s + x.direct; }, 0); }
+  // SCOPE-UI: thread under the 2024 selection — its window spans the 2023 + 2027 SBE cycles,
+  // so the cycle argument is differentiable (the 2026 window holds cycle-2027 rows only).
+  function dir(cyc) { return D.spendSubtab(index, 'school_board', 'industries', cyc, '2024').industries.reduce(function (s, x) { return s + x.direct; }, 0); }
   ok('spend subtabs genuinely thread cycle (industries direct @2027 < all-time, both > 0)',
     dir('2027') > 0 && dir('2027') < dir(null) && dir('bogus-cycle') === 0);
 })();

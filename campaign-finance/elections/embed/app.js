@@ -122,23 +122,35 @@
   function start(root, office, index) {
     IDX = index;
     var cycles = ElectData.availableCycles(index);
-    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors', spendElection: 'all',
-      donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, raceFilter: 'all', electionView: null,
+    // SCOPE-UI: the GLOBAL election selector. Options come from the ratified {year} {body}
+    // pattern; default = newest. A read-only ?election= URL param (validated against the
+    // option ids) pre-selects a scope — no history writes, absent/invalid falls back.
+    var selOpts = ElectData.selectorOptions(office);
+    var urlSel = null;
+    try {
+      if (typeof location !== 'undefined' && typeof URLSearchParams !== 'undefined') {
+        var q = new URLSearchParams(location.search).get('election');
+        if (q && selOpts.some(function (o) { return o.id === q; })) urlSel = q;
+      }
+    } catch (e0) {}
+    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors',
+      election: urlSel || (selOpts[0] && selOpts[0].id) || null,
+      donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, raceFilter: 'all',
       expandedCandidateId: null,   // X-2: the ONE grouped row expanded to its inline funder card (accordion-of-one)
       verify: { reconUrl: RECON_URL, gapsUrl: GAPS_URL } };   // methodology fields; numbers fill in async
     var browseSearchTimer = null;
-    state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, office));
+    state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, office, state.election));
     loadVerify(function (v) { state.verify = v; draw(); });   // runtime-plumb the methodology numbers
 
     function draw() {
-      var omVM = ElectData.viewModels.officeRaces(index, state.office);
+      var omVM = ElectData.viewModels.officeRaces(index, state.office, state.election);
       var raceId = index.raceBySlug[state.activeSlug];
       var rv = raceId ? ElectData.viewModels.raceView(index, raceId, state.cycle) : null;
-      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.spendElection, state.donorFilters, state.raceFilter, state.expandedCandidateId) : null;
+      var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.election, state.donorFilters, state.raceFilter, state.expandedCandidateId) : null;
       root.innerHTML = ElectRender.renderPage({
         office: state.office, topView: state.topView, cycles: cycles, cycle: state.cycle,
         officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend,
-        electionView: state.electionView, verify: state.verify
+        selector: { options: selOpts, active: state.election }, verify: state.verify
       });
     }
 
@@ -180,28 +192,33 @@
         state.donorFilters = { search: '', type: 'All', industry: idr.getAttribute('data-industry-drill'), flag: 'All' };
         draw(); return;
       }
-      // Election filter (This/Last/All) — reslices every spend figure + drill-down by window.
-      var se = cl('[data-spendelection]');
-      if (se) { state.spendElection = se.getAttribute('data-spendelection'); draw(); return; }
+      // GLOBAL election selector (SCOPE-UI): switching scope resets the active race to the
+      // new scope's first race — the 2024/2026 namespaces are disjoint, so preserving a
+      // selection across a switch is impossible by construction (ruled B6 resolution).
+      var es = cl('[data-election]');
+      if (es) {
+        var eid = es.getAttribute('data-election');
+        if (eid !== state.election) {
+          state.election = eid;
+          state.activeSlug = firstSlug(ElectData.viewModels.officeRaces(index, state.office, state.election));
+          state.expandedCandidateId = null;
+        }
+        draw(); return;
+      }
       // Browse-Donors filters: clear-all (the search input + selects are handled by input/change).
       if (cl('[data-clear-filters]')) { state.donorFilters = { search: '', type: 'All', industry: 'All', flag: 'All' }; draw(); return; }
-      // This/Last/All election toggle — same delegation pattern as the spend subtabs:
-      // update state, redraw (which refreshes both the active-tab state and the view).
-      var ev = cl('[data-electionview]');
-      if (ev) { state.electionView = ev.getAttribute('data-electionview'); draw(); return; }
       // chips AND the vacating-incumbent "→" link both navigate by slug
       var ch = cl('[data-slug]');
-      if (ch) { state.activeSlug = ch.getAttribute('data-slug'); state.electionView = null; state.topView = 'byrace'; draw(); return; }
+      if (ch) { state.activeSlug = ch.getAttribute('data-slug'); state.topView = 'byrace'; draw(); return; }
       var of = cl('.office[data-group]');
       if (of) {
         var label = of.getAttribute('data-group');
-        var omVM = ElectData.viewModels.officeRaces(index, state.office);
+        var omVM = ElectData.viewModels.officeRaces(index, state.office, state.election);
         for (var i = 0; i < omVM.groups.length; i++) {
           if (omVM.groups[i].label === label && omVM.groups[i].races.length) {
             state.activeSlug = groupFirstSlug(omVM.groups[i]); break;
           }
         }
-        state.electionView = null;
         draw(); return;
       }
     });
