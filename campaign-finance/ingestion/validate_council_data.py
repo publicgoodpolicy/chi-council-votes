@@ -23,7 +23,7 @@ WARNINGS (printed; abort only with --strict):
   - cluster.total doesn't equal sum(member_totals) within $1
   - an independent-expenditure committee has a blank committee_name
 """
-import json, sys, argparse
+import json, sys, argparse, re
 from collections import defaultdict
 
 
@@ -79,6 +79,7 @@ def validate(d):
         errors.append(f"co-tag violation: 'unclassified' alongside substantive tags: {cotag}")
 
     errors.extend(validate_person_links(d))
+    errors.extend(validate_election_ids(d))
     return errors, warnings
 
 
@@ -158,6 +159,94 @@ def validate_person_links(d):
     if only_link:
         errs.append(f"INV-PERSON-4: person-link prior members not flagged on_current_record: "
                     f"{sorted(only_link)}")
+    return errs
+
+
+# --- HALT-F5-SEED (PS-81): election-identity mismatch checks — ONE implementation ----
+# Imported by build_election_seed.py (mint-time, fatal, nothing written on failure) AND
+# run below as the durable INV-ELECT chain gate. One function, one source of truth
+# (PS-81/F-b: two copies that agree today are the P4-shaped drift defect). Coverage,
+# stated per PS-81: catches cross-namespace and 2024-cohort misfilings; does NOT catch
+# same-election wrong-district errors (a separate class, banked with the ruling).
+
+def _election_of_race_id_namespace(rid):
+    """Race-id namespace convention -> election_id, or None (no claim)."""
+    if not rid:
+        return None
+    if rid.startswith('sb-2024-'):
+        return '2024-school-board'
+    if rid.startswith('sb-'):
+        return '2026-school-board'
+    if rid.startswith('ward-') or rid in ('mayor', 'city-clerk', 'city-treasurer'):
+        return '2027-municipal'
+    return None
+
+
+def _election_of_candidate_id_convention(cid):
+    """Candidate-id naming convention -> election_id, or None. CONSERVATIVE: asserts only
+    where a pattern definitively fires — a false positive here breaks a build over a
+    naming convention (PS-81/F-d), so unknown shapes make no claim."""
+    if not cid:
+        return None
+    if 'sb-2024-' in cid:
+        return '2024-school-board'
+    if re.match(r'inc-ward-\d+$', cid):
+        return '2027-municipal'
+    if re.match(r'inc-sb-d\d+$', cid):
+        return '2026-school-board'
+    if re.search(r'(^|-)sb-(d\d+|president)$', cid):
+        return '2026-school-board'
+    if re.search(r'-ward-\d+$', cid):
+        return '2027-municipal'
+    return None
+
+
+def election_mismatches(candidates, races_by_id):
+    """PS-81 shared checks. Returns (errors, stats); stats carries INV-ELECT-4's
+    claim/no-claim split so the check's real reach is a stated number, not an
+    assumption (PS-81/F-d)."""
+    errs = []
+    stats = {'checked': 0, 'inv4_claimed': 0, 'inv4_no_claim': 0}
+    for c in candidates:
+        cid, rid = c.get('id'), c.get('race_id')
+        stats['checked'] += 1
+        race = races_by_id.get(rid)
+        if race is None:
+            errs.append(f"INV-ELECT-1: candidate '{cid}' race_id {rid!r} resolves to no race")
+            continue
+        resolved = race.get('election_id')
+        stamped = c.get('election_id')
+        if stamped is not None and stamped != resolved:
+            errs.append(f"INV-ELECT-1: candidate '{cid}' stamped election_id {stamped!r} "
+                        f"!= race {rid!r}'s {resolved!r}")
+        ns = _election_of_race_id_namespace(rid)
+        if ns is not None and ns != resolved:
+            errs.append(f"INV-ELECT-2: candidate '{cid}' race_id {rid!r} namespace says "
+                        f"{ns!r} but the race resolves to {resolved!r}")
+        if (c.get('result') is not None or c.get('finance_facet') is not None) \
+                and resolved != '2024-school-board':
+            errs.append(f"INV-ELECT-3: candidate '{cid}' carries 2024-signature keys "
+                        f"(result/finance_facet) but resolves to {resolved!r}")
+        conv = _election_of_candidate_id_convention(cid)
+        if conv is None:
+            stats['inv4_no_claim'] += 1
+        else:
+            stats['inv4_claimed'] += 1
+            if conv != resolved:
+                errs.append(f"INV-ELECT-4: candidate id '{cid}' convention says {conv!r} "
+                            f"but race {rid!r} resolves to {resolved!r}")
+    return errs, stats
+
+
+def validate_election_ids(d):
+    """Durable INV-ELECT gate — election-only (council data has no candidates/races)."""
+    cands = d.get('candidates') or []
+    races = d.get('races') or []
+    if not cands or not races:
+        return []
+    errs, stats = election_mismatches(cands, {r['id']: r for r in races})
+    print(f"[validate] INV-ELECT coverage: {stats['checked']} candidates checked; "
+          f"INV-ELECT-4 claims {stats['inv4_claimed']}, no-claim {stats['inv4_no_claim']}")
     return errs
 
 

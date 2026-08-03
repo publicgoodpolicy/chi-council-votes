@@ -214,7 +214,19 @@ def load_race_map(path):
         return json.load(f)
 
 
-def build_candidates(race_map, race_ids):
+def _load_validator(repo_root):
+    """Load ingestion/validate_council_data.py by path (the repo's importlib pattern,
+    cf. test_ingest_ie_district.py) so the PS-81 mismatch checks have ONE
+    implementation shared between this mint-time call and the chain gate."""
+    import importlib.util
+    p = os.path.join(repo_root, "campaign-finance", "ingestion", "validate_council_data.py")
+    spec = importlib.util.spec_from_file_location("validate_council_data", p)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def build_candidates(race_map, race_ids, rid_to_elec):
     """Turn the race map into candidate records from two sources:
       * mappings        -- committee_id -> candidate (committee known; the join
                            into the reused finance layer).
@@ -240,6 +252,9 @@ def build_candidates(race_map, race_ids):
         rec = {
             "id": c.get("candidate_id"),
             "race_id": rid,
+            # HALT-F5-SEED (PS-81): election identity stamped from the resolved race at
+            # record construction; verified against the independent redundancies below.
+            "election_id": rid_to_elec.get(rid),
             "name": c.get("name"),
             "committee_id": committee_id,
             "status": c.get("status", "declared"),
@@ -266,6 +281,7 @@ def build_candidates(race_map, race_ids):
         rec = {
             "id": c.get("candidate_id", candidate_id),
             "race_id": rid,
+            "election_id": rid_to_elec.get(rid),   # PS-81 stamp (see mappings block)
             "name": c.get("name"),
             "committee_id": c.get("committee_id"),
             "status": c.get("status", "incumbent-pending"),
@@ -290,6 +306,7 @@ def build_candidates(race_map, race_ids):
         rec = {
             "id": c.get("candidate_id", candidate_id),
             "race_id": rid,
+            "election_id": rid_to_elec.get(rid),   # PS-81 stamp (see mappings block)
             "name": c.get("name"),
             "committee_id": c.get("committee_id"),
             "status": c.get("status", "filed"),
@@ -327,8 +344,28 @@ def main():
     elections = ELECTIONS
     races, src = generate_races(R)
     race_ids = {r["id"] for r in races}
+    rid_to_elec = {r["id"]: r["election_id"] for r in races}
     race_map = load_race_map(race_map_path)
-    candidates, bad = build_candidates(race_map, race_ids)
+    candidates, bad = build_candidates(race_map, race_ids, rid_to_elec)
+
+    # HALT-F5-SEED: unknown race_id is FATAL — warn-and-emit is retired. A dangling
+    # race pointer downstream is the `!race` guard-pass-through class and a PS-79/B1
+    # throw the moment it acquires finance; nothing is written on failure.
+    if bad:
+        print("FATAL: candidates pointing at unknown race_id (nothing written):", file=sys.stderr)
+        for cid, rid in bad:
+            print("    %s -> race_id '%s'" % (cid, rid), file=sys.stderr)
+        sys.exit(1)
+
+    # PS-81 mint-time check — the SAME implementation the chain gate runs (imported by
+    # path; one source of truth per PS-81/F-b). Fatal: nothing is written on mismatch.
+    vmod = _load_validator(R)
+    inv_errs, inv_stats = vmod.election_mismatches(candidates, {r["id"]: r for r in races})
+    if inv_errs:
+        print("FATAL: election-identity mismatches (nothing written):", file=sys.stderr)
+        for e in inv_errs:
+            print("    " + e, file=sys.stderr)
+        sys.exit(1)
 
     existing = {}
     if os.path.exists(out_path):
@@ -371,10 +408,8 @@ def main():
                                                        src["ward"] or "synthetic"))
     print("  candidates       : %d  (%d with committee, %d incumbent stubs pending committee)"
           % (len(candidates), with_committee, stub_n))
-    if bad:
-        print("  WARNING: candidates pointing at unknown race_id:")
-        for cid, rid in bad:
-            print("    committee %s -> race_id '%s'" % (cid, rid))
+    print("  INV-ELECT (mint) : %d checked; INV-ELECT-4 claims %d, no-claim %d  (0 mismatches)"
+          % (inv_stats["checked"], inv_stats["inv4_claimed"], inv_stats["inv4_no_claim"]))
     if not existing.get("contributions"):
         print("  NOTE: no finance in election-data.json yet -- run ingest.py / ingest_ie.py next.")
     print("  classification is SHARED: ingest via the same ingest.py and run the same")

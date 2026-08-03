@@ -865,6 +865,7 @@
     {
       "id": "cand-williams-sb-d09",
       "race_id": "sb-d09",
+      "election_id": "2026-school-board",
       "name": "LaPamela Williams",
       "committee_id": "41108",
       "status": "filed",
@@ -878,6 +879,7 @@
     {
       "id": "cand-lenhof-sb-d04",
       "race_id": "sb-d04",
+      "election_id": "2026-school-board",
       "name": "Kyna Lenhof",
       "committee_id": "41203",
       "status": "filed",
@@ -891,6 +893,7 @@
     {
       "id": "cand-diaz-chavez-sb-d14",
       "race_id": "sb-d14",
+      "election_id": "2026-school-board",
       "name": "Erika D\u00edaz-Ch\u00e1vez",
       "committee_id": "41220",
       "status": "filed",
@@ -904,6 +907,7 @@
     {
       "id": "cand-dunneback-sb-d18",
       "race_id": "sb-d18",
+      "election_id": "2026-school-board",
       "name": "Katherine Dunneback",
       "committee_id": "41231",
       "status": "filed",
@@ -917,6 +921,7 @@
     {
       "id": "cand-luczak-sb-d01",
       "race_id": "sb-d01",
+      "election_id": "2026-school-board",
       "name": "Margie B. Luczak",
       "committee_id": "41233",
       "status": "filed",
@@ -930,6 +935,7 @@
     {
       "id": "cand-white-sb-d11",
       "race_id": "sb-d11",
+      "election_id": "2026-school-board",
       "name": "Isaiah White",
       "committee_id": "40744",
       "status": "filed",
@@ -943,6 +949,7 @@
     {
       "id": "cand-hargrove-sb-d10",
       "race_id": "sb-d10",
+      "election_id": "2026-school-board",
       "name": "Anthony Hargrove",
       "committee_id": "39831",
       "status": "filed",
@@ -956,6 +963,7 @@
     {
       "id": "ayala-sb-d13",
       "race_id": "sb-d13",
+      "election_id": "2026-school-board",
       "name": "Jesus Ayala Jr",
       "committee_id": "39789",
       "status": "filed",
@@ -967,6 +975,7 @@
     {
       "id": "lopez-sb-d14",
       "race_id": "sb-d14",
+      "election_id": "2026-school-board",
       "name": "Yesenia Lopez",
       "committee_id": "39844",
       "status": "filed",
@@ -980,6 +989,7 @@
     {
       "id": "gutierrez-sb-d15",
       "race_id": "sb-d15",
+      "election_id": "2026-school-board",
       "name": "Angel Gutierrez",
       "committee_id": "39873",
       "status": "filed",
@@ -991,6 +1001,7 @@
     {
       "id": "gonzalez-sb-d16",
       "race_id": "sb-d16",
+      "election_id": "2026-school-board",
       "name": "Juan Ignacio Gonzalez",
       "committee_id": "41111",
       "status": "filed",
@@ -1002,6 +1013,7 @@
     {
       "id": "boyle-sb-d18",
       "race_id": "sb-d18",
+      "election_id": "2026-school-board",
       "name": "Therese Boyle",
       "committee_id": "39843",
       "status": "filed",
@@ -1013,6 +1025,7 @@
     {
       "id": "smith-sb-d19",
       "race_id": "sb-d19",
+      "election_id": "2026-school-board",
       "name": "Che \"Rhymefest\" Smith",
       "committee_id": "39788",
       "status": "filed",
@@ -1024,6 +1037,7 @@
     {
       "id": "biggs-sb-president",
       "race_id": "sb-president",
+      "election_id": "2026-school-board",
       "name": "Jessica Biggs",
       "committee_id": "39881",
       "status": "filed",
@@ -1035,6 +1049,7 @@
     {
       "id": "custer-sb-president",
       "race_id": "sb-president",
+      "election_id": "2026-school-board",
       "name": "Jennifer Custer",
       "committee_id": "39805",
       "status": "filed",
@@ -1046,6 +1061,7 @@
     {
       "id": "revuluri-sb-president",
       "race_id": "sb-president",
+      "election_id": "2026-school-board",
       "name": "Sendhil Revuluri",
       "committee_id": "40912",
       "status": "filed",
@@ -1057,6 +1073,7 @@
     {
       "id": "henderson-sb-president",
       "race_id": "sb-president",
+      "election_id": "2026-school-board",
       "name": "Victor Henderson",
       "committee_id": "41112",
       "status": "filed",
@@ -1070,6 +1087,7 @@
     {
       "id": "bannon-sb-d01",
       "race_id": "sb-d01",
+      "election_id": "2026-school-board",
       "name": "Ed Bannon",
       "committee_id": "38810",
       "status": "filed",
@@ -1083,6 +1101,7 @@
     {
       "id": "peralta-sb-d02",
       "race_id": "sb-d02",
+      "election_id": "2026-school-board",
       "name": "Claudia Peralta",
       "committee_id": "41087",
       "status": "filed",
@@ -1096,6 +1115,7 @@
     {
       "id": "pierre-sb-d02",
       "race_id": "sb-d02",
+      "election_id": "2026-school-board",
       "name": "Michelle Pierre",
       "committee_id": "39783",
       "status": "filed",
@@ -1107,6 +1127,7 @@
     {
       "id": "deberry-sb-d03",
       "race_id": "sb-d03",
+      "election_id": "2026-school-board",
       "name": "Ebony DeBerry",
       "committee_id": "39821",
       "status": "filed",
@@ -1118,6 +1139,7 @@
     {
       "id": "leon-sb-d03",
       "race_id": "sb-d03",
+      "election_id": "2026-school-board",
       "name": "Bruce Leon",
       "committee_id": "39903",
       "status": "filed",
@@ -1129,6 +1151,7 @@
     {
       "id": "basco-sb-d04",
       "race_id": "sb-d04",
+      "election_id": "2026-school-board",
       "name": "Daniel Basco",
       "committee_id": "41211",
       "status": "filed",
@@ -1140,6 +1163,7 @@
     {
       "id": "pope-sb-d04",
       "race_id": "sb-d04",
+      "election_id": "2026-school-board",
       "name": "Deborah \"Debby\" Pope",
       "committee_id": "39834",
       "status": "filed",
@@ -1151,6 +1175,7 @@
     {
       "id": "gonzales-sb-d05",
       "race_id": "sb-d05",
+      "election_id": "2026-school-board",
       "name": "Peter Gonzales",
       "committee_id": "41125",
       "status": "filed",
@@ -1162,6 +1187,7 @@
     {
       "id": "rios-sierra-sb-d05",
       "race_id": "sb-d05",
+      "election_id": "2026-school-board",
       "name": "Norma Rios Sierra",
       "committee_id": "41082",
       "status": "filed",
@@ -1175,6 +1201,7 @@
     {
       "id": "dones-sb-d06",
       "race_id": "sb-d06",
+      "election_id": "2026-school-board",
       "name": "Jason D\u00f3nes",
       "committee_id": "39820",
       "status": "filed",
@@ -1188,6 +1215,7 @@
     {
       "id": "rivas-sb-d06",
       "race_id": "sb-d06",
+      "election_id": "2026-school-board",
       "name": "Carlos A. Rivas Jr.",
       "committee_id": "39786",
       "status": "filed",
@@ -1199,6 +1227,7 @@
     {
       "id": "sherratt-sb-d07",
       "race_id": "sb-d07",
+      "election_id": "2026-school-board",
       "name": "Ellen Sherratt",
       "committee_id": "41076",
       "status": "filed",
@@ -1210,6 +1239,7 @@
     {
       "id": "zaccor-sb-d07",
       "race_id": "sb-d07",
+      "election_id": "2026-school-board",
       "name": "Karen Zaccor",
       "committee_id": "39866",
       "status": "filed",
@@ -1223,6 +1253,7 @@
     {
       "id": "rosenfeld-sb-d08",
       "race_id": "sb-d08",
+      "election_id": "2026-school-board",
       "name": "Ellen Rosenfeld",
       "committee_id": "39858",
       "status": "filed",
@@ -1234,6 +1265,7 @@
     {
       "id": "brown-sb-d09",
       "race_id": "sb-d09",
+      "election_id": "2026-school-board",
       "name": "Aaron \"Jitu\" Brown",
       "committee_id": "39853",
       "status": "filed",
@@ -1245,6 +1277,7 @@
     {
       "id": "blaise-sb-d10",
       "race_id": "sb-d10",
+      "election_id": "2026-school-board",
       "name": "Michilla \"Kyla\" Blaise",
       "committee_id": "37001",
       "status": "filed",
@@ -1258,6 +1291,7 @@
     {
       "id": "thotakura-sb-d11",
       "race_id": "sb-d11",
+      "election_id": "2026-school-board",
       "name": "Anusha Thotakura",
       "committee_id": "39855",
       "status": "filed",
@@ -1271,6 +1305,7 @@
     {
       "id": "anderson-sb-d11",
       "race_id": "sb-d11",
+      "election_id": "2026-school-board",
       "name": "Brenda Lee Anderson",
       "committee_id": "41131",
       "status": "filed",
@@ -1284,6 +1319,7 @@
     {
       "id": "kimble-sb-d12",
       "race_id": "sb-d12",
+      "election_id": "2026-school-board",
       "name": "Brittany B. Kimble",
       "committee_id": "41134",
       "status": "filed",
@@ -1295,6 +1331,7 @@
     {
       "id": "inc-ward-01",
       "race_id": "ward-01",
+      "election_id": "2027-municipal",
       "name": "Daniel La Spata",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1317,6 +1354,7 @@
     {
       "id": "inc-ward-02",
       "race_id": "ward-02",
+      "election_id": "2027-municipal",
       "name": "Brian Hopkins",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1339,6 +1377,7 @@
     {
       "id": "inc-ward-03",
       "race_id": "ward-03",
+      "election_id": "2027-municipal",
       "name": "Pat Dowell",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1361,6 +1400,7 @@
     {
       "id": "inc-ward-04",
       "race_id": "ward-04",
+      "election_id": "2027-municipal",
       "name": "Lamont J. Robinson",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1381,6 +1421,7 @@
     {
       "id": "inc-ward-05",
       "race_id": "ward-05",
+      "election_id": "2027-municipal",
       "name": "Desmon C. Yancy",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1401,6 +1442,7 @@
     {
       "id": "inc-ward-06",
       "race_id": "ward-06",
+      "election_id": "2027-municipal",
       "name": "William E. Hall",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1421,6 +1463,7 @@
     {
       "id": "inc-ward-07",
       "race_id": "ward-07",
+      "election_id": "2027-municipal",
       "name": "Gregory I. Mitchell",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1443,6 +1486,7 @@
     {
       "id": "inc-ward-08",
       "race_id": "ward-08",
+      "election_id": "2027-municipal",
       "name": "Michelle A. Harris",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1465,6 +1509,7 @@
     {
       "id": "inc-ward-09",
       "race_id": "ward-09",
+      "election_id": "2027-municipal",
       "name": "Anthony Beale",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1487,6 +1532,7 @@
     {
       "id": "inc-ward-10",
       "race_id": "ward-10",
+      "election_id": "2027-municipal",
       "name": "Peter Chico",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1507,6 +1553,7 @@
     {
       "id": "inc-ward-11",
       "race_id": "ward-11",
+      "election_id": "2027-municipal",
       "name": "Nicole T. Lee",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1527,6 +1574,7 @@
     {
       "id": "inc-ward-12",
       "race_id": "ward-12",
+      "election_id": "2027-municipal",
       "name": "Julia M. Ramirez",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1547,6 +1595,7 @@
     {
       "id": "inc-ward-13",
       "race_id": "ward-13",
+      "election_id": "2027-municipal",
       "name": "Marty Quinn",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1567,6 +1616,7 @@
     {
       "id": "inc-ward-14",
       "race_id": "ward-14",
+      "election_id": "2027-municipal",
       "name": "Jeylu B. Gutierrez",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1587,6 +1637,7 @@
     {
       "id": "inc-ward-15",
       "race_id": "ward-15",
+      "election_id": "2027-municipal",
       "name": "Raymond A. Lopez",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1609,6 +1660,7 @@
     {
       "id": "inc-ward-16",
       "race_id": "ward-16",
+      "election_id": "2027-municipal",
       "name": "Stephanie D. Coleman",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1631,6 +1683,7 @@
     {
       "id": "inc-ward-17",
       "race_id": "ward-17",
+      "election_id": "2027-municipal",
       "name": "David H. Moore",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1651,6 +1704,7 @@
     {
       "id": "inc-ward-18",
       "race_id": "ward-18",
+      "election_id": "2027-municipal",
       "name": "Derrick G. Curtis",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1671,6 +1725,7 @@
     {
       "id": "inc-ward-19",
       "race_id": "ward-19",
+      "election_id": "2027-municipal",
       "name": "Matthew J. O'Shea",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1693,6 +1748,7 @@
     {
       "id": "inc-ward-20",
       "race_id": "ward-20",
+      "election_id": "2027-municipal",
       "name": "Jeanette B. Taylor",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1713,6 +1769,7 @@
     {
       "id": "inc-ward-21",
       "race_id": "ward-21",
+      "election_id": "2027-municipal",
       "name": "Ronnie L. Mosley",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1733,6 +1790,7 @@
     {
       "id": "inc-ward-22",
       "race_id": "ward-22",
+      "election_id": "2027-municipal",
       "name": "Michael D. Rodriguez",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1753,6 +1811,7 @@
     {
       "id": "inc-ward-23",
       "race_id": "ward-23",
+      "election_id": "2027-municipal",
       "name": "Silvana Tabares",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1773,6 +1832,7 @@
     {
       "id": "inc-ward-24",
       "race_id": "ward-24",
+      "election_id": "2027-municipal",
       "name": "Monique L. Scott",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1793,6 +1853,7 @@
     {
       "id": "inc-ward-25",
       "race_id": "ward-25",
+      "election_id": "2027-municipal",
       "name": "Byron Sigcho-Lopez",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1815,6 +1876,7 @@
     {
       "id": "inc-ward-26",
       "race_id": "ward-26",
+      "election_id": "2027-municipal",
       "name": "Jessica L. Fuentes",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1835,6 +1897,7 @@
     {
       "id": "inc-ward-27",
       "race_id": "ward-27",
+      "election_id": "2027-municipal",
       "name": "Walter R. Burnett",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1857,6 +1920,7 @@
     {
       "id": "inc-ward-28",
       "race_id": "ward-28",
+      "election_id": "2027-municipal",
       "name": "Jason C. Ervin",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1879,6 +1943,7 @@
     {
       "id": "inc-ward-29",
       "race_id": "ward-29",
+      "election_id": "2027-municipal",
       "name": "Chris Taliaferro",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1901,6 +1966,7 @@
     {
       "id": "inc-ward-30",
       "race_id": "ward-30",
+      "election_id": "2027-municipal",
       "name": "Ruth Cruz",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1921,6 +1987,7 @@
     {
       "id": "inc-ward-31",
       "race_id": "ward-31",
+      "election_id": "2027-municipal",
       "name": "Felix Cardona, Jr.",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1941,6 +2008,7 @@
     {
       "id": "inc-ward-32",
       "race_id": "ward-32",
+      "election_id": "2027-municipal",
       "name": "Scott Waguespack",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1963,6 +2031,7 @@
     {
       "id": "inc-ward-33",
       "race_id": "ward-33",
+      "election_id": "2027-municipal",
       "name": "Rossana Rodriguez Sanchez",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -1983,6 +2052,7 @@
     {
       "id": "inc-ward-34",
       "race_id": "ward-34",
+      "election_id": "2027-municipal",
       "name": "William Conway",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2003,6 +2073,7 @@
     {
       "id": "inc-ward-35",
       "race_id": "ward-35",
+      "election_id": "2027-municipal",
       "name": "Anthony J. Quezada",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2023,6 +2094,7 @@
     {
       "id": "inc-ward-36",
       "race_id": "ward-36",
+      "election_id": "2027-municipal",
       "name": "Gilbert Villegas",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2045,6 +2117,7 @@
     {
       "id": "inc-ward-37",
       "race_id": "ward-37",
+      "election_id": "2027-municipal",
       "name": "Emma Mitts",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2065,6 +2138,7 @@
     {
       "id": "inc-ward-38",
       "race_id": "ward-38",
+      "election_id": "2027-municipal",
       "name": "Nicholas Sposato",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2087,6 +2161,7 @@
     {
       "id": "inc-ward-39",
       "race_id": "ward-39",
+      "election_id": "2027-municipal",
       "name": "Samantha Nugent",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2107,6 +2182,7 @@
     {
       "id": "inc-ward-40",
       "race_id": "ward-40",
+      "election_id": "2027-municipal",
       "name": "Andre Vasquez, Jr.",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2129,6 +2205,7 @@
     {
       "id": "inc-ward-41",
       "race_id": "ward-41",
+      "election_id": "2027-municipal",
       "name": "Anthony V. Napolitano",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2151,6 +2228,7 @@
     {
       "id": "inc-ward-42",
       "race_id": "ward-42",
+      "election_id": "2027-municipal",
       "name": "Brendan Reilly",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2171,6 +2249,7 @@
     {
       "id": "inc-ward-43",
       "race_id": "ward-43",
+      "election_id": "2027-municipal",
       "name": "Timothy R. Knudsen",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2193,6 +2272,7 @@
     {
       "id": "inc-ward-44",
       "race_id": "ward-44",
+      "election_id": "2027-municipal",
       "name": "Bennett R. Lawson",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2213,6 +2293,7 @@
     {
       "id": "inc-ward-45",
       "race_id": "ward-45",
+      "election_id": "2027-municipal",
       "name": "James M. Gardiner",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2235,6 +2316,7 @@
     {
       "id": "inc-ward-46",
       "race_id": "ward-46",
+      "election_id": "2027-municipal",
       "name": "Angela Clay",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2255,6 +2337,7 @@
     {
       "id": "inc-ward-47",
       "race_id": "ward-47",
+      "election_id": "2027-municipal",
       "name": "Matthew J. Martin",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2277,6 +2360,7 @@
     {
       "id": "inc-ward-48",
       "race_id": "ward-48",
+      "election_id": "2027-municipal",
       "name": "Leni Manaa-Hoppenworth",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2299,6 +2383,7 @@
     {
       "id": "inc-ward-49",
       "race_id": "ward-49",
+      "election_id": "2027-municipal",
       "name": "Maria E. Hadden",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2321,6 +2406,7 @@
     {
       "id": "inc-ward-50",
       "race_id": "ward-50",
+      "election_id": "2027-municipal",
       "name": "Debra L. Silverstein",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2343,6 +2429,7 @@
     {
       "id": "inc-sb-d02",
       "race_id": "sb-d02",
+      "election_id": "2026-school-board",
       "name": "Jennifer Custer",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2365,6 +2452,7 @@
     {
       "id": "inc-sb-d12",
       "race_id": "sb-d12",
+      "election_id": "2026-school-board",
       "name": "Jessica Biggs",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2387,6 +2475,7 @@
     {
       "id": "inc-sb-d13",
       "race_id": "sb-d13",
+      "election_id": "2026-school-board",
       "name": "Emma Lozano",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2409,6 +2498,7 @@
     {
       "id": "inc-sb-d16",
       "race_id": "sb-d16",
+      "election_id": "2026-school-board",
       "name": "Cydney Wallace",
       "committee_id": null,
       "status": "incumbent-pending",
@@ -2433,6 +2523,7 @@
     {
       "id": "inc-sb-d17",
       "race_id": "sb-d17",
+      "election_id": "2026-school-board",
       "name": "\u00c1ngel Luis V\u00e9lez Rodr\u00edguez",
       "committee_id": null,
       "status": "filed",
@@ -2449,6 +2540,7 @@
     {
       "id": "cand-preston-sb-d17",
       "race_id": "sb-d17",
+      "election_id": "2026-school-board",
       "name": "Brittany Bailey Preston",
       "committee_id": null,
       "status": "filed",
@@ -2462,6 +2554,7 @@
     {
       "id": "cand-alston-sb-d19",
       "race_id": "sb-d19",
+      "election_id": "2026-school-board",
       "name": "Krista Nichols Alston",
       "committee_id": null,
       "status": "filed",
@@ -2477,6 +2570,7 @@
     {
       "id": "cand-walton-sb-d19",
       "race_id": "sb-d19",
+      "election_id": "2026-school-board",
       "name": "Tameka Walton",
       "committee_id": null,
       "status": "filed",
@@ -2492,6 +2586,7 @@
     {
       "id": "cand-anderson-sb-d20",
       "race_id": "sb-d20",
+      "election_id": "2026-school-board",
       "name": "Connie Anderson",
       "committee_id": null,
       "status": "filed",
@@ -2507,6 +2602,7 @@
     {
       "id": "cand-chatonda-sb-d20",
       "race_id": "sb-d20",
+      "election_id": "2026-school-board",
       "name": "Rosita Chatonda",
       "committee_id": null,
       "status": "filed",
@@ -2522,6 +2618,7 @@
     {
       "id": "cand-watson-sb-d20",
       "race_id": "sb-d20",
+      "election_id": "2026-school-board",
       "name": "Patrick Watson",
       "committee_id": null,
       "status": "filed",
@@ -2535,6 +2632,7 @@
     {
       "id": "cand-alvarez-sb-d07",
       "race_id": "sb-d07",
+      "election_id": "2026-school-board",
       "name": "Angel Alvarez",
       "committee_id": null,
       "status": "filed",
@@ -2548,6 +2646,7 @@
     {
       "id": "cand-neal-sb-d12",
       "race_id": "sb-d12",
+      "election_id": "2026-school-board",
       "name": "Michael L. Neal",
       "committee_id": null,
       "status": "filed",
@@ -2563,6 +2662,7 @@
     {
       "id": "custer-sb-2024-d1",
       "race_id": "sb-2024-d1",
+      "election_id": "2024-school-board",
       "name": "Jennifer Custer",
       "committee_id": null,
       "status": "filed",
@@ -2578,6 +2678,7 @@
     {
       "id": "hernandez-sb-2024-d1",
       "race_id": "sb-2024-d1",
+      "election_id": "2024-school-board",
       "name": "Charles (Chuck) Hernandez",
       "committee_id": "39871",
       "status": "filed",
@@ -2593,6 +2694,7 @@
     {
       "id": "pierre-sb-2024-d1",
       "race_id": "sb-2024-d1",
+      "election_id": "2024-school-board",
       "name": "Michelle N. Pierre",
       "committee_id": null,
       "status": "filed",
@@ -2608,6 +2710,7 @@
     {
       "id": "cullerton-hooper-sb-2024-d2",
       "race_id": "sb-2024-d2",
+      "election_id": "2024-school-board",
       "name": "Margaret Cullerton Hooper",
       "committee_id": "39824",
       "status": "filed",
@@ -2623,6 +2726,7 @@
     {
       "id": "deberry-sb-2024-d2",
       "race_id": "sb-2024-d2",
+      "election_id": "2024-school-board",
       "name": "Ebony L. DeBerry",
       "committee_id": null,
       "status": "filed",
@@ -2638,6 +2742,7 @@
     {
       "id": "doyle-sb-2024-d2",
       "race_id": "sb-2024-d2",
+      "election_id": "2024-school-board",
       "name": "Kate Doyle",
       "committee_id": "39802",
       "status": "filed",
@@ -2653,6 +2758,7 @@
     {
       "id": "kleinman-sb-2024-d2",
       "race_id": "sb-2024-d2",
+      "election_id": "2024-school-board",
       "name": "Daniel Kleinman",
       "committee_id": null,
       "status": "filed",
@@ -2669,6 +2775,7 @@
     {
       "id": "leon-sb-2024-d2",
       "race_id": "sb-2024-d2",
+      "election_id": "2024-school-board",
       "name": "Bruce Leon",
       "committee_id": null,
       "status": "filed",
@@ -2684,6 +2791,7 @@
     {
       "id": "dones-sb-2024-d3",
       "race_id": "sb-2024-d3",
+      "election_id": "2024-school-board",
       "name": "Jason C. Dones",
       "committee_id": null,
       "status": "filed",
@@ -2699,6 +2807,7 @@
     {
       "id": "ortiz-sb-2024-d3",
       "race_id": "sb-2024-d3",
+      "election_id": "2024-school-board",
       "name": "Kirk J. Ortiz",
       "committee_id": null,
       "status": "filed",
@@ -2714,6 +2823,7 @@
     {
       "id": "rivas-sb-2024-d3",
       "race_id": "sb-2024-d3",
+      "election_id": "2024-school-board",
       "name": "Carlos A. Rivas Jr.",
       "committee_id": null,
       "status": "filed",
@@ -2729,6 +2839,7 @@
     {
       "id": "brown-sb-2024-d4",
       "race_id": "sb-2024-d4",
+      "election_id": "2024-school-board",
       "name": "Kimberly Brown",
       "committee_id": "39809",
       "status": "filed",
@@ -2744,6 +2855,7 @@
     {
       "id": "davis-sb-2024-d4",
       "race_id": "sb-2024-d4",
+      "election_id": "2024-school-board",
       "name": "Andrew A. Davis",
       "committee_id": null,
       "status": "filed",
@@ -2759,6 +2871,7 @@
     {
       "id": "day-sb-2024-d4",
       "race_id": "sb-2024-d4",
+      "election_id": "2024-school-board",
       "name": "Thomas Day",
       "committee_id": "39810",
       "status": "filed",
@@ -2774,6 +2887,7 @@
     {
       "id": "gioiosa-sb-2024-d4",
       "race_id": "sb-2024-d4",
+      "election_id": "2024-school-board",
       "name": "Carmen Gioiosa",
       "committee_id": "39975",
       "status": "filed",
@@ -2789,6 +2903,7 @@
     {
       "id": "rosenfeld-sb-2024-d4",
       "race_id": "sb-2024-d4",
+      "election_id": "2024-school-board",
       "name": "Ellen Rosenfeld",
       "committee_id": null,
       "status": "filed",
@@ -2804,6 +2919,7 @@
     {
       "id": "zaccor-sb-2024-d4",
       "race_id": "sb-2024-d4",
+      "election_id": "2024-school-board",
       "name": "Karen Zaccor",
       "committee_id": null,
       "status": "filed",
@@ -2819,6 +2935,7 @@
     {
       "id": "blaise-sb-2024-d5",
       "race_id": "sb-2024-d5",
+      "election_id": "2024-school-board",
       "name": "Michilla 'Kyla' Blaise",
       "committee_id": null,
       "status": "filed",
@@ -2835,6 +2952,7 @@
     {
       "id": "brown-sb-2024-d5",
       "race_id": "sb-2024-d5",
+      "election_id": "2024-school-board",
       "name": "Aaron 'Jitu' Brown",
       "committee_id": null,
       "status": "filed",
@@ -2850,6 +2968,7 @@
     {
       "id": "hargrove-sb-2024-d5",
       "race_id": "sb-2024-d5",
+      "election_id": "2024-school-board",
       "name": "Anthony Hargrove",
       "committee_id": "39831",
       "status": "filed",
@@ -2866,6 +2985,7 @@
     {
       "id": "jones-sb-2024-d5",
       "race_id": "sb-2024-d5",
+      "election_id": "2024-school-board",
       "name": "Kernetha Jones",
       "committee_id": null,
       "status": "filed",
@@ -2882,6 +3002,7 @@
     {
       "id": "shkoukani-sb-2024-d5",
       "race_id": "sb-2024-d5",
+      "election_id": "2024-school-board",
       "name": "Jousef M. Shkoukani",
       "committee_id": null,
       "status": "filed",
@@ -2898,6 +3019,7 @@
     {
       "id": "biggs-sb-2024-d6",
       "race_id": "sb-2024-d6",
+      "election_id": "2024-school-board",
       "name": "Jessica Biggs",
       "committee_id": null,
       "status": "filed",
@@ -2913,6 +3035,7 @@
     {
       "id": "delgado-sb-2024-d6",
       "race_id": "sb-2024-d6",
+      "election_id": "2024-school-board",
       "name": "Brenda Delgado",
       "committee_id": null,
       "status": "filed",
@@ -2928,6 +3051,7 @@
     {
       "id": "smith-sb-2024-d6",
       "race_id": "sb-2024-d6",
+      "election_id": "2024-school-board",
       "name": "Andre Smith",
       "committee_id": "39705",
       "status": "filed",
@@ -2943,6 +3067,7 @@
     {
       "id": "thotakura-sb-2024-d6",
       "race_id": "sb-2024-d6",
+      "election_id": "2024-school-board",
       "name": "Anusha Thotakura",
       "committee_id": null,
       "status": "filed",
@@ -2958,6 +3083,7 @@
     {
       "id": "wallace-sb-2024-d6",
       "race_id": "sb-2024-d6",
+      "election_id": "2024-school-board",
       "name": "Danielle J. Wallace",
       "committee_id": null,
       "status": "filed",
@@ -2975,6 +3101,7 @@
     {
       "id": "ayala-sb-2024-d7",
       "race_id": "sb-2024-d7",
+      "election_id": "2024-school-board",
       "name": "Jesus Ayala Jr.",
       "committee_id": null,
       "status": "filed",
@@ -2990,6 +3117,7 @@
     {
       "id": "don-sb-2024-d7",
       "race_id": "sb-2024-d7",
+      "election_id": "2024-school-board",
       "name": "Raquel Don",
       "committee_id": "39972",
       "status": "filed",
@@ -3005,6 +3133,7 @@
     {
       "id": "lopez-sb-2024-d7",
       "race_id": "sb-2024-d7",
+      "election_id": "2024-school-board",
       "name": "Yesenia Lopez",
       "committee_id": null,
       "status": "filed",
@@ -3020,6 +3149,7 @@
     {
       "id": "luna-sb-2024-d7",
       "race_id": "sb-2024-d7",
+      "election_id": "2024-school-board",
       "name": "Felipe Luna Jr.",
       "committee_id": null,
       "status": "filed",
@@ -3035,6 +3165,7 @@
     {
       "id": "villalobos-sb-2024-d7",
       "race_id": "sb-2024-d7",
+      "election_id": "2024-school-board",
       "name": "Eva A. Villalobos",
       "committee_id": "39840",
       "status": "filed",
@@ -3050,6 +3181,7 @@
     {
       "id": "gutierrez-sb-2024-d8",
       "race_id": "sb-2024-d8",
+      "election_id": "2024-school-board",
       "name": "Angel Gutierrez",
       "committee_id": null,
       "status": "filed",
@@ -3065,6 +3197,7 @@
     {
       "id": "nix-sb-2024-d8",
       "race_id": "sb-2024-d8",
+      "election_id": "2024-school-board",
       "name": "Darius Dee Nix",
       "committee_id": null,
       "status": "filed",
@@ -3080,6 +3213,7 @@
     {
       "id": "ponce-sb-2024-d8",
       "race_id": "sb-2024-d8",
+      "election_id": "2024-school-board",
       "name": "Felix Ponce",
       "committee_id": "39945",
       "status": "filed",
@@ -3095,6 +3229,7 @@
     {
       "id": "bailey-preston-sb-2024-d9",
       "race_id": "sb-2024-d9",
+      "election_id": "2024-school-board",
       "name": "Brittany Bailey Preston",
       "committee_id": null,
       "status": "filed",
@@ -3110,6 +3245,7 @@
     {
       "id": "boyle-sb-2024-d9",
       "race_id": "sb-2024-d9",
+      "election_id": "2024-school-board",
       "name": "Therese Boyle",
       "committee_id": null,
       "status": "filed",
@@ -3125,6 +3261,7 @@
     {
       "id": "lewis-sb-2024-d9",
       "race_id": "sb-2024-d9",
+      "election_id": "2024-school-board",
       "name": "Miquel Lewis",
       "committee_id": "39849",
       "status": "filed",
@@ -3140,6 +3277,7 @@
     {
       "id": "thomas-sb-2024-d9",
       "race_id": "sb-2024-d9",
+      "election_id": "2024-school-board",
       "name": "Lanetta M. Thomas",
       "committee_id": "39794",
       "status": "filed",
@@ -3155,6 +3293,7 @@
     {
       "id": "williams-sb-2024-d9",
       "race_id": "sb-2024-d9",
+      "election_id": "2024-school-board",
       "name": "La'Mont Raymond Williams",
       "committee_id": "37248",
       "status": "filed",
@@ -3170,6 +3309,7 @@
     {
       "id": "chatonda-sb-2024-d10",
       "race_id": "sb-2024-d10",
+      "election_id": "2024-school-board",
       "name": "Rosita Chatonda",
       "committee_id": null,
       "status": "filed",
@@ -3186,6 +3326,7 @@
     {
       "id": "jones-sb-2024-d10",
       "race_id": "sb-2024-d10",
+      "election_id": "2024-school-board",
       "name": "Robert Jones",
       "committee_id": "39838",
       "status": "filed",
@@ -3201,6 +3342,7 @@
     {
       "id": "norington-reaves-sb-2024-d10",
       "race_id": "sb-2024-d10",
+      "election_id": "2024-school-board",
       "name": "Karin Norington-Reaves",
       "committee_id": "39876",
       "status": "filed",
@@ -3216,6 +3358,7 @@
     {
       "id": "parrott-sheffer-sb-2024-d10",
       "race_id": "sb-2024-d10",
+      "election_id": "2024-school-board",
       "name": "Adam Parrott-Sheffer",
       "committee_id": "39765",
       "status": "filed",
@@ -3231,6 +3374,7 @@
     {
       "id": "smith-sb-2024-d10",
       "race_id": "sb-2024-d10",
+      "election_id": "2024-school-board",
       "name": "Che 'Rhymefest' Smith",
       "committee_id": null,
       "status": "filed",
@@ -3246,6 +3390,7 @@
     {
       "id": "walton-sb-2024-d10",
       "race_id": "sb-2024-d10",
+      "election_id": "2024-school-board",
       "name": "James M. Walton Jr.",
       "committee_id": "39874",
       "status": "filed",
@@ -3261,6 +3406,7 @@
     {
       "id": "ward-sb-2024-d10",
       "race_id": "sb-2024-d10",
+      "election_id": "2024-school-board",
       "name": "Nathaniel Ward",
       "committee_id": null,
       "status": "filed",
@@ -3276,6 +3422,7 @@
     {
       "id": "cand-dominguez-sb-president",
       "race_id": "sb-president",
+      "election_id": "2026-school-board",
       "name": "Hilario Dominguez",
       "committee_id": null,
       "status": "filed",
@@ -3291,6 +3438,7 @@
     {
       "id": "cand-morales-sb-d03",
       "race_id": "sb-d03",
+      "election_id": "2026-school-board",
       "name": "Hector Morales",
       "committee_id": null,
       "status": "filed",
@@ -295899,7 +296047,7 @@
       "color": "#5a6a7a"
     }
   },
-  "seed_generated_at": "2026-07-22T22:50:53",
+  "seed_generated_at": "2026-08-03T09:46:11",
   "cycles": {
     "2015": {
       "label": "2011 \u2013 2015 cycle",

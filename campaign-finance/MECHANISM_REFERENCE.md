@@ -82,6 +82,17 @@ would re-invert the authority. The appendix records that `build_all.sh` **confor
 block as of this commit — a conformance record, not a source citation [C1.9, SOURCED]. The
 proposed chain-consistency check (Proposals) diffs implementations against this block.
 
+### Truncation vs order [C1.11, RULED]
+
+A lane may run a **contiguous truncation** of a canonical chain where every omitted step
+provably touches nothing the lane changes — C1.1 binds the **order** of the steps that run,
+not completeness. Conditions, all required: per-step justification in the lane report,
+naming what each omitted step writes and why the lane's change cannot reach it; truncation
+only, never reordering; and the executed chain recorded in the lane record — gate report
+and commit message, against the produced artifact's sha — so a later reader does not infer
+a full-chain vintage. This is not a licence to trim by convenience: C1.5 and the IE re-run
+rule exist because skipped steps have burned this pipeline before (PS-80).
+
 ### What `build_all.sh` is [C1.2, SOURCED]
 
 The repo's **only shell orchestrator and the sole end-to-end builder of the votes pipeline**.
@@ -239,6 +250,17 @@ by uniqueness**: no match → skip; exactly one → alias; two or more → edito
 never a guess. **The minted donor id is never rewritten** — aliasing, not rewriting, is the
 rule, and both filed spellings stay visible.
 
+**Candidate election identity is stamped, and checked** [C4.5, SOURCED; validator
+requirement RULED]: elections-artifact candidate records carry `election_id`, stamped by
+the seed from the resolved race at record construction and verified by a **single shared
+mismatch implementation** (stamped-vs-resolved, race-id namespace, 2024-signature cohort,
+conservative candidate-id conventions with a no-claim default) run at mint — seed, fatal,
+nothing written on failure — and at the chain gate (the INV-ELECT block). The seed's
+unknown-race-id check is likewise fatal; warn-and-emit is retired. Per PS-81 the coverage
+limit travels with the mechanism: it catches cross-namespace and 2024-cohort misfilings,
+**not** same-election wrong-district errors (a separate, separately banked class). Field
+name and meaning match `by_person.members[].election_id` — one artifact, one vocabulary.
+
 **Known reachability failure — the `ie-committee-*` suffix gap** [C4.3, UNVERIFIED —
 **deferred-by-design**]: committee-derived donor identifiers that carry an appended
 committee suffix fall outside the plain name-slug identity space, creating a reachability
@@ -382,7 +404,8 @@ that catch defect classes the existing gates structurally cannot see.
 | S-ie | `campaign-finance/ingestion/ingest_ie.py` | `242caca31d35adfd962f5f1c2897c07345afe1a26286f2cc6ffd779376847158` |
 | S-rep | `campaign-finance/ingestion/repair_clusters.py` | `90cc6912647479510d10d505debb84d18fbd28557bf5996b01a992eb1ddf283c` |
 | S-rol | `campaign-finance/ingestion/build_rollups.py` | `a37a9ee4a1fe93a66dae7c6ecb50e3face70f05078e7fbc97e088a4cafb4fe89` |
-| S-seed | `campaign-finance/elections/build_election_seed.py` | `67a2816c66fc07075250b3533d82ddf08147674a306d003693a7b91d2a9d478f` |
+| S-seed | `campaign-finance/elections/build_election_seed.py` | `a2122eab99c8e6db401801a97e43537a4eea62ae1f7b4f13cdb03e8a761a20f7` |
+| S-vld | `campaign-finance/ingestion/validate_council_data.py` | `a19c5dc2b66764e557e0208c6ba75774d4406b814068fabfe6d21571acb76699` |
 | S-av | `campaign-finance/sync_allvotes.py` | `2ca09ee7323741919f048e61062d54a62719f56f88f71f99b721fe965c753f69` |
 | S-cemb | `campaign-finance/elections/reference/council-embed.html` | `f1451fa9900a7a645fec202f7226b26b95597b008c119be28747de81b89be111` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
@@ -438,6 +461,8 @@ that catch defect classes the existing gates structurally cannot see.
 | C4.2 | A-bbg1 | 38-40 (SEIU propagation fixture: shared Sheet → elections artifact) |
 | C4.3 | A-probe | 152 (banked open-thread naming; mechanism deliberately not characterized here) |
 | C4.4 | S-syn | 590-630 (uniqueness-gated alias; never rewrite) |
+| C4.5 | S-seed | 257, 284, 309 (the three stamp sites), 354-359 (fatal unknown-race-id), 362-368 (mint-time shared check, fatal) |
+| C4.5 | S-vld | 172-238 (the ONE shared implementation: namespace/convention resolvers + election_mismatches), 241-252 (durable INV-ELECT gate), 82 (wired into validate) |
 | C5.1 | A-fw1 | 7-16 (fix sites exist only in the elections path; artifact layer separate) |
 | C5.2 | S-cemb | 42-52 (dataUrl + optional sharded mode); S-eemb 19-24 (elections artifact + inlined deploy) |
 | C5.2 | A-ba1g2 | 49 (Rider 2: neither embed renders entity-type / last-editor) |
@@ -459,6 +484,8 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.1 (chains as requirement; authority inversion) | PS-25 / PS-44 | DOCS-M1 g0-report `d9420b12db1d737318403f299460b5696aa6bcb0cbe2345abdff4e29502e5e94` |
 | C1.7 (positional-requirement framing) | PS-45 | DOCS-M1 G1 authorization `4df351879a2e7d1172f2bfadb2d9a4497b6958a2efbf6e58dd977c95b4a7ba0b` |
 | C1.10 (step-8 re-apply is the intended architecture; not open work) | PS-29 (a′ Option B; 8a ruled) | recorded in the G1 authorization `4df35187…` (§ rulings-in-force) |
+| C1.11 (truncation vs order) | PS-80 | HALT-F5-SEED ruling record `bd25b641b682ec12a950ef64ade8561d65e483ceb7b11fc3dee26942a410cde6` |
+| C4.5 validator requirement (stamped fields carry a mismatch validator; Route B from-source constraint) | PS-81 | same HALT-F5-SEED ruling record `bd25b641…` |
 | C2.9 (writer-sweep method) | discipline 29 | G1 authorization `4df35187…` |
 | C6.4 (documentation drift is audit-only) | ruled this lane | G1 authorization `4df35187…` (§G1 §6 requirement) |
 | C6.5 (mechanical check's worded-count blind spot) | PS-60 | closing amend `daf8a0f0083651a17d39378600c64ced64d2a685e2db140a6075bf611cb6bfc8` |
