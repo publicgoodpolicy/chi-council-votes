@@ -1109,7 +1109,12 @@
           } else {
             rows = '<div class="srow empty"><div class="sname">No finance reported yet.</div></div>';
           }
-          return '<div class="racegroup"><h3 class="racehead">' + esc(g.race.label) + '</h3>' + rows + '</div>';
+          // HALT-GUARD: the section names its election (the HALT-F2 shipped pattern,
+          // unconditional) — under shape 3' a section's race can belong to an election
+          // other than the selected scope, and the label is what keeps that honest.
+          var gy = (/^(\d{4})-/.exec(g.race.election_id || '') || [])[1];
+          return '<div class="racegroup"><h3 class="racehead">' + esc(g.race.label) +
+            (gy ? '<span class="race-meta"> \u00b7 ' + esc(gy) + ' election</span>' : '') + '</h3>' + rows + '</div>';
         }).join('');
     } else if (tab === 'industries') {
       body = industryChart(vm.industries);   // E-6 Level 1: sorted-bar chart, click -> spenders (Level 2)

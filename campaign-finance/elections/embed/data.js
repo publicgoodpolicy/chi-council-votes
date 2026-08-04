@@ -991,24 +991,16 @@
   // 2) Spend by candidate — keyed on the CANDIDATE (target_candidate_id), NOT the
   // committee join, so a name-matched candidate with no committee still shows their
   // IE total. Three figures kept separate. Neutral (alphabetical) order.
-  // HALT-P1-B AGGREGATE SCOPE GUARD (ratified, Option A / nav-visible-election-scoped):
-  // the office-scoped ANALYTICAL views (spend-by-candidate, the industry/flag cross-tabs,
-  // self-funding) report the CURRENT election only. The 2024 school-board backfill stays
-  // browsable as its own race pages — raceIsLive/officeRaces keep it NAV-VISIBLE — but is
-  // excluded from these 2026 aggregates, so populating it (P1-B) does not leak 2024 money
-  // into the 2026 spend/industry/self totals. Before P1-B the 2024 races were empty, so
-  // this leak was latent; gate_bundle 74/0 with the guard IS the dormancy proof (the 2026
-  // aggregates are byte-identical to pre-P1-B). SATISFACTION CONDITION: removing this guard
-  // is part of P1-D's cycle-parity work (ledger cross-ref; paired with the ingest_ie IE
-  // scope-guard whose removal opens P1-E — two guards, two arc-stages).
-  var AGG_EXCLUDED_ELECTIONS = { '2024-school-board': 1 };
-  function inAggScope(race) { return !race || !AGG_EXCLUDED_ELECTIONS[race.election_id]; }
+  // HALT-GUARD (PS-76/PS-86): the aggregate scope guard (AGG_EXCLUDED_ELECTIONS /
+  // inAggScope) is REMOVED — the global selector's window is the sole scoping mechanism
+  // on money surfaces (C5.5). Every admitted row is window-scoped; the grouped view's
+  // section list follows the ruled frame+contents shape (see spendByCandidateGrouped).
 
   function spendByCandidate(index, office, cycle, win) {
     var offs = OFFICE_RACE_OFFICES[office] || [], out = [];
     for (var i = 0; i < index.candidates.length; i++) {
       var c = index.candidates[i], race = index.raceById[c.race_id] || {};
-      if (offs.indexOf(race.office) < 0 || !inAggScope(race)) continue;
+      if (offs.indexOf(race.office) < 0) continue;
       if (c.vacating_for) continue;                  // vacating incumbents listed in their new race
       var f = candidateFigures(index, c.id, cycle, win);  // works for committee-less candidates (direct 0)
       if (!(f.contributions.total > 0 || f.independentSupport > 0 || f.independentOpposition > 0)) continue;
@@ -1020,8 +1012,10 @@
   }
 
   // E-7 grouped spend-by-candidate: the FULL roster (candidatesByRace), grouped by race,
-  // scoped to the office. Section order: President first, then districts ascending by the NN
-  // in sb-dNN (NOT a string sort). Within a race, candidates rank by contributions.total
+  // scoped to the office. Section order: in-frame sections precede out-of-frame ones (the
+  // frame is what the reader selected, so it leads — PS-86 fold-in ruling); within each
+  // group, President first, then districts ascending by the NN in sb-dNN (NOT a string
+  // sort). Within a race, candidates rank by contributions.total
   // (direct raised — a SINGLE legitimate stream; support/oppose stay separate, never fused).
   // No money drop-guard: empty races and $0 / committee-less candidates are included so the
   // render can label them honestly. Optional raceFilter ('all' | race_id) AND-composes with win.
@@ -1035,10 +1029,24 @@
   // (candidateContributors + candidateIE x2 + committeeMeta) — the exact functions raceView
   // calls; everyone else stays figures-only. groupScale (per-group Math.max, raceView's
   // formula) is attached so the inline card's bars fill against the candidate's own race.
-  function spendByCandidateGrouped(index, office, cycle, win, raceFilter, expandedId) {
+  function spendByCandidateGrouped(index, office, cycle, win, sel, raceFilter, expandedId) {
     var offs = OFFICE_RACE_OFFICES[office] || [];
-    var scoped = (index.races || []).filter(function (r) { return offs.indexOf(r.office) >= 0 && raceIsLive(index, r) && inAggScope(r); });
-    scoped.sort(function (a, b) { return raceOrderKey(a) - raceOrderKey(b); });
+    // HALT-GUARD (PS-86, shape 3'): FRAME + CONTENTS. The frame is the selected election —
+    // every one of its races gets a section, money or not (in-frame absence is information:
+    // a visible zero is a finding on a transparency tool). A race of any OTHER election
+    // earns its section iff it carries in-window money (out-of-frame presence must be
+    // earned; empty out-of-frame sections are impossible).
+    function inFrame(r) {
+      if (!sel) return true;
+      var m = /^(\d{4})-/.exec(r.election_id || '');
+      return !!m && m[1] === sel;
+    }
+    var scoped = (index.races || []).filter(function (r) { return offs.indexOf(r.office) >= 0 && raceIsLive(index, r); });
+    scoped.sort(function (a, b) {
+      var fa = inFrame(a) ? 0 : 1, fb = inFrame(b) ? 0 : 1;
+      if (fa !== fb) return fa - fb;   // frame precedes contents; no new within-group convention
+      return raceOrderKey(a) - raceOrderKey(b);
+    });
     var groups = scoped
       .filter(function (r) { return !raceFilter || raceFilter === 'all' || r.id === raceFilter; })
       .map(function (r) {
@@ -1066,9 +1074,15 @@
           var gf = cands[s].figures; if (!gf) continue;
           groupScale = Math.max(groupScale, gf.contributions.total, gf.independentSupport, gf.independentOpposition);
         }
-        return { race: { id: r.id, label: r.label, office: r.office }, candidates: cands, scale: groupScale };
-      });
-    return { groups: groups, raceOptions: scoped.map(function (r) { return { id: r.id, label: r.label }; }) };
+        var hasMoney = cands.some(function (c) {
+          var f = c.figures;
+          return f && (f.contributions.total > 0 || f.independentSupport > 0 || f.independentOpposition > 0);
+        });
+        return { race: { id: r.id, label: r.label, office: r.office, election_id: r.election_id },
+                 inFrame: inFrame(r), hasMoney: hasMoney, candidates: cands, scale: groupScale };
+      })
+      .filter(function (g) { return g.inFrame || g.hasMoney; });   // shape 3'
+    return { groups: groups, raceOptions: groups.map(function (g) { return { id: g.race.id, label: g.race.label }; }) };
   }
 
   // Shared cycle-aware aggregation for the industry/flag cross-tabs (re-derived
@@ -1083,7 +1097,7 @@
     }
     for (var i = 0; i < index.candidates.length; i++) {
       var cand = index.candidates[i], race = index.raceById[cand.race_id] || {};
-      if (offs.indexOf(race.office) < 0 || cand.vacating_for || !inAggScope(race)) continue;
+      if (offs.indexOf(race.office) < 0 || cand.vacating_for) continue;
       var cid = cand.id;
       var dr = index.directByCandidate[cid] || [];
       for (var d = 0; d < dr.length; d++) {
@@ -1158,7 +1172,7 @@
   function spendSubtab(index, office, tab, cycle, election, filters, raceFilter, expandedId) {
     var sel = election || spendElectionIds(office)[0] || null, win = spendWin(office, sel);
     if (tab === 'candidates') {
-      var rf = raceFilter || 'all', g = spendByCandidateGrouped(index, office, cycle, win, rf, expandedId);
+      var rf = raceFilter || 'all', g = spendByCandidateGrouped(index, office, cycle, win, sel, rf, expandedId);
       return { tab: tab, election: sel, win: win, groups: g.groups, raceOptions: g.raceOptions, raceFilter: rf };
     }
     if (tab === 'industries') return { tab: tab, election: sel, win: win, industries: industryTotals(index, office, cycle, win) };

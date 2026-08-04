@@ -97,13 +97,75 @@ var FIXTURES = {
     //   default-visible labeled segments + a breakdown line whose parts sum EXACTLY to the total
     //   (largest-remainder). Values byte-unchanged; ieVal repinned to the rendered total $1,629,547 (of
     //   which only $16,212 is direct — the old 'independent'-tagged fused display was the defect).
-    industryDrill: { scope: '2024', topBar: 'charter-schools', topBarTotal: 1613335.66,
-      hasDirectSeg: false, ieSupportVal: 1212118.66, ieOpposeVal: 401217,
-      ieIndustry: 'charter-schools', ieRank: 1, ieSpender: 'ie-committee-26066',
+    // HALT-GUARD re-pin: the 2024-scope cross-tab now includes the admitted 2024
+    // candidacies' direct money, so charter-schools gains a $19,000 direct segment
+    // (rank 2 behind labor-teachers) while its IE figures are UNCHANGED — asserted.
+    industryDrill: { scope: '2024', topBarTotal: 1632335.66,
+      hasDirectSeg: true, ieDirectVal: 19000, ieSupportVal: 1212118.66, ieOpposeVal: 401217,
+      ieIndustry: 'charter-schools', ieRank: 2, ieSpender: 'ie-committee-26066',
       directIndustry: 'labor-teachers' },
     // Grouped spend-by-candidate (E-7): President first, district order, within-race ranking, race filter.
     candidateGroups: { firstRaceText: 'President', raceCount: 21, raceCount2024Scope: 21,
-      presidentOrder: ['Victor Henderson', 'Sendhil Revuluri', 'Jessica Biggs', 'Jennifer Custer'], singleRace: 'sb-d06' }
+      presidentOrder: ['Victor Henderson', 'Sendhil Revuluri', 'Jessica Biggs', 'Jennifer Custer'], singleRace: 'sb-d06' },
+    // Fold-in ordering ruling (PS-86 frame/contents): the WITHIN-group sequences pinned
+    // verbatim from the pre-amend run (fe3fd1c-content preview, captured 2026-08-04).
+    // The comparator may only change group PRECEDENCE; these sequences must not move.
+    sectionOrder: {
+      '2026': {
+        inFrame: ["School Board President (citywide)",
+                    "School Board, District 1A",
+                    "School Board, District 1B",
+                    "School Board, District 2A",
+                    "School Board, District 2B",
+                    "School Board, District 3A",
+                    "School Board, District 3B",
+                    "School Board, District 4A",
+                    "School Board, District 4B",
+                    "School Board, District 5A",
+                    "School Board, District 5B",
+                    "School Board, District 6A",
+                    "School Board, District 6B",
+                    "School Board, District 7A",
+                    "School Board, District 7B",
+                    "School Board, District 8A",
+                    "School Board, District 8B",
+                    "School Board, District 9A",
+                    "School Board, District 9B",
+                    "School Board, District 10A",
+                    "School Board, District 10B"],
+        outOfFrame: ["School Board, District 1 (2024)",
+                    "School Board, District 6 (2024)",
+                    "School Board, District 9 (2024)"]
+      },
+      '2024': {
+        inFrame: ["School Board, District 1 (2024)",
+                    "School Board, District 2 (2024)",
+                    "School Board, District 3 (2024)",
+                    "School Board, District 4 (2024)",
+                    "School Board, District 5 (2024)",
+                    "School Board, District 6 (2024)",
+                    "School Board, District 7 (2024)",
+                    "School Board, District 8 (2024)",
+                    "School Board, District 9 (2024)",
+                    "School Board, District 10 (2024)"],
+        outOfFrame: ["School Board President (citywide)",
+                    "School Board, District 1A",
+                    "School Board, District 1B",
+                    "School Board, District 2A",
+                    "School Board, District 2B",
+                    "School Board, District 3B",
+                    "School Board, District 4A",
+                    "School Board, District 4B",
+                    "School Board, District 5A",
+                    "School Board, District 5B",
+                    "School Board, District 6A",
+                    "School Board, District 7A",
+                    "School Board, District 7B",
+                    "School Board, District 8A",
+                    "School Board, District 9B",
+                    "School Board, District 10A"]
+      }
+    }
   }
 };
 
@@ -414,13 +476,17 @@ async function assertIndustryDrill(T, ctx, fx) {
   T.ok('[E6.L1] industry chart renders (sorted clickable bars)',
     !!ctx.root().querySelector('.indchart') && !!ctx.root().querySelector('[data-industry-drill]'));
   var bars = [].slice.call(ctx.root().querySelectorAll('[data-industry-drill]'));
-  T.ok('[E6.L1] ' + d.topBar + ' is #' + d.ieRank + ' at ' + fmt(d.topBarTotal) + ' TOTAL DEPLOYED, not "independent" (FW-1 form)',
+  T.ok('[E6.L1] ' + d.ieIndustry + ' is #' + d.ieRank + ' at ' + fmt(d.topBarTotal) + ' TOTAL DEPLOYED, not "independent" (FW-1 form)',
     bars[d.ieRank - 1].getAttribute('data-industry-drill') === d.ieIndustry &&
     bars[d.ieRank - 1].textContent.indexOf(fmt(d.topBarTotal)) >= 0 &&
     /total deployed/.test(bars[d.ieRank - 1].textContent) && !bars[d.ieRank - 1].querySelector('.indep-tag'));
-  T.ok('[E6.L1] ' + d.ieIndustry + ' decomposed: support+oppose segments (no direct this scope) + visible breakdown ' + fmt(d.ieSupportVal) + ' / ' + fmt(d.ieOpposeVal),
+  T.ok('[E6.L1] ' + d.ieIndustry + ' decomposed: direct+support+oppose segments + visible breakdown ' + fmt(d.ieDirectVal) + ' / ' + fmt(d.ieSupportVal) + ' / ' + fmt(d.ieOpposeVal),
     !!bars[d.ieRank - 1].querySelector('.seg.support') && !!bars[d.ieRank - 1].querySelector('.seg.oppose') &&
     (d.hasDirectSeg ? !!bars[d.ieRank - 1].querySelector('.seg.third') : true) &&
+    bars[d.ieRank - 1].textContent.indexOf(fmt(d.ieSupportVal)) >= 0 && bars[d.ieRank - 1].textContent.indexOf(fmt(d.ieOpposeVal)) >= 0);
+  // HALT-GUARD stop-condition assert: the IE layer did NOT move — charter-schools'
+  // support/oppose are byte-equal to the pre-removal pins; only direct joined.
+  T.ok('[E6.L1] charter-schools IE figures UNCHANGED (support ' + fmt(d.ieSupportVal) + ' / oppose ' + fmt(d.ieOpposeVal) + ')',
     bars[d.ieRank - 1].textContent.indexOf(fmt(d.ieSupportVal)) >= 0 && bars[d.ieRank - 1].textContent.indexOf(fmt(d.ieOpposeVal)) >= 0);
   T.ok('[E6.L1] all bars: parts sum EXACTLY to total, zero "independent" labels, no per-candidate phrasing (rule a+b, firewall)',
     ctx.root().querySelector('.spend-body').innerHTML.indexOf('Spent to support') < 0 && bars.length > 0 && bars.every(function (b) {
@@ -464,7 +530,60 @@ async function assertCandidateGroups(T, ctx, fx) {
   ctx.click(ctx.root().querySelector('[data-spendtab="candidates"]')); await ctx.wait(80);
   var groups = [].slice.call(ctx.root().querySelectorAll('.racegroup'));
   var heads = [].slice.call(ctx.root().querySelectorAll('.racehead')).map(function (h) { return h.textContent; });
-  T.ok('[E7] grouped into all ' + cg.raceCount + ' school-board race sections', groups.length === cg.raceCount);
+  // HALT-GUARD (PS-86 shape 3', ruled three-part equivalence) — expectations recomputed
+  // from RAW rows + FIXTURE windows (PS-82: never from the removed guard's field).
+  function shape3Check(T2, ctx2, sel) {
+    var W2 = ctx2.window, ED = W2.ElectData, RAW = W2.PREVIEW_DATA;
+    var w = fx.windows[sel];
+    var races = RAW.races.filter(function (r) { return String(r.office || '').indexOf(fx.office) === 0; });
+    var candByRace = {};
+    RAW.candidates.forEach(function (c) { (candByRace[c.race_id] = candByRace[c.race_id] || []).push(c); });
+    var comKey = {}; Object.keys(RAW.committees).forEach(function (k) { var cm = RAW.committees[k]; if (cm.candidate_id) comKey[cm.candidate_id] = k; });
+    function raceHasWinMoney(r) {
+      return (candByRace[r.id] || []).some(function (c) {
+        var key = comKey[c.id];
+        if (key && RAW.contributions.some(function (x) {
+          return x.committee_id === key && x.date && (w.start == null || x.date >= w.start) && (w.end == null || x.date <= w.end) && x.contribution_type !== 'IE Committee Dues Transfer';
+        })) return true;
+        return RAW.independent_expenditures.some(function (ie) {
+          return ie.target_candidate_id === c.id && ie.date && (w.start == null || ie.date >= w.start) && (w.end == null || ie.date <= w.end);
+        });
+      });
+    }
+    function yearOf(r) { return ((/^(\d{4})-/.exec(r.election_id || '') || [])[1]); }
+    var domIds = [].slice.call(ctx2.root().querySelectorAll('.racegroup .racehead')).map(function (h) { return h.textContent; });
+    var domByLabel = {}; domIds.forEach(function (t) { domByLabel[t.replace(/ \u00b7 \d{4} election$/, '')] = t; });
+    var missFrame = [], missMoney = [], unearned = [], badLabel = [], inFrameEmpty = 0;
+    races.forEach(function (r) {
+      var inF = yearOf(r) === sel, hasM = raceHasWinMoney(r), dom = domByLabel[r.label];
+      if (inF && !dom) missFrame.push(r.id);
+      if (!inF && hasM && !dom) missMoney.push(r.id);
+      if (dom && !inF && !hasM) unearned.push(r.id);
+      if (dom && !(new RegExp('\u00b7 ' + yearOf(r) + ' election$').test(dom))) badLabel.push(r.id);
+      if (inF && dom && !hasM) inFrameEmpty++;
+    });
+    T2.ok('[E7/3\'] (' + sel + ') frame complete: every selected-election race has a section', missFrame.length === 0);
+    T2.ok('[E7/3\'] (' + sel + ') no money stranded: every out-of-frame race with in-window money has a section', missMoney.length === 0);
+    T2.ok('[E7/3\'] (' + sel + ') nothing unearned: every section is in-frame or carries in-window money' + (unearned.length ? ' — BAD: ' + unearned.join(',') : ''), unearned.length === 0);
+    T2.ok('[E7/3\'] (' + sel + ') every section header names its race\'s election', badLabel.length === 0);
+    // Fold-in ordering ruling: in-frame sections precede out-of-frame ones (the frame is
+    // what the reader selected); WITHIN each group the order is pinned to the pre-amend run.
+    var seq = domIds.map(function (t) {
+      var m = /\u00b7 (\d{4}) election$/.exec(t);
+      return { label: t.replace(/ \u00b7 \d{4} election$/, ''), inF: !!m && m[1] === sel };
+    });
+    var lastIn = -1, firstOut = -1;
+    seq.forEach(function (s, i) { if (s.inF) lastIn = i; else if (firstOut < 0) firstOut = i; });
+    T2.ok('[E7/ord] (' + sel + ') every in-frame section precedes every out-of-frame section',
+      firstOut < 0 || lastIn < firstOut);
+    var pin = fx.sectionOrder[sel];
+    T2.ok('[E7/ord] (' + sel + ') in-frame within-group order unchanged from the pre-amend run',
+      JSON.stringify(seq.filter(function (s) { return s.inF; }).map(function (s) { return s.label; })) === JSON.stringify(pin.inFrame));
+    T2.ok('[E7/ord] (' + sel + ') out-of-frame within-group order unchanged from the pre-amend run',
+      JSON.stringify(seq.filter(function (s) { return !s.inF; }).map(function (s) { return s.label; })) === JSON.stringify(pin.outOfFrame));
+    console.log('   [E7/3\'] (' + sel + ') sections=' + domIds.length + ' inFrameEmpty=' + inFrameEmpty + ' (the visible-zero finding)');
+  }
+  shape3Check(T, ctx, '2026');
   T.ok('[E7] President section FIRST', new RegExp(cg.firstRaceText).test(heads[0] || ''));
   T.ok('[E7] districts ascending after President (1A, 1B, ...) — not a string sort',
     /District 1A/.test(heads[1] || '') && /District 1B/.test(heads[2] || ''));
@@ -485,12 +604,10 @@ async function assertCandidateGroups(T, ctx, fx) {
   await ctx.spend(); await ctx.wait(30); ctx.click(ctx.root().querySelector('[data-spendtab="candidates"]')); await ctx.wait(70);
   T.ok('[E7] race filter composes with the scope switch (single section retained under 2024)',
     ctx.root().querySelector('[data-race-filter]').value === cg.singleRace && ctx.root().querySelectorAll('.racegroup').length === 1);
-  // F-2 ruled semantics pinned: the 2024 SCOPE's money view still groups by the
-  // aggregate-eligible (2026) races, windowed to 2024 — money is window-scoped,
-  // navigation is entity-scoped, and the divergence resolves upstream (F1 / P1-E).
+  // Shape 3' proven in the 2024 scope too (frame = the 10 2024 races; contents = 2026
+  // races carrying 2024-window money — the F-2/C5.5 semantics, now guard-free).
   var rs = ctx.root().querySelector('[data-race-filter]'); rs.value = 'all'; rs.dispatchEvent(new ctx.window.Event('change', { bubbles: true })); await ctx.wait(60);
-  T.ok('[E7] 2024-scope money view: ' + cg.raceCount2024Scope + ' sections (window-scoped money over in-guard races)',
-    ctx.root().querySelectorAll('.racegroup').length === cg.raceCount2024Scope);
+  shape3Check(T, ctx, '2024');
   ctx.selectElection('2026'); await ctx.wait(60);
 }
 

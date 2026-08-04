@@ -327,6 +327,24 @@ candidacy ids inside the selected window renders on the money surfaces, and that
 divergence resolves upstream (F1/PS-77, P1-E) — never by narrowing money to entity scope
 or widening navigation to the window.
 
+**Surface class determines scoping rule** [C5.6, RULED; shape SOURCED]: a surface is
+scoped by **what it presents, not what it looks like** — a control that resembles
+navigation but organizes money (a grouping, a section list, a dropdown over a money view)
+follows the money rule. **Frame and contents scope separately**: the selector's chosen
+election establishes the frame, and every in-frame race is present money or not —
+in-frame absence is information (a visible zero is a finding on a transparency tool) —
+while an out-of-frame race appears **iff** it carries in-window money (presence must be
+earned; out-of-frame empty sections are impossible). Corollary: a scoping change that
+makes money unreachable on a surface where it was reachable is a regression regardless of
+how principled the argument sounds. (PS-86. The occasion: the aggregate scope guard — the
+last exclusion-based scoping mechanism — was removed under PS-76 once the selector's
+window replaced it structurally; the grouped money view's section list follows this
+frame+contents shape, each section labeled with its race's election via the shipped
+pattern.) Section **order** follows the same distinction: in-frame sections precede
+out-of-frame ones — the frame is what the reader selected, so it leads — and no new
+within-group convention exists; the pre-existing order continues inside each group
+(fold-in ruling on PS-86, ratified 2026-08-03).
+
 **Sizing note** [C5.4, SOURCED]: the tools present multiple distinct public surfaces,
 which multiplies render paths, not merely classification consumers. The surface count is
 current state and lives in the handover, not here.
@@ -452,8 +470,8 @@ that catch defect classes the existing gates structurally cannot see.
 | S-av | `campaign-finance/sync_allvotes.py` | `2ca09ee7323741919f048e61062d54a62719f56f88f71f99b721fe965c753f69` |
 | S-cemb | `campaign-finance/elections/reference/council-embed.html` | `f1451fa9900a7a645fec202f7226b26b95597b008c119be28747de81b89be111` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
-| S-edat | `campaign-finance/elections/embed/data.js` | `25c1e2115027aba8931e6725382568a339ba6b9ac972b25d315daa7ba0e232f0` |
-| S-eren | `campaign-finance/elections/embed/render.js` | `c6944b3aec3d0ccf421bf11f794731d8b1c87b92ea3fbd5b81c653b67f8f3bc9` |
+| S-edat | `campaign-finance/elections/embed/data.js` | `3fb88346eb67dafd476868bf8b3bcd15e0001888205fd69a81febd50a447e47a` |
+| S-eren | `campaign-finance/elections/embed/render.js` | `bb4e28f761bb812de6a99c76c7c4af49de14f50a1203418f36a01d525cc691bc` |
 | S-eapp | `campaign-finance/elections/embed/app.js` | `ec42983763f18ca5d6f134bcd51a7578858e79787cbaba9b716daea2714c8f7c` |
 | A-probe | `~/probe-sync-2026-07-24/probe-report.md` | `4c678cf0c14dd370f8b52744bf473000340ce16449a5365841b6ac92d8e5f9bb` |
 | A-add | `~/probe-sync-a-2026-07-24/addendum-a-report.md` | `468ba24f4f418f72c2720608353c83e52694c41637cf9ff16a9b267d37e49ed6` |
@@ -545,6 +563,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.5 money/nav semantics (window-scoped money, entity-scoped navigation; divergence resolves upstream) + B1-B7 display ratifications + B7 destination-clause amendment | ruled/ratified at SCOPE-UI G1/G3 | SCOPE-UI decision record `e2f687ce63649c168fd0f7765434017949d68acc3a5613b9101212b5b413ae25` (banked `~/scope-ui-2026-08-03/g1-display-decisions.md`; the G3 authorization carrying the B7 amendment anchors on it) |
 | C4.7 ownership rule (most-recent-by-election; PS-84's conditional facet, amending PS-77's letter) | PS-84 | HALT-F1 ruling record `03721efcf0fe4d744ad580106627a4b3dafd9c65f6ce1c2b28bd833be793756c` |
 | coverage-count stop conditions (pre-ruled expectations, "an unexplained change is a stop") | PS-85 | same HALT-F1 ruling record `03721efc…` |
+| C5.6 surface-class rule (frame entity-scoped, contents window-scoped; money-unreachable corollary; in-frame-first section order) | PS-86 (rev 3, shape 3′ — supersedes rev 2 `7b43b20f…` and rev 1 `9a4ba9ac…`, each replaced on disk as ruled) | HALT-GUARD ruling record `c8c05654e97d92d97c4bc7c11ee4cac0c77e4e153c439f4f465449213f2ca962` |
 | C2.9 (writer-sweep method) | discipline 29 | G1 authorization `4df35187…` |
 | C6.4 (documentation drift is audit-only) | ruled this lane | G1 authorization `4df35187…` (§G1 §6 requirement) |
 | C6.5 (mechanical check's worded-count blind spot) | PS-60 | closing amend `daf8a0f0083651a17d39378600c64ced64d2a685e2db140a6075bf611cb6bfc8` |
