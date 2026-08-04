@@ -28,10 +28,11 @@ carries a claim-id (`[C…]`) and exactly one label:
 
 - **SOURCED** — resolves to a §8 appendix row (file, line, file sha).
 - **RULED** — normative content established by ratification; carries a ratification pointer
-  in §8 in place of an appendix row: ruling ID + **any hashed, on-disk, immutable lane
-  artifact carrying the ruling** — gate reports and governing input briefs alike — with the
-  handover revision as fallback for conversationally-ratified rulings (PS-58, widened by
-  PS-65).
+  in §8 in place of an appendix row: ruling ID + its entry in **`RULINGS.md`**, the committed
+  register that is the authority of record for ruling text; lane archives and handover
+  revisions are provenance, recorded in the register's entries (PS-75, widened by PS-87; the
+  prior archive-and-handover-fallback pointer scheme — PS-58, widened by PS-65 — is
+  superseded, and both rulings' text is in the register).
 - **UNVERIFIED** — no supporting bytes; sub-class stated: *gap* (should be closed, isn't) or
   *deferred-by-design* (deliberately parked, owned by another lane).
 
@@ -202,7 +203,7 @@ the emitted-vs-carried numbers and per-label figures live in the sha'd census re
 `tourism`, `utilities`.
 
 **Members of the label space that are not industries.** [C3.4, SOURCED; display ruling
-pointer per PS-58 — see §8] `individual` is a name-format bucket (above), and
+RULED — see §8] `individual` is a name-format bucket (above), and
 `self-funding` is a **money-type** — it records that the money is the candidate's own, not
 what industry it came from. (`candidate-account`, Sheet-only, is likewise a money-type by
 name.) Rendering any of these as an industry is one category error, not a coincidence
@@ -549,30 +550,31 @@ that catch defect classes the existing gates structurally cannot see.
 | C7.4 | S-ing | 506-508 (the carry set) |
 | P1 | A-fw1 | 60-62 (proposed fused-per-candidate detector, not built) |
 
-**RULED pointers** (`claim-id | ruling | sha'd record`):
+**RULED pointers** (`claim-id | ruling | register entry`; ruling text and provenance live in
+`RULINGS.md`, the authority of record per PS-75/PS-87):
 
-| claim | ruling | record |
+| claim | ruling | register entry |
 |---|---|---|
-| C1.1 (chains as requirement; authority inversion) | PS-25 / PS-44 | DOCS-M1 g0-report `d9420b12db1d737318403f299460b5696aa6bcb0cbe2345abdff4e29502e5e94` |
-| C1.7 (positional-requirement framing) | PS-45 | DOCS-M1 G1 authorization `4df351879a2e7d1172f2bfadb2d9a4497b6958a2efbf6e58dd977c95b4a7ba0b` |
-| C1.10 (step-8 re-apply is the intended architecture; not open work) | PS-29 (a′ Option B; 8a ruled) | recorded in the G1 authorization `4df35187…` (§ rulings-in-force) |
-| C1.11 (truncation vs order) | PS-80 | HALT-F5-SEED ruling record `bd25b641b682ec12a950ef64ade8561d65e483ceb7b11fc3dee26942a410cde6` |
-| C4.5 validator requirement (stamped fields carry a mismatch validator; Route B from-source constraint) | PS-81 | same HALT-F5-SEED ruling record `bd25b641…` |
-| C6.6 (a guard does not consume the field it guards) | PS-82 | SCOPE-PIPE ruling record `4a164c9716cbb67713ac1424b3605f41517789660da7df84eb3ca64b972628f8` |
-| C4.6 disposition (F3 documented, not re-keyed) | ruled at SCOPE-PIPE G1 §3 | same SCOPE-PIPE ruling record `4a164c97…` |
-| C5.5 money/nav semantics (window-scoped money, entity-scoped navigation; divergence resolves upstream) + B1-B7 display ratifications + B7 destination-clause amendment | ruled/ratified at SCOPE-UI G1/G3 | SCOPE-UI decision record `e2f687ce63649c168fd0f7765434017949d68acc3a5613b9101212b5b413ae25` (banked `~/scope-ui-2026-08-03/g1-display-decisions.md`; the G3 authorization carrying the B7 amendment anchors on it) |
-| C4.7 ownership rule (most-recent-by-election; PS-84's conditional facet, amending PS-77's letter) | PS-84 | HALT-F1 ruling record `03721efcf0fe4d744ad580106627a4b3dafd9c65f6ce1c2b28bd833be793756c` |
-| coverage-count stop conditions (pre-ruled expectations, "an unexplained change is a stop") | PS-85 | same HALT-F1 ruling record `03721efc…` |
-| C5.6 surface-class rule (frame entity-scoped, contents window-scoped; money-unreachable corollary; in-frame-first section order) | PS-86 (rev 3, shape 3′ — supersedes rev 2 `7b43b20f…` and rev 1 `9a4ba9ac…`, each replaced on disk as ruled) | HALT-GUARD ruling record `c8c05654e97d92d97c4bc7c11ee4cac0c77e4e153c439f4f465449213f2ca962` |
-| C2.9 (writer-sweep method) | discipline 29 | G1 authorization `4df35187…` |
-| C6.4 (documentation drift is audit-only) | ruled this lane | G1 authorization `4df35187…` (§G1 §6 requirement) |
-| C6.5 (mechanical check's worded-count blind spot) | PS-60 | closing amend `daf8a0f0083651a17d39378600c64ced64d2a685e2db140a6075bf611cb6bfc8` |
-| C2.10 routing (value-class → 1a arc, not a′) | **PS-9 — PS-58/PS-65 fallback**: planner-sitting ruling, no lane artifact carries it; the pointer resolves to the handover revision. **Resolves at rev E**, alongside PS-12 — deferred-by-design, not a defect. The mechanism half is SOURCED above. |
-| detector class (members by name) | PS-33 / PS-54 | G1.0 resolution `f7473cf26ffdfb6d380c73e9388de49913ce4c4c89a2574615a368b3602212c2` |
-| P2 (freshness check, as ratified proposal) | PS-23 | G1 authorization `4df35187…` |
-| P3 (population trip-wire, as ratified proposal) | PS-32 | G1 authorization `4df35187…` |
-| P4 (chain-consistency check, as ratified proposal) | PS-49 | G1 authorization `4df35187…` |
-| C3.4 display ruling | **PS-12 — pointer per PS-58 fallback**: ratified in a planner sitting, no gate record exists; the pointer resolves to the handover revision carrying the ruling. **Resolves at rev E** (drafted after this lane closes, by ratified sequencing) — a scheduled resolution, deferred-by-design, not an open defect. The mechanism claim itself is SOURCED above. |
+| C1.1 | PS-25 / PS-44 | `RULINGS.md` §PS-25, §PS-44 |
+| C1.7 | PS-45 | `RULINGS.md` §PS-45 |
+| C1.10 | PS-29 | `RULINGS.md` §PS-29 |
+| C1.11 | PS-80 | `RULINGS.md` §PS-80 |
+| C4.5 validator requirement | PS-81 | `RULINGS.md` §PS-81 |
+| C6.6 | PS-82 | `RULINGS.md` §PS-82 |
+| C4.6 disposition | SCOPE-PIPE G1 §3 | `RULINGS.md` §SCOPE-PIPE G1 §3 |
+| C5.5 display semantics | SCOPE-UI G1/G3 | `RULINGS.md` §SCOPE-UI G1/G3 |
+| C4.7 ownership rule | PS-84 | `RULINGS.md` §PS-84 |
+| coverage-count stop conditions | PS-85 | `RULINGS.md` §PS-85 |
+| C5.6 | PS-86 rev 3 | `RULINGS.md` §PS-86 |
+| C2.9 | discipline 29 | `RULINGS.md` §Discipline 29 |
+| C6.4 | DOCS-M1 (no id) | `RULINGS.md` §DOCS-M1 C6.4 |
+| C6.5 | PS-60 | `RULINGS.md` §PS-60 |
+| C2.10 routing | PS-9 | `RULINGS.md` §PS-9 |
+| detector class | PS-33 / PS-54 | `RULINGS.md` §PS-33, §PS-54 |
+| P2 | PS-23 | `RULINGS.md` §PS-23 |
+| P3 | PS-32 | `RULINGS.md` §PS-32 |
+| P4 | PS-49 | `RULINGS.md` §PS-49 |
+| C3.4 display ruling | PS-12 | `RULINGS.md` §PS-12 |
 
 **Conformance record:** `build_all.sh` (S-bld, sha above) conforms to the §1 chain block as
 of this commit. Its executable content is byte-identical (comment-stripped comparison) to
@@ -580,8 +582,6 @@ the revision the BA-1 lane shipped; only inert comment text differs. This row is
 baseline for the proposed chain-consistency check [P4].
 
 **UNVERIFIED register:** C4.3 `ie-committee-*` mechanism — *deferred-by-design* (own queued
-lane; owns the same file's help-string repoint). C3.4's PS-12 ruling pointer and C2.10's
-PS-9 routing pointer — *deferred-by-design* per PS-58/PS-65 (planner-sitting rulings; the
-pointers resolve to the handover revision at rev E). C7.5 "behind" — *gap* (no byte
+lane; owns the same file's help-string repoint). C7.5 "behind" — *gap* (no byte
 source). §5 surface enumeration — not carried here; the count is current state and routes
 to the handover.
