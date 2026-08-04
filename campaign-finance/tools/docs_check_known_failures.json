@@ -1,0 +1,13 @@
+{
+  "comment": "PS-73 rule-3 known failures. SHRINK-ONLY: max_entries is pinned at creation and may never rise; the checker fails in code if entries exceed it, if an entry lacks an owner, or if a listed entry no longer fails (remove it). Every entry names the lane that owns the fix.",
+  "created": "2026-08-04",
+  "max_entries": 6,
+  "entries": [
+    {"file": "README.md", "token": "campaign-finance.json", "owner": "DOCS-M2", "dated": "2026-08-04", "note": "pre-rename artifact name; ORIENT-1a finding"},
+    {"file": "README.md", "token": "donor-overrides.json", "owner": "DOCS-M2", "dated": "2026-08-04", "note": "retired local-overrides file; ORIENT-1a finding"},
+    {"file": "README.md", "token": "committees/ward-N.json", "owner": "DOCS-M2", "dated": "2026-08-04", "note": "stale shard layout"},
+    {"file": "README.md", "token": "campaign-finance-index.json", "owner": "DOCS-M2", "dated": "2026-08-04", "note": "stale shard index name"},
+    {"file": "campaign-finance/PIPELINE_RUNBOOK.md", "token": ".github/workflows/sync-council-data.yml", "owner": "DOCS-M2", "dated": "2026-08-04", "note": "Action retired at BA-1; runbook opening still names it; ORIENT-1a finding"},
+    {"file": "campaign-finance/elections/README.md", "token": "export_classification_worklist.py", "owner": "DOCS-M2", "dated": "2026-08-04", "note": "script exists nowhere in repo; NEW find at DOCS-M4 G0"}
+  ]
+}

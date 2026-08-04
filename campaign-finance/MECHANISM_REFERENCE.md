@@ -426,7 +426,7 @@ derives from the same stamped linkage; two near-misses caught at SCOPE-PIPE's ga
 
 ---
 
-## Proposals — detectors proposed, not built
+## Proposals — the invisible-defect detector class (P5 built; P1–P4 proposed, not built)
 
 **The invisible-defect detector class** (ruled; members enumerated below by name): checks
 that catch defect classes the existing gates structurally cannot see.
@@ -449,6 +449,15 @@ that catch defect classes the existing gates structurally cannot see.
    (the conformance record in §8 is its baseline). Failure mode: parsing shell reliably is
    hard; a checker that only pattern-matches invocation lines can be fooled by refactors —
    scope it to the named steps, not general shell semantics.
+5. **Docs-form checker: pointer form, register lexical, path existence** [P5, RULED —
+   **BUILT**] (PS-73) — `campaign-finance/tools/check_docs.py`, one implementation with two
+   invokers: `build_all.sh`'s validation gate and `gate_bundle`. Checks that §8's RULED
+   pointer cells match the PS-71 shape structurally and resolve to `RULINGS.md` headings;
+   that §8's UNVERIFIED register carries no forward-looking status language (PS-42's class
+   names allowlisted as exact tokens); and that backticked paths in tracked markdown resolve
+   on disk, with a committed shrink-only known-failures file whose entries each name an
+   owning lane (`tools/docs_check_known_failures.json`). Hard-fail, ruled with PS-73;
+   self-test mode fires every rule on a synthetic violation.
 
 ---
 
@@ -460,7 +469,7 @@ that catch defect classes the existing gates structurally cannot see.
 |---|---|---|
 | S-ing | `campaign-finance/ingestion/ingest.py` | `5e2c2e2175fa8ed4de0d4a7dd2ffdd70208c5df206b50200faf6225359a7d4cf` |
 | S-syn | `campaign-finance/sheets-sync/sync_overrides.py` | `5162f700c72f1fc02b40e65ecf0bbdf3d4955a712eb8525055aa7a0cc06a6098` |
-| S-bld | `campaign-finance/build_all.sh` | `c652ab26b6d4ea58bfffd3b6f4f13e19c70dc05d958553a1a94ce3e48c2db053` |
+| S-bld | `campaign-finance/build_all.sh` | `84a7b14547ee8bee4c6bd2846d77c5cc12e56c4a6c02bd4af6339a88a18aae54` |
 | S-t1 | `campaign-finance/ingestion/transform_slice1.py` | `5f807b26245ee22173d3903b9b8a3825f224c47c4f2d7ad11042ee87a6ccb68d` |
 | S-ie | `campaign-finance/ingestion/ingest_ie.py` | `242caca31d35adfd962f5f1c2897c07345afe1a26286f2cc6ffd779376847158` |
 | S-rep | `campaign-finance/ingestion/repair_clusters.py` | `90cc6912647479510d10d505debb84d18fbd28557bf5996b01a992eb1ddf283c` |
@@ -577,9 +586,12 @@ that catch defect classes the existing gates structurally cannot see.
 | C3.4 display ruling | PS-12 | `RULINGS.md` §PS-12 |
 
 **Conformance record:** `build_all.sh` (S-bld, sha above) conforms to the §1 chain block as
-of this commit. Its executable content is byte-identical (comment-stripped comparison) to
-the revision the BA-1 lane shipped; only inert comment text differs. This row is the
-baseline for the proposed chain-consistency check [P4].
+of this commit. ~~Its executable content is byte-identical (comment-stripped comparison) to
+the revision the BA-1 lane shipped; only inert comment text differs.~~ Superseded at DOCS-M4:
+its executable delta from the BA-1 revision is exactly one appended validation-gate line —
+the PS-73 docs-form check [P5] — verified by comment-stripped diff at that lane; the chain
+steps and their order are unchanged. This row is the baseline for the proposed
+chain-consistency check [P4].
 
 **UNVERIFIED register:** C4.3 `ie-committee-*` mechanism — *deferred-by-design* (own queued
 lane; owns the same file's help-string repoint). C7.5 "behind" — *gap* (no byte

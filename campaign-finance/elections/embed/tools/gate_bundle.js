@@ -682,6 +682,15 @@ async function assertWindowScoping(T, ctx, fx) {
   await assertCandidateGroups(T, ctx, fx);
   await assertWindowScoping(T, ctx, fx);
 
+  // [DOCS] PS-73 docs-form checker (DOCS-M4): one implementation (campaign-finance/
+  // tools/check_docs.py), two invokers — build_all.sh's validation gate and this line.
+  (function () {
+    var res = require('child_process').spawnSync('python3',
+      [path.join(__dirname, '..', '..', '..', 'tools', 'check_docs.py')], { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[DOCS] check_docs (PS-73) green — ' + tail, res.status === 0);
+  })();
+
   console.log('\n' + T.n + ' checks · ' + (T.fail ? ('FAILED ' + T.fail) : 'ALL PASS'));
   process.exit(T.fail ? 1 : 0);
 })();

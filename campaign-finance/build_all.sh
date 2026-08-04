@@ -97,6 +97,9 @@ if grep -rlnE '^(<<<<<<<|=======|>>>>>>>)' "$DATA" "$SHARDS"/*.json; then
   echo "  !! conflict markers found — ABORTING, nothing committed"; exit 1
 fi
 echo "  no conflict markers."
+# PS-73 docs-form gate (DOCS-M4): one implementation (tools/check_docs.py), two invokers —
+# here and the elections gate_bundle. Hard-fail per RULINGS.md §PS-73.
+python3 "$REPO/campaign-finance/tools/check_docs.py" || { echo "  !! docs-form check (PS-73) FAILED — ABORTING"; exit 1; }
 
 # ---- 7. Commit (manual on purpose — review first) ---------------------------
 say "All artifacts valid. To publish, review the diff then run:"
