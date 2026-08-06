@@ -2024,12 +2024,13 @@
     return s ? '<p class="committee facet-' + esc(c.financeFacet) + '">' + esc(s) + '</p>' : '';
   }
   // Person affordance (D4/D8): opens the person surface via the modal system. The button
-  // carries ONLY data-person (one click never satisfies two dispatch paths) and its label is
-  // DATA ONLY — the candidacy's own name — because no ratified string supplies affordance
-  // copy and the retirement ruling is deletion-with-no-new-words (reported at G3).
+  // carries ONLY data-person (one click never satisfies two dispatch paths). Its label is
+  // string 13 (HALT-S13, ratified) — the arrow is part of the ratified text; the candidate
+  // name is NOT composed in (it renders in the card header above; composing it would be an
+  // accidental concatenation, not the ratified line).
   function personAffordance(c) {
     return '<p class="committee person-link"><button class="goto-link" type="button" data-person="' +
-      esc(c.id) + '">' + esc(c.name) + ' →</button></p>';
+      esc(c.id) + '">Campaign finance for this candidate →</button></p>';
   }
 
   function card(c, scale, idPrefix) {

@@ -724,7 +724,7 @@ descriptive headings.
 *Provenance, second block (B1–B7): SCOPE-UI G1 display decisions (`g1-display-decisions.md`), sha256 `e2f687ce63649c168fd0f7765434017949d68acc3a5613b9101212b5b413ae25`, lines 42–97 (Part B); ratified by Ishan (the G3 authorization proceeds under them), with each decision's recommended option taken. Ruled without PS ids.*
 *Provenance, third block (B7 destination-clause amendment): SCOPE-UI G3 authorization, sha256 `118e0610…` (above), lines 29–49 (§F-2 editorial half); option (b) ratified by Ishan 2026-08-03. Supersedes B7(a) as to the destination clause only. Cited by reference C5.5.*
 
-### P1D-PERSON G1/G2 — display decisions D1–D14 and strings 1–12
+### P1D-PERSON G1/G2 — display decisions D1–D14 and strings 1–13
 
 The corrected decision map (the addendum `9352a5f9…` silently redefined two ratified ids; cite this map, per the G2 record):
 
@@ -808,9 +808,38 @@ Dispositions as ratified at the G3 authorization (string 12's text is part of th
 >
 > **String 12, ratified:** `Total direct contributions`
 
+String 13, the affordance label (ratified at HALT-S13; G3 shipped the affordance with a
+data-only name label because no string had been proposed — the omission is owned in the
+issuing record):
+
+> **Text:** `Campaign finance for this candidate →`
+>
+> **One word changed from the planner's own relay-15 recommendation**, which read *"for this
+> person."* Flagged rather than shipped silently:
+>
+> - **`person` → `candidate`.** No reader-facing copy in the suite calls people "persons" —
+>   that is the internal entity noun. The retired string used *"this candidate"*, so
+>   `candidate` preserves both the reader's vocabulary and the card's own frame at the moment
+>   the affordance is read.
+> - **"all" deliberately absent.** *"All campaign finance"* would imply independent
+>   expenditures are included, which is the assumption string 6 exists to prevent. The label
+>   says where finance lives, not that it is complete.
+>
+> **One word reverses this** if `person` is preferred; the label is then re-ratified, not
+> re-argued.
+
+The citywide substitution in strings 1/2 (applied faithfully at G3, stated here by the
+HALT-S13 fold-in so it is documented rather than incidental):
+
+> - **Register accuracy fix, folded here because it is the same file and subject:** document
+>   the citywide substitution in the string table — strings 1/2's `District N` slot is filled
+>   by the race code where a race has no district (`2026 school board election — President`).
+>   G3 applied it faithfully and reported it; the register should state it rather than leave
+>   the substitution undocumented.
+
 String 4's non-ship disposition:
 
 > **Ratified: the divergent-name line is not built.** The render path is omitted from this
 > lane's diff; the string remains drafted and unshipped.
 
-*Provenance, five sources: strings — G1 decision package (`p1d-person-g1-decisions.md`), sha256 `abeefe80e29aebe992a49f40862b473c99f9feaca50ae4a601b6597a10d017ad`, lines 299–307; D-map and D14 — G2 ratification record, sha256 `54920c73…` (full sha at §PS-92), lines 39–59 and 106–132; dispositions and string 4's non-ship — G3 authorization record (`p1d-person-g3-authorization.md`), sha256 `1dbda314e31147b8f063015bcf1d9d8dd944e10af2ceb80e2ba5f618b61a0e01`, lines 24–36 and 47–48; D1–D10 issued at `d1a77ebc…` §4 (ratified by Ishan 2026-08-04); D11–D14 and sequencing (iii) ratified by Ishan 2026-08-05 at `54920c73…`; final dispositions ratified by Ishan 2026-08-06 at `1dbda314…`. Entry ruled by the G3 authorization §3, answering the G2 statement's flagged question. Cited by reference C5.7 (career-total rule).*
+*Provenance, six sources: strings — G1 decision package (`p1d-person-g1-decisions.md`), sha256 `abeefe80e29aebe992a49f40862b473c99f9feaca50ae4a601b6597a10d017ad`, lines 299–307; D-map and D14 — G2 ratification record, sha256 `54920c73…` (full sha at §PS-92), lines 39–59 and 106–132; dispositions and string 4's non-ship — G3 authorization record (`p1d-person-g3-authorization.md`), sha256 `1dbda314e31147b8f063015bcf1d9d8dd944e10af2ceb80e2ba5f618b61a0e01`, lines 24–36 and 47–48; string 13 and the citywide-substitution note — HALT-S13 brief (`halt-s13-brief.md`), sha256 `e11955dca8337fcb9d6e5c9f0dfd1a103a7e8d2781ce27d64575882a17384209`, lines 14–28 and 71–75, ratified by Ishan 2026-08-06 (relay 16, option (b)); D1–D10 issued at `d1a77ebc…` §4 (ratified by Ishan 2026-08-04); D11–D14 and sequencing (iii) ratified by Ishan 2026-08-05 at `54920c73…`; final dispositions ratified by Ishan 2026-08-06 at `1dbda314…`. Entry ruled by the G3 authorization §3, answering the G2 statement's flagged question. Cited by reference C5.7 (career-total rule).*

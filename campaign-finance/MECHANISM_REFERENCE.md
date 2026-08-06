@@ -367,7 +367,9 @@ election's window, computed as a **boolean** — no unwindowed figure is materia
 render scope. Person resolution is **by id, never by name** (PS-92), and a candidacy id
 belonging to a linked person resolves to that person (the durable-link rule), so shared
 links survive later linking. The retired returner-pointer card carries the person
-affordance in the deleted string's place (SCOPE-UI B7's retirement condition, discharged).
+affordance in the deleted string's place (SCOPE-UI B7's retirement condition, discharged);
+the affordance's label is the ratified string 13 — the arrow is part of the ratified text,
+and the candidate name is not composed into it (HALT-S13; the register's P1D-PERSON entry).
 
 **Sizing note** [C5.4, SOURCED]: the tools present multiple distinct public surfaces,
 which multiplies render paths, not merely classification consumers. The surface count is
@@ -504,7 +506,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-cemb | `campaign-finance/elections/reference/council-embed.html` | `f1451fa9900a7a645fec202f7226b26b95597b008c119be28747de81b89be111` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
 | S-edat | `campaign-finance/elections/embed/data.js` | `14c90973779775659daac337d3b9dc5a1e0f068dea6ec13e0f6602bd52ecc669` |
-| S-eren | `campaign-finance/elections/embed/render.js` | `973596d950d54bde638c4f054b43682968b54147e651ead7b1b5080f0c075bbf` |
+| S-eren | `campaign-finance/elections/embed/render.js` | `57205306c0db4c50b7b9f87232ae8f0b2eb8b15aa6d4ec7bed67fe5702499702` |
 | S-eapp | `campaign-finance/elections/embed/app.js` | `ea8a6b01871dec4cb63a21996fbb4572f855e11a45f0cf9e0ff35fe56815a659` |
 | A-probe | `~/probe-sync-2026-07-24/probe-report.md` | `4c678cf0c14dd370f8b52744bf473000340ce16449a5365841b6ac92d8e5f9bb` |
 | A-add | `~/probe-sync-a-2026-07-24/addendum-a-report.md` | `468ba24f4f418f72c2720608353c83e52694c41637cf9ff16a9b267d37e49ed6` |
@@ -569,10 +571,10 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.2 | S-cemb | 42-52 (dataUrl + optional sharded mode); S-eemb 19-24 (elections artifact + inlined deploy) |
 | C5.2 | A-ba1g2 | 49 (Rider 2: neither embed renders entity-type / last-editor) |
 | C5.5 | S-edat | 110-116 (selectorOptions — the {year} {body} pattern), 812-830 (officeRaces election scoping via the year-prefix join), 761 (the race's window rides the VM), 778 (priorElection re-homed to the base VM) |
-| C5.5 | S-eren | 861-866 (selectorNav), 749-751 (the verbatim prior-note; the formerly-cited on_current_record string is DELETED — its retirement is C5.7's affordance clause) |
+| C5.5 | S-eren | 862-867 (selectorNav), 750-752 (the verbatim prior-note; the formerly-cited on_current_record string is DELETED — its retirement is C5.7's affordance clause) |
 | C5.5 | S-eapp | 140-152 (selector state + read-only ?election= boot), 207-218 (scope switch resets the active race — the ruled B6 resolution) |
 | C5.7 | S-edat | 870-952 (resolvePersonRef 876 — id-only resolution + durable link; personView 907 — member sections, window-scoped figures, career total, boolean out-of-window condition, no IE key), 1291 (exports) |
-| C5.7 | S-eren | 629-666 (renderPersonModal — per-member sections + ratified strings), 668-673 (renderPersonMissing — string 7), 701-708 (facet map with on_current_record retired), 713-716 (personAffordance — data-only label), 752-754 (card affordance), 770-782 (pendingCard explicit on_current_record branch) |
+| C5.7 | S-eren | 629-666 (renderPersonModal — per-member sections + ratified strings), 668-673 (renderPersonMissing — string 7), 701-708 (facet map with on_current_record retired), 714-717 (personAffordance — string 13 label), 753-755 (card affordance), 771-783 (pendingCard explicit on_current_record branch) |
 | C5.7 | S-eapp | 71-80 (openPerson — no window parameter), 91-92 (data-person dispatch, no winFromEl), 276-286 (read-only ?person= boot — the deep-link path) |
 | C5.3 | A-fw1 | 14-16 (artifact not fused), 60-62 (gates check values, not structure) |
 | C5.4 | A-probe | 152 (banked sizing item: multiple surfaces, per-path render compliance) |

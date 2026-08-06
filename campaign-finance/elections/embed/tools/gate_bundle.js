@@ -176,6 +176,7 @@ var FIXTURES = {
       // D8: the RETIRED pointer string (SCOPE-UI B7 as amended; deleted at P1D-PERSON).
       retiredString: 'is reported under their current committee',
       careerLabel: 'Total direct contributions',                        // string 12
+      s13: 'Campaign finance for this candidate →',                     // string 13 (HALT-S13, ratified label)
       s7: 'No person matches this link.',                               // string 7
       s11: "outside this election's window",                        // string 11 (anchor; ratified straight apostrophe)
       // The five verified out-of-window singles (probe-links-report 969fd9f2: no
@@ -799,20 +800,22 @@ async function assertPersonSurface(T, ctx, fx) {
     ED.personView(idx, 'zz-no-such-person') === null &&
     ER.renderPersonMissing().indexOf(pf.s7) >= 0);
 
-  // --- 7. [PERSON/D8] the retirement: the ruled pointer string is GONE from both scopes'
-  // rendered pages, the returner 2024 card does NOT fall through to "still populating",
-  // and the person affordance is present on that same card (the retirement's condition).
-  // (Finding recorded at G2/G3: no prior gate check covered the pointer string — this
-  // check is new coverage, not a discipline-25 rewrite.)
+  // --- 7. [PERSON/D8] the retirement AND the replacement: the ruled pointer string is
+  // GONE from both scopes' rendered pages, the returner 2024 card does NOT fall through to
+  // "still populating", and the affordance on that same card reads EXACTLY string 13's
+  // ratified label (HALT-S13) — the check's subject grew with the ratification, so this is
+  // the discipline-25 REWRITE of the G3 check, not a supplement (104 -> 104).
+  // (G3 finding stands: no pre-G3 gate check covered the pointer string.)
   var page26 = ctx.root().innerHTML;
   ctx.selectElection('2024'); await ctx.wait(70);
   ctx.nav(pf.card2024.slug); await ctx.wait(50);
   var page24 = ctx.root().innerHTML;
-  var card24 = ctx.root().querySelector('[data-person="' + pf.card2024.id + '"]');
-  card24 = card24 && card24.closest('article.card');
-  T.ok('[PERSON/D8] pointer string retired from both scopes; no false fallback; affordance on the same card',
+  var aff24 = ctx.root().querySelector('[data-person="' + pf.card2024.id + '"]');
+  var card24 = aff24 && aff24.closest('article.card');
+  T.ok('[PERSON/D8] pointer retired from both scopes; no false fallback; same-card affordance reads string 13 verbatim',
     page26.indexOf(pf.retiredString) < 0 && page24.indexOf(pf.retiredString) < 0 &&
     !!card24 && card24.innerHTML.indexOf('still populating') < 0 &&
+    !!aff24 && aff24.textContent === pf.s13 &&
     pure.indexOf(pf.careerLabel) >= 0);
   ctx.selectElection('2026'); await ctx.wait(60);
 }
