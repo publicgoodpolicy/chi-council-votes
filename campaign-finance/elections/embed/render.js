@@ -214,6 +214,9 @@
       '.ipg-elect .modal-summary{font-size:13px;font-weight:500;margin:0 0 8px;padding-bottom:8px;border-bottom:1px solid var(--line);}' +
       // Donor-popup stat cards (E-2/E-3): TOTAL GIVEN / COMMITTEES FUNDED / CONTRIBUTIONS / CYCLES.
       '.ipg-elect .elect-statgrid{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;}' +
+      '.ipg-elect .person-member{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);}' +
+      '.ipg-elect .person-member-h{margin-bottom:8px;}' +
+      '.ipg-elect .person-oow{font-style:italic;}' +
       '.ipg-elect .elect-stat{flex:1 1 calc(50% - 8px);min-width:120px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:11px 13px;}' +
       '.ipg-elect .elect-stat .num{font-family:var(--display);font-weight:700;font-size:23px;line-height:1.05;color:var(--teal);white-space:nowrap;}' +
       '.ipg-elect .elect-stat .lab{font-weight:600;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-top:6px;}' +
@@ -616,6 +619,58 @@
       head + summary + spent + '<p class="contrib-h" style="margin-top:14px">' + label + '</p>' + funders + moreF + '</div></div>';
   }
 
+  // Person surface (P1D-PERSON) — the third modal content type. Frame = the person's member
+  // candidacies (PS-89): every member renders, money or not; each section's money is
+  // window-scoped to ITS OWN election (the VM guarantees it). Deliberately carries NO
+  // [data-win-*] attributes and is mounted on <body> by the app — a person modal never
+  // inherits the window of the card it was opened from (PS-89's exemption, structural).
+  // No IE stream renders here (PS-90, deferral-scoped — see personView). Every state is
+  // visible by default, never pointer-revealed (SCOPE-UI B6 / the jsdom lesson).
+  function renderPersonModal(vm) {
+    var stat = function (num, lab) { return '<div class="elect-stat"><div class="num">' + num + '</div><div class="lab">' + lab + '</div></div>'; };
+    var sections = vm.sections.map(function (s) {
+      // Strings 1/2 (ratified pattern; the race identity slot is the district where one
+      // exists, else the race code — President is citywide, no district).
+      var head = '<p class="contrib-h person-member-h">' + esc(s.year) + ' school board election — ' + esc(s.raceLabel) + '</p>';
+      var body;
+      if (s.contributions.count > 0) {
+        body = '<div class="elect-statgrid person-member-figs">' +
+          stat(money(s.contributions.total), 'Direct contributions') +
+          stat(s.contributions.count, s.contributions.count === 1 ? 'contribution' : 'contributions') + '</div>' +
+          (s.contributions.selfFunded > 0
+            ? '<p class="selfline"><b>' + money(s.contributions.selfFunded) + '</b> is the candidate’s own money or loans · <b>' +
+              money(s.contributions.thirdParty) + '</b> from other donors</p>' : '');
+      } else {
+        body = '<p class="committee person-no-money">No itemized contributions reported for this election.</p>';   // string 3
+      }
+      var qual = s.qualifier ? '<p class="committee prior-note">' + esc(s.qualifier) + '</p>' : '';   // string 5: verbatim, no wrapper
+      return '<div class="person-member">' + head + body + qual + '</div>';
+    }).join('');
+    var committeeLine = (vm.committee && vm.committee.name)
+      ? '<p class="committee">Committee: ' + esc(vm.committee.name) +
+        (vm.committee.sunshineUrl ? ' · <a href="' + esc(vm.committee.sunshineUrl) + '" target="_blank" rel="noopener">Illinois Sunshine ↗</a>' : '') + '</p>'
+      : '';
+    var oow = vm.hasOutOfWindow
+      ? '<p class="committee person-oow">This committee also received contributions outside this election\'s window.</p>'   // string 11 (ratified byte-form: straight apostrophe)
+      : '';
+    return '<div class="ipg-modal-overlay" data-modal-overlay><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Candidate across elections">' +
+      '<button class="ipg-modal-close" type="button" data-modal-close aria-label="Close">×</button>' +
+      '<div class="modal-name">' + esc(vm.displayName) + '</div>' +
+      committeeLine +
+      '<div class="elect-statgrid person-career">' + stat(money(vm.careerTotal), 'Total direct contributions') + '</div>' +   // string 12 + D14
+      sections + oow +
+      '<p class="caption">Independent expenditures are reported separately and are not included in these totals.</p>' +   // string 6
+      '</div></div>';
+  }
+
+  // String 7 (ratified): the unresolvable-person-id boot state — an explicit modal state,
+  // never a bare empty region (SCOPE-UI B6 pattern).
+  function renderPersonMissing() {
+    return '<div class="ipg-modal-overlay" data-modal-overlay><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Person not found">' +
+      '<button class="ipg-modal-close" type="button" data-modal-close aria-label="Close">×</button>' +
+      '<p class="committee person-missing">No person matches this link.</p></div></div>';
+  }
+
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
 
   // HALT-P1-B: the 2024 CBOE-native RESULT axis renders as its own pill (separate from the
@@ -639,16 +694,25 @@
     var s = c.result && RESULT_NOTE[c.result];
     return s ? '<p class="result-note">' + esc(s) + '</p>' : '';
   }
-  // Four-way finance facet copy, keyed by the data-side finance_facet enum. committee_receipts
-  // needs no line (the committee + bars render the money); the other three are the ruled strings.
+  // Finance facet copy, keyed by the data-side finance_facet enum. committee_receipts
+  // needs no line (the committee + bars render the money). The on_current_record pointer
+  // string is RETIRED (P1D-PERSON D8, per the SCOPE-UI B7 retirement condition): the alias
+  // is live — its card carries the person affordance instead (see pendingCard).
   var FINANCE_FACET = {
     committee_no_itemized: 'No itemized contributions reported.',
-    no_committee: 'No campaign committee on file with the Illinois State Board of Elections.',
-    on_current_record: 'Campaign finance for this candidate is reported under their current committee.'
+    no_committee: 'No campaign committee on file with the Illinois State Board of Elections.'
   };
   function facetLine(c) {
     var s = FINANCE_FACET[c.financeFacet];
     return s ? '<p class="committee facet-' + esc(c.financeFacet) + '">' + esc(s) + '</p>' : '';
+  }
+  // Person affordance (D4/D8): opens the person surface via the modal system. The button
+  // carries ONLY data-person (one click never satisfies two dispatch paths) and its label is
+  // DATA ONLY — the candidacy's own name — because no ratified string supplies affordance
+  // copy and the retirement ruling is deletion-with-no-new-words (reported at G3).
+  function personAffordance(c) {
+    return '<p class="committee person-link"><button class="goto-link" type="button" data-person="' +
+      esc(c.id) + '">' + esc(c.name) + ' →</button></p>';
   }
 
   function card(c, scale, idPrefix) {
@@ -678,14 +742,18 @@
       : '';
     // SCOPE-UI (F-1 ruled): the prior-run carriage, re-homed VERBATIM from the retired
     // toggle path — shipped label + qualifier text only, no new words, never dollars.
-    // (The office-change provenance sentences described the retired combined sum and have
-    // no scoped-card-compatible shipped wording; they ride to the by-person lane.)
+    // (The office-change provenance sentences were RETIRED at the by-person lane (D7):
+    // they described the retired combined sum; the person-level facts they gestured at
+    // render verbatim as qualifier text on the person surface.)
     var priorLine = (c.priorElection && c.priorElection.label)
       ? '<p class="committee prior-note">' + esc(c.priorElection.label) +
         (c.priorElection.qualifier ? ' · ' + esc(c.priorElection.qualifier) : '') + '</p>'
       : '';
+    // Person affordance (D4): on the returner card — the card that carries prior-run
+    // context is exactly the card whose person spans elections.
+    var personLine = c.priorElection ? personAffordance(c) : '';
     return '<article class="card" id="cand-' + esc(c.slug) + '">' +
-      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' + chips + '</div>' + resultNote(c) + committeeLine + priorLine +
+      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' + chips + '</div>' + resultNote(c) + committeeLine + priorLine + personLine +
       '<div class="bars">' + contribBar + contribPanel + supportBar + supportPanel + opposeBar + opposePanel + '</div>' + selfLine +
       '<p class="caption">Independent support and opposition are spending by outside groups, reported by those ' +
       'groups and not coordinated with the campaign. Figures are shown separately, never added together.</p></article>';
@@ -701,10 +769,12 @@
 
   function pendingCard(c) {
     // A committee-less card. For 2024 records an explicit finance_facet drives the ruled
-    // copy (on_current_record pointer / no-itemized / no-committee); the "still populating"
-    // fallback stays for its legitimate use — a 2026 candidate whose committee is genuinely
-    // not yet identified (no facet).
-    var fl = facetLine(c);
+    // copy (no-itemized / no-committee); the "still populating" fallback stays for its
+    // legitimate use — a 2026 candidate whose committee is genuinely not yet identified
+    // (no facet). on_current_record takes an EXPLICIT branch (D8): its ruled string is
+    // retired and the person affordance renders in its place — without this branch the
+    // deleted facet entry would fall through to the "still populating" line, false here.
+    var fl = c.financeFacet === 'on_current_record' ? personAffordance(c) : facetLine(c);
     return '<article class="card"><div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' +
       (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') + statusPill(c) + '</div>' + resultNote(c) +
       (fl || '<p class="committee">Finance data still populating — committee not yet identified.</p>') + '</article>';
@@ -1204,6 +1274,7 @@
     renderComingSoon: renderComingSoon, spendPlaceholder: spendPlaceholder, renderSpend: renderSpend,
     methodologyView: methodologyView,
     renderFunderModal: renderFunderModal, renderCommitteeProfile: renderCommitteeProfile,
+    renderPersonModal: renderPersonModal, renderPersonMissing: renderPersonMissing,
     tagsHtml: tagsHtml, readableText: readableText,
     donorRow: donorRow, contributorPanel: contributorPanel, iePanel: iePanel,
     renderPage: renderPage, pageLabel: pageLabel,

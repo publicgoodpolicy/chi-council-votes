@@ -885,6 +885,90 @@
     return Object.keys(index.cyclesSeen).sort().reverse();
   }
 
+  // ---- Person surface (P1D-PERSON; PS-89 frame) ----
+  // Resolve a person ref to its frame: a by_person key (a linked person), or a school-board
+  // candidate id (a single's one-member frame). A candidacy id that belongs to a LINKED
+  // person resolves to that person — D4's durable-link clause, so a link shared to a single
+  // survives the single becoming a linked person. Vacating shells and non-school-board ids
+  // resolve to null (the string-7 state). Resolution is by id, never by name (PS-92).
+  function resolvePersonRef(index, ref) {
+    if (!ref) return null;
+    var bp = (index.rollups && index.rollups.by_person) || {};
+    if (bp.hasOwnProperty(ref)) {
+      var p = bp[ref];
+      return { pid: ref, displayName: p.display_name, members: (p.members || []).slice() };
+    }
+    var c = index.candidateById[ref];
+    if (!c || c.vacating_for) return null;
+    var race = index.raceById[c.race_id] || {};
+    if (!officeType(race.office)) return null;
+    for (var pid in bp) {                       // durable link: member id -> its person
+      if (!bp.hasOwnProperty(pid)) continue;
+      var ms = bp[pid].members || [];
+      for (var i = 0; i < ms.length; i++) {
+        if (ms[i].candidacy_id === ref) return resolvePersonRef(index, pid);
+      }
+    }
+    return { pid: c.id, displayName: c.name,
+      members: [{ candidacy_id: c.id, election_id: c.election_id, owns_committee: !!c.committee_id }] };
+  }
+
+  // Person view-model. The person is the framed entity (PS-89): every member candidacy
+  // renders, money or not; the money in each member section is contents, window-scoped to
+  // that member's OWN election (PS-79/A1) — computed from the owning candidacy's rows,
+  // independent of by_person's money values (PS-82: the gate's D14 equality check must not
+  // read its subject). The career total is Σ member own-window figures (D14).
+  // NO IE value enters this view-model. This exclusion is DEFERRAL-SCOPED (PS-90): the lane
+  // that ships IE display after P1-E re-routes supersedes it consciously, and its removal is
+  // NOT a firewall regression — the permanent invariant is INV-PERSON-2 at the artifact
+  // layer, which this comment is expressly not.
+  function personView(index, ref) {
+    var r = resolvePersonRef(index, ref);
+    if (!r) return null;
+    var membs = r.members.slice().sort(function (a, b) {   // most recent first (D6)
+      return (a.election_id || '') < (b.election_id || '') ? 1 : -1;
+    });
+    var ownerId = null;
+    for (var i = 0; i < membs.length; i++) if (membs[i].owns_committee) ownerId = membs[i].candidacy_id;
+    var sections = [], career = 0, memberWins = [];
+    for (var m = 0; m < membs.length; m++) {
+      var mc = index.candidateById[membs[m].candidacy_id] || {};
+      var race = index.raceById[mc.race_id] || {};
+      // B1: fail loud only where finance exists to filter; a money-less frame renders zeros.
+      var win = ownerId ? requireWin(race) : raceWin(race);
+      memberWins.push(win);
+      var f = ownerId ? candidateFigures(index, ownerId, null, win) : null;
+      var contrib = f ? f.contributions : { total: 0, selfFunded: 0, thirdParty: 0, count: 0 };
+      career = round2(career + contrib.total);
+      var yr = (/^(\d{4})-/.exec(membs[m].election_id || '') || [])[1] || '';
+      sections.push({
+        candidacyId: membs[m].candidacy_id, electionId: membs[m].election_id, year: yr,
+        raceLabel: race.district || raceCode(race),
+        contributions: contrib,                          // direct only — never an IE stream
+        qualifier: mc.election_note || ''                // string 5: verbatim from the data
+      });
+    }
+    // String 11's condition — a BOOLEAN by construction (G3 authorization §5(b)): short-
+    // circuit on the first owning-committee row outside every member window; no unwindowed
+    // figure is ever materialised in render scope.
+    var hasOutOfWindow = false;
+    if (ownerId) {
+      var rows = index.directByCandidate[ownerId] || [];
+      for (var k = 0; k < rows.length && !hasOutOfWindow; k++) {
+        var row = rows[k];
+        if (EXCLUDED_CYCLES[row.cycle] || row.contribution_type === DUES_TYPE) continue;
+        var inAny = false;
+        for (var w = 0; w < memberWins.length; w++) {
+          if (memberWins[w] && inWindow(row.date, memberWins[w])) { inAny = true; break; }
+        }
+        if (!inAny) hasOutOfWindow = true;
+      }
+    }
+    return { pid: r.pid, displayName: r.displayName, sections: sections,
+      careerTotal: career, hasOutOfWindow: hasOutOfWindow,
+      committee: ownerId ? committeeMeta(index, ownerId) : null };
+  }
+
   // ---- Election Spend subtabs (office-scoped) ----
 
   // Is a recipient committee in the current office scope? Candidate committees of
@@ -1222,6 +1306,7 @@
     industryTotals: industryTotals, industriesByCandidate: industriesByCandidate,
     flagTotals: flagTotals, spendSubtab: spendSubtab,
     isSelfFunded: isSelfFunded,
+    resolvePersonRef: resolvePersonRef, personView: personView,
     kebab: kebab, raceSlug: raceSlug, candidateSlug: candidateSlug, raceCode: raceCode,
     selectorOptions: selectorOptions,
     viewModels: { raceBrowse: raceBrowse, raceView: raceView, officeRaces: officeRaces }
@@ -1446,6 +1531,9 @@
       '.ipg-elect .modal-summary{font-size:13px;font-weight:500;margin:0 0 8px;padding-bottom:8px;border-bottom:1px solid var(--line);}' +
       // Donor-popup stat cards (E-2/E-3): TOTAL GIVEN / COMMITTEES FUNDED / CONTRIBUTIONS / CYCLES.
       '.ipg-elect .elect-statgrid{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;}' +
+      '.ipg-elect .person-member{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);}' +
+      '.ipg-elect .person-member-h{margin-bottom:8px;}' +
+      '.ipg-elect .person-oow{font-style:italic;}' +
       '.ipg-elect .elect-stat{flex:1 1 calc(50% - 8px);min-width:120px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:11px 13px;}' +
       '.ipg-elect .elect-stat .num{font-family:var(--display);font-weight:700;font-size:23px;line-height:1.05;color:var(--teal);white-space:nowrap;}' +
       '.ipg-elect .elect-stat .lab{font-weight:600;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-top:6px;}' +
@@ -1848,6 +1936,58 @@
       head + summary + spent + '<p class="contrib-h" style="margin-top:14px">' + label + '</p>' + funders + moreF + '</div></div>';
   }
 
+  // Person surface (P1D-PERSON) — the third modal content type. Frame = the person's member
+  // candidacies (PS-89): every member renders, money or not; each section's money is
+  // window-scoped to ITS OWN election (the VM guarantees it). Deliberately carries NO
+  // [data-win-*] attributes and is mounted on <body> by the app — a person modal never
+  // inherits the window of the card it was opened from (PS-89's exemption, structural).
+  // No IE stream renders here (PS-90, deferral-scoped — see personView). Every state is
+  // visible by default, never pointer-revealed (SCOPE-UI B6 / the jsdom lesson).
+  function renderPersonModal(vm) {
+    var stat = function (num, lab) { return '<div class="elect-stat"><div class="num">' + num + '</div><div class="lab">' + lab + '</div></div>'; };
+    var sections = vm.sections.map(function (s) {
+      // Strings 1/2 (ratified pattern; the race identity slot is the district where one
+      // exists, else the race code — President is citywide, no district).
+      var head = '<p class="contrib-h person-member-h">' + esc(s.year) + ' school board election — ' + esc(s.raceLabel) + '</p>';
+      var body;
+      if (s.contributions.count > 0) {
+        body = '<div class="elect-statgrid person-member-figs">' +
+          stat(money(s.contributions.total), 'Direct contributions') +
+          stat(s.contributions.count, s.contributions.count === 1 ? 'contribution' : 'contributions') + '</div>' +
+          (s.contributions.selfFunded > 0
+            ? '<p class="selfline"><b>' + money(s.contributions.selfFunded) + '</b> is the candidate’s own money or loans · <b>' +
+              money(s.contributions.thirdParty) + '</b> from other donors</p>' : '');
+      } else {
+        body = '<p class="committee person-no-money">No itemized contributions reported for this election.</p>';   // string 3
+      }
+      var qual = s.qualifier ? '<p class="committee prior-note">' + esc(s.qualifier) + '</p>' : '';   // string 5: verbatim, no wrapper
+      return '<div class="person-member">' + head + body + qual + '</div>';
+    }).join('');
+    var committeeLine = (vm.committee && vm.committee.name)
+      ? '<p class="committee">Committee: ' + esc(vm.committee.name) +
+        (vm.committee.sunshineUrl ? ' · <a href="' + esc(vm.committee.sunshineUrl) + '" target="_blank" rel="noopener">Illinois Sunshine ↗</a>' : '') + '</p>'
+      : '';
+    var oow = vm.hasOutOfWindow
+      ? '<p class="committee person-oow">This committee also received contributions outside this election\'s window.</p>'   // string 11 (ratified byte-form: straight apostrophe)
+      : '';
+    return '<div class="ipg-modal-overlay" data-modal-overlay><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Candidate across elections">' +
+      '<button class="ipg-modal-close" type="button" data-modal-close aria-label="Close">×</button>' +
+      '<div class="modal-name">' + esc(vm.displayName) + '</div>' +
+      committeeLine +
+      '<div class="elect-statgrid person-career">' + stat(money(vm.careerTotal), 'Total direct contributions') + '</div>' +   // string 12 + D14
+      sections + oow +
+      '<p class="caption">Independent expenditures are reported separately and are not included in these totals.</p>' +   // string 6
+      '</div></div>';
+  }
+
+  // String 7 (ratified): the unresolvable-person-id boot state — an explicit modal state,
+  // never a bare empty region (SCOPE-UI B6 pattern).
+  function renderPersonMissing() {
+    return '<div class="ipg-modal-overlay" data-modal-overlay><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Person not found">' +
+      '<button class="ipg-modal-close" type="button" data-modal-close aria-label="Close">×</button>' +
+      '<p class="committee person-missing">No person matches this link.</p></div></div>';
+  }
+
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
 
   // HALT-P1-B: the 2024 CBOE-native RESULT axis renders as its own pill (separate from the
@@ -1871,16 +2011,25 @@
     var s = c.result && RESULT_NOTE[c.result];
     return s ? '<p class="result-note">' + esc(s) + '</p>' : '';
   }
-  // Four-way finance facet copy, keyed by the data-side finance_facet enum. committee_receipts
-  // needs no line (the committee + bars render the money); the other three are the ruled strings.
+  // Finance facet copy, keyed by the data-side finance_facet enum. committee_receipts
+  // needs no line (the committee + bars render the money). The on_current_record pointer
+  // string is RETIRED (P1D-PERSON D8, per the SCOPE-UI B7 retirement condition): the alias
+  // is live — its card carries the person affordance instead (see pendingCard).
   var FINANCE_FACET = {
     committee_no_itemized: 'No itemized contributions reported.',
-    no_committee: 'No campaign committee on file with the Illinois State Board of Elections.',
-    on_current_record: 'Campaign finance for this candidate is reported under their current committee.'
+    no_committee: 'No campaign committee on file with the Illinois State Board of Elections.'
   };
   function facetLine(c) {
     var s = FINANCE_FACET[c.financeFacet];
     return s ? '<p class="committee facet-' + esc(c.financeFacet) + '">' + esc(s) + '</p>' : '';
+  }
+  // Person affordance (D4/D8): opens the person surface via the modal system. The button
+  // carries ONLY data-person (one click never satisfies two dispatch paths) and its label is
+  // DATA ONLY — the candidacy's own name — because no ratified string supplies affordance
+  // copy and the retirement ruling is deletion-with-no-new-words (reported at G3).
+  function personAffordance(c) {
+    return '<p class="committee person-link"><button class="goto-link" type="button" data-person="' +
+      esc(c.id) + '">' + esc(c.name) + ' →</button></p>';
   }
 
   function card(c, scale, idPrefix) {
@@ -1910,14 +2059,18 @@
       : '';
     // SCOPE-UI (F-1 ruled): the prior-run carriage, re-homed VERBATIM from the retired
     // toggle path — shipped label + qualifier text only, no new words, never dollars.
-    // (The office-change provenance sentences described the retired combined sum and have
-    // no scoped-card-compatible shipped wording; they ride to the by-person lane.)
+    // (The office-change provenance sentences were RETIRED at the by-person lane (D7):
+    // they described the retired combined sum; the person-level facts they gestured at
+    // render verbatim as qualifier text on the person surface.)
     var priorLine = (c.priorElection && c.priorElection.label)
       ? '<p class="committee prior-note">' + esc(c.priorElection.label) +
         (c.priorElection.qualifier ? ' · ' + esc(c.priorElection.qualifier) : '') + '</p>'
       : '';
+    // Person affordance (D4): on the returner card — the card that carries prior-run
+    // context is exactly the card whose person spans elections.
+    var personLine = c.priorElection ? personAffordance(c) : '';
     return '<article class="card" id="cand-' + esc(c.slug) + '">' +
-      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' + chips + '</div>' + resultNote(c) + committeeLine + priorLine +
+      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' + chips + '</div>' + resultNote(c) + committeeLine + priorLine + personLine +
       '<div class="bars">' + contribBar + contribPanel + supportBar + supportPanel + opposeBar + opposePanel + '</div>' + selfLine +
       '<p class="caption">Independent support and opposition are spending by outside groups, reported by those ' +
       'groups and not coordinated with the campaign. Figures are shown separately, never added together.</p></article>';
@@ -1933,10 +2086,12 @@
 
   function pendingCard(c) {
     // A committee-less card. For 2024 records an explicit finance_facet drives the ruled
-    // copy (on_current_record pointer / no-itemized / no-committee); the "still populating"
-    // fallback stays for its legitimate use — a 2026 candidate whose committee is genuinely
-    // not yet identified (no facet).
-    var fl = facetLine(c);
+    // copy (no-itemized / no-committee); the "still populating" fallback stays for its
+    // legitimate use — a 2026 candidate whose committee is genuinely not yet identified
+    // (no facet). on_current_record takes an EXPLICIT branch (D8): its ruled string is
+    // retired and the person affordance renders in its place — without this branch the
+    // deleted facet entry would fall through to the "still populating" line, false here.
+    var fl = c.financeFacet === 'on_current_record' ? personAffordance(c) : facetLine(c);
     return '<article class="card"><div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' +
       (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') + statusPill(c) + '</div>' + resultNote(c) +
       (fl || '<p class="committee">Finance data still populating — committee not yet identified.</p>') + '</article>';
@@ -2436,6 +2591,7 @@
     renderComingSoon: renderComingSoon, spendPlaceholder: spendPlaceholder, renderSpend: renderSpend,
     methodologyView: methodologyView,
     renderFunderModal: renderFunderModal, renderCommitteeProfile: renderCommitteeProfile,
+    renderPersonModal: renderPersonModal, renderPersonMissing: renderPersonMissing,
     tagsHtml: tagsHtml, readableText: readableText,
     donorRow: donorRow, contributorPanel: contributorPanel, iePanel: iePanel,
     renderPage: renderPage, pageLabel: pageLabel,
@@ -2515,6 +2671,15 @@
   }
   function openFunder(pid, win) { if (IDX) openModal(ElectRender.renderFunderModal(ElectData.donorFootprint(IDX, pid, win))); }
   function openCommittee(key, win) { if (IDX) openModal(ElectRender.renderCommitteeProfile(ElectData.committeeProfile(IDX, key, win))); }
+  // Person surface (P1D-PERSON). Takes NO window parameter — a person modal is framed by
+  // its entity, never by the container it was opened from (PS-89's exemption, visible in
+  // the signature). The deep-link boot path calls this same function, on which inheritance
+  // is impossible by construction (no container exists at boot). Unresolvable → string 7.
+  function openPerson(ref) {
+    if (!IDX) return;
+    var vm = ElectData.personView(IDX, ref);
+    openModal(vm ? ElectRender.renderPersonModal(vm) : ElectRender.renderPersonMissing());
+  }
   // A donor clicked inside a per-election panel carries a [data-win-*] ancestor; scope
   // its footprint to that election window (Gate G). Elsewhere -> null -> full footprint.
   function winFromEl(el) {
@@ -2523,8 +2688,11 @@
     return { start: w.getAttribute('data-win-start') || null, end: w.getAttribute('data-win-end') || null };
   }
   // Shared dispatch: a clicked donor row -> footprint, a clicked committee row ->
-  // committee profile. Used by BOTH the page handler and the in-modal handler.
+  // committee profile, a person affordance -> person surface. Used by BOTH the page
+  // handler and the in-modal handler. The person branch passes NO window (PS-89).
   function modalNav(target) {
+    var pr = target.closest && target.closest('[data-person]');
+    if (pr) { openPerson(pr.getAttribute('data-person')); return true; }
     var fr = target.closest && target.closest('[data-funder]');
     if (fr) { openFunder(fr.getAttribute('data-funder'), winFromEl(fr)); return true; }
     var cr = target.closest && target.closest('[data-committee]');
@@ -2707,6 +2875,17 @@
     });
 
     draw();
+
+    // Deep link (D4): a read-only ?person= param opens the person surface after first
+    // paint — the PS-89 rev 2 proof path, with no container to inherit a window from.
+    // Validation is by resolution (openPerson renders string 7 for anything unresolvable);
+    // no history writes, absent param is a no-op.
+    try {
+      if (typeof location !== 'undefined' && typeof URLSearchParams !== 'undefined') {
+        var pq = new URLSearchParams(location.search).get('person');
+        if (pq) openPerson(pq);
+      }
+    } catch (e3) {}
   }
 
   function init() {

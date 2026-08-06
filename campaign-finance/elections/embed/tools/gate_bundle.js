@@ -165,6 +165,23 @@ var FIXTURES = {
                     "School Board, District 9B",
                     "School Board, District 10A"]
       }
+    },
+    // P1D-PERSON: the person surface (PS-89 frame; D14 career totals; PS-90 deferral;
+    // D8 retirement; strings 7/11/12). Biggs anchors the equivalence check because her two
+    // cards live in different scopes AND different window containers — real teeth.
+    person: {
+      pid: 'person-biggs-j',
+      card2026: { id: 'biggs-sb-president', slug: 'school-board-president' },
+      card2024: { id: 'biggs-sb-2024-d6', slug: '2024-district-6' },
+      // D8: the RETIRED pointer string (SCOPE-UI B7 as amended; deleted at P1D-PERSON).
+      retiredString: 'is reported under their current committee',
+      careerLabel: 'Total direct contributions',                        // string 12
+      s7: 'No person matches this link.',                               // string 7
+      s11: "outside this election's window",                        // string 11 (anchor; ratified straight apostrophe)
+      // The five verified out-of-window singles (probe-links-report 969fd9f2: no
+      // counterpart candidacy at any tier). string 11 fires on EXACTLY these.
+      outOfWindowIds: ['bannon-sb-d01', 'pope-sb-d04', 'hernandez-sb-2024-d1',
+                       'smith-sb-2024-d6', 'thomas-sb-2024-d9']
     }
   }
 };
@@ -663,6 +680,143 @@ async function assertWindowScoping(T, ctx, fx) {
        b1 === 'threw-b1');
 }
 
+// (PERSON) P1D-PERSON: the person surface. Seven checks, pre-ruled at G2 (97 -> 104).
+async function assertPersonSurface(T, ctx, fx) {
+  var W = ctx.window, ED = W.ElectData, ER = W.ElectRender, RAW = W.PREVIEW_DATA;
+  var pf = fx.person;
+  if (!ED || !ER || !RAW || !ED.personView) { T.ok('[PERSON] ElectData.personView + ElectRender reachable', false); return; }
+  var idx = ED.loadData(RAW, { office: fx.office });
+  var bp = (RAW.rollups && RAW.rollups.by_person) || {};
+
+  // --- 1. [PERSON/EQ] PS-89 rev 2 equivalence: the pure render (== the deep-link path;
+  // openPerson passes no window and boot calls the same function) must byte-match the
+  // modal opened from a 2026 card AND from a 2024 card (whose container carries a
+  // DIFFERENT [data-win-*] window — the teeth). Also: the modal itself carries no
+  // window attributes to inherit from.
+  var pure = ER.renderPersonModal(ED.personView(idx, pf.pid));
+  // DOM-normalize the pure string (valueless attributes serialize as attr="") so the
+  // three-way comparison is apples-to-apples; the bytes injected are `pure` either way.
+  var tmpEl = ctx.doc.createElement('div'); tmpEl.innerHTML = pure;
+  var pureN = tmpEl.innerHTML;
+  ctx.click(ctx.doc.querySelector('[data-view="byrace"]')); await ctx.wait(60);
+  ctx.selectElection('2026'); await ctx.wait(60);
+  ctx.nav(pf.card2026.slug); await ctx.wait(50);
+  var b26 = ctx.root().querySelector('[data-person="' + pf.card2026.id + '"]');
+  var from2026 = null;
+  if (b26) { ctx.click(b26); await ctx.wait(50); from2026 = ctx.modal() && ctx.modal().innerHTML; await ctx.closeModal(); }
+  ctx.selectElection('2024'); await ctx.wait(70);
+  ctx.nav(pf.card2024.slug); await ctx.wait(50);
+  var b24 = ctx.root().querySelector('[data-person="' + pf.card2024.id + '"]');
+  var from2024 = null, inWinContainer = !!(b24 && b24.closest('[data-win-end]'));
+  if (b24) { ctx.click(b24); await ctx.wait(50); from2024 = ctx.modal() && ctx.modal().innerHTML; await ctx.closeModal(); }
+  T.ok('[PERSON/EQ] renders identically: deep-link(pure) == 2026-card == 2024-card, 2024 card inside a window container, no data-win on the modal',
+    !!from2026 && from2026 === pureN && from2024 === pureN && inWinContainer && !/data-win-(start|end)/.test(pure));
+  ctx.selectElection('2026'); await ctx.wait(60);
+
+  // --- 2. [PERSON/D14] returner equality: careerTotal (computed render-side as the sum of
+  // member own-window figures) equals by_person.direct.total for ALL 18 — the identity
+  // that fires loudly if a future vintage carries money in a window with no member.
+  var d14bad = [];
+  Object.keys(bp).forEach(function (pid) {
+    var vm = ED.personView(idx, pid);
+    if (!vm || Math.abs(vm.careerTotal - bp[pid].direct.total) > 0.01) d14bad.push(pid);
+  });
+  T.ok('[PERSON/D14] career total == by_person.direct.total for all ' + Object.keys(bp).length + ' returners' +
+    (d14bad.length ? ' — BAD: ' + d14bad.join(',') : ''), Object.keys(bp).length === 18 && d14bad.length === 0);
+
+  // --- 3. [PERSON/GRAIN] surface-grain: every member section's figure equals a sum
+  // recomputed HERE from PREVIEW_DATA contributions + the FIXTURE's windows (PS-82: the
+  // expectation reads neither personView nor by_person).
+  var slugByCand = {};
+  Object.keys(RAW.committees || {}).forEach(function (k) {
+    var cid = RAW.committees[k].candidate_id; if (cid) slugByCand[cid] = k;
+  });
+  function oracleSum(ownerId, yr) {
+    var w = fx.windows[yr], s = 0;
+    (RAW.contributions || []).forEach(function (c) {
+      if (c.committee_id !== slugByCand[ownerId]) return;
+      if (ED.EXCLUDED_CYCLES[c.cycle] || c.contribution_type === 'IE Committee Dues Transfer') return;
+      var d = c.date || '';
+      if ((w.start == null || d >= w.start) && (w.end == null || d <= w.end)) s += (c.amount || 0);
+    });
+    return Math.round(s * 100) / 100;
+  }
+  var grainChecked = 0, grainBad = [];
+  Object.keys(bp).forEach(function (pid) {
+    var vm = ED.personView(idx, pid);
+    var owner = null;
+    bp[pid].members.forEach(function (m) { if (m.owns_committee) owner = m.candidacy_id; });
+    vm.sections.forEach(function (s) {
+      grainChecked++;
+      if (Math.abs(s.contributions.total - oracleSum(owner, s.year)) > 0.01) grainBad.push(pid + '/' + s.year);
+    });
+  });
+  T.ok('[PERSON/GRAIN] every member-section figure equals the independent oracle recompute (' +
+    grainChecked + ' sections)' + (grainBad.length ? ' — BAD: ' + grainBad.join(',') : ''),
+    grainChecked >= 36 && grainBad.length === 0);
+
+  // --- 4. [PERSON/PS-90] the view-model IE exclusion. DEFERRAL-SCOPED (PS-90): the lane
+  // that ships IE display after P1-E re-routes supersedes THIS CHECK consciously; its
+  // removal then is NOT a firewall regression. The permanent invariant is INV-PERSON-2
+  // at the artifact layer — expressly not this check.
+  function ieKeys(o, found) {
+    if (o && typeof o === 'object') {
+      Object.keys(o).forEach(function (k) {
+        if (/independent|ie[_A-Z]/.test(k)) found.push(k);
+        ieKeys(o[k], found);
+      });
+    }
+    return found;
+  }
+  var leaked = [];
+  Object.keys(bp).concat(pf.outOfWindowIds).forEach(function (ref) {
+    ieKeys(ED.personView(idx, ref), leaked);
+  });
+  T.ok('[PERSON/PS-90] no IE value enters the person view-model (deferral-scoped exclusion)' +
+    (leaked.length ? ' — LEAKED: ' + leaked.join(',') : ''), leaked.length === 0);
+
+  // --- 5. [PERSON/S11] the out-of-window condition fires on EXACTLY the five verified
+  // singles (a boolean by construction — personView materialises no unwindowed figure).
+  var linkedIds = {};
+  Object.keys(bp).forEach(function (pid) { bp[pid].members.forEach(function (m) { linkedIds[m.candidacy_id] = 1; }); });
+  var fired = [];
+  Object.keys(bp).forEach(function (pid) { if (ED.personView(idx, pid).hasOutOfWindow) fired.push(pid); });
+  (RAW.candidates || []).forEach(function (c) {
+    var race = idx.raceById[c.race_id] || {};
+    if (String(race.office || '').indexOf(fx.office) !== 0 || c.vacating_for || linkedIds[c.id]) return;
+    var vm = ED.personView(idx, c.id);
+    if (vm && vm.hasOutOfWindow) fired.push(c.id);
+  });
+  T.ok('[PERSON/S11] string-11 condition fires on exactly the five verified singles' +
+    ' (fired: ' + fired.length + ')',
+    JSON.stringify(fired.slice().sort()) === JSON.stringify(pf.outOfWindowIds.slice().sort()) &&
+    ER.renderPersonModal(ED.personView(idx, pf.outOfWindowIds[0])).indexOf(pf.s11) >= 0 &&
+    pure.indexOf(pf.s11) < 0);
+
+  // --- 6. [PERSON/S7] an unresolvable ref: personView returns null and the ratified
+  // string-7 state renders (an explicit state, never a bare empty region).
+  T.ok('[PERSON/S7] unresolvable person ref -> null VM + the ratified missing state',
+    ED.personView(idx, 'zz-no-such-person') === null &&
+    ER.renderPersonMissing().indexOf(pf.s7) >= 0);
+
+  // --- 7. [PERSON/D8] the retirement: the ruled pointer string is GONE from both scopes'
+  // rendered pages, the returner 2024 card does NOT fall through to "still populating",
+  // and the person affordance is present on that same card (the retirement's condition).
+  // (Finding recorded at G2/G3: no prior gate check covered the pointer string — this
+  // check is new coverage, not a discipline-25 rewrite.)
+  var page26 = ctx.root().innerHTML;
+  ctx.selectElection('2024'); await ctx.wait(70);
+  ctx.nav(pf.card2024.slug); await ctx.wait(50);
+  var page24 = ctx.root().innerHTML;
+  var card24 = ctx.root().querySelector('[data-person="' + pf.card2024.id + '"]');
+  card24 = card24 && card24.closest('article.card');
+  T.ok('[PERSON/D8] pointer string retired from both scopes; no false fallback; affordance on the same card',
+    page26.indexOf(pf.retiredString) < 0 && page24.indexOf(pf.retiredString) < 0 &&
+    !!card24 && card24.innerHTML.indexOf('still populating') < 0 &&
+    pure.indexOf(pf.careerLabel) >= 0);
+  ctx.selectElection('2026'); await ctx.wait(60);
+}
+
 (async function () {
   var html = fs.readFileSync(PREVIEW, 'utf8');
   var dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: true, url: 'http://localhost/' });
@@ -681,6 +835,7 @@ async function assertWindowScoping(T, ctx, fx) {
   await assertIndustryDrill(T, ctx, fx);
   await assertCandidateGroups(T, ctx, fx);
   await assertWindowScoping(T, ctx, fx);
+  await assertPersonSurface(T, ctx, fx);
 
   // [DOCS] PS-73 docs-form checker (DOCS-M4): one implementation (campaign-finance/
   // tools/check_docs.py), two invokers — build_all.sh's validation gate and this line.

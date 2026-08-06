@@ -439,6 +439,169 @@ descriptive headings.
 
 *Provenance: DOCS-M3 G1 ruling (`docs-m3-g1-ruling.md`), sha256 `3f4f816facf42bd1bf7fa750e8874afa44c34f073252d860f719e537057d3dc6`, lines 28–32 (§2); ratified by Ishan 2026-08-04. Widens PS-75 scope decision 1. Governs this register.*
 
+### PS-89 — a surface may be framed by an entity the selector does not select (rev 2)
+
+> ## PS-89 (rev 2) — A surface may be framed by an entity the selector does not select
+>
+> **Parent: PS-86 rev 3.** This ruling extends PS-86; it does not revise it, and PS-86's text
+> is unchanged. **Rev 2 supersedes rev 1** and adds only the deep-link clause; the frame
+> reasoning is unaltered.
+>
+> Where a surface presents a **single entity that spans elections**, that entity establishes
+> the frame, even though the election selector does not select it. PS-86's frame/contents
+> split applies one level up.
+>
+> Applied to the by-person surface: **the person is the framed entity, and the person's member
+> candidacies are the frame.** Every member renders regardless of money — inside the frame,
+> absence is information, which is PS-86's reason and is inherited here rather than restated
+> as a new rule. The money within each member section is **contents**, window-scoped to that
+> member's own election under PS-79/A1. Nothing from other entities appears, so the contents
+> half is satisfied by construction.
+>
+> **The selector neither filters such a surface nor is contradicted by it.** The surface is
+> *reached* from wherever navigation places it and *scoped* by its framing entity.
+>
+> **Corollary, and the clause with teeth:** a surface framed by its own entity must **not**
+> inherit the window of the container it was opened from. Where the existing mechanism passes
+> a container's window to what it opens, an entity-framed surface takes a deliberate
+> exemption, and that exemption is asserted, not assumed — a surface that renders differently
+> depending on which card opened it is not framed by its entity.
+>
+> **Rev 2 — the deep-link path is the exemption's proof, not an assertion about it.** An
+> entity-framed surface reached by direct link has **no container to inherit from**. Where such
+> a surface is addressable, the direct-link path is the structural demonstration that the frame
+> is the entity's own: the exemption stops being a rule the code remembers to follow and
+> becomes a path on which inheritance is impossible. The equivalence assertion — that the
+> surface renders identically whether reached by link or from a container of either window —
+> is the test that the two paths agree.
+>
+> **Why this is not the entity-scoped reading PS-86 warned about:** narrowing the person
+> surface to the selected election would make the cross-election connection unreachable, and
+> PS-86's corollary holds — money moving between surfaces is a display decision, money leaving
+> all surfaces is a defect.
+
+*Provenance: P1D-PERSON G1 addendum (`g1-addendum-ps89-91-d4-d6.md`), sha256 `9352a5f9b59af5106db9587be49dcef412fb3561ea29ef5e375be1c16b544564`, lines 20–58; rev 2 ratified by Ishan 2026-08-04 — supersedes rev 1, recorded in the issuing record `d1a77ebcf2e56a4172318b77f2f84585d857ae116da84dcdd0919f0cbdcf3e13` §1 and never transcribed. Parent: PS-86 rev 3 (extends, does not revise). Cited by reference C5.7.*
+
+### PS-90 — independent expenditures are deferred from the by-person surface; the exclusion is deferral-scoped
+
+> ## PS-90 — IE is deferred from the by-person surface until P1-E re-routes, and the exclusion carries its own lifetime
+>
+> **The deferral.** Independent expenditures are **not rendered** on the by-person surface at
+> this vintage. Every school-board IE row is 2024-window money keyed to a **2026** candidacy
+> id, so it is 2024 by window and 2026 by key and fits neither member section. Placing it
+> inside a member section asserts an association the rows do not carry. SCOPE-UI ruled this
+> divergence a symptom whose resolution is upstream, and that the lane **records the
+> divergence rather than papering over it**; nesting mis-keyed money under the heading that
+> makes it look correct is papering over it.
+>
+> **The deferral is a commitment, not a decision against the display.** IE support and IE
+> oppose **are displayed on the by-person surface** — money spent supporting a candidate and
+> money spent against them are both part of what the surface exists to show. They are held
+> only until P1-E re-routes 2024 IE to 2024 candidacy ids, at which point placement is
+> coherent. The obligation is carried on P1-E's ledger entry, not only here.
+>
+> **Deferring is not a regression under PS-86's corollary:** the money remains reachable on
+> the 2024-scope spend tab and on committee profiles, so it moves between surfaces rather than
+> leaving them.
+>
+> **Two exclusions, two lifetimes, and they do not ship as one check.**
+>
+> 1. **INV-PERSON-2** — no `independent` key anywhere in `by_person`, asserted recursively at
+>    the artifact layer — is a **permanent firewall invariant** and is never removed.
+> 2. **The person view-model IE exclusion**, at the render layer, is **deferral-scoped**. The
+>    lane that ships IE supersedes it consciously, and its removal is **not** a firewall
+>    regression.
+>
+> A check must state its own lifetime where its lifetime is not permanent. An undifferentiated
+> "no IE on the person surface" assertion leaves the later lane unable to tell which exclusion
+> it is permitted to touch — the PS-76 failure shape, applied before the guard exists rather
+> than after.
+>
+> **Banked form for when IE arrives**, so the firewall reasoning is not re-derived in a lane
+> whose subject is routing: IE renders in **its own component**, never nested inside a member
+> section, never sharing a total, a denominator, or a stacked geometry with direct money, and
+> on its own scale. Support and oppose remain structurally separate streams.
+
+*Provenance: PS-89/90/91 ruling record (`ps-89-91-ratification-record.md`), sha256 `d1a77ebc…` (full sha at §PS-89), lines 52–88; ratified by Ishan 2026-08-04 (D3, option A). The display obligation after P1-E re-routes is carried on P1-E's ledger entry. Cited by reference C5.7.*
+
+### PS-91 — person-level cross-election totals are permitted (rev 2; rev 1 withdrawn)
+
+> ## PS-91 (rev 2) — Person-level cross-election totals are permitted; rev 1 is withdrawn
+>
+> **Rev 1 is withdrawn.** It ruled that `by_person.direct.total` never renders and never
+> enters the person view-model. That ruling is **not in force** and no check implements it.
+>
+> **Ruled: a direct-receipts total spanning a person's candidacies may be rendered, and may be
+> sorted on**, on surfaces framed by the person or listing people. The cross-cycle constraint
+> of `p1d-design-inputs` §1 — no view may sum, rank, or share a denominator across cycles —
+> binds **district- and race-level** aggregation across disjoint namespaces. It does not bind
+> the person. §1's own next sentence names the person as the entity that persists across
+> redistricting and the legitimate carrier of cross-cycle connection; the prohibition and the
+> carve-out are adjacent clauses of one position, and rev 1 applied the first while treating
+> the second as context.
+>
+> **Why rev 1 was wrong, recorded so the question is not re-litigated:**
+>
+> - It read PS-79's rejection of B2 as evidence of a strict reading of §1. B2 was an
+>   **unwindowed, unlabelled** all-dates figure — "reachable by omission." A labelled total on
+>   a surface whose subject is one person is not that shape, and the analogy could not carry
+>   the weight placed on it.
+> - It used the surface's motivating phrase — "all the money a candidate has taken" — as an
+>   argument *against* the figure the surface exists to provide. The hazard in that phrase is
+>   that it pulls toward **including independent expenditures**, and that hazard is held by
+>   INV-PERSON-2 and the firewall permanently, whether or not a direct-only total renders.
+>   Rev 1 collapsed two constraints and let the firewall's caution operate under the
+>   cross-cycle rule's name.
+>
+> **What is unchanged, and is the boundary this ruling does not cross.** The total is **direct
+> receipts only**. No independent-expenditure value enters it, shares a denominator with it,
+> or is summed into it. INV-PERSON-2 remains a permanent invariant. **PS-90 is untouched** —
+> its deferral-scoped exclusion is a separate check with a separate lifetime, and the
+> withdrawal of rev 1 does not loosen it. That the two were ruled as separate checks is what
+> makes this withdrawal safe to perform one lane after the ruling.
+>
+> **Ranking honesty is carried structurally, not by caveat.** Where people are ranked by a
+> cross-election total, the surface displays each person's **candidacy count in the dataset**
+> as its own field, because a total spanning an unstated number of candidacies invites a
+> comparison the number does not support. A displayed count discharges this; a footnote does
+> not.
+
+*Provenance: P1D-PERSON G1 addendum, sha256 `9352a5f9…` (full sha at §PS-89), lines 61–99; rev 2 ratified by Ishan 2026-08-04. Rev 1 is withdrawn, recorded in the issuing record `d1a77ebc…` §3 and never transcribed. Cited by reference C5.7.*
+
+### PS-92 — a cross-election identity claim rests on person-identity evidence, never on district correspondence
+
+> ## PS-92 — A cross-election identity claim rests on person-identity evidence, never on district correspondence
+>
+> Where two candidacies in different elections are claimed to be the same person, the claim
+> rests on **evidence about the person** — name identity, and human approval of it. District
+> adjacency, numbering similarity, or apparent lineage between the two candidacies' districts
+> is **not evidence of identity and is never the basis of a link.**
+>
+> 2024 and 2026 district keys are disjoint namespaces with no crosswalk and no geometry. A
+> linkage rule keyed on district lineage would import that crosswalk as evidence and make the
+> person layer depend on the correspondence the data model denies — the same claim
+> `p1d-design-inputs` §1 forbids at the display layer, entering through the identity layer
+> instead.
+>
+> **District context may be recorded, never relied on.** A link's structured evidence fields
+> may carry each candidacy's district string as context, alongside the verbatim name strings
+> Phase 1 §8.5 already ratified. Recording is not relying: the fields document what a human
+> saw; they do not constitute the basis.
+>
+> **Name identity alone is a candidate for approval, not an approval.** Full-string name
+> identity after normalization is the strongest mechanical signal available and is not
+> sufficient by itself: distinct people share names, and a matcher keyed on less than the full
+> string produces false pairs — the `(williams, l)` collision between two different people is
+> the standing fixture. Every cross-election person link requires human approval on the record.
+>
+> **A schema that cannot express a decline cannot record a human's judgment.** Where the link
+> structure admits approvals only, silence and never-examined are byte-identical, and a pair
+> once examined and rejected re-surfaces indefinitely as an unresolved gap. A link structure
+> used for human adjudication carries a status vocabulary that can express refusal.
+
+*Provenance: P1D-PERSON G2 ratification record (`g2-ratification-record.md`), sha256 `54920c73983cca04579dbfd61300dd50bbbc29737f7e15aad6341f78ae3ae25e`, lines 73–101; ratified by Ishan 2026-08-05, in force generally (the linkage lane is its first application, not its scope). The record states its text byte-identical to the issuing record `c71ae536…` lines 60–87. Not yet cited by a reference claim row; governs the linkage lane's evidence class.*
+
+
 ---
 
 ## Rulings ratified without an id
@@ -560,3 +723,94 @@ descriptive headings.
 *Provenance, first block (money/nav semantics): SCOPE-UI G3 authorization (`scope-ui-g3-authorization.md`), sha256 `118e06103e266997c9373334675560ce2f5625e73261fc46d1c2475176fbb882`, lines 22–27 (§F-2 mechanism half); ruled 2026-08-03.*
 *Provenance, second block (B1–B7): SCOPE-UI G1 display decisions (`g1-display-decisions.md`), sha256 `e2f687ce63649c168fd0f7765434017949d68acc3a5613b9101212b5b413ae25`, lines 42–97 (Part B); ratified by Ishan (the G3 authorization proceeds under them), with each decision's recommended option taken. Ruled without PS ids.*
 *Provenance, third block (B7 destination-clause amendment): SCOPE-UI G3 authorization, sha256 `118e0610…` (above), lines 29–49 (§F-2 editorial half); option (b) ratified by Ishan 2026-08-03. Supersedes B7(a) as to the destination clause only. Cited by reference C5.5.*
+
+### P1D-PERSON G1/G2 — display decisions D1–D14 and strings 1–12
+
+The corrected decision map (the addendum `9352a5f9…` silently redefined two ratified ids; cite this map, per the G2 record):
+
+> **Ids are not reused. The corrected map, with (iii) scope applied:**
+>
+> | id | subject | status | lane |
+> |---|---|---|---|
+> | D1 | frame under PS-86 → PS-89 rev 2 | ratified | this |
+> | D2 | `direct.total` disposition → PS-91 rev 1, **withdrawn** by rev 2 | superseded | — |
+> | D3 | IE deferral → PS-90 | ratified | this (display after P1-E) |
+> | D4 | navigation; addressable person surface; durable-link clause | ratified | this |
+> | **D5** | **naming and identity across elections** | **ratified, in force, not deferred** | this |
+> | **D6** | **candidacy layout** — per-member sections, most recent first | **ratified, in force, not replaced** | this |
+> | D7 | prior-run context; retire the banked sentences, no rewrite | ratified | this |
+> | D8 | returner pointer retires, conditional on the affordance | ratified | this |
+> | D9 | empty and pending states | ratified | this |
+> | D10 | strings — 1–7 and 11 here; 8, 9, 10 defer | ratified | split |
+> | **D11** | **`Person Links` editor column** | deferred | linkage lane (probable) |
+> | **D12** | **searchable, sortable people index** | ratified | **index lane** |
+> | **D13** | **index de-duplication — one human, one row** | **ratified** | **index lane** |
+> | **D14** | **career-total semantics** (§2 below) | **ratified** | this, inherited by index |
+>
+> The addendum's §3 headings "D4 and D6 as amended" read as **D4 and D12**; its "D5 — deferred to
+> its own lane" reads as **D11**. Cite this record for the map.
+
+D14, the career-total semantics:
+
+> **The rule:** the career total is Σ, over a person's member candidacies, of each member's
+> own-election-window direct figure.
+>
+> Its load-bearing claim is SOURCED as of `probe-links-report.md` `969fd9f2…`: none of the five
+> out-of-window singles has a counterpart candidacy at any match tier, no committee is claimed by
+> two candidacies anywhere in the artifact, and no decline exists to point the other way.
+>
+> **Recorded so it is not re-argued:**
+>
+> - For the 18 returners it equals `by_person.direct.total` exactly at this vintage, and G3 asserts
+>   that equality so a future divergence fires loudly rather than drifting.
+> - For the five singles it excludes out-of-window money, and the exclusion rests on a verified
+>   absence of a counterpart candidacy rather than on absence of a link.
+> - Index total ≡ Σ of the person page's member sections — the reconciliation a reader can perform,
+>   and PS-89's frame arithmetic.
+> - The excluded money does not leave all surfaces: the 2024-scope spend tab and committee profiles
+>   render it, untouched. PS-86's corollary holds.
+>
+> **The alternative is recorded as considered and not taken:** committee-lifetime
+> (`by_candidate.all.direct`) matches the committee's filed total but breaks the column's own label
+> in five live cases and makes the index disagree with the person page.
+>
+> **Substrate limitation, stated and not inferred past:** the `founded` field exists and is null
+> for all 68 committees, so the artifact cannot distinguish a committee predating its candidate's
+> race from a prior unattested candidacy. Bannon's rows begin 2022-09-29, before either
+> school-board election in the artifact. The rule is correct either way, because it turns on
+> attested candidacies rather than committee origin.
+
+The ratified strings (the proposal text, transcribed verbatim from the issuing package):
+
+> 1. **Member section heading, current:** `2026 school board election — District N`
+> 2. **Member section heading, prior:** `2024 school board election — District N`
+>    (B3's ruled prose form; "cycle" avoided.)
+> 3. **Prior election, no itemized money:** `No itemized contributions reported for this election.`
+> 4. **Divergent prior name** *(conditional on D5; ships only if the state occurs)*:
+>    `Listed in 2024 as {name}.`
+> 5. **Prior-run qualifier / notes:** rendered **verbatim from the data**, no wrapper sentence.
+> 6. **IE disclosure line, under D3(A)** — *the only new editorial claim in this package*:
+>    `Independent expenditures are reported separately and are not included in these totals.`
+
+Dispositions as ratified at the G3 authorization (string 12's text is part of the ratification):
+
+> | # | subject | source | disposition |
+> |---|---|---|---|
+> | 1 | member section heading, current | `abeefe80…` L299 | ships |
+> | 2 | member section heading, prior | `abeefe80…` L300–301 | ships |
+> | 3 | prior election, no itemized money | `abeefe80…` L302 | ships |
+> | 4 | divergent prior name | `abeefe80…` L303–304 | **does not ship this lane** — §2 |
+> | 5 | prior-run qualifier / notes (verbatim from data, no wrapper) | `abeefe80…` L305 | ships |
+> | 6 | IE disclosure line | `abeefe80…` L306–307 | ships |
+> | 7 | unresolvable person id | `9352a5f9…` §3 | ships |
+> | 11 | out-of-window remainder | `54920c73…` §3 | ships, fires on exactly 5 |
+> | 12 | person-surface career total label | this record | ships — text below |
+>
+> **String 12, ratified:** `Total direct contributions`
+
+String 4's non-ship disposition:
+
+> **Ratified: the divergent-name line is not built.** The render path is omitted from this
+> lane's diff; the string remains drafted and unshipped.
+
+*Provenance, five sources: strings — G1 decision package (`p1d-person-g1-decisions.md`), sha256 `abeefe80e29aebe992a49f40862b473c99f9feaca50ae4a601b6597a10d017ad`, lines 299–307; D-map and D14 — G2 ratification record, sha256 `54920c73…` (full sha at §PS-92), lines 39–59 and 106–132; dispositions and string 4's non-ship — G3 authorization record (`p1d-person-g3-authorization.md`), sha256 `1dbda314e31147b8f063015bcf1d9d8dd944e10af2ceb80e2ba5f618b61a0e01`, lines 24–36 and 47–48; D1–D10 issued at `d1a77ebc…` §4 (ratified by Ishan 2026-08-04); D11–D14 and sequencing (iii) ratified by Ishan 2026-08-05 at `54920c73…`; final dispositions ratified by Ishan 2026-08-06 at `1dbda314…`. Entry ruled by the G3 authorization §3, answering the G2 statement's flagged question. Cited by reference C5.7 (career-total rule).*

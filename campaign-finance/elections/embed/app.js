@@ -68,6 +68,15 @@
   }
   function openFunder(pid, win) { if (IDX) openModal(ElectRender.renderFunderModal(ElectData.donorFootprint(IDX, pid, win))); }
   function openCommittee(key, win) { if (IDX) openModal(ElectRender.renderCommitteeProfile(ElectData.committeeProfile(IDX, key, win))); }
+  // Person surface (P1D-PERSON). Takes NO window parameter — a person modal is framed by
+  // its entity, never by the container it was opened from (PS-89's exemption, visible in
+  // the signature). The deep-link boot path calls this same function, on which inheritance
+  // is impossible by construction (no container exists at boot). Unresolvable → string 7.
+  function openPerson(ref) {
+    if (!IDX) return;
+    var vm = ElectData.personView(IDX, ref);
+    openModal(vm ? ElectRender.renderPersonModal(vm) : ElectRender.renderPersonMissing());
+  }
   // A donor clicked inside a per-election panel carries a [data-win-*] ancestor; scope
   // its footprint to that election window (Gate G). Elsewhere -> null -> full footprint.
   function winFromEl(el) {
@@ -76,8 +85,11 @@
     return { start: w.getAttribute('data-win-start') || null, end: w.getAttribute('data-win-end') || null };
   }
   // Shared dispatch: a clicked donor row -> footprint, a clicked committee row ->
-  // committee profile. Used by BOTH the page handler and the in-modal handler.
+  // committee profile, a person affordance -> person surface. Used by BOTH the page
+  // handler and the in-modal handler. The person branch passes NO window (PS-89).
   function modalNav(target) {
+    var pr = target.closest && target.closest('[data-person]');
+    if (pr) { openPerson(pr.getAttribute('data-person')); return true; }
     var fr = target.closest && target.closest('[data-funder]');
     if (fr) { openFunder(fr.getAttribute('data-funder'), winFromEl(fr)); return true; }
     var cr = target.closest && target.closest('[data-committee]');
@@ -260,6 +272,17 @@
     });
 
     draw();
+
+    // Deep link (D4): a read-only ?person= param opens the person surface after first
+    // paint — the PS-89 rev 2 proof path, with no container to inherit a window from.
+    // Validation is by resolution (openPerson renders string 7 for anything unresolvable);
+    // no history writes, absent param is a no-op.
+    try {
+      if (typeof location !== 'undefined' && typeof URLSearchParams !== 'undefined') {
+        var pq = new URLSearchParams(location.search).get('person');
+        if (pq) openPerson(pq);
+      }
+    } catch (e3) {}
   }
 
   function init() {

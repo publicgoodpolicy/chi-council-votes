@@ -867,6 +867,90 @@
     return Object.keys(index.cyclesSeen).sort().reverse();
   }
 
+  // ---- Person surface (P1D-PERSON; PS-89 frame) ----
+  // Resolve a person ref to its frame: a by_person key (a linked person), or a school-board
+  // candidate id (a single's one-member frame). A candidacy id that belongs to a LINKED
+  // person resolves to that person — D4's durable-link clause, so a link shared to a single
+  // survives the single becoming a linked person. Vacating shells and non-school-board ids
+  // resolve to null (the string-7 state). Resolution is by id, never by name (PS-92).
+  function resolvePersonRef(index, ref) {
+    if (!ref) return null;
+    var bp = (index.rollups && index.rollups.by_person) || {};
+    if (bp.hasOwnProperty(ref)) {
+      var p = bp[ref];
+      return { pid: ref, displayName: p.display_name, members: (p.members || []).slice() };
+    }
+    var c = index.candidateById[ref];
+    if (!c || c.vacating_for) return null;
+    var race = index.raceById[c.race_id] || {};
+    if (!officeType(race.office)) return null;
+    for (var pid in bp) {                       // durable link: member id -> its person
+      if (!bp.hasOwnProperty(pid)) continue;
+      var ms = bp[pid].members || [];
+      for (var i = 0; i < ms.length; i++) {
+        if (ms[i].candidacy_id === ref) return resolvePersonRef(index, pid);
+      }
+    }
+    return { pid: c.id, displayName: c.name,
+      members: [{ candidacy_id: c.id, election_id: c.election_id, owns_committee: !!c.committee_id }] };
+  }
+
+  // Person view-model. The person is the framed entity (PS-89): every member candidacy
+  // renders, money or not; the money in each member section is contents, window-scoped to
+  // that member's OWN election (PS-79/A1) — computed from the owning candidacy's rows,
+  // independent of by_person's money values (PS-82: the gate's D14 equality check must not
+  // read its subject). The career total is Σ member own-window figures (D14).
+  // NO IE value enters this view-model. This exclusion is DEFERRAL-SCOPED (PS-90): the lane
+  // that ships IE display after P1-E re-routes supersedes it consciously, and its removal is
+  // NOT a firewall regression — the permanent invariant is INV-PERSON-2 at the artifact
+  // layer, which this comment is expressly not.
+  function personView(index, ref) {
+    var r = resolvePersonRef(index, ref);
+    if (!r) return null;
+    var membs = r.members.slice().sort(function (a, b) {   // most recent first (D6)
+      return (a.election_id || '') < (b.election_id || '') ? 1 : -1;
+    });
+    var ownerId = null;
+    for (var i = 0; i < membs.length; i++) if (membs[i].owns_committee) ownerId = membs[i].candidacy_id;
+    var sections = [], career = 0, memberWins = [];
+    for (var m = 0; m < membs.length; m++) {
+      var mc = index.candidateById[membs[m].candidacy_id] || {};
+      var race = index.raceById[mc.race_id] || {};
+      // B1: fail loud only where finance exists to filter; a money-less frame renders zeros.
+      var win = ownerId ? requireWin(race) : raceWin(race);
+      memberWins.push(win);
+      var f = ownerId ? candidateFigures(index, ownerId, null, win) : null;
+      var contrib = f ? f.contributions : { total: 0, selfFunded: 0, thirdParty: 0, count: 0 };
+      career = round2(career + contrib.total);
+      var yr = (/^(\d{4})-/.exec(membs[m].election_id || '') || [])[1] || '';
+      sections.push({
+        candidacyId: membs[m].candidacy_id, electionId: membs[m].election_id, year: yr,
+        raceLabel: race.district || raceCode(race),
+        contributions: contrib,                          // direct only — never an IE stream
+        qualifier: mc.election_note || ''                // string 5: verbatim from the data
+      });
+    }
+    // String 11's condition — a BOOLEAN by construction (G3 authorization §5(b)): short-
+    // circuit on the first owning-committee row outside every member window; no unwindowed
+    // figure is ever materialised in render scope.
+    var hasOutOfWindow = false;
+    if (ownerId) {
+      var rows = index.directByCandidate[ownerId] || [];
+      for (var k = 0; k < rows.length && !hasOutOfWindow; k++) {
+        var row = rows[k];
+        if (EXCLUDED_CYCLES[row.cycle] || row.contribution_type === DUES_TYPE) continue;
+        var inAny = false;
+        for (var w = 0; w < memberWins.length; w++) {
+          if (memberWins[w] && inWindow(row.date, memberWins[w])) { inAny = true; break; }
+        }
+        if (!inAny) hasOutOfWindow = true;
+      }
+    }
+    return { pid: r.pid, displayName: r.displayName, sections: sections,
+      careerTotal: career, hasOutOfWindow: hasOutOfWindow,
+      committee: ownerId ? committeeMeta(index, ownerId) : null };
+  }
+
   // ---- Election Spend subtabs (office-scoped) ----
 
   // Is a recipient committee in the current office scope? Candidate committees of
@@ -1204,6 +1288,7 @@
     industryTotals: industryTotals, industriesByCandidate: industriesByCandidate,
     flagTotals: flagTotals, spendSubtab: spendSubtab,
     isSelfFunded: isSelfFunded,
+    resolvePersonRef: resolvePersonRef, personView: personView,
     kebab: kebab, raceSlug: raceSlug, candidateSlug: candidateSlug, raceCode: raceCode,
     selectorOptions: selectorOptions,
     viewModels: { raceBrowse: raceBrowse, raceView: raceView, officeRaces: officeRaces }

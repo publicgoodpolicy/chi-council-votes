@@ -346,6 +346,29 @@ out-of-frame ones — the frame is what the reader selected, so it leads — and
 within-group convention exists; the pre-existing order continues inside each group
 (fold-in ruling on PS-86, ratified 2026-08-03).
 
+**The elections path renders a person surface** [C5.7, SOURCED; frame, deferral, total,
+and identity rules RULED]: a modal reached from an affordance on returner cards and by a
+read-only person URL parameter — the deep-link path, on which container-window inheritance
+is impossible because the one open function takes no window argument (PS-89's exemption,
+structural on both counts: the modal mounts outside every windowed container and no window
+is passed). The surface is **framed by the person** (PS-89, extending PS-86 one level up):
+every member candidacy renders as its own section, most recent first, money or not —
+in-frame absence is information — and each section's money is **direct-only and
+window-scoped to that member's own election** (PS-79/A1), computed from the owning
+candidacy's rows independently of `by_person`'s stored money values (C6.6: the gate's
+equality check must not read its subject). The **career total is the sum of the member
+own-window figures** (the ratified career-total rule; the register's P1D-PERSON entry),
+asserted equal to `by_person.direct.total` at gate so divergence fires rather than drifts.
+**No IE value enters the person view-model** — a **deferral-scoped** exclusion (PS-90) that
+the lane shipping IE display after P1-E supersedes consciously; the permanent firewall
+invariant remains INV-PERSON-2 at the artifact layer, expressly distinct. An out-of-window
+disclosure line renders when the owning committee carries money outside every member
+election's window, computed as a **boolean** — no unwindowed figure is materialised in
+render scope. Person resolution is **by id, never by name** (PS-92), and a candidacy id
+belonging to a linked person resolves to that person (the durable-link rule), so shared
+links survive later linking. The retired returner-pointer card carries the person
+affordance in the deleted string's place (SCOPE-UI B7's retirement condition, discharged).
+
 **Sizing note** [C5.4, SOURCED]: the tools present multiple distinct public surfaces,
 which multiplies render paths, not merely classification consumers. The surface count is
 current state and lives in the handover, not here.
@@ -480,9 +503,9 @@ that catch defect classes the existing gates structurally cannot see.
 | S-av | `campaign-finance/sync_allvotes.py` | `2ca09ee7323741919f048e61062d54a62719f56f88f71f99b721fe965c753f69` |
 | S-cemb | `campaign-finance/elections/reference/council-embed.html` | `f1451fa9900a7a645fec202f7226b26b95597b008c119be28747de81b89be111` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
-| S-edat | `campaign-finance/elections/embed/data.js` | `3fb88346eb67dafd476868bf8b3bcd15e0001888205fd69a81febd50a447e47a` |
-| S-eren | `campaign-finance/elections/embed/render.js` | `bb4e28f761bb812de6a99c76c7c4af49de14f50a1203418f36a01d525cc691bc` |
-| S-eapp | `campaign-finance/elections/embed/app.js` | `ec42983763f18ca5d6f134bcd51a7578858e79787cbaba9b716daea2714c8f7c` |
+| S-edat | `campaign-finance/elections/embed/data.js` | `14c90973779775659daac337d3b9dc5a1e0f068dea6ec13e0f6602bd52ecc669` |
+| S-eren | `campaign-finance/elections/embed/render.js` | `973596d950d54bde638c4f054b43682968b54147e651ead7b1b5080f0c075bbf` |
+| S-eapp | `campaign-finance/elections/embed/app.js` | `ea8a6b01871dec4cb63a21996fbb4572f855e11a45f0cf9e0ff35fe56815a659` |
 | A-probe | `~/probe-sync-2026-07-24/probe-report.md` | `4c678cf0c14dd370f8b52744bf473000340ce16449a5365841b6ac92d8e5f9bb` |
 | A-add | `~/probe-sync-a-2026-07-24/addendum-a-report.md` | `468ba24f4f418f72c2720608353c83e52694c41637cf9ff16a9b267d37e49ed6` |
 | A-ba1g0 | `~/halt-ba-1-2026-07-24/g0-report.md` | `9aeaa793fd5f4afe59d9ac504f7f00dd219f4417cbafdd3403e5a44f661e812e` |
@@ -546,8 +569,11 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.2 | S-cemb | 42-52 (dataUrl + optional sharded mode); S-eemb 19-24 (elections artifact + inlined deploy) |
 | C5.2 | A-ba1g2 | 49 (Rider 2: neither embed renders entity-type / last-editor) |
 | C5.5 | S-edat | 110-116 (selectorOptions — the {year} {body} pattern), 812-830 (officeRaces election scoping via the year-prefix join), 761 (the race's window rides the VM), 778 (priorElection re-homed to the base VM) |
-| C5.5 | S-eren | 791-797 (selectorNav), 647 (the amended on_current_record string — destination clause retired per the SCOPE-UI B7 amendment), 684-686 (the verbatim prior-note) |
-| C5.5 | S-eapp | 136-146 (selector state + read-only ?election= boot), 198-207 (scope switch resets the active race — the ruled B6 resolution) |
+| C5.5 | S-eren | 861-866 (selectorNav), 749-751 (the verbatim prior-note; the formerly-cited on_current_record string is DELETED — its retirement is C5.7's affordance clause) |
+| C5.5 | S-eapp | 140-152 (selector state + read-only ?election= boot), 207-218 (scope switch resets the active race — the ruled B6 resolution) |
+| C5.7 | S-edat | 870-952 (resolvePersonRef 876 — id-only resolution + durable link; personView 907 — member sections, window-scoped figures, career total, boolean out-of-window condition, no IE key), 1291 (exports) |
+| C5.7 | S-eren | 629-666 (renderPersonModal — per-member sections + ratified strings), 668-673 (renderPersonMissing — string 7), 701-708 (facet map with on_current_record retired), 713-716 (personAffordance — data-only label), 752-754 (card affordance), 770-782 (pendingCard explicit on_current_record branch) |
+| C5.7 | S-eapp | 71-80 (openPerson — no window parameter), 91-92 (data-person dispatch, no winFromEl), 276-286 (read-only ?person= boot — the deep-link path) |
 | C5.3 | A-fw1 | 14-16 (artifact not fused), 60-62 (gates check values, not structure) |
 | C5.4 | A-probe | 152 (banked sizing item: multiple surfaces, per-path render compliance) |
 | C6.1 | A-ba1g0 | 56-66 (dollar/repairability distinctions); A-ba1g2 49 (render-invisibility distinction) |
@@ -575,6 +601,11 @@ that catch defect classes the existing gates structurally cannot see.
 | C4.7 ownership rule | PS-84 | `RULINGS.md` §PS-84 |
 | coverage-count stop conditions | PS-85 | `RULINGS.md` §PS-85 |
 | C5.6 | PS-86 rev 3 | `RULINGS.md` §PS-86 |
+| C5.7 frame | PS-89 rev 2 | `RULINGS.md` §PS-89 |
+| C5.7 IE deferral | PS-90 | `RULINGS.md` §PS-90 |
+| C5.7 career total | PS-91 rev 2 | `RULINGS.md` §PS-91 |
+| C5.7 career-total rule | P1D-PERSON G1/G2 | `RULINGS.md` §P1D-PERSON G1/G2 |
+| C5.7 identity rule | PS-92 | `RULINGS.md` §PS-92 |
 | C2.9 | discipline 29 | `RULINGS.md` §Discipline 29 |
 | C6.4 | DOCS-M1 (no id) | `RULINGS.md` §DOCS-M1 C6.4 |
 | C6.5 | PS-60 | `RULINGS.md` §PS-60 |

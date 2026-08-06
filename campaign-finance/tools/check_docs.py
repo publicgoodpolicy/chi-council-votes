@@ -37,14 +37,17 @@ KNOWN_PATH = os.path.join(HERE, "docs_check_known_failures.json")
 REF_REL = "campaign-finance/MECHANISM_REFERENCE.md"
 REG_REL = "campaign-finance/RULINGS.md"
 
-# Rule 1 — the ruling-cell grammar. Five shapes, enumerated: four ratifications took
-# no PS id (historical form, not retrofitted — G1 §6). If PS-88 ratifies, the set is
-# closed; a new id-less ruling otherwise requires a deliberate edit here.
+# Rule 1 — the ruling-cell grammar. Six shapes, enumerated: five ratifications took
+# no PS id (historical form, not retrofitted — G1 §6; P1D-PERSON's display-decisions
+# entry added per its G3 authorization §3, the register-expansion ruling). If PS-88
+# ratifies, the set is closed; a new id-less ruling otherwise requires a deliberate
+# edit here.
 RULING_CELL = re.compile(
     r"^(PS-\d+( rev \d+)?( / PS-\d+)*"
     r"|discipline \d+"
     r"|SCOPE-PIPE G1 §\d+"
     r"|SCOPE-UI G1/G3"
+    r"|P1D-PERSON G1/G2"
     r"|DOCS-M1 \(no id\))$")
 RECORD_CELL = re.compile(r"^`RULINGS\.md` §[^|]+$")
 
