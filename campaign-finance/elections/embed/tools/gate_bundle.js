@@ -747,6 +747,35 @@ async function assertExclusionUniformity(T, ctx, fx) {
   var after = ED.candidateFigures(xi2, sbCand, null, fx.windows['2024']).contributions.total;
   T.ok('[EXCL/WIN-GUARD] a pre-2011 row inside the open-start 2024 window is excluded by CYCLE, not by the window (figure unmoved)',
     after === before);
+
+  // 5. [DUES/UNIF] HALT-DUES / PS-94+PS-95 — CLASS-LEVEL per the brief's preference: the
+  // FULL exclusion set, not dues alone. A synthetic artifact whose only money is one dues
+  // row and one pre-2011 row on each committee type renders ZERO from every money entry
+  // point. (The class is the subject: the next ruled exclusion joins this fixture, not a
+  // new check.)
+  var cp3 = JSON.parse(JSON.stringify(RAW));
+  var candK = Object.keys(RAW.committees).find(function (k) { return RAW.committees[k].type === 'candidate'; });
+  var ieK = Object.keys(RAW.committees).find(function (k) { return RAW.committees[k].type === 'independent_expenditure'; });
+  var don0 = Object.keys(RAW.donors)[0];
+  cp3.contributions = [
+    { donor_id: don0, committee_id: candK, amount: 1111, date: '2025-06-01', cycle: '2027', contribution_type: 'IE Committee Dues Transfer' },
+    { donor_id: don0, committee_id: ieK, amount: 2222, date: '2025-06-01', cycle: '2027', contribution_type: 'IE Committee Dues Transfer' },
+    { donor_id: don0, committee_id: candK, amount: 3333, date: '2009-06-01', cycle: 'pre-2011', contribution_type: 'Individual' },
+    { donor_id: don0, committee_id: ieK, amount: 4444, date: '2009-06-01', cycle: 'pre-2011', contribution_type: 'Individual' }];
+  cp3.independent_expenditures = [];
+  var xi3 = ED.loadData(cp3, { office: fx.office });
+  var candId3 = (RAW.committees[candK] || {}).candidate_id;
+  var leaks3 = [];
+  if (ED.candidateFigures(xi3, candId3, null, null).contributions.total !== 0) leaks3.push('candidateFigures');
+  if (ED.candidateContributors(xi3, candId3, null, null).total !== 0) leaks3.push('candidateContributors');
+  if (ED.spenderFunders(xi3, ieK).total !== 0) leaks3.push('spenderFunders');
+  var fp3 = ED.donorFootprint(xi3, don0, null);
+  if (fp3 && fp3.total !== 0) leaks3.push('donorFootprint');
+  if (ED.browseDonors(xi3, null, null, { search: '', type: 'All', industry: 'All', flag: 'All' })
+        .some(function (r) { return r.total > 0; })) leaks3.push('browseDonors');
+  if (ED.committeeProfile(xi3, ieK, null).funderTotal !== 0) leaks3.push('committeeProfile.funders');
+  T.ok('[DUES/UNIF] the FULL exclusion set (dues + excluded cycles): a dues+pre-2011-only artifact renders ZERO from every money entry point' +
+    (leaks3.length ? ' — LEAKED: ' + leaks3.join(',') : ''), leaks3.length === 0);
 }
 
 // (PERSON) P1D-PERSON: the person surface. Seven checks, pre-ruled at G2 (97 -> 104).

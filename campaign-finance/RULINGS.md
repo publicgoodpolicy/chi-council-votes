@@ -649,6 +649,65 @@ descriptive headings.
 *Provenance: EXCL-UNIFORM G1 ratification record (`excl-uniform-g1-ratification.md`), sha256 `38540989bc0a3aa928bb4c6169f13816c486daf9dbcfce682c303a0e88e3634f`, lines 40–80 (extract sha256 `4151707eab56bf52648973b02c8fe66743e086ef74f8a050d3bd7eacec0de959`); ratified by Ishan 2026-08-06 (relay 24; the record's revision 2, relay 26, changed string dispositions only). Assembled by substitution from the lane brief's §2 draft (`91534400…`) with E1's amended uniformity clause; the superseded draft is retained in the brief as issued. Figure of record for the excluded class: cited in the record beneath the ruling text. Cited by reference C5.8.*
 
 
+### PS-94 — a ruled exclusion binds every displayed figure, wherever the figure is computed
+
+> ## PS-94 — A ruled exclusion binds every displayed figure, wherever the figure is computed
+>
+> Where a rule excludes a class of money from published figures, that exclusion binds **every
+> figure a reader sees**, regardless of whether the figure is computed in the pipeline or
+> recomputed in an embed from row data. A pipeline exclusion is not a boundary of the rule; it is
+> one place the rule is applied.
+>
+> **The recurring defect this names.** Exclusions have twice been applied at rollup and missed at
+> the embeds' own row-aggregating consumers — the cycle exclusion (PS-93) and the dues-transfer
+> exclusion. In both cases the pipeline was correct, the register was correct, and reader-facing
+> figures were wrong, because a consumer aggregated rows without applying what the pipeline
+> applies.
+>
+> **Therefore:** any consumer that aggregates rows applies the **full** exclusion set, and a new
+> row-aggregating consumer is checked against that set before it ships. Where an exclusion set is
+> applied in more than one place, the places share one predicate rather than repeating the
+> condition — a repeated condition is how the second instance of this defect happened.
+>
+> **This ruling is about where a rule applies, not what any rule excludes.** It creates no
+> exclusion and narrows none; it forecloses the reading that a pipeline-stage exclusion leaves
+> embed-side aggregation unbound.
+
+*Provenance: HALT-DUES brief (`halt-dues-brief.md`), sha256 `bc011950ed541b80b5bf12da062f4ead8fd6551e307e591fc77a02410dc895cc` (revision 2), lines 66–86; ratified by Ishan 2026-08-07 (relay 30). In force generally — governs any consumer that aggregates rows, both embeds and any future surface. Cited by reference C5.8.*
+
+### PS-95 — dues transfers are excluded from all totals, retained in the substrate, and disclosed by magnitude
+
+> ## PS-95 — Dues transfers are excluded from all totals, retained in the substrate, and disclosed by magnitude
+>
+> **The rule.** Transfers of member dues between political committees are excluded from every
+> published total, on every surface, wherever the figure is computed. PS-94 governs the *where*;
+> this ruling states the *what*.
+>
+> **Retention is part of the rule, not a side effect.** Dues rows are **kept** in the substrate
+> and **typed distinctly** so consumers can exclude them — that is the stated design intent at
+> `ingest_ie.py`'s dues-typing region. Retention and exclusion are one rule: a future lane must
+> not "clean up" by dropping the rows, and a consumer must not treat their presence as licence to
+> include them.
+>
+> **Provenance.** The rule was ratified as **rule (c) of the HALT-FW-1 firewall set**,
+> pre-register, and was **never transcribed** when the register was established — verified as
+> holding at FW-1's G0.4, archive `A-fw1`. It governed published figures for the whole interval
+> in which it had no text of record. This entry ends that.
+>
+> **Disclosure by magnitude.** Because the exclusion removes a class of money from every total, a
+> surface displaying those totals **states that the exclusion exists and states its magnitude in
+> that dataset.** A rule that silently removes money from published figures is indistinguishable
+> to a reader from money that was never there.
+>
+> **The flag is not the exclusion.** Where an editorial flag marks the excluded class, the flag's
+> cross-tab row is subject to the exclusion like any other total and renders zero. **The row
+> remains rendered**: its zero is informative, and the flag's coextension with the excluded class
+> is an editorial contingency rather than a definition — a flagged row that ever renders non-zero
+> is a signal worth preserving the ability to see.
+
+*Provenance: HALT-DUES stop resolution (`halt-dues-resolution.md`), sha256 `5fb6766bb6c654ca06c8b6d3f9fe29a1747441cfabf3ae1673bd5ae5b2642a97`, lines 38–64; subject ratified by Ishan 2026-08-07, transcription gated on the rule (c) extraction per the resolution §1. **The gate's branch 2 fired: this is FRESH AUTHORING.** The pre-register rule was verified as HOLDING at FW-1's G0.4 (archive `A-fw1`, `43dc9f2b…`) but was never STATED in its own words there or anywhere on the executor's machine — A-fw1's verbatim carriage is its census heading "IE-dues exclusion (rule c) holds (done)" plus the mechanism sites; the design-intent prose lives at `ingest_ie.py`'s dues-typing region. The planner's clauses above are therefore the rule's first text of record, per the same honesty PS-93 applied to the 2011 cutoff. Cited by reference C5.8.*
+
+
 ---
 
 ## Rulings ratified without an id
@@ -890,3 +949,76 @@ String 4's non-ship disposition:
 > lane's diff; the string remains drafted and unshipped.
 
 *Provenance, six sources: strings — G1 decision package (`p1d-person-g1-decisions.md`), sha256 `abeefe80e29aebe992a49f40862b473c99f9feaca50ae4a601b6597a10d017ad`, lines 299–307; D-map and D14 — G2 ratification record, sha256 `54920c73…` (full sha at §PS-92), lines 39–59 and 106–132; dispositions and string 4's non-ship — G3 authorization record (`p1d-person-g3-authorization.md`), sha256 `1dbda314e31147b8f063015bcf1d9d8dd944e10af2ceb80e2ba5f618b61a0e01`, lines 24–36 and 47–48; string 13 and the citywide-substitution note — HALT-S13 brief (`halt-s13-brief.md`), sha256 `e11955dca8337fcb9d6e5c9f0dfd1a103a7e8d2781ce27d64575882a17384209`, lines 14–28 and 71–75, ratified by Ishan 2026-08-06 (relay 16, option (b)); D1–D10 issued at `d1a77ebc…` §4 (ratified by Ishan 2026-08-04); D11–D14 and sequencing (iii) ratified by Ishan 2026-08-05 at `54920c73…`; final dispositions ratified by Ishan 2026-08-06 at `1dbda314…`. Entry ruled by the G3 authorization §3, answering the G2 statement's flagged question. Cited by reference C5.7 (career-total rule).*
+
+### EXCL-UNIFORM G1 — display decisions E1–E7 and strings 1–8
+
+The ratified decision set (E4's added labelling condition and the strings' phrasing
+constraint — name the term, never "post-2011" — are stated in the issuing records):
+
+> | id | decision as ratified |
+> |---|---|
+> | **E1** | PS-93's uniformity clause amended — figure-by-figure, with explicit-selection carve-out |
+> | **E2** | **(a)** the pre-2011 view is kept and **made deliberate** — curated, not emergent |
+> | **E3** | corrected identity claims render; no claim renders against an empty funder set |
+> | **E4** | $0-in-subject donors drop from the ranked list, **plus an explicit coverage statement on the list itself** |
+> | **E5** | strings 1–4 as drafted; **strings 5 and 6 ratified at relay 26** |
+> | **E6** | two paste reports, own protocols, **council first** |
+> | **E7** | this lane lands before or with the discoverability lane |
+
+Strings 1–4, ratified as drafted:
+
+> **E5:** strings 1–4 ratified as drafted, sentence case:
+> 1. `Total since the 2011 city council term`
+> 2. `No contributions in the cycles this tool covers.`
+> 3. `Before 2011 (outside this tool's cycles)`
+> 4. `Contributions before the city council term seated in May 2011 are outside the cycles this tool covers.`
+
+String 5 (the list-level coverage statement, discharging E4's added condition):
+
+> **RATIFIED — string 5, list-level coverage statement:**
+>
+> 5. `This tool covers contributions from the city council term seated in May 2011 onward. Donors who gave only before then are not listed.`
+
+String 6 (the pointer to the deliberate before-May-2011 view):
+
+> **RATIFIED — string 6, the pointer E2(a) now makes coherent:**
+>
+> 6. `See contributions before May 2011`
+
+Strings 7 and 8 (HALT-DUES; string 8's figures are the council artifact's and were
+re-verified against the artifact at the landing commit):
+
+> ## 3. Strings 7 and 8 — RATIFIED
+>
+> 7. **Flag cross-tab row, `pac_dues_funding`:**
+>    `$0 — dues transfers are excluded from all totals`
+>
+> 8. **Methodology-level, council surface:**
+>    `Transfers of member dues between political committees are excluded from all totals. In this dataset they account for $36,121,256.16 across 252 transactions.`
+
+The `pac_dues_funding` disposition — option (ii) extended, with the reasoning against the
+alternatives carried here by ratification (the row renders at $0 with string 7 and does not
+disappear):
+
+> ## 2. The `pac_dues_funding` disposition — option (ii) extended
+>
+> **The flag cross-tab excludes dues.** `pac_dues_funding` renders **$0** with string 7, and
+> **does not disappear from the cross-tab.**
+>
+> **Why not (i), rendering the row from the excluded mass inline.** PS-94 requires the exclusion to
+> bind the figure, and PS-93's carve-out permits reader-selected out-of-subject views only on the
+> condition that they **never aggregate with in-subject money in a shared total**. A cross-tab with
+> five in-subject rows and one excluded row shares an axis and invites summing — the same geometry
+> objection as a shared-denominator bar, where labels do not cure what the geometry asserts.
+>
+> **Why not (iii), removing the row.** The flag/exclusion coextension is **contingent, not
+> definitional** [SOURCED — stop report §4: every dollar it marks *is* a dues transfer, at this
+> vintage]. If an editor ever flags a row not typed as a dues transfer, that row goes non-zero —
+> either a typing error or an editorial judgment, and in both cases something you want visible.
+> Removing the row destroys a future tell to tidy a present zero.
+>
+> **Why this is not inconsistent with E4**, where $0 rows were dropped: 2,853 unexplained zeros in a
+> ranked donor list are noise, and one structural zero that explains itself is disclosure. The
+> distinction is whether the zero carries information, not whether it is zero.
+
+*Provenance, two sources: E1–E7 and strings 1–6 — EXCL-UNIFORM G1 ratification record (`excl-uniform-g1-ratification.md`), sha256 `38540989bc0a3aa928bb4c6169f13816c486daf9dbcfce682c303a0e88e3634f` (revision 2), lines 24–32 (the E-table), 142–146 (strings 1–4), 103–105 and 110–112 (strings 5 and 6); ratified by Ishan 2026-08-06 (relays 24/26). Strings 7–8 and the `pac_dues_funding` disposition — HALT-DUES stop resolution, sha256 `5fb6766b…` (full sha at §PS-95), lines 87–93 and 66–85; ratified by Ishan 2026-08-07. Entry heading extended to strings 1–8 per the resolution §5 — one display-decision set, one entry, so citation never splits. PS-93's own text is at §PS-93, not here.*

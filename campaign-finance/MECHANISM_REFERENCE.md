@@ -388,7 +388,16 @@ strings — the phrase names the term seated May 2011, never "post-2011", becaus
 is mid-May and January-to-May 2011 money is excluded too. One precision of record: the
 earliest school-board election window is open-start, so a pre-2011 date passes that
 window predicate by itself — **the protection on windowed figures is the cycle filter,
-not the window**, asserted at gate.
+not the window**, asserted at gate. **The exclusion set is larger than cycles, and it
+binds as a set** (PS-94): dues transfers between political committees are excluded from
+every published total while their rows stay in the substrate, typed distinctly (PS-95 —
+the rule's first text of record; it governed as FW-1's rule (c) pre-register), and every
+row-aggregating consumer applies the **full** set through one shared predicate per embed
+— a repeated condition is how the second gap of this class happened. The exclusion is
+**disclosed by magnitude** at methodology level (PS-95's clause), and a flag that marks an
+excluded class **renders its structural zero with the ratified line rather than
+disappearing** — the flag/exclusion coextension is contingent, and a non-zero on that row
+is a tell worth keeping visible.
 
 **Sizing note** [C5.4, SOURCED]: the tools present multiple distinct public surfaces,
 which multiplies render paths, not merely classification consumers. The surface count is
@@ -597,7 +606,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.7 | S-eapp | 71-80 (openPerson — no window parameter), 91-92 (data-person dispatch, no winFromEl), 276-286 (read-only ?person= boot — the deep-link path) |
 | C5.8 | S-edat | 419-423 (spenderFunders exclusion — the funder-rollup gap closed), 469-473 (donorFootprint exclusion — load-bearing for the windowless opener) |
 | C5.8 | S-eren | 454-455 (iePanel basis label + string-2 empty state), 618-624 (committee-profile basis label, string-2 empty state, structural no-identity-claim) |
-| C5.8 | S-cemb | 1014-1017 (cfInSubject, the shared predicate), 1266-1271 (donor-index split: in-subject totals + separate before-May-2011 accumulator), 1391/1411/1509/1580/1849/3059 (call sites: industry, per-alder industry, flags, IE funders, industry-detail, correlation index; IE spender sums filtered in situ), 1085-1101 (alder-profile in-subject views + curated option + string 4), 1624-1645 (pre2011SubView — strings 3/4, display-only rows), 1705-1707 (strings 5/6 on the ranked list), 2985-2988 (view bindings) |
+| C5.8 | S-cemb | 1014-1023 (cfInSubject + cfDuesRow + cfCountable — the shared full-set predicates), 1272-1277 (donor-index split: dues out first, then in-subject totals + separate before-May-2011 accumulator), 1397/1417/1522/1593/1862/3079 (full-set call sites: industry, per-alder industry, flags, IE funders, industry-detail, correlation index; IE spender sums filtered in situ), 1508-1521 (flag rows seeded from flagged donors — a fully-excluded flag renders zero, never vanishes), 2022-2031 (string 7 on the structural zero), 2558 (string 8, methodology), 1091-1107 (alder-profile in-subject views + curated option + string 4), 1637-1658 (pre2011SubView — strings 3/4, display-only rows), 1718-1720 (strings 5/6 on the ranked list), 3005-3008 (view bindings) |
 | C5.3 | A-fw1 | 14-16 (artifact not fused), 60-62 (gates check values, not structure) |
 | C5.4 | A-probe | 152 (banked sizing item: multiple surfaces, per-path render compliance) |
 | C6.1 | A-ba1g0 | 56-66 (dollar/repairability distinctions); A-ba1g2 49 (render-invisibility distinction) |
@@ -631,6 +640,8 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.7 career-total rule | P1D-PERSON G1/G2 | `RULINGS.md` §P1D-PERSON G1/G2 |
 | C5.7 identity rule | PS-92 | `RULINGS.md` §PS-92 |
 | C5.8 | PS-93 | `RULINGS.md` §PS-93 |
+| C5.8 full-set rule | PS-94 | `RULINGS.md` §PS-94 |
+| C5.8 dues exclusion | PS-95 | `RULINGS.md` §PS-95 |
 | C2.9 | discipline 29 | `RULINGS.md` §Discipline 29 |
 | C6.4 | DOCS-M1 (no id) | `RULINGS.md` §DOCS-M1 C6.4 |
 | C6.5 | PS-60 | `RULINGS.md` §PS-60 |
