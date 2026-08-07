@@ -371,6 +371,25 @@ affordance in the deleted string's place (SCOPE-UI B7's retirement condition, di
 the affordance's label is the ratified string 13 — the arrow is part of the ratified text,
 and the candidate name is not composed into it (HALT-S13; the register's P1D-PERSON entry).
 
+**The cycle exclusion is subject scope, applied at every unchosen figure** [C5.8, RULED;
+sites SOURCED]: money dated before the floor of the modeled council eras (the `CYCLES`
+table; the term seated May 2011) is **outside the tool's subject** (PS-93 — the doctrine,
+the cutoff's honest provenance, and the labelling rule live in the register entry). Every
+consumer that computes a figure from raw contribution or IE rows, **in both embeds**,
+applies `EXCLUDED_CYCLES`; the previously unfiltered consumers (the elections funder
+rollup and donor footprint; the council shard-fed donor index, industry and flag
+cross-tabs, IE funder and spender sums, industry-detail, and correlation index) are
+closed, with the elections side gate-asserted and the council side lane-proofed.
+**Explicit selection is disclosure, not violation**: the council's deliberate
+before-May-2011 option and list view are named as outside the tool's cycles, offered by
+design where such rows exist (never as an enumeration artifact), and never aggregate with
+in-subject money. **Non-window figures state their basis** using the ratified term-basis
+strings — the phrase names the term seated May 2011, never "post-2011", because the floor
+is mid-May and January-to-May 2011 money is excluded too. One precision of record: the
+earliest school-board election window is open-start, so a pre-2011 date passes that
+window predicate by itself — **the protection on windowed figures is the cycle filter,
+not the window**, asserted at gate.
+
 **Sizing note** [C5.4, SOURCED]: the tools present multiple distinct public surfaces,
 which multiplies render paths, not merely classification consumers. The surface count is
 current state and lives in the handover, not here.
@@ -503,10 +522,10 @@ that catch defect classes the existing gates structurally cannot see.
 | S-vld | `campaign-finance/ingestion/validate_council_data.py` | `6c83c3d5ab25b0ea402f06ae3a0d1e456d0497f23f91527f8ce7276d19900538` |
 | S-rst | `campaign-finance/ingestion/restamp_committee_linkage.py` | `6ceb82f9bbcffa08fdb21904b8585982a6bff7e3982e0b810937e2958019d06e` |
 | S-av | `campaign-finance/sync_allvotes.py` | `2ca09ee7323741919f048e61062d54a62719f56f88f71f99b721fe965c753f69` |
-| S-cemb | `campaign-finance/elections/reference/council-embed.html` | `f1451fa9900a7a645fec202f7226b26b95597b008c119be28747de81b89be111` |
+| S-cemb | `campaign-finance/elections/reference/council-embed.html` | `6cebc0c68735e42523c3cf2fb824623837476a51e38d175042e989951e063197` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
-| S-edat | `campaign-finance/elections/embed/data.js` | `14c90973779775659daac337d3b9dc5a1e0f068dea6ec13e0f6602bd52ecc669` |
-| S-eren | `campaign-finance/elections/embed/render.js` | `57205306c0db4c50b7b9f87232ae8f0b2eb8b15aa6d4ec7bed67fe5702499702` |
+| S-edat | `campaign-finance/elections/embed/data.js` | `e36af72ece73ff47b1322abd08548b1f3a1a7624f896381c6c8f10fd6b043ecc` |
+| S-eren | `campaign-finance/elections/embed/render.js` | `bc5ccf5b1720a366487419f2d3267591e4332da14a1ba6cade46606b2f35d9d2` |
 | S-eapp | `campaign-finance/elections/embed/app.js` | `ea8a6b01871dec4cb63a21996fbb4572f855e11a45f0cf9e0ff35fe56815a659` |
 | A-probe | `~/probe-sync-2026-07-24/probe-report.md` | `4c678cf0c14dd370f8b52744bf473000340ce16449a5365841b6ac92d8e5f9bb` |
 | A-add | `~/probe-sync-a-2026-07-24/addendum-a-report.md` | `468ba24f4f418f72c2720608353c83e52694c41637cf9ff16a9b267d37e49ed6` |
@@ -570,12 +589,15 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.1 | A-fw1 | 7-16 (fix sites exist only in the elections path; artifact layer separate) |
 | C5.2 | S-cemb | 42-52 (dataUrl + optional sharded mode); S-eemb 19-24 (elections artifact + inlined deploy) |
 | C5.2 | A-ba1g2 | 49 (Rider 2: neither embed renders entity-type / last-editor) |
-| C5.5 | S-edat | 110-116 (selectorOptions — the {year} {body} pattern), 812-830 (officeRaces election scoping via the year-prefix join), 761 (the race's window rides the VM), 778 (priorElection re-homed to the base VM) |
-| C5.5 | S-eren | 862-867 (selectorNav), 750-752 (the verbatim prior-note; the formerly-cited on_current_record string is DELETED — its retirement is C5.7's affordance clause) |
+| C5.5 | S-edat | 110-116 (selectorOptions — the {year} {body} pattern), 820-838 (officeRaces election scoping via the year-prefix join), 769 (the race's window rides the VM), 786 (priorElection re-homed to the base VM) |
+| C5.5 | S-eren | 871-876 (selectorNav), 759-761 (the verbatim prior-note; the formerly-cited on_current_record string is DELETED — its retirement is C5.7's affordance clause) |
 | C5.5 | S-eapp | 140-152 (selector state + read-only ?election= boot), 207-218 (scope switch resets the active race — the ruled B6 resolution) |
-| C5.7 | S-edat | 870-952 (resolvePersonRef 876 — id-only resolution + durable link; personView 907 — member sections, window-scoped figures, career total, boolean out-of-window condition, no IE key), 1291 (exports) |
-| C5.7 | S-eren | 629-666 (renderPersonModal — per-member sections + ratified strings), 668-673 (renderPersonMissing — string 7), 701-708 (facet map with on_current_record retired), 714-717 (personAffordance — string 13 label), 753-755 (card affordance), 771-783 (pendingCard explicit on_current_record branch) |
+| C5.7 | S-edat | 878-960 (resolvePersonRef 884 — id-only resolution + durable link; personView 915 — member sections, window-scoped figures, career total, boolean out-of-window condition, no IE key), 1299 (exports) |
+| C5.7 | S-eren | 638-675 (renderPersonModal — per-member sections + ratified strings), 677-682 (renderPersonMissing — string 7), 710-717 (facet map with on_current_record retired), 723-726 (personAffordance — string 13 label), 762-764 (card affordance), 780-792 (pendingCard explicit on_current_record branch) |
 | C5.7 | S-eapp | 71-80 (openPerson — no window parameter), 91-92 (data-person dispatch, no winFromEl), 276-286 (read-only ?person= boot — the deep-link path) |
+| C5.8 | S-edat | 419-423 (spenderFunders exclusion — the funder-rollup gap closed), 469-473 (donorFootprint exclusion — load-bearing for the windowless opener) |
+| C5.8 | S-eren | 454-455 (iePanel basis label + string-2 empty state), 618-624 (committee-profile basis label, string-2 empty state, structural no-identity-claim) |
+| C5.8 | S-cemb | 1014-1017 (cfInSubject, the shared predicate), 1266-1271 (donor-index split: in-subject totals + separate before-May-2011 accumulator), 1391/1411/1509/1580/1849/3059 (call sites: industry, per-alder industry, flags, IE funders, industry-detail, correlation index; IE spender sums filtered in situ), 1085-1101 (alder-profile in-subject views + curated option + string 4), 1624-1645 (pre2011SubView — strings 3/4, display-only rows), 1705-1707 (strings 5/6 on the ranked list), 2985-2988 (view bindings) |
 | C5.3 | A-fw1 | 14-16 (artifact not fused), 60-62 (gates check values, not structure) |
 | C5.4 | A-probe | 152 (banked sizing item: multiple surfaces, per-path render compliance) |
 | C6.1 | A-ba1g0 | 56-66 (dollar/repairability distinctions); A-ba1g2 49 (render-invisibility distinction) |
@@ -608,6 +630,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.7 career total | PS-91 rev 2 | `RULINGS.md` §PS-91 |
 | C5.7 career-total rule | P1D-PERSON G1/G2 | `RULINGS.md` §P1D-PERSON G1/G2 |
 | C5.7 identity rule | PS-92 | `RULINGS.md` §PS-92 |
+| C5.8 | PS-93 | `RULINGS.md` §PS-93 |
 | C2.9 | discipline 29 | `RULINGS.md` §Discipline 29 |
 | C6.4 | DOCS-M1 (no id) | `RULINGS.md` §DOCS-M1 C6.4 |
 | C6.5 | PS-60 | `RULINGS.md` §PS-60 |

@@ -681,6 +681,74 @@ async function assertWindowScoping(T, ctx, fx) {
        b1 === 'threw-b1');
 }
 
+// (EXCL) EXCL-UNIFORM / PS-93: out-of-subject money (pre-2011/undated) never enters an
+// unchosen figure. Four checks, additions only (pre-ruled: 104 -> 108, zero rewrites).
+async function assertExclusionUniformity(T, ctx, fx) {
+  var W = ctx.window, ED = W.ElectData, ER = W.ElectRender, RAW = W.PREVIEW_DATA;
+  if (!ED || !ER || !RAW) { T.ok('[EXCL] ElectData/ElectRender/PREVIEW_DATA reachable', false); return; }
+  var idx = ED.loadData(RAW, { office: fx.office });
+
+  // 1. [EXCL/UNIF] the uniformity assertion — the check that would have caught the
+  // original gap. A synthetic artifact whose ONLY money is one pre-2011 row on each
+  // committee type must produce zero/empty output from EVERY money-computing entry point.
+  var cp = JSON.parse(JSON.stringify(RAW));
+  cp.contributions = [
+    { donor_id: Object.keys(RAW.donors)[0], committee_id: Object.keys(RAW.committees).find(function (k) { return RAW.committees[k].type === 'candidate'; }),
+      amount: 5000, date: '2009-06-01', cycle: 'pre-2011', contribution_type: 'Individual' },
+    { donor_id: Object.keys(RAW.donors)[0], committee_id: Object.keys(RAW.committees).find(function (k) { return RAW.committees[k].type === 'independent_expenditure'; }),
+      amount: 7000, date: '2009-06-01', cycle: 'pre-2011', contribution_type: 'Individual' }];
+  cp.independent_expenditures = [];
+  var xi = ED.loadData(cp, { office: fx.office });
+  var candId = (RAW.committees[cp.contributions[0].committee_id] || {}).candidate_id;
+  var ieKey = cp.contributions[1].committee_id;
+  var leaks = [];
+  if (ED.candidateFigures(xi, candId, null, null).contributions.total !== 0) leaks.push('candidateFigures');
+  if (ED.spenderFunders(xi, ieKey).total !== 0) leaks.push('spenderFunders');
+  var fp0 = ED.donorFootprint(xi, cp.contributions[0].donor_id, null);
+  if (fp0 && fp0.total !== 0) leaks.push('donorFootprint');
+  if (ED.browseDonors(xi, null, null, { search: '', type: 'All', industry: 'All', flag: 'All' })
+        .some(function (r) { return r.total > 0; })) leaks.push('browseDonors');
+  var prof = ED.committeeProfile(xi, ieKey, null);
+  if (prof.funderTotal !== 0) leaks.push('committeeProfile.funders');
+  T.ok('[EXCL/UNIF] a pre-2011-only artifact renders ZERO from every money entry point' +
+    (leaks.length ? ' — LEAKED: ' + leaks.join(',') : ''), leaks.length === 0);
+
+  // 2. [EXCL/SEIU] the live fixture at its post-fix value: the funder total drops from
+  // $11,513,949.64 (incl. $11,392,124.39 pre-2011) to the in-subject remainder, and the
+  // identity (top funder) is no longer a pre-2011-only entity.
+  var seiu = ED.spenderFunders(idx, 'ie-committee-18574');
+  T.ok('[EXCL/SEIU] SEIU PAC funder total == 121825.25 in-subject (was 11513949.64) and top funder is SEIU Healthcare IL IN PAC',
+    seiu.total === 121825.25 && seiu.funders[0] && seiu.funders[0].name === 'SEIU Healthcare IL IN PAC');
+
+  // 3. [EXCL/WMT] Welcome Wal-Mart: 100% pre-2011 receipts -> empty funder set, the
+  // ratified string 2 renders, and NO identity claim appears (E3, structural).
+  var wmt = ED.spenderFunders(idx, 'ie-committee-22729');
+  var wmtHtml = ER.renderCommitteeProfile(ED.committeeProfile(idx, 'ie-committee-22729', null));
+  T.ok('[EXCL/WMT] Welcome Wal-Mart: empty funder set + string 2 + no "Funded primarily by" claim',
+    wmt.total === 0 && wmt.count === 0 &&
+    wmtHtml.indexOf('No contributions in the cycles this tool covers.') >= 0 &&
+    wmtHtml.indexOf('Funded primarily by') < 0 &&
+    wmtHtml.indexOf('Total since the 2011 city council term') >= 0);
+
+  // 4. [EXCL/WIN-GUARD] precision the lane surfaced: the 2024 school-board window is
+  // OPEN-START (start:null), so a pre-2011 date passes the window predicate BY ITSELF —
+  // the protection on windowed figures is the cycle filter, not the window. Assert it.
+  var cp2 = JSON.parse(JSON.stringify(RAW));
+  var sbCmte = Object.keys(RAW.committees).find(function (k) {
+    var cm = RAW.committees[k]; if (cm.type !== 'candidate' || !cm.candidate_id) return false;
+    var cd = (RAW.candidates || []).filter(function (c) { return c.id === cm.candidate_id; })[0];
+    return cd && /school-board/.test(cd.election_id || '');
+  });
+  var sbCand = cp2.committees[sbCmte].candidate_id;
+  cp2.contributions.push({ donor_id: Object.keys(RAW.donors)[0], committee_id: sbCmte,
+    amount: 999999, date: '2009-06-01', cycle: 'pre-2011', contribution_type: 'Individual' });
+  var xi2 = ED.loadData(cp2, { office: fx.office });
+  var before = ED.candidateFigures(idx, sbCand, null, fx.windows['2024']).contributions.total;
+  var after = ED.candidateFigures(xi2, sbCand, null, fx.windows['2024']).contributions.total;
+  T.ok('[EXCL/WIN-GUARD] a pre-2011 row inside the open-start 2024 window is excluded by CYCLE, not by the window (figure unmoved)',
+    after === before);
+}
+
 // (PERSON) P1D-PERSON: the person surface. Seven checks, pre-ruled at G2 (97 -> 104).
 async function assertPersonSurface(T, ctx, fx) {
   var W = ctx.window, ED = W.ElectData, ER = W.ElectRender, RAW = W.PREVIEW_DATA;
@@ -839,6 +907,7 @@ async function assertPersonSurface(T, ctx, fx) {
   await assertCandidateGroups(T, ctx, fx);
   await assertWindowScoping(T, ctx, fx);
   await assertPersonSurface(T, ctx, fx);
+  await assertExclusionUniformity(T, ctx, fx);
 
   // [DOCS] PS-73 docs-form checker (DOCS-M4): one implementation (campaign-finance/
   // tools/check_docs.py), two invokers — build_all.sh's validation gate and this line.

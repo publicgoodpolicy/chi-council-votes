@@ -450,7 +450,10 @@
           '<p class="contrib-note framing">Amounts below are what each donor gave <b>this committee</b> over time — ' +
           'not money spent on this race.</p>' +
           '<p class="contrib-h">Who funds this committee · ' + money(s.funderTotal) + ' from ' +
-          plural(s.funderCount, 'funder', 'funders') + ' (dues excluded)</p>' + frows + more +
+          plural(s.funderCount, 'funder', 'funders') + ' (dues excluded)</p>' +
+          '<p class="contrib-note basis-note">Total since the 2011 city council term</p>' +   // string 1 (PS-93 basis label)
+          (s.funderCount === 0 ? '<p class="contrib-note">No contributions in the cycles this tool covers.</p>' : '') +   // string 2
+          frows + more +
         '</div></div></div>';
     }).join('');
     return '<div class="contrib" id="' + id + '"><div class="contrib-inner">' +
@@ -610,13 +613,19 @@
     var label = p.isIE
       ? ('Who funds this committee · ' + money(p.funderTotal) + ' from ' + plural(p.funderCount, 'funder', 'funders') + ' (dues excluded)')
       : ('Contributors · ' + money(p.funderTotal) + ' from ' + plural(p.funderCount, 'donor', 'donors'));
+    // PS-93 basis label (string 1) on the IE-kind lifetime figure; candidate-kind funder
+    // lines are click-context-windowed, so the basis is the window and needs no label.
+    var basis = p.isIE ? '<p class="contrib-note basis-note">Total since the 2011 city council term</p>' : '';
+    // String 2 (E3): an empty funder set renders the ratified state, never a bare region —
+    // and the identity claim is already structurally absent (built from this same list).
+    var emptyF = p.isIE && p.funderCount === 0 ? '<p class="contrib-note">No contributions in the cycles this tool covers.</p>' : '';
     var fl = p.funders.slice(0, 30), funders = '';
     for (var i = 0; i < fl.length; i++) funders += donorRow(fl[i]);
     var moreF = p.funders.length > 30 ? '<p class="contrib-note">+ ' + (p.funders.length - 30) + ' more</p>' : '';
     var wA = p.win ? (' data-win-start="' + esc(p.win.start || '') + '" data-win-end="' + esc(p.win.end || '') + '"') : '';
     return '<div class="ipg-modal-overlay" data-modal-overlay' + wA + '><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Committee profile">' +
       '<button class="ipg-modal-close" type="button" data-modal-close aria-label="Close">×</button>' +
-      head + summary + spent + '<p class="contrib-h" style="margin-top:14px">' + label + '</p>' + funders + moreF + '</div></div>';
+      head + summary + spent + '<p class="contrib-h" style="margin-top:14px">' + label + '</p>' + basis + emptyF + funders + moreF + '</div></div>';
   }
 
   // Person surface (P1D-PERSON) — the third modal content type. Frame = the person's member

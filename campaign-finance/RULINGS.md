@@ -602,6 +602,53 @@ descriptive headings.
 *Provenance: P1D-PERSON G2 ratification record (`g2-ratification-record.md`), sha256 `54920c73983cca04579dbfd61300dd50bbbc29737f7e15aad6341f78ae3ae25e`, lines 73–101; ratified by Ishan 2026-08-05, in force generally (the linkage lane is its first application, not its scope). The record states its text byte-identical to the issuing record `c71ae536…` lines 60–87. Not yet cited by a reference claim row; governs the linkage lane's evidence class.*
 
 
+### PS-93 — the cycle exclusion is subject scope; unchosen figures exclude it; every displayed figure states what it covers
+
+> ## PS-93 — The cycle exclusion is subject scope; unchosen figures exclude it; every displayed figure states what it covers
+>
+> **The exclusion is scope, not filtering.** The tool's subject is the modeled council eras —
+> the cycles in the `CYCLES` table, whose floor is the term seated 2011-05-17. Money dated
+> before the earliest modeled era is **outside the subject**, in the same way independent
+> expenditures naming a former officeholder are out of scope. That doctrine is stated at
+> `ingest_ie.py`'s docstring and in the council embed's reader-facing methodology sentence.
+>
+> **The cutoff's provenance, recorded honestly.** `pre-2011` is not a chosen constant: it is the
+> fallback cycle label minted for any date below the `CYCLES` floor. The convention entered at
+> repo dawn from the council chain, predates every lane record and the register, and **the year
+> itself was never independently derived** — no record anywhere explains why the modeled era
+> begins at the 2011 term rather than earlier. Retained pending review, with the doctrine above
+> as its stated reason and this clause as its honest limit.
+>
+> **The scope is the whole pipeline, both tools.** The predicate is on `cycle`, which every row
+> carries regardless of committee type. The council artifact carries 7,020 pre-2011 rows /
+> $5,920,311.36 on candidate committees; the elections artifact's excluded set being entirely
+> IE-typed is a fact about young school-board committees, not a scope limit.
+>
+> **Uniform application to unchosen figures.** Every figure whose temporal basis is a selected
+> window, an aggregate ("all", "lifetime", "total"), or unstated **excludes out-of-subject
+> money**. A figure that includes it is a defect, not a variant — and an identity or "primarily
+> funded by" claim computed from out-of-subject money is the same defect with a reader-facing
+> conclusion attached.
+>
+> **Explicit selection is disclosure, not violation.** Where a reader selects a named
+> out-of-subject view and the surface names it as such, out-of-subject money may render. It must
+> never aggregate with in-subject money in a shared total, and the surface offering it must do so
+> by deliberate design rather than as an artifact of enumerating whatever the data contains.
+>
+> **Every displayed figure states what it covers.** Where a surface displays a total whose
+> temporal basis is not the selected window — lifetime, all-cycles, or all-dates — it states
+> that basis, and states it as *since the earliest modeled cycle* rather than as unqualified
+> lifetime. Two unlabelled bases coexisting in one suite is the condition this clause exists to
+> end.
+>
+> **Inclusion of pre-2011 money is a scope decision, not a data-quality one.** Those rows are
+> fully donor-resolved, fully dated, unaggregated, and better-classified than a matched
+> post-2011 sample; 98.1% of the money is one committee's receipt history. Admitting them would
+> change the tool's subject, and that is the ground on which it is decided if it ever is.
+
+*Provenance: EXCL-UNIFORM G1 ratification record (`excl-uniform-g1-ratification.md`), sha256 `38540989bc0a3aa928bb4c6169f13816c486daf9dbcfce682c303a0e88e3634f`, lines 40–80 (extract sha256 `4151707eab56bf52648973b02c8fe66743e086ef74f8a050d3bd7eacec0de959`); ratified by Ishan 2026-08-06 (relay 24; the record's revision 2, relay 26, changed string dispositions only). Assembled by substitution from the lane brief's §2 draft (`91534400…`) with E1's amended uniformity clause; the superseded draft is retained in the brief as issued. Figure of record for the excluded class: cited in the record beneath the ruling text. Cited by reference C5.8.*
+
+
 ---
 
 ## Rulings ratified without an id

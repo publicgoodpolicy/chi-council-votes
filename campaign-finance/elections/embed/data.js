@@ -417,6 +417,10 @@
     for (var i = 0; i < rows.length; i++) {
       var c = rows[i];
       if (c.contribution_type === DUES_TYPE) continue;        // internal dues transfers are not giving
+      // PS-93: out-of-subject money (pre-2011/undated cycles) never enters an unchosen
+      // figure — this lifetime funder total fed the "Funded primarily by" identity line
+      // from money every other surface excluded (EXCL-UNIFORM; the SEIU PAC case).
+      if (EXCLUDED_CYCLES[c.cycle]) continue;
       var donor = index.donors[c.donor_id] || {};
       var pid = donor.parent_id || c.donor_id;
       var parent = index.donors[pid] || donor;
@@ -463,6 +467,10 @@
     for (var i = 0; i < rows.length; i++) {
       var c = rows[i];
       if (c.contribution_type === DUES_TYPE) continue;
+      // PS-93: excluded here too, not only by the click-context window — the windowless
+      // opener the person surface's affordance will create (E7) makes this line
+      // load-bearing, and the open-start 2024 window admits pre-2011 dates by itself.
+      if (EXCLUDED_CYCLES[c.cycle]) continue;
       if (win && !inWindow(c.date, win)) continue;
       var cid = c.committee_id, cm = index.committees[cid] || {};
       // office scope: an IE committee that didn't spend in this office is out of
