@@ -81,7 +81,57 @@ def validate(d):
     errors.extend(validate_person_links(d))
     errors.extend(validate_election_ids(d))
     errors.extend(validate_committee_linkage(d))
+    errors.extend(validate_aggregate_absence(d))
+    errors.extend(validate_donor_referential(d))
     return errors, warnings
+
+
+def validate_aggregate_absence(d):
+    """[AGG/PS-96] LEDGER-0 — the un-keyed-money class is asserted ABSENT, class-level.
+    Artifact-agnostic: runs at the terminal step of BOTH canonical chains (council and
+    elections feed the same validator), so either artifact waking fails its build. The
+    predicate list is the DETECTION SURFACE, not the class definition (PS-96), and the
+    causes carry distinct names: predicates 1-3 ([AGG/PS-96]) fire only on a data-source
+    change reintroducing un-keyed rows/donors; the small-dollar tag ([AGG/PS-96-TAG])
+    fires on a Sheet edit that makes ITEMIZED money render as aggregate — a false
+    display claim, not the class waking. Read RULINGS.md §PS-96 before touching this."""
+    errors = []
+    rows = d.get('contributions', [])
+    donors = d.get('donors', {})
+    flag_rows = [c.get('id') for c in rows if c.get('is_aggregate')]
+    if flag_rows:
+        errors.append(f"[AGG/PS-96] {len(flag_rows)} contribution row(s) carry is_aggregate "
+                      f"(first: {flag_rows[:3]}) — the un-keyed class woke; read RULINGS.md §PS-96")
+    type_rows = [c.get('id') for c in rows if c.get('contribution_type') == 'Aggregate']
+    if type_rows:
+        errors.append(f"[AGG/PS-96] {len(type_rows)} contribution row(s) carry contribution_type "
+                      f"'Aggregate' (first: {type_rows[:3]}) — read RULINGS.md §PS-96")
+    agg_donors = [k for k, v in donors.items() if v.get('type') == 'Aggregate']
+    if agg_donors:
+        errors.append(f"[AGG/PS-96] {len(agg_donors)} donor(s) typed 'Aggregate' "
+                      f"(first: {agg_donors[:3]}) — read RULINGS.md §PS-96")
+    sd_donors = [k for k, v in donors.items() if 'small-dollar' in (v.get('industries') or [])]
+    if sd_donors:
+        errors.append(f"[AGG/PS-96-TAG] {len(sd_donors)} donor(s) carry the 'small-dollar' industry "
+                      f"tag (first: {sd_donors[:3]}) — an editorial tag makes ITEMIZED money render "
+                      f"as an aggregate line; not the class waking. Read RULINGS.md §PS-96")
+    return errors
+
+
+def validate_donor_referential(d):
+    """[AGG/PS-96-DEFECT] LEDGER-0 / D15(b) — PS-96's carve boundary: a donor key that
+    SHOULD have resolved and did not is NOT un-keyed money. The donor-grain consumers
+    skip such a row with the same silent continue as the aggregate skip, so this is the
+    one loud path. Distinct name from [AGG/PS-96] so a failure distinguishes 'the class
+    woke' from 'a key failed to resolve'."""
+    donors = d.get('donors', {})
+    bad = [c.get('id') for c in d.get('contributions', [])
+           if not c.get('donor_id') or c.get('donor_id') not in donors]
+    if bad:
+        return [f"[AGG/PS-96-DEFECT] {len(bad)} contribution row(s) whose donor_id fails to "
+                f"resolve in donors (first: {bad[:3]}) — key-missing-by-defect is OUTSIDE the "
+                f"un-keyed class and must fail loudly (RULINGS.md §PS-96)"]
+    return []
 
 
 def validate_person_links(d):

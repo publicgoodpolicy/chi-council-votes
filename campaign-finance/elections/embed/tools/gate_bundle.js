@@ -778,6 +778,35 @@ async function assertExclusionUniformity(T, ctx, fx) {
     (leaks3.length ? ' — LEAKED: ' + leaks3.join(',') : ''), leaks3.length === 0);
 }
 
+// (AGG) LEDGER-0 / PS-96: the un-keyed-money class is asserted ABSENT from the SHIPPED
+// elections artifact, class-level. The predicate list is the DETECTION SURFACE, not the
+// class definition (PS-96), and the causes carry DISTINCT names (D15's purpose): the
+// class waking on a data-source change ([AGG/PS-96], predicates 1-3) is a different
+// condition from a Sheet edit whose small-dollar tag makes ITEMIZED money render as an
+// aggregate line ([AGG/PS-96-TAG], a false display claim). Read RULINGS.md §PS-96
+// before touching either. Council's twins live in validate_council_data.py, per D4(b).
+async function assertAggAbsence(T, ctx) {
+  var RAW = ctx.window.PREVIEW_DATA;
+  if (!RAW) { T.ok('[AGG/PS-96] PREVIEW_DATA reachable', false); return; }
+  var rows = RAW.contributions || [], donors = RAW.donors || {}, hits = [], tagHits = [];
+  rows.forEach(function (c) {
+    if (c.is_aggregate) hits.push('row-flag:' + c.id);
+    if (c.contribution_type === 'Aggregate') hits.push('row-type:' + c.id);
+  });
+  Object.keys(donors).forEach(function (k) {
+    var v = donors[k] || {};
+    if (v.type === 'Aggregate') hits.push('donor-type:' + k);
+    if ((v.industries || []).indexOf('small-dollar') >= 0) tagHits.push('donor-industry:' + k);
+  });
+  T.ok('[AGG/PS-96] un-keyed class absent from the elections artifact (predicates 1-3: ' +
+    rows.length + ' rows, ' + Object.keys(donors).length + ' donors)' +
+    (hits.length ? ' — WOKE (read RULINGS.md §PS-96): ' + hits.slice(0, 4).join(',') : ''),
+    hits.length === 0);
+  T.ok('[AGG/PS-96-TAG] no donor carries the small-dollar industry tag (which renders itemized money as aggregate)' +
+    (tagHits.length ? ' — TAGGED (read RULINGS.md §PS-96): ' + tagHits.slice(0, 4).join(',') : ''),
+    tagHits.length === 0);
+}
+
 // (PERSON) P1D-PERSON: the person surface. Seven checks, pre-ruled at G2 (97 -> 104).
 async function assertPersonSurface(T, ctx, fx) {
   var W = ctx.window, ED = W.ElectData, ER = W.ElectRender, RAW = W.PREVIEW_DATA;
@@ -937,6 +966,7 @@ async function assertPersonSurface(T, ctx, fx) {
   await assertWindowScoping(T, ctx, fx);
   await assertPersonSurface(T, ctx, fx);
   await assertExclusionUniformity(T, ctx, fx);
+  await assertAggAbsence(T, ctx);
 
   // [DOCS] PS-73 docs-form checker (DOCS-M4): one implementation (campaign-finance/
   // tools/check_docs.py), two invokers — build_all.sh's validation gate and this line.

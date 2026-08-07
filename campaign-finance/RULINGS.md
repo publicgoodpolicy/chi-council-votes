@@ -80,6 +80,12 @@ descriptive headings.
 
 *Provenance: DOCS-M1 G1.0 resolution (`docs-m1-g1-0-resolution.md`), sha256 `f7473cf26ffdfb6d380c73e9388de49913ce4c4c89a2574615a368b3602212c2`, lines 45–50 (the class membership as completed by PS-54); drafted 2026-07-26. PS-33's issued naming of the class predates the banked set. Cited by the reference's detector-class row.*
 
+### PS-42 — UNVERIFIED splits two ways: gap versus deferred-by-design
+
+> - **PS-42 — UNVERIFIED splits two ways and the close report must distinguish them.** *Gap* = should be closed, currently isn't. *Deferred-by-design* = correctly open, owned by another lane. The `ie-committee-*` mechanism is **deferred**, not a gap — it has its own queued lane and characterizing it here is scope creep. Without the distinction a future reader treats a deliberate park as an oversight and re-derives it. Note also: the five-surface enumeration is resolved by **PS-38**, not by sourcing — the count routes to the handover, the enumeration by name is not a count.
+
+*Provenance: DOCS-M1 G1 authorization, sha256 `4df35187…` (full sha at §PS-23), line 28; drafted 2026-07-26. **The rule is the two sub-classes**; the `ie-committee-*` characterisation and the five-surface note are that lane's applications of it, quoted here because the bullet transfers whole. The sub-classes are applied independently of those instances by the reference (C4.3 `ie-committee-*` *deferred-by-design*, C7.5 "behind" *gap*) and are allowlisted as exact tokens by `check_docs.py:57`; PS-72's register text cites them by id. Entered the register at LEDGER-0 under PS-87, having been in force by use with no heading. Cited by PS-58's pointer scheme and PS-72.*
+
 ### PS-44 — runbook canonical-chain transfer
 
 > - **PS-44 — the runbook canonical-chain transfer happens in this lane**, on a split principle. Leaving the runbook asserting ordering authority while the reference claims it is the split-authority state PS-25 exists to end. **The reference holds the ordering requirements, their dependencies, and what breaks otherwise — the *why*. The runbook holds the operational sequence with flags and cites the reference as authority.** Different content types on one subject; not duplication if disciplined.
@@ -646,7 +652,27 @@ descriptive headings.
 > post-2011 sample; 98.1% of the money is one committee's receipt history. Admitting them would
 > change the tool's subject, and that is the ground on which it is decided if it ever is.
 
+> **Amendment (LEDGER-0, 2026-08-07).** PS-93's clauses above govern money **dated** before the
+> earliest modeled era. They do not reach a **date-less** row, whose exclusion rests on a different
+> ground: the date is unknown, not known-early. `EXCLUDED_CYCLES` has carried `undated` beside
+> `pre-2011` at every consumer since repo dawn with no ruling sentence of its own.
+>
+> **Ruled:** a contribution or expenditure row carrying no usable date is outside the subject of every
+> displayed figure, on the ground that a row whose date is unknown cannot be placed in any modeled era
+> — not on the ground that it falls below the `CYCLES` floor. The two halves of `EXCLUDED_CYCLES` are
+> therefore excluded for different reasons and are not interchangeable in prose, in labels, or in a
+> reader-selectable view.
+>
+> **Recorded with the amendment:** the class is fully dormant at this vintage — zero rows with a null
+> or empty date exist in either artifact, so this amendment governs zero rows today and is written for
+> the wake, as PS-95 recorded of its own fresh authoring. And the two minting sites diverge on a date
+> falling *between* cycle windows: `transform_slice1.assign` yields `undated`, `ingest_ie.cycle_for`
+> yields the latest cycle. Unreachable at this vintage — the CYCLES windows are day-contiguous, with no
+> representable date between them — and recorded so the divergence is known rather than discovered.
+
 *Provenance: EXCL-UNIFORM G1 ratification record (`excl-uniform-g1-ratification.md`), sha256 `38540989bc0a3aa928bb4c6169f13816c486daf9dbcfce682c303a0e88e3634f`, lines 40–80 (extract sha256 `4151707eab56bf52648973b02c8fe66743e086ef74f8a050d3bd7eacec0de959`); ratified by Ishan 2026-08-06 (relay 24; the record's revision 2, relay 26, changed string dispositions only). Assembled by substitution from the lane brief's §2 draft (`91534400…`) with E1's amended uniformity clause; the superseded draft is retained in the brief as issued. Figure of record for the excluded class: cited in the record beneath the ruling text. Cited by reference C5.8.*
+
+*Provenance, amendment (the undated scope rationale): LEDGER-0 G3, package part 1 §3.1 (`ledger-0-g3-package-part1.md`, sha256 `911398da675c4a0070b9b0f05f447f4442dba1f95f9c503741f69c741bc0a5e8`); ratified by Ishan 2026-08-07 (authorization `5017136c…`). Dormancy and the minting-site divergence are measurements, cited to `ledger-0-g0-report.md` §4 (`39f5f5bc…`) and `ledger-0-g2-report.md` §4.1 (`f63e9a84…`) per PS-38 and D12. PS-93's pre-amendment text is unaltered.*
 
 
 ### PS-94 — a ruled exclusion binds every displayed figure, wherever the figure is computed
@@ -707,6 +733,58 @@ descriptive headings.
 
 *Provenance: HALT-DUES stop resolution (`halt-dues-resolution.md`), sha256 `5fb6766bb6c654ca06c8b6d3f9fe29a1747441cfabf3ae1673bd5ae5b2642a97`, lines 38–64; subject ratified by Ishan 2026-08-07, transcription gated on the rule (c) extraction per the resolution §1. **The gate's branch 2 fired: this is FRESH AUTHORING.** The pre-register rule was verified as HOLDING at FW-1's G0.4 (archive `A-fw1`, `43dc9f2b…`) but was never STATED in its own words there or anywhere on the executor's machine — A-fw1's verbatim carriage is its census heading "IE-dues exclusion (rule c) holds (done)" plus the mechanism sites; the design-intent prose lives at `ingest_ie.py`'s dues-typing region. The planner's clauses above are therefore the rule's first text of record, per the same honesty PS-93 applied to the 2011 cutoff. Cited by reference C5.8.*
 
+
+### PS-96 — un-keyed money: a figure grouped on a key reports only money carrying that key, and discloses the residual
+
+> **The class.** Money may be present in a figure's subject and still lack the key that figure is
+> grouped on. An un-itemized roll-up row carries no donor identity, so a figure grouped by donor has
+> no row to place it on — the same reason a row with no ward is absent from a per-ward breakdown.
+> This is what grouping by an absent field does. It is **not** an exclusion, and PS-96 is not an
+> exclusion rule.
+>
+> **The classifying test, so the next case is not re-litigated: does the money leave the top-line
+> total?** Money that leaves every total is out of subject and is governed as an exclusion (PS-93,
+> PS-95, and PS-94's binding of an exclusion to every displayed figure). Money that stays in the
+> total but drops out of a keyed breakdown is un-keyed and is governed here. **Citing PS-94 or PS-76
+> as authority for this ruling is malformed** — PS-94 governs exclusion sets, and PS-76 governs guard
+> removal, neither of which this is.
+>
+> **The convention of record.** Figures grouped on donor identity — the pipeline's donor-grain
+> rollups, the council correlation index, the editor's cluster-preview totals, and the reconcile
+> compare — omit rows and donors that carry no donor identity. Figures at committee or candidate
+> grain count the same money as real received money, because at that grain no key is missing. Both
+> halves are correct. The split is not a defect.
+>
+> **The residual-disclosure obligation.** A figure that omits un-keyed money must disclose the
+> residual. The omission is invisible in the figure itself, so a reader who cannot see the residual
+> cannot reconcile what they are shown with the total they were given. This is PS-95's
+> rendered-row principle applied to a different cause: the disclosure remains rendered because its
+> presence, and its size, are what the reader needs.
+>
+> **Named as this ruling's one standing non-conformance:** the council alder profile counts un-keyed
+> money in its headline while the line that disclosed it was removed at HALT-MIG-1. The headline is
+> correct; the missing disclosure is the defect. **Dropping the rows from the headline is not the
+> repair** — it would under-report real received money. The repair is to restore the disclosure, and
+> REPAIR-AGG-1 owns it.
+>
+> **The carve, and it is the boundary of the class.** *Structurally* un-keyed money — a key that does
+> not exist by construction — is the class. A key that **should have resolved and did not** is not in
+> the class and must fail loudly rather than be silently omitted. The two cases are indistinguishable
+> in the pipeline's current control flow, which is why this ruling lands with a referential-integrity
+> assertion rather than only a sentence.
+>
+> **Detection.** The class is asserted absent at build time, class-level, per artifact, under a
+> failure name carrying this ruling's id. The predicate list is the **detection surface, not the
+> class definition**: it names how un-keyed rows are recognised in today's bytes and is expected to
+> change as the substrate does. A future reader must not read the list as the rule.
+>
+> **Dormant at authoring, written for the wake.** No such row exists in either artifact at this
+> vintage and no code mints one; the class returns only by a data-source change. Every clause above
+> therefore governs zero rows today. That is the point: this convention governed published figures
+> for the project's life with no text of record, and it could not announce itself through a wrong
+> figure because no row existed to distort.
+
+*Provenance: LEDGER-0 G3 authorization, sha256 `5017136c6b86b5ff5f847b6de7331faed4c8ed1c171e927913e60cd7dd4ee60a`; ratified by Ishan 2026-08-07. Fresh authoring — no prior record states this rule in its own words; the convention was read from bytes at `ledger-0-g0-report.md` §1 (`39f5f5bc…`) and confirmed at `ledger-0-g2-report.md` §4.2/§4.3/§4.5 (`f63e9a84…`). Framing ratified as R3 (`ledger-0-g1-ratification-rev3.md`, `ed4aac0f…`); the carve's mechanism is D15(b), reasoning at `ledger-0-g3-package-part1.md` §1 (`911398da…`). Dormancy, the per-figure site map, the four predicates, and the seam analysis are measurements and cite those reports per PS-38 and D12, with collection scope named at each. Partial pre-existing coverage: the `[PERSON/D14]` gate check asserts the person surface's career total against `by_person.direct.total` and therefore fails loudly on un-keyed rows for **linked persons only** — not council, not unlinked candidates; it is not the general guard. Known limitation of the detection surface: `ingest.py:518-521` records a retired convention carrying the small-dollar aggregate donor under a `_`-prefixed donor id, with no live code testing the prefix; a data-source change restoring that id convention without restoring the type or flag would not be seen by the predicate list. Seam 2 (`build_rollups.py:188` drops on the row flag and never consults donor type) publishes no dollar on any reader-facing surface at this vintage — its money fields are read only by two dev-tool console oracles — so its grain question falls due the day any consumer reads them.*
 
 ---
 
@@ -950,7 +1028,7 @@ String 4's non-ship disposition:
 
 *Provenance, six sources: strings — G1 decision package (`p1d-person-g1-decisions.md`), sha256 `abeefe80e29aebe992a49f40862b473c99f9feaca50ae4a601b6597a10d017ad`, lines 299–307; D-map and D14 — G2 ratification record, sha256 `54920c73…` (full sha at §PS-92), lines 39–59 and 106–132; dispositions and string 4's non-ship — G3 authorization record (`p1d-person-g3-authorization.md`), sha256 `1dbda314e31147b8f063015bcf1d9d8dd944e10af2ceb80e2ba5f618b61a0e01`, lines 24–36 and 47–48; string 13 and the citywide-substitution note — HALT-S13 brief (`halt-s13-brief.md`), sha256 `e11955dca8337fcb9d6e5c9f0dfd1a103a7e8d2781ce27d64575882a17384209`, lines 14–28 and 71–75, ratified by Ishan 2026-08-06 (relay 16, option (b)); D1–D10 issued at `d1a77ebc…` §4 (ratified by Ishan 2026-08-04); D11–D14 and sequencing (iii) ratified by Ishan 2026-08-05 at `54920c73…`; final dispositions ratified by Ishan 2026-08-06 at `1dbda314…`. Entry ruled by the G3 authorization §3, answering the G2 statement's flagged question. Cited by reference C5.7 (career-total rule).*
 
-### EXCL-UNIFORM G1 — display decisions E1–E7 and strings 1–8
+### EXCL-UNIFORM G1 — display decisions E1–E7 and strings 1–9
 
 The ratified decision set (E4's added labelling condition and the strings' phrasing
 constraint — name the term, never "post-2011" — are stated in the issuing records):
@@ -1021,4 +1099,11 @@ disappear):
 > ranked donor list are noise, and one structural zero that explains itself is disclosure. The
 > distinction is whether the zero carries information, not whether it is zero.
 
+String 9 (the undated methodology disclosure; D16(iii) — no undated view exists, the exclusion is
+disclosed by magnitude at methodology level, and no existing string is amended):
+
+> 9. `This tool also excludes contributions with no usable date. Because their date is unknown, they cannot be placed in any cycle and are not shown in any view.`
+
 *Provenance, two sources: E1–E7 and strings 1–6 — EXCL-UNIFORM G1 ratification record (`excl-uniform-g1-ratification.md`), sha256 `38540989bc0a3aa928bb4c6169f13816c486daf9dbcfce682c303a0e88e3634f` (revision 2), lines 24–32 (the E-table), 142–146 (strings 1–4), 103–105 and 110–112 (strings 5 and 6); ratified by Ishan 2026-08-06 (relays 24/26). Strings 7–8 and the `pac_dues_funding` disposition — HALT-DUES stop resolution, sha256 `5fb6766b…` (full sha at §PS-95), lines 87–93 and 66–85; ratified by Ishan 2026-08-07. Entry heading extended to strings 1–8 per the resolution §5 — one display-decision set, one entry, so citation never splits. PS-93's own text is at §PS-93, not here.*
+
+*Provenance, string 9 and the no-view disposition: LEDGER-0 G3 (authorization sha256 `5017136c6b86b5ff5f847b6de7331faed4c8ed1c171e927913e60cd7dd4ee60a`; reasoning `ledger-0-g3-package-part1.md` §2, `911398da…`); ratified by Ishan 2026-08-07 as D16(iii). Ground: PS-93's carve-out condition — a named out-of-subject view must name what it is, and a view scoped by time cannot honestly present rows with no time, so the condition is satisfied by not rendering rather than by naming. The heading's range is extended to 1–9; strings 1–8 are unaltered.*

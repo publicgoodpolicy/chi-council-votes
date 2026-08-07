@@ -399,6 +399,39 @@ excluded class **renders its structural zero with the ratified line rather than
 disappearing** — the flag/exclusion coextension is contingent, and a non-zero on that row
 is a tell worth keeping visible.
 
+**Un-keyed money: donor-grain figures omit it and owe a disclosed residual; committee-grain
+figures count it** [C5.9, RULED; sites SOURCED]: money can sit inside a figure's subject
+while lacking the key that figure is grouped on — the un-itemized aggregate roll-up row,
+which carries no donor identity (PS-96 states the class, the classifying test against
+exclusions, the residual-disclosure obligation, and the carve; this claim cites the
+register and does not restate it). **The convention:** figures grouped on donor identity —
+the pipeline's donor-grain rollups, the council correlation index, the editor's
+cluster-preview totals, and the reconcile compare — omit such rows and donors; committee-
+and candidate-grain figures in both embeds count the same money, because at that grain no
+key is missing. Both halves are correct; the split is not a defect. **Four recognition
+predicates exist and are not coextensive** — the row flag, the donor type, reconcile's
+contribution-type, and the elections render's marking (donor type OR the small-dollar
+industry tag, strictly broader, and Sheet-editable) — and no code establishes or checks
+any coupling among them; they are the detection surface, never the class definition
+(PS-96). **Known gap in that surface:** a retired convention once carried the small-dollar
+aggregate donor under an underscore-prefixed donor id, and no live code tests the prefix,
+so a data source restoring the id convention without the type or flag is invisible to the
+predicates. **The residual-disclosure treatments diverge between the embeds:** the
+elections contributor panel renders the labeled, non-clickable aggregate line pinned
+beneath the real donors, its rows summing to the headline; the council alder profile's
+line was removed at the bulk-source migration while its headline kept counting — the
+standing non-conformance PS-96 names, owned by REPAIR-AGG-1. The class is asserted absent
+at build time, class-level, per artifact, and the three causes carry distinct failure
+names because they demand different responses: un-keyed rows or donors present
+(`[AGG/PS-96]`, predicates one to three — fires only on a data-source change, the class
+waking); a donor carrying the small-dollar industry tag (`[AGG/PS-96-TAG]` — fires on a
+Sheet edit, and the condition is an editorial tag making *itemized* money render as an
+aggregate line, a false display claim rather than the class waking); and a donor key that
+should have resolved and did not (`[AGG/PS-96-DEFECT]`, the referential-integrity
+assertion — **outside** the class, must fail loudly; both embeds otherwise treat such a
+row divergently, the council headline counting what its list hides and the elections
+panel rendering a fallback line).
+
 **Sizing note** [C5.4, SOURCED]: the tools present multiple distinct public surfaces,
 which multiplies render paths, not merely classification consumers. The surface count is
 current state and lives in the handover, not here.
@@ -531,11 +564,13 @@ that catch defect classes the existing gates structurally cannot see.
 | S-vld | `campaign-finance/ingestion/validate_council_data.py` | `6c83c3d5ab25b0ea402f06ae3a0d1e456d0497f23f91527f8ce7276d19900538` |
 | S-rst | `campaign-finance/ingestion/restamp_committee_linkage.py` | `6ceb82f9bbcffa08fdb21904b8585982a6bff7e3982e0b810937e2958019d06e` |
 | S-av | `campaign-finance/sync_allvotes.py` | `2ca09ee7323741919f048e61062d54a62719f56f88f71f99b721fe965c753f69` |
-| S-cemb | `campaign-finance/elections/reference/council-embed.html` | `6cebc0c68735e42523c3cf2fb824623837476a51e38d175042e989951e063197` |
+| S-cemb | `campaign-finance/elections/reference/council-embed.html` | `62cf38bce614e0ff8c028bf06af98d6adb3e0e04f71b5d606f1d777db7650ef6` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
 | S-edat | `campaign-finance/elections/embed/data.js` | `e36af72ece73ff47b1322abd08548b1f3a1a7624f896381c6c8f10fd6b043ecc` |
 | S-eren | `campaign-finance/elections/embed/render.js` | `bc5ccf5b1720a366487419f2d3267591e4332da14a1ba6cade46606b2f35d9d2` |
 | S-eapp | `campaign-finance/elections/embed/app.js` | `ea8a6b01871dec4cb63a21996fbb4572f855e11a45f0cf9e0ff35fe56815a659` |
+| S-srv | `campaign-finance/editor/serve.py` | `f430f67b2d2367893ab4cb37a1c25ff84d71bb93b53a23b78f253ec17dccaa3a` |
+| S-rec | `campaign-finance/ingestion/reconcile.py` | `e832e648b5cf4ceee065e0ad07f610ff14b6c47a66609b300c7f2cdba6114ae2` |
 | A-probe | `~/probe-sync-2026-07-24/probe-report.md` | `4c678cf0c14dd370f8b52744bf473000340ce16449a5365841b6ac92d8e5f9bb` |
 | A-add | `~/probe-sync-a-2026-07-24/addendum-a-report.md` | `468ba24f4f418f72c2720608353c83e52694c41637cf9ff16a9b267d37e49ed6` |
 | A-ba1g0 | `~/halt-ba-1-2026-07-24/g0-report.md` | `9aeaa793fd5f4afe59d9ac504f7f00dd219f4417cbafdd3403e5a44f661e812e` |
@@ -616,6 +651,14 @@ that catch defect classes the existing gates structurally cannot see.
 | C7.2 | this document §1 (positional definition) + A-probe 42-72 (§P1 usage of record) |
 | C7.3 | A-probe | 74-94 (§P2), 90 (the overload stated) |
 | C7.4 | S-ing | 506-508 (the carry set) |
+| C5.9 | S-rol | 63 (the Aggregate-donor set), 77 (member counts exclude it), 82-88 (the one direct-layer loop: row-flag and donor-set skips governing by_parent/by_industry/by_alder/by_candidate/by_race), 188 (by_candidate_election's row-flag-only skip), 237-242 (by_person's paired skips) |
+| C5.9 | S-t1 | 67-73 (slice1 by_parent paired skips), 90-93 (the [8-check] oracle mirrors both) |
+| C5.9 | S-ing | 518-521 (the retired underscore-prefix marking, comment of record) |
+| C5.9 | S-srv | 471-508 (cluster-preview totals mirror the rollup exclusion set exactly) |
+| C5.9 | S-rec | 39, 196 (contribution-type set-aside, excluded from the itemized compare) |
+| C5.9 | S-edat | 383-410 (contributor rollup counts every row; the broader render marking incl. small-dollar), 499 (row-flag carriage into the footprint VM) |
+| C5.9 | S-eren | 373-392 (the labeled, non-clickable pinned aggregate line; rows sum to the headline), 482 (the aggregate-of-N row chip) |
+| C5.9 | S-cemb | 1116-1127 (alder-profile headline counts the tail into totals and stats), 1181-1182 (the removed disclosure line, comment of record), 3081 (correlation-index donor-type skip) |
 | P1 | A-fw1 | 60-62 (proposed fused-per-candidate detector, not built) |
 
 **RULED pointers** (`claim-id | ruling | register entry`; ruling text and provenance live in
@@ -642,6 +685,8 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.8 | PS-93 | `RULINGS.md` §PS-93 |
 | C5.8 full-set rule | PS-94 | `RULINGS.md` §PS-94 |
 | C5.8 dues exclusion | PS-95 | `RULINGS.md` §PS-95 |
+| C5.8 strings | EXCL-UNIFORM G1 | `RULINGS.md` §EXCL-UNIFORM G1 |
+| C5.9 | PS-96 | `RULINGS.md` §PS-96 |
 | C2.9 | discipline 29 | `RULINGS.md` §Discipline 29 |
 | C6.4 | DOCS-M1 (no id) | `RULINGS.md` §DOCS-M1 C6.4 |
 | C6.5 | PS-60 | `RULINGS.md` §PS-60 |
