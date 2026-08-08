@@ -1068,6 +1068,23 @@ async function assertPersonSurface(T, ctx, fx) {
          res.status === 0);
   })();
 
+  // [SBV/RENDER] the school-board embed's render fixture (SBVOTE-1/C). It boots the real
+  // embed in jsdom and asserts every birth state: string 1 on zero votes, string 3 on a
+  // member with no positions, the vacancy as a seat with NO member page, `-` as
+  // not-recorded rather than Neutral, and a stated error on fetch failure.
+  //
+  // The council render fixture is deliberately UNGATED because each boot parses a ~39 MB
+  // artifact. That cost does not exist here — the school-board artifact is ~7.6 KB — so
+  // the precedent's rule (a fixture is the evidence the render ships on) is kept while
+  // its cost-driven exception is not. Deliberate divergence, not an oversight.
+  (function () {
+    var res = require('child_process').spawnSync('node',
+      [path.join(__dirname, '..', '..', '..', 'school-board', 'sb_render_fixture.js')],
+      { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[SBV/RENDER] school-board embed render fixture green — ' + tail, res.status === 0);
+  })();
+
   console.log('\n' + T.n + ' checks · ' + (T.fail ? ('FAILED ' + T.fail) : 'ALL PASS'));
   process.exit(T.fail ? 1 : 0);
 })();

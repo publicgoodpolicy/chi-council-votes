@@ -1,0 +1,434 @@
+<!-- ===================================================================
+  INSTITUTE FOR THE PUBLIC GOOD — Chicago Board of Education Voting Tool
+  Paste this whole block into a Squarespace Code Block (Edit → add block →
+  Code), or Settings → Advanced → Code Injection for a full-page version.
+  Self-contained. Loads Poppins from Google Fonts.
+
+  SBVOTE-1 / HALT-SBV-C. Built and pasteable; NOT pasted by the build lane.
+  The page's public state is a deliberate launch decision and is Ishan's.
+
+  ===================================================================
+  WHAT THIS EMBED IS, AND WHAT IT IS NOT
+  -------------------------------------------------------------------
+  It mirrors the council voting tool's VOTES-FAMILY structure only: the
+  member view, the complete-record browser, and the methodology shell.
+  The council tool's ward routing, committee blocks, bio grid, finance
+  half and vote-correlation card are deliberately absent — the board has
+  seats rather than wards, the roster carries none of those fields, and
+  campaign finance is out of scope at launch (V4).
+
+  ZERO COUPLING. This embed reads exactly ONE file — the school-board
+  artifact — and shares no component, no data source and no state with
+  either finance embed.
+
+  ===================================================================
+  THE POSITION VOCABULARY, AND THE ONE PLACE IT IS TRANSLATED
+  -------------------------------------------------------------------
+  The artifact stores the SEMANTIC set exactly as an editor entered it:
+  Affirmative / Oppositional / Neutral, plus "-" for a blank cell. No
+  translation exists anywhere upstream — not in the ingest, not in the
+  artifact (ratified D-1; the ingest's own self-test asserts the absence
+  of a display map). POSITION_DISPLAY below is the render boundary and
+  the ONLY place the mapping exists.
+
+  "-" IS NOT A POSITION. It means no position has been recorded. It is
+  rendered as "Not recorded", visually and textually distinct from
+  "Neutral", which IS an entered position. Collapsing the two would
+  assert a position nobody recorded.
+
+  CAUTION, because the same character means something else next door:
+  in the COUNCIL artifact "-" is minted for absent/excused — a factual
+  claim about attendance. Here it is minted for a blank cell — an
+  absence of record. The two are not interchangeable and this map must
+  never be reused for the council tool.
+  =================================================================== -->
+
+<div id="ipg-sb-app"></div>
+
+<script>
+// ============================================================
+// CONFIG
+// ============================================================
+const IPG_SB_CONFIG = {
+  // The one and only fetch this embed performs. D-5 ratified the
+  // refs/heads/main/ form: "main" is a fragment GitHub resolves against
+  // branches AND tags, so a future tag named "main" would silently
+  // repoint it; refs/heads/main/ is structurally unambiguous.
+  dataUrl: "https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/refs/heads/main/campaign-finance/school-board-data.json",
+};
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@font-face{
+  font-family:'Recoleta';
+  src:url('https://db.onlinewebfonts.com/t/4b3a3f6c2c6e4f1e8e5d4c3b2a1f0e9d.woff2') format('woff2');
+  font-weight:700; font-display:swap;
+}
+#ipg-sb-app *{box-sizing:border-box;margin:0;padding:0}
+#ipg-sb-app{
+  /* IPG brand palette — shared visual language with the council tool.
+     Shared PALETTE, not shared code: no component crosses between them. */
+  --cream:#F6EFE9; --sage:#508F88; --teal:#044147; --tan:#EBDAC6;
+  --ink:#342828; --white:#FFFFFF;
+  --aff:#044147;  --aff-bg:#dCEae8;
+  --opp:#9c3b2e;  --opp-bg:#f1e1dc;
+  --neu:#9a8e74;  --neu-bg:#efe7d8;
+  --nd:#a9a299;   --nd-bg:#e9e4dc;
+  --line:#dcd2c4;
+  font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:var(--ink); background:var(--cream);
+  line-height:1.55;
+  --content:1080px;
+  padding:32px max(20px,calc((100% - var(--content))/2));
+}
+/* Display face measured from the council embed's `.serif` rule and mirrored: Recoleta
+   isn't guaranteed to load from CDN, so the same high-quality serif fallback carries the
+   editorial feel offline. Size and line-height are NOT copied — the council's heading
+   sits in a full-bleed cream-on-teal band and is sized for it. */
+#ipg-sb-app .sb-title{font-family:'Recoleta','Georgia',ui-serif,serif;letter-spacing:-.01em;
+  font-size:clamp(24px,3.2vw,36px);font-weight:700;line-height:1.2;margin-bottom:6px}
+#ipg-sb-app .sb-sub{color:#6b5f5f;margin-bottom:22px;max-width:62ch}
+#ipg-sb-app .sb-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+#ipg-sb-app .sb-nav button{font:inherit;font-weight:500;padding:8px 16px;border-radius:999px;
+  border:1px solid var(--line);background:var(--white);color:var(--ink);cursor:pointer}
+#ipg-sb-app .sb-nav button[aria-current="true"]{background:var(--teal);color:var(--white);border-color:var(--teal)}
+#ipg-sb-app .sb-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:18px}
+#ipg-sb-app .sb-row{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+#ipg-sb-app label{font-weight:600;font-size:14px}
+#ipg-sb-app select,#ipg-sb-app input[type=search]{font:inherit;padding:8px 12px;border-radius:8px;
+  border:1px solid var(--line);background:var(--white);color:var(--ink);max-width:100%}
+#ipg-sb-app .sb-seat{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#7d7069;font-weight:600}
+#ipg-sb-app .sb-name{font-size:clamp(20px,2.4vw,28px);font-weight:700;line-height:1.15}
+#ipg-sb-app .sb-badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;
+  background:var(--tan);color:var(--ink);border:1px solid var(--line);margin-left:10px;vertical-align:middle}
+#ipg-sb-app .sb-meta{color:#6b5f5f;font-size:14px;margin-top:6px}
+#ipg-sb-app .sb-meta a{color:var(--sage)}
+#ipg-sb-app .sb-pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;
+  border-radius:999px;border:1px solid transparent;white-space:nowrap}
+/* Four display states, four distinct treatments. `pill-norecord` is deliberately
+   NOT the same treatment as `pill-neu`: an entered position and a missing
+   record must not read alike. */
+#ipg-sb-app .pill-aff{color:var(--aff);background:var(--aff-bg);border-color:var(--aff)}
+#ipg-sb-app .pill-opp{color:var(--opp);background:var(--opp-bg);border-color:var(--opp)}
+#ipg-sb-app .pill-neu{color:#7c6f4f;background:var(--neu-bg);border-color:var(--neu)}
+#ipg-sb-app .pill-norecord{color:#8c8479;background:transparent;border-color:var(--nd);border-style:dashed;font-style:italic}
+#ipg-sb-app .sb-vote{border-top:1px solid var(--line);padding:14px 0}
+#ipg-sb-app .sb-vote:first-of-type{border-top:0}
+#ipg-sb-app .sb-vote h4{font-size:16px;font-weight:600;margin-bottom:2px}
+#ipg-sb-app .sb-vote .sb-when{font-size:13px;color:#7d7069}
+#ipg-sb-app .sb-vote p{font-size:14px;color:#5d5252;margin:6px 0}
+#ipg-sb-app .sb-chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 4px}
+#ipg-sb-app .sb-chip{font:inherit;font-size:12px;font-weight:500;padding:4px 12px;border-radius:999px;
+  border:1px solid var(--line);background:var(--white);cursor:pointer;color:var(--ink)}
+#ipg-sb-app .sb-chip[aria-pressed="true"]{background:var(--sage);color:var(--white);border-color:var(--sage)}
+#ipg-sb-app .sb-empty{background:var(--nd-bg);border:1px dashed var(--nd);border-radius:10px;
+  padding:16px 18px;color:#6b5f5f;font-size:15px}
+#ipg-sb-app .sb-err{background:var(--opp-bg);border:1px solid var(--opp);border-radius:10px;
+  padding:16px 18px;color:var(--opp);font-size:15px}
+#ipg-sb-app table{width:100%;border-collapse:collapse;font-size:14px}
+#ipg-sb-app th,#ipg-sb-app td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+#ipg-sb-app th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:#7d7069}
+#ipg-sb-app .sb-scroll{overflow-x:auto}
+#ipg-sb-app .sb-tally{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px;font-size:14px}
+#ipg-sb-app .sb-meth h3{font-size:18px;margin:18px 0 6px}
+#ipg-sb-app .sb-meth p,#ipg-sb-app .sb-meth li{font-size:15px;margin-bottom:8px}
+#ipg-sb-app .sb-meth ul{padding-left:20px}
+#ipg-sb-app .sb-foot{font-size:13px;color:#7d7069;margin-top:22px}
+</style>
+
+<script>
+(function(){
+  var app = document.getElementById('ipg-sb-app');
+  var D = null;
+  var state = { view:'member', seat:null, tag:'All', recQuery:'', recTag:'All',
+                status:'loading', error:null };
+
+  // ==========================================================
+  // THE RENDER BOUNDARY — D-1's four-value map, declared as data.
+  // Four pairs, visible in one place. Nothing upstream translates.
+  // ==========================================================
+  var POSITION_DISPLAY = {
+    'Affirmative':  { label:'Yes',          cls:'pill-aff',      recorded:true  },
+    'Oppositional': { label:'No',           cls:'pill-opp',      recorded:true  },
+    'Neutral':      { label:'Present',      cls:'pill-neu',      recorded:true  },
+    '-':            { label:'Not recorded', cls:'pill-norecord', recorded:false }
+  };
+  var NOT_RECORDED = '-';
+
+  // ==========================================================
+  // THE RATIFIED STRINGS — register entry `SBVOTE-1 G1+G3 — display
+  // strings 1–5`, verbatim. Editorial text; do not reword in code.
+  // ==========================================================
+  var S = {
+    emptyTool: 'Voting records for the Chicago Board of Education begin with the board seated in January 2025. Votes will appear here as they are recorded.',
+    appointed: 'Appointed',
+    noVotesForMember: 'No recorded votes yet for this member.',
+    methodology: 'Vote positions are entered from public Board of Education records and meeting minutes; each vote links to its source.',
+    vacant: 'Vacant'
+  };
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  function display(v){
+    var d = POSITION_DISPLAY[v];
+    // An unmapped value is a defect, not a fifth state: show it rather than
+    // silently bucketing it (the council tool's posKey folds unknowns into
+    // "absent", which is exactly how a mis-mapped value hides).
+    if(!d) return { label:'Unrecognised value: '+String(v), cls:'pill-norecord', recorded:false };
+    return d;
+  }
+  function pill(v){ var d = display(v);
+    return '<span class="sb-pill '+d.cls+'">'+esc(d.label)+'</span>'; }
+
+  // ---- roster helpers -------------------------------------------------
+  // A row describes a MEMBER iff `name` is non-blank. The same predicate
+  // the artifact's own validation uses (D-2 as amended) — vacancy semantics
+  // are not re-derived here.
+  function isMember(m){ return !!String(m && m.name || '').trim(); }
+  function members(){ return (D && D.members || []).filter(isMember); }
+  function seatRow(seat){ return (D && D.members || []).filter(function(m){ return m.seat===seat; })[0] || null; }
+  function memberLabel(m){ return isMember(m) ? m.name : S.vacant; }
+
+  function voteTags(v){
+    if(!v) return [];
+    var t = (v.tags!=null ? v.tags : v.tag);
+    if(Array.isArray(t)) return t.map(function(s){return String(s).trim();}).filter(Boolean);
+    return String(t||'').split(',').map(function(s){return s.trim();}).filter(Boolean);
+  }
+  function allTags(){
+    var s = {};
+    (D && D.votemeta || []).forEach(function(vm){ voteTags(vm).forEach(function(t){ s[t]=1; }); });
+    return Object.keys(s).sort();
+  }
+  function rollcallById(id){
+    if(!D || !id) return null;
+    var list = ((D.rollcall||{}).votes)||[];
+    for(var i=0;i<list.length;i++){ if(list[i].id===id) return list[i]; }
+    return null;
+  }
+  // The join, seat-keyed. The referential key is the SEAT, not the member id —
+  // a real seat can have no member (D-4), and a position column exists for it.
+  function seatPosition(vm, seat){
+    var rc = rollcallById(vm && vm.vote_id);
+    if(!rc || !rc.positions) return NOT_RECORDED;
+    var p = rc.positions[String(seat)];
+    return (p==null || p==='') ? NOT_RECORDED : p;
+  }
+  function hasAnyRecordedPosition(seat){
+    return (D && D.votemeta || []).some(function(vm){
+      return display(seatPosition(vm, seat)).recorded; });
+  }
+  function voteCount(){ return ((D && D.rollcall || {}).votes || []).length; }
+
+  // ---- views ----------------------------------------------------------
+  function head(){
+    var h = '<h1 class="sb-title">How is your Chicago Board of Education member voting?</h1>';
+    h += '<p class="sb-sub">Recorded votes of the seated Board, by member and by seat.</p>';
+    h += '<div class="sb-nav">';
+    [['member','By member'],['record','Complete record'],['methodology','Methodology']]
+      .forEach(function(p){
+        h += '<button type="button" data-view="'+p[0]+'" aria-current="'+(state.view===p[0])+'">'+p[1]+'</button>';
+      });
+    h += '</div>';
+    return h;
+  }
+
+  // Empty state at the whole-tool grain — string 1. This is the BORN STATE:
+  // a roster with zero votes renders this, never an error and never a blank.
+  function emptyToolCard(){
+    return '<div class="sb-card"><div class="sb-empty">'+esc(S.emptyTool)+'</div></div>';
+  }
+
+  function memberView(){
+    var roster = (D.members||[]);
+    if(!roster.length) return '<div class="sb-card"><div class="sb-empty">No roster is available yet.</div></div>';
+
+    if(state.seat==null) state.seat = (members()[0]||roster[0]).seat;
+    var row = seatRow(state.seat);
+
+    var h = '<div class="sb-card">';
+    h += '<div class="sb-row"><label for="sb-seat-sel">Seat</label>';
+    h += '<select id="sb-seat-sel">';
+    roster.forEach(function(m){
+      // The vacancy APPEARS in the selector — the seat is a real fact about
+      // the board — and selecting it reaches a seat notice, not a member page.
+      h += '<option value="'+esc(m.seat)+'"'+(m.seat===state.seat?' selected':'')+'>'
+         + esc(m.seat)+' — '+esc(memberLabel(m))+'</option>';
+    });
+    h += '</select></div></div>';
+
+    if(!row) return h + '<div class="sb-card"><div class="sb-empty">That seat is not in the roster.</div></div>';
+
+    // ---- string 5: the vacancy renders as a SEAT, with NO member page ----
+    if(!isMember(row)){
+      h += '<div class="sb-card">';
+      h += '<div class="sb-seat">Seat '+esc(row.seat)+'</div>';
+      h += '<div class="sb-name">'+esc(S.vacant)+'</div>';
+      h += '<div class="sb-meta">This seat is currently vacant. There is no member page for a seat with no member.</div>';
+      h += '</div>';
+      return h;
+    }
+
+    h += '<div class="sb-card">';
+    h += '<div class="sb-seat">Seat '+esc(row.seat)+'</div>';
+    // ---- string 2: the badge marks the EXCEPTION; elected members carry none
+    h += '<div class="sb-name">'+esc(row.name)
+       + (row.seat_type==='appointed' ? '<span class="sb-badge">'+esc(S.appointed)+'</span>' : '')
+       + '</div>';
+    var meta = [];
+    if(row.term_start) meta.push('Term began '+esc(row.term_start));
+    if(row.source_url) meta.push('<a href="'+esc(row.source_url)+'" target="_blank" rel="noopener">Source</a>');
+    if(meta.length) h += '<div class="sb-meta">'+meta.join(' &middot; ')+'</div>';
+    h += '</div>';
+
+    // ---- votes for this member ----
+    if(!voteCount()) return h + emptyToolCard();
+
+    // string 3 — roster present, this member has no recorded position on anything
+    if(!hasAnyRecordedPosition(row.seat)){
+      h += '<div class="sb-card"><div class="sb-empty">'+esc(S.noVotesForMember)+'</div></div>';
+      return h;
+    }
+
+    var tags = allTags();
+    h += '<div class="sb-card">';
+    if(tags.length){
+      h += '<div class="sb-chips">';
+      ['All'].concat(tags).forEach(function(t){
+        h += '<button type="button" class="sb-chip" data-tag="'+esc(t)+'" aria-pressed="'+(state.tag===t)+'">'+esc(t)+'</button>';
+      });
+      h += '</div>';
+    }
+    var shown = (D.votemeta||[]).filter(function(vm){
+      return state.tag==='All' || voteTags(vm).indexOf(state.tag)>=0; });
+    if(!shown.length){
+      h += '<div class="sb-empty">No votes carry the tag &ldquo;'+esc(state.tag)+'&rdquo;.</div>';
+    } else {
+      shown.forEach(function(vm){
+        h += '<div class="sb-vote">';
+        h += '<h4>'+esc(vm.full || vm.code)+' '+pill(seatPosition(vm, row.seat))+'</h4>';
+        if(vm.date) h += '<div class="sb-when">'+esc(vm.date)+'</div>';
+        if(vm.desc) h += '<p>'+esc(vm.desc)+'</p>';
+        if(vm.source_url) h += '<div class="sb-when"><a href="'+esc(vm.source_url)+'" target="_blank" rel="noopener">Source</a></div>';
+        h += '</div>';
+      });
+    }
+    h += '</div>';
+    return h;
+  }
+
+  function recordView(){
+    if(!voteCount()) return emptyToolCard();
+    var roster = (D.members||[]);
+    var votes = (((D.rollcall||{}).votes)||[]).slice().sort(function(a,b){
+      return String(b.date||'').localeCompare(String(a.date||'')); });
+
+    var tags = allTags();
+    var h = '<div class="sb-card">';
+    h += '<div class="sb-row"><label for="sb-rec-q">Search</label>'
+       + '<input id="sb-rec-q" type="search" placeholder="Title or description" value="'+esc(state.recQuery)+'"/></div>';
+    if(tags.length){
+      h += '<div class="sb-chips">';
+      ['All'].concat(tags).forEach(function(t){
+        h += '<button type="button" class="sb-chip" data-rectag="'+esc(t)+'" aria-pressed="'+(state.recTag===t)+'">'+esc(t)+'</button>';
+      });
+      h += '</div>';
+    }
+    var meta = {}; (D.votemeta||[]).forEach(function(vm){ if(vm.vote_id) meta[vm.vote_id]=vm; });
+    var q = state.recQuery.trim().toLowerCase();
+    var rows = votes.filter(function(v){
+      var vm = meta[v.id]||{};
+      if(state.recTag!=='All' && voteTags(vm).indexOf(state.recTag)<0) return false;
+      if(!q) return true;
+      return (String(v.title||'')+' '+String(vm.desc||'')).toLowerCase().indexOf(q)>=0;
+    });
+    if(!rows.length){
+      h += '<div class="sb-empty">No votes match this filter.</div></div>';
+      return h;
+    }
+    h += '<div class="sb-scroll"><table><thead><tr><th>Vote</th><th>Date</th>';
+    roster.forEach(function(m){ h += '<th>'+esc(m.seat)+'</th>'; });
+    h += '</tr></thead><tbody>';
+    rows.forEach(function(v){
+      h += '<tr><td>'+esc(v.title||v.id)+'</td><td>'+esc(v.date||'')+'</td>';
+      roster.forEach(function(m){
+        var p = (v.positions && v.positions[String(m.seat)]);
+        h += '<td>'+pill(p==null||p===''?NOT_RECORDED:p)+'</td>';
+      });
+      h += '</tr>';
+    });
+    h += '</tbody></table></div></div>';
+    return h;
+  }
+
+  function methodologyView(){
+    var h = '<div class="sb-card sb-meth">';
+    h += '<h3>How this tool works</h3>';
+    // ---- string 4, verbatim ----
+    h += '<p>'+esc(S.methodology)+'</p>';
+    h += '<h3>How to read a position</h3><ul>';
+    Object.keys(POSITION_DISPLAY).forEach(function(k){
+      var d = POSITION_DISPLAY[k];
+      h += '<li>'+pill(k)+' &mdash; '
+         + (d.recorded ? 'a position recorded in the source record.'
+                       : 'no position has been recorded for this member on this vote &mdash; '
+                         + 'distinct from '+pill('Neutral')+', which is an entered position.')
+         + '</li>';
+    });
+    h += '</ul>';
+    h += '<h3>Seats and members</h3>';
+    h += '<p>Appointed members are labelled; elected members are not, because election is the '
+       + 'default this tool exists to track. A seat with no member is shown as '
+       + esc(S.vacant)+' and has no member page.</p>';
+    h += '</div>';
+    return h;
+  }
+
+  function render(){
+    var h = head();
+    if(state.status==='loading'){
+      h += '<div class="sb-card"><div class="sb-empty">Loading Board voting data&hellip;</div></div>';
+    } else if(state.status==='error'){
+      // A stated error, never a blank page — the council embed's idiom.
+      h += '<div class="sb-card"><div class="sb-err"><strong>Could not load Board voting data.</strong><br/>'
+         + esc(state.error||'unknown error')
+         + '<br/>The data file may be temporarily unavailable. Please try again shortly.</div></div>';
+    } else if(state.view==='member'){
+      h += memberView();
+    } else if(state.view==='record'){
+      h += recordView();
+    } else {
+      h += methodologyView();
+    }
+    h += '<div class="sb-foot">Institute for the Public Good</div>';
+    app.innerHTML = h;
+    wire();
+  }
+
+  function wire(){
+    app.querySelectorAll('[data-view]').forEach(function(b){
+      b.onclick = function(){ state.view = b.getAttribute('data-view'); render(); }; });
+    var sel = document.getElementById('sb-seat-sel');
+    if(sel) sel.onchange = function(){ state.seat = sel.value; state.tag='All'; render(); };
+    app.querySelectorAll('[data-tag]').forEach(function(b){
+      b.onclick = function(){ state.tag = b.getAttribute('data-tag'); render(); }; });
+    app.querySelectorAll('[data-rectag]').forEach(function(b){
+      b.onclick = function(){ state.recTag = b.getAttribute('data-rectag'); render(); }; });
+    var q = document.getElementById('sb-rec-q');
+    if(q) q.oninput = function(){ state.recQuery = q.value; var p=q.selectionStart; render();
+      var n=document.getElementById('sb-rec-q'); if(n){ n.focus(); n.setSelectionRange(p,p);} };
+  }
+
+  function loadData(){
+    return fetch(IPG_SB_CONFIG.dataUrl, {cache:'no-cache'})
+      .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+      .then(function(j){ D = j; state.status='ready'; })
+      .catch(function(e){ state.status='error'; state.error=e && e.message || String(e); });
+  }
+
+  render();
+  loadData().then(render);
+})();
+</script>
