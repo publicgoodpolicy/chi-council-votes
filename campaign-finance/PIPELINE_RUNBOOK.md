@@ -1,103 +1,135 @@
-# Vote sync — operator runbook
+# Pipeline runbook — operator procedures for both ingestion families
 
-How to run, test, and fall back on the Chicago council vote pipeline.
-Written for "future me." The data only changes when the Council actually
-votes, so you do NOT need to babysit this — a manual run after meeting days
-is enough if the nightly schedule ever gives you trouble.
+How to refresh, verify, and publish this repo's data. Written for "future me."
 
----
+**Two ingestion families, one document.** **Dollars** come from SBE bulk exports;
+**votes** come from DataMade's Councilmatic Datasette. They share the derived layers,
+the editorial Sheet, and the validation gate, so they share a runbook.
 
-## Prerequisite (one time): the workflow must exist on GitHub
-
-The Action lives at `.github/workflows/sync-council-data.yml`. It only appears
-in the Actions tab once that file is committed **on GitHub**.
-
-If it isn't there yet, the cleanest way to add it (avoids the Personal Access
-Token `workflow`-scope error) is GitHub's web UI:
-
-1. Repo page → **Add file → Create new file**
-2. Filename: `.github/workflows/sync-council-data.yml`
-   (typing the slashes creates the folders)
-3. Paste the workflow contents → **Commit**
-
-Web-UI commits don't need the `workflow` token scope. (Pushing the same file
-from the terminal does — that's the error you hit before.)
+**Ordering authority of record: `campaign-finance/MECHANISM_REFERENCE.md` §1** (PS-25/PS-44).
+This document holds the **operational sequence with its flags**; the reference holds the
+*requirements* behind the order — which dependencies make it load-bearing and what breaks
+when it is violated. Citation is **one-way**: this runbook cites the reference; the reference
+never cites this runbook (PS-47). If the two ever disagree, **the reference wins**, and the
+disagreement is a defect fixed in the same commit as whatever caused it (discipline 33).
 
 ---
 
-## Running the workflow manually (the real test)
+## The one orchestrator
 
-1. Go to the repo on GitHub → **Actions** tab.
-2. Left sidebar → **Sync council votes**.
-3. Click **Run workflow** (top right) → confirm **Run workflow**.
-   (This button exists because the YAML has `workflow_dispatch`.)
-4. A run appears in a few seconds. Click into it → click the **sync** job to
-   watch the live log.
+**`campaign-finance/build_all.sh` is the repo's only shell orchestrator and the sole
+end-to-end builder of the votes pipeline.** There is **no CI** — no workflow files exist. It
+runs on a human's machine, by hand, because the vote source blocks datacenter IPs (below).
 
-### What success looks like
-- The **Run vote sync** step prints the SYNC REPORT (Tier 2 count, the six
-  featured votes with position breakdowns).
-- The **Commit if changed** step either commits `council-data.json` or prints
-  `No changes in council-data.json — nothing to commit.`
-- Both are success. If it committed, the live tool updates on its next fetch.
+```
+bash campaign-finance/build_all.sh
+```
 
-### What failure looks like — and the one likely cause
-If it fails at the **Run vote sync** step with a connectivity error at
-`SELECT 1` (HTTP 403 / blocked / timeout), that is **bot detection**.
-GitHub's runners use datacenter IPs, which `puddle.datamade.us` tends to block.
-Your local machine works because it's on a residential IP.
+It pulls, syncs the roster, fetches votes, syncs the All Votes tab, **optionally** ingests
+staged finance receipts, rebuilds the derived layers, and ends in a hard validation gate. It
+does **not** commit — it prints the commands and stops, on purpose.
 
-Fixes, in order of preference:
-1. **Just run it locally by hand** (see below). Simplest, and fine — the data
-   only changes on meeting days.
-2. **Self-hosted runner**: set up a small always-on box on a normal IP, then
-   change `runs-on: ubuntu-latest` to your runner's label in the YAML.
-3. **Switch the source to Legistar's API** instead of the Datasette (same
-   upstream data) — a code change to `ingest_votes.py` we can add if needed.
+> **Historical note, so old lane records do not mislead.** A nightly GitHub Action — its
+> workflow file named sync-council-data.yml, deliberately un-backticked here because **no such
+> file exists** — once ran this. It was **retired**: datacenter
+> IPs are blocked by the vote source, and its commits collided with manual pushes.
+> `build_all.sh` replaced it. Any instruction to "run the workflow" is obsolete.
+
+### What is *not* in `build_all.sh`, by design
+
+`convert_bulk_receipts`, `repair_clusters`, `ingest_ie`, and `enrich_committee_names` are
+omitted — they need the multi-gigabyte SBE bulk files and run quarterly. The script conforms
+to the reference's chain block with exactly those omissions.
 
 ---
 
-## Running the sync by hand (local fallback)
+## Refreshing votes
 
-From the repo, on your own machine (residential IP clears the bot wall):
+Votes change only when the Council actually votes, so a manual run after meeting days is
+enough. `build_all.sh` covers the whole path; run it and stop at the gate.
 
-```
-cd campaign-finance
-# preview first — writes nothing:
-python3 ingest_votes.py --data ./council-data.json --map ./featured_vote_map.json --dry-run
-# then for real (backs up to council-data.json.bak, re-validates before writing):
-python3 ingest_votes.py --data ./council-data.json --map ./featured_vote_map.json
-```
+**The source** is DataMade's Councilmatic Datasette (`puddle.datamade.us`). **It blocks
+datacenter IPs** — that is the bot wall, and it is the reason there is no CI. A residential
+IP clears it. If the fetch fails at `SELECT 1` with HTTP 403 or a timeout, that is the wall,
+not a code fault.
 
-Then publish:
+> **The 403 belongs to the VOTES source only.** It has been mis-attributed to the SBE /
+> `elections.il.gov` side; that is wrong, and the dollars section below states what is
+> actually true there.
 
-```
-git add campaign-finance/council-data.json
-git commit -m "Council vote sync $(date -u +%Y-%m-%d)"
-git push
-```
+**Positions are single-source (PS-99).** Every published vote position comes from the vote
+ingest. **Hand-entry is retired** — no position enters the artifact by hand, and content that
+existed only by hand-entry was removed rather than legitimized. A vote absent from the ingest
+source is **absent from the tool** until the source carries it.
 
-Sanity check after: load the live tool and confirm one known position
-(e.g. Ward 2 → Snap Curfew → Affirmative; Hopkins championed it).
+- Featured votes are defined by the **All Votes tab**: check `featured`, give it a `code`.
+  `votemeta` is rebuilt from that set every run, so un-checking removes a vote.
+- The `tag` column on any row attaches to that rollcall vote, featured or not.
+- **`reverse_coded` is retired.** Positions are written exactly as the position map yields
+  them; the semantic-inversion path is gone, and the column leaves the All Votes tab on the
+  next sync.
+- **Enforcement:** `validate_votes` (VOTES-1..8) fails the build if any per-alder vote code
+  resolves to no `votemeta` entry. There is **no hand-entered exemption**, because under
+  PS-99 no hand-entered class exists.
+
+**Where positions actually live, because the obvious guess is wrong:** the embed reads
+`rollcall.votes[].positions`, joined through `votemeta.vote_id`. **`alders[].votes` is read by
+no surface.** Do not reason about what readers see from that map.
+
+**Caucuses** are not in the feed — edit `caucuses.json` by hand from public rosters. The sync
+never touches it.
+
+**Roster changes** (appointment / election): re-run `probe_memberships.py` to refresh the
+crosswalk and surface succession edge cases.
+
+**Backfill** to earlier terms: run the sync per historical session (`--term 2019`, etc.).
 
 ---
 
-## Other operational notes
+## Refreshing dollars
 
-- **Adding a new featured vote**: add it to `votemeta`, then run
-  `match_featured_manual.py` once to map it to its OCD vote id. The sync
-  populates positions from then on. Votes with no divided roll call stay
-  hand-entered (currently GSH, Southshore CBA).
-- **Roster changed** (appointment / election): re-run `probe_memberships.py`
-  to refresh the crosswalk and surface any succession/merged-record edge cases.
-  (Outstanding: spot-check Ward 27 / Burnett before any historical backfill.)
-- **Backfill to 2011**: run the sync per historical session
-  (`--term 2019`, etc.). The crosswalk already spans those terms.
-- **Caucuses** are NOT in the feed — edit `caucuses.json` by hand from public
-  rosters. The sync never touches it.
-- The sync only ever writes the machine-owned keys (`rollcall`,
-  `council_committees`, `_sync`, and positions for mapped featured votes).
-  Donors, bios, vote definitions, and unmapped votes are never touched.
+### Preconditions — check these before starting
+
+1. **A fresh, same-pull set of four SBE bulk files**: Receipts, Expenditures, `D2Totals`,
+   `FiledDocs`. Pull them after the quarterly deadlines — the 16th–20th of Jan / Apr / Jul /
+   Oct. **Never mix files across pulls in one rebuild** (see the archival rule at the end).
+2. **`raw/` is expected to be ABSENT between refreshes.** It is gitignored and holds only the
+   staged pull. `build_all.sh` skips the finance ingest when it is empty — that is the safe
+   default, not a failure.
+3. Staged council CSVs go in **`raw/receipts-council/`**, not `raw/receipts/` — the latter
+   holds the bulk `.txt` that `ingest_ie` needs, and globbing both breaks `ingest`'s column
+   check.
+
+### The pull is manual, and *why* matters
+
+The SBE download page is reachable and **does not block scripted access** — a single request
+with an honest user-agent from a local machine is admitted, HTTP 200 [SOURCED — the REFRESH-1
+G2 probe]. **The pull is manual because no downloader was ever built, not because one is
+blocked.** Two facts shape any future downloader:
+
+- There is **no static bulk-file URL**. The page is an ASP.NET postback: a client must GET the
+  page, parse `__VIEWSTATE` / `__EVENTVALIDATION`, and POST the chosen filename.
+- Cloudflare bot management fronts the site. The local case was admitted; the
+  **datacenter-origin case is untested** and must not be inferred from the local result.
+
+### Traps, and the check that catches each
+
+The order in the chain below is load-bearing. These are the ways it has actually broken:
+
+| trap | what happens | what catches it |
+|---|---|---|
+| `sync_overrides` runs **before** `ingest` | ingest's donor-union clears the Sheet-only fields and nothing restores them | **P3**, fail-loud at sync time |
+| a chain runs **without** `sync_overrides` | same loss; dollar-invisible, so no reconcile or diff can see it | **P3** |
+| `ingest_ie` run by hand **after** `build_all.sh` | shards were built before it, so they miss IE and dues data | **`validate_council_data --shards`** (stamp + totals). Remedy: pass `ingest_ie --shards`, or re-run `build_all.sh` |
+| `transform_slice1` skipped before `ingest_ie` | its internal rollup runs with donors lacking `parent_id` | order only — run the chain as written |
+| `repair_clusters` skipped after a re-ingest | cluster blocks point at absent members | the validator's cluster family |
+| a Donor Merges row is added | the mechanism is **deprecated (PS-97)** and destructive | the sync **stops** on any row |
+| a legacy vote code reappears | vocabularies fork silently, as they did before | **VOTES-5** |
+| shards published stale | readers get an older dataset than the monolith | **`--shards`**, wired into the gate |
+
+**A re-ingest does NOT strip the IE layer.** `ingest.py` never touches
+`independent_expenditures`, and its contribution replacement is per-committee, so IE rows are
+never in the removed set. Earlier records said otherwise; they were wrong.
 
 ---
 
@@ -251,3 +283,10 @@ A council rebuild is pinned to **one dated pull-set of four SBE bulk files**
 Archive them together, dated, in gitignored `raw/` — they are the migration's
 source-of-record and the only way to reproduce a given build's vintage. Never
 mix files across pulls in one rebuild.
+
+**`raw/` is expected ABSENT between refreshes** — it holds only the staged pull, and
+`build_all.sh` skips the finance ingest when it is empty. Archive the pull-set somewhere
+durable *outside* `raw/` once a rebuild lands, because the next refresh's staging will not
+preserve it. **Known gap, stated rather than discovered later:** the sealed archives on the
+operator's machine today are split across two pull dates, so no single same-pull four-file
+set exists locally — a reproduction from local material would violate this rule.
