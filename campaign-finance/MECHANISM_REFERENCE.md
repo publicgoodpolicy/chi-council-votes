@@ -103,6 +103,14 @@ and ends in a validation gate. There is **no CI**: no workflow files exist, and 
 own header records that it replaced a nightly GitHub Action that could not fetch votes from
 datacenter IPs [C1.8, SOURCED]. It runs on a human's machine, by hand.
 
+**Qualifier added at SBVOTE-1/B, when it stopped being the only votes builder** [C1.2]: the
+claim above is now specifically about the **council** votes pipeline. The school-board votes
+ingest is a **second, unorchestrated builder** — a single hand-run step with no chain block
+and no shell caller, because a one-step chain has no order to constrain. Its validation is
+therefore not reached by any chain: it runs at the gate instead, which is why that assertion
+is a gate line rather than a pipeline step. A future lane wiring it into an orchestrator
+inherits C1.1's ordering requirement the moment it acquires a second step.
+
 ### Ordering constraints and why each exists
 
 - **`sync_overrides` after `ingest`** [C1.3, SOURCED]. Ingest's donor-union rebuilds each
@@ -212,7 +220,31 @@ named there, not by the family already being general. Before that accessor exist
 artifact whose roster sat under a different field name made both checks examine an empty list
 and report success. A missing roster and an empty one are now separately loud under one stable
 check name; neither is a silent pass.** An artifact with no votes
-tier is in scope and passes. The retired semantic-inversion flag is asserted **absent**, and
+tier is in scope and passes.
+
+**The second client is real, and the parameterization is now a declaration** [C1.16,
+SOURCED; ratified properties RULED — see the register's SBVOTE-1 entries]: the school-board
+votes tier is minted by its own ingest from two hand-authored Sheet tabs (a roster and a
+wide-format position grid, one column per seat) into its **own artifact**, with no coupling
+to either finance artifact. It is a client of the same family rather than a second
+exception, which is what PS-99 exists to make possible. Each roster shape **declares
+itself** — the field name it lives under, the roster field a position key resolves by
+(`ward` for the council, the seat for the school board), and optionally a column contract —
+so naming a new shape is what admits it, and a shape that declares no contract is stated as
+such rather than silently skipped. The **column contract is enforced outside the votes
+checks**, deliberately: those early-return on an artifact with no votes tier, and a roster
+that ships before its first vote would otherwise be examined by nothing at all. The
+positions are stored as the **semantic** set exactly as entered, the sole ingest-time
+mapping being blank → the not-recorded marker; any other cell value is fatal and names row
+and column, and no display map exists at ingest, because an ingest-time translation is what
+would let a position silently mis-map. Roster identity is a **pipeline-minted slug** that
+strips honorifics, bare initials and quoted nicknames while keeping generational suffixes,
+and the deferred candidacy bridge rides an explicit reference column rather than slug
+matching. A seat with no member is a real seat: it carries no minted identity and no term
+dates, and the predicate "this row describes a member" governs identity minting and date
+strictness alike, so vacancy semantics live in exactly one place.
+
+The retired semantic-inversion flag is asserted **absent**, and
 `rollcall.votes[].type`'s stringified-list shape is pinned because a writer switching it to a
 real list would change what every consumer parses.
 
@@ -724,7 +756,8 @@ that catch defect classes the existing gates structurally cannot see.
 | S-rep | `campaign-finance/ingestion/repair_clusters.py` | `90cc6912647479510d10d505debb84d18fbd28557bf5996b01a992eb1ddf283c` |
 | S-rol | `campaign-finance/ingestion/build_rollups.py` | `a37a9ee4a1fe93a66dae7c6ecb50e3face70f05078e7fbc97e088a4cafb4fe89` |
 | S-seed | `campaign-finance/elections/build_election_seed.py` | `a2122eab99c8e6db401801a97e43537a4eea62ae1f7b4f13cdb03e8a761a20f7` |
-| S-vld | `campaign-finance/ingestion/validate_council_data.py` | `eb523348df4fdc03967c3e84990d4d4a2e0a5b9bf2dd56afd6ea72409032f3d3` |
+| S-vld | `campaign-finance/ingestion/validate_council_data.py` | `7d6a5b63942866aa1a6f57647b63b7a63d140298ab7a3ae93b8c1ec85d1b1e23` |
+| S-sbv | `campaign-finance/ingest_sb_votes.py` | `e7d60ebc18dcf303e418acbb4596d77b54bf28bfc99e75c71d2c56c3995af259` |
 | S-rst | `campaign-finance/ingestion/restamp_committee_linkage.py` | `6ceb82f9bbcffa08fdb21904b8585982a6bff7e3982e0b810937e2958019d06e` |
 | S-cbr | `campaign-finance/ingestion/convert_bulk_receipts.py` | `ac33aa394c4f8905c307390160fbe397a09399199a3396b07f29f01729bbe582` |
 | S-av | `campaign-finance/sync_allvotes.py` | `a0c4f23df6e4f012e683088e012dc91692fe65399e6fcae2acd1ec9b40e61384` |
@@ -735,7 +768,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-eapp | `campaign-finance/elections/embed/app.js` | `ea8a6b01871dec4cb63a21996fbb4572f855e11a45f0cf9e0ff35fe56815a659` |
 | S-srv | `campaign-finance/editor/serve.py` | `f430f67b2d2367893ab4cb37a1c25ff84d71bb93b53a23b78f253ec17dccaa3a` |
 | S-rec | `campaign-finance/ingestion/reconcile.py` | `e832e648b5cf4ceee065e0ad07f610ff14b6c47a66609b300c7f2cdba6114ae2` |
-| S-chk | `campaign-finance/tools/check_sheet_scopes.py` | `56bdd6335c621d7c8551a38325fdbff4b25fdc5c0948b2d3608e318126f20527` |
+| S-chk | `campaign-finance/tools/check_sheet_scopes.py` | `bd118ab5b8a15fa1f032d6c350389690c948e99820b2b80f7fb93a98c55259b5` |
 | A-probe | `~/probe-sync-2026-07-24/probe-report.md` | `4c678cf0c14dd370f8b52744bf473000340ce16449a5365841b6ac92d8e5f9bb` |
 | A-add | `~/probe-sync-a-2026-07-24/addendum-a-report.md` | `468ba24f4f418f72c2720608353c83e52694c41637cf9ff16a9b267d37e49ed6` |
 | A-ba1g0 | `~/halt-ba-1-2026-07-24/g0-report.md` | `9aeaa793fd5f4afe59d9ac504f7f00dd219f4417cbafdd3403e5a44f661e812e` |
@@ -771,10 +804,13 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.13 | A-l0g0 | §5 (the Supporting/Opposing volume, measured over the expenditures bulk; the archived volumes, measured per collection) |
 | C1.14 | S-cbr | 59-65 (`D2PART_NAME`, the five itemizable codes), 357 and 463 (the selection pass and the reassembly pass, both requiring membership) |
 | C1.14 | A-l0g0 | §5 (the D2Part tally over the receipts bulk: the out-of-map values are field-shifted artifacts, not types) |
-| C1.15 | S-vld | 160-271 (`validate_votes` — VOTES-ROSTER + VOTES-1..8, the single-source assertion at VOTES-5), 130-157 (`ROSTER_FIELDS` + `_roster` — the parameterization point, absence distinguishable from emptiness), 86 (wired into validate) |
+| C1.15 | S-vld | 195-312 (`validate_votes` — VOTES-ROSTER + VOTES-1..8, the single-source assertion at VOTES-5), 131-192 (`ROSTER_FIELDS`, `ROSTER_SCHEMAS` and `_roster` — the parameterization point: absence distinguishable from emptiness, and each shape declaring its position key and optional column contract), 86 (wired into validate) |
 | C1.15 | S-av | 156-158 (the seed map, flip-free), 221-238 (apply_featured: votemeta rebuilt whole, positions set-only — the asymmetry the rule closes) |
-| C1.15 | S-vld | 274-324 (`validate_shard_freshness` — the two-namespace stamp discriminator and the deep total assert), 720-723 (the `--shards` opt-in), 615-695 (`self_test` — the votes-family fixtures, incl. the members-shaped-with-votes false-green case), 699-702 + 717-719 (its pre-argparse handler and the `--self-test` flag) |
+| C1.15 | S-vld | 420-470 (`validate_shard_freshness` — the two-namespace stamp discriminator and the deep total assert), 948-951 (the `--shards` opt-in), 761-923 (`self_test` — the roster-and-votes fixtures, incl. the undeclared-shape false-green case and MEMBER-1..7), 927-930 + 945-947 (its pre-argparse handler and the `--self-test` flag) |
 | C1.15 | S-bld | 114 (the validator invoked with `--shards`) |
+| C1.16 | S-sbv | whole file (`ingest_sb_votes.py` — the school-board ingest: read-only scope by construction, no write verb anywhere; `mint_member_id` the D-3 slug rule with the four ratified examples as `--self-test` cases; `read_votes` the blank→marker mapping and the fatal unknown-token branch; `build` the artifact assembly, own-namespace stamps, and the `candidacy_ref` carry-through) |
+| C1.16 | S-vld | 315-417 (`validate_members` — MEMBER-1..7, the roster column contract, deliberately outside `validate_votes`' early return), 87 (wired into validate), 149-170 (`ROSTER_SCHEMAS` — the per-shape declaration the contract hangs on), 172 (`_ISO_DATE`, the date predicate a′ names) |
+| C1.16 | S-chk | `EDITORIAL_TABS` (both school-board source tabs declared) + `ROLES` (`ingest_sb_votes.py` classified `pipeline-reader`) — the pair that makes the read-only property structural rather than promised |
 | C2.1 | S-ing | 86-127 (rules), 130-141 (classifier), 314-320 (assignment), 492-496 (partial preserve) |
 | C2.1 | S-syn | 520-526 (merge) |
 | C2.2 | S-ing | 497-500; S-syn 170-174, 528-531 |
@@ -803,12 +839,12 @@ that catch defect classes the existing gates structurally cannot see.
 | C4.3 | A-probe | 152 (banked open-thread naming; mechanism deliberately not characterized here) |
 | C4.4 | S-syn | 546-586 (uniqueness-gated alias; never rewrite) |
 | C4.5 | S-seed | 257, 284, 309 (the three stamp sites), 354-359 (fatal unknown-race-id), 362-368 (mint-time shared check, fatal) |
-| C4.5 | S-vld | 453-519 (the ONE shared implementation: namespace/convention resolvers + election_mismatches), 522-531 (durable INV-ELECT gate), 82 (wired into validate) |
+| C4.5 | S-vld | 599-665 (the ONE shared implementation: namespace/convention resolvers + election_mismatches), 668-677 (durable INV-ELECT gate), 82 (wired into validate) |
 | C4.7 | S-ing | 681-706 (resolve_committee_claimants — the ONE resolver), 585-599 (deterministic linkage build consuming it) |
 | C4.7 | S-rst | whole script (claims-derived re-stamp; ruled-four-fields write; fifth-field fail-loud; idempotent) |
-| C4.7 | S-vld | 552-596 (INV-LINK-1..3), 534-541 (the PS-82-independence rationale and the coverage-limit statement, which live in the block header rather than in the function — the pre-amend row cited only the function while describing both), 83 (wired into validate) |
+| C4.7 | S-vld | 698-742 (INV-LINK-1..3), 680-687 (the PS-82-independence rationale and the coverage-limit statement, which live in the block header rather than in the function — the pre-amend row cited only the function while describing both), 83 (wired into validate) |
 | C4.6 | S-rol | 109-112, 127-130 (by_candidate/by_race keyed (id, cycle) — no election), 132-204 (by_candidate_election, the election-keyed variant) |
-| C4.6 | S-vld | 414-420 (INV-PERSON-1 pins by_candidate.all as dedup identity) |
+| C4.6 | S-vld | 560-566 (INV-PERSON-1 pins by_candidate.all as dedup identity) |
 | C4.8 | S-syn | 67-68 (the artifact list + known-failures path), 606-630 (shrink-only loader: growth and owner-less entries fail in code), 632-657 (`resolvable_donor_ids` — the union across artifacts, disk reads only), 659-685 (`check_tag_continuity` — unresolved ids, and a listed entry that no longer fails), 788-817 (the call site: runs before the write, aborts on failure) |
 | C4.8 | A-esg0 | §3 (the orphan census against the union, and the re-mint signature it caught) |
 | C4.9 | S-syn | 691-713 (`coverage_figure`), 801-809 (the per-artifact report and its stated collection scope) |

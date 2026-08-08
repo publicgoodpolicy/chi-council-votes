@@ -1284,3 +1284,50 @@ disclosed by magnitude at methodology level, and no existing string is amended):
 *Provenance, two sources: E1–E7 and strings 1–6 — EXCL-UNIFORM G1 ratification record (`excl-uniform-g1-ratification.md`), sha256 `38540989bc0a3aa928bb4c6169f13816c486daf9dbcfce682c303a0e88e3634f` (revision 2), lines 24–32 (the E-table), 142–146 (strings 1–4), 103–105 and 110–112 (strings 5 and 6); ratified by Ishan 2026-08-06 (relays 24/26). Strings 7–8 and the `pac_dues_funding` disposition — HALT-DUES stop resolution, sha256 `5fb6766b…` (full sha at §PS-95), lines 87–93 and 66–85; ratified by Ishan 2026-08-07. Entry heading extended to strings 1–8 per the resolution §5 — one display-decision set, one entry, so citation never splits. PS-93's own text is at §PS-93, not here.*
 
 *Provenance, string 9 and the no-view disposition: LEDGER-0 G3 (authorization sha256 `5017136c6b86b5ff5f847b6de7331faed4c8ed1c171e927913e60cd7dd4ee60a`; reasoning `ledger-0-g3-package-part1.md` §2, `911398da…`); ratified by Ishan 2026-08-07 as D16(iii). Ground: PS-93's carve-out condition — a named out-of-subject view must name what it is, and a view scoped by time cannot honestly present rows with no time, so the condition is satisfied by not rendering rather than by naming. The heading's range is extended to 1–9; strings 1–8 are unaltered.*
+
+### SBVOTE-1 G1+G3 — display strings 1–5
+
+Strings 1–4 as ratified at G1, transcribed verbatim from the brief's V5:
+
+> 1. **Empty-tool state** (no votes entered):
+>    `Voting records for the Chicago Board of Education begin with the board seated in January 2025. Votes will appear here as they are recorded.`
+> 2. **Appointed-member badge:** `Appointed` (elected members carry no badge — election is the
+>    default the tool exists to track; the exception is what gets labeled).
+> 3. **Member with no recorded positions** (roster present, votes blank):
+>    `No recorded votes yet for this member.`
+> 4. **Methodology sentence:**
+>    `Vote positions are entered from public Board of Education records and meeting minutes; each vote links to its source.`
+
+String 5, ratified at G3 as D-4's seat label:
+
+> 5. **Vacant seat label:** `Vacant` — the label a seat with no member renders under, with
+>    **no member page**. The seat is a real fact about the board and is carried as one; the
+>    string is the embed's, never the artifact's.
+
+*Provenance, two sources: strings 1–4 — SBVOTE-1 G1 brief (`sbvote-1-g1-brief.md`), sha256 `9bede0e526270f47a2514f24a1859d65a0e95c558651f69f8587493f1e251e31`, lines 69–76 (§V5), ratified by Ishan 2026-08-08. String 5 — SBVOTE-1 G3 decision record (`sbvote-1-g3-decision-record.md`), sha256 `5d22cf1ca32bd891bba6a5badbdd3c5735681d4c7d12aa1b8ecddcb8a178a1b9`, §D-4; ratified by Ishan 2026-08-08. **Entry name of record:** the brief anticipated `SBVOTE-1 G1 — strings 1–4`; the set gained string 5 at G3, so the heading names both gates — the rename is deliberate and is why a citation to the anticipated name resolves here. Id-less per PS-88, the ratified form for a display-decision set. The strings ship with the school-board embed (HALT-SBV-C), which is launch-gated and not authorized at this commit; the entry records what was ratified, not what has rendered.*
+
+### SBVOTE-1 — D-2 as amended (a′)
+
+The roster conformance predicate, ratified as an amendment to the G3 decision record's D-2 and
+transcribed verbatim:
+
+> **Vocabulary:** `seat_type` is lowercase `elected` | `appointed`, exactly. **Dates are ISO
+> `YYYY-MM-DD` wherever present.**
+>
+> **`term_start` is required-and-ISO iff `name` is non-blank.** A member row (non-blank `name`)
+> with a blank or non-ISO `term_start` is a **fatal validation error naming the row**. A vacancy
+> row (blank `name`) carries no `term_start`, and its blank is conforming — an accurate fact
+> about a seat with no member, per D-4.
+>
+> **`term_end` is ISO-if-present and always optional.** A sitting member has no known term end;
+> blank is the accurate value. A present-but-non-ISO `term_end` is fatal.
+>
+> **The governing predicate is `name` non-blank — "this row describes a member" — and it is the
+> same predicate that governs `member_id` minting** (minted iff `name` non-blank, per the
+> authorization's B.3 reconciliation). Vacancy semantics live in exactly one place; no column
+> re-derives them.
+>
+> Assert-strictly-at-validation stands unchanged: nothing is normalized at ingest, and every
+> violation of the above is fatal and row-named.
+
+*Provenance: SBVOTE-1 D-2 amendment record (`sbvote-1-d2-amendment.md`), sha256 `7d0b450f6f04962ec263ac434ce18bc244ae4fca0fbe5d6411f3d8be642a6c97`, lines 15–32; ratified by Ishan 2026-08-08. **Amends D-2 of the G3 decision record** (`5d22cf1c…`) and governs over it; D-1, D-3, D-4 and D-5 are untouched. Occasion: the letter of D-2, applied to the sha-verified roster bytes, failed all 21 rows on blank `term_end` and the vacant seat on blank `term_start`, colliding with D-4's ruling that the vacancy is real — recorded at the P0 attestation (`sbvote-1-p0-attestation.md`, sha256 `ee09b45e3b428e99098e5e3d136ca12ca9eff94eb40a4662e835da4fbbdf688f`). **Predicate-only by ratification:** the amendment record's two adoptions and its reproduction-convention correction are deliberately NOT part of this entry — the convention fix and the self-test extension were discharged in commit `5afffa9c4c14c03833ce3e0d5c81da663085a62f`, and the green-at-zero-by-enumeration adoption binds lane reporting rather than stating a rule. Implemented as the MEMBER-1..7 checks; id-less, and no PS id is allocated — that a general validation predicate is numbered-ruling-shaped is recorded as a banked question, not acted on.*

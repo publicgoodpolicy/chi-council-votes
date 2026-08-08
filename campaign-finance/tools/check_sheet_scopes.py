@@ -49,6 +49,10 @@ CF = os.path.join(REPO, "campaign-finance")
 EDITORIAL_TABS = {
     "Donor Overrides", "Committee Tags", "Donor Merges", "Donor Clusters",
     "Person Links", "Industry Tags", "Flag Types", "Entity Types", "Alder Bios",
+    # SBVOTE-1/B: the school-board source tabs. Both are hand-authored by an editor —
+    # the roster and the vote positions — so they are editorial, and `ingest_sb_votes`
+    # reads them under a read-only credential like every other pipeline reader.
+    "SB Members", "SB Votes",
 }
 # Machine-owned tabs. sync_allvotes clears+rewrites this one by design; its six
 # editor columns are protected by EDIT-SAFE-1/S1's fail-loud read, not by scope.
@@ -65,6 +69,7 @@ ROLES = {
     "campaign-finance/sheets-sync/sync_overrides.py": "pipeline-reader",
     "campaign-finance/sheets-sync/sync_bios.py":      "pipeline-reader",
     "campaign-finance/sync_allvotes.py":              "pipeline-writer",
+    "campaign-finance/ingest_sb_votes.py":            "pipeline-reader",
     "campaign-finance/editor/write_overrides.py":     "editor-app",
     "campaign-finance/editor/serve.py":               "editor-app",
     "campaign-finance/editor/compose.py":             "no-sheet-access",

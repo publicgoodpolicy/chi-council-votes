@@ -84,6 +84,7 @@ def validate(d):
     errors.extend(validate_aggregate_absence(d))
     errors.extend(validate_donor_referential(d))
     errors.extend(validate_votes(d))
+    errors.extend(validate_members(d))
     return errors, warnings
 
 
@@ -130,11 +131,45 @@ def _agg_test(p, obj):
 # The roster field names this validator knows, in resolution order. A votes-carrying
 # artifact must present exactly one of them.
 #
-# `members` is deliberately NOT here yet. The school-board artifact does not exist at
-# this commit, and naming its field before it exists would be an unexercised claim of
-# the kind this very repair was needed to remove. HALT-SBV-B adds it in the commit that
-# adds the artifact.
-ROSTER_FIELDS = ('alders',)
+# `members` joined at SBVOTE-1/B, in the commit that added the school-board artifact —
+# the claim became exercised the moment it became true, which is the discipline the A
+# repair existed to restore.
+ROSTER_FIELDS = ('alders', 'members')
+
+# What each roster shape declares about itself. This is the parameterization point the
+# docstring below now claims and no longer overstates: a second votes source becomes a
+# client of the votes family by being declared HERE, not by the family being magically
+# general.
+#
+#   position_key — the roster field a `rollcall.votes[].positions` key resolves to.
+#   contract     — the column contract MEMBER-* enforces. OPTIONAL, and its absence is
+#                  a stated fact rather than a silent skip: `alders` declares none
+#                  because the council roster predates this mechanism and inventing a
+#                  contract for it is not the school-board lane's to do.
+ROSTER_SCHEMAS = {
+    'alders': {
+        'position_key': 'ward',
+    },
+    'members': {
+        'position_key': 'seat',
+        'contract': {
+            # Every row carries every one of these keys, present-but-empty included.
+            'required': ('member_id', 'name', 'seat', 'seat_type', 'term_start',
+                         'term_end', 'source_url', 'candidacy_ref'),
+            # THE governing predicate (D-2 as amended, a'): "this row describes a
+            # member". One predicate governs both `member_id` minting and date
+            # strictness, so vacancy semantics live in exactly one place.
+            'member_when': 'name',
+            'identity': 'member_id',
+            'seat_types': ('elected', 'appointed'),
+            # ISO wherever present; required only on a member row.
+            'dates': ('term_start', 'term_end'),
+            'dates_required_on_member': ('term_start',),
+        },
+    },
+}
+
+_ISO_DATE = re.compile(r'^\d{4}-\d{2}-\d{2}$')
 
 
 def _roster(d):
@@ -243,15 +278,21 @@ def validate_votes(d):
                         f"(PS-99 single-source: no hand-entered class exists, so there is no "
                         f"exemption — a code with no ingest provenance is a defect)")
 
-    # VOTES-6: every position key resolves to a ward this artifact knows.
+    # VOTES-6: every position key resolves to a roster row this artifact knows.
     # The `if wards:` guard is REMOVED (SBVOTE-1/A.2). It made an empty roster mean
     # "nothing to check" instead of "cannot check", so the one case the check most needed
     # to catch was the one case it skipped in silence.
+    #
+    # The key a position resolves BY is declared per roster shape (SBVOTE-1/B): `ward`
+    # for the council, `seat` for the school board — which is the V6/D-4 reconciliation,
+    # the referential key being the SEAT, because a real seat can have no member and
+    # therefore no minted identity.
     if roster_ok:
-        wards = {str(a.get('ward')) for a in alders}
-        badw = sorted({w for v in votes for w in (v.get('positions') or {}) if w not in wards})
+        pkey = (ROSTER_SCHEMAS.get(roster_field) or {}).get('position_key', 'ward')
+        known = {str(a.get(pkey)) for a in alders}
+        badw = sorted({w for v in votes for w in (v.get('positions') or {}) if w not in known})
         if badw:
-            errs.append(f"VOTES-6: position key(s) resolving to no known ward: {badw[:8]}")
+            errs.append(f"VOTES-6: position key(s) resolving to no known `{pkey}`: {badw[:8]}")
 
     # VOTES-7: `reverse_coded` is RETIRED (REFRESH-1). Absent-or-inert: its presence
     # anywhere means a writer reintroduced the semantic-inversion path this lane removed.
@@ -268,6 +309,111 @@ def validate_votes(d):
     if badtype:
         errs.append(f"VOTES-8: rollcall vote.type must be a string (the stringified-list "
                     f"shape of record); non-string on {badtype[:3]}")
+    return errs
+
+
+def validate_members(d):
+    """[MEMBER/*] SBVOTE-1/B — the roster column contract, implementing D-2 as amended.
+
+    DELIBERATELY OUTSIDE `validate_votes`. That function early-returns on an artifact
+    with no votes tier, and the school-board artifact is born with a full roster and
+    zero votes — so a roster check living inside it would never run on exactly the
+    artifact it exists to examine. These checks are what makes the born artifact's
+    green non-vacuous (the amendment's adoption 1: green-at-zero is reported by
+    enumeration, never by colour).
+
+    D-2 as amended (a'), which is the ruling this implements:
+      * `seat_type` is lowercase `elected` | `appointed`, exactly.
+      * Dates are ISO `YYYY-MM-DD` **wherever present**.
+      * `term_start` is required-and-ISO **iff `name` is non-blank**. A vacancy row
+        carries no `term_start` and its blank is conforming — an accurate fact about a
+        seat with no member (D-4).
+      * `term_end` is ISO-if-present and always optional; a sitting member has no
+        known term end.
+    Every violation is fatal and names the row. Nothing is normalized here or at
+    ingest: a strict assert gives an editor immediate feedback where silent
+    normalization would accept drift and hide it.
+    """
+    errs = []
+    field, rows = _roster(d)
+    if field is None:
+        return errs                       # no roster at all — VOTES-ROSTER's business
+    contract = (ROSTER_SCHEMAS.get(field) or {}).get('contract')
+    if not contract:
+        return errs                       # shape declares no column contract (see ROSTER_SCHEMAS)
+
+    name_key = contract['member_when']
+    id_key = contract['identity']
+    seen_ids, seen_seats = {}, {}
+
+    for i, r in enumerate(rows):
+        where = f"{field}[{i}]"
+        if not isinstance(r, dict):
+            errs.append(f"MEMBER-1: {where} is not an object")
+            continue
+        seat = str(r.get('seat') or '').strip()
+        label = f"{where} (seat {seat or '?'})"
+
+        # MEMBER-1: the column contract. Present-but-empty is fine; ABSENT is not,
+        # because an absent key and a deliberate blank are different facts.
+        missing = [k for k in contract['required'] if k not in r]
+        if missing:
+            errs.append(f"MEMBER-1: {label} is missing required key(s) {missing}")
+            continue
+
+        is_member = bool(str(r.get(name_key) or '').strip())
+
+        # MEMBER-2: seat_type vocabulary, lowercase exactly.
+        st = r.get('seat_type')
+        if st not in contract['seat_types']:
+            errs.append(f"MEMBER-2: {label} seat_type {st!r} is not one of "
+                        f"{list(contract['seat_types'])} (lowercase, exactly)")
+
+        # MEMBER-3: dates are ISO wherever present.
+        for dk in contract['dates']:
+            dv = str(r.get(dk) or '').strip()
+            if dv and not _ISO_DATE.match(dv):
+                errs.append(f"MEMBER-3: {label} {dk} {dv!r} is present but not ISO "
+                            f"YYYY-MM-DD")
+
+        # MEMBER-4: a date required on a member row is present there, and absent on a
+        # vacancy. Both directions, because a vacancy carrying a term start is as wrong
+        # as a member lacking one — a seat with no member has no term.
+        for dk in contract['dates_required_on_member']:
+            dv = str(r.get(dk) or '').strip()
+            if is_member and not dv:
+                errs.append(f"MEMBER-4: {label} describes a member (`{name_key}` "
+                            f"non-blank) but carries no {dk}")
+            if not is_member and dv:
+                errs.append(f"MEMBER-4: {label} is a vacancy (`{name_key}` blank) but "
+                            f"carries {dk} {dv!r} — a seat with no member has no term")
+
+        # MEMBER-5: identity is minted iff the row describes a member — THE predicate,
+        # the same one governing dates above.
+        mid = str(r.get(id_key) or '').strip()
+        if is_member and not mid:
+            errs.append(f"MEMBER-5: {label} describes a member but mints no {id_key}")
+        if not is_member and mid:
+            errs.append(f"MEMBER-5: {label} is a vacancy but carries {id_key} {mid!r}")
+
+        # MEMBER-6: minted identities are unique.
+        if mid:
+            if mid in seen_ids:
+                errs.append(f"MEMBER-6: {id_key} {mid!r} is claimed by {label} and by "
+                            f"{field}[{seen_ids[mid]}] — two rows, one identity")
+            else:
+                seen_ids[mid] = i
+
+        # MEMBER-7: the seat is the referential key (V6 reconciled with D-4), so it must
+        # exist and be unique whether or not anyone holds it.
+        if not seat:
+            errs.append(f"MEMBER-7: {where} carries no seat")
+        elif seat in seen_seats:
+            errs.append(f"MEMBER-7: seat {seat!r} appears at {where} and at "
+                        f"{field}[{seen_seats[seat]}] — seats are unique")
+        else:
+            seen_seats[seat] = i
+
     return errs
 
 
@@ -626,8 +772,14 @@ def self_test():
     results = []
 
     def case(name, artifact, expect):
-        """expect: a substring that must appear in some error, or None for 'must pass'."""
-        errs = validate_votes(artifact)
+        """expect: a substring that must appear in some error, or None for 'must pass'.
+
+        Runs the whole roster-and-votes surface — `validate_votes` AND
+        `validate_members` — because they are one family split across two entry points
+        for the early-return reason `validate_members` documents, and a fixture that
+        exercised only one of them would miss the seam between them.
+        """
+        errs = validate_votes(artifact) + validate_members(artifact)
         if expect is None:
             ok = not errs
         else:
@@ -650,24 +802,31 @@ def self_test():
         a.update(over)
         return a
 
-    # The members-shaped artifact: a roster under a field name this validator does not
-    # know, WITH votes — the population the repair will actually meet.
-    members_shaped = {
+    # The undeclared-shape artifact: a roster under a field name no schema declares,
+    # WITH votes — the population the A repair was built for.
+    #
+    # SUPERSEDED FIXTURE, recorded rather than quietly swapped: at SBVOTE-1/A this
+    # fixture used `members`, which was then undeclared. B declared `members`, so the
+    # same bytes no longer test the same thing — an unknown shape must be a name no
+    # schema knows, and `trustees` is that name. The A-phase cases keep their meaning;
+    # only the field they use to mean it changed. A declared-and-well-formed `members`
+    # artifact is covered separately below, which is the case B adds.
+    unknown_shaped = {
         'rollcall': {'term_votes': 1, 'votes': [
             {'id': 'v1', 'date': '2026-01-01', 'type': '["ordinance"]',
              'positions': {'1A': 'Affirmative'}}]},
         'votemeta': [{'code': 'c1', 'vote_id': 'v1'}],
-        'members': [{'district/seat': '1A', 'votes': {'c1': 'Affirmative'}}],
+        'trustees': [{'seat': '1A', 'votes': {'c1': 'Affirmative'}}],
     }
 
     # 1-2. THE FALSE GREEN, both halves. It must fire, and it must fire by name.
-    case("members-shaped artifact WITH votes is no longer a false green (errors non-empty)",
-         members_shaped, "VOTES-ROSTER")
-    assert validate_votes(members_shaped), "the false-green fixture must not return []"
+    case("undeclared roster shape WITH votes is no longer a false green (errors non-empty)",
+         unknown_shaped, "VOTES-ROSTER")
+    assert validate_votes(unknown_shaped), "the false-green fixture must not return []"
 
     # 3. Absence and emptiness are DIFFERENT, and reported differently (A.1).
     case("absent roster field names what it looked for",
-         members_shaped, "no roster field")
+         unknown_shaped, "no roster field")
     case("present-but-EMPTY roster is a distinct message, not the same one",
          council(alders=[]), "present but EMPTY")
 
@@ -688,6 +847,75 @@ def self_test():
     case("an artifact with NO votes tier still passes (absence is not a violation)",
          {'donors': {}}, None)
     case("a well-formed council-shaped artifact passes untouched", council(), None)
+
+    # ---- SBVOTE-1/B: the school-board roster contract (D-2 as amended, a').
+    # A school-board-shaped roster, correct — one deliberate mutation away from each
+    # MEMBER-* case below.
+    def sb(**over):
+        m = {'member_id': 'jane-doe', 'name': 'Jane Doe', 'seat': '1A',
+             'seat_type': 'elected', 'term_start': '2025-01-16', 'term_end': '',
+             'source_url': 'https://example.org/roster', 'candidacy_ref': '', 'votes': {}}
+        for k, v in over.items():
+            m[k] = v
+        vac = {'member_id': '', 'name': '', 'seat': '10B', 'seat_type': 'appointed',
+               'term_start': '', 'term_end': '', 'source_url': 'https://example.org/roster',
+               'candidacy_ref': '', 'votes': {}}
+        return {'members': [m, vac]}
+
+    def sb_rows(*rows):
+        return {'members': list(rows)}
+
+    case("MEMBER-* : a well-formed school-board roster passes (born-artifact shape)",
+         sb(), None)
+    case("MEMBER-1 fires on a missing required column",
+         sb_rows({'member_id': 'x', 'name': 'X', 'seat': '1A', 'seat_type': 'elected'}),
+         "MEMBER-1")
+    case("MEMBER-2 fires on a capitalised seat_type (D-2 vocabulary is exact)",
+         sb(seat_type='Elected'), "MEMBER-2")
+    case("MEMBER-3 fires on a present-but-non-ISO date",
+         sb(term_start='Jan 16, 2025'), "MEMBER-3")
+    case("MEMBER-4 fires on a MEMBER row with no term_start (a' required-iff-named)",
+         sb(term_start=''), "MEMBER-4")
+    case("MEMBER-4 fires on a VACANCY carrying a term_start (the other direction)",
+         sb_rows({'member_id': '', 'name': '', 'seat': '10B', 'seat_type': 'appointed',
+                  'term_start': '2025-01-16', 'term_end': '',
+                  'source_url': 'u', 'candidacy_ref': ''}), "MEMBER-4")
+    case("MEMBER-4 does NOT fire on a blank term_end (always optional under a')",
+         sb(term_end=''), None)
+    case("MEMBER-5 fires when a member row mints no member_id",
+         sb(member_id=''), "MEMBER-5")
+    case("MEMBER-5 fires when a vacancy carries a member_id",
+         sb_rows({'member_id': 'ghost', 'name': '', 'seat': '10B',
+                  'seat_type': 'appointed', 'term_start': '', 'term_end': '',
+                  'source_url': 'u', 'candidacy_ref': ''}), "MEMBER-5")
+    case("MEMBER-6 fires on two rows minting one member_id",
+         sb_rows(
+             {'member_id': 'dup', 'name': 'A', 'seat': '1A', 'seat_type': 'elected',
+              'term_start': '2025-01-16', 'term_end': '', 'source_url': 'u', 'candidacy_ref': ''},
+             {'member_id': 'dup', 'name': 'B', 'seat': '1B', 'seat_type': 'elected',
+              'term_start': '2025-01-16', 'term_end': '', 'source_url': 'u', 'candidacy_ref': ''}),
+         "MEMBER-6")
+    case("MEMBER-7 fires on a duplicate seat (the referential key)",
+         sb_rows(
+             {'member_id': 'a', 'name': 'A', 'seat': '1A', 'seat_type': 'elected',
+              'term_start': '2025-01-16', 'term_end': '', 'source_url': 'u', 'candidacy_ref': ''},
+             {'member_id': 'b', 'name': 'B', 'seat': '1A', 'seat_type': 'elected',
+              'term_start': '2025-01-16', 'term_end': '', 'source_url': 'u', 'candidacy_ref': ''}),
+         "MEMBER-7")
+    case("MEMBER-* do not touch the council shape (alders declares no contract)",
+         council(), None)
+
+    # VOTES-6 now resolves by the roster shape's declared position key.
+    case("VOTES-6 resolves by `seat` on the members shape",
+         {'rollcall': {'term_votes': 1, 'votes': [
+             {'id': 'v1', 'date': '2026-01-01', 'type': '["x"]',
+              'positions': {'99Z': 'Affirmative'}}]},
+          'votemeta': [{'code': 'c1', 'vote_id': 'v1'}],
+          'members': [{'member_id': 'a', 'name': 'A', 'seat': '1A',
+                       'seat_type': 'elected', 'term_start': '2025-01-16',
+                       'term_end': '', 'source_url': 'u', 'candidacy_ref': '',
+                       'votes': {'c1': 'Affirmative'}}]},
+         "no known `seat`")
 
     bad = [n for n, ok in results if not ok]
     print(f"self-test: {len(results)} checks · "

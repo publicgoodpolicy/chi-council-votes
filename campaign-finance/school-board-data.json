@@ -1,0 +1,262 @@
+{
+  "schema_version": 1.0,
+  "generated_at": "2026-08-08T19:26:09Z",
+  "source": "Chicago Board of Education roster and vote positions, entered from public Board records into the project Google Sheet (tabs 'SB Members' and 'SB Votes') and ingested by ingest_sb_votes.py. Single-source per PS-99.",
+  "_sync": {
+    "generated_at": "2026-08-08T19:26:09Z",
+    "sheet_id": "1tUJNv7S611xM-VO7LcZlOStbJ8O7LQ5deYjsHeVAwQ8",
+    "ingest": "ingest_sb_votes.py",
+    "source_tabs": {
+      "SB Members": {
+        "sha256": "c7fbf963f29c93bef0b5ad694c9a65ddf5ab21592cf78a393e72e19eb8a6cd1a",
+        "data_rows": 21
+      },
+      "SB Votes": {
+        "sha256": "e580bb6715bce61cfd79ca2a82403678b2b021063b589ab25646f3736cae0226",
+        "columns": 27,
+        "data_rows": 0
+      }
+    },
+    "convention": "tab sha256: non-empty rows, cells as returned with trailing empty cells retained, tab-separated, newline-joined, UTF-8, no trailing newline"
+  },
+  "members": [
+    {
+      "member_id": "ed-bannon",
+      "name": "Ed Bannon",
+      "seat": "1A",
+      "seat_type": "appointed",
+      "term_start": "2025-01-17",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "jennifer-custer",
+      "name": "Jennifer Custer",
+      "seat": "1B",
+      "seat_type": "elected",
+      "term_start": "2025-01-17",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "ebony-deberry",
+      "name": "Ebony DeBerry",
+      "seat": "2A",
+      "seat_type": "elected",
+      "term_start": "2025-01-21",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "debby-pope",
+      "name": "Debby Pope",
+      "seat": "2B",
+      "seat_type": "appointed",
+      "term_start": "2025-01-17",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "norma-rios-sierra",
+      "name": "Norma Rios-Sierra",
+      "seat": "3A",
+      "seat_type": "appointed",
+      "term_start": "2025-01-16",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "carlos-rivas-jr",
+      "name": "Carlos Rivas, Jr.",
+      "seat": "3B",
+      "seat_type": "elected",
+      "term_start": "2025-01-21",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "karen-zaccor",
+      "name": "Karen Zaccor",
+      "seat": "4A",
+      "seat_type": "appointed",
+      "term_start": "2025-01-17",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "ellen-rosenfeld",
+      "name": "Ellen Rosenfeld",
+      "seat": "4B",
+      "seat_type": "elected",
+      "term_start": "2025-01-17",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "jitu-brown",
+      "name": "Jitu Brown",
+      "seat": "5A",
+      "seat_type": "elected",
+      "term_start": "2025-02-06",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "michilla-blaise",
+      "name": "Michilla Blaise",
+      "seat": "5B",
+      "seat_type": "appointed",
+      "term_start": "2025-01-21",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "anusha-thotakura",
+      "name": "Anusha Thotakura",
+      "seat": "6A",
+      "seat_type": "appointed",
+      "term_start": "2025-01-17",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "jessica-biggs",
+      "name": "Jessica Biggs",
+      "seat": "6B",
+      "seat_type": "elected",
+      "term_start": "2025-01-19",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "emma-lozano",
+      "name": "Pastor Emma Lozano",
+      "seat": "7A",
+      "seat_type": "appointed",
+      "term_start": "2025-01-23",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "yesenia-lopez",
+      "name": "Yesenia Lopez",
+      "seat": "7B",
+      "seat_type": "elected",
+      "term_start": "2025-02-03",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "angel-gutierrez",
+      "name": "Angel Gutierrez",
+      "seat": "8A",
+      "seat_type": "elected",
+      "term_start": "2025-01-16",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "cydney-wallace",
+      "name": "Cydney Wallace",
+      "seat": "8B",
+      "seat_type": "appointed",
+      "term_start": "2025-03-06",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "angel-velez",
+      "name": "Dr. Angel L. Velez",
+      "seat": "9A",
+      "seat_type": "appointed",
+      "term_start": "2025-09-02",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "therese-boyle",
+      "name": "Therese Boyle",
+      "seat": "9B",
+      "seat_type": "elected",
+      "term_start": "2025-01-17",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "che-smith",
+      "name": "Dr. Che \"Rhymefest\" Smith",
+      "seat": "10A",
+      "seat_type": "elected",
+      "term_start": "2025-01-16",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "",
+      "name": "",
+      "seat": "10B",
+      "seat_type": "appointed",
+      "term_start": "",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    },
+    {
+      "member_id": "sean-harden",
+      "name": "Sean B. Harden",
+      "seat": "President",
+      "seat_type": "appointed",
+      "term_start": "2025-01-16",
+      "term_end": "",
+      "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
+      "candidacy_ref": "",
+      "votes": {}
+    }
+  ],
+  "votemeta": [],
+  "rollcall": {
+    "generated_at": "2026-08-08T19:26:09Z",
+    "source": "SB Votes tab, project Google Sheet",
+    "term_votes": 0,
+    "votes": []
+  }
+}

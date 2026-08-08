@@ -1038,6 +1038,36 @@ async function assertPersonSurface(T, ctx, fx) {
     T.ok('[VOTES/SELF] votes-family self-test green — ' + tail, res.status === 0);
   })();
 
+  // [SBV/SELF] the school-board ingest's own self-test (SBVOTE-1/B). D-3 ratifies four
+  // slug examples as COMMITTED TEST CASES; a committed test case that no gate runs is a
+  // test that rots. This is what keeps the minting rule honest.
+  (function () {
+    var res = require('child_process').spawnSync('python3',
+      [path.join(__dirname, '..', '..', '..', 'ingest_sb_votes.py'), '--self-test'],
+      { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[SBV/SELF] school-board ingest self-test green — ' + tail, res.status === 0);
+  })();
+
+  // [SBV/ROSTER] green-at-zero, made standing rather than one-time. The born artifact
+  // carries a full roster and zero votes, so validate_votes early-returns and VOTES-*
+  // do not execute on it — MEMBER-1..7 are its real examination, and this line is what
+  // asserts they keep passing. The ENUMERATION of what executed belongs to the lane
+  // report; this asserts the roster contract holds (amendment adoption 1).
+  (function () {
+    var art = path.join(__dirname, '..', '..', '..', 'school-board-data.json');
+    if (!fs.existsSync(art)) {
+      T.ok('[SBV/ROSTER] school-board artifact present', false);
+      return;
+    }
+    var res = require('child_process').spawnSync('python3',
+      [path.join(__dirname, '..', '..', '..', 'ingestion', 'validate_council_data.py'), art],
+      { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[SBV/ROSTER] born school-board artifact validates clean — ' + tail,
+         res.status === 0);
+  })();
+
   console.log('\n' + T.n + ' checks · ' + (T.fail ? ('FAILED ' + T.fail) : 'ALL PASS'));
   process.exit(T.fail ? 1 : 0);
 })();
