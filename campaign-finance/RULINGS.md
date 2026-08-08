@@ -63,6 +63,12 @@ descriptive headings.
 
 *Provenance: DOCS-M1 G1 authorization, sha256 `4df35187…` (full sha at §PS-23), § ratified-rulings-in-force, line 38; drafted 2026-07-26. The bullet does not name the id; the DOCS-M3 G0 lane report records the identification. Cited by reference C1.10.*
 
+### PS-31 — the a-prime manual-invocation residual, characterized so it is not rediscovered as an alarm
+
+> **PS-31 — the residual, characterized so it is not rediscovered as an alarm.** One step-8-skip path survives: **manual invocation.** DEMO's own proof run omitted step 8 deliberately, and all three re-apply vintages are exactly that. These are scratch characterizations, not shipped damage — operator-deliberate, non-shipping, and every data commit passes the gate protocol. **Operator discipline, not architecture.**
+
+*Provenance: handover rev E, 2026-07-30, sha256 `6d2421b5faa6d6b4be0125229e3b4af1c5795e4aac89f16b9bc1a5076d575b77`, line 121; carried forward as a live ruling in rev E's own rulings triage (line 180, STANDING). No on-disk lane-record source states it; the handover is the artifact of record for conversationally-ratified rulings, as for PS-9 and PS-12. In force by use: the ordering-requirement framing it relocates the countermeasure into is the reference's C1.1, and PS-45 cites the class it defines. Entered the register at REGISTER-COHORT-1 under PS-87.*
+
 ### PS-32 — population trip-wire (ratified proposal)
 
 > - **Proposals section:** PS-23's freshness check and PS-32's population trip-wire, each with failure modes and, for PS-23, both semantics options (hard-fail vs review-required) unresolved; PS-49's chain-consistency check; PS-33's naming of the invisible-defect detector class, now four members. Prose only — build nothing.
@@ -79,6 +85,24 @@ descriptive headings.
 > 4. PS-49 — chain-consistency check.
 
 *Provenance: DOCS-M1 G1.0 resolution (`docs-m1-g1-0-resolution.md`), sha256 `f7473cf26ffdfb6d380c73e9388de49913ce4c4c89a2574615a368b3602212c2`, lines 45–50 (the class membership as completed by PS-54); drafted 2026-07-26. PS-33's issued naming of the class predates the banked set. Cited by the reference's detector-class row.*
+
+### PS-34 — counts cite their source (mention-level carriage; the full statement is joint with PS-38)
+
+> - **PS-34 / PS-38** where a mechanism claim needs a count, **cite the source rather than restating the number**. The target is two-valued, and the discriminator is what the number describes: **what is true now** (baselines, artifact shas, reconcile counts, surface counts) → the **handover**; **what a lane found then** (census results, probe enumerations) → **the sha'd report that established it**. Historical findings must not be routed to the handover — it never carried them and adding them would defeat the purpose. Genuine identifiers (commit shas, `file:line` + file sha) are not counts and stay verbatim.
+
+*Provenance: DOCS-M1 brief (`docs-m1-brief.md`), sha256 `77d5fec0fd983da6d1d25906d0009e8e966453ae8350619006c230b2424c1ce3`, line 19; DOCS-M1 lane archive, 2026-07-24. **Mention-level carriage**, the PS-23 form: no record states PS-34 in its own words — every source states it jointly with PS-38, and rev E's triage (line 172) does the same. The quoted bullet is the fullest joint statement found; §PS-38 carries the separately-issued half. Recorded as mention-level rather than reconstructed, per PS-72's principle that a pointer must resolve to something that exists. Entered the register at REGISTER-COHORT-1 under PS-87.*
+
+### PS-38 — counts cite their source, two-valued: current state to the handover, historical finding to the sha'd report
+
+> - **PS-38** — counts cite their source, two-valued: current state → handover; historical finding → the sha'd report that established it. Genuine identifiers (commit shas, `file:line` + file sha) are not counts.
+
+*Provenance: DOCS-M1 G1 authorization, sha256 `4df35187…` (full sha at §PS-23), line 36; drafted 2026-07-26. In force: cited by the reference's scope rule and by PS-62's not-counts discriminator, and applied as lane discipline at LEDGER-0 D12. Entered the register at REGISTER-COHORT-1 under PS-87.*
+
+### PS-41 — archive sources authorized for the UNVERIFIED close
+
+> - **PS-41** — BULK-B and FW-1 archives authorized as sources; expected to close 3 of the 6 UNVERIFIED items.
+
+*Provenance: DOCS-M1 G1 authorization, sha256 `4df35187…` (full sha at §PS-23), line 27; drafted 2026-07-26. Terse by issue: the ruling is the authorization of those two archives as citable sources, and the reference's §8 A-fw1 and A-bbg0/A-bbg1 rows are its discharge. **In-force note:** rev E's rulings triage labels PS-41 SPENT (lane-local, discharged). That label is not an exclusion criterion — four ids the same triage called SPENT (PS-29, PS-44, PS-54, PS-60) carry register headings today — so PS-87's test governs and the entry stands; the label is recorded here rather than silently overridden. Entered the register at REGISTER-COHORT-1 under PS-87.*
 
 ### PS-42 — UNVERIFIED splits two ways: gap versus deferred-by-design
 
@@ -97,6 +121,12 @@ descriptive headings.
 > - **PS-45** — Q3 is moot, but record the *reason* as a §1 ordering requirement, not trivia: the absence of a cluster lag is **positional**, holding only because `apply_clusters` (`sync_overrides.py:507`) runs after the transforms and before rollups. It is therefore fragile to any future reordering — exactly the class PS-31 says §1 records as a requirement on callers. (Note for the record: `sync_overrides.py:507` and `ingest.py:506` are different files; the adjacent numbers mean nothing.)
 
 *Provenance: DOCS-M1 G1 authorization, sha256 `4df35187…` (full sha at §PS-23), line 32; drafted 2026-07-26. Cited by reference C1.7.*
+
+### PS-48 — standing discipline 33 — a mechanism change carries its documentation update in the same commit
+
+> - **PS-48 (standing discipline 33)** — an edit that changes a documented mechanism carries its documentation update **in the same commit**. This promotes BA-1's Rider 1 logic to a standing rule and is the primary drift defense: there is no window in which the two disagree.
+
+*Provenance: DOCS-M1 G1 authorization, sha256 `4df35187…` (full sha at §PS-23), line 34; drafted 2026-07-26. In force and load-bearing: the reference's own header states the same-commit rule, C6.4 names it as the reason documentation drift is audit-only, and PS-83 extends its principle to line coordinates. The bare-integer form 'discipline 33' is the same rule under the pre-`PS-` naming convention (rev E's naming note). Entered the register at REGISTER-COHORT-1 under PS-87.*
 
 ### PS-49 — chain-consistency check (ratified proposal)
 
@@ -120,6 +150,36 @@ descriptive headings.
 > **Provenance note for the record:** this member was named when the class was first defined and never propagated into the brief or the authorization. Planner-side propagation failure, same class as the `508-510` citation and PS-34's citation target.
 
 *Provenance: DOCS-M1 G1.0 resolution, sha256 `f7473cf2…` (full sha at §PS-33), lines 43–54; drafted 2026-07-26. Cited by the reference's detector-class row.*
+
+### PS-55 — RULED as a third label class
+
+> Your PS-47 resolution is correct — no appendix row may name `PIPELINE_RUNBOOK.md` — but it leaves the canonical chain block as an assertion with no source, which the skeleton's rule ("resolves to an appendix row, or is labelled UNVERIFIED") cannot classify. It is neither sourced nor unverified. It is **ruled**.
+>
+> Every Tier-1 claim now carries exactly one of three labels:
+>
+> - **SOURCED** — resolves to an appendix row pinning file, line, and file sha.
+> - **RULED** — normative content established by ratification, carrying a **ratification pointer** (ruling ID + the sha'd gate record where it was ratified) in place of an appendix row.
+> - **UNVERIFIED** — with PS-42's sub-class stated: *gap* or *deferred-by-design*.
+>
+> The chain block is **RULED**: pointer PS-25 / PS-44, gate record `d9420b12…5e94`.
+
+*Provenance: DOCS-M1 G1.0 resolution, sha256 `f7473cf2…` (full sha at §PS-33), lines 58–66; drafted 2026-07-26. Region: the label-class ruling and the chain block's classification; the section's heading, its conformance note (line 68) and its G2.5 amend instruction (line 70) are lane mechanics and were excluded. In force: the three-label scheme is the reference's form rule, and PS-58/PS-65 amend this ruling's RULED-pointer half (both superseded as to the pointer target by PS-75). Entered the register at REGISTER-COHORT-1 under PS-87.*
+
+### PS-57 — the mechanical check re-runs at any standalone digit run, not a digit threshold
+
+> The G2.4 method — sha-shaped hex, dollar figures, and any **≥3-digit** number — is weaker than the rule it enforces. The counts PS-34/PS-38 exist to route are predominantly one and two digits: emitted-vs-carried label counts, referent instance counts, reconcile counts. **Zero hits at ≥3 digits does not demonstrate zero restated counts.**
+>
+> **Re-run over the prose tier (everything before §8) matching any standalone digit run**, regardless of length. Disposition each hit into one of:
+>
+> - **Exempt** — section/claim numbering, ruling IDs (`PS-38`), discipline numbers, `file:line` references, version strings, ordinal words rendered as digits within a citation.
+> - **Sourced count** — cites the correct target per PS-38 (current state → handover; historical finding → the sha'd report). Passes.
+> - **Misrouted count** — cites the wrong target. **Is a hit**, not a pass. Fix before commit.
+> - **Unsourced count** — restated with no citation. **Is a hit.** Fix before commit.
+>
+> Report the full disposition table, including exempt hits, even if the outcome is clean. Structural constants stated without a number (*"two fully separate render paths"* written as prose rather than a figure) are fine; a **count that will change** — surfaces, labels, committees — must route per PS-38 regardless of how small the number is.
+>
+
+*Provenance: DOCS-M1 pre-G4 items, sha256 `6037b347…` (full sha at §PS-58), lines 26–36; drafted 2026-07-26. Region: the threshold ruling and its disposition classes; the item heading is excluded. In force: rev E's triage carries it as 'PS-57's threshold — any standalone digit run, binding precedent for the scope-rule check' (line 179), and PS-60 records the blind spot this method still has (a count spelled as a word). Entered the register at REGISTER-COHORT-1 under PS-87.*
 
 ### PS-58 — RULED-pointer fallback for planner-sitting rulings
 
@@ -157,6 +217,12 @@ descriptive headings.
 
 *Provenance: DOCS-M1 closing amend (`docs-m1-closing-amend.md`), sha256 `daf8a0f0083651a17d39378600c64ced64d2a685e2db140a6075bf611cb6bfc8`, lines 15–36 (the section's post-edit asserts excluded as lane mechanics); drafted 2026-07-26. Cited by reference C6.5.*
 
+### PS-62 — the not-counts discriminator
+
+> - **PS-62** — the not-counts discriminator: **a number that is part of a rule's logic or a value's identity is not a count.**
+
+*Provenance: handover rev E, 2026-07-30, sha256 `6d2421b5…` (full sha at §PS-31), line 176, in rev E's STANDING rulings triage. No on-disk lane-record source states it; the handover is the artifact of record, as for PS-9, PS-12 and PS-31. In force: PS-72's ratified text cites it by id for the register-population count ('per PS-62 that count is rule-logic, not a PS-34/PS-38 count'). Entered the register at REGISTER-COHORT-1 under PS-87.*
+
 ### PS-65 — RULED-pointer artifact class widened
 
 > Widen the header's three-label definition. A **RULED** pointer resolves to a ruling ID plus **any hashed, on-disk, immutable lane artifact** — gate reports **and** governing input briefs (`g0-report`, the G1 authorization, the G1.0 resolution, the closing-amend file) — with **the handover revision as fallback** for conversationally-ratified rulings.
@@ -164,6 +230,14 @@ descriptive headings.
 > This aligns the definition with the practice already accepted at G2/G3. The planner's PS-58 phrasing said "sha'd gate record," which was narrower than the document's own contents.
 
 *Provenance: DOCS-M1 final pre-push amend (`docs-m1-final-amend.md`), sha256 `25387ecc84ea7d2cb1d7f832178c9adad7436ac2f00f899df790b89052173b3d`, lines 38–40; drafted 2026-07-26. Widens PS-58; superseded with it by PS-75, as PS-58's entry records. Cited by the reference §8 form header.*
+
+### PS-66 — the arc's defining failure mode — ruling content not reaching the artifact that governs the work
+
+> The arc's defining finding: **every failure in it traced to ruling content not reaching the artifact that governs the work.** Six instances — the `508-510` citation, PS-15's placement phrasing, commit item (5)'s status wording, PS-34's citation target, PS-33's unnamed fourth detector member, and PS-9's absent second half.
+>
+> It also explains why the defenses that worked all attack that single mechanism: **PS-36** (cite ruling IDs, never restate content), **PS-39 / PS-64** (briefs and reports travel as hashed files, never paste), **PS-48 / discipline 33** (a mechanism change carries its doc update in the same commit), **PS-50** (read-back before authoring). Four mechanisms, one failure mode. Rev E should state it once, plainly, as the arc's summary lesson.
+
+*Provenance: DOCS-M1 closing/final amend, sha256 `25387ecc…` (full sha at §PS-65), lines 63–65; drafted 2026-07-26. Region: the finding and the defenses it explains; the section heading and the push instruction are lane mechanics and were excluded. In force and heavily cited: PS-73's build obligation names 'PS-66's counted failure mode', and PS-75 invokes it as the reason a pointer target must contain the ruling. Entered the register at REGISTER-COHORT-1 under PS-87.*
 
 ### PS-71 — pointer cells are tenseless and prose-free
 
@@ -444,6 +518,34 @@ descriptive headings.
 > **Scope consequence:** the 23 §8-cited entries, plus **PS-71, PS-72, PS-73, PS-75, PS-76, PS-77, PS-78, PS-79, PS-83** from §1's supplied records, plus **PS-87 itself**. PS-74 is recorded as **a question resolved by PS-75**, not as a standing rule — one line, no ruling text.
 
 *Provenance: DOCS-M3 G1 ruling (`docs-m3-g1-ruling.md`), sha256 `3f4f816facf42bd1bf7fa750e8874afa44c34f073252d860f719e537057d3dc6`, lines 28–32 (§2); ratified by Ishan 2026-08-04. Widens PS-75 scope decision 1. Governs this register.*
+
+### PS-88 — id-less register entries are legitimate for display-decision sets; the checker's grammar is extended deliberately, in the commit that needs it
+
+> A ratified display-decision set (decisions and strings ratified as one package at a gate) may enter
+> the register as an **id-less entry** named for its lane and gate, rather than taking a PS id per
+> decision. The register's population rule (PS-87) is unchanged: the entry carries every decision in
+> force, and citation is by entry name.
+>
+> The docs checker's RULING_CELL grammar enumerates the id-less shapes it accepts. **Extending that
+> grammar is legitimate and expected** when a new id-less entry lands, on three conditions: the
+> extension is made at the grammar's documented extension point; it is made in the same commit as the
+> entry it admits (PS-48's same-commit rule applied to the checker); and it is flagged in the gate
+> report rather than made silently. A grammar that cannot be extended blocks correct entries; a
+> grammar extended silently is not a check.
+>
+> **Check names are stable identifiers, never data-dependent.** A check whose name varies with the
+> data breaks the stable-PASS-line convention the gate lineage's readability depends on — the counts
+> and names are the artifact read across lanes. A new failure *cause* takes a new named check; it
+> does not take a dynamic name.
+
+*Provenance: REGISTER-COHORT-1, ratified by Ishan 2026-08-07 at diff review; redrafted — the original
+PS-88 draft (planner session, pre-rev-F) is unreachable on any machine and its subject was recovered
+from rev F's index row. Evidence base: one grammar creation (DOCS-M4) and two extensions
+(P1D-PERSON; LEDGER-0 D7), both extensions flagged-deliberate at their gates and both correct — the
+count corrected from "three extensions" per the G0 method note (`git log -S` returns only the
+creating commit; `-G` was required). The stable-name clause's occasion is the REPAIR-AGG-1 F5 shape
+decision. Cited by the checker's extension-point comment, which this commit repoints from "PS-88
+(drafted)" to this entry.*
 
 ### PS-89 — a surface may be framed by an entity the selector does not select (rev 2)
 

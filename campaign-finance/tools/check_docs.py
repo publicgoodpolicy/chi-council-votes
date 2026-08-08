@@ -12,6 +12,16 @@ Three rules, one script, docs-only, no external state (RULINGS.md §PS-73):
      `~`-anchored, absolute, glob/placeholder tokens out; `../` out-of-repo relatives
      reported as a class, not failed; RULINGS.md quoted blocks and provenance lines
      out by construction; basename-index resolutions reported as weak-passes.
+  4. [REG/PS-N] ID RESOLUTION (REGISTER-COHORT-1) — every `PS-N` id cited in either
+     authority document's OWN VOICE resolves to a `### PS-N` register heading. Under
+     PS-87 a ruling in force belongs in the register; a citation that resolves nowhere
+     is a rule governing work the work cannot see. Boundary, and it is narrower than
+     rule 3's: only RULINGS.md's **verbatim quoted blocks** are exempt — provenance
+     lines, headings, prose, and the whole reference stay in scope. Quoted ruling text
+     is a historical record transferred verbatim (the D8 convention), not the register
+     asserting a pointer; holding it to current resolution would make faithful
+     transcription impossible, and every residual at this rule's landing was of exactly
+     that kind. Own known-failures file, pinned at ZERO.
 
 Semantics: HARD-FAIL (ruled with PS-73). Pre-existing failures live in the committed
 known-failures file beside this script — dated, owner-named, SHRINK-ONLY (growth fails
@@ -33,6 +43,7 @@ import tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(HERE))          # campaign-finance/tools -> repo root
 KNOWN_PATH = os.path.join(HERE, "docs_check_known_failures.json")
+REG_KNOWN_PATH = os.path.join(HERE, "reg_check_known_failures.json")
 
 REF_REL = "campaign-finance/MECHANISM_REFERENCE.md"
 REG_REL = "campaign-finance/RULINGS.md"
@@ -40,9 +51,13 @@ REG_REL = "campaign-finance/RULINGS.md"
 # Rule 1 — the ruling-cell grammar. Seven shapes, enumerated: six ratifications took
 # no PS id (historical form, not retrofitted — G1 §6; P1D-PERSON's display-decisions
 # entry added per its G3 authorization §3, the register-expansion ruling; EXCL-UNIFORM
-# G1 added at LEDGER-0 per D7, the ratified C5.8-strings pointer row). If PS-88
-# ratifies, the set is closed; a new id-less ruling otherwise requires a deliberate
-# edit here.
+# G1 added at LEDGER-0 per D7, the ratified C5.8-strings pointer row).
+#
+# THIS IS THE DOCUMENTED EXTENSION POINT, and extending it is legitimate and expected
+# when a new id-less entry lands — see RULINGS.md §PS-88, which rules the three
+# conditions: extend here, in the same commit as the entry it admits, flagged in the
+# gate report rather than made silently. History to date: one creation (DOCS-M4) and
+# two extensions (P1D-PERSON; LEDGER-0 D7), both flagged-deliberate at their gates.
 RULING_CELL = re.compile(
     r"^(PS-\d+( rev \d+)?( / PS-\d+)*"
     r"|discipline \d+"
@@ -226,6 +241,39 @@ def rule3(known):
     return fails, stats
 
 
+# ---------------------------------------------------------------- rule 4
+def rule4(ref_lines, reg_lines, known):
+    """[REG/PS-N] Returns (failures, stats). Every PS-N id cited in either authority
+    document's own voice resolves to a '### PS-N' register heading (PS-87). Only the
+    register's verbatim quoted blocks are exempt — see the module docstring."""
+    headed = {int(m.group(1)) for m in
+              (re.match(r"^### PS-(\d+)", l) for l in reg_lines) if m}
+    cited = {}                                    # id -> first "doc:line" citing it
+    for label, lines, skip_quotes in (("RULINGS.md", reg_lines, True),
+                                      ("MECHANISM_REFERENCE.md", ref_lines, False)):
+        for i, l in enumerate(lines, 1):
+            if skip_quotes and l.startswith(">"):
+                continue                          # verbatim quoted ruling text
+            for tok in re.findall(r"\bPS-(\d+)\b", l):
+                cited.setdefault(int(tok), f"{label}:{i}")
+    known_keys = {e["token"] for e in known["entries"]}
+    seen_known, fails = set(), []
+    for i in sorted(cited):
+        if i in headed:
+            continue
+        tok = f"PS-{i}"
+        if tok in known_keys:
+            seen_known.add(tok)
+            continue
+        fails.append(f"[REG/PS-N] {tok} is cited at {cited[i]} and resolves to no "
+                     f"'### {tok}' heading in campaign-finance/RULINGS.md (PS-87)")
+    for e in known["entries"]:                    # a listed entry must still fail
+        if e["token"] not in seen_known:
+            fails.append(f"[REG/PS-N] known-failures entry no longer fails — remove it "
+                         f"(shrink): {e['token']}")
+    return fails, {"cited": len(cited), "headed": len(headed), "known_hits": len(seen_known)}
+
+
 def load_known(path=KNOWN_PATH):
     with open(path, encoding="utf-8") as f:
         k = json.load(f)
@@ -245,14 +293,19 @@ def run_check():
     ref = read_lines(os.path.join(REPO, REF_REL))
     reg = read_lines(os.path.join(REPO, REG_REL))
     known, kfails = load_known()
+    regknown, regkfails = load_known(REG_KNOWN_PATH)
 
     r1, rows = rule1(ref, reg)
     r2 = rule2(ref)
     r3, stats = rule3(known)
+    r4, s4 = rule4(ref, reg, regknown)
 
     print(f"check_docs (PS-73): rule1 rows={rows} fails={len(r1)} | "
           f"rule2 fails={len(r2)} | rule3 files={stats['files']} tokens={stats['tokens']} "
-          f"fails={len(r3)}")
+          f"fails={len(r3)} | rule4 ids={s4['cited']} headed={s4['headed']} fails={len(r4)}")
+    print(f"  [REG/PS-N] known-failures: {s4['known_hits']} hit(s) across "
+          f"{len(regknown['entries'])} entries (shrink-only, pinned max "
+          f"{regknown['max_entries']})")
     print(f"  known-failures: {stats['known_hits']} site-hits across "
           f"{len(known['entries'])} entries (shrink-only; all owned) | "
           f"weak-passes: {len(stats['weak'])} | out-of-repo refs (reported, not failed): "
@@ -261,7 +314,7 @@ def run_check():
         print(f"  WEAK-PASS {w}")
     for o in stats["outrepo"]:
         print(f"  OUT-OF-REPO {o}")
-    all_fails = kfails + r1 + r2 + r3
+    all_fails = kfails + regkfails + r1 + r2 + r3 + r4
     for x in all_fails:
         print(f"  FAIL {x}")
     print(f"check_docs: {'FAILED ' + str(len(all_fails)) if all_fails else 'ALL GREEN'}")
@@ -311,6 +364,19 @@ def self_test():
     t("rule3 boundary: MEMORY.md allowlisted as named-external", classify_token("MEMORY.md") is None)
     t("rule3 boundary: ../ classifies as checkable (reported class)",
       classify_token("../ipg-rep-finder/index.html") is not None)
+
+    # rule 4: fires on an own-voice citation with no heading; silent on quoted text.
+    EMPTY = {"entries": []}
+    f, _ = rule4(["prose citing PS-9999 in the reference"], ["### PS-1 — x"], EMPTY)
+    t("rule4 fires on an own-voice citation with no register heading", len(f) == 1)
+    f, _ = rule4([], ["### PS-1 — x", "> quoted historical text citing PS-9999"], EMPTY)
+    t("rule4 silent on a citation inside a register quoted block (D8 verbatim transfer)", len(f) == 0)
+    f, _ = rule4([], ["### PS-1 — x", "*Provenance: see PS-9999.*"], EMPTY)
+    t("rule4 fires on a provenance-line citation — narrower boundary than rule 3", len(f) == 1)
+    f, _ = rule4([], ["### PS-1 — x", "prose citing PS-1"], EMPTY)
+    t("rule4 passes when every cited id resolves", len(f) == 0)
+    f, _ = rule4([], ["### PS-1 — x"], {"entries": [{"token": "PS-9999", "owner": "X"}]})
+    t("rule4 shrink: a known-failures entry that no longer fails must be removed", len(f) == 1)
 
     # shrink-only: growth fails in code.
     with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as tf:

@@ -549,7 +549,17 @@ that catch defect classes the existing gates structurally cannot see.
    names allowlisted as exact tokens); and that backticked paths in tracked markdown resolve
    on disk, with a committed shrink-only known-failures file whose entries each name an
    owning lane (`tools/docs_check_known_failures.json`). Hard-fail, ruled with PS-73;
-   self-test mode fires every rule on a synthetic violation.
+   self-test mode fires every rule on a synthetic violation. **Extended at
+   REGISTER-COHORT-1 with a fourth rule, `[REG/PS-N]`:** every `PS-N` id cited in either
+   authority document's **own voice** resolves to a `### PS-N` register heading (PS-87 —
+   a ruling in force that a repo-only reader cannot find is a rule the work cannot see).
+   Its boundary is deliberately narrower than the path rule's: only the register's
+   **verbatim quoted blocks** are exempt, because quoted ruling text is a historical
+   record transferred whole under the D8 convention rather than the register asserting a
+   pointer — provenance lines, prose and the whole reference stay in scope. It carries
+   its **own** shrink-only known-failures file (`tools/reg_check_known_failures.json`),
+   pinned at **zero**: the transcriptions that would populate it landed in the same
+   commit, so any future headless citation fails the build by construction.
 
 ---
 
@@ -630,12 +640,12 @@ that catch defect classes the existing gates structurally cannot see.
 | C4.3 | A-probe | 152 (banked open-thread naming; mechanism deliberately not characterized here) |
 | C4.4 | S-syn | 590-630 (uniqueness-gated alias; never rewrite) |
 | C4.5 | S-seed | 257, 284, 309 (the three stamp sites), 354-359 (fatal unknown-race-id), 362-368 (mint-time shared check, fatal) |
-| C4.5 | S-vld | 175-241 (the ONE shared implementation: namespace/convention resolvers + election_mismatches), 244-255 (durable INV-ELECT gate), 82 (wired into validate) |
+| C4.5 | S-vld | 255-321 (the ONE shared implementation: namespace/convention resolvers + election_mismatches), 324-335 (durable INV-ELECT gate), 82 (wired into validate) |
 | C4.7 | S-ing | 681-706 (resolve_committee_claimants — the ONE resolver), 585-599 (deterministic linkage build consuming it) |
 | C4.7 | S-rst | whole script (claims-derived re-stamp; ruled-four-fields write; fifth-field fail-loud; idempotent) |
-| C4.7 | S-vld | 253-319 (INV-LINK-1..3 + coverage-limit statement), 83 (wired into validate) |
+| C4.7 | S-vld | 354-399 (INV-LINK-1..3 + coverage-limit statement), 83 (wired into validate) |
 | C4.6 | S-rol | 109-112, 127-130 (by_candidate/by_race keyed (id, cycle) — no election), 132-204 (by_candidate_election, the election-keyed variant) |
-| C4.6 | S-vld | 135-141 (INV-PERSON-1 pins by_candidate.all as dedup identity) |
+| C4.6 | S-vld | 215-221 (INV-PERSON-1 pins by_candidate.all as dedup identity) |
 | C5.1 | A-fw1 | 7-16 (fix sites exist only in the elections path; artifact layer separate) |
 | C5.2 | S-cemb | 42-52 (dataUrl + optional sharded mode); S-eemb 19-24 (elections artifact + inlined deploy) |
 | C5.2 | A-ba1g2 | 49 (Rider 2: neither embed renders entity-type / last-editor) |

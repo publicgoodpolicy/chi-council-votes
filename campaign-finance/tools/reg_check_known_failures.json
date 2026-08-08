@@ -1,0 +1,6 @@
+{
+  "comment": "[REG/PS-N] rule-4 known failures: PS-N ids cited in an authority document's OWN VOICE that resolve to no '### PS-N' register heading. SHRINK-ONLY, and pinned at ZERO: REGISTER-COHORT-1 transcribed the nine that existed, so the correct steady state is an empty list. Any new headless citation fails the build by construction rather than being absorbable here. max_entries may never rise; the checker fails in code if entries exceed it, if an entry lacks an owner, or if a listed entry no longer fails.",
+  "created": "2026-08-07",
+  "max_entries": 0,
+  "entries": []
+}
