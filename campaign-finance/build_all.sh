@@ -111,7 +111,7 @@ python3 "$REPO/campaign-finance/tools/check_sheet_scopes.py" || { echo "  !! She
 # so the INV-* families and the [AGG/PS-96] tripwire never fired on a build_all.sh build.
 # That gap narrowed the premise LEDGER-0's D1(c) was ratified on. Wired here, mirroring the
 # docs-form gate above: this script now has a hard failure mode, deliberately.
-python3 "$INGEST/validate_council_data.py" "$DATA" || { echo "  !! council-data.json validation FAILED — ABORTING"; exit 1; }
+python3 "$INGEST/validate_council_data.py" "$DATA" --shards "$SHARDS" || { echo "  !! council-data.json validation FAILED — ABORTING"; exit 1; }
 
 # ---- 7. Commit (manual on purpose — review first) ---------------------------
 say "All artifacts valid. To publish, review the diff then run:"

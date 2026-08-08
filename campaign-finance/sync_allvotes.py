@@ -7,7 +7,7 @@ crosswalk / position-mapping logic is shared, not duplicated). It:
 
   PUSH  — writes every rollcall (divided) vote to an "All Votes" tab:
           machine columns  vote_id | date | bill | title | type | result | tally
-          editor columns   featured | code | full_name | tag | reverse_coded | description
+          editor columns   featured | code | full_name | tag | description
           Machine columns are overwritten each run; editor columns are PRESERVED
           (read first, written back). On first run, votes already in
           featured_vote_map.json are SEEDED as featured (pulling full/tag/etc.
@@ -21,14 +21,15 @@ crosswalk / position-mapping logic is shared, not duplicated). It:
             read ok, no rows   -> {} -> proceed (legitimately empty)
             tab absent         -> created, read skipped -> proceed (named branch)
           Previously a bare `except Exception: return {}` made the first state
-          look like the second, and the run silently overwrote six human-edited
-          columns with seeded or blank values.
+          look like the second, and the run silently overwrote every human-edited
+          editor column with seeded or blank values.
 
   READ-BACK — turns the editor columns into data:
           • Any row checked `featured` becomes a featured vote. Its vote_id is
             already in the row, so NO matching is needed (retires the matcher).
             We upsert a votemeta entry, add it to featured_vote_map.json, and
-            populate its 50 per-alder positions (reverse-coded per the tab).
+            populate its per-alder positions. Positions are written exactly as
+            POSITION maps them — the reverse-coding flip is retired (REFRESH-1).
           • The `tag` column on ANY row is attached to that rollcall vote, so
             the full record can be filtered by tag — featured or not.
 
@@ -45,11 +46,15 @@ import argparse, json, os, sys
 from pathlib import Path
 
 import ingest_votes as IV   # shared, tested: sql, build_crosswalk, resolve_ward,
-                            # personvotes_for, POSITION, FLIP, DEFAULT_BASE/ORG
+                            # personvotes_for, POSITION, DEFAULT_BASE/ORG
 
 ALL_VOTES_TAB = "All Votes"
 MACHINE_COLS = ["vote_id", "date", "bill", "title", "type", "result", "tally"]
-EDITOR_COLS = ["featured", "code", "full_name", "tag", "reverse_coded", "description"]
+# `reverse_coded` RETIRED at REFRESH-1: dropping it here is deliberate, and the
+# next real sync removes the column from the All Votes tab, because write_tab
+# rewrites the whole tab from HEADER. The tab is machine-owned, so this is a
+# votes-domain scaffolding write, not an editorial write-back.
+EDITOR_COLS = ["featured", "code", "full_name", "tag", "description"]
 HEADER = MACHINE_COLS + EDITOR_COLS
 WRITE_SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
@@ -101,7 +106,7 @@ def get_or_make_tab(sheet):
     editor values, and that must be a NAMED branch rather than something the
     caller infers from an empty read. Without it, "tab absent, will create" and
     "the read failed" are indistinguishable, which is what let a transient API
-    error overwrite six human-edited columns with seeded values.
+    error overwrite every human-edited editor column with seeded values.
     """
     import gspread
     try:
@@ -149,7 +154,6 @@ def seed_map_from_featured(fmap, votemeta):
         seed[vid] = {
             "featured": "TRUE", "code": code,
             "full_name": vm.get("full", ""), "tag": vm.get("tag", ""),
-            "reverse_coded": "TRUE" if vm.get("reverse_coded") else "",
             "description": vm.get("desc", vm.get("description", "")),
         }
     return seed
@@ -215,13 +219,11 @@ def apply_featured(data, effective, base, org, dry_run=False):
         seen_codes.add(code)
         rcv = rc_by_id.get(vid, {})
         date = rcv.get("date", "")
-        reverse = truthy(ed.get("reverse_coded"))
         new_votemeta.append({
             "code": code,
             "full": str(ed.get("full_name") or rcv.get("title") or code).strip(),
             "tag": str(ed.get("tag") or "").strip(),
             "year": (date[:4] if date else ""),
-            "reverse_coded": reverse,
             "source_url": rcv.get("source_url"),
             "desc": str(ed.get("description") or "").strip(),
             "vote_id": vid,
@@ -233,8 +235,6 @@ def apply_featured(data, effective, base, org, dry_run=False):
             ward = IV.resolve_ward(cw, pid, date or "")
             if ward in ward_index:
                 pos = IV.POSITION.get(opt, "-")
-                if reverse:
-                    pos = IV.FLIP.get(pos, pos)
                 ward_index[ward].setdefault("votes", {})[code] = pos
                 report["positions_written"] += 1
         report["featured"] += 1

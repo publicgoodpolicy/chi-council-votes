@@ -83,6 +83,7 @@ def validate(d):
     errors.extend(validate_committee_linkage(d))
     errors.extend(validate_aggregate_absence(d))
     errors.extend(validate_donor_referential(d))
+    errors.extend(validate_votes(d))
     return errors, warnings
 
 
@@ -124,6 +125,137 @@ def _agg_test(p, obj):
     if p['test'] == 'contains':
         return p['value'] in (v or [])
     raise ValueError(f"unknown predicate test {p['test']!r}")
+
+
+def validate_votes(d):
+    """[VOTES/*] REFRESH-1 D2 — the votes family, asserting PS-99 single-source.
+
+    The votes family had no validator at all before this: nothing checked rollcall,
+    votemeta, or per-alder positions, while the dollars side carried INV-* and
+    [AGG/*]. Its absence is how a legacy code vocabulary forked and drifted unseen.
+
+    Parameterized on the artifact, never council-hardcoded, so a second votes source
+    (the school-board Sheet-tab ingest) is a client of this family rather than a
+    second exception — which is what PS-99 exists to make possible. An artifact with
+    no votes tier is silently in scope and passes: absence is not a violation.
+    """
+    errs = []
+    rc = d.get('rollcall') or {}
+    votes = rc.get('votes') or []
+    votemeta = d.get('votemeta') or []
+    alders = d.get('alders') or []
+    if not votes and not votemeta:
+        return errs                       # no votes tier in this artifact
+
+    # VOTES-1: rollcall vote ids are unique — the join key for everything below.
+    ids = [v.get('id') for v in votes]
+    if len(ids) != len(set(ids)):
+        dupes = sorted({i for i in ids if ids.count(i) > 1})
+        errs.append(f"VOTES-1: duplicate rollcall vote id(s): {dupes[:5]}")
+
+    # VOTES-2: the declared count matches the list it declares.
+    if rc.get('term_votes') is not None and rc.get('term_votes') != len(votes):
+        errs.append(f"VOTES-2: rollcall.term_votes {rc.get('term_votes')} != "
+                    f"len(votes) {len(votes)}")
+
+    # VOTES-3: every rollcall vote carries a date — the window key every consumer uses.
+    undated = [v.get('id') for v in votes if not v.get('date')]
+    if undated:
+        errs.append(f"VOTES-3: {len(undated)} rollcall vote(s) carry no date: {undated[:3]}")
+
+    # VOTES-4: every votemeta entry resolves to a rollcall vote. PS-99's first half —
+    # a featured vote with no ingest provenance is exactly the hand-entered class.
+    idset = set(ids)
+    orphan_meta = [m.get('code') for m in votemeta if m.get('vote_id') not in idset]
+    if orphan_meta:
+        errs.append(f"VOTES-4: votemeta entr(ies) resolving to no rollcall vote: "
+                    f"{orphan_meta[:5]} (PS-99: every position comes from the vote ingest)")
+
+    # VOTES-5: SINGLE-SOURCE. Every per-alder vote code resolves to a votemeta entry.
+    # No hand-entered exemption exists, because under PS-99 no hand-entered class exists.
+    codes = {m.get('code') for m in votemeta}
+    stray = sorted({c for a in alders for c in (a.get('votes') or {}) if c not in codes})
+    if stray:
+        errs.append(f"VOTES-5: alder vote code(s) resolving to no votemeta entry: {stray} "
+                    f"(PS-99 single-source: no hand-entered class exists, so there is no "
+                    f"exemption — a code with no ingest provenance is a defect)")
+
+    # VOTES-6: every position key resolves to a ward this artifact knows.
+    wards = {str(a.get('ward')) for a in alders}
+    if wards:
+        badw = sorted({w for v in votes for w in (v.get('positions') or {}) if w not in wards})
+        if badw:
+            errs.append(f"VOTES-6: position key(s) resolving to no known ward: {badw[:8]}")
+
+    # VOTES-7: `reverse_coded` is RETIRED (REFRESH-1). Absent-or-inert: its presence
+    # anywhere means a writer reintroduced the semantic-inversion path this lane removed.
+    rc_present = [m.get('code') for m in votemeta if 'reverse_coded' in m]
+    if rc_present:
+        errs.append(f"VOTES-7: retired field `reverse_coded` present on votemeta entr(ies) "
+                    f"{rc_present[:5]} — the flip path was removed at REFRESH-1")
+
+    # VOTES-8: vote.type's stringified-list shape pinned. It is stored as a STRING
+    # (e.g. '["ordinance"]'), not a list; a writer switching to a real list would change
+    # what every consumer parses, silently.
+    badtype = [v.get('id') for v in votes if v.get('type') is not None
+               and not isinstance(v.get('type'), str)]
+    if badtype:
+        errs.append(f"VOTES-8: rollcall vote.type must be a string (the stringified-list "
+                    f"shape of record); non-string on {badtype[:3]}")
+    return errs
+
+
+def validate_shard_freshness(d, shards_dir):
+    """[SHARD/STALE] REFRESH-1 D3 — the shard-vs-monolith staleness check.
+
+    The trap `ingest_ie.py` documents on itself: build_all builds shards BEFORE the
+    hand-run IE step, so without `--shards` (or a re-run) the shards silently miss
+    IE and dues data. Nothing caught it — the gate JSON-parsed the shards and
+    validated the monolith, and never compared them.
+
+    The stamp is the discriminator: `ingest_ie` advances the monolith's top-level
+    `generated_at` through its internal build_rollups, and leaves the index shard's
+    behind. TWO NAMESPACES, NEVER CONFLATED: top-level `generated_at` is the dollars
+    stamp; `rollcall.generated_at` is the votes stamp. This check reads only the
+    former. The total comparison behind it is the deep assert.
+    """
+    import os
+    errs = []
+    idx_path = os.path.join(shards_dir, 'council-index.json')
+    con_path = os.path.join(shards_dir, 'council-contributions.json')
+    if not (os.path.exists(idx_path) and os.path.exists(con_path)):
+        return [f"SHARD/STALE: shards not found under {shards_dir}"]
+    try:
+        idx = json.load(open(idx_path))
+        con = json.load(open(con_path))
+    except Exception as e:
+        return [f"SHARD/STALE: could not parse shards: {type(e).__name__}: {e}"]
+
+    mono_stamp, idx_stamp = d.get('generated_at'), idx.get('generated_at')
+    if mono_stamp != idx_stamp:
+        errs.append(f"SHARD/STALE: monolith generated_at {mono_stamp!r} != index shard "
+                    f"{idx_stamp!r} — the shards were built from an older artifact. "
+                    f"Re-run build_shards (or pass ingest_ie --shards).")
+
+    mc, cc = d.get('contributions', []), con.get('contributions', [])
+    if len(mc) != len(cc):
+        errs.append(f"SHARD/STALE: contribution rows monolith {len(mc):,} != shard {len(cc):,}")
+    else:
+        def tot(rows):
+            s = 0.0
+            for r in rows:
+                try:
+                    s += float(r.get('amount') or 0)
+                except (TypeError, ValueError):
+                    pass
+            return round(s, 2)
+        if tot(mc) != tot(cc):
+            errs.append(f"SHARD/STALE: contribution dollars monolith {tot(mc)} != shard {tot(cc)}")
+    for key in ('donors', 'committees'):
+        if len(d.get(key, {})) != len(idx.get(key, {})):
+            errs.append(f"SHARD/STALE: {key} monolith {len(d.get(key, {})):,} != "
+                        f"index {len(idx.get(key, {})):,}")
+    return errs
 
 
 def validate_aggregate_absence(d):
@@ -428,6 +560,10 @@ def main():
     ap.add_argument('--strict', action='store_true', help='also fail on warnings')
     ap.add_argument('--emit-predicates', action='store_true',
                     help='print the [AGG/PS-96] detection surface as JSON and exit')
+    ap.add_argument('--shards', metavar='DIR',
+                    help='shards dir; when given, assert the shards are not stale against '
+                         'this artifact (REFRESH-1 D3). Opt-in by argument rather than a '
+                         'derived sibling path, so the coupling is explicit at every caller.')
     a = ap.parse_args()
 
     try:
@@ -437,6 +573,8 @@ def main():
         sys.exit(2)
 
     errors, warnings = validate(d)
+    if a.shards:
+        errors.extend(validate_shard_freshness(d, a.shards))
     print("[validate] council-data.json summary:")
     print(summary(d))
 

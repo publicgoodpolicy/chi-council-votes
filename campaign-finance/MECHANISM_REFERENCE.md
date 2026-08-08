@@ -182,6 +182,37 @@ the sha'd report that measured them, with their collection named at each.
   this is the predicate that drops them. Reading it as selection-only would invite
   "widening" it to admit more types and silently re-admit malformed rows with them.
 
+### Vote provenance: what the votes tier admits [C1.15, RULED; sites SOURCED]
+
+The dollars family's selection rules above have a votes-family counterpart, and it is a
+**scope rule rather than a filter**: **every published vote position comes from the vote
+ingest.** Hand-entry is retired — no position enters the artifact by hand, and content that
+existed only by hand-entry was removed rather than legitimized (PS-99). The stated
+consequence: **a vote absent from the ingest source is absent from the tool** until the
+source carries it.
+
+Two writers set per-alder positions, both keyed on the current featured set, and — the
+mechanism this rule exists to close — **neither has ever deleted a key**, while `votemeta`
+is authoritatively rebuilt each run. A renamed vote code therefore left its old key on every
+alder permanently, and the vocabularies forked silently: the artifact accumulated codes that
+resolved to no `votemeta` entry, one pair drifting to different values for the same vote.
+Nothing detected it, because the votes family had **no validator of any kind** while the
+dollars family carried INV-\* and `[AGG/\*]`.
+
+The `validate_votes` family closes that: rollcall id uniqueness and declared-count agreement,
+every `votemeta` entry resolving to a rollcall vote, and — the single-source assertion —
+**every per-alder vote code resolving to a `votemeta` entry, with no hand-entered exemption,
+because under PS-99 no hand-entered class exists.** It is parameterized on the artifact, so a
+second votes source is a client rather than a second exception; an artifact with no votes
+tier is in scope and passes. The retired semantic-inversion flag is asserted **absent**, and
+`rollcall.votes[].type`'s stringified-list shape is pinned because a writer switching it to a
+real list would change what every consumer parses.
+
+**Two `generated_at` namespaces exist and are never conflated**: the top-level stamp is the
+dollars stamp (advanced by the rollup builder, and therefore by the IE ingest's internal
+rollup); `rollcall.generated_at` is the votes stamp. The shard-staleness check reads only the
+former.
+
 ---
 
 ## §2 — Donor field ownership map
@@ -198,7 +229,7 @@ Sheet apply rewrites it from the Sheet each run. The precision (functions, lines
 | `entity_type` [C2.3, SOURCED] | **editor via Sheet only** | **no** | **yes — sole restorer** (Donor Overrides · entity_type) | restored | **cleared, never restored** |
 | `_last_edited_by` [C2.3, SOURCED] | **editor via Sheet only** | **no** | **yes — sole restorer** (Donor Overrides · last_edited_by) | restored | **cleared, never restored** |
 | cluster fields + `parent_id` [C2.4, SOURCED] | Sheet apply's cluster pass; `parent_id` also transforms | yes (guarded cluster-field carry) | yes — reset then re-tag (Donor Clusters tab) | authoritative from tab | survive one run via union |
-| `aka` [C2.5, SOURCED] | Sheet apply's merge pass | no | **recomputed** each run (Donor Merges tab) | rebuilt | dropped, rebuilt next step-8 run |
+| `aka` [C2.5, SOURCED] | ~~Sheet apply's merge pass~~ **NO WRITER — the merge pass was its only one, removed at REFRESH-1 (PS-97)** | no | ~~recomputed each run (Donor Merges tab)~~ **never written** | — | — |
 | `slug_aliases` [C2.6, SOURCED] | Sheet apply's alias matcher | n/a | recomputed each run | rebuilt | absent |
 | `ie_funding`, `type`, identity fields (name, city, occupation, employer) [C2.7, SOURCED] | ingest / IE ingest (machine-derived) | overwritten by fresh parse | no | machine facts | machine facts |
 
@@ -215,9 +246,10 @@ unclassified org. By ruling it is **routed to the 1a editorial-state arc, not to
 field-granularity closure above is untouched by it.
 
 Fields resolved as *not* in the position, and why (negative results are half this table's
-value): `parent_id` is both union-preserved and transform-recomputed; `aka` is recomputed
-from its tab every run. Neither needs — or can meaningfully take — a code-side preserve.
-[C2.4, C2.5]
+value): `parent_id` is both union-preserved and transform-recomputed; `aka` ~~is recomputed
+from its tab every run~~ **has no writer at all since the merge pass was removed (PS-97) —
+it is retained in the schema, written by nothing, and populated on no donor**. Neither
+needs — or can meaningfully take — a code-side preserve. [C2.4, C2.5]
 
 **Sheet-owned writer set, by name** [C2.8, SOURCED]: `primary_industry` +
 `additional_industries` (→ `industries`), `flags`, `notes`, `entity_type`, `last_edited_by`
@@ -677,17 +709,17 @@ that catch defect classes the existing gates structurally cannot see.
 | tag | file | sha256 |
 |---|---|---|
 | S-ing | `campaign-finance/ingestion/ingest.py` | `5e2c2e2175fa8ed4de0d4a7dd2ffdd70208c5df206b50200faf6225359a7d4cf` |
-| S-syn | `campaign-finance/sheets-sync/sync_overrides.py` | `52dc859c4b7c4012fffc9ebfbe0af8e6f70f597ae876505d6854bb60fea922d5` |
-| S-bld | `campaign-finance/build_all.sh` | `1ecdb058fd5b6e15059abb16a3f97f43c48f124e51c6cf5185794b24079b0963` |
+| S-syn | `campaign-finance/sheets-sync/sync_overrides.py` | `0bac13ab7c15a02197822b77b7c1144ad3b12655b37322208476a3b0d3d73913` |
+| S-bld | `campaign-finance/build_all.sh` | `e034a6052cacd26b15fc1e682584fd9d8cc6d2a9430d2f456c1b98de24e81d56` |
 | S-t1 | `campaign-finance/ingestion/transform_slice1.py` | `5f807b26245ee22173d3903b9b8a3825f224c47c4f2d7ad11042ee87a6ccb68d` |
 | S-ie | `campaign-finance/ingestion/ingest_ie.py` | `242caca31d35adfd962f5f1c2897c07345afe1a26286f2cc6ffd779376847158` |
 | S-rep | `campaign-finance/ingestion/repair_clusters.py` | `90cc6912647479510d10d505debb84d18fbd28557bf5996b01a992eb1ddf283c` |
 | S-rol | `campaign-finance/ingestion/build_rollups.py` | `a37a9ee4a1fe93a66dae7c6ecb50e3face70f05078e7fbc97e088a4cafb4fe89` |
 | S-seed | `campaign-finance/elections/build_election_seed.py` | `a2122eab99c8e6db401801a97e43537a4eea62ae1f7b4f13cdb03e8a761a20f7` |
-| S-vld | `campaign-finance/ingestion/validate_council_data.py` | `6c83c3d5ab25b0ea402f06ae3a0d1e456d0497f23f91527f8ce7276d19900538` |
+| S-vld | `campaign-finance/ingestion/validate_council_data.py` | `1ef36ad61af959c8a050ed6fa79c78bd1fc0b05e9f59ab1853c777aedc89b976` |
 | S-rst | `campaign-finance/ingestion/restamp_committee_linkage.py` | `6ceb82f9bbcffa08fdb21904b8585982a6bff7e3982e0b810937e2958019d06e` |
 | S-cbr | `campaign-finance/ingestion/convert_bulk_receipts.py` | `ac33aa394c4f8905c307390160fbe397a09399199a3396b07f29f01729bbe582` |
-| S-av | `campaign-finance/sync_allvotes.py` | `feb409e0f70940ec6750540d3a2458c6bbb24beb89a1fd939400034e4554d8f7` |
+| S-av | `campaign-finance/sync_allvotes.py` | `a0c4f23df6e4f012e683088e012dc91692fe65399e6fcae2acd1ec9b40e61384` |
 | S-cemb | `campaign-finance/elections/reference/council-embed.html` | `148b05bc6c4cff9abca1097457db6164917d932455e6c63f9579a8b7a6c371b6` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
 | S-edat | `campaign-finance/elections/embed/data.js` | `e36af72ece73ff47b1322abd08548b1f3a1a7624f896381c6c8f10fd6b043ecc` |
@@ -713,7 +745,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.2 | S-bld | 3-8 (header: one local builder), 49 (the vote fetch) |
 | C1.2 | A-ba1g0 | 25-42 (§G0.1 sole-orchestrator census: only .sh, no CI, fetch invoked nowhere else) |
 | C1.3 | S-ing | 488-509 (donor-union; preserved subset 492-500, 506-508) |
-| C1.3 | S-syn | 577-588 (sole-restorer writes) |
+| C1.3 | S-syn | 526-537 (sole-restorer writes) |
 | C1.3 | A-ba1g0 | 44-54 (§G0.2 the firing configuration), 56-66 (§G0.3) |
 | C1.4 | S-seed | 57-61 (rollups-last rationale), 63-70 (governing rule) |
 | C1.4 | S-rol | 284-285 (runs-last comment) |
@@ -721,7 +753,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.5 | S-seed | 63-65 (must-never-run-without-parent rule) |
 | C1.5 | S-t1 | 10-16 (parent derivation from cluster state) |
 | C1.6 | S-rep | 10-24 (post-re-ingest repair: re-stamp / reparent / dissolve) |
-| C1.7 | S-syn | 456-473 (reset), 513-518 (cluster pass writes parent directly) |
+| C1.7 | S-syn | 405-422 (reset), 462-467 (cluster pass writes parent directly) |
 | C1.7 | S-t1 | 10-16 (prior-run derivation it supersedes) |
 | C1.8 | S-bld | 4-8 (replaced the nightly Action) |
 | C1.9 | S-bld | 62, 79, 80, 86, 87, 88, 92-94 (invocation order conforming to the block; executable content verified byte-identical, comment-stripped, to the pre-amend revision recorded in the BA-1 lane) |
@@ -731,15 +763,19 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.13 | A-l0g0 | §5 (the Supporting/Opposing volume, measured over the expenditures bulk; the archived volumes, measured per collection) |
 | C1.14 | S-cbr | 59-65 (`D2PART_NAME`, the five itemizable codes), 357 and 463 (the selection pass and the reassembly pass, both requiring membership) |
 | C1.14 | A-l0g0 | §5 (the D2Part tally over the receipts bulk: the out-of-map values are field-shifted artifacts, not types) |
+| C1.15 | S-vld | 130-206 (`validate_votes` — VOTES-1..8, the single-source assertion at VOTES-5), 86 (wired into validate) |
+| C1.15 | S-av | 156-158 (the seed map, flip-free), 221-238 (apply_featured: votemeta rebuilt whole, positions set-only — the asymmetry the rule closes) |
+| C1.15 | S-vld | 208-259 (`validate_shard_freshness` — the two-namespace stamp discriminator and the deep total assert), 563-566 (the `--shards` opt-in) |
+| C1.15 | S-bld | 114 (the validator invoked with `--shards`) |
 | C2.1 | S-ing | 86-127 (rules), 130-141 (classifier), 314-320 (assignment), 492-496 (partial preserve) |
-| C2.1 | S-syn | 571-577 (merge) |
-| C2.2 | S-ing | 497-500; S-syn 168-172, 579-582 |
-| C2.3 | S-ing | 506-508 (absent from carry); S-syn 173-178, 583-588 (sole restorer) |
-| C2.4 | S-ing | 501-508 (guarded carry); S-syn 456-473, 513-518; S-t1 10-16 |
-| C2.5 | S-syn | 422-424 (recompute); A-add 146-160 (§A4.2 writer sweep, census-invisible) |
-| C2.6 | S-syn | 597-637 (alias matcher) |
+| C2.1 | S-syn | 520-526 (merge) |
+| C2.2 | S-ing | 497-500; S-syn 170-174, 528-531 |
+| C2.3 | S-ing | 506-508 (absent from carry); S-syn 175-180, 532-537 (sole restorer) |
+| C2.4 | S-ing | 501-508 (guarded carry); S-syn 405-422, 462-467; S-t1 10-16 |
+| C2.5 | S-syn | 241-263 (`assert_donor_merges_empty` — the tripwire standing where the writer was; the merge pass that recomputed `aka` is removed, so the field has no writer); A-add 146-160 (§A4.2 writer sweep, census-invisible) |
+| C2.6 | S-syn | 546-586 (alias matcher) |
 | C2.7 | S-ing | 294-306 (type), 316-334 (identity fields) |
-| C2.8 | S-syn | 153-180 (tab reader: the writer-set columns) |
+| C2.8 | S-syn | 155-182 (tab reader: the writer-set columns) |
 | C2.9 | A-add | 141-160 (§A4: sweep method, aka fixture) |
 | C2.10 | A-add | 87-98 (§A2.3: the value-granularity qualifier — property shared, position not) |
 | C3.1 | S-ing | 130-141 (short-circuit before rules), 182-189 (name-format heuristic) |
@@ -747,27 +783,27 @@ that catch defect classes the existing gates structurally cannot see.
 | C3.2 | S-ing | 141 (org no-match fallback) |
 | C3.3 | A-add | 116-139 (§A3.4: label census; Sheet-only enumeration; numbers live here) |
 | C3.4 | S-ing | 130-141 (individual = name shape), 311-312 (self-funding = money provenance) |
-| C3.5 | S-syn | 163 (empty cell carried only if non-empty), 572 (fall-through); S-ing 492-496 (union re-classifies bare marker) |
+| C3.5 | S-syn | 165 (empty cell carried only if non-empty), 521 (fall-through); S-ing 492-496 (union re-classifies bare marker) |
 | C3.5 | A-probe | 74-94 (§P2, both representations) |
-| C3.6 | S-syn | 571-577 |
-| C3.7 | S-syn | 108, 115, 126 (read-only Sheet access); S-av 51-53, 88-95 (the named read-failure type), 97-110 (get_or_make_tab's created flag), 113-130 (fail-loud read: raise on failure, empty only on a successful read), 132-134 (write_tab's clear+update — what the abort protects), 268-289 (the three named branches at the call site) |
+| C3.6 | S-syn | 520-526 |
+| C3.7 | S-syn | 110, 117, 128 (read-only Sheet access); S-av 51-57 (the editor-column set, `reverse_coded` retired out of it), 93-100 (the named read-failure type), 102-115 (get_or_make_tab's created flag), 118-135 (fail-loud read: raise on failure, empty only on a successful read), 137-139 (write_tab's clear+update — what the abort protects, and what removes the retired column on the next run), 268-289 (the three named branches at the call site) |
 | C3.7 | S-chk | whole script (the static no-editorial-writeback check: role classification, reader-scope, writer-disjointness, write-verb, allowlist-integrity and tab-declaration rules; `--self-test` fires each on a synthetic violation) |
 | C3.7 | S-bld | 108 (the build_all.sh invoker) |
 | C3.7 | A-probe | 120-130 ((b) universality + qualifier) |
 | C4.1 | S-ing | 147-156 (slug minting; stability rationale in situ) |
 | C4.2 | A-bbg1 | 38-40 (SEIU propagation fixture: shared Sheet → elections artifact) |
 | C4.3 | A-probe | 152 (banked open-thread naming; mechanism deliberately not characterized here) |
-| C4.4 | S-syn | 597-637 (uniqueness-gated alias; never rewrite) |
+| C4.4 | S-syn | 546-586 (uniqueness-gated alias; never rewrite) |
 | C4.5 | S-seed | 257, 284, 309 (the three stamp sites), 354-359 (fatal unknown-race-id), 362-368 (mint-time shared check, fatal) |
-| C4.5 | S-vld | 255-321 (the ONE shared implementation: namespace/convention resolvers + election_mismatches), 324-335 (durable INV-ELECT gate), 82 (wired into validate) |
+| C4.5 | S-vld | 387-453 (the ONE shared implementation: namespace/convention resolvers + election_mismatches), 456-467 (durable INV-ELECT gate), 82 (wired into validate) |
 | C4.7 | S-ing | 681-706 (resolve_committee_claimants — the ONE resolver), 585-599 (deterministic linkage build consuming it) |
 | C4.7 | S-rst | whole script (claims-derived re-stamp; ruled-four-fields write; fifth-field fail-loud; idempotent) |
-| C4.7 | S-vld | 354-399 (INV-LINK-1..3 + coverage-limit statement), 83 (wired into validate) |
+| C4.7 | S-vld | 486-531 (INV-LINK-1..3 + coverage-limit statement), 83 (wired into validate) |
 | C4.6 | S-rol | 109-112, 127-130 (by_candidate/by_race keyed (id, cycle) — no election), 132-204 (by_candidate_election, the election-keyed variant) |
-| C4.6 | S-vld | 215-221 (INV-PERSON-1 pins by_candidate.all as dedup identity) |
-| C4.8 | S-syn | 65-66 (the artifact list + known-failures path), 657-681 (shrink-only loader: growth and owner-less entries fail in code), 683-708 (`resolvable_donor_ids` — the union across artifacts, disk reads only), 710-736 (`check_tag_continuity` — unresolved ids, and a listed entry that no longer fails), 805-834 (the call site: runs before the write, aborts on failure) |
+| C4.6 | S-vld | 347-353 (INV-PERSON-1 pins by_candidate.all as dedup identity) |
+| C4.8 | S-syn | 67-68 (the artifact list + known-failures path), 606-630 (shrink-only loader: growth and owner-less entries fail in code), 632-657 (`resolvable_donor_ids` — the union across artifacts, disk reads only), 659-685 (`check_tag_continuity` — unresolved ids, and a listed entry that no longer fails), 788-817 (the call site: runs before the write, aborts on failure) |
 | C4.8 | A-esg0 | §3 (the orphan census against the union, and the re-mint signature it caught) |
-| C4.9 | S-syn | 742-764 (`coverage_figure`), 818-826 (the per-artifact report and its stated collection scope) |
+| C4.9 | S-syn | 691-713 (`coverage_figure`), 801-809 (the per-artifact report and its stated collection scope) |
 | C4.9 | A-esg0 | §2 (pull-model established from bytes; the coverage gap and its collection scope) |
 | C5.1 | A-fw1 | 7-16 (fix sites exist only in the elections path; artifact layer separate) |
 | C5.2 | S-cemb | 42-52 (dataUrl + optional sharded mode); S-eemb 19-24 (elections artifact + inlined deploy) |
@@ -826,6 +862,8 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.8 dues exclusion | PS-95 | `RULINGS.md` §PS-95 |
 | C5.8 strings | EXCL-UNIFORM G1 | `RULINGS.md` §EXCL-UNIFORM G1 |
 | C5.9 | PS-96 | `RULINGS.md` §PS-96 |
+| C1.15 | PS-99 | `RULINGS.md` §PS-99 |
+| C2.5 aka retirement | PS-97 | `RULINGS.md` §PS-97 |
 | C2.9 | discipline 29 | `RULINGS.md` §Discipline 29 |
 | C6.4 | DOCS-M1 (no id) | `RULINGS.md` §DOCS-M1 C6.4 |
 | C6.5 | PS-60 | `RULINGS.md` §PS-60 |

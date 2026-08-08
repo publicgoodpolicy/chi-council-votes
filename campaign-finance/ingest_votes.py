@@ -15,14 +15,17 @@ WHAT IT WRITES (machine-owned):
 
 WHAT IT NEVER TOUCHES (editor-owned, "editor wins"):
   * donors, contributions, campaign-finance "committees", cycles, tags, flags
-  * votemeta DEFINITIONS (full/tag/desc/reverse_coded/source_url)
+  * votemeta DEFINITIONS (full/tag/desc/source_url)
   * alder bios; positions for featured votes NOT in the map (hand-entered)
   * "caucuses" (sourced from caucuses.json editorial table)
 
 KEY CORRECTNESS RULES:
-  * Tier 1 positions are SEMANTIC (Affirmative = support for the named action),
-    so reverse-coded votes are FLIPPED per votemeta.reverse_coded. This matches
-    the existing tool convention that lets positions be compared across votes.
+  * Tier 1 positions are SEMANTIC (Affirmative = support for the named action).
+    The `reverse_coded` flip is RETIRED (REFRESH-1, PS-99's neighborhood): the
+    field was uniformly false, exercised by no vote, and read inconsistently by
+    two consumers (bool() here vs truthy() in sync_allvotes), so a string
+    reaching it would have inverted every published position on one path only.
+    Positions are now written exactly as POSITION maps them.
   * Tier 2 positions are FACTUAL (yes/no/present/absent) with NO semantic
     judgment — these 167 votes are not editorially framed.
   * Votes attribute by ward via the live person_id->ward crosswalk. A ward's
@@ -62,7 +65,6 @@ RECORD = {"yes": "yes", "no": "no", "abstain": "present", "not voting": "present
 # option -> semantic position (Tier 1), normal coding
 POSITION = {"yes": "Affirmative", "no": "Oppositional", "abstain": "Neutral",
             "not voting": "Neutral", "absent": "-", "excused": "-"}
-FLIP = {"Affirmative": "Oppositional", "Oppositional": "Affirmative"}
 
 
 # --------------------------------------------------------------------------
@@ -241,18 +243,15 @@ def populate_featured(data, fmap, pv, cw, ward_index):
         if rows is None:  # featured vote wasn't in the divided pull; fetch handled by caller
             report[code] = {"status": "no_personvotes_pulled"}
             continue
-        reverse = bool(votemeta.get(code, {}).get("reverse_coded"))
         counts = Counter()
         for (pid, opt) in rows:
             ward = resolve_ward(cw, pid, m.get("date") or "")
             if ward is None or ward not in ward_index:
                 continue
             pos = POSITION.get(opt, "-")
-            if reverse:
-                pos = FLIP.get(pos, pos)
             ward_index[ward].setdefault("votes", {})[code] = pos
             counts[pos] += 1
-        report[code] = {"status": "populated", "reverse_coded": reverse,
+        report[code] = {"status": "populated",
                         "positions_written": sum(counts.values()), "breakdown": dict(counts)}
     return report
 
@@ -347,8 +346,7 @@ def run(data_path, map_path, base, org, term, dry_run):
     print("  Tier 1 featured votes auto-populated:")
     for code, r in feat_report.items():
         if r.get("status") == "populated":
-            rc = " (reverse-coded)" if r.get("reverse_coded") else ""
-            print(f"    {code:18s} {r['positions_written']:>2} positions  {r['breakdown']}{rc}")
+            print(f"    {code:18s} {r['positions_written']:>2} positions  {r['breakdown']}")
         else:
             print(f"    {code:18s} {r.get('status')}")
     print(f"  Council committees folded in  : {len(council_committees['by_committee'])} (held)")

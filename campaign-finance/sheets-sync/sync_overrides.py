@@ -11,24 +11,26 @@ TABS THIS SCRIPT READS
                         flags | notes | last_edited_by
   2. "Industry Tags"    key | label | color
   3. "Flag Types"       key | label | severity
-  4. "Donor Merges"     alias_id | canonical_id        (same-entity dedupe / exact dups)
+  4. "Donor Merges"     DEPRECATED (PS-97) — read only to assert it is empty
   5. "Donor Clusters"   cluster_id | cluster_name | canonical_id | donor_id |
                         role | relationship            (ROLLUPS — parent + members)
 
 ENTITY RESOLUTION
 -----------------
-MERGE  (Donor Merges tab): collapse duplicate records of the SAME entity. Every
-       contribution from an alias is reassigned to the canonical donor, the
-       alias's industries/flags are folded into the canonical record, and the
-       alias donor is removed. Reserved for genuine same-SBE-record duplicates
-       (a re-ingest, a trailing space) — the rollup builder flags these as
-       "exact-dup → merge". Applied BEFORE overrides and clusters.
+MERGE  (Donor Merges tab): **DEPRECATED AND REMOVED — PS-97.** It collapsed two
+       donor records by rewriting every alias contribution's donor_id in place and
+       deleting the alias donor. No artifact carries a per-row filed name, so the
+       rewrite was irreversible from artifact bytes; and no row was ever written in
+       the mechanism's lifetime. `apply_merges` is gone rather than disabled; the
+       tab remains on the Sheet, guarded empty by a tripwire that stops the sync on
+       any row. Spelling variants are a CLUSTER (below), which destroys nothing.
 
 ROLLUP (Donor Clusters tab): group a donor's variants under one PARENT
        (canonical_id) WITHOUT deleting anything. Every member record stays in
        the data, traceable to its SBE source; the cluster adds a display layer.
        This script:
-         - resolves members + the canonical through any merges, de-dupes,
+         - resolves members + the canonical (the merge map is now always empty),
+           de-dupes,
          - tags each member donor with cluster_id / cluster_name / cluster_role
            / cluster_is_parent,
          - precomputes the rolled-up total (sum of every member's contributions)
@@ -38,7 +40,7 @@ ROLLUP (Donor Clusters tab): group a donor's variants under one PARENT
        'role' values: parent | alt-name | affiliated-pac | subsidiary | related.
 
 Idempotent: ingest.py recreates raw donors each run; this script re-applies the
-merge/cluster maps on top every night.
+cluster map and the editorial overrides on top every night.
 
 USAGE
     python sync_overrides.py --sheet-id ABC123 --creds-file ./creds.json
@@ -236,27 +238,29 @@ def apply_committee_tags(data: dict, ctags: dict, industry_vocab: dict) -> dict:
     return stats
 
 
-def read_donor_merges(sheet) -> list[tuple]:
-    """Read the Donor Merges tab -> list of (alias_id, canonical_id) pairs.
+def assert_donor_merges_empty(sheet) -> None:
+    """DEPRECATION TRIPWIRE (PS-97). The Donor Merges mechanism is retired.
 
-    Presence of a row = apply the merge (editors curate the tab; rejected
-    suggestions simply aren't in it). An optional 'KEEP? (y/n)' column, if
-    present, must be affirmative.
+    The tab is deliberately NOT deleted from the Sheet — a guarded empty tab is
+    the honest state, because deleting it would make a future re-add invisible.
+    Any row in it means someone used a mechanism that rewrites contribution rows
+    in place and deletes the alias donor, irreversibly from artifact bytes. That
+    is a stop, not a warning.
     """
     rows = _worksheet_records(sheet, 'Donor Merges')
-    if rows is None:
-        return []
-    pairs = []
-    for row in rows:
-        a = (str(row.get('alias_id') or '')).strip()
-        c = (str(row.get('canonical_id') or '')).strip()
-        keep_col = row.get('KEEP? (y/n)', row.get('keep', None))
-        if keep_col is not None and str(keep_col).strip() != '':
-            if str(keep_col).strip().lower() not in ('y', 'yes', '1', 'true'):
-                continue
-        if a and c and a != c:
-            pairs.append((a, c))
-    return pairs
+    if not rows:                      # None (absent tab) or [] (guarded empty)
+        return
+    live = [r for r in rows
+            if (str(r.get('alias_id') or '')).strip() and (str(r.get('canonical_id') or '')).strip()]
+    if live:
+        raise SystemExit(
+            f"STOP: the Donor Merges tab carries {len(live)} row(s), but the merge mechanism "
+            f"is DEPRECATED by ruling (RULINGS.md \u00a7PS-97). Nothing was written.\n"
+            f"  The mechanism rewrites contribution donor_ids in place and deletes the alias "
+            f"donor; it is irreversible from artifact bytes.\n"
+            f"  Use a Donor Clusters row instead — clusters group distinct ids without "
+            f"destroying either.\n"
+            f"  First offending row: {live[0].get('alias_id')!r} -> {live[0].get('canonical_id')!r}")
 
 
 def read_donor_clusters(sheet) -> dict[str, dict]:
@@ -377,61 +381,6 @@ def read_person_links(sheet, data):
 # ============================================================
 # ENTITY RESOLUTION
 # ============================================================
-def resolve_merge_map(pairs: list[tuple]) -> dict:
-    """Collapse alias->canonical pairs, following chains, breaking cycles."""
-    direct = {}
-    for a, c in pairs:
-        if a and c and a != c:
-            direct[a] = c
-
-    def final(x):
-        seen = set()
-        while x in direct and x not in seen:
-            seen.add(x)
-            x = direct[x]
-        return x
-
-    return {a: final(a) for a in direct}
-
-
-def apply_merges(data: dict, pairs: list[tuple]) -> dict:
-    """Reassign contributions to canonical, fold metadata, drop alias donors."""
-    donors = data.get('donors', {})
-    contribs = data.get('contributions', [])
-    changes = {'merged': 0, 'contributions_reassigned': 0, 'skipped': 0}
-
-    mapfinal = resolve_merge_map(pairs)
-    valid = {a: c for a, c in mapfinal.items()
-             if a in donors and c in donors and a != c}
-    skipped = {a for a in mapfinal if a not in valid}
-    changes['skipped'] = len(skipped)
-
-    for c in contribs:
-        did = c.get('donor_id')
-        if did in valid:
-            c['donor_id'] = valid[did]
-            changes['contributions_reassigned'] += 1
-
-    for alias, canon in valid.items():
-        if alias not in donors or canon not in donors:
-            continue
-        a, c = donors[alias], donors[canon]
-        ci = c.get('industries') or ([c['industry']] if c.get('industry') else [])
-        ai = a.get('industries') or ([a['industry']] if a.get('industry') else [])
-        merged = list(dict.fromkeys([*ci, *ai]))
-        if merged:
-            c['industries'] = merged
-        if a.get('flags'):
-            c.setdefault('flags', []).extend(a['flags'])
-        c.setdefault('aka', [])
-        if a.get('name') and a['name'] != c.get('name') and a['name'] not in c['aka']:
-            c['aka'].append(a['name'])
-        del donors[alias]
-        changes['merged'] += 1
-
-    return changes, valid
-
-
 def _contribution_totals(contribs: list) -> dict:
     """Sum contribution amounts by (post-merge) donor_id."""
     totals = defaultdict(float)
@@ -764,6 +713,40 @@ def coverage_figure(data, sheet_ids):
             'missing_amount': round(missing_amt, 2), 'total_amount': round(total, 2)}
 
 
+# ---------------------------------------------------------------------------
+# EDIT-SAFE-1/P3 (REFRESH-1 D4) — step-8 population trip-wire, fail-loud
+# ---------------------------------------------------------------------------
+def check_step8_population(data, overrides):
+    """Every Sheet-owned value the Sheet still carries must be present on the donor.
+
+    The two fields ingest's donor-union deliberately clears — `entity_type` and
+    `_last_edited_by` — are restored ONLY by this step (C1.3, C2.3). Their loss is
+    dollar-invisible by construction (C6.2), so no reconcile, artifact diff, or gate
+    can see it; a chain that skipped step 8 publishes an artifact that looks perfect.
+
+    Compared against the SHEET, never against history — that is P3's stated failure
+    mode: population legitimately shrinks when rows are removed, so a threshold on
+    prior counts false-positives. Scoped to donors present in THIS artifact, because
+    the Sheet is shared across both tools and its other tool's ids resolve nowhere here.
+    """
+    donors = data.get('donors', {})
+    fails = []
+    checked = 0
+    for did, ov in overrides.items():
+        if did not in donors:
+            continue                      # other tool's donor; not this artifact's business
+        d = donors[did]
+        for sheet_key, donor_key in (('entity_type', 'entity_type'),
+                                     ('last_edited_by', '_last_edited_by')):
+            if not ov.get(sheet_key):
+                continue
+            checked += 1
+            if not d.get(donor_key):
+                fails.append(f"donor {did!r}: Sheet carries {sheet_key}="
+                             f"{ov[sheet_key]!r} but the artifact carries no {donor_key}")
+    return fails, {'checked': checked}
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                   formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -793,8 +776,8 @@ def main():
     flag_vocab = read_vocab(sheet, 'Flag Types', 'key')
     entity_vocab = read_vocab(sheet, 'Entity Types', 'key')   # absent tab -> {} (tolerated)
     print(f"  {len(entity_vocab)} operator-added entity types")
-    merges = read_donor_merges(sheet)
-    print(f"  {len(merges)} donor-merge pairs")
+    assert_donor_merges_empty(sheet)          # PS-97 deprecation tripwire
+    print("  donor merges: DEPRECATED (PS-97) — tab asserted empty")
     clusters = read_donor_clusters(sheet)
     print(f"  {len(clusters)} donor clusters (rollups)")
 
@@ -833,9 +816,10 @@ def main():
             f"nothing written. Known-failures file: {TAG_CONTINUITY_KNOWN}")
     print("  tag continuity: OK")
 
-    print("Applying merges (dedupe)…")
-    merge_changes, mergemap = apply_merges(data, merges)
-    print(f"  {merge_changes}")
+    # Merges are deprecated (PS-97): nothing collapses donors any more. The empty
+    # map keeps the id-resolution plumbing that merge_overrides / apply_clusters /
+    # build_slug_alias_map read through, without a mechanism behind it.
+    mergemap = {}
 
     # Person-slug alias (HALT-SLUG-A) — elections-only (council Sheet ids match exactly; ratified:
     # no council-side write). Points a given-surname election donor (IE-funder duplicate) at its
@@ -857,6 +841,21 @@ def main():
     changes = merge_overrides(data, overrides, industry_vocab, flag_vocab, mergemap,
                               entity_vocab=entity_vocab)
     print(f"  {changes}")
+
+    # P3 (D4) — the step-8 population trip-wire. Runs HERE: after the re-apply that
+    # restores the fields, before anything is written. Fail-loud by ruling, not
+    # review-required: the loss is structurally silent, so a review queue is a queue
+    # nobody is forced to read.
+    p3_fails, p3_stats = check_step8_population(data, overrides)
+    print(f"Step-8 population trip-wire (P3): {p3_stats['checked']} Sheet-owned value(s) checked")
+    if p3_fails:
+        for f in p3_fails[:10]:
+            print(f"  !! {f}")
+        raise SystemExit(
+            f"P3 FAILED: {len(p3_fails)} Sheet-owned value(s) absent from the artifact after "
+            f"the re-apply — nothing written. This is the step-8 loss the field census named; "
+            f"it is dollar-invisible, so no other check would have seen it.")
+    print("  P3: OK")
 
     print("Tagging committees (industry)…")
     committee_tags = read_committee_tags(sheet)
