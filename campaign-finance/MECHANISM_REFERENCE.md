@@ -613,7 +613,7 @@ derives from the same stamped linkage; two near-misses caught at SCOPE-PIPE's ga
 
 ---
 
-## Proposals — the invisible-defect detector class (P5 built; P1–P4 proposed, not built)
+## Proposals — the invisible-defect detector class (P5 and P6 built; P1–P4 proposed, not built)
 
 **The invisible-defect detector class** (ruled; members enumerated below by name): checks
 that catch defect classes the existing gates structurally cannot see.
@@ -655,6 +655,18 @@ that catch defect classes the existing gates structurally cannot see.
    its **own** shrink-only known-failures file (`tools/reg_check_known_failures.json`),
    pinned at **zero**: the transcriptions that would populate it landed in the same
    commit, so any future headless citation fails the build by construction.
+6. **No-editorial-writeback checker** [P6, RULED — **BUILT**] (PS-33's fifth member, added by
+   the PS-54 pattern) — `campaign-finance/tools/check_sheet_scopes.py`, one implementation with
+   the same two invokers as P5. Static and network-free: it discovers every Sheet-touching
+   program in the repo rather than reading a hand list, then requires each to be classified, a
+   pipeline reader of an editorial tab to hold only a read-only scope, a pipeline writer to name
+   no editorial tab, no pipeline program to write-verb an editorial tab, the editorial-writer
+   allowlist to hold exactly the editor app, and every tab a pipeline program names to be
+   declared. Hard-fail; `--self-test` fires each rule on a synthetic violation plus a
+   negative control. It belongs to this class because the defect it catches is invisible to
+   every other gate: a scope upgrade on an editorial reader moves no dollar, changes no
+   rendered byte, and fails no reconcile — it is discovered when an editor's work is already
+   gone.
 
 ---
 

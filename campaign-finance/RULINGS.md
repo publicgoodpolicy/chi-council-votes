@@ -84,7 +84,15 @@ descriptive headings.
 > 3. PS-32 — `entity_type` / `_last_edited_by` population trip-wire.
 > 4. PS-49 — chain-consistency check.
 
-*Provenance: DOCS-M1 G1.0 resolution (`docs-m1-g1-0-resolution.md`), sha256 `f7473cf26ffdfb6d380c73e9388de49913ce4c4c89a2574615a368b3602212c2`, lines 45–50 (the class membership as completed by PS-54); drafted 2026-07-26. PS-33's issued naming of the class predates the banked set. Cited by the reference's detector-class row.*
+**Membership addition (REFRESH-1, 2026-08-07), by the PS-54 pattern — the class gains a fifth
+member:** `check_sheet_scopes` (EDIT-SAFE-1/S2), the static no-editorial-writeback check. It
+qualifies on the class's own test — it catches a defect the existing gates structurally cannot
+see: a pipeline program acquiring a write scope on an editorial tab moves no dollar, changes no
+rendered byte, and fails no reconcile, so its loss would be invisible until an editor's work was
+already overwritten. Recorded inside this entry rather than as a new id, exactly as PS-54 recorded
+the fourth member.
+
+*Provenance: DOCS-M1 G1.0 resolution (`docs-m1-g1-0-resolution.md`), sha256 `f7473cf26ffdfb6d380c73e9388de49913ce4c4c89a2574615a368b3602212c2`, lines 45–50 (the class membership as completed by PS-54); drafted 2026-07-26. PS-33's issued naming of the class predates the banked set. The fifth member is added by the REFRESH-1 G3 authorization (`0b5e43d1…`) §COMMIT 1, ratified by Ishan 2026-08-07, and rides the same commit as the reference's Proposals enumeration per PS-48. Cited by the reference's detector-class row.*
 
 ### PS-34 — counts cite their source (mention-level carriage; the full statement is joint with PS-38)
 
@@ -887,6 +895,73 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 > figure because no row existed to distort.
 
 *Provenance: LEDGER-0 G3 authorization, sha256 `5017136c6b86b5ff5f847b6de7331faed4c8ed1c171e927913e60cd7dd4ee60a`; ratified by Ishan 2026-08-07. Fresh authoring — no prior record states this rule in its own words; the convention was read from bytes at `ledger-0-g0-report.md` §1 (`39f5f5bc…`) and confirmed at `ledger-0-g2-report.md` §4.2/§4.3/§4.5 (`f63e9a84…`). Framing ratified as R3 (`ledger-0-g1-ratification-rev3.md`, `ed4aac0f…`); the carve's mechanism is D15(b), reasoning at `ledger-0-g3-package-part1.md` §1 (`911398da…`). Dormancy, the per-figure site map, the four predicates, and the seam analysis are measurements and cite those reports per PS-38 and D12, with collection scope named at each. Partial pre-existing coverage: the `[PERSON/D14]` gate check asserts the person surface's career total against `by_person.direct.total` and therefore fails loudly on un-keyed rows for **linked persons only** — not council, not unlinked candidates; it is not the general guard. Known limitation of the detection surface: `ingest.py:518-521` records a retired convention carrying the small-dollar aggregate donor under a `_`-prefixed donor id, with no live code testing the prefix; a data-source change restoring that id convention without restoring the type or flag would not be seen by the predicate list. Seam 2 (`build_rollups.py:188` drops on the row flag and never consults donor type) publishes no dollar on any reader-facing surface at this vintage — its money fields are read only by two dev-tool console oracles — so its grain question falls due the day any consumer reads them.*
+
+### PS-97 — Donor Merges is deprecated: a destructive unification mechanism, retired rather than reformed
+
+> **The mechanism.** A Donor Merges row names an alias donor id and a canonical one. Applying it
+> rewrites every matching contribution row's `donor_id` **in place**, folds the alias's editorial
+> metadata into the canonical donor, records the alias's *name* in `aka`, and **deletes the alias
+> donor record**.
+>
+> **Why it is retired rather than reformed.** The mechanism is destructive in a way the substrate
+> cannot undo. No artifact carries a per-row filed-name field, so once a row's `donor_id` has been
+> rewritten the dollar can no longer be traced to the spelling it was filed under. `aka` retains
+> the alias's name as an unordered set, not row-linked, and no surface renders it. **A merge is
+> therefore irreversible from artifact bytes** — only the Sheet row records that it happened.
+>
+> **The alias-not-rewrite ruling does not reach it.** C4.4's "the minted donor id is never
+> rewritten — aliasing, not rewriting" governs `slug_aliases`, the uniqueness-gated matcher.
+> Merges are its destructive sibling and carry the opposite property. The two have been conflated
+> in prior records; they are distinct mechanisms and the distinction is load-bearing.
+>
+> **Ruled: no merge row is ever added.** `apply_merges` is removed along with its call site rather
+> than disabled — a dead code path guarding a destructive mechanism is a rule requiring care, and
+> removal is the structure. The tab is **not** deleted from the Sheet: a guarded empty tab is the
+> honest state, because deleting it would make a future re-add invisible. A sync that finds any row
+> in it fails loudly, naming this ruling.
+>
+> **The interim state, named so it reads as chosen rather than overlooked.** After deprecation,
+> the council side's only editor-reachable mechanism for spelling variants is **clusters** —
+> `slug_aliases` is machine-derived, has no Sheet column, and is guarded to the elections chain. A
+> live near-identical pair stays two donors, clustered where editorially desired, kept visible by
+> the near-duplicate report. Extending alias machinery to council, or making it Sheet-editable,
+> **banks to SHEET-SCHEMA-1**, whose before-editor-two gate is the right forcing point for a schema
+> question.
+>
+> **Recorded with the ruling:** the mechanism had never been used — the tab carried no data rows at
+> the first read of record, and none at any read since.
+
+*Provenance: REFRESH-1 G3 authorization (`refresh-1-g3-authorization.md`), sha256 `0b5e43d19c26abb9360d4e49624653fe384cf71148d7e3db1893b96e928739bf`, §COMMIT 1; ratified by Ishan 2026-08-07 (D1, rev-2 ratification record `08228a3f…`). **Fresh authoring** — no prior record states this rule in its own words; the mechanism reads are measured at `refresh-1-g2-report.md` §2b of the G0 report (`338dbe68…`) and the G2 report (`987fd58f…`) §Custody/§2, with the anchors `sync_overrides.apply_merges` and the Donor Overrides tab reader named there. The interim-state clause follows the G1 review's §A2 finding (`c1a04f00…`). Zero-use and the tab's row count are measurements and cite those reports per PS-38 and D12.*
+
+### PS-98 — capture-first is standing protocol: the baseline capture gates packet issuance
+
+> **The rule.** Where a lane will change a deployed surface, the **pre-change capture of that
+> surface is a step the packet's existence depends on** — not a step someone remembers. The packet
+> is not issued until the baseline capture exists and is hashed.
+>
+> **Why it is structural rather than procedural.** Capture-first was attempted repeatedly as a
+> remembered step and failed each time; it succeeded the first time it gated issuance. A step that
+> depends on recall fails at exactly the moment recall is most loaded — the moment a lane is being
+> packaged and its author is holding everything else.
+>
+> **What it buys, stated so the cost is understood as purchase rather than overhead.** A pre-state
+> **proven rather than reconstructed**. Without it, a post-change verification can only compare
+> against what the record *claims* the surface was; with it, drift that predates the lane is
+> separable from drift the lane caused — and the two have been confused before.
+
+*Provenance: REFRESH-1 G3 authorization, sha256 `0b5e43d1…` (full sha at §PS-97), §COMMIT 1; ratified by Ishan 2026-08-07. **Fresh authoring**, promoting a recommendation queued since REPAIR-AGG-1. The attempt history (the run that succeeded against the prior failures) is a historical finding and is cited to handover rev I's lessons section rather than restated here, per PS-34/PS-38. Closes the ledger item that carried the recommendation.*
+
+### PS-99 — the votes family is single-source: every published position comes from the vote ingest
+
+> **The votes family is single-source: every published position comes from the vote ingest.** The
+> hand-entry mechanism is **retired** — no position enters the artifact by hand, and artifact
+> content that exists only by hand-entry is **removed**, not legitimized. Consequence, stated so it
+> is chosen knowingly: a vote absent from the ingest source is absent from the tool until the source
+> carries it. This is the Donor-Merges deprecation pattern applied to the votes family, and it is
+> what makes the school-board variant (Sheet-tab ingest, same single-source shape) a clean second
+> client rather than a second exception.
+
+*Provenance: REFRESH-1 G1 ratification record, revision 2 (`refresh-1-g1-ratification-rev2.md`), sha256 `08228a3f3e146269f763ffe1c96786693f6cb5dc743669f2b1bd9ee99e429ee1`, §"THE SINGLE-SOURCE RULING", lines 32–38, transcribed verbatim; ratified by Ishan 2026-08-07 after observing that the inverted legacy label appears nowhere in the editorial Sheet. Id allocated at the G3 relay (`0b5e43d1…` §COMMIT 1) rather than at issue, so the allocation is checked rather than assumed. Governs D2 and D6. The removal's magnitude on the surface losing an unreferenced vote is a measurement and is cited to the G2 report (`987fd58f…`) §2.4 per PS-38.*
 
 ---
 

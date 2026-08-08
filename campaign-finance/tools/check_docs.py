@@ -48,6 +48,18 @@ REG_KNOWN_PATH = os.path.join(HERE, "reg_check_known_failures.json")
 REF_REL = "campaign-finance/MECHANISM_REFERENCE.md"
 REG_REL = "campaign-finance/RULINGS.md"
 
+# Ruling ids that must NEVER be allocated in RULINGS.md (REFRESH-1, 2026-08-07).
+# `PS-9999` is this self-test's "id that resolves to nothing": rule 1's
+# does-not-resolve fixture and all four rule-4 fixtures below depend on it having
+# no `### PS-9999` heading, in order to prove those rules can fail at all.
+# Allocating it would silently convert those fixtures into passes-by-accident.
+#
+# Home note: this reservation cannot live in RULINGS.md, because naming the token
+# in the register's own voice is itself a rule-4 violation — the checker adjudicated
+# its own documentation's placement. `PS-99` carries no such dependency and was
+# allocated normally; the distinction was measured, not assumed.
+RESERVED_RULING_IDS = ("PS-9999",)
+
 # Rule 1 — the ruling-cell grammar. Seven shapes, enumerated: six ratifications took
 # no PS id (historical form, not retrofitted — G1 §6; P1D-PERSON's display-decisions
 # entry added per its G3 authorization §3, the register-expansion ruling; EXCL-UNIFORM
