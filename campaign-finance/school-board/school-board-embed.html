@@ -2,24 +2,31 @@
   INSTITUTE FOR THE PUBLIC GOOD — Chicago Board of Education Voting Tool
   Paste this whole block into a Squarespace Code Block (Edit → add block →
   Code), or Settings → Advanced → Code Injection for a full-page version.
-  Self-contained. Loads Poppins from Google Fonts.
+  Self-contained. Loads Poppins from Google Fonts; display face is Georgia.
 
-  SBVOTE-1 / HALT-SBV-C. Built and pasteable; NOT pasted by the build lane.
-  The page's public state is a deliberate launch decision and is Ishan's.
+  SBVOTE-1 built this tool; SBVOTE-2 restyled it to read as the council
+  voting tool's sibling. What it SAYS is unchanged — the ratified strings,
+  the position map, the vacancy behaviour and the single-fetch/zero-coupling
+  properties are all SBVOTE-1's and were not reopened.
 
   ===================================================================
   WHAT THIS EMBED IS, AND WHAT IT IS NOT
   -------------------------------------------------------------------
   It mirrors the council voting tool's VOTES-FAMILY structure only: the
-  member view, the complete-record browser, and the methodology shell.
-  The council tool's ward routing, committee blocks, bio grid, finance
-  half and vote-correlation card are deliberately absent — the board has
-  seats rather than wards, the roster carries none of those fields, and
-  campaign finance is out of scope at launch (V4).
+  member view, the complete-record browser, the all-seats matrix, and the
+  methodology shell. The council tool's ward routing, committee blocks, bio
+  grid, finance half and vote-correlation card are deliberately absent —
+  the board has seats rather than wards, the roster carries none of those
+  fields, and campaign finance is out of scope at launch (V4).
 
   ZERO COUPLING. This embed reads exactly ONE file — the school-board
   artifact — and shares no component, no data source and no state with
-  either finance embed.
+  either finance embed. The visual language is shared; the code is not.
+
+  DISPLAY FACE is Georgia. The council tool carried a Recoleta @font-face
+  whose source 404s — measured at SBVOTE-2 G1, 2026-08-08 — so Georgia was
+  always what rendered. Ishan ratified Georgia as the intended face and the
+  dead declaration was removed from both tools.
 
   ===================================================================
   THE POSITION VOCABULARY, AND THE ONE PLACE IT IS TRANSLATED
@@ -29,7 +36,7 @@
   translation exists anywhere upstream — not in the ingest, not in the
   artifact (ratified D-1; the ingest's own self-test asserts the absence
   of a display map). POSITION_DISPLAY below is the render boundary and
-  the ONLY place the mapping exists.
+  the ONLY place the mapping exists, for every view.
 
   "-" IS NOT A POSITION. It means no position has been recorded. It is
   rendered as "Not recorded", visually and textually distinct from
@@ -50,25 +57,34 @@
 // CONFIG
 // ============================================================
 const IPG_SB_CONFIG = {
-  // The one and only fetch this embed performs. D-5 ratified the
+  // The one and only data fetch this embed performs. D-5 ratified the
   // refs/heads/main/ form: "main" is a fragment GitHub resolves against
   // branches AND tags, so a future tag named "main" would silently
   // repoint it; refs/heads/main/ is structurally unambiguous.
   dataUrl: "https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/refs/heads/main/campaign-finance/school-board-data.json",
 };
+
+// Corrections inbox — the SAME mechanism the council tool uses, joined
+// rather than duplicated (SBVOTE-2 D3). The only per-tool difference is the
+// subject prefix, so both tools land in one inbox and sort by prefix.
+// NO CREDENTIAL SHIPS: accessKey is null, and a Formspree form id is a public
+// submission endpoint, not a token. It reaches an inbox and nothing else —
+// in particular it cannot reach the editorial Sheet, directly or otherwise.
+const IPG_SB_FEEDBACK = {
+  email: 'contact@i4pg.org',
+  endpoint: 'https://formspree.io/f/xjgdkkrk',
+  accessKey: null,
+  subjectPrefix: '[IPG School Board Tool] ',
+  floatingButton: true,
+};
 </script>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-@font-face{
-  font-family:'Recoleta';
-  src:url('https://db.onlinewebfonts.com/t/4b3a3f6c2c6e4f1e8e5d4c3b2a1f0e9d.woff2') format('woff2');
-  font-weight:700; font-display:swap;
-}
 #ipg-sb-app *{box-sizing:border-box;margin:0;padding:0}
 #ipg-sb-app{
-  /* IPG brand palette — shared visual language with the council tool.
-     Shared PALETTE, not shared code: no component crosses between them. */
+  /* IPG brand palette — the council tool's sixteen tokens at their measured
+     values. Shared PALETTE, not shared code. */
   --cream:#F6EFE9; --sage:#508F88; --teal:#044147; --tan:#EBDAC6;
   --ink:#342828; --white:#FFFFFF;
   --aff:#044147;  --aff-bg:#dCEae8;
@@ -76,65 +92,228 @@ const IPG_SB_CONFIG = {
   --neu:#9a8e74;  --neu-bg:#efe7d8;
   --nd:#a9a299;   --nd-bg:#e9e4dc;
   --line:#dcd2c4;
+  /* The council's warm-grey text ramp, TOKENISED here rather than copied as
+     literals (SBVOTE-2 B.4). In the council file these five values appear
+     ~85 times as bare hex and drift the moment either tool is touched. */
+  --ink-muted:#9a8e7e;   /* muted body / empty-state text */
+  --ink-label:#7d7264;   /* uppercase labels, legends */
+  --ink-mid:#6a5d4e;     /* inactive tabs, footer emphasis, status */
+  --ink-deep:#5a5048;    /* matrix row labels, dense description text */
+  --ink-nd:#8c8479;      /* no-data / not-recorded text */
   font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   color:var(--ink); background:var(--cream);
   line-height:1.55;
   --content:1080px;
-  padding:32px max(20px,calc((100% - var(--content))/2));
+  /* Full-bleed: break out of the host content column so the coloured bands
+     span the viewport, then re-centre content with padding-inline:max(...),
+     so it reads as a real site section rather than a pasted island. The
+     council tool's mechanism, copied. */
+  width:100vw; max-width:100vw;
+  position:relative; left:50%; right:50%; margin-left:-50vw; margin-right:-50vw;
+  -webkit-font-smoothing:antialiased;
 }
-/* Display face measured from the council embed's `.serif` rule and mirrored: Recoleta
-   isn't guaranteed to load from CDN, so the same high-quality serif fallback carries the
-   editorial feel offline. Size and line-height are NOT copied — the council's heading
-   sits in a full-bleed cream-on-teal band and is sized for it. */
-#ipg-sb-app .sb-title{font-family:'Recoleta','Georgia',ui-serif,serif;letter-spacing:-.01em;
-  font-size:clamp(24px,3.2vw,36px);font-weight:700;line-height:1.2;margin-bottom:6px}
-#ipg-sb-app .sb-sub{color:#6b5f5f;margin-bottom:22px;max-width:62ch}
-#ipg-sb-app .sb-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
-#ipg-sb-app .sb-nav button{font:inherit;font-weight:500;padding:8px 16px;border-radius:999px;
-  border:1px solid var(--line);background:var(--white);color:var(--ink);cursor:pointer}
-#ipg-sb-app .sb-nav button[aria-current="true"]{background:var(--teal);color:var(--white);border-color:var(--teal)}
-#ipg-sb-app .sb-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:18px}
-#ipg-sb-app .sb-row{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
-#ipg-sb-app label{font-weight:600;font-size:14px}
-#ipg-sb-app select,#ipg-sb-app input[type=search]{font:inherit;padding:8px 12px;border-radius:8px;
-  border:1px solid var(--line);background:var(--white);color:var(--ink);max-width:100%}
-#ipg-sb-app .sb-seat{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#7d7069;font-weight:600}
-#ipg-sb-app .sb-name{font-size:clamp(20px,2.4vw,28px);font-weight:700;line-height:1.15}
-#ipg-sb-app .sb-badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;
-  background:var(--tan);color:var(--ink);border:1px solid var(--line);margin-left:10px;vertical-align:middle}
-#ipg-sb-app .sb-meta{color:#6b5f5f;font-size:14px;margin-top:6px}
-#ipg-sb-app .sb-meta a{color:var(--sage)}
-#ipg-sb-app .sb-pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;
-  border-radius:999px;border:1px solid transparent;white-space:nowrap}
+/* The ONE serif stack, matching the council's post-SBVOTE-2/A normalisation. */
+#ipg-sb-app .serif{font-family:Georgia, ui-serif, serif; font-weight:700; letter-spacing:-.01em}
+#ipg-sb-app a{color:var(--sage)}
+
+/* HEADER BAND */
+#ipg-sb-app .ipg-sb-head{
+  background:var(--teal); color:var(--cream);
+  padding:38px max(30px,calc((100% - var(--content))/2)) 34px; position:relative; overflow:hidden;
+}
+#ipg-sb-app .ipg-sb-head::after{
+  /* tan + sage stepped accent echoing the brand cover */
+  content:''; position:absolute; left:0; right:0; bottom:0; height:10px;
+  background:linear-gradient(90deg,var(--sage) 0 62%,var(--tan) 62% 100%);
+}
+#ipg-sb-app h1.ipg-sb-title{
+  font-size:clamp(28px,4.6vw,46px); line-height:1.04; max-width:20ch; color:var(--cream);
+}
+#ipg-sb-app .ipg-sb-sub{margin-top:14px;max-width:60ch;font-size:15.5px;color:#cfe0dd;font-weight:400}
+
+/* TABS */
+#ipg-sb-app .ipg-sb-tabs{display:flex;background:var(--tan);border-bottom:1px solid var(--line);
+  padding-inline:max(0px,calc((100% - var(--content))/2));overflow-x:auto}
+#ipg-sb-app .ipg-sb-tab{
+  font-family:inherit;font-weight:600;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;
+  padding:16px 22px;cursor:pointer;border:none;background:none;color:var(--ink-mid);
+  border-bottom:3px solid transparent;flex:0 0 auto;
+}
+#ipg-sb-app .ipg-sb-tab.active{color:var(--teal);border-bottom-color:var(--sage);background:var(--cream)}
+
+#ipg-sb-app .ipg-sb-body{padding:28px max(30px,calc((100% - var(--content))/2)) 8px}
+
+/* CARDS + CONTROLS */
+#ipg-sb-app .ipg-sb-card{background:var(--white);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin-bottom:18px}
+#ipg-sb-app .ipg-sb-row{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+#ipg-sb-app label{font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-label)}
+#ipg-sb-app select,#ipg-sb-app input[type=search]{font-family:'Poppins',sans-serif;font-size:14.5px;
+  padding:11px 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--white);
+  color:var(--ink);max-width:100%}
+#ipg-sb-app select:focus,#ipg-sb-app input:focus{outline:2.5px solid var(--sage);outline-offset:1px}
+
+/* MEMBER IDENTITY */
+#ipg-sb-app .ipg-sb-seat{font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-label);font-weight:600}
+#ipg-sb-app .ipg-sb-name{font-size:clamp(22px,3.4vw,30px);line-height:1.15;color:var(--teal)}
+#ipg-sb-app .ipg-sb-badge{display:inline-block;font-size:10.5px;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;padding:3px 9px;border-radius:20px;line-height:1.4;
+  color:#fff;background:var(--teal);margin-left:9px;vertical-align:middle}
+#ipg-sb-app .ipg-sb-meta{color:var(--ink-mid);font-size:13px;margin-top:8px}
+
+/* POSITION PILLS — the tinted key-vote idiom */
+#ipg-sb-app .ipg-sb-pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;
+  border-radius:999px;border:1px solid transparent;white-space:nowrap;line-height:1.4}
 /* Four display states, four distinct treatments. `pill-norecord` is deliberately
    NOT the same treatment as `pill-neu`: an entered position and a missing
    record must not read alike. */
 #ipg-sb-app .pill-aff{color:var(--aff);background:var(--aff-bg);border-color:var(--aff)}
 #ipg-sb-app .pill-opp{color:var(--opp);background:var(--opp-bg);border-color:var(--opp)}
 #ipg-sb-app .pill-neu{color:#7c6f4f;background:var(--neu-bg);border-color:var(--neu)}
-#ipg-sb-app .pill-norecord{color:#8c8479;background:transparent;border-color:var(--nd);border-style:dashed;font-style:italic}
-#ipg-sb-app .sb-vote{border-top:1px solid var(--line);padding:14px 0}
-#ipg-sb-app .sb-vote:first-of-type{border-top:0}
-#ipg-sb-app .sb-vote h4{font-size:16px;font-weight:600;margin-bottom:2px}
-#ipg-sb-app .sb-vote .sb-when{font-size:13px;color:#7d7069}
-#ipg-sb-app .sb-vote p{font-size:14px;color:#5d5252;margin:6px 0}
-#ipg-sb-app .sb-chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 4px}
-#ipg-sb-app .sb-chip{font:inherit;font-size:12px;font-weight:500;padding:4px 12px;border-radius:999px;
-  border:1px solid var(--line);background:var(--white);cursor:pointer;color:var(--ink)}
-#ipg-sb-app .sb-chip[aria-pressed="true"]{background:var(--sage);color:var(--white);border-color:var(--sage)}
-#ipg-sb-app .sb-empty{background:var(--nd-bg);border:1px dashed var(--nd);border-radius:10px;
-  padding:16px 18px;color:#6b5f5f;font-size:15px}
-#ipg-sb-app .sb-err{background:var(--opp-bg);border:1px solid var(--opp);border-radius:10px;
-  padding:16px 18px;color:var(--opp);font-size:15px}
-#ipg-sb-app table{width:100%;border-collapse:collapse;font-size:14px}
-#ipg-sb-app th,#ipg-sb-app td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-#ipg-sb-app th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:#7d7069}
-#ipg-sb-app .sb-scroll{overflow-x:auto}
-#ipg-sb-app .sb-tally{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px;font-size:14px}
-#ipg-sb-app .sb-meth h3{font-size:18px;margin:18px 0 6px}
-#ipg-sb-app .sb-meth p,#ipg-sb-app .sb-meth li{font-size:15px;margin-bottom:8px}
-#ipg-sb-app .sb-meth ul{padding-left:20px}
-#ipg-sb-app .sb-foot{font-size:13px;color:#7d7069;margin-top:22px}
+#ipg-sb-app .pill-norecord{color:var(--ink-nd);background:transparent;border-color:var(--nd);
+  border-style:dashed;font-style:italic}
+
+/* KEY-VOTE LIST (member view) */
+#ipg-sb-app .ipg-sb-vote{border-top:1px solid var(--line);padding:14px 4px}
+#ipg-sb-app .ipg-sb-vote:first-of-type{border-top:0}
+#ipg-sb-app .ipg-sb-vote h4{font-size:15px;font-weight:500;line-height:1.3;color:var(--ink);margin-bottom:3px}
+#ipg-sb-app .ipg-sb-when{font-size:12px;color:var(--ink-muted)}
+#ipg-sb-app .ipg-sb-vote p{font-size:13px;color:var(--ink-mid);margin:6px 0;line-height:1.5}
+
+/* COMPLETE RECORD — card-per-vote, the council's .rec-vote idiom */
+#ipg-sb-app .ipg-sb-rec{display:flex;flex-direction:column}
+#ipg-sb-app .ipg-sb-rec-vote{border-top:1px solid var(--line);padding:14px 4px;display:grid;
+  grid-template-columns:1fr auto;gap:6px 14px;align-items:center;transition:background .12s}
+#ipg-sb-app .ipg-sb-rec-vote:last-child{border-bottom:1px solid var(--line)}
+#ipg-sb-app .ipg-sb-rec-vote:hover{background:rgba(80,143,136,.06)}
+#ipg-sb-app .ipg-sb-rec-meta{font-size:12px;color:#8a7d6e;display:flex;gap:9px;flex-wrap:wrap;
+  align-items:center;margin-bottom:3px}
+#ipg-sb-app .ipg-sb-rec-tag{font-size:11px;font-weight:500;padding:2px 8px;border-radius:999px;
+  background:var(--tan);color:var(--ink-mid)}
+#ipg-sb-app .ipg-sb-rec-title{font-size:15px;font-weight:500;line-height:1.3;color:var(--ink)}
+#ipg-sb-app .ipg-sb-rec-right{display:flex;align-items:center;gap:14px;justify-self:end}
+/* The louder solid chip the council uses on the record surface. */
+#ipg-sb-app .ipg-sb-rec-pos{font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px;
+  white-space:nowrap;min-width:96px;text-align:center}
+#ipg-sb-app .ipg-sb-rec-pos.aff{background:var(--aff);color:#fff}
+#ipg-sb-app .ipg-sb-rec-pos.opp{background:var(--opp);color:#fff}
+#ipg-sb-app .ipg-sb-rec-pos.neu{background:var(--neu);color:#fff}
+#ipg-sb-app .ipg-sb-rec-pos.norecord{background:var(--nd-bg);color:var(--ink-nd);
+  border:1px dashed var(--nd);font-style:italic;font-weight:600}
+
+/* ALL-SEATS MATRIX — the council's compare-by-issue idiom, with its legend */
+#ipg-sb-app .ipg-sb-mx-legend{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12px;
+  color:var(--ink-label);margin:2px 0 12px}
+#ipg-sb-app .mx-key{font-weight:700;font-size:11px;letter-spacing:.03em;padding:3px 9px;border-radius:14px}
+#ipg-sb-app .mx-key.mx-aff{color:var(--aff);background:var(--aff-bg)}
+#ipg-sb-app .mx-key.mx-opp{color:var(--opp);background:var(--opp-bg)}
+#ipg-sb-app .mx-key.mx-neu{color:#7c6f4f;background:var(--neu-bg)}
+#ipg-sb-app .mx-key.mx-na{color:var(--ink-nd);background:var(--nd-bg)}
+#ipg-sb-app .ipg-sb-matrix-wrap{overflow:auto;max-height:70vh;-webkit-overflow-scrolling:touch;
+  border:1px solid var(--line);border-radius:10px}
+#ipg-sb-app table.ipg-sb-matrix{border-collapse:collapse;width:100%;font-size:12.5px}
+#ipg-sb-app .ipg-sb-matrix th,#ipg-sb-app .ipg-sb-matrix td{padding:8px 10px;
+  border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+#ipg-sb-app .ipg-sb-matrix thead th{background:var(--cream);vertical-align:bottom;position:sticky;top:0;z-index:3}
+#ipg-sb-app .ipg-sb-matrix .seat-col{text-align:left;position:sticky;left:0;background:var(--cream);
+  z-index:2;font-weight:500;color:var(--ink-deep)}
+#ipg-sb-app .ipg-sb-matrix thead .seat-col{z-index:5}
+#ipg-sb-app .ipg-sb-matrix td.mx-aff{background:var(--aff-bg);color:var(--aff);font-weight:600}
+#ipg-sb-app .ipg-sb-matrix td.mx-opp{background:var(--opp-bg);color:var(--opp);font-weight:600}
+#ipg-sb-app .ipg-sb-matrix td.mx-neu{background:var(--neu-bg);color:#7c6f4f;font-weight:600}
+#ipg-sb-app .ipg-sb-matrix td.mx-na{color:#b3a899}
+#ipg-sb-app .ipg-sb-matrix .vacant-row .seat-col{font-style:italic;color:var(--ink-nd)}
+
+/* FILTER CHIPS */
+#ipg-sb-app .ipg-sb-chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 4px}
+#ipg-sb-app .ipg-sb-chip{font-family:inherit;font-size:11px;font-weight:500;padding:2px 10px;
+  border-radius:999px;border:1px solid var(--line);background:var(--white);cursor:pointer;color:var(--ink-mid)}
+#ipg-sb-app .ipg-sb-chip[aria-pressed="true"]{background:var(--sage);color:var(--white);border-color:var(--sage)}
+
+/* STATES */
+#ipg-sb-app .ipg-sb-empty{padding:50px 20px;text-align:center;color:var(--ink-muted);font-size:17px}
+#ipg-sb-app .ipg-sb-err{background:var(--opp-bg);border:1px solid var(--opp);border-radius:10px;
+  padding:16px 18px;color:var(--opp);font-size:15px;line-height:1.5}
+
+/* METHODOLOGY */
+#ipg-sb-app .ipg-sb-meth h3{font-family:Georgia, ui-serif, serif;font-size:16px;margin:18px 0 6px;color:var(--ink)}
+#ipg-sb-app .ipg-sb-meth h3:first-child{margin-top:0}
+#ipg-sb-app .ipg-sb-meth p,#ipg-sb-app .ipg-sb-meth li{font-size:14.5px;margin-bottom:8px;color:var(--ink-mid);line-height:1.6}
+#ipg-sb-app .ipg-sb-meth ul{padding-left:20px}
+#ipg-sb-app .ipg-sb-fb-btn{display:inline-block;margin-top:12px;font-family:'Poppins',sans-serif;
+  font-weight:600;font-size:12.5px;letter-spacing:.02em;color:var(--white);background:var(--sage);
+  border:none;border-radius:8px;padding:9px 16px;cursor:pointer}
+#ipg-sb-app .ipg-sb-fb-btn:hover{background:var(--teal)}
+
+/* FOOTER */
+#ipg-sb-app .ipg-sb-foot{margin-top:26px;padding:22px max(30px,calc((100% - var(--content))/2)) 30px;
+  border-top:1px solid var(--line);font-size:12.5px;line-height:1.65;color:#8a7e70;background:var(--tan)}
+#ipg-sb-app .ipg-sb-foot strong{color:var(--ink-mid)}
+
+/* FEEDBACK — FAB, modal. Unprefixed like the council's, because the modal
+   mounts outside the app subtree; the palette is re-declared on .ipg-sb-modal
+   so tokens resolve there (the council's scoping decision, copied). */
+.ipg-sb-fb-fab{position:fixed;right:20px;bottom:20px;z-index:9990;font-family:'Poppins',sans-serif;
+  font-weight:600;font-size:12.5px;color:#fff;background:#044147;border:none;border-radius:30px;
+  padding:11px 16px;cursor:pointer;display:flex;align-items:center;gap:7px;
+  box-shadow:0 6px 18px -4px rgba(4,65,71,.45)}
+.ipg-sb-fb-fab:hover{background:#0a5a5e}
+.ipg-sb-fb-fab svg{width:15px;height:15px}
+.ipg-sb-modal-overlay{position:fixed;inset:0;z-index:9995;background:rgba(52,40,40,.55);
+  display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;
+  font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+.ipg-sb-modal{
+  background:#F6EFE9;border-radius:14px;max-width:min(680px,calc(100vw - 40px));width:100%;
+  box-shadow:0 24px 48px -10px rgba(4,65,71,.35),0 0 0 1px #dcd2c4;
+  padding:32px 32px 26px;position:relative;
+  --cream:#F6EFE9; --sage:#508F88; --teal:#044147; --tan:#EBDAC6;
+  --ink:#342828; --white:#FFFFFF; --line:#dcd2c4; --neu-bg:#efe7d8;
+  --ink-muted:#9a8e7e; --ink-label:#7d7264; --ink-mid:#6a5d4e;
+  color:var(--ink);
+}
+.ipg-sb-modal-close{position:absolute;top:14px;right:18px;font-size:28px;font-weight:300;line-height:1;
+  width:32px;height:32px;border:none;background:none;cursor:pointer;color:var(--ink-muted)}
+.ipg-sb-modal-close:hover{color:var(--teal)}
+.ipg-sb-modal-head{margin-bottom:18px;padding-right:30px}
+.ipg-sb-modal-kicker{font-weight:600;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--sage);margin-bottom:6px}
+.ipg-sb-modal-name{font-size:clamp(22px,3.4vw,30px);line-height:1.15;color:var(--teal);
+  font-family:Georgia, ui-serif, serif;font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
+.ipg-sb-modal-meta{font-size:13px;color:var(--ink-mid);line-height:1.5}
+.ipg-sb-fb-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.ipg-sb-fb-field label{font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-label)}
+.ipg-sb-fb-field input,.ipg-sb-fb-field select,.ipg-sb-fb-field textarea{
+  font-family:'Poppins',sans-serif;font-size:14.5px;padding:11px 12px;border:1.5px solid var(--line);
+  border-radius:8px;background:#fff;color:var(--ink)}
+.ipg-sb-fb-field textarea{min-height:96px;resize:vertical;line-height:1.5}
+.ipg-sb-fb-field input:focus,.ipg-sb-fb-field select:focus,.ipg-sb-fb-field textarea:focus{
+  outline:2.5px solid var(--sage);outline-offset:1px}
+.ipg-sb-fb-hint{font-size:11.5px;color:var(--ink-muted);font-weight:400;text-transform:none;letter-spacing:0}
+.ipg-sb-fb-context{font-size:11.5px;color:var(--ink-label);background:var(--neu-bg);border-radius:8px;
+  padding:9px 11px;margin-bottom:16px;line-height:1.45}
+.ipg-sb-fb-actions{display:flex;gap:12px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.ipg-sb-fb-submit{font-family:'Poppins',sans-serif;font-weight:600;font-size:13.5px;color:#fff;
+  background:var(--teal);border:none;border-radius:9px;padding:11px 20px;cursor:pointer}
+.ipg-sb-fb-submit:hover{background:#0a5a5e}
+.ipg-sb-fb-submit:disabled{opacity:.55;cursor:default}
+.ipg-sb-fb-status{font-size:12.5px;color:var(--ink-mid)}
+.ipg-sb-fb-status.err{color:#9c3b2e}
+.ipg-sb-fb-done{text-align:center;padding:22px 6px}
+.ipg-sb-fb-done .big{font-size:36px;line-height:1;color:var(--sage)}
+.ipg-sb-fb-done p{margin-top:12px;font-size:14.5px;color:var(--ink);line-height:1.5}
+
+/* RESPONSIVE — one breakpoint scale (the council carries three that disagree;
+   normalised here to its dominant ≤600px, per SBVOTE-2 B.4). */
+@media(max-width:600px){
+  #ipg-sb-app .ipg-sb-head,#ipg-sb-app .ipg-sb-body{padding-left:18px;padding-right:18px}
+  #ipg-sb-app .ipg-sb-foot{padding-left:18px;padding-right:18px}
+  #ipg-sb-app .ipg-sb-rec-vote{grid-template-columns:1fr}
+  #ipg-sb-app .ipg-sb-rec-right{justify-self:start}
+  .ipg-sb-fb-fab{right:14px;bottom:14px;padding:10px 13px;font-size:12px}
+  .ipg-sb-modal-overlay{padding:0;align-items:stretch}
+  .ipg-sb-modal{border-radius:0;min-height:100vh;padding:24px 18px 20px;max-width:100vw}
+}
 </style>
 
 <script>
@@ -146,13 +325,13 @@ const IPG_SB_CONFIG = {
 
   // ==========================================================
   // THE RENDER BOUNDARY — D-1's four-value map, declared as data.
-  // Four pairs, visible in one place. Nothing upstream translates.
+  // Four pairs, visible in one place, serving EVERY view.
   // ==========================================================
   var POSITION_DISPLAY = {
-    'Affirmative':  { label:'Yes',          cls:'pill-aff',      recorded:true  },
-    'Oppositional': { label:'No',           cls:'pill-opp',      recorded:true  },
-    'Neutral':      { label:'Present',      cls:'pill-neu',      recorded:true  },
-    '-':            { label:'Not recorded', cls:'pill-norecord', recorded:false }
+    'Affirmative':  { label:'Yes',          cls:'pill-aff',      rec:'aff',      mx:'mx-aff', recorded:true  },
+    'Oppositional': { label:'No',           cls:'pill-opp',      rec:'opp',      mx:'mx-opp', recorded:true  },
+    'Neutral':      { label:'Present',      cls:'pill-neu',      rec:'neu',      mx:'mx-neu', recorded:true  },
+    '-':            { label:'Not recorded', cls:'pill-norecord', rec:'norecord', mx:'mx-na',  recorded:false }
   };
   var NOT_RECORDED = '-';
 
@@ -168,6 +347,38 @@ const IPG_SB_CONFIG = {
     vacant: 'Vacant'
   };
 
+  // Feedback copy — the council's set transcribed verbatim (SBVOTE-2 G1 census),
+  // with exactly three ratified deltas: the subject prefix (in IPG_SB_FEEDBACK),
+  // the placeholder, and the context disclosure.
+  var FB = {
+    fab: 'Feedback',
+    trigger: 'Report a correction or bug',
+    kicker: 'Help us keep this accurate',
+    title: 'Report a correction or bug',
+    intro: 'Tell us what looks wrong or what we’re missing — the more specific, the faster we can fix it.',
+    contextLabel: 'What you’re viewing:',
+    disclosure: "Sending this report includes what you’re viewing — the seat, member, and vote on screen — so we can find the issue faster.",
+    typeLabel: 'Type',
+    types: ['Data correction','Missing data / addition','Bug or display issue','General comment'],
+    commentLabel: 'What’s wrong / what to add',
+    required: '(required)',
+    optional: '(optional)',
+    placeholder: "e.g. Seat 3B’s vote on the budget is shown as Yes, but the Board minutes show No.",
+    linkLabel: 'Source / link with the correct info',
+    shots: 'Have a screenshot? After sending this, email it to ',
+    shotsTail: ' and mention what you reported — we’ll match it to this report.',
+    nameLabel: 'Your name',
+    emailLabel: 'Your email',
+    emailHint: '(optional — only if you’d like a reply)',
+    submit: 'Send to IPG',
+    needComment: 'Please add a short description first.',
+    sending: 'Sending…',
+    thanks: 'Thank you — your report reached the IPG team. We review every submission. Have a screenshot? Email it to ',
+    failed: 'Couldn’t send just now — ',
+    failedLink: 'email it instead',
+    mailtoDone: 'Your email app should have opened with the details filled in. (No mail app? Email '
+  };
+
   function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 
@@ -176,16 +387,17 @@ const IPG_SB_CONFIG = {
     // An unmapped value is a defect, not a fifth state: show it rather than
     // silently bucketing it (the council tool's posKey folds unknowns into
     // "absent", which is exactly how a mis-mapped value hides).
-    if(!d) return { label:'Unrecognised value: '+String(v), cls:'pill-norecord', recorded:false };
+    if(!d) return { label:'Unrecognised value: '+String(v), cls:'pill-norecord',
+                    rec:'norecord', mx:'mx-na', recorded:false };
     return d;
   }
-  function pill(v){ var d = display(v);
-    return '<span class="sb-pill '+d.cls+'">'+esc(d.label)+'</span>'; }
+  function pill(v){ var d=display(v); return '<span class="ipg-sb-pill '+d.cls+'">'+esc(d.label)+'</span>'; }
+  function recPos(v){ var d=display(v); return '<span class="ipg-sb-rec-pos '+d.rec+'">'+esc(d.label)+'</span>'; }
 
   // ---- roster helpers -------------------------------------------------
-  // A row describes a MEMBER iff `name` is non-blank. The same predicate
-  // the artifact's own validation uses (D-2 as amended) — vacancy semantics
-  // are not re-derived here.
+  // A row describes a MEMBER iff `name` is non-blank — the same predicate the
+  // artifact's own validation uses (D-2 as amended). Vacancy semantics are not
+  // re-derived here.
   function isMember(m){ return !!String(m && m.name || '').trim(); }
   function members(){ return (D && D.members || []).filter(isMember); }
   function seatRow(seat){ return (D && D.members || []).filter(function(m){ return m.seat===seat; })[0] || null; }
@@ -221,150 +433,179 @@ const IPG_SB_CONFIG = {
       return display(seatPosition(vm, seat)).recorded; });
   }
   function voteCount(){ return ((D && D.rollcall || {}).votes || []).length; }
+  function votesSorted(){
+    return (((D&&D.rollcall||{}).votes)||[]).slice().sort(function(a,b){
+      return String(b.date||'').localeCompare(String(a.date||'')); });
+  }
+  function metaByVoteId(){
+    var m={}; (D&&D.votemeta||[]).forEach(function(vm){ if(vm.vote_id) m[vm.vote_id]=vm; }); return m;
+  }
 
-  // ---- views ----------------------------------------------------------
+  // ---- chrome ---------------------------------------------------------
+  var TABS = [['member','By member'],['record','Complete record'],
+              ['matrix','All seats'],['methodology','Methodology']];
+
   function head(){
-    var h = '<h1 class="sb-title">How is your Chicago Board of Education member voting?</h1>';
-    h += '<p class="sb-sub">Recorded votes of the seated Board, by member and by seat.</p>';
-    h += '<div class="sb-nav">';
-    [['member','By member'],['record','Complete record'],['methodology','Methodology']]
-      .forEach(function(p){
-        h += '<button type="button" data-view="'+p[0]+'" aria-current="'+(state.view===p[0])+'">'+p[1]+'</button>';
-      });
-    h += '</div>';
-    return h;
+    return '<div class="ipg-sb-head">'
+      + '<h1 class="ipg-sb-title serif">How is your Chicago Board of Education member voting?</h1>'
+      + '<p class="ipg-sb-sub">Recorded votes of the seated Board, by member and by seat.</p></div>'
+      + '<div class="ipg-sb-tabs">' + TABS.map(function(p){
+          return '<button type="button" class="ipg-sb-tab'+(state.view===p[0]?' active':'')
+               + '" data-view="'+p[0]+'">'+p[1]+'</button>'; }).join('') + '</div>';
   }
 
   // Empty state at the whole-tool grain — string 1. This is the BORN STATE:
   // a roster with zero votes renders this, never an error and never a blank.
   function emptyToolCard(){
-    return '<div class="sb-card"><div class="sb-empty">'+esc(S.emptyTool)+'</div></div>';
+    return '<div class="ipg-sb-card"><div class="ipg-sb-empty">'+esc(S.emptyTool)+'</div></div>';
   }
-
-  function memberView(){
-    var roster = (D.members||[]);
-    if(!roster.length) return '<div class="sb-card"><div class="sb-empty">No roster is available yet.</div></div>';
-
-    if(state.seat==null) state.seat = (members()[0]||roster[0]).seat;
-    var row = seatRow(state.seat);
-
-    var h = '<div class="sb-card">';
-    h += '<div class="sb-row"><label for="sb-seat-sel">Seat</label>';
-    h += '<select id="sb-seat-sel">';
-    roster.forEach(function(m){
+  function seatSelector(){
+    var h = '<div class="ipg-sb-card"><div class="ipg-sb-row"><label for="ipg-sb-seat-sel">Seat</label>'
+          + '<select id="ipg-sb-seat-sel">';
+    (D.members||[]).forEach(function(m){
       // The vacancy APPEARS in the selector — the seat is a real fact about
       // the board — and selecting it reaches a seat notice, not a member page.
       h += '<option value="'+esc(m.seat)+'"'+(m.seat===state.seat?' selected':'')+'>'
          + esc(m.seat)+' — '+esc(memberLabel(m))+'</option>';
     });
-    h += '</select></div></div>';
+    return h + '</select></div></div>';
+  }
 
-    if(!row) return h + '<div class="sb-card"><div class="sb-empty">That seat is not in the roster.</div></div>';
+  function memberView(){
+    var roster = (D.members||[]);
+    if(!roster.length) return '<div class="ipg-sb-card"><div class="ipg-sb-empty">No roster is available yet.</div></div>';
+    if(state.seat==null) state.seat = (members()[0]||roster[0]).seat;
+    var row = seatRow(state.seat);
+    var h = seatSelector();
+    if(!row) return h + '<div class="ipg-sb-card"><div class="ipg-sb-empty">That seat is not in the roster.</div></div>';
 
     // ---- string 5: the vacancy renders as a SEAT, with NO member page ----
     if(!isMember(row)){
-      h += '<div class="sb-card">';
-      h += '<div class="sb-seat">Seat '+esc(row.seat)+'</div>';
-      h += '<div class="sb-name">'+esc(S.vacant)+'</div>';
-      h += '<div class="sb-meta">This seat is currently vacant. There is no member page for a seat with no member.</div>';
-      h += '</div>';
-      return h;
+      return h + '<div class="ipg-sb-card">'
+        + '<div class="ipg-sb-seat">Seat '+esc(row.seat)+'</div>'
+        + '<div class="ipg-sb-name serif">'+esc(S.vacant)+'</div>'
+        + '<div class="ipg-sb-meta">This seat is currently vacant. There is no member page for a seat with no member.</div>'
+        + '</div>';
     }
 
-    h += '<div class="sb-card">';
-    h += '<div class="sb-seat">Seat '+esc(row.seat)+'</div>';
-    // ---- string 2: the badge marks the EXCEPTION; elected members carry none
-    h += '<div class="sb-name">'+esc(row.name)
-       + (row.seat_type==='appointed' ? '<span class="sb-badge">'+esc(S.appointed)+'</span>' : '')
+    h += '<div class="ipg-sb-card">'
+       + '<div class="ipg-sb-seat">Seat '+esc(row.seat)+'</div>'
+       // ---- string 2: the badge marks the EXCEPTION; elected carry none ----
+       + '<div class="ipg-sb-name serif">'+esc(row.name)
+       + (row.seat_type==='appointed' ? '<span class="ipg-sb-badge">'+esc(S.appointed)+'</span>' : '')
        + '</div>';
     var meta = [];
     if(row.term_start) meta.push('Term began '+esc(row.term_start));
     if(row.source_url) meta.push('<a href="'+esc(row.source_url)+'" target="_blank" rel="noopener">Source</a>');
-    if(meta.length) h += '<div class="sb-meta">'+meta.join(' &middot; ')+'</div>';
+    if(meta.length) h += '<div class="ipg-sb-meta">'+meta.join(' &middot; ')+'</div>';
     h += '</div>';
 
-    // ---- votes for this member ----
     if(!voteCount()) return h + emptyToolCard();
-
-    // string 3 — roster present, this member has no recorded position on anything
-    if(!hasAnyRecordedPosition(row.seat)){
-      h += '<div class="sb-card"><div class="sb-empty">'+esc(S.noVotesForMember)+'</div></div>';
-      return h;
-    }
+    // string 3 — roster present, no recorded position on anything
+    if(!hasAnyRecordedPosition(row.seat))
+      return h + '<div class="ipg-sb-card"><div class="ipg-sb-empty">'+esc(S.noVotesForMember)+'</div></div>';
 
     var tags = allTags();
-    h += '<div class="sb-card">';
+    h += '<div class="ipg-sb-card">';
     if(tags.length){
-      h += '<div class="sb-chips">';
+      h += '<div class="ipg-sb-chips">';
       ['All'].concat(tags).forEach(function(t){
-        h += '<button type="button" class="sb-chip" data-tag="'+esc(t)+'" aria-pressed="'+(state.tag===t)+'">'+esc(t)+'</button>';
+        h += '<button type="button" class="ipg-sb-chip" data-tag="'+esc(t)+'" aria-pressed="'+(state.tag===t)+'">'+esc(t)+'</button>';
       });
       h += '</div>';
     }
     var shown = (D.votemeta||[]).filter(function(vm){
       return state.tag==='All' || voteTags(vm).indexOf(state.tag)>=0; });
     if(!shown.length){
-      h += '<div class="sb-empty">No votes carry the tag &ldquo;'+esc(state.tag)+'&rdquo;.</div>';
+      h += '<div class="ipg-sb-empty">No votes carry the tag &ldquo;'+esc(state.tag)+'&rdquo;.</div>';
     } else {
       shown.forEach(function(vm){
-        h += '<div class="sb-vote">';
-        h += '<h4>'+esc(vm.full || vm.code)+' '+pill(seatPosition(vm, row.seat))+'</h4>';
-        if(vm.date) h += '<div class="sb-when">'+esc(vm.date)+'</div>';
-        if(vm.desc) h += '<p>'+esc(vm.desc)+'</p>';
-        if(vm.source_url) h += '<div class="sb-when"><a href="'+esc(vm.source_url)+'" target="_blank" rel="noopener">Source</a></div>';
-        h += '</div>';
+        h += '<div class="ipg-sb-vote">'
+           + '<h4>'+esc(vm.full || vm.code)+' '+pill(seatPosition(vm, row.seat))+'</h4>'
+           + (vm.date ? '<div class="ipg-sb-when">'+esc(vm.date)+'</div>' : '')
+           + (vm.desc ? '<p>'+esc(vm.desc)+'</p>' : '')
+           + (vm.source_url ? '<div class="ipg-sb-when"><a href="'+esc(vm.source_url)+'" target="_blank" rel="noopener">Source</a></div>' : '')
+           + '</div>';
       });
     }
-    h += '</div>';
-    return h;
+    return h + '</div>';
   }
 
+  // Complete record — CARD-PER-VOTE for the selected seat, the council's
+  // .rec-vote idiom (SBVOTE-2 B.3). Not a matrix; the all-seats grid is its
+  // own view, exactly as the council splits them.
   function recordView(){
     if(!voteCount()) return emptyToolCard();
-    var roster = (D.members||[]);
-    var votes = (((D.rollcall||{}).votes)||[]).slice().sort(function(a,b){
-      return String(b.date||'').localeCompare(String(a.date||'')); });
-
-    var tags = allTags();
-    var h = '<div class="sb-card">';
-    h += '<div class="sb-row"><label for="sb-rec-q">Search</label>'
-       + '<input id="sb-rec-q" type="search" placeholder="Title or description" value="'+esc(state.recQuery)+'"/></div>';
+    if(state.seat==null) state.seat = (members()[0]||(D.members||[])[0]).seat;
+    var row = seatRow(state.seat);
+    var h = seatSelector();
+    if(row && !isMember(row)){
+      return h + '<div class="ipg-sb-card"><div class="ipg-sb-empty">'
+        + esc(S.vacant)+' — this seat has no member, so it has no voting record.</div></div>';
+    }
+    var meta = metaByVoteId(), tags = allTags();
+    h += '<div class="ipg-sb-card">'
+       + '<div class="ipg-sb-row"><label for="ipg-sb-rec-q">Search</label>'
+       + '<input id="ipg-sb-rec-q" type="search" placeholder="Title or description" value="'+esc(state.recQuery)+'"/></div>';
     if(tags.length){
-      h += '<div class="sb-chips">';
+      h += '<div class="ipg-sb-chips">';
       ['All'].concat(tags).forEach(function(t){
-        h += '<button type="button" class="sb-chip" data-rectag="'+esc(t)+'" aria-pressed="'+(state.recTag===t)+'">'+esc(t)+'</button>';
+        h += '<button type="button" class="ipg-sb-chip" data-rectag="'+esc(t)+'" aria-pressed="'+(state.recTag===t)+'">'+esc(t)+'</button>';
       });
       h += '</div>';
     }
-    var meta = {}; (D.votemeta||[]).forEach(function(vm){ if(vm.vote_id) meta[vm.vote_id]=vm; });
     var q = state.recQuery.trim().toLowerCase();
-    var rows = votes.filter(function(v){
+    var rows = votesSorted().filter(function(v){
       var vm = meta[v.id]||{};
       if(state.recTag!=='All' && voteTags(vm).indexOf(state.recTag)<0) return false;
       if(!q) return true;
       return (String(v.title||'')+' '+String(vm.desc||'')).toLowerCase().indexOf(q)>=0;
     });
-    if(!rows.length){
-      h += '<div class="sb-empty">No votes match this filter.</div></div>';
-      return h;
-    }
-    h += '<div class="sb-scroll"><table><thead><tr><th>Vote</th><th>Date</th>';
-    roster.forEach(function(m){ h += '<th>'+esc(m.seat)+'</th>'; });
-    h += '</tr></thead><tbody>';
+    if(!rows.length) return h + '<div class="ipg-sb-empty">No votes match these filters.</div></div>';
+    h += '<div class="ipg-sb-rec">';
     rows.forEach(function(v){
-      h += '<tr><td>'+esc(v.title||v.id)+'</td><td>'+esc(v.date||'')+'</td>';
-      roster.forEach(function(m){
+      var vm = meta[v.id]||{}, tag = vm.tag||v.tag;
+      var p = (v.positions && v.positions[String(state.seat)]);
+      h += '<div class="ipg-sb-rec-vote"><div>'
+         + '<div class="ipg-sb-rec-meta">'+(v.date?esc(v.date):'')
+         + (tag?'<span class="ipg-sb-rec-tag">'+esc(tag)+'</span>':'')+'</div>'
+         + '<div class="ipg-sb-rec-title">'+esc(v.title||vm.full||v.id)+'</div></div>'
+         + '<div class="ipg-sb-rec-right">'+recPos(p==null||p===''?NOT_RECORDED:p)+'</div>'
+         + '</div>';
+    });
+    return h + '</div></div>';
+  }
+
+  // All-seats matrix — the council's compare-by-issue idiom WITH its legend.
+  function matrixView(){
+    if(!voteCount()) return emptyToolCard();
+    var roster = (D.members||[]), votes = votesSorted();
+    var h = '<div class="ipg-sb-card">';
+    h += '<div class="ipg-sb-mx-legend"><strong>Key:</strong>';
+    ['Affirmative','Oppositional','Neutral','-'].forEach(function(k){
+      var d = display(k);
+      h += '<span class="mx-key '+d.mx+'">'+esc(d.label)+'</span>';
+    });
+    h += '</div>';
+    h += '<div class="ipg-sb-matrix-wrap"><table class="ipg-sb-matrix"><thead><tr>'
+       + '<th class="seat-col">Seat</th>';
+    votes.forEach(function(v){ h += '<th>'+esc(v.title||v.id)+'</th>'; });
+    h += '</tr></thead><tbody>';
+    roster.forEach(function(m){
+      h += '<tr'+(isMember(m)?'':' class="vacant-row"')+'>'
+         + '<td class="seat-col">'+esc(m.seat)+' — '+esc(memberLabel(m))+'</td>';
+      votes.forEach(function(v){
         var p = (v.positions && v.positions[String(m.seat)]);
-        h += '<td>'+pill(p==null||p===''?NOT_RECORDED:p)+'</td>';
+        var d = display(p==null||p===''?NOT_RECORDED:p);
+        h += '<td class="'+d.mx+'">'+esc(d.label)+'</td>';
       });
       h += '</tr>';
     });
-    h += '</tbody></table></div></div>';
-    return h;
+    return h + '</tbody></table></div></div>';
   }
 
   function methodologyView(){
-    var h = '<div class="sb-card sb-meth">';
+    var h = '<div class="ipg-sb-card ipg-sb-meth">';
     h += '<h3>How this tool works</h3>';
     // ---- string 4, verbatim ----
     h += '<p>'+esc(S.methodology)+'</p>';
@@ -382,43 +623,166 @@ const IPG_SB_CONFIG = {
     h += '<p>Appointed members are labelled; elected members are not, because election is the '
        + 'default this tool exists to track. A seat with no member is shown as '
        + esc(S.vacant)+' and has no member page.</p>';
-    h += '</div>';
-    return h;
+    h += '<h3>Spotted something wrong?</h3>';
+    h += '<p>We rely on readers to help us keep this accurate.<br>'
+       + '<button type="button" class="ipg-sb-fb-btn">'+esc(FB.trigger)+'</button></p>';
+    return h + '</div>';
   }
 
   function render(){
-    var h = head();
+    var h = head() + '<div class="ipg-sb-body">';
     if(state.status==='loading'){
-      h += '<div class="sb-card"><div class="sb-empty">Loading Board voting data&hellip;</div></div>';
+      h += '<div class="ipg-sb-card"><div class="ipg-sb-empty">Loading Board voting data&hellip;</div></div>';
     } else if(state.status==='error'){
       // A stated error, never a blank page — the council embed's idiom.
-      h += '<div class="sb-card"><div class="sb-err"><strong>Could not load Board voting data.</strong><br/>'
+      h += '<div class="ipg-sb-card"><div class="ipg-sb-err"><strong>Could not load Board voting data.</strong><br/>'
          + esc(state.error||'unknown error')
          + '<br/>The data file may be temporarily unavailable. Please try again shortly.</div></div>';
-    } else if(state.view==='member'){
-      h += memberView();
-    } else if(state.view==='record'){
-      h += recordView();
-    } else {
-      h += methodologyView();
-    }
-    h += '<div class="sb-foot">Institute for the Public Good</div>';
+    } else if(state.view==='member'){    h += memberView();
+    } else if(state.view==='record'){    h += recordView();
+    } else if(state.view==='matrix'){    h += matrixView();
+    } else {                             h += methodologyView(); }
+    h += '</div><div class="ipg-sb-foot"><strong>Institute for the Public Good</strong> &middot; '
+       + 'Vote positions are entered from public Board of Education records.</div>';
     app.innerHTML = h;
     wire();
+    mountFab();
   }
 
   function wire(){
     app.querySelectorAll('[data-view]').forEach(function(b){
       b.onclick = function(){ state.view = b.getAttribute('data-view'); render(); }; });
-    var sel = document.getElementById('sb-seat-sel');
+    var sel = document.getElementById('ipg-sb-seat-sel');
     if(sel) sel.onchange = function(){ state.seat = sel.value; state.tag='All'; render(); };
     app.querySelectorAll('[data-tag]').forEach(function(b){
       b.onclick = function(){ state.tag = b.getAttribute('data-tag'); render(); }; });
     app.querySelectorAll('[data-rectag]').forEach(function(b){
       b.onclick = function(){ state.recTag = b.getAttribute('data-rectag'); render(); }; });
-    var q = document.getElementById('sb-rec-q');
+    var q = document.getElementById('ipg-sb-rec-q');
     if(q) q.oninput = function(){ state.recQuery = q.value; var p=q.selectionStart; render();
-      var n=document.getElementById('sb-rec-q'); if(n){ n.focus(); n.setSelectionRange(p,p);} };
+      var n=document.getElementById('ipg-sb-rec-q'); if(n){ n.focus(); n.setSelectionRange(p,p);} };
+    app.querySelectorAll('.ipg-sb-fb-btn').forEach(function(b){ b.onclick = openFeedback; });
+  }
+
+  // ---- feedback -------------------------------------------------------
+  function fbContext(){
+    var bits = [];
+    var name = ({member:'By member',record:'Complete record',matrix:'All seats',
+                 methodology:'Methodology'})[state.view] || state.view;
+    bits.push('View: '+name);
+    if(state.seat){
+      var r = seatRow(state.seat);
+      bits.push('Seat '+state.seat+(r && isMember(r) ? ' — '+r.name : ' — '+S.vacant));
+    }
+    if(state.tag && state.tag!=='All') bits.push('Tag: '+state.tag);
+    if(state.recTag && state.recTag!=='All') bits.push('Record tag: '+state.recTag);
+    return bits.join(' · ');
+  }
+
+  function mountFab(){
+    if(IPG_SB_FEEDBACK.floatingButton===false) return;
+    if(document.getElementById('ipg-sb-fb-fab')) return;
+    var fab = document.createElement('button');
+    fab.id='ipg-sb-fb-fab'; fab.className='ipg-sb-fb-fab'; fab.type='button';
+    fab.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
+      +'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+      +'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
+      +'<span>'+esc(FB.fab)+'</span>';
+    fab.onclick = openFeedback;
+    document.body.appendChild(fab);
+  }
+
+  function openFeedback(){
+    if(document.getElementById('ipg-sb-fb-overlay')) return;
+    var o = document.createElement('div');
+    o.className='ipg-sb-modal-overlay'; o.id='ipg-sb-fb-overlay';
+    o.innerHTML =
+      '<div class="ipg-sb-modal" role="dialog" aria-modal="true" aria-label="'+esc(FB.title)+'">'
+      + '<button class="ipg-sb-modal-close" id="ipg-sb-fb-close" aria-label="Close">×</button>'
+      + '<div class="ipg-sb-modal-head"><div class="ipg-sb-modal-kicker">'+esc(FB.kicker)+'</div>'
+      + '<div class="ipg-sb-modal-name">'+esc(FB.title)+'</div>'
+      + '<div class="ipg-sb-modal-meta">'+esc(FB.intro)+'</div></div>'
+      + '<div id="ipg-sb-fb-body">'
+      + '<div class="ipg-sb-fb-context"><strong>'+esc(FB.contextLabel)+'</strong> '+esc(fbContext())
+      // ---- ratified delta 3: the context capture is disclosed ----
+      + '<br>'+esc(FB.disclosure)+'</div>'
+      + '<div class="ipg-sb-fb-field"><label for="ipg-sb-fb-type">'+esc(FB.typeLabel)+'</label>'
+      + '<select id="ipg-sb-fb-type">'
+      + FB.types.map(function(t){ return '<option>'+esc(t)+'</option>'; }).join('')
+      + '</select></div>'
+      + '<div class="ipg-sb-fb-field"><label for="ipg-sb-fb-comment">'+esc(FB.commentLabel)
+      + ' <span class="ipg-sb-fb-hint">'+esc(FB.required)+'</span></label>'
+      // ---- ratified delta 2: the placeholder, re-authored for seats ----
+      + '<textarea id="ipg-sb-fb-comment" placeholder="'+esc(FB.placeholder)+'"></textarea></div>'
+      + '<div class="ipg-sb-fb-field"><label for="ipg-sb-fb-link">'+esc(FB.linkLabel)
+      + ' <span class="ipg-sb-fb-hint">'+esc(FB.optional)+'</span></label>'
+      + '<input type="url" id="ipg-sb-fb-link" placeholder="https://…"></div>'
+      + '<div class="ipg-sb-fb-field"><label>Screenshots</label><div class="ipg-sb-fb-hint">'
+      + esc(FB.shots)+'<a href="mailto:'+esc(IPG_SB_FEEDBACK.email)+'">'+esc(IPG_SB_FEEDBACK.email)+'</a>'
+      + esc(FB.shotsTail)+'</div></div>'
+      + '<div class="ipg-sb-fb-field"><label for="ipg-sb-fb-name">'+esc(FB.nameLabel)
+      + ' <span class="ipg-sb-fb-hint">'+esc(FB.optional)+'</span></label><input type="text" id="ipg-sb-fb-name"></div>'
+      + '<div class="ipg-sb-fb-field"><label for="ipg-sb-fb-email">'+esc(FB.emailLabel)
+      + ' <span class="ipg-sb-fb-hint">'+esc(FB.emailHint)+'</span></label><input type="email" id="ipg-sb-fb-email"></div>'
+      + '<div class="ipg-sb-fb-actions"><button class="ipg-sb-fb-submit" id="ipg-sb-fb-submit">'+esc(FB.submit)+'</button>'
+      + '<span class="ipg-sb-fb-status" id="ipg-sb-fb-status"></span></div>'
+      + '</div></div>';
+    document.body.appendChild(o);
+    document.getElementById('ipg-sb-fb-close').onclick = closeFeedback;
+    o.onclick = function(e){ if(e.target===o) closeFeedback(); };
+    document.getElementById('ipg-sb-fb-submit').onclick = submitFeedback;
+  }
+  function closeFeedback(){
+    var o = document.getElementById('ipg-sb-fb-overlay'); if(o) o.remove();
+  }
+  function fbMailto(type,comment,link,name,email,ctx){
+    return 'mailto:'+encodeURIComponent(IPG_SB_FEEDBACK.email)
+      + '?subject='+encodeURIComponent(IPG_SB_FEEDBACK.subjectPrefix+type)
+      + '&body='+encodeURIComponent(comment+'\n\n'+(link?('Source: '+link+'\n'):'')
+        + (name?('From: '+name+'\n'):'')+(email?('Reply to: '+email+'\n'):'')+'\n'+ctx);
+  }
+  function fbDone(msg){
+    var b = document.getElementById('ipg-sb-fb-body');
+    if(b) b.innerHTML = '<div class="ipg-sb-fb-done"><div class="big">✓</div><p>'+esc(msg)+'</p></div>';
+  }
+  function submitFeedback(){
+    var g = function(id){ return document.getElementById(id); };
+    var comment = (g('ipg-sb-fb-comment').value||'').trim();
+    var status = g('ipg-sb-fb-status');
+    if(!comment){ status.className='ipg-sb-fb-status err'; status.textContent=FB.needComment; return; }
+    var type=g('ipg-sb-fb-type').value, link=(g('ipg-sb-fb-link').value||'').trim();
+    var name=(g('ipg-sb-fb-name').value||'').trim(), email=(g('ipg-sb-fb-email').value||'').trim();
+    var ctx=fbContext();
+    if(IPG_SB_FEEDBACK.endpoint){
+      var btn=g('ipg-sb-fb-submit'); btn.disabled=true;
+      status.className='ipg-sb-fb-status'; status.textContent=FB.sending;
+      var fd=new FormData();
+      if(IPG_SB_FEEDBACK.accessKey) fd.append('access_key',IPG_SB_FEEDBACK.accessKey);
+      // The per-tool identifier: both voting tools share one inbox and sort by prefix.
+      fd.append('subject', IPG_SB_FEEDBACK.subjectPrefix+type);
+      fd.append('from_name', name||'IPG tool visitor');
+      if(email) fd.append('email',email);
+      fd.append('type',type);
+      fd.append('comment',comment);
+      if(link) fd.append('link',link);
+      fd.append('context',ctx);
+      fetch(IPG_SB_FEEDBACK.endpoint,{method:'POST',headers:{'Accept':'application/json'},body:fd})
+        .then(function(r){ return r.json().catch(function(){ return {}; })
+          .then(function(j){ return r.ok && j.success!==false && j.ok!==false; }); })
+        .then(function(ok){
+          if(!ok) throw new Error('bad response');
+          fbDone(FB.thanks+IPG_SB_FEEDBACK.email+'.');
+        })
+        .catch(function(){
+          btn.disabled=false; status.className='ipg-sb-fb-status err'; status.textContent=FB.failed;
+          var a=document.createElement('a');
+          a.href=fbMailto(type,comment,link,name,email,ctx); a.textContent=FB.failedLink;
+          a.style.color='var(--sage)'; status.appendChild(a);
+        });
+    } else {
+      window.location.href=fbMailto(type,comment,link,name,email,ctx);
+      fbDone(FB.mailtoDone+IPG_SB_FEEDBACK.email+' directly.)');
+    }
   }
 
   function loadData(){

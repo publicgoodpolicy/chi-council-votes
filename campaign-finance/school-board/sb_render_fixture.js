@@ -42,7 +42,7 @@ var REAL = JSON.parse(fs.readFileSync(DATA, 'utf8'));
 var sha = function (p) { return crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex'); };
 var EMBED_SHA0 = sha(EMBED), DATA_SHA0 = sha(DATA);
 
-var n = 0, fail = 0;
+var n = 0, fail = 0, POSTED = null;
 function ok(label, cond, detail) {
   n++; if (!cond) fail++;
   console.log((cond ? 'PASS  ' : 'FAIL  ') + label + (cond || !detail ? '' : '\n        ' + detail));
@@ -56,7 +56,15 @@ function boot(data, mode) {
     var dom = new JSDOM('<!doctype html><html><body>' + EMBED_HTML + '</body></html>', {
       runScripts: 'dangerously', pretendToBeVisual: true,
       beforeParse: function (w) {
-        w.fetch = function (u) {
+        w.fetch = function (u, opts) {
+          // HARD GUARD: the fixture must never submit. A POST from any code path —
+          // including an accidental click on the feedback submit button — aborts the
+          // run rather than being quietly shimmed away (authorization stop condition:
+          // "any POST to the feedback endpoint from any code path including the fixture").
+          if (opts && String(opts.method || '').toUpperCase() === 'POST') {
+            POSTED = String(u);
+            throw new Error('FIXTURE POSTED to ' + u + ' — forbidden');
+          }
           if (mode === 'fail') return Promise.reject(new Error('network unreachable'));
           return String(u).indexOf('school-board-data.json') >= 0
             ? Promise.resolve({ ok: true, json: function () { return Promise.resolve(data); } })
@@ -73,7 +81,7 @@ function boot(data, mode) {
   });
 }
 function pick(v, seat) {                       // select a seat and re-render
-  var s = v.doc.getElementById('sb-seat-sel');
+  var s = v.doc.getElementById('ipg-sb-seat-sel');
   s.value = seat; s.onchange();
   return { doc: v.doc, app: v.app, html: v.app.innerHTML, text: v.app.textContent || '' };
 }
@@ -104,7 +112,7 @@ var S5 = regString(/\*\*Vacant seat label:\*\* `([^`]+)`/);
   ok('[C3/1] born artifact (0 votes) renders string 1 verbatim, not a blank and not an error',
      born.text.indexOf(S1) >= 0);
   ok('[C3/1] the born state is NOT an error state',
-     born.html.indexOf('sb-err') < 0);
+     born.html.indexOf('ipg-sb-err') < 0);
 
   // ---------- C3 state 2: every member has no positions -> string 3 -------
   // With votes present but every cell blank, the member surface must say string 3
@@ -132,8 +140,8 @@ var S5 = regString(/\*\*Vacant seat label:\*\* `([^`]+)`/);
   ok('[C3/3] the vacant seat renders string 5 at the seat label',
      vv.text.indexOf(S5) >= 0);
   ok('[C3/3] the vacancy has NO member page: no badge, no term, no source, no votes section',
-     vv.html.indexOf('sb-badge') < 0 && vv.text.indexOf('Term began') < 0
-       && vv.html.indexOf('sb-vote') < 0);
+     vv.html.indexOf('ipg-sb-badge') < 0 && vv.text.indexOf('Term began') < 0
+       && vv.html.indexOf('ipg-sb-vote') < 0);
   ok('[C3/3] the vacant seat still APPEARS in the selector (the seat is a real fact)',
      born.html.indexOf('>' + vac.seat + ' — ' + S5 + '<') >= 0);
 
@@ -171,12 +179,13 @@ var S5 = regString(/\*\*Vacant seat label:\*\* `([^`]+)`/);
   // The complete-record view is the other surface a `-` reaches.
   var rec = nav(v4, 'record');
   ok('[C3/4] the complete-record view renders `-` as Not recorded too',
-     rec.text.indexOf('Not recorded') >= 0 && rec.html.indexOf('pill-norecord') >= 0);
+     rec.text.indexOf('Not recorded') >= 0
+       && rec.html.indexOf('ipg-sb-rec-pos norecord') >= 0);
 
   // ---------- C3 state 5: fetch failure -> a stated error, not a blank ----
   var errv = await boot(REAL, 'fail');
   ok('[C3/5] a failed fetch renders a stated error, not a blank page',
-     errv.html.indexOf('sb-err') >= 0 && errv.text.indexOf('Could not load') >= 0);
+     errv.html.indexOf('ipg-sb-err') >= 0 && errv.text.indexOf('Could not load') >= 0);
   ok('[C3/5] the error names the cause rather than swallowing it',
      errv.text.indexOf('network unreachable') >= 0);
 
@@ -185,9 +194,9 @@ var S5 = regString(/\*\*Vacant seat label:\*\* `([^`]+)`/);
   var elected = REAL.members.filter(function (m) { return m.seat_type === 'elected'; })[0];
   var av = pick(born, appointed.seat), ev = pick(born, elected.seat);
   ok('[S2] an appointed member carries the ' + JSON.stringify(S2) + ' badge',
-     av.html.indexOf('sb-badge') >= 0 && av.text.indexOf(S2) >= 0);
+     av.html.indexOf('ipg-sb-badge') >= 0 && av.text.indexOf(S2) >= 0);
   ok('[S2] an elected member carries NO badge (the exception is what gets labeled)',
-     ev.html.indexOf('sb-badge') < 0);
+     ev.html.indexOf('ipg-sb-badge') < 0);
   var meth = nav(born, 'methodology');
   ok('[S4] the methodology surface carries string 4 verbatim',
      meth.text.indexOf(S4) >= 0);
@@ -196,12 +205,87 @@ var S5 = regString(/\*\*Vacant seat label:\*\* `([^`]+)`/);
   var mapBlock = EMBED_HTML.split('var POSITION_DISPLAY = {')[1].split('};')[0];
   ok('[MAP] POSITION_DISPLAY declares exactly four pairs',
      (mapBlock.match(/'(Affirmative|Oppositional|Neutral|-)':/g) || []).length === 4, mapBlock.trim());
-  ok('[MAP] the embed performs exactly one fetch, at the ratified refs/heads/main/ URL',
-     (EMBED_HTML.match(/fetch\(/g) || []).length === 1
-       && EMBED_HTML.indexOf('refs/heads/main/campaign-finance/school-board-data.json') >= 0);
+  // Zero coupling is a property of the DATA source. Restated at SBVOTE-2 because the
+  // feedback POST added a second fetch target; the meaning is unchanged — exactly one
+  // artifact is read, and it is the ratified one.
+  var fetchTargets = (EMBED_HTML.match(/fetch\(([A-Za-z_.]+)/g) || []);
+  ok('[MAP] exactly one DATA fetch, at the ratified refs/heads/main/ URL',
+     EMBED_HTML.indexOf('refs/heads/main/campaign-finance/school-board-data.json') >= 0
+       && (EMBED_HTML.match(/IPG_SB_CONFIG\.dataUrl/g) || []).length === 1);
+  ok('[MAP] the only other fetch target is the feedback endpoint',
+     fetchTargets.length === 2
+       && fetchTargets.some(function (f) { return f.indexOf('IPG_SB_CONFIG') >= 0; })
+       && fetchTargets.some(function (f) { return f.indexOf('IPG_SB_FEEDBACK') >= 0; }),
+     JSON.stringify(fetchTargets));
   ok('[MAP] zero coupling: the embed names no other artifact and no finance embed',
      EMBED_HTML.indexOf('council-data.json') < 0
        && EMBED_HTML.indexOf('election-data.json') < 0);
+
+  // ---------- SBVOTE-2: the parity transplants ----------------------------
+  ok('[SBV2/BAND] the full-bleed teal header band renders with the stepped accent',
+     born.html.indexOf('ipg-sb-head') >= 0
+       && EMBED_HTML.indexOf('background:var(--teal); color:var(--cream)') >= 0
+       && EMBED_HTML.indexOf('linear-gradient(90deg,var(--sage) 0 62%,var(--tan) 62% 100%)') >= 0);
+  ok('[SBV2/BAND] the title carries the serif display face and the subtitle sits in the band',
+     born.html.indexOf('ipg-sb-title serif') >= 0 && born.html.indexOf('ipg-sb-sub') >= 0);
+  ok('[SBV2/TABS] the tab strip replaces the nav pills, with one tab marked active',
+     born.html.indexOf('ipg-sb-tabs') >= 0
+       && (born.html.match(/ipg-sb-tab active/g) || []).length === 1);
+  // Structural, so it tests the CODE and not the prose: the comment of record
+  // deliberately explains that a Recoleta @font-face used to be here, and that
+  // explanation must survive. Comments are stripped before the check.
+  var EMBED_CODE = EMBED_HTML.replace(/<!--[\s\S]*?-->/g, '');
+  ok('[SBV2/FONT] Recoleta is gone as a FACE (the comment of record may still name it)',
+     EMBED_CODE.indexOf('Recoleta') < 0 && EMBED_CODE.indexOf('@font-face') < 0
+       && EMBED_CODE.indexOf('onlinewebfonts') < 0
+       && (EMBED_CODE.match(/font-family:Georgia, ui-serif, serif/g) || []).length >= 1);
+  ok('[SBV2/GREY] the warm-grey ramp is tokenised, not literal',
+     ['--ink-muted','--ink-label','--ink-mid','--ink-deep','--ink-nd']
+       .every(function (v) { return EMBED_HTML.indexOf(v + ':#') >= 0; }));
+  ok('[SBV2/BP] one breakpoint scale',
+     (EMBED_HTML.match(/@media/g) || []).length === 1
+       && EMBED_HTML.indexOf('@media(max-width:600px)') >= 0);
+
+  // Record surface: card-per-vote for the selected seat, NOT a matrix (Finding 2).
+  var recv = nav(pick(v4, subject.seat), 'record');
+  ok('[SBV2/REC] the per-member record is card-per-vote, not a matrix',
+     recv.html.indexOf('ipg-sb-rec-vote') >= 0 && recv.html.indexOf('ipg-sb-matrix') < 0);
+  ok('[SBV2/REC] it uses the solid record-chip idiom',
+     recv.html.indexOf('ipg-sb-rec-pos') >= 0);
+
+  // The all-seats grid is its own view, with the council's legend.
+  var mxv = nav(recv, 'matrix');
+  ok('[SBV2/MX] the matrix view exists as its own view',
+     mxv.html.indexOf('ipg-sb-matrix') >= 0 && mxv.html.indexOf('ipg-sb-rec-vote') < 0);
+  ok('[SBV2/MX] it carries the legend, with all four keys',
+     mxv.html.indexOf('ipg-sb-mx-legend') >= 0
+       && ['mx-aff','mx-opp','mx-neu','mx-na'].every(function (k) { return mxv.html.indexOf(k) >= 0; }));
+  ok('[SBV2/MX] every roster seat has a row, the vacancy included and marked',
+     (mxv.html.match(/class="seat-col"/g) || []).length === REAL.members.length + 1
+       && mxv.html.indexOf('vacant-row') >= 0);
+
+  // Feedback: the trigger exists and OPENS — and nothing is ever submitted.
+  var fabEl = born.doc.getElementById('ipg-sb-fb-fab');
+  ok('[SBV2/FB] the feedback trigger exists', !!fabEl);
+  fabEl.onclick();
+  var modal = born.doc.getElementById('ipg-sb-fb-overlay');
+  ok('[SBV2/FB] the trigger opens the modal', !!modal);
+  var mtext = modal ? (modal.textContent || '') : '';
+  ok('[SBV2/FB] the ratified context disclosure renders in the modal',
+     mtext.indexOf('Sending this report includes what you\u2019re viewing') >= 0);
+  ok('[SBV2/FB] the re-authored placeholder is seat-shaped, not ward-shaped',
+     (modal ? modal.innerHTML : '').indexOf('Seat 3B') >= 0
+       && (modal ? modal.innerHTML : '').indexOf('Ward 12') < 0);
+  ok('[SBV2/FB] the subject prefix identifies THIS tool',
+     EMBED_HTML.indexOf("subjectPrefix: '[IPG School Board Tool] '") >= 0);
+  ok('[SBV2/FB] no credential ships (accessKey null, no token literal)',
+     EMBED_HTML.indexOf('accessKey: null') >= 0);
+  ok('[SBV2/FB] the destination cannot reach the editorial Sheet',
+     EMBED_HTML.indexOf('sheets.googleapis.com') < 0
+       && EMBED_HTML.indexOf('auth/spreadsheets') < 0
+       && EMBED_HTML.indexOf('gspread') < 0
+       && EMBED_HTML.indexOf('docs.google.com') < 0);
+  ok('[SBV2/FB] NOTHING was POSTed by this fixture', POSTED === null, String(POSTED));
 
   // ---------- no writes ---------------------------------------------------
   ok('[NOWRITE] embed and artifact are byte-unchanged by this fixture',
