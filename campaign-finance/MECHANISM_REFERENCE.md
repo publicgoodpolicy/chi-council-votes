@@ -133,6 +133,55 @@ datacenter IPs [C1.8, SOURCED]. It runs on a human's machine, by hand.
   the run). Any future reordering that moves the cluster pass off this position re-opens a
   one-run cluster lag. Positional, therefore fragile, therefore recorded here.
 
+### Source-row selection: what the ingest steps admit
+
+Three selection rules decide which raw SBE rows enter the pipeline at all. They run
+upstream of every classification, rollup and exclusion in this document — a row these
+rules drop is not excluded from a figure, it never becomes a row — and none of them had a
+record before LEDGER-0. Each is named here by its predicate; **the phrase "IE item-4/5
+drops", used in earlier lane records, is retired rather than resolved — it resolves to no
+byte** (D10). Anchors are in §8; per-run and bulk-population figures are state and live in
+the sha'd report that measured them, with their collection named at each.
+
+- **Archived rows are dropped, at three sites** [C1.12, SOURCED]. The SBE marks a receipt
+  or expenditure row `Archived` when a later filing supersedes it — amendment supersession
+  and A-1 absorption both flow through that flag — so the live set is the non-archived
+  rows. The bulk converter keeps only non-archived rows as its selection and uses the same
+  predicate when assembling the registry cross-check input; the IE ingest applies it
+  independently on both the expenditure side and the receipts/funder side. **The rule is
+  authoritative over the alternative:** HALT-BULK-A ruled the `Archived` selection to
+  govern where it disagrees with the registry window-and-order heuristic, and the converter
+  carries a trip-wire that reports any committee where the two selections differ. This is
+  the highest-volume rule in the pipeline — it drops a large fraction of both bulk files,
+  measured by collection (receipts and expenditures separately) in the LEDGER-0 G0 report
+  [A-l0g0].
+- **The IE lane admits a row only by surviving five drops, in order** [C1.13, SOURCED],
+  each stated by its predicate because the set has been miscited as a numbered list before:
+  **archived** (above, applied first); **not marked Supporting or Opposing** — the
+  definition of an independent expenditure, and by volume the rule that does nearly all the
+  work, since only a small minority of non-archived expenditure rows carry either flag
+  [figure and collection in A-l0g0]; **unmatched target** — an expenditure naming no
+  candidate the registry resolves is out of scope, the same doctrine that puts a former
+  officeholder's IEs outside the subject; **candidate-committee spender** — a filer that
+  resolves to a non-IE committee in the registry is spending its own campaign money, not
+  making an independent expenditure, so the row is skipped; and **exact-duplicate
+  collapse** — the same committee, payee, candidate, amount, date and purpose emitted once,
+  because filers re-report an expenditure across successive filings. The first two are
+  admission rules on the raw file; the last three are resolution rules that need the
+  registry. Per-run counts for the last three are recorded in the ingest step's own `stats`
+  and are **not persisted into either artifact**, so they are recoverable only from a run's
+  output or a lane record.
+- **The converter admits only the five itemizable D2Part codes, and the rule has two
+  characters** [C1.14, SOURCED]. Its map names the receipt types the pipeline itemizes
+  (individual contribution, transfer in, loan received, other receipt, in-kind), and both
+  the selection pass and the reassembly pass require membership in it. **As a selection it
+  is dormant** — every well-formed row in the bulk receipts file carries one of those
+  codes, so the predicate excludes nothing a reader would miss [measured over the receipts
+  bulk, A-l0g0]. **As a well-formedness guard it is live**: the bulk format's occasional
+  field-shifted rows carry values in the D2Part position that are not codes at all, and
+  this is the predicate that drops them. Reading it as selection-only would invite
+  "widening" it to admit more types and silently re-admit malformed rows with them.
+
 ---
 
 ## §2 — Donor field ownership map
@@ -579,6 +628,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-seed | `campaign-finance/elections/build_election_seed.py` | `a2122eab99c8e6db401801a97e43537a4eea62ae1f7b4f13cdb03e8a761a20f7` |
 | S-vld | `campaign-finance/ingestion/validate_council_data.py` | `6c83c3d5ab25b0ea402f06ae3a0d1e456d0497f23f91527f8ce7276d19900538` |
 | S-rst | `campaign-finance/ingestion/restamp_committee_linkage.py` | `6ceb82f9bbcffa08fdb21904b8585982a6bff7e3982e0b810937e2958019d06e` |
+| S-cbr | `campaign-finance/ingestion/convert_bulk_receipts.py` | `ac33aa394c4f8905c307390160fbe397a09399199a3396b07f29f01729bbe582` |
 | S-av | `campaign-finance/sync_allvotes.py` | `2ca09ee7323741919f048e61062d54a62719f56f88f71f99b721fe965c753f69` |
 | S-cemb | `campaign-finance/elections/reference/council-embed.html` | `148b05bc6c4cff9abca1097457db6164917d932455e6c63f9579a8b7a6c371b6` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
@@ -594,6 +644,7 @@ that catch defect classes the existing gates structurally cannot see.
 | A-fw1 | `~/halt-fw-1-2026-07-23/g0-consolidated-report.md` | `43dc9f2b2e76bdf914dbbacbe0b06006485c4aa70d26b9393192bd34a55d8239` |
 | A-bbg0 | `~/halt-bulk-b-2026-07-22/g0-report.md` | `d6a65529623c7928a80ef2016f1f905af93d359a749e37dd3f150e5471aa6dc1` |
 | A-bbg1 | `~/halt-bulk-b-2026-07-22/g1-report.md` | `594c8c4da6db7a1a6d1768ff0d81eedd0c1030e3d20b56285c9a5166d96c5846` |
+| A-l0g0 | `~/ledger-0-2026-08-07/ledger-0-g0-report.md` | `39f5f5bcef4592b5823e7320d5fb6766890675c25a3befa559fc8e3e3fa0ede4` |
 
 **SOURCED rows** (`claim-id | file | line(s)`):
 
@@ -614,6 +665,12 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.7 | S-t1 | 10-16 (prior-run derivation it supersedes) |
 | C1.8 | S-bld | 4-8 (replaced the nightly Action) |
 | C1.9 | S-bld | 62, 79, 80, 86, 87, 88, 92-94 (invocation order conforming to the block; executable content verified byte-identical, comment-stripped, to the pre-amend revision recorded in the BA-1 lane) |
+| C1.12 | S-cbr | 469 (the `Archived == 'False'` selection), 357 (same predicate on the registry cross-check input), 501-508 (the disagreement trip-wire; selection ruled authoritative) |
+| C1.12 | S-ie | 234 (expenditure side), 319 (receipts/funder side) |
+| C1.13 | S-ie | 234 (archived), 235-236 (not Supporting/Opposing), 244 (unmatched target), 253-255 (candidate-committee spender skip), 257 (exact-duplicate collapse), 279-281 (the per-run `stats`, not persisted); 49-54 (`cycle_for`, the label minted for a dateless or out-of-range row) |
+| C1.13 | A-l0g0 | §5 (the Supporting/Opposing volume, measured over the expenditures bulk; the archived volumes, measured per collection) |
+| C1.14 | S-cbr | 59-65 (`D2PART_NAME`, the five itemizable codes), 357 and 463 (the selection pass and the reassembly pass, both requiring membership) |
+| C1.14 | A-l0g0 | §5 (the D2Part tally over the receipts bulk: the out-of-map values are field-shifted artifacts, not types) |
 | C2.1 | S-ing | 86-127 (rules), 130-141 (classifier), 314-320 (assignment), 492-496 (partial preserve) |
 | C2.1 | S-syn | 564-570 (merge) |
 | C2.2 | S-ing | 497-500; S-syn 161-165, 572-575 |
