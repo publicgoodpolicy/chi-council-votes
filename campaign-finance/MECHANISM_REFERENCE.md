@@ -202,8 +202,16 @@ dollars family carried INV-\* and `[AGG/\*]`.
 The `validate_votes` family closes that: rollcall id uniqueness and declared-count agreement,
 every `votemeta` entry resolving to a rollcall vote, and — the single-source assertion —
 **every per-alder vote code resolving to a `votemeta` entry, with no hand-entered exemption,
-because under PS-99 no hand-entered class exists.** It is parameterized on the artifact, so a
-second votes source is a client rather than a second exception; an artifact with no votes
+because under PS-99 no hand-entered class exists.** ~~It is parameterized on the artifact, so
+a second votes source is a client rather than a second exception~~ — **struck at SBVOTE-1/A as
+false when written. The family splits: the rollcall and `votemeta` checks are genuinely
+shape-independent, while the two roster-dependent checks (the single-source assertion and the
+position-key check) resolve their roster through one named accessor, and that accessor's known
+field names are the parameterization point — a second votes source becomes a client by being
+named there, not by the family already being general. Before that accessor existed, an
+artifact whose roster sat under a different field name made both checks examine an empty list
+and report success. A missing roster and an empty one are now separately loud under one stable
+check name; neither is a silent pass.** An artifact with no votes
 tier is in scope and passes. The retired semantic-inversion flag is asserted **absent**, and
 `rollcall.votes[].type`'s stringified-list shape is pinned because a writer switching it to a
 real list would change what every consumer parses.
@@ -716,7 +724,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-rep | `campaign-finance/ingestion/repair_clusters.py` | `90cc6912647479510d10d505debb84d18fbd28557bf5996b01a992eb1ddf283c` |
 | S-rol | `campaign-finance/ingestion/build_rollups.py` | `a37a9ee4a1fe93a66dae7c6ecb50e3face70f05078e7fbc97e088a4cafb4fe89` |
 | S-seed | `campaign-finance/elections/build_election_seed.py` | `a2122eab99c8e6db401801a97e43537a4eea62ae1f7b4f13cdb03e8a761a20f7` |
-| S-vld | `campaign-finance/ingestion/validate_council_data.py` | `1ef36ad61af959c8a050ed6fa79c78bd1fc0b05e9f59ab1853c777aedc89b976` |
+| S-vld | `campaign-finance/ingestion/validate_council_data.py` | `eb523348df4fdc03967c3e84990d4d4a2e0a5b9bf2dd56afd6ea72409032f3d3` |
 | S-rst | `campaign-finance/ingestion/restamp_committee_linkage.py` | `6ceb82f9bbcffa08fdb21904b8585982a6bff7e3982e0b810937e2958019d06e` |
 | S-cbr | `campaign-finance/ingestion/convert_bulk_receipts.py` | `ac33aa394c4f8905c307390160fbe397a09399199a3396b07f29f01729bbe582` |
 | S-av | `campaign-finance/sync_allvotes.py` | `a0c4f23df6e4f012e683088e012dc91692fe65399e6fcae2acd1ec9b40e61384` |
@@ -763,9 +771,9 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.13 | A-l0g0 | §5 (the Supporting/Opposing volume, measured over the expenditures bulk; the archived volumes, measured per collection) |
 | C1.14 | S-cbr | 59-65 (`D2PART_NAME`, the five itemizable codes), 357 and 463 (the selection pass and the reassembly pass, both requiring membership) |
 | C1.14 | A-l0g0 | §5 (the D2Part tally over the receipts bulk: the out-of-map values are field-shifted artifacts, not types) |
-| C1.15 | S-vld | 130-206 (`validate_votes` — VOTES-1..8, the single-source assertion at VOTES-5), 86 (wired into validate) |
+| C1.15 | S-vld | 160-271 (`validate_votes` — VOTES-ROSTER + VOTES-1..8, the single-source assertion at VOTES-5), 130-157 (`ROSTER_FIELDS` + `_roster` — the parameterization point, absence distinguishable from emptiness), 86 (wired into validate) |
 | C1.15 | S-av | 156-158 (the seed map, flip-free), 221-238 (apply_featured: votemeta rebuilt whole, positions set-only — the asymmetry the rule closes) |
-| C1.15 | S-vld | 208-259 (`validate_shard_freshness` — the two-namespace stamp discriminator and the deep total assert), 563-566 (the `--shards` opt-in) |
+| C1.15 | S-vld | 274-324 (`validate_shard_freshness` — the two-namespace stamp discriminator and the deep total assert), 720-723 (the `--shards` opt-in), 615-695 (`self_test` — the votes-family fixtures, incl. the members-shaped-with-votes false-green case), 699-702 + 717-719 (its pre-argparse handler and the `--self-test` flag) |
 | C1.15 | S-bld | 114 (the validator invoked with `--shards`) |
 | C2.1 | S-ing | 86-127 (rules), 130-141 (classifier), 314-320 (assignment), 492-496 (partial preserve) |
 | C2.1 | S-syn | 520-526 (merge) |
@@ -795,12 +803,12 @@ that catch defect classes the existing gates structurally cannot see.
 | C4.3 | A-probe | 152 (banked open-thread naming; mechanism deliberately not characterized here) |
 | C4.4 | S-syn | 546-586 (uniqueness-gated alias; never rewrite) |
 | C4.5 | S-seed | 257, 284, 309 (the three stamp sites), 354-359 (fatal unknown-race-id), 362-368 (mint-time shared check, fatal) |
-| C4.5 | S-vld | 387-453 (the ONE shared implementation: namespace/convention resolvers + election_mismatches), 456-467 (durable INV-ELECT gate), 82 (wired into validate) |
+| C4.5 | S-vld | 453-519 (the ONE shared implementation: namespace/convention resolvers + election_mismatches), 522-531 (durable INV-ELECT gate), 82 (wired into validate) |
 | C4.7 | S-ing | 681-706 (resolve_committee_claimants — the ONE resolver), 585-599 (deterministic linkage build consuming it) |
 | C4.7 | S-rst | whole script (claims-derived re-stamp; ruled-four-fields write; fifth-field fail-loud; idempotent) |
-| C4.7 | S-vld | 486-531 (INV-LINK-1..3 + coverage-limit statement), 83 (wired into validate) |
+| C4.7 | S-vld | 552-596 (INV-LINK-1..3), 534-541 (the PS-82-independence rationale and the coverage-limit statement, which live in the block header rather than in the function — the pre-amend row cited only the function while describing both), 83 (wired into validate) |
 | C4.6 | S-rol | 109-112, 127-130 (by_candidate/by_race keyed (id, cycle) — no election), 132-204 (by_candidate_election, the election-keyed variant) |
-| C4.6 | S-vld | 347-353 (INV-PERSON-1 pins by_candidate.all as dedup identity) |
+| C4.6 | S-vld | 414-420 (INV-PERSON-1 pins by_candidate.all as dedup identity) |
 | C4.8 | S-syn | 67-68 (the artifact list + known-failures path), 606-630 (shrink-only loader: growth and owner-less entries fail in code), 632-657 (`resolvable_donor_ids` — the union across artifacts, disk reads only), 659-685 (`check_tag_continuity` — unresolved ids, and a listed entry that no longer fails), 788-817 (the call site: runs before the write, aborts on failure) |
 | C4.8 | A-esg0 | §3 (the orphan census against the union, and the re-mint signature it caught) |
 | C4.9 | S-syn | 691-713 (`coverage_figure`), 801-809 (the per-artifact report and its stated collection scope) |

@@ -127,6 +127,36 @@ def _agg_test(p, obj):
     raise ValueError(f"unknown predicate test {p['test']!r}")
 
 
+# The roster field names this validator knows, in resolution order. A votes-carrying
+# artifact must present exactly one of them.
+#
+# `members` is deliberately NOT here yet. The school-board artifact does not exist at
+# this commit, and naming its field before it exists would be an unexercised claim of
+# the kind this very repair was needed to remove. HALT-SBV-B adds it in the commit that
+# adds the artifact.
+ROSTER_FIELDS = ('alders',)
+
+
+def _roster(d):
+    """The roster accessor, lifted so ABSENCE and EMPTINESS stay distinguishable.
+
+    Returns `(field_name, rows)`. `field_name` is None when the artifact carries no
+    roster field at all — the state the old `d.get('alders') or []` collapsed into
+    "empty list", which is precisely what let VOTES-5 and VOTES-6 report zero errors
+    having examined nothing on any artifact not shaped like the council's.
+
+    The distinction is the whole of the repair: an absent field is a different fact
+    from a present-but-empty one, only the caller can decide what each means, and a
+    caller handed `[]` for both cannot decide anything. Same silent-degradation shape
+    EDIT-SAFE-1 closed at S1/F4, closed the same way.
+    """
+    for f in ROSTER_FIELDS:
+        if f in d:
+            rows = d.get(f)
+            return f, (rows if isinstance(rows, list) else [])
+    return None, []
+
+
 def validate_votes(d):
     """[VOTES/*] REFRESH-1 D2 — the votes family, asserting PS-99 single-source.
 
@@ -134,18 +164,49 @@ def validate_votes(d):
     votemeta, or per-alder positions, while the dollars side carried INV-* and
     [AGG/*]. Its absence is how a legacy code vocabulary forked and drifted unseen.
 
-    Parameterized on the artifact, never council-hardcoded, so a second votes source
-    (the school-board Sheet-tab ingest) is a client of this family rather than a
-    second exception — which is what PS-99 exists to make possible. An artifact with
-    no votes tier is silently in scope and passes: absence is not a violation.
+    An artifact with no votes tier is in scope and passes: absence is not a violation.
+
+    SHAPE DEPENDENCE, STATED ACCURATELY (corrected at SBVOTE-1/A, PS-48). A previous
+    revision of this docstring claimed the family was "parameterized on the artifact,
+    never council-hardcoded". That was false as written and the claim is withdrawn:
+
+      * VOTES-1, -2, -3, -4, -7, -8 read only `rollcall` and `votemeta` and are
+        genuinely shape-independent.
+      * VOTES-5 and VOTES-6 need a ROSTER, and a roster is council-shaped. They
+        resolve it through `_roster`/`ROSTER_FIELDS`, which is the one parameterization
+        point; a second votes source becomes a client by being named there, not by
+        this function already being general.
+
+    Before that resolution existed, a non-council artifact made both checks examine an
+    empty list and report success — a false green, demonstrated at SBVOTE-1 G2. The
+    absent and empty cases are now both loud, and distinctly so, under VOTES-ROSTER.
     """
     errs = []
     rc = d.get('rollcall') or {}
     votes = rc.get('votes') or []
     votemeta = d.get('votemeta') or []
-    alders = d.get('alders') or []
     if not votes and not votemeta:
         return errs                       # no votes tier in this artifact
+
+    # VOTES-ROSTER: a votes tier requires a roster for its positions to resolve against.
+    # ONE stable check name, two distinct messages — the name never varies with the data
+    # (PS-88), while the message says which of the two states was found. When it fires,
+    # VOTES-5 and VOTES-6 do NOT run: they would turn one root cause into a flood of
+    # derived noise, and a check with nothing to resolve against is a restatement rather
+    # than a check (C6.6/PS-82).
+    roster_field, alders = _roster(d)
+    roster_ok = True
+    if roster_field is None:
+        roster_ok = False
+        errs.append(f"VOTES-ROSTER: the artifact carries a votes tier but no roster field "
+                    f"(looked for: {', '.join(ROSTER_FIELDS)}) — VOTES-5 and VOTES-6 cannot "
+                    f"resolve positions and are NOT run. This state previously reported zero "
+                    f"errors having checked nothing")
+    elif not alders:
+        roster_ok = False
+        errs.append(f"VOTES-ROSTER: roster field `{roster_field}` is present but EMPTY while a "
+                    f"votes tier exists — no position can resolve. Distinct from an absent "
+                    f"field, and reported distinctly")
 
     # VOTES-1: rollcall vote ids are unique — the join key for everything below.
     ids = [v.get('id') for v in votes]
@@ -173,16 +234,21 @@ def validate_votes(d):
 
     # VOTES-5: SINGLE-SOURCE. Every per-alder vote code resolves to a votemeta entry.
     # No hand-entered exemption exists, because under PS-99 no hand-entered class exists.
-    codes = {m.get('code') for m in votemeta}
-    stray = sorted({c for a in alders for c in (a.get('votes') or {}) if c not in codes})
-    if stray:
-        errs.append(f"VOTES-5: alder vote code(s) resolving to no votemeta entry: {stray} "
-                    f"(PS-99 single-source: no hand-entered class exists, so there is no "
-                    f"exemption — a code with no ingest provenance is a defect)")
+    # Runs only against a resolved roster — VOTES-ROSTER owns the absent/empty case.
+    if roster_ok:
+        codes = {m.get('code') for m in votemeta}
+        stray = sorted({c for a in alders for c in (a.get('votes') or {}) if c not in codes})
+        if stray:
+            errs.append(f"VOTES-5: alder vote code(s) resolving to no votemeta entry: {stray} "
+                        f"(PS-99 single-source: no hand-entered class exists, so there is no "
+                        f"exemption — a code with no ingest provenance is a defect)")
 
     # VOTES-6: every position key resolves to a ward this artifact knows.
-    wards = {str(a.get('ward')) for a in alders}
-    if wards:
+    # The `if wards:` guard is REMOVED (SBVOTE-1/A.2). It made an empty roster mean
+    # "nothing to check" instead of "cannot check", so the one case the check most needed
+    # to catch was the one case it skipped in silence.
+    if roster_ok:
+        wards = {str(a.get('ward')) for a in alders}
         badw = sorted({w for v in votes for w in (v.get('positions') or {}) if w not in wards})
         if badw:
             errs.append(f"VOTES-6: position key(s) resolving to no known ward: {badw[:8]}")
@@ -546,7 +612,95 @@ def summary(d):
             f"  IE committees: {ie}  |  dues-transfer rows typed: {dues:,}")
 
 
+def self_test():
+    """[VOTES/*] SBVOTE-1/A.4 — fire the repair on the population it will actually meet.
+
+    The G2 false-green demonstration made permanent. Before this lane a members-shaped
+    artifact carrying votes ran VOTES-5 and VOTES-6 against an empty list and returned
+    zero errors; that scenario is the first case below, and it is the reason this
+    self-test exists rather than a one-time proof in a lane report.
+
+    Synthetic fixtures only — no artifact on disk is read here. The real council
+    artifact is validated directly at the gate, which is the stronger negative control.
+    """
+    results = []
+
+    def case(name, artifact, expect):
+        """expect: a substring that must appear in some error, or None for 'must pass'."""
+        errs = validate_votes(artifact)
+        if expect is None:
+            ok = not errs
+        else:
+            ok = any(expect in e for e in errs)
+        results.append((name, ok))
+        print(f"SELF-TEST {'PASS' if ok else 'FAIL'}  {name}")
+        if not ok:
+            print(f"          expected {expect!r}, got: {errs}")
+
+    # A council-shaped artifact that is correct in every respect — the shape every
+    # positive case below is a single deliberate mutation away from.
+    def council(**over):
+        a = {
+            'rollcall': {'term_votes': 1, 'votes': [
+                {'id': 'v1', 'date': '2026-01-01', 'type': '["ordinance"]',
+                 'positions': {'1': 'yes'}}]},
+            'votemeta': [{'code': 'c1', 'vote_id': 'v1'}],
+            'alders': [{'ward': 1, 'votes': {'c1': 'yes'}}],
+        }
+        a.update(over)
+        return a
+
+    # The members-shaped artifact: a roster under a field name this validator does not
+    # know, WITH votes — the population the repair will actually meet.
+    members_shaped = {
+        'rollcall': {'term_votes': 1, 'votes': [
+            {'id': 'v1', 'date': '2026-01-01', 'type': '["ordinance"]',
+             'positions': {'1A': 'Affirmative'}}]},
+        'votemeta': [{'code': 'c1', 'vote_id': 'v1'}],
+        'members': [{'district/seat': '1A', 'votes': {'c1': 'Affirmative'}}],
+    }
+
+    # 1-2. THE FALSE GREEN, both halves. It must fire, and it must fire by name.
+    case("members-shaped artifact WITH votes is no longer a false green (errors non-empty)",
+         members_shaped, "VOTES-ROSTER")
+    assert validate_votes(members_shaped), "the false-green fixture must not return []"
+
+    # 3. Absence and emptiness are DIFFERENT, and reported differently (A.1).
+    case("absent roster field names what it looked for",
+         members_shaped, "no roster field")
+    case("present-but-EMPTY roster is a distinct message, not the same one",
+         council(alders=[]), "present but EMPTY")
+
+    # 4. A.2's teeth: an empty roster used to make VOTES-6 skip in silence.
+    case("empty roster no longer silently skips the position check",
+         council(alders=[]), "VOTES-ROSTER")
+
+    # 5-6. The checks still work on the population they were written for.
+    case("VOTES-5 still fires on a stray alder vote code (council shape)",
+         council(alders=[{'ward': 1, 'votes': {'ghost': 'yes'}}]), "VOTES-5")
+    case("VOTES-6 still fires on an unknown position ward key (council shape)",
+         council(rollcall={'term_votes': 1, 'votes': [
+             {'id': 'v1', 'date': '2026-01-01', 'type': '["ordinance"]',
+              'positions': {'99': 'yes'}}]}), "VOTES-6")
+
+    # 7-8. Negative controls. The documented no-votes-tier behaviour is preserved, and a
+    # well-formed council artifact is untouched by the repair.
+    case("an artifact with NO votes tier still passes (absence is not a violation)",
+         {'donors': {}}, None)
+    case("a well-formed council-shaped artifact passes untouched", council(), None)
+
+    bad = [n for n, ok in results if not ok]
+    print(f"self-test: {len(results)} checks · "
+          + ("ALL PASS" if not bad else f"FAILED {len(bad)}"))
+    return 1 if bad else 0
+
+
 def main():
+    # SBVOTE-1/A.4: the votes-family self-test. Handled before argparse, like
+    # --emit-predicates, because `path` is not required for this mode.
+    if '--self-test' in sys.argv:
+        return sys.exit(self_test())
+
     # [AGG/PS-96-PARITY] (F5): emit the detection surface so the elections gate can compare
     # it against its own copy. The list lives twice, in two languages; this is what keeps
     # the two from drifting silently. `path` is not required for this mode.
@@ -560,6 +714,9 @@ def main():
     ap.add_argument('--strict', action='store_true', help='also fail on warnings')
     ap.add_argument('--emit-predicates', action='store_true',
                     help='print the [AGG/PS-96] detection surface as JSON and exit')
+    ap.add_argument('--self-test', action='store_true',
+                    help='fire the votes-family checks on synthetic fixtures and exit '
+                         '(SBVOTE-1/A.4); reads no artifact')
     ap.add_argument('--shards', metavar='DIR',
                     help='shards dir; when given, assert the shards are not stale against '
                          'this artifact (REFRESH-1 D3). Opt-in by argument rather than a '

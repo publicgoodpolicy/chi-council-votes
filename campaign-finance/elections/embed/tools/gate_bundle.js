@@ -1025,6 +1025,19 @@ async function assertPersonSurface(T, ctx, fx) {
     T.ok('[SHEET/SCOPE] no-editorial-writeback holds — ' + tail, res.status === 0);
   })();
 
+  // [VOTES/SELF] the votes-family self-test (SBVOTE-1/A.4), third invoker of the same
+  // shell-out shape as [DOCS] and [SHEET/SCOPE] above. It fires the repaired VOTES-ROSTER
+  // / VOTES-5 / VOTES-6 on synthetic fixtures — including a members-shaped artifact WITH
+  // votes, the population that produced a false green before this lane. Synthetic only:
+  // it reads no artifact, so it stays fast and cannot go stale with the data.
+  (function () {
+    var res = require('child_process').spawnSync('python3',
+      [path.join(__dirname, '..', '..', '..', 'ingestion', 'validate_council_data.py'),
+       '--self-test'], { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[VOTES/SELF] votes-family self-test green — ' + tail, res.status === 0);
+  })();
+
   console.log('\n' + T.n + ' checks · ' + (T.fail ? ('FAILED ' + T.fail) : 'ALL PASS'));
   process.exit(T.fail ? 1 : 0);
 })();
