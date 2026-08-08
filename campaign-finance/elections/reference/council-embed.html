@@ -1060,7 +1060,13 @@ const FEEDBACK_CONFIG = {
     // aggregated with in-subject money in any shared total.
     const currentCycle=state.cf.current_cycle;
     const cycleDefs=state.cf.cycles||{};
-    const preContribs=allContribs.filter(c=>c.cycle==='pre-2011'||c.cycle==='undated');
+    // D16(iii) / PS-93 as amended: `undated` leaves the curated view too. The two halves of
+    // EXCLUDED_CYCLES are excluded for DIFFERENT reasons and are not interchangeable -- a
+    // date-less row is not "before May 2011", so strings 3/4/5/6 would name it as something
+    // it is not. It therefore renders in NO view. NOTE the asymmetry is deliberate: the next
+    // line keeps BOTH clauses, so undated falls into neither collection. Symmetrising it
+    // would put undated money back into the in-subject views -- the inverse of the ruling.
+    const preContribs=allContribs.filter(c=>c.cycle==='pre-2011');
     const inContribs=allContribs.filter(c=>c.cycle!=='pre-2011'&&c.cycle!=='undated');
     let effectiveCycle=state.cfCycle;
     if(effectiveCycle==='current') effectiveCycle=currentCycle;
@@ -1178,8 +1184,26 @@ const FEEDBACK_CONFIG = {
       h += '<div class="ipg-cf-empty">No itemized donors in this category for this committee.</div>';
     }
 
-    // Small-dollar aggregate rows removed: the SBE-bulk source itemizes every
-    // receipt, so no Aggregate-typed donors remain to render (HALT-MIG-1).
+    // Small-dollar aggregate rows: the render line was REMOVED at HALT-MIG-1 (the SBE-bulk
+    // source itemizes every receipt, so no Aggregate-typed donors remained to render) while
+    // its money kept counting in the headline above -- PS-96's one named standing
+    // non-conformance. RESTORED at REPAIR-AGG-1 (authorization sha256 26cbc371eba48c14d4a944
+    // f5979db2f844280009d95d2d3425889b6a4522e641) as the residual-disclosure clause requires:
+    // the reader can reconcile the visible list against the headline. Amount only (F1); the
+    // donor-type partition is exhaustive over `agg`, so itemized + this line == the headline
+    // total exactly. Renders ONLY when the class is present (E1.2) -- zero rows render nothing
+    // at all, never a $0 line, so today's real data is byte-identical to the pre-restore page.
+    // Non-clickable by construction: the click delegation binds `.ipg-cf-clickable
+    // [data-donor-id]` and this row carries neither -- a residual is not a donor, there is no
+    // profile to open.
+    if(aggregates.length){
+      const aggResidual=aggregates.reduce((s,a)=>s+a.total,0);
+      h+='<div class="ipg-cf-row">'
+        +'<div><div class="name">Small-dollar and un-itemized contributions</div>'
+        +'<div class="sub">Contributions reported to the state in aggregate, without individual donor identities. Counted in this committee\'s totals; not attributable to any listed donor.</div>'
+        +'</div>'
+        +'<div class="amount">'+fmtMoney(aggResidual)+'</div></div>';
+    }
 
     return h;
   }
@@ -2538,6 +2562,7 @@ function recTagChips(){
       <ul>
         <li><strong>Itemization follows the SBE record.</strong> Contribution data is pulled directly from Illinois State Board of Elections filings, and our itemization and disclosure boundaries follow the filings themselves &mdash; every contribution the SBE itemizes, we itemize and attribute to the named donor. (Donor-cluster roll-up totals &mdash; which stand in for a group of related records rather than a single identifiable donor &mdash; remain excluded from the donor-network and &ldquo;Follow the money&rdquo; relationship views.)</li>
         <li>Amounts and dates reflect what was reported in the filings. Filers occasionally amend, misreport, or duplicate entries; see <em>Limitations</em> below.</li>
+        <li>This tool also excludes contributions with no usable date. Because their date is unknown, they cannot be placed in any cycle and are not shown in any view.</li>
       </ul>
 
       <h3 class="ipg-meth-h" id="meth-donors">How we identify and group donors</h3>

@@ -785,18 +785,36 @@ async function assertExclusionUniformity(T, ctx, fx) {
 // condition from a Sheet edit whose small-dollar tag makes ITEMIZED money render as an
 // aggregate line ([AGG/PS-96-TAG], a false display claim). Read RULINGS.md §PS-96
 // before touching either. Council's twins live in validate_council_data.py, per D4(b).
+// The JS copy of the detection surface. It lives twice, in two languages — Python's copy
+// is validate_council_data.AGG_PREDICATES — and [AGG/PS-96-PARITY] below is what stops the
+// two drifting silently (REPAIR-AGG-1 rider F5). `label` is display-only and not compared.
+var AGG_PREDICATES = [
+  { name: 'AGG/PS-96', kind: 'row', field: 'is_aggregate', test: 'truthy', value: null, label: 'row-flag' },
+  { name: 'AGG/PS-96', kind: 'row', field: 'contribution_type', test: 'equals', value: 'Aggregate', label: 'row-type' },
+  { name: 'AGG/PS-96', kind: 'donor', field: 'type', test: 'equals', value: 'Aggregate', label: 'donor-type' },
+  { name: 'AGG/PS-96-TAG', kind: 'donor', field: 'industries', test: 'contains', value: 'small-dollar', label: 'donor-industry' }
+];
+var AGG_PREDICATE_KEYS = ['field', 'kind', 'name', 'test', 'value'];
+
+function aggTest(p, obj) {
+  var v = obj[p.field];
+  if (p.test === 'truthy') return !!v;
+  if (p.test === 'equals') return v === p.value;
+  if (p.test === 'contains') return (v || []).indexOf(p.value) >= 0;
+  throw new Error('unknown predicate test ' + p.test);
+}
+
 async function assertAggAbsence(T, ctx) {
   var RAW = ctx.window.PREVIEW_DATA;
   if (!RAW) { T.ok('[AGG/PS-96] PREVIEW_DATA reachable', false); return; }
   var rows = RAW.contributions || [], donors = RAW.donors || {}, hits = [], tagHits = [];
-  rows.forEach(function (c) {
-    if (c.is_aggregate) hits.push('row-flag:' + c.id);
-    if (c.contribution_type === 'Aggregate') hits.push('row-type:' + c.id);
-  });
-  Object.keys(donors).forEach(function (k) {
-    var v = donors[k] || {};
-    if (v.type === 'Aggregate') hits.push('donor-type:' + k);
-    if ((v.industries || []).indexOf('small-dollar') >= 0) tagHits.push('donor-industry:' + k);
+  AGG_PREDICATES.forEach(function (p) {
+    var into = p.name === 'AGG/PS-96-TAG' ? tagHits : hits;
+    if (p.kind === 'row') {
+      rows.forEach(function (c) { if (aggTest(p, c)) into.push(p.label + ':' + c.id); });
+    } else {
+      Object.keys(donors).forEach(function (k) { if (aggTest(p, donors[k] || {})) into.push(p.label + ':' + k); });
+    }
   });
   T.ok('[AGG/PS-96] un-keyed class absent from the elections artifact (predicates 1-3: ' +
     rows.length + ' rows, ' + Object.keys(donors).length + ' donors)' +
@@ -805,6 +823,25 @@ async function assertAggAbsence(T, ctx) {
   T.ok('[AGG/PS-96-TAG] no donor carries the small-dollar industry tag (which renders itemized money as aggregate)' +
     (tagHits.length ? ' — TAGGED (read RULINGS.md §PS-96): ' + tagHits.slice(0, 4).join(',') : ''),
     tagHits.length === 0);
+
+  // [AGG/PS-96-PARITY] (F5) — the detection surface exists in two languages and can drift.
+  // PS-94 does not bind PS-96, but the repeated-condition hazard PS-94 was earned over
+  // applies to this list. Shells out to the Python home (the check_docs precedent below).
+  var norm = function (list) {
+    return JSON.stringify(list.map(function (p) {
+      var o = {}; AGG_PREDICATE_KEYS.forEach(function (k) { o[k] = p[k] === undefined ? null : p[k]; });
+      return o;
+    }));
+  };
+  var vpath = path.join(__dirname, '..', '..', '..', 'ingestion', 'validate_council_data.py');
+  var res = require('child_process').spawnSync('python3', [vpath, '--emit-predicates'], { encoding: 'utf8' });
+  var pyList = null;
+  try { pyList = JSON.parse((res.stdout || '').trim()); } catch (e) { pyList = null; }
+  var agree = pyList !== null && norm(pyList) === norm(AGG_PREDICATES);
+  T.ok('[AGG/PS-96-PARITY] the JS detection surface equals the Python one (' +
+    AGG_PREDICATES.length + ' predicates)' +
+    (agree ? '' : ' — DRIFTED: py=' + (pyList === null ? '(unreadable)' : norm(pyList)) +
+      ' js=' + norm(AGG_PREDICATES)), agree);
 }
 
 // (PERSON) P1D-PERSON: the person surface. Seven checks, pre-ruled at G2 (97 -> 104).

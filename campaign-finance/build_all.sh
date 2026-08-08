@@ -100,6 +100,12 @@ echo "  no conflict markers."
 # PS-73 docs-form gate (DOCS-M4): one implementation (tools/check_docs.py), two invokers —
 # here and the elections gate_bundle. Hard-fail per RULINGS.md §PS-73.
 python3 "$REPO/campaign-finance/tools/check_docs.py" || { echo "  !! docs-form check (PS-73) FAILED — ABORTING"; exit 1; }
+# Artifact integrity gate (REPAIR-AGG-1 rider F4). This script is the repo's only shell
+# orchestrator and it CAN re-ingest receipts (§4 above), but it did not run the validator —
+# so the INV-* families and the [AGG/PS-96] tripwire never fired on a build_all.sh build.
+# That gap narrowed the premise LEDGER-0's D1(c) was ratified on. Wired here, mirroring the
+# docs-form gate above: this script now has a hard failure mode, deliberately.
+python3 "$INGEST/validate_council_data.py" "$DATA" || { echo "  !! council-data.json validation FAILED — ABORTING"; exit 1; }
 
 # ---- 7. Commit (manual on purpose — review first) ---------------------------
 say "All artifacts valid. To publish, review the diff then run:"

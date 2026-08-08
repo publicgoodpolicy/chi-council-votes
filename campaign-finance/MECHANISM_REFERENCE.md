@@ -416,11 +416,17 @@ any coupling among them; they are the detection surface, never the class definit
 (PS-96). **Known gap in that surface:** a retired convention once carried the small-dollar
 aggregate donor under an underscore-prefixed donor id, and no live code tests the prefix,
 so a data source restoring the id convention without the type or flag is invisible to the
-predicates. **The residual-disclosure treatments diverge between the embeds:** the
+predicates. ~~**The residual-disclosure treatments diverge between the embeds:** the
 elections contributor panel renders the labeled, non-clickable aggregate line pinned
 beneath the real donors, its rows summing to the headline; the council alder profile's
 line was removed at the bulk-source migration while its headline kept counting — the
-standing non-conformance PS-96 names, owned by REPAIR-AGG-1. The class is asserted absent
+standing non-conformance PS-96 names, owned by REPAIR-AGG-1.~~ **Superseded at
+REPAIR-AGG-1, the commit that retired it: the treatments no longer diverge.** Both embeds
+render the residual as a labeled, non-clickable line pinned beneath the real donors, and
+in both the visible rows plus that line reconcile to the headline — the council line was
+restored on the donor-type partition, amount only, and renders nothing at all when the
+class is absent, so a surface with no un-keyed money is unchanged by its presence. PS-96's
+one named standing non-conformance is discharged. The class is asserted absent
 at build time, class-level, per artifact, and the three causes carry distinct failure
 names because they demand different responses: un-keyed rows or donors present
 (`[AGG/PS-96]`, predicates one to three — fires only on a data-source change, the class
@@ -564,7 +570,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-vld | `campaign-finance/ingestion/validate_council_data.py` | `6c83c3d5ab25b0ea402f06ae3a0d1e456d0497f23f91527f8ce7276d19900538` |
 | S-rst | `campaign-finance/ingestion/restamp_committee_linkage.py` | `6ceb82f9bbcffa08fdb21904b8585982a6bff7e3982e0b810937e2958019d06e` |
 | S-av | `campaign-finance/sync_allvotes.py` | `2ca09ee7323741919f048e61062d54a62719f56f88f71f99b721fe965c753f69` |
-| S-cemb | `campaign-finance/elections/reference/council-embed.html` | `62cf38bce614e0ff8c028bf06af98d6adb3e0e04f71b5d606f1d777db7650ef6` |
+| S-cemb | `campaign-finance/elections/reference/council-embed.html` | `148b05bc6c4cff9abca1097457db6164917d932455e6c63f9579a8b7a6c371b6` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
 | S-edat | `campaign-finance/elections/embed/data.js` | `e36af72ece73ff47b1322abd08548b1f3a1a7624f896381c6c8f10fd6b043ecc` |
 | S-eren | `campaign-finance/elections/embed/render.js` | `bc5ccf5b1720a366487419f2d3267591e4332da14a1ba6cade46606b2f35d9d2` |
@@ -641,7 +647,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.7 | S-eapp | 71-80 (openPerson — no window parameter), 91-92 (data-person dispatch, no winFromEl), 276-286 (read-only ?person= boot — the deep-link path) |
 | C5.8 | S-edat | 419-423 (spenderFunders exclusion — the funder-rollup gap closed), 469-473 (donorFootprint exclusion — load-bearing for the windowless opener) |
 | C5.8 | S-eren | 454-455 (iePanel basis label + string-2 empty state), 618-624 (committee-profile basis label, string-2 empty state, structural no-identity-claim) |
-| C5.8 | S-cemb | 1014-1023 (cfInSubject + cfDuesRow + cfCountable — the shared full-set predicates), 1272-1277 (donor-index split: dues out first, then in-subject totals + separate before-May-2011 accumulator), 1397/1417/1522/1593/1862/3079 (full-set call sites: industry, per-alder industry, flags, IE funders, industry-detail, correlation index; IE spender sums filtered in situ), 1508-1521 (flag rows seeded from flagged donors — a fully-excluded flag renders zero, never vanishes), 2022-2031 (string 7 on the structural zero), 2558 (string 8, methodology), 1091-1107 (alder-profile in-subject views + curated option + string 4), 1637-1658 (pre2011SubView — strings 3/4, display-only rows), 1718-1720 (strings 5/6 on the ranked list), 3005-3008 (view bindings) |
+| C5.8 | S-cemb | 1014-1023 (cfInSubject + cfDuesRow + cfCountable — the shared full-set predicates), 1296-1301 (donor-index split: dues out first, then in-subject totals + separate before-May-2011 accumulator), 1397/1417/1522/1593/1862/3079 (full-set call sites: industry, per-alder industry, flags, IE funders, industry-detail, correlation index; IE spender sums filtered in situ), 1508-1521 (flag rows seeded from flagged donors — a fully-excluded flag renders zero, never vanishes), 2022-2031 (string 7 on the structural zero), 2558 (string 8, methodology), 1091-1107 (alder-profile in-subject views + curated option + string 4), 1637-1658 (pre2011SubView — strings 3/4, display-only rows), 1718-1720 (strings 5/6 on the ranked list), 3005-3008 (view bindings) |
 | C5.3 | A-fw1 | 14-16 (artifact not fused), 60-62 (gates check values, not structure) |
 | C5.4 | A-probe | 152 (banked sizing item: multiple surfaces, per-path render compliance) |
 | C6.1 | A-ba1g0 | 56-66 (dollar/repairability distinctions); A-ba1g2 49 (render-invisibility distinction) |
@@ -658,7 +664,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.9 | S-rec | 39, 196 (contribution-type set-aside, excluded from the itemized compare) |
 | C5.9 | S-edat | 383-410 (contributor rollup counts every row; the broader render marking incl. small-dollar), 499 (row-flag carriage into the footprint VM) |
 | C5.9 | S-eren | 373-392 (the labeled, non-clickable pinned aggregate line; rows sum to the headline), 482 (the aggregate-of-N row chip) |
-| C5.9 | S-cemb | 1116-1127 (alder-profile headline counts the tail into totals and stats), 1181-1182 (the removed disclosure line, comment of record), 3081 (correlation-index donor-type skip) |
+| C5.9 | S-cemb | 1122-1133 (alder-profile headline counts the tail into totals and stats), 1187-1206 (the restored disclosure line and its superseded HALT-MIG-1 comment of record), 3106 (correlation-index donor-type skip) |
 | P1 | A-fw1 | 60-62 (proposed fused-per-candidate detector, not built) |
 
 **RULED pointers** (`claim-id | ruling | register entry`; ruling text and provenance live in
