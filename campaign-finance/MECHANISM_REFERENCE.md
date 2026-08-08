@@ -761,7 +761,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-rst | `campaign-finance/ingestion/restamp_committee_linkage.py` | `6ceb82f9bbcffa08fdb21904b8585982a6bff7e3982e0b810937e2958019d06e` |
 | S-cbr | `campaign-finance/ingestion/convert_bulk_receipts.py` | `ac33aa394c4f8905c307390160fbe397a09399199a3396b07f29f01729bbe582` |
 | S-av | `campaign-finance/sync_allvotes.py` | `a0c4f23df6e4f012e683088e012dc91692fe65399e6fcae2acd1ec9b40e61384` |
-| S-cemb | `campaign-finance/elections/reference/council-embed.html` | `148b05bc6c4cff9abca1097457db6164917d932455e6c63f9579a8b7a6c371b6` |
+| S-cemb | `campaign-finance/elections/reference/council-embed.html` | `f439227d3dd9781df90b34454b46e26f438b6433057ea60d61a5b72fd934f14f` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
 | S-edat | `campaign-finance/elections/embed/data.js` | `e36af72ece73ff47b1322abd08548b1f3a1a7624f896381c6c8f10fd6b043ecc` |
 | S-eren | `campaign-finance/elections/embed/render.js` | `bc5ccf5b1720a366487419f2d3267591e4332da14a1ba6cade46606b2f35d9d2` |
@@ -860,7 +860,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.7 | S-eapp | 71-80 (openPerson — no window parameter), 91-92 (data-person dispatch, no winFromEl), 276-286 (read-only ?person= boot — the deep-link path) |
 | C5.8 | S-edat | 419-423 (spenderFunders exclusion — the funder-rollup gap closed), 469-473 (donorFootprint exclusion — load-bearing for the windowless opener) |
 | C5.8 | S-eren | 454-455 (iePanel basis label + string-2 empty state), 618-624 (committee-profile basis label, string-2 empty state, structural no-identity-claim) |
-| C5.8 | S-cemb | 1014-1023 (cfInSubject + cfDuesRow + cfCountable — the shared full-set predicates), 1296-1301 (donor-index split: dues out first, then in-subject totals + separate before-May-2011 accumulator), 1397/1417/1522/1593/1862/3079 (full-set call sites: industry, per-alder industry, flags, IE funders, industry-detail, correlation index; IE spender sums filtered in situ), 1508-1521 (flag rows seeded from flagged donors — a fully-excluded flag renders zero, never vanishes), 2022-2031 (string 7 on the structural zero), 2558 (string 8, methodology), 1091-1107 (alder-profile in-subject views + curated option + string 4), 1637-1658 (pre2011SubView — strings 3/4, display-only rows), 1718-1720 (strings 5/6 on the ranked list), 3005-3008 (view bindings) |
+| C5.8 | S-cemb | 1017-1026 (cfInSubject + cfDuesRow + cfCountable — the shared full-set predicates), 1299-1304 (donor-index split: dues out first, then in-subject totals + separate before-May-2011 accumulator), 1400/1420/1525/1596/1865/3082 (full-set call sites: industry, per-alder industry, flags, IE funders, industry-detail, correlation index; IE spender sums filtered in situ), 1511-1524 (flag rows seeded from flagged donors — a fully-excluded flag renders zero, never vanishes), 2025-2034 (string 7 on the structural zero), 2561 (string 8, methodology), 1094-1110 (alder-profile in-subject views + curated option + string 4), 1640-1661 (pre2011SubView — strings 3/4, display-only rows), 1721-1723 (strings 5/6 on the ranked list), 3008-3011 (view bindings) |
 | C5.3 | A-fw1 | 14-16 (artifact not fused), 60-62 (gates check values, not structure) |
 | C5.4 | A-probe | 152 (banked sizing item: multiple surfaces, per-path render compliance) |
 | C6.1 | A-ba1g0 | 56-66 (dollar/repairability distinctions); A-ba1g2 49 (render-invisibility distinction) |
@@ -877,7 +877,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.9 | S-rec | 39, 196 (contribution-type set-aside, excluded from the itemized compare) |
 | C5.9 | S-edat | 383-410 (contributor rollup counts every row; the broader render marking incl. small-dollar), 499 (row-flag carriage into the footprint VM) |
 | C5.9 | S-eren | 373-392 (the labeled, non-clickable pinned aggregate line; rows sum to the headline), 482 (the aggregate-of-N row chip) |
-| C5.9 | S-cemb | 1122-1133 (alder-profile headline counts the tail into totals and stats), 1187-1206 (the restored disclosure line and its superseded HALT-MIG-1 comment of record), 3106 (correlation-index donor-type skip) |
+| C5.9 | S-cemb | 1125-1136 (alder-profile headline counts the tail into totals and stats), 1190-1209 (the restored disclosure line and its superseded HALT-MIG-1 comment of record), 3109 (correlation-index donor-type skip) |
 | P1 | A-fw1 | 60-62 (proposed fused-per-candidate detector, not built) |
 
 **RULED pointers** (`claim-id | ruling | register entry`; ruling text and provenance live in

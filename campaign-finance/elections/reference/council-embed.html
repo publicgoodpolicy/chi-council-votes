@@ -2,7 +2,7 @@
   INSTITUTE FOR THE PUBLIC GOOD — Chicago City Council Accountability Tool
   Paste this whole block into a Squarespace Code Block (Edit → add block →
   Code), or Settings → Advanced → Code Injection for a full-page version.
-  Self-contained. Loads Poppins + Recoleta from Google Fonts / CDN.
+  Self-contained. Loads Poppins from Google Fonts; display face is Georgia.
 
   ===================================================================
   HOW EDITORIAL DATA WORKS
@@ -102,15 +102,18 @@ const FEEDBACK_CONFIG = {
   position:relative; left:50%; right:50%; margin-left:-50vw; margin-right:-50vw;
   -webkit-font-smoothing:antialiased;
 }
-@font-face{
-  font-family:'Recoleta';
-  src:url('https://db.onlinewebfonts.com/t/4b3a3f6c2c6e4f1e8e5d4c3b2a1f0e9d.woff2') format('woff2');
-  font-weight:700; font-display:swap;
-}
-/* Recoleta isn't guaranteed to load from CDN; we fall back to a high-quality serif
-   so the editorial feel survives even offline. */
+/* DISPLAY FACE — Georgia, and this is the intended face rather than a fallback.
+   A Recoleta @font-face used to sit here. It never loaded: the source it pointed at
+   (a third-party font CDN) returns 404, measured at SBVOTE-2 G1 on 2026-08-08 with a
+   browser User-Agent, a Referer and an Accept: font/woff2 — the host root 404s too. So
+   every display heading this tool has ever rendered was already Georgia, and the
+   @font-face only cost a failed request per page load. Ishan ratified Georgia as the
+   intended display face and the dead declaration was removed (SBVOTE-2/A). Removing it
+   changes nothing visually, by construction.
+   The stack below is the ONE serif stack in this file; four slightly different ones had
+   drifted apart, and they were normalised to this in the same commit. */
 #ipg-council-app .serif{
-  font-family:'Recoleta','Georgia',ui-serif,serif; font-weight:700; letter-spacing:-.01em;
+  font-family:Georgia, ui-serif, serif; font-weight:700; letter-spacing:-.01em;
 }
 #ipg-council-app a{color:var(--sage)}
 
@@ -201,7 +204,7 @@ const FEEDBACK_CONFIG = {
   border-radius:10px;padding:15px 16px;
 }
 #ipg-council-app .ipg-stat .num{font-size:30px;line-height:1;color:var(--teal);white-space:nowrap}
-#ipg-council-app .ipg-stat .num.serif{font-family:'Recoleta',Georgia,serif}
+#ipg-council-app .ipg-stat .num.serif{font-family:Georgia, ui-serif, serif}
 #ipg-council-app .ipg-stat .lab{font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#9a8e7e;margin-top:8px}
 
 /* SECTION HEADER */
@@ -262,7 +265,7 @@ const FEEDBACK_CONFIG = {
 #ipg-council-app .ipg-matrix td.mx-yes{background:var(--aff-bg);color:var(--aff);font-weight:600}
 #ipg-council-app .ipg-matrix td.mx-no{background:var(--opp-bg);color:var(--opp);font-weight:600}
 #ipg-council-app .ipg-matrix td.mx-na{color:#b3a899}
-#ipg-council-app .ipg-mx-desc-h{font-family:'Recoleta','Georgia',serif;font-size:14px;color:var(--ink);margin:22px 0 8px}
+#ipg-council-app .ipg-mx-desc-h{font-family:Georgia, ui-serif, serif;font-size:14px;color:var(--ink);margin:22px 0 8px}
 #ipg-council-app .ipg-mx-desc{font-size:13px;color:#5a5048;line-height:1.55;padding:9px 0;border-bottom:1px solid var(--line)}
 #ipg-council-app .ipg-mx-desc strong{color:var(--teal)}
 #ipg-council-app .ipg-mx-desc .mx-th-tally{color:#9a8e7e;font-weight:400;font-size:11.5px}
@@ -555,7 +558,7 @@ const FEEDBACK_CONFIG = {
 .ipg-modal-close:hover{color:var(--teal)}
 .ipg-modal-head{margin-bottom:18px;padding-right:30px}
 .ipg-modal-kicker{font-weight:600;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--sage);margin-bottom:6px}
-.ipg-modal-name{font-size:clamp(22px,3.4vw,30px);line-height:1.15;color:var(--teal);font-family:'Recoleta','Georgia',ui-serif,serif;font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
+.ipg-modal-name{font-size:clamp(22px,3.4vw,30px);line-height:1.15;color:var(--teal);font-family:Georgia, ui-serif, serif;font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
 .ipg-modal-meta{font-size:13px;color:#6a5d4e;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .ipg-modal-meta .ipg-cf-chip{
   display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;
@@ -580,7 +583,7 @@ const FEEDBACK_CONFIG = {
   border-radius:10px;padding:13px 14px;
 }
 .ipg-modal-summary .ipg-stat .num{font-size:24px;line-height:1;color:var(--teal)}
-.ipg-modal-summary .ipg-stat .num.serif{font-family:'Recoleta',Georgia,serif;font-weight:700}
+.ipg-modal-summary .ipg-stat .num.serif{font-family:Georgia, ui-serif, serif;font-weight:700}
 .ipg-modal-summary .ipg-stat .lab{font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#9a8e7e;margin-top:6px}
 
 .ipg-modal .ipg-section-h{
@@ -637,7 +640,7 @@ const FEEDBACK_CONFIG = {
    like the other .ipg-modal rules, so these are unprefixed; vars resolve from .ipg-modal. */
 .ipg-rollup{background:var(--white);border:1px solid var(--line);border-left:5px solid var(--sage);border-radius:10px;padding:14px 16px;margin:4px 0 16px}
 .ipg-rollup-kicker{font-weight:600;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin-bottom:6px}
-.ipg-rollup-total{font-family:'Recoleta',Georgia,ui-serif,serif;font-weight:700;font-size:27px;line-height:1;color:var(--teal)}
+.ipg-rollup-total{font-family:Georgia, ui-serif, serif;font-weight:700;font-size:27px;line-height:1;color:var(--teal)}
 .ipg-rollup-sub{font-size:12.5px;color:#7d7264;margin-top:5px}
 .ipg-rollup-details{margin-top:12px}
 .ipg-rollup-details summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--sage);list-style:none;user-select:none}
@@ -660,7 +663,7 @@ const FEEDBACK_CONFIG = {
 #ipg-council-app .ipg-cf-rollup-pill{
   display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;
   letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:20px;
-  line-height:1.4;color:#fff;background:var(--teal,#044127);
+  line-height:1.4;color:#fff;background:var(--teal,#044147);
   margin-left:9px;vertical-align:middle;
 }
 .ipg-rollup-note{font-size:11.5px;color:#9a8e7e;font-style:italic;margin-top:10px}
