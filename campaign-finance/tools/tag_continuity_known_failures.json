@@ -1,0 +1,13 @@
+{
+  "comment": "[SHEET/TAG-CONT] tag-continuity known failures: Sheet donor ids (Donor Overrides + Donor Clusters) that resolve to no donor in ANY artifact, so the editorial work on that row reaches nothing. Measured against the UNION of both artifacts, never one — the Sheet is shared across both tools, so a per-artifact count is misleading (EDIT-SAFE-1 G0 §3). SHRINK-ONLY: max_entries may never rise; the checker fails in code if entries exceed it, if an entry lacks an owner, or if a listed entry no longer fails. Pinned at ONE at landing: the single true orphan is a re-mint signature, and the fix is an editorial merge in the Sheet (EDIT-SAFE-1/S5), not a code change. When that merge lands the entry stops failing, the checker demands its removal, and the pin moves to zero THEN — not pre-emptively.",
+  "created": "2026-08-07",
+  "max_entries": 1,
+  "entries": [
+    {
+      "token": "odelson-murphey-frazier-mcgrath-ltd",
+      "owner": "EDIT-SAFE-1/S5",
+      "dated": "2026-08-07",
+      "note": "True orphan, sole one at landing [S — EDIT-SAFE-1 G0 report 1ff6960b, §3]. The filer spelled the firm three ways; each spelling minted its own slug, and the tagged one stopped accruing. Two live near-identical ids carry their own Sheet rows. Carries primary_industry unclassified and the flag Outside-Chicago. Resolution is Ishan's editorial merge/cluster of the three spellings, after which this entry must be removed."
+    }
+  ]
+}

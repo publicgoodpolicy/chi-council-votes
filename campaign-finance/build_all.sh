@@ -100,6 +100,12 @@ echo "  no conflict markers."
 # PS-73 docs-form gate (DOCS-M4): one implementation (tools/check_docs.py), two invokers —
 # here and the elections gate_bundle. Hard-fail per RULINGS.md §PS-73.
 python3 "$REPO/campaign-finance/tools/check_docs.py" || { echo "  !! docs-form check (PS-73) FAILED — ABORTING"; exit 1; }
+# No-editorial-writeback gate (EDIT-SAFE-1/S2): static, network-free. Asserts that the
+# pipeline's editorial-tab readers still hold a READ-ONLY credential and that no pipeline
+# program write-verbs an editorial tab — the property that makes "the Sheet is the editors'
+# and the pipeline only reads it" structural rather than conventional. Same two-invoker
+# shape as the docs gate above: here and the elections gate_bundle.
+python3 "$REPO/campaign-finance/tools/check_sheet_scopes.py" || { echo "  !! Sheet-scope check (EDIT-SAFE-1/S2) FAILED — ABORTING"; exit 1; }
 # Artifact integrity gate (REPAIR-AGG-1 rider F4). This script is the repo's only shell
 # orchestrator and it CAN re-ingest receipts (§4 above), but it did not run the validator —
 # so the INV-* families and the [AGG/PS-96] tripwire never fired on a build_all.sh build.

@@ -13,6 +13,17 @@ crosswalk / position-mapping logic is shared, not duplicated). It:
           featured_vote_map.json are SEEDED as featured (pulling full/tag/etc.
           from the current votemeta) so the migration needs no manual re-flagging.
 
+          FAIL-LOUD (EDIT-SAFE-1/S1): the push is clear()+update() over the WHOLE
+          tab, so the editor columns survive only because they were read first.
+          A read that FAILS therefore aborts the run before the clear — it is an
+          error, never an empty tab. Three distinct states, never collapsed:
+            read failed        -> EditorReadFailure -> abort, tab untouched
+            read ok, no rows   -> {} -> proceed (legitimately empty)
+            tab absent         -> created, read skipped -> proceed (named branch)
+          Previously a bare `except Exception: return {}` made the first state
+          look like the second, and the run silently overwrote six human-edited
+          columns with seeded or blank values.
+
   READ-BACK — turns the editor columns into data:
           • Any row checked `featured` becomes a featured vote. Its vote_id is
             already in the row, so NO matching is needed (retires the matcher).
@@ -74,20 +85,42 @@ def open_sheet(sheet_id, creds_file=None):
     return gc.open_by_key(sheet_id)
 
 
+class EditorReadFailure(RuntimeError):
+    """The existing All Votes tab could not be read.
+
+    Distinct from a successful read that returns no rows. The caller MUST abort
+    before write_tab(): the editor columns cannot be preserved if they were
+    never read, and this tab's write is a clear()+update() over the whole tab.
+    """
+
+
 def get_or_make_tab(sheet):
+    """(worksheet, created) — `created` True only when the tab was absent.
+
+    The flag is the whole point: a freshly created tab legitimately has no
+    editor values, and that must be a NAMED branch rather than something the
+    caller infers from an empty read. Without it, "tab absent, will create" and
+    "the read failed" are indistinguishable, which is what let a transient API
+    error overwrite six human-edited columns with seeded values.
+    """
     import gspread
     try:
-        return sheet.worksheet(ALL_VOTES_TAB)
+        return sheet.worksheet(ALL_VOTES_TAB), False
     except gspread.WorksheetNotFound:
-        return sheet.add_worksheet(title=ALL_VOTES_TAB, rows=400, cols=len(HEADER))
+        return sheet.add_worksheet(title=ALL_VOTES_TAB, rows=400, cols=len(HEADER)), True
 
 
 def read_existing_editor(ws):
-    """{vote_id: {editor_col: value}} for rows already in the tab."""
+    """{vote_id: {editor_col: value}} for rows already in the tab.
+
+    Raises EditorReadFailure if the read itself fails. Returning {} is reserved
+    for a SUCCESSFUL read of a tab with no rows — the two cases mean opposite
+    things to the caller and are never collapsed here.
+    """
     try:
         rows = ws.get_all_records()
-    except Exception:
-        return {}
+    except Exception as e:
+        raise EditorReadFailure(f"{type(e).__name__}: {e}") from e
     out = {}
     for r in rows:
         vid = str(r.get("vote_id") or "").strip()
@@ -233,9 +266,27 @@ def run(data_path, map_path, sheet_id, creds_file, base, org, dry_run, no_sheet)
         existing_editor = {}
     else:
         sheet = open_sheet(sheet_id, creds_file)
-        ws = get_or_make_tab(sheet)
-        existing_editor = read_existing_editor(ws)
-        print(f"  All Votes tab: {len(existing_editor)} existing rows.")
+        ws, created = get_or_make_tab(sheet)
+        if created:
+            # Named branch: the tab did not exist, so there is nothing to preserve.
+            # This is the ONLY path on which an empty editor map is legitimate.
+            existing_editor = {}
+            print(f"  All Votes tab absent — created. No prior editor values to preserve.")
+        else:
+            try:
+                existing_editor = read_existing_editor(ws)
+            except EditorReadFailure as e:
+                # ABORT BEFORE write_tab(): its clear()+update() would overwrite the
+                # six editor columns with seeded/blank values — silently, because the
+                # fallback writes plausible data rather than blanks. A failed read is
+                # an error, never an empty tab (the PS-79/B1 shape).
+                print(f"\n  !! ABORT: could not read the existing All Votes tab.\n"
+                      f"     {e}\n"
+                      f"     The editor columns ({', '.join(EDITOR_COLS)}) were NOT read, so\n"
+                      f"     they cannot be preserved. Nothing was written — the tab is untouched.\n"
+                      f"     Re-run once the Sheets API is reachable.", file=sys.stderr)
+                return 1
+            print(f"  All Votes tab: {len(existing_editor)} existing rows.")
 
     rows, effective = compute_effective(rollcall_votes, existing_editor, seed)
 

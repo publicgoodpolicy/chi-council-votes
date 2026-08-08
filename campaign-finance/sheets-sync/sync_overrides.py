@@ -58,6 +58,13 @@ from typing import Optional
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 DEFAULT_DATA_PATH = Path(__file__).parent.parent / 'council-data.json'
 
+# --- EDIT-SAFE-1/S3 + S4: tag continuity and coverage -------------------------
+# Both live HERE, at sync time, because this is the one step that holds the Sheet
+# and an artifact in the same process. Deliberately NOT in the terminal validator:
+# that runs on the artifact alone and must never acquire a network dependency.
+ARTIFACT_NAMES = ['council-data.json', 'election-data.json']
+TAG_CONTINUITY_KNOWN = Path(__file__).parent.parent / 'tools' / 'tag_continuity_known_failures.json'
+
 # Recognized rollup roles; anything else falls back to 'related'.
 VALID_ROLES = {'parent', 'alt-name', 'affiliated-pac', 'subsidiary', 'related'}
 
@@ -644,6 +651,119 @@ def write_slug_worklist(worklist, path):
         json.dump(payload, f, indent=2, ensure_ascii=True)
 
 
+# ---------------------------------------------------------------------------
+# EDIT-SAFE-1/S3 — tag continuity
+# ---------------------------------------------------------------------------
+def load_tag_continuity_known(path=TAG_CONTINUITY_KNOWN):
+    """Load the shrink-only known-failures file. Returns (known, fails).
+
+    Same discipline as tools/check_docs.py: entries may never exceed the pinned
+    max, and every entry names an owning lane. Growth fails in code, so the file
+    cannot become a place to park new orphans.
+    """
+    fails = []
+    try:
+        with open(path, encoding='utf-8') as f:
+            known = json.load(f)
+    except FileNotFoundError:
+        return {'max_entries': 0, 'entries': []}, [
+            f"[SHEET/TAG-CONT] known-failures file missing: {path}"]
+    if len(known['entries']) > known['max_entries']:
+        fails.append(
+            f"[SHEET/TAG-CONT] known-failures file GREW: {len(known['entries'])} entries > "
+            f"pinned max_entries {known['max_entries']} — shrink-only is enforced; a new "
+            f"orphan is a finding, not an entry")
+    for e in known['entries']:
+        if not e.get('owner'):
+            fails.append(f"[SHEET/TAG-CONT] known-failures entry has no owning lane: "
+                         f"{e.get('token')}")
+    return known, fails
+
+
+def resolvable_donor_ids(data, data_path):
+    """Donor ids resolvable in ANY artifact: the one in memory, plus every sibling
+    artifact on disk.
+
+    The union is the point. The Sheet is shared across both tools, so a Sheet id
+    absent from the artifact being synced is usually just the other tool's donor —
+    counted per-artifact the orphan figure is alarming and wrong (G0 §3). Disk
+    reads only; this adds no network dependency.
+    """
+    ids = set(data.get('donors', {}))
+    contributing = ['<in-memory: %s>' % Path(data_path).name]
+    here = Path(data_path).resolve()
+    for name in ARTIFACT_NAMES:
+        sib = (Path(__file__).parent.parent / name).resolve()
+        if sib == here or not sib.exists():
+            continue
+        try:
+            with open(sib, encoding='utf-8') as f:
+                ids |= set(json.load(f).get('donors', {}))
+            contributing.append(name)
+        except Exception as e:
+            # Named, not swallowed: an unreadable sibling shrinks the union and
+            # would manufacture orphans, so say so rather than fail quietly.
+            contributing.append(f'{name} <UNREADABLE: {type(e).__name__}>')
+    return ids, contributing
+
+
+def check_tag_continuity(sheet_ids, resolvable, known):
+    """Every Sheet donor id resolves in >=1 artifact. Returns (fails, stats).
+
+    A Sheet row whose id matches no donor anywhere is inert: the human who typed
+    it sees a tag that reaches nothing, and nothing reports it. Pure function —
+    the demonstration drives it directly with an injected id.
+    """
+    known_tokens = {e['token'] for e in known['entries']}
+    unresolved = sorted(set(sheet_ids) - set(resolvable))
+    fresh = [i for i in unresolved if i not in known_tokens]
+    seen_known = {i for i in unresolved if i in known_tokens}
+
+    fails = []
+    for i in fresh:
+        fails.append(
+            f"[SHEET/TAG-CONT] Sheet donor id resolves in no artifact: {i!r} — the "
+            f"editorial work on that row reaches nothing. Fix the id, merge the donor, "
+            f"or record it in {TAG_CONTINUITY_KNOWN}")
+    for e in known['entries']:                      # a listed entry must still fail
+        if e['token'] not in seen_known:
+            fails.append(
+                f"[SHEET/TAG-CONT] known-failures entry no longer fails — remove it "
+                f"(shrink-only): {e['token']}")
+    return fails, {'sheet_ids': len(set(sheet_ids)),
+                   'unresolved': len(unresolved),
+                   'known_hits': len(seen_known),
+                   'fresh': len(fresh)}
+
+
+# ---------------------------------------------------------------------------
+# EDIT-SAFE-1/S4 — coverage, REPORT ONLY (never a gate: it fails every build today)
+# ---------------------------------------------------------------------------
+def coverage_figure(data, sheet_ids):
+    """Donors in THIS artifact carrying no Sheet row, and what they received.
+
+    Reported, never asserted. Two-thirds of council donors are untaggable without
+    someone running export_unclassified — that is the size of the manual step the
+    completeness model depends on, and it is a trend to watch rather than a defect
+    to fail on. The push-model exporter that would close it is banked to REFRESH-1.
+    """
+    donors = data.get('donors', {})
+    have = set(sheet_ids)
+    missing = {d for d in donors if d not in have}
+    total = 0.0
+    missing_amt = 0.0
+    for c in data.get('contributions', []):
+        try:
+            amt = float(c.get('amount') or 0)
+        except (TypeError, ValueError):
+            continue
+        total += amt
+        if c.get('donor_id') in missing:
+            missing_amt += amt
+    return {'donors': len(donors), 'missing': len(missing),
+            'missing_amount': round(missing_amt, 2), 'total_amount': round(total, 2)}
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                   formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -677,6 +797,41 @@ def main():
     print(f"  {len(merges)} donor-merge pairs")
     clusters = read_donor_clusters(sheet)
     print(f"  {len(clusters)} donor clusters (rollups)")
+
+    # --- EDIT-SAFE-1/S3 + S4 -------------------------------------------------
+    # Run BEFORE anything is applied or written: the question is whether the
+    # Sheet's ids reach the artifact as ingest built it, and a failure must abort
+    # before the artifact write below.
+    all_sheet_ids = set(overrides) | {
+        m for c in clusters.values() for m in (c.get('members') or [])}
+    resolvable, contributing = resolvable_donor_ids(data, data_path)
+    known, known_fails = load_tag_continuity_known()
+    tc_fails, tc_stats = check_tag_continuity(all_sheet_ids, resolvable, known)
+
+    print("Checking tag continuity (EDIT-SAFE-1/S3)…")
+    print(f"  union scope: {', '.join(contributing)}")
+    print(f"  {tc_stats['sheet_ids']} distinct Sheet donor ids · "
+          f"{tc_stats['unresolved']} unresolved "
+          f"({tc_stats['known_hits']} known, {tc_stats['fresh']} new) · "
+          f"pinned max {known['max_entries']}")
+
+    # S4 — coverage. REPORTED, never asserted. Collection scope named per D12.
+    cov = coverage_figure(data, all_sheet_ids)
+    print(f"  coverage [{Path(data_path).name}] — donors with NO Sheet row: "
+          f"{cov['missing']} of {cov['donors']}; their contributions "
+          f"${cov['missing_amount']:,.2f} of ${cov['total_amount']:,.2f}")
+    print(f"    scope: donors in this artifact's donors{{}} map against the union of ids "
+          f"in Donor Overrides + Donor Clusters; amounts are summed contributions[] "
+          f"across ALL cycles, including cycles excluded from published figures.")
+    print(f"    report only — completeness is pull-model (export_unclassified), never a gate.")
+
+    if known_fails or tc_fails:
+        for f in known_fails + tc_fails:
+            print(f"  !! {f}")
+        raise SystemExit(
+            f"Tag-continuity check FAILED ({len(known_fails) + len(tc_fails)}) — "
+            f"nothing written. Known-failures file: {TAG_CONTINUITY_KNOWN}")
+    print("  tag continuity: OK")
 
     print("Applying merges (dedupe)…")
     merge_changes, mergemap = apply_merges(data, merges)

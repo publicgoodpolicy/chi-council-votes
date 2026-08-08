@@ -275,11 +275,29 @@ primary industry when present, else keeps the existing first industry; additiona
 append without duplication. Combined with the union rule above, "unclassified" is stable
 only as an explicit Sheet value, never as an artifact-resident state.
 
-**Direction of flow** [C3.7, SOURCED]: in the donor-editorial domain, values flow
-Sheet → artifact only; no pipeline value returns to the Sheet. Qualifier so no one
-over-generalizes: the votes tab **is** machine-written — the vote sync clears and rewrites
-the machine vote columns while reading and re-emitting the editor columns. That is a
-votes-domain scaffolding write, not classification write-back.
+**Direction of flow, and it is scope-enforced rather than conventional** [C3.7, SOURCED]:
+in the donor-editorial domain, values flow Sheet → artifact only; no pipeline value returns
+to the Sheet. **The guarantee is structural**: every pipeline program that reads an
+editorial tab holds a **read-only** Sheets credential, so a future edit adding a write
+fails at the API rather than at review, and the one pipeline program that does hold a write
+scope targets a tab **disjoint** from every editorial tab. The editor application is the
+deliberate exception — it is the human write path this property exists to protect — and it
+writes **cell-scoped**, building one range per changed column of a matched row, never
+rewriting a row wholesale and never clearing a tab; a row it cannot match is reported
+rather than guessed at. The property is asserted **statically at build time** (§8's
+scope-check row; both gate invokers, no network): an unclassified Sheet-touching program, a
+scope upgrade on an editorial reader, a write verb aimed at an editorial tab, a second
+editorial writer, or an undeclared tab name each fail the build. It is a property the
+project already had and would not have noticed losing.
+
+Qualifier so no one over-generalizes: the votes tab **is** machine-written — the vote sync
+clears and rewrites the whole tab, preserving the editor columns by reading them first and
+re-emitting them. That is a votes-domain scaffolding write, not classification write-back.
+**Because preservation depends on that read, the read is fail-loud**: a read that *fails* is
+an error and aborts before the clear, while a successful read returning nothing and an
+absent tab are separate, named branches. Collapsing the three — as a bare
+catch-all-and-return-empty did — turns a transient API error into a silent overwrite of the
+editor columns with seeded values, which is dollar-invisible and render-invisible both (§6).
 
 ---
 
@@ -333,6 +351,34 @@ money-requires-a-claim rule, and `owns_committee` against expectations recompute
 `candidates[].committee_id` claims (PS-82: different fields, different writers; the
 coverage limit is stated at the check's site — a mis-authored claim defeats both sides
 and belongs to the authoring layer, guarded by INV-ELECT).
+
+**Sheet-edit reachability is asserted at sync time, against the union of artifacts**
+[C4.8, SOURCED]: an editorial row keys to a donor by the minted slug (C4.1) and is applied
+by **exact match**, so a row whose id matches no donor is silently inert — the tag reaches
+nothing, and nothing reports it. The Sheet apply therefore asserts that every Sheet donor id
+(overrides plus cluster members) resolves in **at least one artifact**, and fails **before
+the artifact write** when one does not. **The union is load-bearing, not a convenience:**
+the Sheet is shared across both tools, so an id absent from the artifact being synced is
+usually just the other tool's donor — a per-artifact orphan count is *misleading*, not
+merely narrower, and reporting one would manufacture alarm. The check lives here rather than
+in the terminal validator because this is the only step holding the Sheet and an artifact in
+one process, and the validator must never acquire a network dependency. Residual orphans sit
+in a **shrink-only** known-failures file that names an owning lane per entry: growth fails,
+and an entry that *stops* failing fails too, so the file cannot outlive its cause. The
+signature it exists for is the **re-mint**: one filer spelling a name several ways, each
+spelling minting its own slug, and only one of them carrying the human's tag — the tagged
+one then stops accruing, invisibly.
+
+**Editorial coverage is pull-model, and it is reported rather than gated** [C4.9, SOURCED]:
+nothing in the pipeline appends a new donor row to the Sheet — the apply holds a read-only
+credential and therefore *cannot* — so a new donor becomes taggable only when a human runs
+the unclassified export, whose own docstring states that workflow. Completeness thus depends
+on a remembered manual step. Each run reports, per artifact, how many donors carry no Sheet
+row and what those donors received, with its collection scope stated in the same breath. It
+is a **reported figure and never a gate**: it is non-zero by construction today, and a check
+that fails every build is the routinely-overridden gate PS-23 leaves unresolved for exactly
+this reason. The push-model exporter that would close the gap belongs to the refresh-runbook
+lane, not here.
 
 **Known reachability failure — the `ie-committee-*` suffix gap** [C4.3, UNVERIFIED —
 **deferred-by-design**]: committee-derived donor identifiers that carry an appended
@@ -619,8 +665,8 @@ that catch defect classes the existing gates structurally cannot see.
 | tag | file | sha256 |
 |---|---|---|
 | S-ing | `campaign-finance/ingestion/ingest.py` | `5e2c2e2175fa8ed4de0d4a7dd2ffdd70208c5df206b50200faf6225359a7d4cf` |
-| S-syn | `campaign-finance/sheets-sync/sync_overrides.py` | `5162f700c72f1fc02b40e65ecf0bbdf3d4955a712eb8525055aa7a0cc06a6098` |
-| S-bld | `campaign-finance/build_all.sh` | `84a7b14547ee8bee4c6bd2846d77c5cc12e56c4a6c02bd4af6339a88a18aae54` |
+| S-syn | `campaign-finance/sheets-sync/sync_overrides.py` | `52dc859c4b7c4012fffc9ebfbe0af8e6f70f597ae876505d6854bb60fea922d5` |
+| S-bld | `campaign-finance/build_all.sh` | `1ecdb058fd5b6e15059abb16a3f97f43c48f124e51c6cf5185794b24079b0963` |
 | S-t1 | `campaign-finance/ingestion/transform_slice1.py` | `5f807b26245ee22173d3903b9b8a3825f224c47c4f2d7ad11042ee87a6ccb68d` |
 | S-ie | `campaign-finance/ingestion/ingest_ie.py` | `242caca31d35adfd962f5f1c2897c07345afe1a26286f2cc6ffd779376847158` |
 | S-rep | `campaign-finance/ingestion/repair_clusters.py` | `90cc6912647479510d10d505debb84d18fbd28557bf5996b01a992eb1ddf283c` |
@@ -629,7 +675,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-vld | `campaign-finance/ingestion/validate_council_data.py` | `6c83c3d5ab25b0ea402f06ae3a0d1e456d0497f23f91527f8ce7276d19900538` |
 | S-rst | `campaign-finance/ingestion/restamp_committee_linkage.py` | `6ceb82f9bbcffa08fdb21904b8585982a6bff7e3982e0b810937e2958019d06e` |
 | S-cbr | `campaign-finance/ingestion/convert_bulk_receipts.py` | `ac33aa394c4f8905c307390160fbe397a09399199a3396b07f29f01729bbe582` |
-| S-av | `campaign-finance/sync_allvotes.py` | `2ca09ee7323741919f048e61062d54a62719f56f88f71f99b721fe965c753f69` |
+| S-av | `campaign-finance/sync_allvotes.py` | `feb409e0f70940ec6750540d3a2458c6bbb24beb89a1fd939400034e4554d8f7` |
 | S-cemb | `campaign-finance/elections/reference/council-embed.html` | `148b05bc6c4cff9abca1097457db6164917d932455e6c63f9579a8b7a6c371b6` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
 | S-edat | `campaign-finance/elections/embed/data.js` | `e36af72ece73ff47b1322abd08548b1f3a1a7624f896381c6c8f10fd6b043ecc` |
@@ -637,6 +683,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-eapp | `campaign-finance/elections/embed/app.js` | `ea8a6b01871dec4cb63a21996fbb4572f855e11a45f0cf9e0ff35fe56815a659` |
 | S-srv | `campaign-finance/editor/serve.py` | `f430f67b2d2367893ab4cb37a1c25ff84d71bb93b53a23b78f253ec17dccaa3a` |
 | S-rec | `campaign-finance/ingestion/reconcile.py` | `e832e648b5cf4ceee065e0ad07f610ff14b6c47a66609b300c7f2cdba6114ae2` |
+| S-chk | `campaign-finance/tools/check_sheet_scopes.py` | `56bdd6335c621d7c8551a38325fdbff4b25fdc5c0948b2d3608e318126f20527` |
 | A-probe | `~/probe-sync-2026-07-24/probe-report.md` | `4c678cf0c14dd370f8b52744bf473000340ce16449a5365841b6ac92d8e5f9bb` |
 | A-add | `~/probe-sync-a-2026-07-24/addendum-a-report.md` | `468ba24f4f418f72c2720608353c83e52694c41637cf9ff16a9b267d37e49ed6` |
 | A-ba1g0 | `~/halt-ba-1-2026-07-24/g0-report.md` | `9aeaa793fd5f4afe59d9ac504f7f00dd219f4417cbafdd3403e5a44f661e812e` |
@@ -645,6 +692,7 @@ that catch defect classes the existing gates structurally cannot see.
 | A-bbg0 | `~/halt-bulk-b-2026-07-22/g0-report.md` | `d6a65529623c7928a80ef2016f1f905af93d359a749e37dd3f150e5471aa6dc1` |
 | A-bbg1 | `~/halt-bulk-b-2026-07-22/g1-report.md` | `594c8c4da6db7a1a6d1768ff0d81eedd0c1030e3d20b56285c9a5166d96c5846` |
 | A-l0g0 | `~/ledger-0-2026-08-07/ledger-0-g0-report.md` | `39f5f5bcef4592b5823e7320d5fb6766890675c25a3befa559fc8e3e3fa0ede4` |
+| A-esg0 | `~/edit-safe-1-2026-08-07/edit-safe-1-g0-report.md` | `1ff6960b4ec218063755dddb90b462ccc3aea9a8c51176d1296ad1c94921c74e` |
 
 **SOURCED rows** (`claim-id | file | line(s)`):
 
@@ -653,7 +701,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.2 | S-bld | 3-8 (header: one local builder), 49 (the vote fetch) |
 | C1.2 | A-ba1g0 | 25-42 (§G0.1 sole-orchestrator census: only .sh, no CI, fetch invoked nowhere else) |
 | C1.3 | S-ing | 488-509 (donor-union; preserved subset 492-500, 506-508) |
-| C1.3 | S-syn | 570-581 (sole-restorer writes) |
+| C1.3 | S-syn | 577-588 (sole-restorer writes) |
 | C1.3 | A-ba1g0 | 44-54 (§G0.2 the firing configuration), 56-66 (§G0.3) |
 | C1.4 | S-seed | 57-61 (rollups-last rationale), 63-70 (governing rule) |
 | C1.4 | S-rol | 284-285 (runs-last comment) |
@@ -661,7 +709,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.5 | S-seed | 63-65 (must-never-run-without-parent rule) |
 | C1.5 | S-t1 | 10-16 (parent derivation from cluster state) |
 | C1.6 | S-rep | 10-24 (post-re-ingest repair: re-stamp / reparent / dissolve) |
-| C1.7 | S-syn | 449-466 (reset), 506-511 (cluster pass writes parent directly) |
+| C1.7 | S-syn | 456-473 (reset), 513-518 (cluster pass writes parent directly) |
 | C1.7 | S-t1 | 10-16 (prior-run derivation it supersedes) |
 | C1.8 | S-bld | 4-8 (replaced the nightly Action) |
 | C1.9 | S-bld | 62, 79, 80, 86, 87, 88, 92-94 (invocation order conforming to the block; executable content verified byte-identical, comment-stripped, to the pre-amend revision recorded in the BA-1 lane) |
@@ -672,14 +720,14 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.14 | S-cbr | 59-65 (`D2PART_NAME`, the five itemizable codes), 357 and 463 (the selection pass and the reassembly pass, both requiring membership) |
 | C1.14 | A-l0g0 | §5 (the D2Part tally over the receipts bulk: the out-of-map values are field-shifted artifacts, not types) |
 | C2.1 | S-ing | 86-127 (rules), 130-141 (classifier), 314-320 (assignment), 492-496 (partial preserve) |
-| C2.1 | S-syn | 564-570 (merge) |
-| C2.2 | S-ing | 497-500; S-syn 161-165, 572-575 |
-| C2.3 | S-ing | 506-508 (absent from carry); S-syn 166-171, 576-581 (sole restorer) |
-| C2.4 | S-ing | 501-508 (guarded carry); S-syn 449-466, 506-511; S-t1 10-16 |
-| C2.5 | S-syn | 415-417 (recompute); A-add 146-160 (§A4.2 writer sweep, census-invisible) |
-| C2.6 | S-syn | 590-630 (alias matcher) |
+| C2.1 | S-syn | 571-577 (merge) |
+| C2.2 | S-ing | 497-500; S-syn 168-172, 579-582 |
+| C2.3 | S-ing | 506-508 (absent from carry); S-syn 173-178, 583-588 (sole restorer) |
+| C2.4 | S-ing | 501-508 (guarded carry); S-syn 456-473, 513-518; S-t1 10-16 |
+| C2.5 | S-syn | 422-424 (recompute); A-add 146-160 (§A4.2 writer sweep, census-invisible) |
+| C2.6 | S-syn | 597-637 (alias matcher) |
 | C2.7 | S-ing | 294-306 (type), 316-334 (identity fields) |
-| C2.8 | S-syn | 146-173 (tab reader: the writer-set columns) |
+| C2.8 | S-syn | 153-180 (tab reader: the writer-set columns) |
 | C2.9 | A-add | 141-160 (§A4: sweep method, aka fixture) |
 | C2.10 | A-add | 87-98 (§A2.3: the value-granularity qualifier — property shared, position not) |
 | C3.1 | S-ing | 130-141 (short-circuit before rules), 182-189 (name-format heuristic) |
@@ -687,15 +735,17 @@ that catch defect classes the existing gates structurally cannot see.
 | C3.2 | S-ing | 141 (org no-match fallback) |
 | C3.3 | A-add | 116-139 (§A3.4: label census; Sheet-only enumeration; numbers live here) |
 | C3.4 | S-ing | 130-141 (individual = name shape), 311-312 (self-funding = money provenance) |
-| C3.5 | S-syn | 156 (empty cell carried only if non-empty), 565 (fall-through); S-ing 492-496 (union re-classifies bare marker) |
+| C3.5 | S-syn | 163 (empty cell carried only if non-empty), 572 (fall-through); S-ing 492-496 (union re-classifies bare marker) |
 | C3.5 | A-probe | 74-94 (§P2, both representations) |
-| C3.6 | S-syn | 564-570 |
-| C3.7 | S-syn | 101, 108, 119 (read-only Sheet access); S-av 40-42, 85-96, 99-101 (votes-tab machine write, editor columns preserved) |
+| C3.6 | S-syn | 571-577 |
+| C3.7 | S-syn | 108, 115, 126 (read-only Sheet access); S-av 51-53, 88-95 (the named read-failure type), 97-110 (get_or_make_tab's created flag), 113-130 (fail-loud read: raise on failure, empty only on a successful read), 132-134 (write_tab's clear+update — what the abort protects), 268-289 (the three named branches at the call site) |
+| C3.7 | S-chk | whole script (the static no-editorial-writeback check: role classification, reader-scope, writer-disjointness, write-verb, allowlist-integrity and tab-declaration rules; `--self-test` fires each on a synthetic violation) |
+| C3.7 | S-bld | 108 (the build_all.sh invoker) |
 | C3.7 | A-probe | 120-130 ((b) universality + qualifier) |
 | C4.1 | S-ing | 147-156 (slug minting; stability rationale in situ) |
 | C4.2 | A-bbg1 | 38-40 (SEIU propagation fixture: shared Sheet → elections artifact) |
 | C4.3 | A-probe | 152 (banked open-thread naming; mechanism deliberately not characterized here) |
-| C4.4 | S-syn | 590-630 (uniqueness-gated alias; never rewrite) |
+| C4.4 | S-syn | 597-637 (uniqueness-gated alias; never rewrite) |
 | C4.5 | S-seed | 257, 284, 309 (the three stamp sites), 354-359 (fatal unknown-race-id), 362-368 (mint-time shared check, fatal) |
 | C4.5 | S-vld | 255-321 (the ONE shared implementation: namespace/convention resolvers + election_mismatches), 324-335 (durable INV-ELECT gate), 82 (wired into validate) |
 | C4.7 | S-ing | 681-706 (resolve_committee_claimants — the ONE resolver), 585-599 (deterministic linkage build consuming it) |
@@ -703,6 +753,10 @@ that catch defect classes the existing gates structurally cannot see.
 | C4.7 | S-vld | 354-399 (INV-LINK-1..3 + coverage-limit statement), 83 (wired into validate) |
 | C4.6 | S-rol | 109-112, 127-130 (by_candidate/by_race keyed (id, cycle) — no election), 132-204 (by_candidate_election, the election-keyed variant) |
 | C4.6 | S-vld | 215-221 (INV-PERSON-1 pins by_candidate.all as dedup identity) |
+| C4.8 | S-syn | 65-66 (the artifact list + known-failures path), 657-681 (shrink-only loader: growth and owner-less entries fail in code), 683-708 (`resolvable_donor_ids` — the union across artifacts, disk reads only), 710-736 (`check_tag_continuity` — unresolved ids, and a listed entry that no longer fails), 805-834 (the call site: runs before the write, aborts on failure) |
+| C4.8 | A-esg0 | §3 (the orphan census against the union, and the re-mint signature it caught) |
+| C4.9 | S-syn | 742-764 (`coverage_figure`), 818-826 (the per-artifact report and its stated collection scope) |
+| C4.9 | A-esg0 | §2 (pull-model established from bytes; the coverage gap and its collection scope) |
 | C5.1 | A-fw1 | 7-16 (fix sites exist only in the elections path; artifact layer separate) |
 | C5.2 | S-cemb | 42-52 (dataUrl + optional sharded mode); S-eemb 19-24 (elections artifact + inlined deploy) |
 | C5.2 | A-ba1g2 | 49 (Rider 2: neither embed renders entity-type / last-editor) |

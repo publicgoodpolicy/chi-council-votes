@@ -1014,6 +1014,17 @@ async function assertPersonSurface(T, ctx, fx) {
     T.ok('[DOCS] check_docs (PS-73) green — ' + tail, res.status === 0);
   })();
 
+  // [SHEET/SCOPE] no-editorial-writeback (EDIT-SAFE-1/S2): one implementation
+  // (campaign-finance/tools/check_sheet_scopes.py), two invokers — build_all.sh's
+  // validation gate and this line, mirroring [DOCS] above. Static and network-free:
+  // it reads code and declared scopes, never the live Sheet.
+  (function () {
+    var res = require('child_process').spawnSync('python3',
+      [path.join(__dirname, '..', '..', '..', 'tools', 'check_sheet_scopes.py')], { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[SHEET/SCOPE] no-editorial-writeback holds — ' + tail, res.status === 0);
+  })();
+
   console.log('\n' + T.n + ' checks · ' + (T.fail ? ('FAILED ' + T.fail) : 'ALL PASS'));
   process.exit(T.fail ? 1 : 0);
 })();
