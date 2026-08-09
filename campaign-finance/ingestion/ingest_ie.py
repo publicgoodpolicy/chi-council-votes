@@ -52,8 +52,41 @@ def cycle_for(date,cycles):
     for k,s,e in rs:
         if s<=date<=e: return k
     return 'pre-2011' if date<rs[0][1] else rs[-1][0]
+# SBE bulk exports are Windows-1252 (cp1252), NOT latin-1. The two agree on 0x00-0x7F and
+# 0xA0-0xFF and disagree on 0x80-0x9F, where cp1252 carries real punctuation and latin-1
+# carries C1 controls. latin-1 NEVER raises, so reading a cp1252 file as latin-1 is a SILENT
+# mis-decode: 0x92 (a curly apostrophe) became U+0092, a control character, and rode into the
+# artifact as a display name — `Daniel O\x92Keefe`, live on the deployed elections tool.
+#
+# The remedy is convert_bulk_receipts.py's, not a swapped encoding string: strict cp1252 with
+# a byte pre-scan, so a future pull carrying one of the five unmapped bytes fails LOUDLY
+# rather than corrupting quietly. A decoder that cannot fail is worse than one that can.
+CP1252_UNMAPPED = {0x81, 0x8D, 0x8F, 0x90, 0x9D}
+
+
+def prescan_unmapped(path):
+    """Byte pre-scan: locate any cp1252-unmapped bytes. Returns [(offset, hexbyte), ...]."""
+    hits, off = [], 0
+    with open(path, 'rb') as f:
+        while True:
+            chunk = f.read(1 << 20)
+            if not chunk:
+                break
+            for i, b in enumerate(chunk):
+                if b in CP1252_UNMAPPED:
+                    hits.append((off + i, hex(b)))
+            off += len(chunk)
+    return hits
+
+
 def read_tsv(path):
-    with open(path,encoding='latin-1',newline='') as f:
+    bad = prescan_unmapped(path)
+    if bad:
+        raise SystemExit(
+            f"FATAL: {len(bad)} cp1252-unmapped byte(s) in {path} -- first 10: {bad[:10]}\n"
+            f"  These bytes have no cp1252 character. Decoding would corrupt or crash.\n"
+            f"  Inspect the source pull; do NOT fall back to latin-1, which hides this.")
+    with open(path,encoding='cp1252',newline='') as f:
         r=csv.DictReader((line.replace('\r\n','\n') for line in f),delimiter='\t')
         for row in r: yield row
 

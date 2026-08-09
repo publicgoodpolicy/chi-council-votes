@@ -1085,6 +1085,24 @@ async function assertPersonSurface(T, ctx, fx) {
     T.ok('[SBF/SELF] school-board finance builder self-test green — ' + tail, res.status === 0);
   })();
 
+  // [ENC] SBFIN-4: no persisted display name carries a C1 control or an unmapped byte.
+  // A decoder bug is invisible by construction — latin-1 never raises — so the artifact is
+  // the only place it can be caught. SHRINK-ONLY known-failures: the one live instance
+  // (`Daniel O\x92Keefe`, live on the deployed elections tool) is pinned at 1, and the
+  // checker FAILS if a listed entry stops failing, so the re-run that clears it must also
+  // remove the pin.
+  (function () {
+    var root = path.join(__dirname, '..', '..', '..');
+    var chk = path.join(root, 'tools', 'check_encoding.py');
+    var res = require('child_process').spawnSync('python3', [chk], { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[ENC] no persisted name carries a C1/unmapped byte — ' + tail, res.status === 0);
+    var st = require('child_process').spawnSync('python3', [chk, '--self-test'],
+                                                { encoding: 'utf8' });
+    var stail = ((st.stdout || '') + (st.stderr || '')).trim().split('\n').pop();
+    T.ok('[ENC/SELF] check_encoding self-test green — ' + stail, st.status === 0);
+  })();
+
   // [SBF/NOSHEET] the scope silence made an asserted absence (HALT-B addendum 3).
   // check_sheet_scopes discovers files by SHEET_MARKERS; a builder that touches no
   // Sheet is simply not discovered, so its 8/8 green says nothing about it either

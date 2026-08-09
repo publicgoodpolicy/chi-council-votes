@@ -1,0 +1,16 @@
+{
+  "comment": "SBFIN-4 check_encoding known failures. SHRINK-ONLY: max_entries is pinned at creation and may never rise; the checker fails in code if entries exceed it, if an entry lacks an owner, or if a listed entry NO LONGER fails (remove it). That last rule is why this file is safe here: the decoders were fixed at their sites in this commit, but the artifact still carries the bad name because no pipeline has run. The moment the elections chain re-runs, this entry stops failing and the checker DEMANDS its removal — the re-run cannot quietly leave the pin standing.",
+  "created": "2026-08-09",
+  "max_entries": 1,
+  "entries": [
+    {
+      "artifact": "election-data.json",
+      "collection": "donors",
+      "key": "daniel-o-keefe",
+      "field": "name",
+      "owner": "SBFIN-4 — clears at the next elections-chain re-run",
+      "dated": "2026-08-09",
+      "note": "0x92 (cp1252 right single quote) read as latin-1 -> U+0092. Decoders fixed at ingest_ie.py and enrich_committee_names.py in the same commit; the artifact predates the fix. Urban Center Action's joint-top funder at 19.3%, live on the deployed elections tool. The donor id is unaffected — norm() strips both the control and the apostrophe, so the slug is daniel-o-keefe either way."
+    }
+  ]
+}

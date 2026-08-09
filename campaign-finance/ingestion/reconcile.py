@@ -12,7 +12,7 @@ v1 scope: elections candidate committees only. The IE-committee lane (typed
 'IE Committee Receipt' / 'IE Committee Dues Transfer') and the council lane are
 deferred to v2 -- see PIPELINE_RUNBOOK.md.
 
-SBE bulk exports are Windows-1252 encoded; both raw files are read as latin-1.
+SBE bulk exports are Windows-1252 encoded; both raw files are read as cp1252.
 
 CLI:
   python3 reconcile.py \
@@ -37,7 +37,13 @@ D2_PERIOD_DOCNAMES = {'Quarterly', 'Semiannual', 'Pre-election', 'Annual', 'Fina
 ITEMIZED_TYPES = {'Individual Contribution', 'Transfer In', 'Loan Received', 'Other Receipt'}
 INKIND_TYPE = 'In-kind Contribution'
 AGGREGATE_TYPE = 'Aggregate'
-RAW_ENCODING = 'latin-1'  # SBE bulk exports are Windows-1252, not UTF-8
+# PS-48: the comment here used to state "SBE bulk exports are Windows-1252" above a value of
+# 'latin-1' — a documented false claim, and the same confusion that let `Daniel O\x92Keefe`
+# into the elections artifact. Corrected to match the fact the comment already knew.
+# This module is a COMPARATOR and persists nothing, so the mis-decode could not reach an
+# artifact from here; it is corrected anyway, because a reader copying this line into a
+# writer is exactly how the defect spreads.
+RAW_ENCODING = 'cp1252'  # SBE bulk exports are Windows-1252, not UTF-8 and not latin-1
 CENT = 1.0               # reconciliation tolerance: |residual| < $1 counts as clean
 
 

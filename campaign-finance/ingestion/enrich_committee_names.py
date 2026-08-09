@@ -10,13 +10,23 @@ also appears as a donor (its giving face). Run after ingest_ie, before build_sha
 
 Only FIELD_MAP is format-dependent — adjust if the SBE header differs.
 """
-import json, re, csv, sys, argparse
+import json, re, csv, sys, os, argparse
 csv.field_size_limit(min(sys.maxsize, 2**31-1))
+# ONE implementation of the cp1252 pre-scan, imported rather than retyped: a second copy of
+# the unmapped-byte set is a divergence waiting to happen (the `_bucket` reasoning again).
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from ingest_ie import prescan_unmapped as ie_prescan  # noqa: E402
 FIELD_MAP={"id":"ID","name":"Name"}
 
 def norm(s): return re.sub(r'\s+',' ',re.sub(r'[^a-z0-9 ]',' ',(s or '').lower())).strip()
 def read_tsv(path):
-    with open(path,encoding='latin-1',newline='') as f:
+    # cp1252, not latin-1 — see ingest_ie.read_tsv for why the difference is not cosmetic.
+    # This reader PERSISTS committee_name, so a silent mis-decode lands in the artifact.
+    bad = ie_prescan(path)
+    if bad:
+        raise SystemExit(
+            f"FATAL: {len(bad)} cp1252-unmapped byte(s) in {path} -- first 10: {bad[:10]}")
+    with open(path,encoding='cp1252',newline='') as f:
         for row in csv.DictReader((ln.replace('\r\n','\n') for ln in f),delimiter='\t'):
             yield row
 
