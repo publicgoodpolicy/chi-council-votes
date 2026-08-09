@@ -67,7 +67,9 @@ council-canonical:
 elections-canonical:
   build_election_seed -> ingest -> transform_slice1 -> transform_slice2
   -> ingest_ie -> enrich_committee_names -> sync_overrides -> build_rollups
-  -> validate_council_data
+  -> build_sb_finance -> validate_council_data
+  (build_sb_finance also requires ingest_sb_votes: it reads the school-board
+   roster's candidacy_ref bridge as well as rollups.*, and hashes both inputs)
 
 build_all.sh (votes builder; finance section conforms to council-canonical,
 omitting by design: convert_bulk_receipts, repair_clusters, ingest_ie,

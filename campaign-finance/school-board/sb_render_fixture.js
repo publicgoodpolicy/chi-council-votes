@@ -40,9 +40,14 @@ var DATA = path.join(REPO, 'campaign-finance/school-board-data.json');
 var EMBED_HTML = fs.readFileSync(EMBED, 'utf8');
 var REAL = JSON.parse(fs.readFileSync(DATA, 'utf8'));
 var sha = function (p) { return crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex'); };
-var EMBED_SHA0 = sha(EMBED), DATA_SHA0 = sha(DATA);
+var FINDATA = path.join(REPO, 'campaign-finance/school-board-finance.json');
+var REALFIN = JSON.parse(fs.readFileSync(FINDATA, 'utf8'));
+var EMBED_SHA0 = sha(EMBED), DATA_SHA0 = sha(DATA), FIN_SHA0 = sha(FINDATA);
 
 var n = 0, fail = 0, POSTED = null;
+// FIN is what the finance fetch resolves for the CURRENT boot; FETCHED records
+// every GET so the fetch count is asserted by observation, not by source-reading.
+var FIN = REALFIN, FETCHED = [];
 function ok(label, cond, detail) {
   n++; if (!cond) fail++;
   console.log((cond ? 'PASS  ' : 'FAIL  ') + label + (cond || !detail ? '' : '\n        ' + detail));
@@ -65,7 +70,15 @@ function boot(data, mode) {
             POSTED = String(u);
             throw new Error('FIXTURE POSTED to ' + u + ' — forbidden');
           }
+          // Every GET is recorded so [SBF/FETCH] can assert the ratified N=2 by
+          // enumeration rather than by reading the source for URL literals.
+          FETCHED.push(String(u));
           if (mode === 'fail') return Promise.reject(new Error('network unreachable'));
+          if (String(u).indexOf('school-board-finance.json') >= 0) {
+            // 'finfail' exercises the isolation requirement: finance down, votes fine.
+            if (mode === 'finfail') return Promise.reject(new Error('finance unreachable'));
+            return Promise.resolve({ ok: true, json: function () { return Promise.resolve(FIN); } });
+          }
           return String(u).indexOf('school-board-data.json') >= 0
             ? Promise.resolve({ ok: true, json: function () { return Promise.resolve(data); } })
             : Promise.resolve({ ok: false, status: 404, json: function () { return Promise.resolve({}); } });
@@ -83,6 +96,11 @@ function boot(data, mode) {
 function pick(v, seat) {                       // select a seat and re-render
   var s = v.doc.getElementById('ipg-sb-seat-sel');
   s.value = seat; s.onchange();
+  return { doc: v.doc, app: v.app, html: v.app.innerHTML, text: v.app.textContent || '' };
+}
+function setSel(v, id, value) {                // drive a select, then re-render
+  var s = v.doc.getElementById(id);
+  s.value = value; s.onchange();
   return { doc: v.doc, app: v.app, html: v.app.innerHTML, text: v.app.textContent || '' };
 }
 function nav(v, view) {
@@ -103,9 +121,23 @@ var S3 = regString(/`(No recorded votes yet for this member\.)`/);
 var S4 = regString(/`(Vote positions are entered from public Board[^`]*)`/);
 var S5 = regString(/\*\*Vacant seat label:\*\* `([^`]+)`/);
 
+/* SBFIN-1's four finance-state strings, read from the register for the same reason:
+ * the entry of record is what the page must match. Retyping them here would only
+ * prove the fixture agrees with itself. */
+var fentry = REG.split('### SBFIN-1 — finance state strings 1–4')[1].split('\n### ')[0];
+function fString(re) { var m = fentry.match(re); return m ? m[1] : null; }
+var F1 = fString(/`(No campaign finance records are on file[^`]*)`/);
+var F2 = fString(/`(Itemized donor detail for this campaign[^`]*)`/);
+var F3 = fString(/`(This chart classifies \{N\}%[^`]*)`/);
+var F4 = fString(/`(Industry classification of this member[^`]*)`/);
+// {N} is substituted at render, so the register form is matched on its stable halves.
+function around(tpl, marker) { return String(tpl).split(marker); }
+
 (async function () {
   ok('register entry yielded all five strings',
      !!(S1 && S2 && S3 && S4 && S5), JSON.stringify({ S1: !!S1, S2: !!S2, S3: !!S3, S4: !!S4, S5: !!S5 }));
+  ok('SBFIN-1 register entry yielded all four finance strings',
+     !!(F1 && F2 && F3 && F4), JSON.stringify({ F1: !!F1, F2: !!F2, F3: !!F3, F4: !!F4 }));
 
   // ---------- C3 state 1: the born artifact, 0 votes -> string 1 ----------
   var born = await boot(REAL, 'ok');
@@ -205,17 +237,20 @@ var S5 = regString(/\*\*Vacant seat label:\*\* `([^`]+)`/);
   var mapBlock = EMBED_HTML.split('var POSITION_DISPLAY = {')[1].split('};')[0];
   ok('[MAP] POSITION_DISPLAY declares exactly four pairs',
      (mapBlock.match(/'(Affirmative|Oppositional|Neutral|-)':/g) || []).length === 4, mapBlock.trim());
-  // Zero coupling is a property of the DATA source. Restated at SBVOTE-2 because the
-  // feedback POST added a second fetch target; the meaning is unchanged — exactly one
-  // artifact is read, and it is the ratified one.
+  // Zero coupling is a property of the DATA source. SBVOTE-2 restated this as "exactly
+  // one artifact"; SBFIN-1 ratification 1 DELIBERATELY reopens it as an enumerated N=2,
+  // both school-board-family. The claim is updated, not weakened: the count is still
+  // asserted exactly, and [SBF/FETCH] additionally asserts it by observed GETs.
   var fetchTargets = (EMBED_HTML.match(/fetch\(([A-Za-z_.]+)/g) || []);
-  ok('[MAP] exactly one DATA fetch, at the ratified refs/heads/main/ URL',
+  ok('[MAP] both DATA fetches use the ratified refs/heads/main/ URL form',
      EMBED_HTML.indexOf('refs/heads/main/campaign-finance/school-board-data.json') >= 0
-       && (EMBED_HTML.match(/IPG_SB_CONFIG\.dataUrl/g) || []).length === 1);
-  ok('[MAP] the only other fetch target is the feedback endpoint',
-     fetchTargets.length === 2
-       && fetchTargets.some(function (f) { return f.indexOf('IPG_SB_CONFIG') >= 0; })
-       && fetchTargets.some(function (f) { return f.indexOf('IPG_SB_FEEDBACK') >= 0; }),
+       && EMBED_HTML.indexOf('refs/heads/main/campaign-finance/school-board-finance.json') >= 0
+       && (EMBED_HTML.match(/IPG_SB_CONFIG\.dataUrl/g) || []).length === 1
+       && (EMBED_HTML.match(/IPG_SB_CONFIG\.financeUrl/g) || []).length === 1);
+  ok('[MAP] exactly three fetch call-sites: two data + the feedback endpoint',
+     fetchTargets.length === 3
+       && fetchTargets.filter(function (f) { return f.indexOf('IPG_SB_CONFIG') >= 0; }).length === 2
+       && fetchTargets.filter(function (f) { return f.indexOf('IPG_SB_FEEDBACK') >= 0; }).length === 1,
      JSON.stringify(fetchTargets));
   ok('[MAP] zero coupling: the embed names no other artifact and no finance embed',
      EMBED_HTML.indexOf('council-data.json') < 0
@@ -287,9 +322,153 @@ var S5 = regString(/\*\*Vacant seat label:\*\* `([^`]+)`/);
        && EMBED_HTML.indexOf('docs.google.com') < 0);
   ok('[SBV2/FB] NOTHING was POSTed by this fixture', POSTED === null, String(POSTED));
 
+  // ======================================================================
+  // SBFIN-1 / HALT-B — the finance surfaces.
+  // ======================================================================
+  var money = function (x) { return '$' + Math.round(x).toLocaleString('en-US'); };
+  var finBy = function (seat) {
+    return REALFIN.members.filter(function (m) { return m.seat === seat; })[0]; };
+
+  // ---- B.4: exactly TWO data fetches, enumerated -------------------------
+  var gets = FETCHED.filter(function (u) { return u.indexOf('formspree') < 0; });
+  var uniq = gets.filter(function (u, i) { return gets.indexOf(u) === i; });
+  ok('[SBF/FETCH] exactly two distinct DATA fetches, no third target',
+     uniq.length === 2, uniq.join(' | '));
+  ok('[SBF/FETCH] both are school-board-family artifacts',
+     uniq.every(function (u) {
+       return /school-board-(data|finance)\.json$/.test(u); }), uniq.join(' | '));
+  ok('[SBF/FETCH] the feedback endpoint is the only other target in the source',
+     (EMBED_HTML.match(/https:\/\/[^"' ]+/g) || [])
+       .filter(function (u) { return u.indexOf('raw.githubusercontent') < 0
+                                  && u.indexOf('fonts.googleapis') < 0
+                                  && u.indexOf('fonts.gstatic') < 0
+                                  && /^https:\/\/[a-z0-9.-]+\.[a-z]{2,}/i.test(u); })
+       .every(function (u) { return u.indexOf('formspree.io') >= 0; }));
+
+  // ---- the four member-page populations ---------------------------------
+  // One page per ratified finance_state, so a regression in any one is visible.
+  var mv = nav(mxv, 'member');
+  var pFull = pick(mv, '4A');                                  // person-anchored, 13
+  ok('[SBF/STATE] full: donor detail renders with tiles',
+     pFull.html.indexOf('ipg-sb-stats') >= 0 && pFull.html.indexOf('ipg-sb-donor') >= 0);
+  ok('[SBF/STATE] full: Raised equals the artifact direct amount for the DEFAULT election',
+     pFull.text.indexOf(money(finBy('4A').elections['2026'].direct.amount)) >= 0);
+  // The election filter is the ratified election-labeled control: driving it must
+  // move every figure to that election's own numbers, unrecomputed.
+  var pFull24 = setSel(pFull, 'ipg-sb-fin-el', '2024');
+  ok('[SBF/ELECT] the election filter re-keys the figures to the chosen election',
+     pFull24.text.indexOf(money(finBy('4A').elections['2024'].direct.amount)) >= 0
+       && pFull24.text.indexOf(money(finBy('4A').elections['2026'].direct.amount)) < 0);
+  ok('[SBF/SELF] self-funding renders in its OWN tile, not folded into Raised',
+     pFull24.text.indexOf('Self-funding') >= 0
+       && pFull24.text.indexOf(money(finBy('4A').elections['2024'].self_funding.amount)) >= 0
+       && pFull24.text.indexOf(money(finBy('4A').elections['2024'].direct.amount
+                                   + finBy('4A').elections['2024'].self_funding.amount)) < 0);
+  ok('[SBF/STATE] member page is DIRECT-ONLY: no IE figure appears on it',
+     pFull24.text.indexOf('Independent') < 0);
+
+  var pThin = pick(mv, '1A');                                  // totals-only, 3
+  ok('[SBF/STATE] totals-only: the ratified thinness string renders',
+     !!F2 && pThin.text.indexOf(F2) >= 0);
+  ok('[SBF/STATE] totals-only: NO donor rows and NO Donors tile (not derivable)',
+     pThin.html.indexOf('ipg-sb-donor') < 0 && pThin.html.indexOf('>Donors<') < 0);
+
+  var pNone = pick(mv, '9A');                                  // no_record, 4
+  ok('[SBF/STATE] no-record: the ratified no-record string renders',
+     !!F1 && pNone.text.indexOf(F1) >= 0);
+  ok('[SBF/STATE] no-record: no tiles, no bar, no donor rows',
+     pNone.html.indexOf('ipg-sb-stats') < 0 && pNone.html.indexOf('ipg-sb-bar') < 0);
+
+  var pVac = pick(mv, '10B');                                  // vacancy
+  ok('[SBF/STATE] vacancy: a seat notice and NO finance section at all',
+     pVac.html.indexOf('ipg-sb-fin') < 0 && pVac.text.indexOf('Vacant') >= 0);
+
+  // ---- both threshold branches ------------------------------------------
+  // 4A is measured above threshold and 6B below, on the REAL artifact — so both
+  // branches are exercised by real data. The synthetic boot below then flips one
+  // member, proving the branch follows the artifact's precomputed flag and is not
+  // keyed to a member id or to a recomputation in the embed.
+  ok('[SBF/BAR] above threshold: the bar renders with the disclosure line',
+     pFull.html.indexOf('ipg-sb-bar-seg') >= 0
+       && !!F3 && pFull.text.indexOf(around(F3, '{N}')[1]) >= 0);
+  var pBelow = pick(mv, '6B');
+  ok('[SBF/BAR] below threshold: NO bar, and string 4 renders as the primary state',
+     pBelow.html.indexOf('ipg-sb-bar-seg') < 0
+       && !!F4 && pBelow.text.indexOf(around(F4, '{N}')[0]) >= 0);
+  ok('[SBF/BAR] below-threshold copy carries the member’s own measured share',
+     pBelow.text.indexOf(String(Math.round(finBy('6B').coverage.substantive_share * 1000) / 10) + '% of donor dollars') >= 0);
+
+  var flipped = JSON.parse(JSON.stringify(REALFIN));
+  flipped.members.forEach(function (m) {
+    if (m.seat === '6B' && m.coverage) {
+      m.coverage.substantive_share = 0.91; m.coverage.meets_industry_threshold = true; }
+  });
+  FIN = flipped;
+  var vflip = await boot(REAL, 'ok');
+  var pFlip = pick(vflip, '6B');
+  ok('[SBF/BAR] the branch follows the artifact flag, not the member',
+     pFlip.html.indexOf('ipg-sb-bar-seg') >= 0 && pFlip.text.indexOf('91%') >= 0);
+  FIN = REALFIN;
+
+  // ---- B.2 Spend by member: the never-summed structural assert -----------
+  var sv0 = nav(pick(vflip, '4A'), 'spend');
+  var sv = setSel(sv0, 'ipg-sb-spend-el', '2024');
+  ok('[SBF/SPEND] the view renders three labeled streams',
+     sv.text.indexOf('Direct contributions') >= 0
+       && sv.text.indexOf('Independent — for') >= 0
+       && sv.text.indexOf('Independent — against') >= 0);
+  ok('[SBF/SPEND] independent scales are DISCLOSED, not implied',
+     sv.text.indexOf('Each stream has its own scale') >= 0);
+  ok('[SBF/SPEND] the never-summed sentence renders',
+     sv.text.indexOf('never added together') >= 0);
+  ok('[SBF/SPEND] rows are sorted by DIRECT alone', (function () {
+    var amts = [].slice.call(sv.doc.querySelectorAll('.ipg-sb-spend-amt'))
+      .map(function (e) { return Number(String(e.textContent).replace(/[$,]/g, '')); });
+    for (var i = 1; i < amts.length; i++) { if (amts[i] > amts[i - 1]) return false; }
+    return amts.length > 0;
+  })());
+  ok('[SBF/SPEND] rows with no IE carry the row-grain empty state',
+     sv.text.indexOf('No independent spending recorded.') >= 0);
+
+  // THE assert the council's own Spend-by-Alder surface does not have: for every
+  // rendered row, the right-hand amount is DIRECT ALONE, and no rendered figure
+  // anywhere equals any sum of two or more of that row's streams.
+  ok('[SBF/NEVERSUM] every row amount is direct alone, and no fused figure renders', (function () {
+    var rows = [].slice.call(sv.doc.querySelectorAll('.ipg-sb-spend-row'));
+    if (!rows.length) return false;
+    for (var i = 0; i < rows.length; i++) {
+      var seat = rows[i].getAttribute('data-spend-seat');
+      var fm = finBy(seat); if (!fm) return false;
+      var e = fm.elections['2024'];
+      if (!e) return false;
+      var d = Number(e.direct.amount || 0), s = Number(e.ie_support.amount || 0),
+          o = Number(e.ie_oppose.amount || 0);
+      var amt = String(rows[i].querySelector('.ipg-sb-spend-amt').textContent).trim();
+      if (amt !== money(d)) return false;                        // direct alone
+      var txt = rows[i].textContent;
+      var sums = [d + s, d + o, s + o, d + s + o].filter(function (x) { return x > 0; });
+      for (var j = 0; j < sums.length; j++) {
+        // A sum is only a violation if it is not itself one of the three stream values.
+        if ([d, s, o].indexOf(sums[j]) >= 0) continue;
+        if (txt.indexOf(money(sums[j])) >= 0) return false;
+      }
+    }
+    return true;
+  })());
+  ok('[SBF/NEVERSUM] the embed source contains no expression adding two streams',
+     !/ie_support[^;]*\+[^;]*ie_oppose|direct[^;]*\+[^;]*ie_(support|oppose)|\.sup\s*\+\s*\w*\.?opp/.test(EMBED_HTML));
+
+  // ---- finance failure is ISOLATED --------------------------------------
+  var vfin = await boot(REAL, 'finfail');
+  ok('[SBF/ISOLATE] a finance failure states itself and does NOT error the tool',
+     vfin.text.indexOf('Could not load campaign finance data') >= 0
+       && vfin.text.indexOf('Could not load Board voting data') < 0);
+  ok('[SBF/ISOLATE] the voting record still renders under finance failure',
+     vfin.html.indexOf('ipg-sb-seat-sel') >= 0);
+
   // ---------- no writes ---------------------------------------------------
-  ok('[NOWRITE] embed and artifact are byte-unchanged by this fixture',
-     sha(EMBED) === EMBED_SHA0 && sha(DATA) === DATA_SHA0);
+  ok('[NOWRITE] embed and artifacts are byte-unchanged by this fixture',
+     sha(EMBED) === EMBED_SHA0 && sha(DATA) === DATA_SHA0 && sha(FINDATA) === FIN_SHA0);
 
   console.log('\n' + n + ' checks · ' + (fail ? ('FAILED ' + fail) : 'ALL PASS'));
   process.exit(fail ? 1 : 0);

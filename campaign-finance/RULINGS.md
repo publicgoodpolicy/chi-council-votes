@@ -1331,3 +1331,25 @@ transcribed verbatim:
 > violation of the above is fatal and row-named.
 
 *Provenance: SBVOTE-1 D-2 amendment record (`sbvote-1-d2-amendment.md`), sha256 `7d0b450f6f04962ec263ac434ce18bc244ae4fca0fbe5d6411f3d8be642a6c97`, lines 15–32; ratified by Ishan 2026-08-08. **Amends D-2 of the G3 decision record** (`5d22cf1c…`) and governs over it; D-1, D-3, D-4 and D-5 are untouched. Occasion: the letter of D-2, applied to the sha-verified roster bytes, failed all 21 rows on blank `term_end` and the vacant seat on blank `term_start`, colliding with D-4's ruling that the vacancy is real — recorded at the P0 attestation (`sbvote-1-p0-attestation.md`, sha256 `ee09b45e3b428e99098e5e3d136ca12ca9eff94eb40a4662e835da4fbbdf688f`). **Predicate-only by ratification:** the amendment record's two adoptions and its reproduction-convention correction are deliberately NOT part of this entry — the convention fix and the self-test extension were discharged in commit `5afffa9c4c14c03833ce3e0d5c81da663085a62f`, and the green-at-zero-by-enumeration adoption binds lane reporting rather than stating a rule. Implemented as the MEMBER-1..7 checks; id-less, and no PS id is allocated — that a general validation predicate is numbered-ruling-shaped is recorded as a banked question, not acted on.*
+
+### SBFIN-1 — finance state strings 1–4
+
+The four states a member page's finance section can render, ratified at HALT-B diff review and
+transcribed verbatim:
+
+> 1. **No record** (no candidacy, or only `inc-` placeholder rows — 4 of 21 members):
+>    `No campaign finance records are on file with the State Board of Elections for this member.`
+> 2. **Thinness** (a candidacy resolves but carries no itemized donor detail — 3 of 21):
+>    `Itemized donor detail for this campaign is not yet ingested; totals are computed from state filings.`
+> 3. **Industry-bar disclosure**, rendered on every bar that renders:
+>    `This chart classifies {N}% of this member’s donor dollars by industry; individual donors and not-yet-classified contributions are excluded.`
+> 4. **Below threshold**, the PRIMARY bar-section state:
+>    `Industry classification of this member’s donors is still in progress — {N}% of donor dollars are classified so far, not yet enough to chart reliably.`
+>
+> `{N}` is the member's own `substantive_share`, rendered from the artifact's precomputed value
+> and **never recomputed in the embed**. String 4 is drafted as a primary state, not a fallback:
+> measured at HALT-A, only 5 of the 13 donor-detail pages clear the ratified 50% threshold, so
+> the industry bar does not render on **16 of 21 member pages** and string 4 is the more visible
+> of the two bar strings.
+
+*Provenance: SBFIN-1 G2 authorization (`sbfin-1-g2-authorization.md`, sha256 `2de786ac712eb1ef36851d96d31117b450defdd2d346d8ec5b6ef8019bb01d21`) B.3, strings 1–3 as drafted there; string 4 replaced per the HALT-B addendum (`sbfin-1-halt-b-addendum.md`, sha256 `fb0c8c01d808ffa7d7a0df16440388f991d3c585654a7ca82e8488396cb609e7`) item 2, whose replacement draft carries the measured share. Ratified by Ishan at the HALT-B diff. The adapted Spend-by-Member copy — the council's Spend-by-alder strings with `ward's council race` → `Board seat's race` and `alder` → `member` — follows the ratified-at-review convention and carries NO register entry, per the authorization's B.5. Id-less; no PS id allocated.*

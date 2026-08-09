@@ -57,11 +57,17 @@
 // CONFIG
 // ============================================================
 const IPG_SB_CONFIG = {
-  // The one and only data fetch this embed performs. D-5 ratified the
-  // refs/heads/main/ form: "main" is a fragment GitHub resolves against
-  // branches AND tags, so a future tag named "main" would silently
-  // repoint it; refs/heads/main/ is structurally unambiguous.
+  // EXACTLY TWO data fetches, enumerated. SBVOTE-1 D-5 ratified a single fetch;
+  // SBFIN-1 ratification 1 deliberately reopens that as an enumerated N=2, both
+  // school-board-family artifacts. The feedback endpoint is the only other network
+  // target this embed has, and it is a POST the user initiates. [SBF/FETCH] asserts
+  // the count, so adding a third is a gate failure and not a silent drift.
+  //
+  // D-5's refs/heads/main/ form stands for both: "main" is a fragment GitHub resolves
+  // against branches AND tags, so a future tag named "main" would silently repoint it;
+  // refs/heads/main/ is structurally unambiguous.
   dataUrl: "https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/refs/heads/main/campaign-finance/school-board-data.json",
+  financeUrl: "https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/refs/heads/main/campaign-finance/school-board-finance.json",
 };
 
 // Corrections inbox — the SAME mechanism the council tool uses, joined
@@ -303,9 +309,65 @@ const IPG_SB_FEEDBACK = {
 .ipg-sb-fb-done .big{font-size:36px;line-height:1;color:var(--sage)}
 .ipg-sb-fb-done p{margin-top:12px;font-size:14.5px;color:var(--ink);line-height:1.5}
 
+/* ---- SBFIN-1: finance section + spend-by-member ------------------------
+   Reuses the warm-grey ramp and the tokenised properties from SBVOTE-2 B; no
+   new colour is introduced except the two IE stream colours, which are the
+   council's own values carried across so the two tools read alike. */
+#ipg-sb-app .ipg-sb-fin-h{font-size:13px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink-mid);font-weight:600;margin-bottom:14px}
+#ipg-sb-app .ipg-sb-fin-sub{margin:18px 0 8px;font-weight:600;color:var(--ink);font-size:14px}
+#ipg-sb-app .ipg-sb-stats{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 4px}
+#ipg-sb-app .ipg-sb-stat{flex:1 1 120px;background:var(--tan);border:1px solid var(--line);
+  border-radius:10px;padding:12px 14px}
+#ipg-sb-app .ipg-sb-stat .v{font-size:20px;font-weight:600;color:var(--ink);
+  font-variant-numeric:tabular-nums}
+#ipg-sb-app .ipg-sb-stat .l{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-mid);margin-top:3px}
+#ipg-sb-app .ipg-sb-selffund{display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+  margin:12px 0 0;padding:10px 12px;background:var(--cream);border:1px dashed var(--line);
+  border-radius:10px}
+#ipg-sb-app .ipg-sb-selffund .ipg-sb-stat{flex:0 0 auto;background:transparent;border:0;padding:0}
+#ipg-sb-app .ipg-sb-selffund .ipg-sb-meta{flex:1 1 220px}
+#ipg-sb-app .ipg-sb-note{margin:12px 0 0;font-size:12.5px;line-height:1.55;color:var(--ink-mid)}
+#ipg-sb-app .ipg-sb-bar{display:flex;height:26px;border-radius:7px;overflow:hidden;
+  background:var(--tan);margin:2px 0 8px}
+#ipg-sb-app .ipg-sb-bar-seg{display:block;height:100%}
+#ipg-sb-app .ipg-sb-bar-key,#ipg-sb-app .ipg-sb-spend-key{display:flex;flex-wrap:wrap;gap:14px;
+  font-size:12px;color:var(--ink-mid)}
+#ipg-sb-app .ipg-sb-bar-key i,#ipg-sb-app .ipg-sb-spend-key i{display:inline-block;width:10px;
+  height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+#ipg-sb-app .ipg-sb-donor{display:flex;justify-content:space-between;gap:14px;
+  padding:10px 0;border-bottom:1px solid var(--line)}
+#ipg-sb-app .ipg-sb-donor .n{font-weight:600;color:var(--ink);font-size:14px}
+#ipg-sb-app .ipg-sb-donor .s{font-size:12px;color:var(--ink-mid);margin-top:2px}
+#ipg-sb-app .ipg-sb-donor .a{font-weight:600;color:var(--ink);white-space:nowrap;
+  font-variant-numeric:tabular-nums}
+#ipg-sb-app .ipg-sb-more{margin-top:12px;background:transparent;border:1px solid var(--line);
+  border-radius:8px;padding:8px 14px;font:inherit;font-size:13px;color:var(--teal);cursor:pointer}
+#ipg-sb-app .ipg-sb-meta-sub{display:block;margin-top:5px;color:var(--ink-nd)}
+#ipg-sb-app .ipg-sb-howto{margin:10px 0;padding:9px 11px;background:var(--tan);
+  border-radius:8px;font-size:12.5px;line-height:1.55;color:var(--ink-mid)}
+#ipg-sb-app .ipg-sb-spend-row{display:flex;gap:14px;align-items:flex-start;
+  padding:14px 0;border-bottom:1px solid var(--line);cursor:pointer}
+#ipg-sb-app .ipg-sb-spend-row:hover{background:var(--tan)}
+#ipg-sb-app .ipg-sb-spend-main{flex:1 1 auto;min-width:0}
+#ipg-sb-app .ipg-sb-spend-main .n{font-weight:600;color:var(--ink);font-size:14px;margin-bottom:2px}
+#ipg-sb-app .ipg-sb-spend-amt{flex:0 0 auto;font-weight:600;color:var(--ink);
+  white-space:nowrap;font-variant-numeric:tabular-nums}
+#ipg-sb-app .ipg-sb-barline{display:flex;align-items:center;gap:8px;margin:5px 0 0}
+#ipg-sb-app .ipg-sb-barline .lab{flex:0 0 148px;font-size:11.5px;color:var(--ink-mid)}
+#ipg-sb-app .ipg-sb-barline .track{flex:1 1 auto;height:8px;border-radius:4px;
+  background:var(--tan);overflow:hidden;max-width:340px}
+#ipg-sb-app .ipg-sb-barline .track span{display:block;height:100%}
+#ipg-sb-app .ipg-sb-barline .amt{flex:0 0 auto;font-size:11.5px;color:var(--ink-mid);
+  font-variant-numeric:tabular-nums}
+#ipg-sb-app .ipg-sb-noie{font-size:11.5px;color:var(--ink-nd);margin:5px 0 0}
+
 /* RESPONSIVE — one breakpoint scale (the council carries three that disagree;
    normalised here to its dominant ≤600px, per SBVOTE-2 B.4). */
 @media(max-width:600px){
+  #ipg-sb-app .ipg-sb-barline .lab{flex-basis:110px}
+  #ipg-sb-app .ipg-sb-spend-row{flex-wrap:wrap}
   #ipg-sb-app .ipg-sb-head,#ipg-sb-app .ipg-sb-body{padding-left:18px;padding-right:18px}
   #ipg-sb-app .ipg-sb-foot{padding-left:18px;padding-right:18px}
   #ipg-sb-app .ipg-sb-rec-vote{grid-template-columns:1fr}
@@ -320,8 +382,14 @@ const IPG_SB_FEEDBACK = {
 (function(){
   var app = document.getElementById('ipg-sb-app');
   var D = null;
+  // F is the finance artifact. It loads INDEPENDENTLY of D: a finance failure must
+  // degrade only the finance section, never the voting record, so finStatus is its
+  // own state and the votes views never consult it.
+  var F = null;
   var state = { view:'member', seat:null, tag:'All', recQuery:'', recTag:'All',
-                status:'loading', error:null };
+                status:'loading', error:null,
+                finStatus:'loading', finError:null,
+                finElection:null, finShowAllDonors:false, spendElection:null };
 
   // ==========================================================
   // THE RENDER BOUNDARY — D-1's four-value map, declared as data.
@@ -345,6 +413,40 @@ const IPG_SB_FEEDBACK = {
     noVotesForMember: 'No recorded votes yet for this member.',
     methodology: 'Vote positions are entered from public Board of Education records and meeting minutes; each vote links to its source.',
     vacant: 'Vacant'
+  };
+
+  // ==========================================================
+  // SBFIN-1 FINANCE STRINGS — states 1–4, ratified at HALT-B review.
+  // String 4 is the PRIMARY bar-section state, not a fallback: measured at
+  // HALT-A, 8 of the 13 donor-detail pages render below threshold and only 5
+  // render the bar. It carries the member's own measured share so the page is
+  // honest about magnitude rather than merely declining to chart.
+  // ==========================================================
+  var SF = {
+    noRecord: 'No campaign finance records are on file with the State Board of Elections for this member.',
+    thinness: 'Itemized donor detail for this campaign is not yet ingested; totals are computed from state filings.',
+    // {N} is the member's precomputed substantive_share — rendered from the
+    // artifact, NEVER recomputed here.
+    barDisclosure: 'This chart classifies {N}% of this member’s donor dollars by industry; individual donors and not-yet-classified contributions are excluded.',
+    belowThreshold: 'Industry classification of this member’s donors is still in progress — {N}% of donor dollars are classified so far, not yet enough to chart reliably.'
+  };
+
+  // Spend-by-Member copy — the council's Spend-by-alder strings transcribed
+  // VERBATIM (G1b S2), with exactly two ratified substitutions: the ward's
+  // council race -> the Board seat's race, and alder -> member. Nothing else moves.
+  var SP = {
+    header: 'Money in each Board seat’s race, shown as <strong>three separate streams</strong> — direct contributions to the member’s committee, plus independent spending <strong>for</strong> and <strong>against</strong> them.',
+    headerNeverSummed: ' Opposition spending is made <em>against</em> a candidate, so the three streams are shown separately and never added together.',
+    headerSub: 'Ranked by direct fundraising (shown at right). Click a seat to open that member’s page. Independent spending is made without coordinating with the candidate; correlation is not causation.',
+    howToRead: '<strong>How to read the bars:</strong> Each stream has its own scale — direct bars are sized against the top-fundraising seat, independent-spending bars against the seat with the most independent spending. Compare bar <em>length</em> only within the same stream; the dollar amount on each bar gives its true size.',
+    labDirect: 'Direct contributions',
+    labFor: 'Independent — for',
+    labAgainst: 'Independent — against',
+    legDirect: 'direct',
+    legFor: 'independent — for',
+    legAgainst: 'independent — against',
+    emptySurface: 'No spending data for this election.',
+    emptyRowIE: 'No independent spending recorded.'
   };
 
   // Feedback copy — the council's set transcribed verbatim (SBVOTE-2 G1 census),
@@ -441,9 +543,38 @@ const IPG_SB_FEEDBACK = {
     var m={}; (D&&D.votemeta||[]).forEach(function(vm){ if(vm.vote_id) m[vm.vote_id]=vm; }); return m;
   }
 
+  // ---- finance helpers ------------------------------------------------
+  // Everything below reads school-board-finance.json ONLY. No figure is derived
+  // here: the artifact carries election-labeled streams and precomputed coverage
+  // shares precisely so the render layer does no arithmetic that a gate cannot see.
+  function finMember(seat){
+    if(!F || !F.members) return null;
+    for(var i=0;i<F.members.length;i++){ if(F.members[i].seat===seat) return F.members[i]; }
+    return null;
+  }
+  function money(n){
+    n = Number(n||0);
+    return '$' + Math.round(n).toLocaleString('en-US');
+  }
+  function pct(share){ return Math.round(Number(share||0)*1000)/10; }
+  function fill(tpl, n){ return String(tpl).replace('{N}', String(n)); }
+  // Election keys, most recent first, for a member's own elections object.
+  function finElections(fm){
+    return Object.keys((fm && fm.elections) || {}).sort().reverse();
+  }
+  function pickElection(fm, chosen){
+    var keys = finElections(fm);
+    if(!keys.length) return null;
+    return (chosen && keys.indexOf(chosen)>=0) ? chosen : keys[0];
+  }
+  function statTile(val, lab){
+    return '<div class="ipg-sb-stat"><div class="v">'+esc(val)+'</div><div class="l">'+esc(lab)+'</div></div>';
+  }
+
   // ---- chrome ---------------------------------------------------------
   var TABS = [['member','By member'],['record','Complete record'],
-              ['matrix','All seats'],['methodology','Methodology']];
+              ['matrix','All seats'],['spend','Spend by member'],
+              ['methodology','Methodology']];
 
   function head(){
     return '<div class="ipg-sb-head">'
@@ -500,10 +631,14 @@ const IPG_SB_FEEDBACK = {
     if(meta.length) h += '<div class="ipg-sb-meta">'+meta.join(' &middot; ')+'</div>';
     h += '</div>';
 
-    if(!voteCount()) return h + emptyToolCard();
+    // The finance section is INDEPENDENT of the voting record: a member with no
+    // recorded votes still has campaign finance, and the born state (zero votes)
+    // must not suppress it. So every real-member return below carries it.
+    if(!voteCount()) return h + emptyToolCard() + financeSection(row);
     // string 3 — roster present, no recorded position on anything
     if(!hasAnyRecordedPosition(row.seat))
-      return h + '<div class="ipg-sb-card"><div class="ipg-sb-empty">'+esc(S.noVotesForMember)+'</div></div>';
+      return h + '<div class="ipg-sb-card"><div class="ipg-sb-empty">'+esc(S.noVotesForMember)+'</div></div>'
+             + financeSection(row);
 
     var tags = allTags();
     h += '<div class="ipg-sb-card">';
@@ -528,6 +663,214 @@ const IPG_SB_FEEDBACK = {
            + '</div>';
       });
     }
+    return h + '</div>' + financeSection(row);
+  }
+
+  // ==========================================================
+  // B.1 — the member page's finance section. DIRECT-ONLY, by ratification 2.
+  // Independent expenditure does not appear here at all; it lives on Spend by
+  // member. This mirrors the council, whose member page likewise renders no IE
+  // (G1 R1-a) — the separation is achieved by absence, and the three-stream view
+  // is where the streams meet, side by side and never summed.
+  // ==========================================================
+  function financeSection(row){
+    var h = '<div class="ipg-sb-card ipg-sb-fin">'
+          + '<div class="ipg-sb-fin-h">Campaign finance</div>';
+    if(state.finStatus==='loading')
+      return h + '<div class="ipg-sb-empty">Loading campaign finance data&hellip;</div></div>';
+    if(state.finStatus==='error')
+      return h + '<div class="ipg-sb-err">Could not load campaign finance data ('
+        + esc(state.finError||'unknown error')+'). The voting record above is unaffected.</div></div>';
+
+    var fm = finMember(row.seat);
+    if(!fm) return h + '<div class="ipg-sb-empty">'+esc(SF.noRecord)+'</div></div>';
+    // The four ratified states. no_record and vacancy are terminal.
+    if(fm.finance_state==='no_record' || fm.finance_state==='vacancy')
+      return h + '<div class="ipg-sb-empty">'+esc(SF.noRecord)+'</div></div>';
+
+    var keys = finElections(fm);
+    if(!keys.length) return h + '<div class="ipg-sb-empty">'+esc(SF.noRecord)+'</div></div>';
+    var ek = pickElection(fm, state.finElection), e = fm.elections[ek];
+
+    // Election filter, labeled by election (ratification 3 / 9). Present whenever
+    // the member has more than one; a single election needs no control.
+    if(keys.length>1){
+      h += '<div class="ipg-sb-row"><label for="ipg-sb-fin-el">Election</label>'
+         + '<select id="ipg-sb-fin-el">';
+      keys.forEach(function(k){
+        h += '<option value="'+esc(k)+'"'+(k===ek?' selected':'')+'>'
+           + esc(fm.elections[k].label || k)+'</option>';
+      });
+      h += '</select></div>';
+    } else {
+      h += '<div class="ipg-sb-meta">'+esc(e.label || ek)+'</div>';
+    }
+
+    // Stat tiles. Raised and Contributions come straight from the artifact's
+    // direct stream; Avg. gift is the only derived figure and is a ratio of two
+    // displayed numbers, never a sum of streams.
+    var raised = Number(e.direct.amount||0), ncontrib = Number(e.direct.count||0);
+    var avg = ncontrib ? raised/ncontrib : 0;
+    h += '<div class="ipg-sb-stats">';
+    h += statTile(money(raised), 'Raised');
+    // Donor count is knowable only where donor detail exists. For a totals-only
+    // member it is NOT derivable from contribution counts, so the tile is omitted
+    // rather than filled with a number that would silently mean something else.
+    if(fm.coverage) h += statTile(String(fm.coverage.donor_count), 'Donors');
+    h += statTile(money(avg), 'Avg. gift');
+    h += statTile(String(ncontrib), 'Contributions');
+    h += '</div>';
+
+    // Self-funding: its OWN tile, never folded into Raised (ratification 8).
+    var self = Number((e.self_funding||{}).amount||0);
+    if(self>0){
+      h += '<div class="ipg-sb-selffund">'
+         + '<div class="ipg-sb-stat"><div class="v">'+esc(money(self))+'</div>'
+         + '<div class="l">Self-funding</div></div>'
+         + '<div class="ipg-sb-meta">Money the candidate put into their own committee. '
+         + 'Shown separately and not included in the Raised figure above.</div></div>';
+    }
+
+    // The ratified thinness state, carried as data by the artifact.
+    if(fm.finance_state==='totals_only')
+      h += '<div class="ipg-sb-note">'+esc(SF.thinness)+'</div>';
+
+    // Industry bar — gated at the ratified >=50% substantive share. Both branches
+    // read the artifact's PRECOMPUTED share; neither recomputes it.
+    if(fm.coverage){
+      var n = pct(fm.coverage.substantive_share);
+      if(fm.coverage.meets_industry_threshold){
+        var d = fm.coverage.dollars, tot = Number(fm.coverage.donor_total||0);
+        var seg = [['substantive','Classified by industry','var(--teal)'],
+                   ['individual_only','Individual donors','var(--sage)'],
+                   // --nd is the tool's existing not-recorded neutral; "not yet
+                   // classified" is the same kind of absence, so it reuses that
+                   // colour rather than introducing one.
+                   ['unclassified','Not yet classified','var(--nd)']];
+        h += '<div class="ipg-sb-fin-sub">Where this member’s money comes from</div>'
+           + '<div class="ipg-sb-bar">';
+        seg.forEach(function(s){
+          var v = Number(d[s[0]]||0), w = tot ? (v/tot*100) : 0;
+          if(w>0) h += '<span class="ipg-sb-bar-seg" style="width:'+w.toFixed(2)+'%;background:'+s[2]+'" title="'+esc(s[1]+' — '+money(v))+'"></span>';
+        });
+        h += '</div><div class="ipg-sb-bar-key">';
+        seg.forEach(function(s){
+          h += '<span><i style="background:'+s[2]+'"></i>'+esc(s[1])+' '+esc(money(d[s[0]]||0))+'</span>';
+        });
+        h += '</div>';
+        h += '<div class="ipg-sb-note">'+esc(fill(SF.barDisclosure, n))+'</div>';
+      } else {
+        h += '<div class="ipg-sb-note">'+esc(fill(SF.belowThreshold, n))+'</div>';
+      }
+    }
+
+    // Itemized donors — top 10 + toggle, for the members that have detail.
+    if(fm.donors && fm.donors.length){
+      var all = fm.donors, show = state.finShowAllDonors ? all.length : Math.min(10, all.length);
+      h += '<div class="ipg-sb-fin-sub">Top donors</div>';
+      for(var i=0;i<show;i++){
+        var dn = all[i];
+        h += '<div class="ipg-sb-donor"><div><div class="n">'+esc(dn.name||dn.donor_id)+'</div>'
+           + '<div class="s">'+esc(dn.count + (dn.count===1?' contribution':' contributions'))
+           + (dn.industries && dn.industries.length ? ' &middot; '+esc(dn.industries.join(', ')) : '')
+           + '</div></div><div class="a">'+esc(money(dn.amount))+'</div></div>';
+      }
+      if(all.length>10)
+        h += '<button type="button" class="ipg-sb-more" id="ipg-sb-fin-more">'
+           + (state.finShowAllDonors ? 'Show top 10 only' : 'Show all '+all.length+' donors')+'</button>';
+    }
+
+    // Un-itemized disclosure — the council's REPAIR-AGG-1 component, present and
+    // DORMANT-CORRECT: PS-96 measured the un-keyed class absent from the elections
+    // artifact, so this renders nothing at all rather than a $0 line ([E1.2]).
+    if(fm.unitemized && Number(fm.unitemized.amount||0) > 0){
+      h += '<div class="ipg-sb-donor"><div><div class="n">Small-dollar and un-itemized contributions</div>'
+         + '<div class="s">Contributions reported to the state in aggregate, without individual donor '
+         + 'identities. Counted in this member’s totals; not attributable to any listed donor.</div></div>'
+         + '<div class="a">'+esc(money(fm.unitemized.amount))+'</div></div>';
+    }
+    return h + '</div>';
+  }
+
+  // ==========================================================
+  // B.2 — Spend by member. The council's Spend-by-alder form, mirrored: three
+  // streams, INDEPENDENT SCALES disclosed, sorted by direct, and the row's
+  // right-hand amount is DIRECT ALONE. No expression in this function adds any
+  // two streams together, and [SBF/NEVERSUM] asserts that structurally — the
+  // check the council's own surface does not have.
+  // Self-funding is deliberately absent here: it lives on the member page, and
+  // mirror fidelity means this view carries exactly the council's three streams.
+  // ==========================================================
+  function spendView(){
+    if(state.finStatus==='loading')
+      return '<div class="ipg-sb-card"><div class="ipg-sb-empty">Loading campaign finance data&hellip;</div></div>';
+    if(state.finStatus==='error')
+      return '<div class="ipg-sb-card"><div class="ipg-sb-err">Could not load campaign finance data ('
+        + esc(state.finError||'unknown error')+').</div></div>';
+    if(!F || !F.members) return '<div class="ipg-sb-card"><div class="ipg-sb-empty">'+esc(SP.emptySurface)+'</div></div>';
+
+    // Election-keyed (ratification 9), across the whole board rather than one member.
+    var elections = {};
+    F.members.forEach(function(m){ Object.keys(m.elections||{}).forEach(function(k){
+      elections[k] = (m.elections[k].label || k); }); });
+    var keys = Object.keys(elections).sort().reverse();
+    if(!keys.length) return '<div class="ipg-sb-card"><div class="ipg-sb-empty">'+esc(SP.emptySurface)+'</div></div>';
+    var ek = (state.spendElection && keys.indexOf(state.spendElection)>=0) ? state.spendElection : keys[0];
+
+    var rows = [];
+    F.members.forEach(function(m){
+      var e = (m.elections||{})[ek];
+      if(!e) return;
+      var direct = Number(e.direct.amount||0),
+          sup    = Number(e.ie_support.amount||0),
+          opp    = Number(e.ie_oppose.amount||0);
+      if(!direct && !sup && !opp) return;
+      rows.push({ seat:m.seat, name:m.name||m.display_name||m.seat,
+                  direct:direct, sup:sup, opp:opp });
+    });
+    rows.sort(function(a,b){ return b.direct - a.direct; });   // by DIRECT alone
+
+    var h = '<div class="ipg-sb-card">';
+    h += '<div class="ipg-sb-row"><label for="ipg-sb-spend-el">Election</label><select id="ipg-sb-spend-el">';
+    keys.forEach(function(k){
+      h += '<option value="'+esc(k)+'"'+(k===ek?' selected':'')+'>'+esc(elections[k])+'</option>'; });
+    h += '</select></div>';
+
+    if(!rows.length) return h + '<div class="ipg-sb-empty">'+esc(SP.emptySurface)+'</div></div>';
+
+    var anyIE = rows.some(function(r){ return r.sup || r.opp; });
+    h += '<div class="ipg-sb-meta">' + SP.header + (anyIE ? SP.headerNeverSummed : '')
+       + '<span class="ipg-sb-meta-sub">' + SP.headerSub + '</span></div>';
+    if(anyIE){
+      h += '<div class="ipg-sb-howto">'+SP.howToRead+'</div>';
+      h += '<div class="ipg-sb-spend-key">'
+         + '<span><i style="background:var(--teal)"></i>'+esc(SP.legDirect)+'</span>'
+         + '<span><i style="background:#3f9d78"></i>'+esc(SP.legFor)+'</span>'
+         + '<span><i style="background:#c0563a"></i>'+esc(SP.legAgainst)+'</span></div>';
+    }
+
+    // TWO independent scales, exactly as the council: direct against the top
+    // direct, both IE streams against the top IE. Never a shared denominator.
+    var maxDirect = Math.max.apply(null, [1].concat(rows.map(function(r){ return r.direct; })));
+    var maxIE = Math.max.apply(null, [1].concat(rows.map(function(r){ return Math.max(r.sup,r.opp); })));
+    function bar(lab, frac, color, amt){
+      var w = Math.max(amt>0?2:0, Math.min(100, frac*100)).toFixed(2);
+      return '<div class="ipg-sb-barline"><span class="lab">'+esc(lab)+'</span>'
+           + '<span class="track"><span style="width:'+w+'%;background:'+color+'"></span></span>'
+           + '<span class="amt">'+esc(money(amt))+'</span></div>';
+    }
+    rows.forEach(function(r){
+      h += '<div class="ipg-sb-spend-row" data-spend-seat="'+esc(r.seat)+'">'
+         + '<div class="ipg-sb-spend-main"><div class="n">Seat '+esc(r.seat)+' &middot; '+esc(r.name)+'</div>'
+         + bar(SP.labDirect, r.direct/maxDirect, 'var(--teal)', r.direct)
+         + ((r.sup||r.opp)
+             ? ((r.sup ? bar(SP.labFor, r.sup/maxIE, '#3f9d78', r.sup) : '')
+              + (r.opp ? bar(SP.labAgainst, r.opp/maxIE, '#c0563a', r.opp) : ''))
+             : '<div class="ipg-sb-noie">'+esc(SP.emptyRowIE)+'</div>')
+         + '</div>'
+         // The row amount is DIRECT ALONE — never a combined figure.
+         + '<div class="ipg-sb-spend-amt">'+esc(money(r.direct))+'</div></div>';
+    });
     return h + '</div>';
   }
 
@@ -641,6 +984,7 @@ const IPG_SB_FEEDBACK = {
     } else if(state.view==='member'){    h += memberView();
     } else if(state.view==='record'){    h += recordView();
     } else if(state.view==='matrix'){    h += matrixView();
+    } else if(state.view==='spend'){     h += spendView();
     } else {                             h += methodologyView(); }
     h += '</div><div class="ipg-sb-foot"><strong>Institute for the Public Good</strong> &middot; '
        + 'Vote positions are entered from public Board of Education records.</div>';
@@ -662,6 +1006,15 @@ const IPG_SB_FEEDBACK = {
     if(q) q.oninput = function(){ state.recQuery = q.value; var p=q.selectionStart; render();
       var n=document.getElementById('ipg-sb-rec-q'); if(n){ n.focus(); n.setSelectionRange(p,p);} };
     app.querySelectorAll('.ipg-sb-fb-btn').forEach(function(b){ b.onclick = openFeedback; });
+    var fe = document.getElementById('ipg-sb-fin-el');
+    if(fe) fe.onchange = function(){ state.finElection = fe.value; state.finShowAllDonors=false; render(); };
+    var fm = document.getElementById('ipg-sb-fin-more');
+    if(fm) fm.onclick = function(){ state.finShowAllDonors = !state.finShowAllDonors; render(); };
+    var se = document.getElementById('ipg-sb-spend-el');
+    if(se) se.onchange = function(){ state.spendElection = se.value; render(); };
+    app.querySelectorAll('[data-spend-seat]').forEach(function(r){
+      r.onclick = function(){ state.seat = r.getAttribute('data-spend-seat');
+                              state.view='member'; state.finElection=null; render(); }; });
   }
 
   // ---- feedback -------------------------------------------------------
@@ -792,7 +1145,17 @@ const IPG_SB_FEEDBACK = {
       .catch(function(e){ state.status='error'; state.error=e && e.message || String(e); });
   }
 
+  // The second of the two enumerated fetches. Isolated by construction: its failure
+  // sets finStatus only, so a member page still renders its votes with a stated
+  // finance notice rather than the whole tool erroring.
+  function loadFinance(){
+    return fetch(IPG_SB_CONFIG.financeUrl, {cache:'no-cache'})
+      .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+      .then(function(j){ F = j; state.finStatus='ready'; })
+      .catch(function(e){ state.finStatus='error'; state.finError=e && e.message || String(e); });
+  }
+
   render();
-  loadData().then(render);
+  Promise.all([loadData(), loadFinance()]).then(render);
 })();
 </script>

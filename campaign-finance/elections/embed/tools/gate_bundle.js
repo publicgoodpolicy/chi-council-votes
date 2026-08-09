@@ -1085,6 +1085,20 @@ async function assertPersonSurface(T, ctx, fx) {
     T.ok('[SBF/SELF] school-board finance builder self-test green — ' + tail, res.status === 0);
   })();
 
+  // [SBF/NOSHEET] the scope silence made an asserted absence (HALT-B addendum 3).
+  // check_sheet_scopes discovers files by SHEET_MARKERS; a builder that touches no
+  // Sheet is simply not discovered, so its 8/8 green says nothing about it either
+  // way. This asserts the absence directly, so "it doesn't touch the Sheet" stops
+  // being an inference from a checker that never looked.
+  (function () {
+    var src = fs.readFileSync(path.join(__dirname, '..', '..', '..', 'ingestion',
+                                        'build_sb_finance.py'), 'utf8');
+    var MARKERS = ['gspread', 'auth/spreadsheets', '.worksheet('];
+    var hit = MARKERS.filter(function (m) { return src.indexOf(m) >= 0; });
+    T.ok('[SBF/NOSHEET] the finance builder contains no Sheet marker (asserted, not inferred)',
+         hit.length === 0, hit.join(','));
+  })();
+
   (function () {
     var root = path.join(__dirname, '..', '..', '..');
     var art = path.join(root, 'school-board-finance.json');
