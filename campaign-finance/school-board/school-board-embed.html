@@ -1719,7 +1719,7 @@ const IPG_SB_FEEDBACK = {
     return ek === ALL_ELECTIONS ? spendElectionKeys().keys : [ek];
   }
 
-  function spendView(){
+  function spendView(ekIn){
     if(state.finStatus==='loading')
       return '<div class="ipg-sb-card"><div class="ipg-sb-empty">Loading campaign finance data&hellip;</div></div>';
     if(state.finStatus==='error')
@@ -1730,7 +1730,11 @@ const IPG_SB_FEEDBACK = {
     var sub = state.spendSub || 'members';
     var el = spendScopeOptions(sub);
     if(!el.keys.length) return '<div class="ipg-sb-card"><div class="ipg-sb-empty">'+esc(SP.emptySurface)+'</div></div>';
-    var ek = spendScope(sub);
+    // The scope is resolved ONCE, by render(), and passed in. Two call sites resolving it
+    // independently is precisely what produced F-C1: they agreed until SBFIN-3 C changed one
+    // of them. A caller that forgets to pass it still gets the right answer, but the body and
+    // the modals can no longer disagree by construction.
+    var ek = (ekIn != null) ? ekIn : spendScope(sub);
     var h = spendChrome(ek, el.keys, el.labels);
     if(state.spendSub === 'donors')          h += browseDonorsBody(ek);
     else if(state.spendSub === 'industries') h += (state.spendIndustryDetail
@@ -2104,12 +2108,22 @@ const IPG_SB_FEEDBACK = {
     } else if(state.view==='member'){    h += memberView();
     } else if(state.view==='record'){    h += recordView();
     } else if(state.view==='matrix'){    h += matrixView();
-    } else if(state.view==='spend'){     h += spendView();
-      var _el = spendElectionKeys();
-      var _ek = (state.spendElection && _el.keys.indexOf(state.spendElection)>=0)
-                ? state.spendElection : _el.keys[0];
-      if(state.finDonor) h += donorProfileHtml(null, { key:_ek, label:(_el.labels[_ek] || _ek) });
-      if(state.spendIE)  h += ieDetailHtml(_ek, _el.labels[_ek] || _ek);
+    } else if(state.view==='spend'){
+      // SBFIN-4 A.1 — F-C1's fix. These two modals resolved the election with the PRE-SBFIN-3-C
+      // rule (`state.spendElection || most-recent`) while the body resolved through
+      // spendScope(sub). At the ratified All-elections landing state.spendElection is null, so
+      // the body rendered every election's rows while the modals looked in 2026 alone — and
+      // every 2024-only row's lookup returned nothing, so the modal rendered as an empty
+      // string. The click fired, the state set, the render ran, and nothing appeared.
+      // Measured before the fix: 13 of the 25 rendered rows dead, and they were exactly the
+      // 13 with no 2026 money. ONE resolver now, the same one the body uses.
+      var _sub = state.spendSub || 'members';
+      var _ek = spendScope(_sub);
+      var _lab = (_ek === ALL_ELECTIONS) ? SF.allElections
+                                         : (spendElectionKeys().labels[_ek] || _ek);
+      h += spendView(_ek);
+      if(state.finDonor) h += donorProfileHtml(null, { key:_ek, label:_lab });
+      if(state.spendIE)  h += ieDetailHtml(_ek, _lab);
     } else {                             h += methodologyView(); }
     h += '</div>' + feedbackBarHtml()
        + '<div class="ipg-sb-foot"><strong>Institute for the Public Good</strong> &middot; '

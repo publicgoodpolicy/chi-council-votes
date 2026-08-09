@@ -103,6 +103,27 @@ function setSel(v, id, value) {                // drive a select, then re-render
   s.value = value; s.onchange();
   return { doc: v.doc, app: v.app, html: v.app.innerHTML, text: v.app.textContent || '' };
 }
+// SBFIN-4 A.2 — REAL EVENTS. `b.onclick()` proves a handler exists and nothing about a
+// click reaching it: no bubbling, no delegation, no default-prevention, no listener added
+// with addEventListener rather than assigned. Every click-to-open assertion dispatches a
+// real MouseEvent through the DOM. Programmatic drives remain only where they test
+// something other than reachability (driving a <select>, which has no click semantics).
+//
+// STATED SO IT IS NOT MISREAD: this conversion is NOT the fix for F-C1. F-C1 was a scope
+// mismatch, and a programmatic drive failed at the landing scope exactly as a real click
+// did (measured at R.1). What closes F-C1 is the single resolver in the embed; what closes
+// the fixture's blind spot is the LANDING-SCOPE coverage below. This is a third, separate
+// repair: it closes a class the fixture could not have seen at all.
+function fire(v, el) {
+  var w = v.doc.defaultView;
+  el.dispatchEvent(new w.MouseEvent('click', { bubbles: true, cancelable: true }));
+  return { doc: v.doc, app: v.app, html: v.app.innerHTML, text: v.app.textContent || '' };
+}
+function fireSel(v, sel) {                 // dispatch on the first match of a selector
+  var el = v.doc.querySelector(sel);
+  if (!el) return null;
+  return fire(v, el);
+}
 function trySel(v, id, value) {          // drive a select IF it exists; else pass through
   var s = v.doc.getElementById(id);
   if (!s) return v;
@@ -110,9 +131,7 @@ function trySel(v, id, value) {          // drive a select IF it exists; else pa
   return { doc: v.doc, app: v.app, html: v.app.innerHTML, text: v.app.textContent || '' };
 }
 function nav(v, view) {
-  var b = v.doc.querySelector('[data-view="' + view + '"]');
-  b.onclick();
-  return { doc: v.doc, app: v.app, html: v.app.innerHTML, text: v.app.textContent || '' };
+  return fire(v, v.doc.querySelector('[data-view="' + view + '"]'));
 }
 
 /* The five ratified strings, read from the REGISTER rather than retyped here — the
@@ -317,7 +336,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   // Feedback: the trigger exists and OPENS — and nothing is ever submitted.
   var fabEl = born.doc.getElementById('ipg-sb-fb-fab');
   ok('[SBV2/FB] the feedback trigger exists', !!fabEl);
-  fabEl.onclick();
+  fire(born, fabEl);
   var modal = born.doc.getElementById('ipg-sb-fb-overlay');
   ok('[SBV2/FB] the trigger opens the modal', !!modal);
   var mtext = modal ? (modal.textContent || '') : '';
@@ -512,9 +531,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
     var m = pBar.html.match(/class="ipg-sb-bar-seg" data-industry="([^"]+)"/); return m ? m[1] : null; })();
   ok('[SBF2/BAR] segments carry an industry key', !!segKey, String(segKey));
   var pSeg = (function () {
-    var b = pBar.doc.querySelector('.ipg-sb-bar-seg[data-industry="' + segKey + '"]');
-    b.onclick({ preventDefault: function () {}, stopPropagation: function () {} });
-    return { doc: pBar.doc, app: pBar.app, html: pBar.app.innerHTML, text: pBar.app.textContent || '' };
+    return fire(pBar, pBar.doc.querySelector('.ipg-sb-bar-seg[data-industry="' + segKey + '"]'));
   })();
   ok('[SBF2/BAR] clicking a SEGMENT filters the donor list in place',
      pSeg.text.indexOf('Donor list filtered to') >= 0 && pSeg.html.indexOf('ipg-sb-fin-clear') >= 0);
@@ -528,22 +545,17 @@ function around(tpl, marker) { return String(tpl).split(marker); }
       return want.some(function (d) { return d.donor_id === id; }); });
   })());
   var pSeg2 = (function () {
-    var b = pSeg.doc.querySelector('.ipg-sb-bar-seg[data-industry="' + segKey + '"]');
-    b.onclick({ preventDefault: function () {}, stopPropagation: function () {} });
-    return { doc: pSeg.doc, app: pSeg.app, html: pSeg.app.innerHTML, text: pSeg.app.textContent || '' };
+    return fire(pSeg, pSeg.doc.querySelector('.ipg-sb-bar-seg[data-industry="' + segKey + '"]'));
   })();
   ok('[SBF2/BAR] clicking the same segment again CLEARS the filter (toggle)',
      pSeg2.text.indexOf('Donor list filtered to') < 0);
   var pLeg = (function () {
-    var b = pSeg2.doc.querySelector('.ipg-sb-legend-item[data-industry="' + segKey + '"]');
-    b.onclick({ preventDefault: function () {}, stopPropagation: function () {} });
-    return { doc: pSeg2.doc, app: pSeg2.app, html: pSeg2.app.innerHTML, text: pSeg2.app.textContent || '' };
+    return fire(pSeg2, pSeg2.doc.querySelector('.ipg-sb-legend-item[data-industry="' + segKey + '"]'));
   })();
   ok('[SBF2/BAR] the LEGEND row filters identically to the segment',
      pLeg.text.indexOf('Donor list filtered to') >= 0);
   (function () {
-    var b = pLeg.doc.querySelector('.ipg-sb-legend-item[data-industry="' + segKey + '"]');
-    b.onclick({ preventDefault: function () {}, stopPropagation: function () {} });
+    fire(pLeg, pLeg.doc.querySelector('.ipg-sb-legend-item[data-industry="' + segKey + '"]'));
   })();
   ok('[SBF2/BAR] every segment label comes from the artifact vocabulary, never a raw key',
      (function () {
@@ -605,9 +617,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   var pDef = setSel(pick(mv, '4A'), 'ipg-sb-fin-el', defaultElection(finBy('4A')));
   var firstDonor = (function () { var m = pDef.html.match(/data-donor="([^"]+)"/); return m ? m[1] : null; })();
   var pProf = (function () {
-    var b = pDef.doc.querySelector('[data-donor="' + firstDonor + '"]');
-    b.onclick();
-    return { doc: pDef.doc, app: pDef.app, html: pDef.app.innerHTML, text: pDef.app.textContent || '' };
+    return fire(pDef, pDef.doc.querySelector('[data-donor="' + firstDonor + '"]'));
   })();
   ok('[SBF2/PROFILE] a donor row opens the profile', !!firstDonor
      && pProf.html.indexOf('ipg-sb-donor-overlay') >= 0
@@ -640,7 +650,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
              (d.items || []).forEach(function (it) { if (it.is_in_kind) anyInKind = true; }); }); }); });
        return anyInKind;   // the vocabulary has a live case in the data
      })());
-  (function () { var cb = pProf.doc.getElementById('ipg-sb-donor-close'); if (cb) cb.onclick(); })();
+  (function () { var cb = pProf.doc.getElementById('ipg-sb-donor-close'); if (cb) fire(pProf, cb); })();
 
   // ---- B.4: the Verified block, WITHOUT a link ----
   var pVer = pick(mv, '4A');
@@ -748,9 +758,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   // Industries by member. All three are render-time derivations.
   // ======================================================================
   var subtab = function (v, key) {
-    var b = v.doc.querySelector('[data-spendsub="' + key + '"]');
-    b.onclick();
-    return { doc: v.doc, app: v.app, html: v.app.innerHTML, text: v.app.textContent || '' };
+    return fire(v, v.doc.querySelector('[data-spendsub="' + key + '"]'));
   };
   var spv = nav(mxv, 'spend');
   var spendEK = (function () {
@@ -817,16 +825,16 @@ function around(tpl, marker) { return String(tpl).split(marker); }
         return nm.indexOf('chicago teachers') >= 0; });
     });
   })());
-  (function () { var c = pBdQ.doc.getElementById('ipg-sb-bd-clear'); if (c) c.onclick(); })();
+  (function () { var c = pBdQ.doc.getElementById('ipg-sb-bd-clear'); if (c) fire(pBdQ, c); })();
   var pBd2 = { doc: pBd.doc, app: pBd.app, html: pBd.app.innerHTML, text: pBd.app.textContent || '' };
   ok('[SBF2/BROWSE] a donor row opens the SAME profile the member page opens', (function () {
     var id = (pBd2.html.match(/data-donor="([^"]+)"/) || [])[1];
     if (!id) return false;
-    pBd2.doc.querySelector('[data-donor="' + id + '"]').onclick();
+    fire(pBd2, pBd2.doc.querySelector('[data-donor="' + id + '"]'));
     var t = pBd2.app.textContent || '';
     return t.indexOf('Donor profile') >= 0 && t.indexOf('Board members funded') >= 0;
   })());
-  (function () { var cb = pBd2.doc.getElementById('ipg-sb-donor-close'); if (cb) cb.onclick(); })();
+  (function () { var cb = pBd2.doc.getElementById('ipg-sb-donor-close'); if (cb) fire(pBd2, cb); })();
 
   // ---- C.2 Industry totals ----
   var pInd = setSel(subtab({ doc: spv.doc, app: spv.app }, 'industries'),
@@ -862,7 +870,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
      })());
   var pDrill = (function () {
     var k = (pInd.html.match(/data-industry-drill="([^"]+)"/) || [])[1];
-    pInd.doc.querySelector('[data-industry-drill="' + k + '"]').onclick();
+    fire(pInd, pInd.doc.querySelector('[data-industry-drill="' + k + '"]'));
     return { key: k, doc: pInd.doc, app: pInd.app,
              html: pInd.app.innerHTML, text: pInd.app.textContent || '' };
   })();
@@ -878,7 +886,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
     var shown = (pDrill.html.match(/data-donor="([^"]+)"/g) || []).map(function (x) { return x.slice(12, -1); });
     return shown.length > 0 && shown.every(function (id) { return want[id]; });
   })());
-  (function () { var b = pDrill.doc.getElementById('ipg-sb-ind-back'); if (b) b.onclick(); })();
+  (function () { var b = pDrill.doc.getElementById('ipg-sb-ind-back'); if (b) fire(pDrill, b); })();
 
   // ---- C.3 Industries by member ----
   var pMix = setSel(subtab({ doc: spv.doc, app: spv.app }, 'mix'),
@@ -908,7 +916,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   })());
   ok('[SBF2/MIX] a row opens that member\'s page', (function () {
     var seat = (pMix.html.match(/data-spend-seat="([^"]+)"/) || [])[1];
-    pMix.doc.querySelector('[data-spend-seat="' + seat + '"]').onclick();
+    fire(pMix, pMix.doc.querySelector('[data-spend-seat="' + seat + '"]'));
     var t = pMix.app.textContent || '';
     return t.indexOf('Campaign finance') >= 0 && t.indexOf('Seat ' + seat) >= 0;
   })());
@@ -1042,7 +1050,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   })());
   var spDetail = (function () {
     var id = (spBd.html.match(/data-ie="([^"]+)"/) || [])[1];
-    spBd.doc.querySelector('[data-ie="' + id + '"]').onclick();
+    fire(spBd, spBd.doc.querySelector('[data-ie="' + id + '"]'));
     return { id: id, doc: spBd.doc, app: spBd.app,
              html: spBd.app.innerHTML, text: spBd.app.textContent || '' };
   })();
@@ -1066,7 +1074,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
           && spDetail.text.indexOf(money(t.support.amount)) >= 0
           && spDetail.text.indexOf(money(t.oppose.amount)) >= 0; });
   })());
-  (function () { var b = spDetail.doc.getElementById('ipg-sb-ie-close'); if (b) b.onclick(); })();
+  (function () { var b = spDetail.doc.getElementById('ipg-sb-ie-close'); if (b) fire(spDetail, b); })();
 
   // ---- carve (a): election-wide aggregate, parts summing EXACTLY to the displayed total ----
   var spInd = setSel(subtab({ doc: nav(mxv, 'spend').doc, app: mxv.app }, 'industries'),
@@ -1176,10 +1184,10 @@ function around(tpl, marker) { return String(tpl).split(marker); }
                      'ipg-sb-spend-el', ieEK);
     var id2 = (sv2.html.match(/data-ie="([^"]+)"/) || [])[1];
     if (id2) {
-      sv2.doc.querySelector('[data-ie="' + id2 + '"]').onclick();
+      fire(sv2, sv2.doc.querySelector('[data-ie="' + id2 + '"]'));
       var t2 = sv2.app.textContent || '', h2 = sv2.app.innerHTML;
       if (probe.test(t2) || probe.test(h2)) bad.push('ie-detail');
-      var cb2 = sv2.doc.getElementById('ipg-sb-ie-close'); if (cb2) cb2.onclick();
+      var cb2 = sv2.doc.getElementById('ipg-sb-ie-close'); if (cb2) fire(sv2, cb2);
     }
     var mv3 = nav(mxv, 'member');
     REALFIN.members.forEach(function (m) {
@@ -1372,6 +1380,92 @@ function around(tpl, marker) { return String(tpl).split(marker); }
       FIN = REALFIN;
     }
   })();
+
+  // ======================================================================
+  // SBFIN-4 A.2 — LANDING-SCOPE CLICK COVERAGE. The repair for the blind spot that let
+  // F-C1 ship.
+  //
+  // The fixture's every open-on-click assertion drove the election selector to a concrete
+  // election FIRST, so `state.spendElection` was never null and the modals' stale resolver
+  // always agreed with the body. The defect lived only at the ratified landing state. This
+  // walks EVERY rendered row of EVERY clickable kind, on the surface as it first appears,
+  // and asserts each one opens what it promises.
+  //
+  // Measured before the fix: 13 of 25 rows dead — exactly the 13 with no 2026 money.
+  // ======================================================================
+  var landV = await boot(REAL, 'ok');
+  fire(landV, landV.doc.querySelector('[data-view="spend"]'));
+  ok('[SBF4/CLICK] every row on Browse donors opens at the LANDING scope', (function () {
+    var pg = fire(landV, landV.doc.querySelector('[data-spendsub="donors"]'));
+    var n = pg.doc.querySelectorAll('[data-donor],[data-ie]').length;
+    if (!n) return false;
+    var dead = [];
+    for (var i = 0; i < n; i++) {
+      var el = pg.doc.querySelectorAll('[data-donor],[data-ie]')[i];
+      var label = (el.textContent || '').slice(0, 40).trim();
+      fire(pg, el);
+      var open = pg.app.innerHTML.indexOf('ipg-sb-ie-overlay') >= 0
+              || pg.app.innerHTML.indexOf('ipg-sb-donor-overlay') >= 0;
+      if (!open) dead.push(label);
+      var cb = pg.doc.getElementById('ipg-sb-ie-close') || pg.doc.getElementById('ipg-sb-donor-close');
+      if (cb) fire(pg, cb);
+    }
+    if (dead.length) console.log('        dead: ' + dead.slice(0, 8).join(' | '));
+    return dead.length === 0;
+  })(), 'rows that fired but opened nothing');
+
+  ok('[SBF4/CLICK] every industry row drills at the LANDING scope', (function () {
+    var pg = fire(landV, landV.doc.querySelector('[data-spendsub="industries"]'));
+    var keys = (pg.html.match(/data-industry-drill="([^"]+)"/g) || [])
+      .map(function (x) { return x.slice(21, -1); });
+    if (!keys.length) return false;
+    var dead = [];
+    keys.forEach(function (k) {
+      var p2 = fire(pg, pg.doc.querySelector('[data-industry-drill="' + k + '"]'));
+      if (p2.text.indexOf('Donors in this industry') < 0) dead.push(k);
+      var b = p2.doc.getElementById('ipg-sb-ind-back'); if (b) fire(p2, b);
+    });
+    if (dead.length) console.log('        dead: ' + dead.join(' | '));
+    return dead.length === 0;
+  })());
+
+  ok('[SBF4/CLICK] every Industries-by-member row opens that member at the LANDING scope',
+     (function () {
+       var pg = fire(landV, landV.doc.querySelector('[data-spendsub="mix"]'));
+       var seats = (pg.html.match(/data-spend-seat="([^"]+)"/g) || [])
+         .map(function (x) { return x.slice(17, -1); });
+       if (!seats.length) return false;
+       var dead = [];
+       seats.forEach(function (seat) {
+         var sv = fire(landV, landV.doc.querySelector('[data-view="spend"]'));
+         sv = fire(sv, sv.doc.querySelector('[data-spendsub="mix"]'));
+         var el = sv.doc.querySelector('[data-spend-seat="' + seat + '"]');
+         if (!el) { dead.push(seat + '!row'); return; }
+         var p2 = fire(sv, el);
+         if (p2.text.indexOf('Campaign finance') < 0) dead.push(seat);
+       });
+       if (dead.length) console.log('        dead: ' + dead.join(' | '));
+       return dead.length === 0;
+     })());
+
+  ok('[SBF4/CLICK] every member-page donor row opens at that page\'s own default scope',
+     (function () {
+       var mv4 = nav(landV, 'member');
+       var dead = [];
+       REALFIN.members.forEach(function (m) {
+         if (m.finance_state !== 'full') return;
+         var pg = pick(mv4, m.seat);               // no setSel: the page's OWN default
+         var ids = (pg.html.match(/data-donor="([^"]+)"/g) || []).map(function (x) {
+           return x.slice(12, -1); });
+         ids.slice(0, 4).forEach(function (id) {
+           var p2 = fire(pg, pg.doc.querySelector('[data-donor="' + id + '"]'));
+           if (p2.html.indexOf('ipg-sb-donor-overlay') < 0) dead.push(m.seat + ' ' + id);
+           var cb = p2.doc.getElementById('ipg-sb-donor-close'); if (cb) fire(p2, cb);
+         });
+       });
+       if (dead.length) console.log('        dead: ' + dead.slice(0, 8).join(' | '));
+       return dead.length === 0;
+     })());
 
   // ---- finance failure is ISOLATED --------------------------------------
   var vfin = await boot(REAL, 'finfail');
