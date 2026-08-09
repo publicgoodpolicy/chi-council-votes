@@ -257,6 +257,28 @@ const IPG_SB_FEEDBACK = {
 #ipg-sb-app .ipg-sb-fb-btn:hover{background:var(--teal)}
 
 /* FOOTER */
+/* ---- SBFIN-2 C: Political Spend sub-tabs, filters, mix rows ---- */
+#ipg-sb-app .ipg-sb-subtabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+#ipg-sb-app .ipg-sb-subtab{border:1px solid var(--line);background:var(--white);color:var(--ink-mid);
+  padding:7px 13px;border-radius:999px;font:inherit;font-size:13px;cursor:pointer}
+#ipg-sb-app .ipg-sb-subtab:hover{background:var(--neu-bg)}
+#ipg-sb-app .ipg-sb-subtab.active{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:600}
+#ipg-sb-app .ipg-sb-filters{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+#ipg-sb-app .ipg-sb-field{display:flex;flex-direction:column;gap:4px;flex:0 1 auto}
+#ipg-sb-app .ipg-sb-field.grow{flex:2 1 240px}
+#ipg-sb-app .ipg-sb-field label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-mid)}
+#ipg-sb-app .ipg-sb-field input,#ipg-sb-app .ipg-sb-field select{
+  border:1px solid var(--line);border-radius:7px;padding:7px 9px;font:inherit;font-size:13px;
+  background:var(--white);color:var(--ink)}
+#ipg-sb-app .ipg-sb-mixrow{padding:10px 0;border-bottom:1px solid var(--line)}
+#ipg-sb-app .ipg-sb-mixhead{display:flex;width:100%;justify-content:space-between;gap:12px;
+  align-items:baseline;border:0;background:none;font:inherit;text-align:left;cursor:pointer;
+  color:var(--ink);padding:2px 0 6px}
+#ipg-sb-app .ipg-sb-mixhead:hover{text-decoration:underline}
+#ipg-sb-app .ipg-sb-mixhead .a{font-weight:600;white-space:nowrap}
+#ipg-sb-app .ipg-sb-bar-seg.static{cursor:default}
+#ipg-sb-app .ipg-sb-verified-pill{display:inline-block;padding:1px 7px;border-radius:999px;
+  background:var(--aff-bg);color:var(--teal);font-size:11px;font-weight:600}
 /* ---- SBFIN-2 B: labeled industry bar, donor profile, verified block ---- */
 #ipg-sb-app .ipg-sb-verified{display:inline-block;margin:10px 0 2px;padding:4px 10px;border-radius:999px;
   background:var(--aff-bg);color:var(--teal);font-size:12px;font-weight:600;letter-spacing:.02em}
@@ -431,7 +453,9 @@ const IPG_SB_FEEDBACK = {
                 status:'loading', error:null,
                 finStatus:'loading', finError:null,
                 finElection:null, finShowAllDonors:false, spendElection:null,
-                finIndustry:'All', finDonor:null };
+                finIndustry:'All', finDonor:null,
+                spendSub:'members', spendSearch:'', spendType:'All', spendIndustry:'All',
+                spendIndustryDetail:null, spendShowAll:false };
 
   // ==========================================================
   // THE RENDER BOUNDARY — D-1's four-value map, declared as data.
@@ -533,6 +557,50 @@ const IPG_SB_FEEDBACK = {
     legAgainst: 'independent — against',
     emptySurface: 'No spending data for this election.',
     emptyRowIE: 'No independent spending recorded.'
+  };
+
+  // ==========================================================
+  // SBFIN-2 C — Political Spend sub-tab copy. The council's Browse-donors /
+  // Industry-totals / Industries-by-alder strings adapted, with `alder` -> `member` and
+  // `ward` -> `seat`. DRAFTED for ratification at C's diff review.
+  //
+  // Two council sentences are deliberately DROPPED, not adapted: the
+  // "contributions from the city council term seated in May 2011 onward" coverage
+  // statement and the "See contributions before May 2011" affordance. Both are about the
+  // council's own cycle floor and would be false here — the school-board universe has no
+  // pre-2011 rows and no such view to point at.
+  //
+  // Exit 1: each industry surface states its own direct-only scope in its OWN sentence,
+  // not by inheritance from the member page's bar.
+  // ==========================================================
+  var SPC = {
+    browseIntro: 'Every donor to a seated Board member’s committee in this election, ranked by total given.',
+    browseSub: 'Click any row to see that donor’s full footprint.',
+    browseRollupNote: 'Affiliated donors are combined into one group.',
+    browseEmpty: 'No donors match these filters.',
+    searchPlaceholder: 'e.g. CTU, SEIU, Realtors',
+    filteredBy: 'Filtered by {N}.',
+    clearFilters: 'Clear filters',
+    rollupPill: 'rollup',
+    // Browse donors is a donor list, so it is direct by construction; saying so keeps a
+    // reader from reading the absence of the IE committees as an omission.
+    directOnlyDonors: 'These are direct contributions to members’ own committees. Independent spending is not shown here — it appears in Spend by member, as its own two streams.',
+
+    indIntro: 'Industries ranked by total dollars given across all Board committees in this election.',
+    indSub: 'Click an industry to see who its donors are and which members they funded.',
+    directOnlyIndustries: 'Independent spending is not included here — these totals are direct contributions only.',
+    indBarHead: 'Where each dollar comes from',
+    indBarSub: 'Total raised across all Board committees in this election: {N}. Each segment below is one industry; width is its share of the total. Donors with multiple industry tags count in each category.',
+    indListHead: 'Industry breakdown',
+    indEmpty: 'No industry data yet.',
+    indBack: '← All industries',
+    indDonorsHead: 'Donors in this industry',
+    indMembersHead: 'Members they funded',
+
+    mixIntro: 'Where each member’s direct contributions come from, by industry, shown as a 100% bar — independent spending is not included here.',
+    mixSub: 'Bars in seat order. Click any row to open that member’s page.',
+    mixEmpty: 'No campaign-finance data yet for this election.',
+    verifiedPill: 'Verified'
   };
 
   // Feedback copy — the council's set transcribed verbatim (SBVOTE-2 G1 census),
@@ -662,7 +730,7 @@ const IPG_SB_FEEDBACK = {
 
   // ---- chrome ---------------------------------------------------------
   var TABS = [['member','By member'],['record','Complete record'],
-              ['matrix','All seats'],['spend','Spend by member'],
+              ['matrix','All seats'],['spend','Political Spend'],
               ['methodology','Methodology']];
 
   function head(){
@@ -983,8 +1051,30 @@ const IPG_SB_FEEDBACK = {
     }
     return null;
   }
+  // ONE profile renderer. The member page passes the row it found in its own scope; the
+  // Political Spend sub-tabs pass a row aggregated across members. Both render the same
+  // panel, so a donor looks the same wherever the reader reached them from.
+  // The same donor, summed across every member for one election — the Political Spend
+  // profile's subject. Items are concatenated and re-sorted so the contribution list reads
+  // chronologically regardless of which member each row was filed against.
+  function spendDonorAggregate(donorId, ek){
+    var out = null;
+    spendDonorRows(ek).forEach(function(x){
+      if(x.d.donor_id !== donorId) return;
+      if(!out) out = { donor_id: x.d.donor_id, name: x.d.name, type: x.d.type,
+                       industries: (x.d.industries || []).slice(), cluster_id: x.d.cluster_id,
+                       amount: 0, count: 0, items: [] };
+      out.amount = round2(out.amount + Number(x.d.amount || 0));
+      out.count += Number(x.d.count || 0);
+      out.items = out.items.concat(x.d.items || []);
+    });
+    if(out) out.items.sort(function(a, b){
+      return String(a.date || '').localeCompare(String(b.date || '')); });
+    return out;
+  }
+
   function donorProfileHtml(fm, scope){
-    var d = findDonorRow(state.finDonor, fm, scope);
+    var d = fm ? findDonorRow(state.finDonor, fm, scope) : spendDonorAggregate(state.finDonor, scope.key);
     if(!d) return '';
     var inds = (d.industries||[]).map(function(i){
       var meta = indMeta(i);
@@ -1201,22 +1291,10 @@ const IPG_SB_FEEDBACK = {
   // Self-funding is deliberately absent here: it lives on the member page, and
   // mirror fidelity means this view carries exactly the council's three streams.
   // ==========================================================
-  function spendView(){
-    if(state.finStatus==='loading')
-      return '<div class="ipg-sb-card"><div class="ipg-sb-empty">Loading campaign finance data&hellip;</div></div>';
-    if(state.finStatus==='error')
-      return '<div class="ipg-sb-card"><div class="ipg-sb-err">Could not load campaign finance data ('
-        + esc(state.finError||'unknown error')+').</div></div>';
-    if(!F || !F.members) return '<div class="ipg-sb-card"><div class="ipg-sb-empty">'+esc(SP.emptySurface)+'</div></div>';
-
-    // Election-keyed (ratification 9), across the whole board rather than one member.
-    var elections = {};
-    F.members.forEach(function(m){ Object.keys(m.elections||{}).forEach(function(k){
-      elections[k] = (m.elections[k].label || k); }); });
-    var keys = Object.keys(elections).sort().reverse();
-    if(!keys.length) return '<div class="ipg-sb-card"><div class="ipg-sb-empty">'+esc(SP.emptySurface)+'</div></div>';
-    var ek = (state.spendElection && keys.indexOf(state.spendElection)>=0) ? state.spendElection : keys[0];
-
+  // SBFIN-2 C: the body only. Chrome (sub-tabs + election selector) moved to spendView,
+  // and the row markup below is UNCHANGED — [SBF/NEVERSUM] walks these rows, and a check
+  // that has to be taught a new path is a check that stopped proving the old one.
+  function spendByMemberBody(ek){
     var rows = [];
     F.members.forEach(function(m){
       var e = (m.elections||{})[ek];
@@ -1230,13 +1308,8 @@ const IPG_SB_FEEDBACK = {
     });
     rows.sort(function(a,b){ return b.direct - a.direct; });   // by DIRECT alone
 
-    var h = '<div class="ipg-sb-card">';
-    h += '<div class="ipg-sb-row"><label for="ipg-sb-spend-el">Election</label><select id="ipg-sb-spend-el">';
-    keys.forEach(function(k){
-      h += '<option value="'+esc(k)+'"'+(k===ek?' selected':'')+'>'+esc(elections[k])+'</option>'; });
-    h += '</select></div>';
-
-    if(!rows.length) return h + '<div class="ipg-sb-empty">'+esc(SP.emptySurface)+'</div></div>';
+    var h = '';
+    if(!rows.length) return '<div class="ipg-sb-empty">'+esc(SP.emptySurface)+'</div>';
 
     var anyIE = rows.some(function(r){ return r.sup || r.opp; });
     h += '<div class="ipg-sb-meta">' + SP.header + (anyIE ? SP.headerNeverSummed : '')
@@ -1271,8 +1344,313 @@ const IPG_SB_FEEDBACK = {
          // The row amount is DIRECT ALONE — never a combined figure.
          + '<div class="ipg-sb-spend-amt">'+esc(money(r.direct))+'</div></div>';
     });
+    return h;
+  }
+
+  // ==========================================================
+  // SBFIN-2 C — Political Spend. Four sub-tabs over ONE election scope.
+  //
+  // Every view below is a RENDER-TIME DERIVATION of donors_by_election. No artifact byte
+  // was added for any of them (census R6 rows 1-4): the member pages already carry every
+  // donor row, and these are re-groupings of the same rows.
+  //
+  // Spend by member is the LANDING sub-tab, deliberately: it is the surface that already
+  // shipped, and [SBF/NEVERSUM] walks its rows. Keeping it where the check finds it means
+  // the check keeps passing unadapted rather than being taught a new path.
+  //
+  // NOT built here, both ratified: Flag totals (banked — 4 SB donors carry a flag and the
+  // flag vocabulary is broken, census F2), and the council's IE-PAC row kind in Browse
+  // donors, whose headline is a fused support+oppose figure. Exit 1 declines that; IE
+  // stays in Spend by member's three-stream form.
+  // ==========================================================
+  var SPEND_SUBS = [['members', 'Spend by member'], ['donors', 'Browse donors'],
+                    ['industries', 'Industry totals'], ['mix', 'Industries by member']];
+
+  // Board-wide election keys, most recent first.
+  function spendElectionKeys(){
+    var e = {};
+    ((F && F.members) || []).forEach(function(m){
+      Object.keys(m.elections || {}).forEach(function(k){ e[k] = (m.elections[k].label || k); }); });
+    return { keys: Object.keys(e).sort().reverse(), labels: e };
+  }
+  // Every donor row on the board, for one election. The single source all four views group.
+  function spendDonorRows(ek){
+    var out = [];
+    ((F && F.members) || []).forEach(function(m){
+      ((m.donors_by_election || {})[ek] || []).forEach(function(d){ out.push({ m: m, d: d }); });
+    });
+    return out;
+  }
+  // Rollup-first, as the council's Browse donors is: a donor inside a family groups under
+  // the family, so the list ranks households and affiliated PACs as one giver rather than
+  // scattering them. Dollars are summed from THESE rows — the artifact carries no family
+  // totals, deliberately (they would be elections-wide).
+  function browseRows(ek){
+    var by = {}, order = [];
+    spendDonorRows(ek).forEach(function(x){
+      var fam = x.d.cluster_id ? ((F.donor_clusters || {})[x.d.cluster_id]) : null;
+      var key = x.d.cluster_id || ('d:' + x.d.donor_id);
+      var e = by[key];
+      if(!e){
+        e = by[key] = { key: key, donor_id: x.d.donor_id, cluster_id: x.d.cluster_id || null,
+                        name: fam ? (fam.name || x.d.name) : x.d.name,
+                        type: x.d.type, industries: {}, amount: 0, count: 0,
+                        entities: {}, members: {} };
+        order.push(key);
+      }
+      e.amount = round2(e.amount + Number(x.d.amount || 0));
+      e.count += Number(x.d.count || 0);
+      e.entities[x.d.donor_id] = 1;
+      e.members[x.m.seat] = 1;
+      ((x.d.industries && x.d.industries.length) ? x.d.industries : ['unclassified'])
+        .forEach(function(i){ e.industries[i] = 1; });
+    });
+    return order.map(function(k){
+      var e = by[k];
+      e.industryList = Object.keys(e.industries);
+      e.entityCount = Object.keys(e.entities).length;
+      e.memberCount = Object.keys(e.members).length;
+      return e;
+    }).sort(function(a, b){ return b.amount - a.amount || String(a.name||'').localeCompare(String(b.name||'')); });
+  }
+  // Board-wide industry totals. A donor with several tags counts in EACH, which is the
+  // council's behaviour and is disclosed in the view's own sentence rather than hidden.
+  function spendIndustryTotals(ek){
+    var by = {}, order = [];
+    spendDonorRows(ek).forEach(function(x){
+      ((x.d.industries && x.d.industries.length) ? x.d.industries : ['unclassified'])
+        .forEach(function(i){
+          if(!by[i]){ by[i] = { industry: i, amount: 0, donors: {}, members: {} }; order.push(i); }
+          by[i].amount = round2(by[i].amount + Number(x.d.amount || 0));
+          by[i].donors[x.d.donor_id] = 1;
+          by[i].members[x.m.seat] = 1;
+        });
+    });
+    return order.map(function(k){
+      var e = by[k];
+      e.donorCount = Object.keys(e.donors).length;
+      e.memberCount = Object.keys(e.members).length;
+      return e;
+    }).sort(function(a, b){ return b.amount - a.amount || a.industry.localeCompare(b.industry); });
+  }
+
+  function spendChrome(ek, keys, labels){
+    var h = '<div class="ipg-sb-card">';
+    h += '<div class="ipg-sb-subtabs">' + SPEND_SUBS.map(function(p){
+      return '<button type="button" class="ipg-sb-subtab'
+           + (state.spendSub === p[0] ? ' active' : '') + '" data-spendsub="' + esc(p[0]) + '">'
+           + esc(p[1]) + '</button>'; }).join('') + '</div>';
+    h += '<div class="ipg-sb-row"><label for="ipg-sb-spend-el">Election</label><select id="ipg-sb-spend-el">';
+    keys.forEach(function(k){
+      h += '<option value="' + esc(k) + '"' + (k === ek ? ' selected' : '') + '>'
+         + esc(labels[k]) + '</option>'; });
+    return h + '</select></div>';
+  }
+
+  function spendView(){
+    if(state.finStatus==='loading')
+      return '<div class="ipg-sb-card"><div class="ipg-sb-empty">Loading campaign finance data&hellip;</div></div>';
+    if(state.finStatus==='error')
+      return '<div class="ipg-sb-card"><div class="ipg-sb-err">Could not load campaign finance data ('
+        + esc(state.finError||'unknown error')+').</div></div>';
+    if(!F || !F.members) return '<div class="ipg-sb-card"><div class="ipg-sb-empty">'+esc(SP.emptySurface)+'</div></div>';
+
+    var el = spendElectionKeys();
+    if(!el.keys.length) return '<div class="ipg-sb-card"><div class="ipg-sb-empty">'+esc(SP.emptySurface)+'</div></div>';
+    var ek = (state.spendElection && el.keys.indexOf(state.spendElection)>=0)
+             ? state.spendElection : el.keys[0];
+    var h = spendChrome(ek, el.keys, el.labels);
+    if(state.spendSub === 'donors')          h += browseDonorsBody(ek);
+    else if(state.spendSub === 'industries') h += (state.spendIndustryDetail
+                                                   ? industryDetailBody(ek) : industryTotalsBody(ek));
+    else if(state.spendSub === 'mix')        h += industriesByMemberBody(ek);
+    else                                     h += spendByMemberBody(ek);
     return h + '</div>';
   }
+
+  // ---- C.1 Browse donors -------------------------------------------------
+  function browseDonorsBody(ek){
+    var rows = browseRows(ek);
+    var types = {}; rows.forEach(function(r){ if(r.type) types[r.type] = 1; });
+    var inds = {}; rows.forEach(function(r){ r.industryList.forEach(function(i){ inds[i] = 1; }); });
+    var h = '<div class="ipg-sb-meta">' + esc(SPC.browseIntro)
+          + '<span class="ipg-sb-meta-sub">' + esc(SPC.browseSub) + '</span></div>'
+          + '<div class="ipg-sb-note">' + esc(SPC.directOnlyDonors) + '</div>';
+
+    h += '<div class="ipg-sb-filters">'
+       + '<div class="ipg-sb-field grow"><label for="ipg-sb-bd-q">Search donors</label>'
+       + '<input type="text" id="ipg-sb-bd-q" placeholder="' + esc(SPC.searchPlaceholder) + '" value="'
+       + esc(state.spendSearch || '') + '" autocomplete="off"></div>'
+       + '<div class="ipg-sb-field"><label for="ipg-sb-bd-type">Donor type</label>'
+       + '<select id="ipg-sb-bd-type"><option value="All">All types</option>';
+    Object.keys(types).sort().forEach(function(t){
+      h += '<option value="' + esc(t) + '"' + (state.spendType === t ? ' selected' : '') + '>'
+         + esc(t) + '</option>'; });
+    h += '</select></div>'
+       + '<div class="ipg-sb-field"><label for="ipg-sb-bd-ind">Industry</label>'
+       + '<select id="ipg-sb-bd-ind"><option value="All">All industries</option>';
+    Object.keys(inds).sort(function(a,b){ return indMeta(a).label.localeCompare(indMeta(b).label); })
+      .forEach(function(i){
+        h += '<option value="' + esc(i) + '"' + (state.spendIndustry === i ? ' selected' : '') + '>'
+           + esc(indMeta(i).label) + '</option>'; });
+    h += '</select></div></div>';
+    // No Flag filter: Flag totals is banked, and a filter over a vocabulary the tool does
+    // not carry would offer a control that cannot be honoured.
+
+    var q = String(state.spendSearch || '').toLowerCase();
+    var shown = rows.filter(function(r){
+      if(q && String(r.name || '').toLowerCase().indexOf(q) < 0) return false;
+      if(state.spendType && state.spendType !== 'All' && r.type !== state.spendType) return false;
+      if(state.spendIndustry && state.spendIndustry !== 'All'
+         && r.industryList.indexOf(state.spendIndustry) < 0) return false;
+      return true;
+    });
+    var bits = [];
+    if(state.spendType && state.spendType !== 'All') bits.push('type: ' + state.spendType);
+    if(state.spendIndustry && state.spendIndustry !== 'All')
+      bits.push('industry: ' + indMeta(state.spendIndustry).label);
+    if(q) bits.push('search: ' + state.spendSearch);
+    h += '<div class="ipg-sb-meta">' + esc(shown.length + (shown.length === 1 ? ' result' : ' results'))
+       + esc(' matched.')
+       + (bits.length ? ' ' + esc(fill(SPC.filteredBy, bits.join(' + ')))
+          + ' <button type="button" class="ipg-sb-more" id="ipg-sb-bd-clear">'
+          + esc(SPC.clearFilters) + '</button>' : '')
+       + '<span class="ipg-sb-meta-sub">' + esc(SPC.browseRollupNote) + '</span></div>';
+    if(!shown.length) return h + '<div class="ipg-sb-empty">' + esc(SPC.browseEmpty) + '</div>';
+
+    var n = state.spendShowAll ? shown.length : Math.min(25, shown.length);
+    for(var i = 0; i < n; i++){
+      var r = shown[i];
+      var sub = [];
+      if(r.entityCount > 1) sub.push(r.entityCount + ' entities');
+      sub.push(r.memberCount + (r.memberCount === 1 ? ' member' : ' members'));
+      sub.push(r.count + (r.count === 1 ? ' contribution' : ' contributions'));
+      h += '<button type="button" class="ipg-sb-donor ipg-sb-donor-click" data-donor="'
+         + esc(r.donor_id) + '"><div><div class="n">' + esc(r.name || r.donor_id)
+         + (r.entityCount > 1 ? ' <span class="ipg-sb-role">' + esc(SPC.rollupPill) + '</span>' : '')
+         + '</div><div class="s">' + esc(sub.join(' · ')) + '</div></div>'
+         + '<div class="a">' + esc(money(r.amount)) + '</div></button>';
+    }
+    if(shown.length > 25)
+      h += '<button type="button" class="ipg-sb-more" id="ipg-sb-bd-more">'
+         + (state.spendShowAll ? 'Show top 25 only' : 'Show all ' + shown.length + ' results') + '</button>';
+    return h;
+  }
+
+  // ---- C.2 Industry totals ----------------------------------------------
+  function industryTotalsBody(ek){
+    var inds = spendIndustryTotals(ek);
+    var h = '<div class="ipg-sb-meta">' + esc(SPC.indIntro)
+          + '<span class="ipg-sb-meta-sub">' + esc(SPC.indSub) + '</span></div>'
+          // Exit 1: this surface states its own direct-only scope in its own sentence.
+          + '<div class="ipg-sb-note">' + esc(SPC.directOnlyIndustries) + '</div>';
+    if(!inds.length) return h + '<div class="ipg-sb-empty">' + esc(SPC.indEmpty) + '</div>';
+    var grand = inds.reduce(function(s, x){ return s + Number(x.amount || 0); }, 0);
+    h += '<div class="ipg-sb-fin-sub">' + esc(SPC.indBarHead) + '</div>'
+       + '<div class="ipg-sb-meta">' + esc(fill(SPC.indBarSub, money(grand))) + '</div>'
+       + dollarBar(inds, 'All')
+       + '<div class="ipg-sb-fin-sub">' + esc(SPC.indListHead) + '</div>';
+    inds.forEach(function(x){
+      var meta = indMeta(x.industry);
+      var p = grand > 0 ? (x.amount / grand) * 100 : 0;
+      h += '<button type="button" class="ipg-sb-donor ipg-sb-donor-click" data-industry-drill="'
+         + esc(x.industry) + '"><div><div class="n">' + esc(meta.label) + '</div>'
+         + '<div class="s">' + esc(x.donorCount + (x.donorCount === 1 ? ' donor' : ' donors'))
+         + esc(' · funded ' + x.memberCount + (x.memberCount === 1 ? ' member' : ' members'))
+         + (p ? esc(' · ' + (p >= 1 ? Math.round(p) : p.toFixed(1)) + '% of total') : '')
+         + '</div></div><div class="a">' + esc(money(x.amount)) + '</div></button>';
+    });
+    return h;
+  }
+
+  function industryDetailBody(ek){
+    var key = state.spendIndustryDetail, meta = indMeta(key);
+    var rows = spendDonorRows(ek).filter(function(x){
+      return ((x.d.industries && x.d.industries.length) ? x.d.industries : ['unclassified'])
+             .indexOf(key) >= 0; });
+    var h = '<div class="ipg-sb-fin-sub">' + esc(meta.label)
+          + ' <button type="button" class="ipg-sb-more" id="ipg-sb-ind-back">'
+          + esc(SPC.indBack) + '</button></div>'
+          + '<div class="ipg-sb-note">' + esc(SPC.directOnlyIndustries) + '</div>';
+    if(!rows.length) return h + '<div class="ipg-sb-empty">' + esc(SPC.indEmpty) + '</div>';
+
+    var byDonor = {}, dorder = [], byMember = {}, morder = [];
+    rows.forEach(function(x){
+      if(!byDonor[x.d.donor_id]){
+        byDonor[x.d.donor_id] = { name: x.d.name, donor_id: x.d.donor_id, amount: 0, count: 0 };
+        dorder.push(x.d.donor_id); }
+      byDonor[x.d.donor_id].amount = round2(byDonor[x.d.donor_id].amount + Number(x.d.amount || 0));
+      byDonor[x.d.donor_id].count += Number(x.d.count || 0);
+      if(!byMember[x.m.seat]){
+        byMember[x.m.seat] = { seat: x.m.seat, name: x.m.name, amount: 0 };
+        morder.push(x.m.seat); }
+      byMember[x.m.seat].amount = round2(byMember[x.m.seat].amount + Number(x.d.amount || 0));
+    });
+    h += '<div class="ipg-sb-fin-sub">' + esc(SPC.indDonorsHead) + '</div>';
+    dorder.map(function(k){ return byDonor[k]; })
+      .sort(function(a, b){ return b.amount - a.amount; })
+      .forEach(function(d){
+        h += '<button type="button" class="ipg-sb-donor ipg-sb-donor-click" data-donor="'
+           + esc(d.donor_id) + '"><div><div class="n">' + esc(d.name || d.donor_id) + '</div>'
+           + '<div class="s">' + esc(d.count + (d.count === 1 ? ' contribution' : ' contributions'))
+           + '</div></div><div class="a">' + esc(money(d.amount)) + '</div></button>';
+      });
+    h += '<div class="ipg-sb-fin-sub">' + esc(SPC.indMembersHead) + '</div>';
+    morder.map(function(k){ return byMember[k]; })
+      .sort(function(a, b){ return b.amount - a.amount; })
+      .forEach(function(m){
+        h += '<button type="button" class="ipg-sb-donor ipg-sb-donor-click" data-spend-seat="'
+           + esc(m.seat) + '"><div><div class="n">Seat ' + esc(m.seat) + ' — ' + esc(m.name)
+           + '</div></div><div class="a">' + esc(money(m.amount)) + '</div></button>';
+      });
+    return h;
+  }
+
+  // ---- C.3 Industries by member -----------------------------------------
+  function industriesByMemberBody(ek){
+    // Exit 1's sentence is the FIRST thing this view says, as the council's does.
+    var h = '<div class="ipg-sb-meta">' + esc(SPC.mixIntro)
+          + '<span class="ipg-sb-meta-sub">' + esc(SPC.mixSub) + '</span></div>';
+    var any = false, body = '';
+    // Roster order, which is the board's own seat order — never a string sort, which
+    // would put seat 10A before seat 2A.
+    ((F && F.members) || []).forEach(function(m){
+      var rows = (m.donors_by_election || {})[ek] || [];
+      if(!rows.length) return;
+      var inds = industryTotals(rows);
+      var tot = inds.reduce(function(s, x){ return s + Number(x.amount || 0); }, 0);
+      if(tot <= 0) return;
+      any = true;
+      var cm = (m.committees || [])[0];
+      var badge = (cm && cm.data_quality === 'REAL')
+        ? '<span class="ipg-sb-verified-pill">' + esc(SPC.verifiedPill) + '</span>' : '';
+      body += '<div class="ipg-sb-mixrow">'
+            + '<button type="button" class="ipg-sb-mixhead" data-spend-seat="' + esc(m.seat) + '">'
+            + '<span class="n"><strong>Seat ' + esc(m.seat) + '</strong> — ' + esc(m.name) + ' ' + badge + '</span>'
+            + '<span class="a">' + esc(money(tot)) + '</span></button>'
+            + dollarBarStatic(inds) + '</div>';
+    });
+    if(!any) return h + '<div class="ipg-sb-empty">' + esc(SPC.mixEmpty) + '</div>';
+    return h + body;
+  }
+  // A STATIC bar: no data-industry, so nothing here is clickable into a filter that would
+  // belong to a different member's page. The row itself navigates; the segments do not.
+  function dollarBarStatic(inds){
+    var grand = inds.reduce(function(s, x){ return s + Number(x.amount || 0); }, 0);
+    if(grand <= 0) return '';
+    var h = '<div class="ipg-sb-dollarbar">';
+    inds.forEach(function(x){
+      var meta = indMeta(x.industry);
+      var p = (x.amount / grand) * 100;
+      if(p < 0.3) return;
+      var pstr = p >= 10 ? Math.round(p) + '%' : p.toFixed(1) + '%';
+      h += '<span class="ipg-sb-bar-seg static" style="flex:' + p + ' 0 0;background:'
+         + esc(meta.color) + '" title="' + esc(meta.label + ' — ' + money(x.amount) + ' (' + pstr + ')') + '">'
+         + (p >= 12 ? '<span class="l">' + esc(meta.label) + '</span>' : '') + '</span>';
+    });
+    return h + '</div>';
+  }
+
 
   // Complete record — CARD-PER-VOTE for the selected seat, the council's
   // .rec-vote idiom (SBVOTE-2 B.3). Not a matrix; the all-seats grid is its
@@ -1385,6 +1763,12 @@ const IPG_SB_FEEDBACK = {
     } else if(state.view==='record'){    h += recordView();
     } else if(state.view==='matrix'){    h += matrixView();
     } else if(state.view==='spend'){     h += spendView();
+      if(state.finDonor){
+        var _el = spendElectionKeys();
+        var _ek = (state.spendElection && _el.keys.indexOf(state.spendElection)>=0)
+                  ? state.spendElection : _el.keys[0];
+        h += donorProfileHtml(null, { key:_ek, label:(_el.labels[_ek] || _ek) });
+      }
     } else {                             h += methodologyView(); }
     h += '</div>' + feedbackBarHtml()
        + '<div class="ipg-sb-foot"><strong>Institute for the Public Good</strong> &middot; '
@@ -1441,7 +1825,38 @@ const IPG_SB_FEEDBACK = {
     var fm = document.getElementById('ipg-sb-fin-more');
     if(fm) fm.onclick = function(){ state.finShowAllDonors = !state.finShowAllDonors; render(); };
     var se = document.getElementById('ipg-sb-spend-el');
-    if(se) se.onchange = function(){ state.spendElection = se.value; render(); };
+    if(se) se.onchange = function(){ state.spendElection = se.value;
+                                     state.spendShowAll = false; render(); };
+
+    // C: sub-tabs. Switching sub-tab clears the sub-tab-local state (filters, drill,
+    // paging) so a control left set on one view cannot silently scope another.
+    app.querySelectorAll('[data-spendsub]').forEach(function(b){
+      b.onclick = function(){
+        state.spendSub = b.getAttribute('data-spendsub');
+        state.spendSearch=''; state.spendType='All'; state.spendIndustry='All';
+        state.spendIndustryDetail=null; state.spendShowAll=false; state.finDonor=null;
+        render();
+      };
+    });
+    var bq = document.getElementById('ipg-sb-bd-q');
+    if(bq) bq.oninput = function(){ state.spendSearch = bq.value; state.spendShowAll=false;
+      var pos = bq.selectionStart; render();
+      var nq = document.getElementById('ipg-sb-bd-q');
+      if(nq){ nq.focus(); nq.setSelectionRange(pos,pos); } };
+    var bt = document.getElementById('ipg-sb-bd-type');
+    if(bt) bt.onchange = function(){ state.spendType = bt.value; state.spendShowAll=false; render(); };
+    var bi = document.getElementById('ipg-sb-bd-ind');
+    if(bi) bi.onchange = function(){ state.spendIndustry = bi.value; state.spendShowAll=false; render(); };
+    var bc = document.getElementById('ipg-sb-bd-clear');
+    if(bc) bc.onclick = function(){ state.spendSearch=''; state.spendType='All';
+      state.spendIndustry='All'; state.spendShowAll=false; render(); };
+    var bm = document.getElementById('ipg-sb-bd-more');
+    if(bm) bm.onclick = function(){ state.spendShowAll = !state.spendShowAll; render(); };
+    app.querySelectorAll('[data-industry-drill]').forEach(function(b){
+      b.onclick = function(){ state.spendIndustryDetail = b.getAttribute('data-industry-drill');
+                              render(); }; });
+    var ib = document.getElementById('ipg-sb-ind-back');
+    if(ib) ib.onclick = function(){ state.spendIndustryDetail = null; render(); };
     app.querySelectorAll('[data-spend-seat]').forEach(function(r){
       r.onclick = function(){ state.seat = r.getAttribute('data-spend-seat');
                               state.view='member'; state.finElection=null;

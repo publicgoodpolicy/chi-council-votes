@@ -736,6 +736,177 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   ok('[SBF/NEVERSUM] the embed source contains no expression adding two streams',
      !/ie_support[^;]*\+[^;]*ie_oppose|direct[^;]*\+[^;]*ie_(support|oppose)|\.sup\s*\+\s*\w*\.?opp/.test(EMBED_HTML));
 
+  // ======================================================================
+  // SBFIN-2 C.4 — Political Spend: Browse donors, Industry totals,
+  // Industries by member. All three are render-time derivations.
+  // ======================================================================
+  var subtab = function (v, key) {
+    var b = v.doc.querySelector('[data-spendsub="' + key + '"]');
+    b.onclick();
+    return { doc: v.doc, app: v.app, html: v.app.innerHTML, text: v.app.textContent || '' };
+  };
+  var spv = nav(mxv, 'spend');
+  var spendEK = (function () {
+    var e = {};
+    REALFIN.members.forEach(function (m) {
+      Object.keys(m.elections || {}).forEach(function (k) { e[k] = 1; }); });
+    return Object.keys(e).sort().reverse()[0];
+  })();
+  // Every donor row on the board for that election — the single source all three group.
+  var boardRows = (function () {
+    var out = [];
+    REALFIN.members.forEach(function (m) {
+      ((m.donors_by_election || {})[spendEK] || []).forEach(function (d) { out.push({ m: m, d: d }); }); });
+    return out;
+  })();
+
+  ok('[SBF2/SPEND] the tab carries four sub-tabs and Flag totals is NOT among them',
+     ['members', 'donors', 'industries', 'mix'].every(function (k) {
+       return spv.html.indexOf('data-spendsub="' + k + '"') >= 0; })
+       && spv.text.indexOf('Flag totals') < 0);
+  ok('[SBF2/SPEND] Spend by member is the LANDING sub-tab, so [SBF/NEVERSUM] keeps its path',
+     /class="ipg-sb-subtab active" data-spendsub="members"/.test(spv.html)
+       && spv.html.indexOf('ipg-sb-spend-row') >= 0);
+
+  // ---- C.1 Browse donors ----
+  var pBd = subtab(spv, 'donors');
+  ok('[SBF2/BROWSE] the list is rollup-first and ranks by dollars given', (function () {
+    var fams = {}, singles = {};
+    boardRows.forEach(function (x) {
+      if (x.d.cluster_id) fams[x.d.cluster_id] = 1; else singles[x.d.donor_id] = 1; });
+    var expected = Object.keys(fams).length + Object.keys(singles).length;
+    // The rendered page shows the top 25; the count line reports the whole set.
+    return pBd.text.indexOf(expected + ' results matched.') >= 0;
+  })());
+  ok('[SBF2/BROWSE] it states its own direct-only scope',
+     pBd.text.indexOf('Independent spending is not shown here') >= 0);
+  ok('[SBF2/BROWSE] NO flag filter is offered (Flag totals is banked)',
+     pBd.html.indexOf('ipg-sb-bd-q') >= 0 && pBd.html.indexOf('ipg-sb-bd-type') >= 0
+       && pBd.html.indexOf('ipg-sb-bd-ind') >= 0 && pBd.html.indexOf('ipg-sb-bd-flag') < 0);
+  ok('[SBF2/BROWSE] NO IE-PAC row kind appears (no fused support+oppose headline)',
+     pBd.text.indexOf('IE PAC') < 0 && pBd.text.indexOf('expenditures') < 0);
+  var pBdQ = (function () {
+    var q = pBd.doc.getElementById('ipg-sb-bd-q');
+    q.value = 'chicago teachers'; q.oninput();
+    return { doc: pBd.doc, app: pBd.app, html: pBd.app.innerHTML, text: pBd.app.textContent || '' };
+  })();
+  ok('[SBF2/BROWSE] search narrows the list and every shown row matches', (function () {
+    var ids = (pBdQ.html.match(/data-donor="([^"]+)"/g) || []).map(function (x) { return x.slice(12, -1); });
+    if (!ids.length) return false;
+    return ids.every(function (id) {
+      return boardRows.some(function (x) {
+        if (x.d.donor_id !== id) return false;
+        var fam = x.d.cluster_id ? (REALFIN.donor_clusters || {})[x.d.cluster_id] : null;
+        var nm = String((fam && fam.name) || x.d.name || '').toLowerCase();
+        return nm.indexOf('chicago teachers') >= 0; });
+    });
+  })());
+  (function () { var c = pBdQ.doc.getElementById('ipg-sb-bd-clear'); if (c) c.onclick(); })();
+  var pBd2 = { doc: pBd.doc, app: pBd.app, html: pBd.app.innerHTML, text: pBd.app.textContent || '' };
+  ok('[SBF2/BROWSE] a donor row opens the SAME profile the member page opens', (function () {
+    var id = (pBd2.html.match(/data-donor="([^"]+)"/) || [])[1];
+    if (!id) return false;
+    pBd2.doc.querySelector('[data-donor="' + id + '"]').onclick();
+    var t = pBd2.app.textContent || '';
+    return t.indexOf('Donor profile') >= 0 && t.indexOf('Board members funded') >= 0;
+  })());
+  (function () { var cb = pBd2.doc.getElementById('ipg-sb-donor-close'); if (cb) cb.onclick(); })();
+
+  // ---- C.2 Industry totals ----
+  var pInd = subtab({ doc: spv.doc, app: spv.app }, 'industries');
+  ok('[SBF2/INDUSTRY] it states its own direct-only scope in its own sentence (exit 1)',
+     pInd.text.indexOf('these totals are direct contributions only') >= 0);
+  ok('[SBF2/INDUSTRY] the totals equal the same money the member pages carry', (function () {
+    // 0 donor rows carry more than one industry in this universe, so the industry sum is
+    // the donor-row sum, which is each member's own direct figure for this election.
+    var multi = boardRows.filter(function (x) { return (x.d.industries || []).length > 1; }).length;
+    var rowSum = boardRows.reduce(function (a, x) { return a + Number(x.d.amount || 0); }, 0);
+    var directSum = REALFIN.members.reduce(function (a, m) {
+      var has = ((m.donors_by_election || {})[spendEK] || []).length;
+      return a + (has ? Number(((m.elections || {})[spendEK] || {}).direct.amount || 0) : 0); }, 0);
+    return multi === 0 && Math.abs(rowSum - directSum) < 0.005
+        && pInd.text.indexOf(money(rowSum)) >= 0;
+  })());
+  ok('[SBF2/INDUSTRY] every label comes from the artifact vocabulary, never a raw key',
+     (function () {
+       var vocab = Object.keys(REALFIN.industry_tags || {}).map(function (k) {
+         return REALFIN.industry_tags[k].label; });
+       var keys = Object.keys(REALFIN.industry_tags || {});
+       // No raw key may appear as rendered text where its label differs from it.
+       return keys.every(function (k) {
+         var lab = REALFIN.industry_tags[k].label;
+         return lab === k || pInd.text.indexOf('>' + k + '<') < 0;
+       }) && vocab.some(function (l) { return pInd.text.indexOf(l) >= 0; });
+     })());
+  var pDrill = (function () {
+    var k = (pInd.html.match(/data-industry-drill="([^"]+)"/) || [])[1];
+    pInd.doc.querySelector('[data-industry-drill="' + k + '"]').onclick();
+    return { key: k, doc: pInd.doc, app: pInd.app,
+             html: pInd.app.innerHTML, text: pInd.app.textContent || '' };
+  })();
+  ok('[SBF2/INDUSTRY] drilling shows that industry\'s donors AND the members they funded',
+     pDrill.text.indexOf('Donors in this industry') >= 0
+       && pDrill.text.indexOf('Members they funded') >= 0
+       && pDrill.text.indexOf('these totals are direct contributions only') >= 0);
+  ok('[SBF2/INDUSTRY] the drill lists exactly the donors carrying that industry', (function () {
+    var want = {};
+    boardRows.forEach(function (x) {
+      if (((x.d.industries && x.d.industries.length) ? x.d.industries : ['unclassified'])
+          .indexOf(pDrill.key) >= 0) want[x.d.donor_id] = 1; });
+    var shown = (pDrill.html.match(/data-donor="([^"]+)"/g) || []).map(function (x) { return x.slice(12, -1); });
+    return shown.length > 0 && shown.every(function (id) { return want[id]; });
+  })());
+  (function () { var b = pDrill.doc.getElementById('ipg-sb-ind-back'); if (b) b.onclick(); })();
+
+  // ---- C.3 Industries by member ----
+  var pMix = subtab({ doc: spv.doc, app: spv.app }, 'mix');
+  ok('[SBF2/MIX] it states its own direct-only scope in its own sentence (exit 1)',
+     pMix.text.indexOf('independent spending is not included here') >= 0);
+  ok('[SBF2/MIX] one row per member that has donor rows in this election', (function () {
+    var expect = REALFIN.members.filter(function (m) {
+      return ((m.donors_by_election || {})[spendEK] || []).length > 0; }).length;
+    return (pMix.html.match(/ipg-sb-mixrow/g) || []).length === expect;
+  })());
+  ok('[SBF2/MIX] rows are in SEAT order, never a string sort (10A after 2A)', (function () {
+    var seats = (pMix.html.match(/data-spend-seat="([^"]+)"/g) || []).map(function (x) { return x.slice(17, -1); });
+    var roster = REALFIN.members.filter(function (m) {
+      return ((m.donors_by_election || {})[spendEK] || []).length > 0; }).map(function (m) { return m.seat; });
+    return seats.length === roster.length && seats.every(function (x, i) { return x === roster[i]; })
+        && seats.join(',') !== seats.slice().sort().join(',');
+  })());
+  ok('[SBF2/MIX] segments are STATIC — no member\'s bar filters another member\'s list',
+     pMix.html.indexOf('ipg-sb-bar-seg static') >= 0
+       && (pMix.html.match(/ipg-sb-bar-seg static[^>]*data-industry/g) || []).length === 0);
+  ok('[SBF2/MIX] the Verified pill is gated on data_quality', (function () {
+    var expect = REALFIN.members.filter(function (m) {
+      return ((m.donors_by_election || {})[spendEK] || []).length > 0
+          && ((m.committees || [])[0] || {}).data_quality === 'REAL'; }).length;
+    return (pMix.html.match(/ipg-sb-verified-pill/g) || []).length === expect;
+  })());
+  ok('[SBF2/MIX] a row opens that member\'s page', (function () {
+    var seat = (pMix.html.match(/data-spend-seat="([^"]+)"/) || [])[1];
+    pMix.doc.querySelector('[data-spend-seat="' + seat + '"]').onclick();
+    var t = pMix.app.textContent || '';
+    return t.indexOf('Campaign finance') >= 0 && t.indexOf('Seat ' + seat) >= 0;
+  })());
+
+  // ---- no fused figure anywhere in the three new views ----
+  ok('[SBF2/SPEND] no IE figure renders on any of the three new sub-tabs', (function () {
+    var sv = nav(mxv, 'spend'), bad = [];
+    ['donors', 'industries', 'mix'].forEach(function (k) {
+      var pg = subtab({ doc: sv.doc, app: sv.app }, k);
+      REALFIN.members.forEach(function (m) {
+        var e = (m.elections || {})[spendEK]; if (!e) return;
+        [e.ie_support, e.ie_oppose].forEach(function (st) {
+          var amt = Number((st || {}).amount || 0);
+          if (amt > 0 && pg.text.indexOf(money(amt)) >= 0) bad.push(k + ' ' + m.seat);
+        });
+        var d = Number(e.direct.amount || 0), sf = Number(e.self_funding.amount || 0);
+        if (sf > 0 && pg.text.indexOf(money(d + sf)) >= 0) bad.push(k + ' ' + m.seat + ' fused');
+      });
+    });
+    return bad.length === 0;
+  })());
   // ---- finance failure is ISOLATED --------------------------------------
   var vfin = await boot(REAL, 'finfail');
   ok('[SBF/ISOLATE] a finance failure states itself and does NOT error the tool',
