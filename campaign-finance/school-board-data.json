@@ -1,14 +1,14 @@
 {
   "schema_version": 1.0,
-  "generated_at": "2026-08-08T19:26:09Z",
+  "generated_at": "2026-08-09T04:55:36Z",
   "source": "Chicago Board of Education roster and vote positions, entered from public Board records into the project Google Sheet (tabs 'SB Members' and 'SB Votes') and ingested by ingest_sb_votes.py. Single-source per PS-99.",
   "_sync": {
-    "generated_at": "2026-08-08T19:26:09Z",
+    "generated_at": "2026-08-09T04:55:36Z",
     "sheet_id": "1tUJNv7S611xM-VO7LcZlOStbJ8O7LQ5deYjsHeVAwQ8",
     "ingest": "ingest_sb_votes.py",
     "source_tabs": {
       "SB Members": {
-        "sha256": "c7fbf963f29c93bef0b5ad694c9a65ddf5ab21592cf78a393e72e19eb8a6cd1a",
+        "sha256": "c1e8ebc89c1e6b28b2ea64a9d0f00be2eff49f081ffdb1bd6e361f158a094948",
         "data_rows": 21
       },
       "SB Votes": {
@@ -28,7 +28,7 @@
       "term_start": "2025-01-17",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "bannon-sb-d01",
       "votes": {}
     },
     {
@@ -39,7 +39,7 @@
       "term_start": "2025-01-17",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "person-custer-j",
       "votes": {}
     },
     {
@@ -50,7 +50,7 @@
       "term_start": "2025-01-21",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "person-deberry-e",
       "votes": {}
     },
     {
@@ -61,7 +61,7 @@
       "term_start": "2025-01-17",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "pope-sb-d04",
       "votes": {}
     },
     {
@@ -72,7 +72,7 @@
       "term_start": "2025-01-16",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "rios-sierra-sb-d05",
       "votes": {}
     },
     {
@@ -83,7 +83,7 @@
       "term_start": "2025-01-21",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "person-rivas-c",
       "votes": {}
     },
     {
@@ -94,7 +94,7 @@
       "term_start": "2025-01-17",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "person-zaccor-k",
       "votes": {}
     },
     {
@@ -105,7 +105,7 @@
       "term_start": "2025-01-17",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "person-rosenfeld-e",
       "votes": {}
     },
     {
@@ -116,7 +116,7 @@
       "term_start": "2025-02-06",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "person-brown-a",
       "votes": {}
     },
     {
@@ -127,7 +127,7 @@
       "term_start": "2025-01-21",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "person-blaise-m",
       "votes": {}
     },
     {
@@ -138,7 +138,7 @@
       "term_start": "2025-01-17",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "person-thotakura-a",
       "votes": {}
     },
     {
@@ -149,7 +149,7 @@
       "term_start": "2025-01-19",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "person-biggs-j",
       "votes": {}
     },
     {
@@ -160,7 +160,7 @@
       "term_start": "2025-01-23",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "none",
       "votes": {}
     },
     {
@@ -171,7 +171,7 @@
       "term_start": "2025-02-03",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "person-lopez-y",
       "votes": {}
     },
     {
@@ -182,7 +182,7 @@
       "term_start": "2025-01-16",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "person-gutierrez-a",
       "votes": {}
     },
     {
@@ -193,7 +193,7 @@
       "term_start": "2025-03-06",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "none",
       "votes": {}
     },
     {
@@ -204,7 +204,7 @@
       "term_start": "2025-09-02",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "none",
       "votes": {}
     },
     {
@@ -215,7 +215,7 @@
       "term_start": "2025-01-17",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "person-boyle-t",
       "votes": {}
     },
     {
@@ -226,7 +226,7 @@
       "term_start": "2025-01-16",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "person-smith-c",
       "votes": {}
     },
     {
@@ -248,13 +248,13 @@
       "term_start": "2025-01-16",
       "term_end": "",
       "source_url": "https://www.cps.edu/about/chicago-board-of-education/",
-      "candidacy_ref": "",
+      "candidacy_ref": "none",
       "votes": {}
     }
   ],
   "votemeta": [],
   "rollcall": {
-    "generated_at": "2026-08-08T19:26:09Z",
+    "generated_at": "2026-08-09T04:55:36Z",
     "source": "SB Votes tab, project Google Sheet",
     "term_votes": 0,
     "votes": []

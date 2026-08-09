@@ -1068,6 +1068,39 @@ async function assertPersonSurface(T, ctx, fx) {
          res.status === 0);
   })();
 
+  // [SBF/SELF] + [SBF/ARTIFACT] the finance layer (SBFIN-1/HALT-SBF-A). Two lines, the
+  // [SBV/SELF] + [SBV/ROSTER] shape exactly: the builder's own unit cases, then the minted
+  // artifact's examination against its source.
+  //
+  // The artifact line is the one that matters. Its SBF-5 assert — no field anywhere equals
+  // a sum of the four money streams — is the structural never-summed check that the
+  // council's own Spend-by-Alder surface does NOT have (G1b S2-a): nothing in this repo
+  // would notice if that surface fused its three columns tomorrow. The mirror is therefore
+  // gated where its source is not, which is the intended direction.
+  (function () {
+    var res = require('child_process').spawnSync('python3',
+      [path.join(__dirname, '..', '..', '..', 'ingestion', 'build_sb_finance.py'), '--self-test'],
+      { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[SBF/SELF] school-board finance builder self-test green — ' + tail, res.status === 0);
+  })();
+
+  (function () {
+    var root = path.join(__dirname, '..', '..', '..');
+    var art = path.join(root, 'school-board-finance.json');
+    if (!fs.existsSync(art)) {
+      T.ok('[SBF/ARTIFACT] school-board finance artifact present', false);
+      return;
+    }
+    var res = require('child_process').spawnSync('python3',
+      [path.join(root, 'ingestion', 'validate_sb_finance.py'), art,
+       '--elections', path.join(root, 'election-data.json')],
+      { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[SBF/ARTIFACT] finance artifact validates against its source — ' + tail,
+         res.status === 0);
+  })();
+
   // [SBV/RENDER] the school-board embed's render fixture (SBVOTE-1/C). It boots the real
   // embed in jsdom and asserts every birth state: string 1 on zero votes, string 3 on a
   // member with no positions, the vacancy as a seat with NO member page, `-` as
