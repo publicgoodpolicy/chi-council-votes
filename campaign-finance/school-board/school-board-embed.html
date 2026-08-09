@@ -257,6 +257,22 @@ const IPG_SB_FEEDBACK = {
 #ipg-sb-app .ipg-sb-fb-btn:hover{background:var(--teal)}
 
 /* FOOTER */
+/* ---- SBFIN-3: IE rows, the three-stream industry row ---- */
+#ipg-sb-app .ipg-sb-pac-tag{display:inline-block;padding:1px 7px;border-radius:999px;
+  background:var(--neu-bg);color:var(--ink-mid);font-size:11px;font-weight:600}
+#ipg-sb-app .ipg-sb-indrow{display:block;width:100%;text-align:left;border:0;background:none;
+  font:inherit;cursor:pointer;padding:9px 6px;border-bottom:1px solid var(--line);color:var(--ink)}
+#ipg-sb-app .ipg-sb-indrow:hover{background:var(--neu-bg)}
+#ipg-sb-app .ipg-sb-indrow-top{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+#ipg-sb-app .ipg-sb-indrow-top .n{font-weight:600;font-size:14px}
+#ipg-sb-app .ipg-sb-indrow-top .a{font-weight:600;white-space:nowrap}
+#ipg-sb-app .ipg-sb-indrow-top .lab{font-weight:400;font-size:11px;color:var(--ink-mid)}
+#ipg-sb-app .ipg-sb-dollarbar.mini{height:12px;margin:6px 0 5px;border-radius:4px}
+#ipg-sb-app .ipg-sb-indrow-parts{font-size:12px;color:var(--ink-mid)}
+#ipg-sb-app .ipg-sb-indrow-parts .sep{opacity:.5;margin:0 2px}
+#ipg-sb-app .ipg-sb-streamkey{flex-direction:row;flex-wrap:wrap;gap:14px;margin:2px 0 8px}
+#ipg-sb-app .ipg-sb-streamkey span{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-mid)}
+#ipg-sb-app .ipg-sb-streamkey i{width:11px;height:11px;border-radius:3px}
 /* ---- SBFIN-2 C: Political Spend sub-tabs, filters, mix rows ---- */
 #ipg-sb-app .ipg-sb-subtabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
 #ipg-sb-app .ipg-sb-subtab{border:1px solid var(--line);background:var(--white);color:var(--ink-mid);
@@ -455,7 +471,7 @@ const IPG_SB_FEEDBACK = {
                 finElection:null, finShowAllDonors:false, spendElection:null,
                 finIndustry:'All', finDonor:null,
                 spendSub:'members', spendSearch:'', spendType:'All', spendIndustry:'All',
-                spendIndustryDetail:null, spendShowAll:false };
+                spendIndustryDetail:null, spendShowAll:false, spendIE:null };
 
   // ==========================================================
   // THE RENDER BOUNDARY — D-1's four-value map, declared as data.
@@ -597,10 +613,39 @@ const IPG_SB_FEEDBACK = {
     indDonorsHead: 'Donors in this industry',
     indMembersHead: 'Members they funded',
 
+    // SBFIN-3 B.1: the direct-only sentence was REMOVED from Browse donors — with IE
+    // spenders in the list it is false. `directOnlyDonors` is retired with it.
+    mixedListNote: 'This list mixes two kinds of money: direct contributions to a member’s own committee, and independent spending by committees tagged IE PAC, which is made without coordinating with the candidate. An IE row’s amount is what that committee deployed — spending for and against, shown separately on the row and on click.',
+    // SBFIN-3 B.3: this REPLACES the direct-only sentence on Industry Totals, which is now
+    // false there. It says the thing the old sentence never did — that two different
+    // classifiers produced the segments in one bar.
+    twoClassifier: 'Direct segments are attributed by the donor’s own industry tag; independent-spending segments by the tag on the committee that did the spending. Two different classifiers appear in one bar, so an industry’s independent segment says who deployed the money, not who gave it.',
     mixIntro: 'Where each member’s direct contributions come from, by industry, shown as a 100% bar — independent spending is not included here.',
     mixSub: 'Bars in seat order. Click any row to open that member’s page.',
     mixEmpty: 'No campaign-finance data yet for this election.',
     verifiedPill: 'Verified'
+  };
+
+  // ==========================================================
+  // SBFIN-3 — independent-expenditure copy. The council's IE strings adapted (`alder` ->
+  // `member`, ward -> seat); the stream labels are the elections tool's ratified FW-1 set,
+  // and `total deployed` is its ratified fused label — never "independent".
+  // DRAFTED for ratification at B's diff review.
+  // ==========================================================
+  var SPI = {
+    kicker: 'Independent-expenditure committee',
+    pacTag: 'IE PAC',
+    caution: 'Independent spending is made without coordinating with the candidate — the candidate need not know about it, approve it, or receive any of it. It is even more attenuated from a vote than a direct contribution. This shows correlation, not causation.',
+    deployedLabel: 'total deployed',
+    supportLabel: 'Spent to support',
+    opposeLabel: 'Spent to oppose',
+    forWord: 'for',
+    againstWord: 'against',
+    targetsHead: 'What it spent on',
+    targetsNote: 'Support and opposition are shown separately for every member and are never added together.',
+    segDirect: 'Direct',
+    segSupport: 'Independent support',
+    segOppose: 'Independent opposition'
   };
 
   // Feedback copy — the council's set transcribed verbatim (SBVOTE-2 G1 census),
@@ -1367,11 +1412,20 @@ const IPG_SB_FEEDBACK = {
                     ['industries', 'Industry totals'], ['mix', 'Industries by member']];
 
   // Board-wide election keys, most recent first.
+  // SBFIN-3 B.4 — the label fix. `elections[].label` is a PER-MEMBER label: build_rollups
+  // writes a returner's prior window as "2024: District N", the member's own prior race,
+  // which is correct and ruled on a member page. Assigning it in a roster loop made the
+  // BOARD-WIDE selector read whatever the last member happened to carry — "2024: District
+  // 10". The election-wide label is now minted in the artifact from election-windows.json,
+  // the file that defines the buckets, and cross-member views read only that.
   function spendElectionKeys(){
-    var e = {};
+    var keys = {};
     ((F && F.members) || []).forEach(function(m){
-      Object.keys(m.elections || {}).forEach(function(k){ e[k] = (m.elections[k].label || k); }); });
-    return { keys: Object.keys(e).sort().reverse(), labels: e };
+      Object.keys(m.elections || {}).forEach(function(k){ keys[k] = 1; }); });
+    var labels = {};
+    Object.keys(keys).forEach(function(k){
+      labels[k] = ((F && F.election_labels) || {})[k] || k; });
+    return { keys: Object.keys(keys).sort().reverse(), labels: labels };
   }
   // Every donor row on the board, for one election. The single source all four views group.
   function spendDonorRows(ek){
@@ -1415,23 +1469,141 @@ const IPG_SB_FEEDBACK = {
   }
   // Board-wide industry totals. A donor with several tags counts in EACH, which is the
   // council's behaviour and is disclosed in the view's own sentence rather than hidden.
+  // SBFIN-3 B.3 — three streams per industry. `direct` is attributed by the DONOR's tag;
+  // `support`/`oppose` by the SPENDING COMMITTEE's tag. Two different classifiers in one
+  // bar, which is why the view carries the two-classifier disclosure rather than leaving a
+  // reader to assume one rule produced both.
+  //
+  // `amount` here is the fused deployment — carve (a), an ELECTION-WIDE aggregate, where
+  // no candidate is in view. Nothing per-member is fused anywhere.
   function spendIndustryTotals(ek){
     var by = {}, order = [];
+    function slot(i){
+      if(!by[i]){ by[i] = { industry: i, amount: 0, direct: 0, support: 0, oppose: 0,
+                            donors: {}, members: {} }; order.push(i); }
+      return by[i];
+    }
     spendDonorRows(ek).forEach(function(x){
       ((x.d.industries && x.d.industries.length) ? x.d.industries : ['unclassified'])
         .forEach(function(i){
-          if(!by[i]){ by[i] = { industry: i, amount: 0, donors: {}, members: {} }; order.push(i); }
-          by[i].amount = round2(by[i].amount + Number(x.d.amount || 0));
-          by[i].donors[x.d.donor_id] = 1;
-          by[i].members[x.m.seat] = 1;
+          var e = slot(i);
+          e.direct = round2(e.direct + Number(x.d.amount || 0));
+          e.donors[x.d.donor_id] = 1;
+          e.members[x.m.seat] = 1;
+        });
+    });
+    ieSpenders(ek).forEach(function(sp){
+      ((sp.industries && sp.industries.length) ? sp.industries : ['unclassified'])
+        .forEach(function(i){
+          var e = slot(i);
+          e.support = round2(e.support + Number(sp.support.amount || 0));
+          e.oppose = round2(e.oppose + Number(sp.oppose.amount || 0));
+          (sp.targets || []).forEach(function(t){ e.members[t.seat] = 1; });
         });
     });
     return order.map(function(k){
       var e = by[k];
+      e.amount = round2(e.direct + e.support + e.oppose);
       e.donorCount = Object.keys(e.donors).length;
       e.memberCount = Object.keys(e.members).length;
       return e;
     }).sort(function(a, b){ return b.amount - a.amount || a.industry.localeCompare(b.industry); });
+  }
+
+  // ==========================================================
+  // SBFIN-3 B — independent expenditure enters the spend family.
+  //
+  // THE SCOPED [SBF/NEVERSUM] AMENDMENT, verbatim and in force:
+  //
+  //   Fusion of money streams is FORBIDDEN on any per-member or per-candidate surface,
+  //   without exception. It is permitted in exactly two scopes: (a) election-wide
+  //   aggregates and (b) a single spender's own spend. Where permitted, every part must
+  //   be separately labeled and the fused label must name deployment ("total deployed"),
+  //   never "independent". The per-member prohibition is asserted per member per election,
+  //   by figure; the two carves are asserted to occur only on the surfaces that own them.
+  //
+  // The amendment TIGHTENS the per-member case and carves exactly two holes with a stated
+  // rule. Any future request to widen it is a finding, not an edit.
+  //
+  // What went wrong before it (planner error 48): exit 1 was ratified about INDUSTRY
+  // surfaces and applied to the whole spend family, so the two IE committees were excluded
+  // from Browse donors — hiding $1,185,635.74, about a quarter of the 2024 money, from the
+  // one view whose purpose is who spent the most.
+  //
+  // NO FUSED FIGURE IS STORED. The artifact carries support and oppose as separate keys;
+  // every fused figure below is computed here, on a surface entitled to it.
+  // ==========================================================
+  function ieSpenders(ek){
+    return ((F && F.ie_spenders) || {})[ek] || [];
+  }
+  function ieDeployed(sp){            // carve (b): a single spender's own spend
+    return round2(Number(sp.support.amount || 0) + Number(sp.oppose.amount || 0));
+  }
+  function ieSpenderById(ek, id){
+    var l = ieSpenders(ek);
+    for(var i = 0; i < l.length; i++) if(l[i].committee_id === id) return l[i];
+    return null;
+  }
+  // Largest-remainder, the elections tool's ratified remedy (render.js:1131): money()
+  // rounds each part independently, which can drift a dollar against round(total). The
+  // displayed parts must sum to the displayed whole.
+  function apportion(parts, total){
+    var floors = parts.map(function(p){ return Math.floor(p.raw); });
+    var left = Math.round(total) - floors.reduce(function(a, b){ return a + b; }, 0);
+    parts.map(function(p, i){ return i; })
+      .sort(function(a, b){ return (parts[b].raw - Math.floor(parts[b].raw))
+                                 - (parts[a].raw - Math.floor(parts[a].raw)); })
+      .slice(0, Math.max(0, left)).forEach(function(i){ floors[i] += 1; });
+    return floors;
+  }
+  function fmtWhole(n){ return '$' + Number(n).toLocaleString('en-US'); }
+
+  // ---- B.2 — the IE detail view, the school-board equivalent of the council's ----
+  function ieDetailHtml(ek, ekLabel){
+    var sp = ieSpenderById(ek, state.spendIE);
+    if(!sp) return '';
+    var chips = (sp.industries || []).map(function(i){
+      var m = indMeta(i);
+      return '<span class="ipg-sb-chip-ind" style="background:' + esc(m.color) + '">'
+           + esc(m.label) + '</span>'; }).join('');
+    var h = '<div class="ipg-sb-modal-overlay" id="ipg-sb-ie-overlay">'
+      + '<div class="ipg-sb-modal" role="dialog" aria-modal="true" aria-label="' + esc(SPI.kicker) + '">'
+      + '<button class="ipg-sb-modal-close" id="ipg-sb-ie-close" aria-label="Close">×</button>'
+      + '<div class="ipg-sb-modal-head">'
+      + '<div class="ipg-sb-modal-kicker">' + esc(SPI.kicker) + '</div>'
+      + '<div class="ipg-sb-modal-name serif">' + esc(sp.name)
+      + ' <span class="ipg-sb-pac-tag">' + esc(SPI.pacTag) + '</span></div>'
+      + '<div class="ipg-sb-modal-meta">' + chips
+      + ' <span class="ipg-sb-dscope">' + esc(ekLabel) + '</span></div></div>';
+    h += '<div class="ipg-sb-note">' + esc(SPI.caution) + '</div>';
+    // Carve (b). The fused figure is this spender's own deployment, every part labeled,
+    // and the fused label names DEPLOYMENT, never "independent".
+    h += '<div class="ipg-sb-stats">'
+       + statTile(money(ieDeployed(sp)), SPI.deployedLabel)
+       + statTile(money(sp.support.amount), SPI.supportLabel)
+       + statTile(money(sp.oppose.amount), SPI.opposeLabel)
+       + '</div>';
+    h += '<div class="ipg-sb-fin-sub">' + esc(SPI.targetsHead) + '</div>';
+    (sp.targets || []).forEach(function(t){
+      var bits = [];
+      if(Number(t.support.amount || 0) > 0)
+        bits.push(esc(money(t.support.amount) + ' ' + SPI.forWord));
+      if(Number(t.oppose.amount || 0) > 0)
+        bits.push(esc(money(t.oppose.amount) + ' ' + SPI.againstWord));
+      var n = (t.rows || []).length;
+      bits.push(esc(n + (n === 1 ? ' expenditure' : ' expenditures')));
+      // Per-member row: the amounts are the two streams SEPARATELY. No fused per-member
+      // figure renders here — the prohibition has no carve on a per-member figure, and
+      // this row is per-member even though the panel it sits in is per-spender.
+      h += '<button type="button" class="ipg-sb-donor ipg-sb-donor-click" data-spend-seat="'
+         + esc(t.seat) + '"><div><div class="n">Seat ' + esc(t.seat) + ' — ' + esc(t.name)
+         + '</div><div class="s">' + bits.join(' &middot; ') + '</div></div>'
+         + '<div class="a">' + esc(money(t.support.amount)) + ' / ' + esc(money(t.oppose.amount))
+         + '</div></button>';
+    });
+    h += '<div class="ipg-sb-note">' + esc(SPI.targetsNote) + '</div>';
+    h += '<div class="ipg-sb-modal-foot">' + esc(SF.profileFoot) + '</div>';
+    return h + '</div></div>';
   }
 
   function spendChrome(ek, keys, labels){
@@ -1475,7 +1647,10 @@ const IPG_SB_FEEDBACK = {
     var inds = {}; rows.forEach(function(r){ r.industryList.forEach(function(i){ inds[i] = 1; }); });
     var h = '<div class="ipg-sb-meta">' + esc(SPC.browseIntro)
           + '<span class="ipg-sb-meta-sub">' + esc(SPC.browseSub) + '</span></div>'
-          + '<div class="ipg-sb-note">' + esc(SPC.directOnlyDonors) + '</div>';
+          // The SBFIN-2 C direct-only sentence was REMOVED here: with IE spenders in the
+          // list it is false. Its replacement says what the mixed list contains, so a
+          // reader can tell a contribution from an independent expenditure at a glance.
+          + '<div class="ipg-sb-note">' + esc(SPC.mixedListNote) + '</div>';
 
     h += '<div class="ipg-sb-filters">'
        + '<div class="ipg-sb-field grow"><label for="ipg-sb-bd-q">Search donors</label>'
@@ -1496,6 +1671,24 @@ const IPG_SB_FEEDBACK = {
     h += '</select></div></div>';
     // No Flag filter: Flag totals is banked, and a filter over a vocabulary the tool does
     // not carry would offer a control that cannot be honoured.
+
+    // B.1 — IE spenders join the SAME ranked list as direct givers, so the reader sees who
+    // spent most regardless of channel. The row amount is support + oppose: carve (b), a
+    // single spender's own deployment. It is the ordering key AND the displayed figure,
+    // mirroring the council (cfIESpenders sorts on total).
+    ieSpenders(ek).forEach(function(sp){
+      rows.push({ key: 'ie:' + sp.committee_id, ie: true, committee_id: sp.committee_id,
+                  name: sp.name, type: 'PAC',
+                  industryList: (sp.industries || []).slice(),
+                  amount: ieDeployed(sp),
+                  support: Number(sp.support.amount || 0), oppose: Number(sp.oppose.amount || 0),
+                  count: (sp.targets || []).reduce(function(a, t){
+                    return a + ((t.rows || []).length); }, 0),
+                  entityCount: 1,
+                  memberCount: (sp.targets || []).length });
+    });
+    rows.sort(function(a, b){ return b.amount - a.amount
+      || String(a.name || '').localeCompare(String(b.name || '')); });
 
     var q = String(state.spendSearch || '').toLowerCase();
     var shown = rows.filter(function(r){
@@ -1522,14 +1715,30 @@ const IPG_SB_FEEDBACK = {
     for(var i = 0; i < n; i++){
       var r = shown[i];
       var sub = [];
-      if(r.entityCount > 1) sub.push(r.entityCount + ' entities');
-      sub.push(r.memberCount + (r.memberCount === 1 ? ' member' : ' members'));
-      sub.push(r.count + (r.count === 1 ? ' contribution' : ' contributions'));
+      if(!r.ie){
+        if(r.entityCount > 1) sub.push(r.entityCount + ' entities');
+        sub.push(r.memberCount + (r.memberCount === 1 ? ' member' : ' members'));
+        sub.push(r.count + (r.count === 1 ? ' contribution' : ' contributions'));
+      }
+      if(r.ie){
+        // Split visible on the row itself AND on click (ratification 2). Both parts are
+        // labeled; the fused figure is the row amount, which this surface owns.
+        var ieSub = [];
+        if(r.support > 0) ieSub.push(money(r.support) + ' ' + SPI.forWord);
+        if(r.oppose > 0) ieSub.push(money(r.oppose) + ' ' + SPI.againstWord);
+        ieSub.push(r.count + (r.count === 1 ? ' expenditure' : ' expenditures'));
+        h += '<button type="button" class="ipg-sb-donor ipg-sb-donor-click ipg-sb-ie-row" data-ie="'
+           + esc(r.committee_id) + '"><div><div class="n">' + esc(r.name)
+           + ' <span class="ipg-sb-pac-tag">' + esc(SPI.pacTag) + '</span></div>'
+           + '<div class="s">' + esc(ieSub.join(' · ')) + '</div></div>'
+           + '<div class="a">' + esc(money(r.amount)) + '</div></button>';
+      } else {
       h += '<button type="button" class="ipg-sb-donor ipg-sb-donor-click" data-donor="'
          + esc(r.donor_id) + '"><div><div class="n">' + esc(r.name || r.donor_id)
          + (r.entityCount > 1 ? ' <span class="ipg-sb-role">' + esc(SPC.rollupPill) + '</span>' : '')
          + '</div><div class="s">' + esc(sub.join(' · ')) + '</div></div>'
          + '<div class="a">' + esc(money(r.amount)) + '</div></button>';
+      }
     }
     if(shown.length > 25)
       h += '<button type="button" class="ipg-sb-more" id="ipg-sb-bd-more">'
@@ -1542,23 +1751,46 @@ const IPG_SB_FEEDBACK = {
     var inds = spendIndustryTotals(ek);
     var h = '<div class="ipg-sb-meta">' + esc(SPC.indIntro)
           + '<span class="ipg-sb-meta-sub">' + esc(SPC.indSub) + '</span></div>'
-          // Exit 1: this surface states its own direct-only scope in its own sentence.
-          + '<div class="ipg-sb-note">' + esc(SPC.directOnlyIndustries) + '</div>';
+          // The SBFIN-2 C direct-only sentence was REPLACED here: this surface now carries
+          // independent spending, so it was false. The two-classifier disclosure takes its
+          // place and says something the old sentence never did.
+          + '<div class="ipg-sb-note">' + esc(SPC.twoClassifier) + '</div>';
     if(!inds.length) return h + '<div class="ipg-sb-empty">' + esc(SPC.indEmpty) + '</div>';
     var grand = inds.reduce(function(s, x){ return s + Number(x.amount || 0); }, 0);
     h += '<div class="ipg-sb-fin-sub">' + esc(SPC.indBarHead) + '</div>'
        + '<div class="ipg-sb-meta">' + esc(fill(SPC.indBarSub, money(grand))) + '</div>'
+       + '<div class="ipg-sb-bar-legend ipg-sb-streamkey">'
+       + '<span><i style="background:var(--teal)"></i>' + esc(SPI.segDirect) + '</span>'
+       + '<span><i style="background:#3f9d78"></i>' + esc(SPI.segSupport) + '</span>'
+       + '<span><i style="background:#c0563a"></i>' + esc(SPI.segOppose) + '</span></div>'
        + dollarBar(inds, 'All')
        + '<div class="ipg-sb-fin-sub">' + esc(SPC.indListHead) + '</div>';
     inds.forEach(function(x){
       var meta = indMeta(x.industry);
-      var p = grand > 0 ? (x.amount / grand) * 100 : 0;
-      h += '<button type="button" class="ipg-sb-donor ipg-sb-donor-click" data-industry-drill="'
-         + esc(x.industry) + '"><div><div class="n">' + esc(meta.label) + '</div>'
-         + '<div class="s">' + esc(x.donorCount + (x.donorCount === 1 ? ' donor' : ' donors'))
-         + esc(' · funded ' + x.memberCount + (x.memberCount === 1 ? ' member' : ' members'))
-         + (p ? esc(' · ' + (p >= 1 ? Math.round(p) : p.toFixed(1)) + '% of total') : '')
-         + '</div></div><div class="a">' + esc(money(x.amount)) + '</div></button>';
+      // Carve (a): election-wide, so the fused figure is permitted — and it is labeled
+      // `total deployed`, never "independent". Every part is separately labeled below it,
+      // and largest-remainder makes the displayed parts sum EXACTLY to the displayed total.
+      var streams = [];
+      if(x.direct > 0)  streams.push({ lab: SPI.segDirect,  cls: 'bd-d', raw: x.direct });
+      if(x.support > 0) streams.push({ lab: SPI.segSupport, cls: 'bd-s', raw: x.support });
+      if(x.oppose > 0)  streams.push({ lab: SPI.segOppose,  cls: 'bd-o', raw: x.oppose });
+      var disp = apportion(streams, x.amount);
+      var parts = streams.map(function(st, i){
+        return '<span class="ipg-sb-bd ' + st.cls + '">' + esc(st.lab) + ' '
+             + esc(fmtWhole(disp[i])) + '</span>'; });
+      var segs = streams.map(function(st, i){
+        var w = x.amount > 0 ? (st.raw / x.amount * 100) : 0;
+        return '<span class="ipg-sb-bar-seg static" style="flex:' + w + ' 0 0;background:'
+             + (st.cls === 'bd-d' ? 'var(--teal)' : st.cls === 'bd-s' ? '#3f9d78' : '#c0563a')
+             + '"></span>'; }).join('');
+      h += '<button type="button" class="ipg-sb-indrow ipg-sb-donor-click" data-industry-drill="'
+         + esc(x.industry) + '">'
+         + '<div class="ipg-sb-indrow-top"><span class="n">' + esc(meta.label) + '</span>'
+         + '<span class="a">' + esc(money(x.amount)) + ' <span class="lab">'
+         + esc(SPI.deployedLabel) + '</span></span></div>'
+         + '<div class="ipg-sb-dollarbar mini">' + segs + '</div>'
+         + '<div class="ipg-sb-indrow-parts">' + parts.join(' <span class="sep">·</span> ')
+         + '</div></button>';
     });
     return h;
   }
@@ -1763,12 +1995,11 @@ const IPG_SB_FEEDBACK = {
     } else if(state.view==='record'){    h += recordView();
     } else if(state.view==='matrix'){    h += matrixView();
     } else if(state.view==='spend'){     h += spendView();
-      if(state.finDonor){
-        var _el = spendElectionKeys();
-        var _ek = (state.spendElection && _el.keys.indexOf(state.spendElection)>=0)
-                  ? state.spendElection : _el.keys[0];
-        h += donorProfileHtml(null, { key:_ek, label:(_el.labels[_ek] || _ek) });
-      }
+      var _el = spendElectionKeys();
+      var _ek = (state.spendElection && _el.keys.indexOf(state.spendElection)>=0)
+                ? state.spendElection : _el.keys[0];
+      if(state.finDonor) h += donorProfileHtml(null, { key:_ek, label:(_el.labels[_ek] || _ek) });
+      if(state.spendIE)  h += ieDetailHtml(_ek, _el.labels[_ek] || _ek);
     } else {                             h += methodologyView(); }
     h += '</div>' + feedbackBarHtml()
        + '<div class="ipg-sb-foot"><strong>Institute for the Public Good</strong> &middot; '
@@ -1835,6 +2066,7 @@ const IPG_SB_FEEDBACK = {
         state.spendSub = b.getAttribute('data-spendsub');
         state.spendSearch=''; state.spendType='All'; state.spendIndustry='All';
         state.spendIndustryDetail=null; state.spendShowAll=false; state.finDonor=null;
+        state.spendIE=null;
         render();
       };
     });
@@ -1857,6 +2089,20 @@ const IPG_SB_FEEDBACK = {
                               render(); }; });
     var ib = document.getElementById('ipg-sb-ind-back');
     if(ib) ib.onclick = function(){ state.spendIndustryDetail = null; render(); };
+
+    // B.2 — the IE detail view.
+    app.querySelectorAll('[data-ie]').forEach(function(b){
+      b.onclick = function(){ state.spendIE = b.getAttribute('data-ie'); render(); }; });
+    var iov = document.getElementById('ipg-sb-ie-overlay');
+    if(iov){
+      var iclose = function(){ state.spendIE = null;
+        document.removeEventListener('keydown', iesc); render(); };
+      var iesc = function(e){ if(e.key === 'Escape') iclose(); };
+      document.addEventListener('keydown', iesc);
+      iov.onclick = function(e){ if(e.target === iov) iclose(); };
+      var icb = document.getElementById('ipg-sb-ie-close');
+      if(icb) icb.onclick = iclose;
+    }
     app.querySelectorAll('[data-spend-seat]').forEach(function(r){
       r.onclick = function(){ state.seat = r.getAttribute('data-spend-seat');
                               state.view='member'; state.finElection=null;

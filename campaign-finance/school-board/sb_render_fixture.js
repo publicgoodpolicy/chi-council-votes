@@ -103,6 +103,12 @@ function setSel(v, id, value) {                // drive a select, then re-render
   s.value = value; s.onchange();
   return { doc: v.doc, app: v.app, html: v.app.innerHTML, text: v.app.textContent || '' };
 }
+function trySel(v, id, value) {          // drive a select IF it exists; else pass through
+  var s = v.doc.getElementById(id);
+  if (!s) return v;
+  s.value = value; s.onchange();
+  return { doc: v.doc, app: v.app, html: v.app.innerHTML, text: v.app.textContent || '' };
+}
 function nav(v, view) {
   var b = v.doc.querySelector('[data-view="' + view + '"]');
   b.onclick();
@@ -778,13 +784,19 @@ function around(tpl, marker) { return String(tpl).split(marker); }
     // The rendered page shows the top 25; the count line reports the whole set.
     return pBd.text.indexOf(expected + ' results matched.') >= 0;
   })());
-  ok('[SBF2/BROWSE] it states its own direct-only scope',
-     pBd.text.indexOf('Independent spending is not shown here') >= 0);
+  // RETIRED at SBFIN-3 B: '[SBF2/BROWSE] it states its own direct-only scope'. The
+  // sentence it asserted was removed because IE spenders now appear in this list, which
+  // made it false. Replaced by the mixed-list check below — not dropped.
+  ok('[SBF3/BROWSE] the mixed list says what it contains (the retired sentence\'s successor)',
+     pBd.text.indexOf('This list mixes two kinds of money') >= 0
+       && pBd.text.indexOf('Independent spending is not shown here') < 0);
   ok('[SBF2/BROWSE] NO flag filter is offered (Flag totals is banked)',
      pBd.html.indexOf('ipg-sb-bd-q') >= 0 && pBd.html.indexOf('ipg-sb-bd-type') >= 0
        && pBd.html.indexOf('ipg-sb-bd-ind') >= 0 && pBd.html.indexOf('ipg-sb-bd-flag') < 0);
-  ok('[SBF2/BROWSE] NO IE-PAC row kind appears (no fused support+oppose headline)',
-     pBd.text.indexOf('IE PAC') < 0 && pBd.text.indexOf('expenditures') < 0);
+  // RETIRED at SBFIN-3 B: '[SBF2/BROWSE] NO IE-PAC row kind appears'. It encoded planner
+  // error 48 — exit 1 applied to a surface it was never ratified for — and excluding the
+  // two committees hid $1,185,635.74 from the view whose purpose is who spent the most.
+  // Its inverse is now asserted, on the election that actually has IE.
   var pBdQ = (function () {
     var q = pBd.doc.getElementById('ipg-sb-bd-q');
     q.value = 'chicago teachers'; q.oninput();
@@ -814,8 +826,13 @@ function around(tpl, marker) { return String(tpl).split(marker); }
 
   // ---- C.2 Industry totals ----
   var pInd = subtab({ doc: spv.doc, app: spv.app }, 'industries');
-  ok('[SBF2/INDUSTRY] it states its own direct-only scope in its own sentence (exit 1)',
-     pInd.text.indexOf('these totals are direct contributions only') >= 0);
+  // FORM CHANGED, name retired: '[SBF2/INDUSTRY] it states its own direct-only scope'.
+  // Industry Totals now carries IE (carve (a), election-wide), so the direct-only sentence
+  // was false there. The two-classifier disclosure replaces it and asserts more: that a
+  // reader is told the segments come from two different classifiers.
+  ok('[SBF3/INDUSTRY] the two-classifier disclosure replaces the direct-only sentence',
+     pInd.text.indexOf('Direct segments are attributed by the donor') >= 0
+       && pInd.text.indexOf('these totals are direct contributions only') < 0);
   ok('[SBF2/INDUSTRY] the totals equal the same money the member pages carry', (function () {
     // 0 donor rows carry more than one industry in this universe, so the industry sum is
     // the donor-row sum, which is each member's own direct figure for this election.
@@ -891,9 +908,14 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   })());
 
   // ---- no fused figure anywhere in the three new views ----
-  ok('[SBF2/SPEND] no IE figure renders on any of the three new sub-tabs', (function () {
+  // FORM CHANGED, name retired at SBFIN-3 B: '[SBF2/SPEND] no IE figure renders on any of
+  // the three new sub-tabs'. Two of those three now carry IE by ratification, and the
+  // check survived the change ONLY because the default election (2026) has no IE at all —
+  // it had quietly stopped asserting what it said. Narrowed to the one sub-tab that is
+  // still per-member, and the general prohibition moved to [SBF3/AMEND]'s by-figure walk.
+  ok('[SBF3/SPEND] no IE figure renders on Industries by member (a per-member surface)', (function () {
     var sv = nav(mxv, 'spend'), bad = [];
-    ['donors', 'industries', 'mix'].forEach(function (k) {
+    ['mix'].forEach(function (k) {
       var pg = subtab({ doc: sv.doc, app: sv.app }, k);
       REALFIN.members.forEach(function (m) {
         var e = (m.elections || {})[spendEK]; if (!e) return;
@@ -907,6 +929,261 @@ function around(tpl, marker) { return String(tpl).split(marker); }
     });
     return bad.length === 0;
   })());
+  // ======================================================================
+  // SBFIN-3 B.5 — THE SCOPED [SBF/NEVERSUM] AMENDMENT.
+  //
+  // The rule, verbatim and in force:
+  //
+  //   Fusion of money streams is FORBIDDEN on any per-member or per-candidate surface,
+  //   without exception. It is permitted in exactly two scopes: (a) election-wide
+  //   aggregates and (b) a single spender's own spend. Where permitted, every part must
+  //   be separately labeled and the fused label must name deployment ("total deployed"),
+  //   never "independent". The per-member prohibition is asserted per member per election,
+  //   by figure; the two carves are asserted to occur only on the surfaces that own them.
+  //
+  // The amendment TIGHTENS the per-member case — it must now be walked by figure on every
+  // surface, not only Spend by member — and carves exactly two holes with a stated rule.
+  // Any future request to widen it is a finding, not an edit.
+  //
+  // ONE HONEST LIMIT, stated rather than implied. The pre-existing source check
+  // '[SBF/NEVERSUM] the embed source contains no expression adding two streams' matches on
+  // the ARTIFACT's field names (ie_support / ie_oppose). SBFIN-3's permitted fusions read
+  // `sp.support.amount` and `x.direct`, so that regex does not fire on them — it proves
+  // less than its wording suggests. It is KEPT because what it does prove is still true
+  // and useful, and the per-member prohibition is now carried by the by-figure walk below,
+  // which is what the amendment actually requires.
+  // ======================================================================
+  var ieEK = (function () {
+    var k = null;
+    Object.keys(REALFIN.ie_spenders || {}).forEach(function (e) { if (!k) k = e; });
+    return k;
+  })();
+  ok('[SBF3/AMEND] the IE election under test is the one that has IE',
+     !!ieEK && (REALFIN.ie_spenders[ieEK] || []).length > 0, String(ieEK));
+
+  // ---- the prohibition: NO per-member fused figure, on EVERY surface, by figure ----
+  // The prohibition, walked BY FIGURE and scoped to the member in view. Scoping matters:
+  // a first draft compared every member's fused combinations against every surface and
+  // fired on a pure numeric coincidence — seat 2B's 2024 direct+self is $1,000 and seat
+  // 1B's own self-funding tile legitimately shows $1,000. A cross-member collision is not
+  // a fusion, so each surface is checked against the member it actually presents, exactly
+  // as [SBF/NEVERSUM] already does row by row.
+  function fusedCombos(m, k) {
+    var e = (m.elections || {})[k]; if (!e) return [];
+    var d = Number(e.direct.amount || 0), sf = Number(e.self_funding.amount || 0),
+        su = Number(e.ie_support.amount || 0), op = Number(e.ie_oppose.amount || 0);
+    var singles = [d, sf, su, op];
+    return [[d + sf, 'direct+self'], [d + su, 'direct+support'], [d + op, 'direct+oppose'],
+            [su + op, 'support+oppose'], [d + su + op, 'all three']]
+      .filter(function (pr) {
+        return pr[0] > 0 && !singles.some(function (v) { return Math.abs(v - pr[0]) < 0.005; }); });
+  }
+  ok('[SBF3/AMEND] no per-member fused figure renders on any per-member surface', (function () {
+    var bad = [];
+    // (i) every member page, at every one of that member's election scopes.
+    var mvx = nav(mxv, 'member');
+    REALFIN.members.forEach(function (m) {
+      Object.keys(m.elections || {}).forEach(function (k) {
+        var pg = trySel(pick(mvx, m.seat), 'ipg-sb-fin-el', k);
+        fusedCombos(m, k).forEach(function (pr) {
+          if (pg.text.indexOf(money(pr[0])) >= 0)
+            bad.push('member ' + m.seat + ' ' + k + ' ' + pr[1]);
+        });
+      });
+    });
+    // (ii) the two per-member surfaces inside Political Spend, ROW-scoped.
+    ['members', 'mix'].forEach(function (sub) {
+      var pg = trySel(subtab({ doc: nav(mxv, 'spend').doc, app: mxv.app }, sub),
+                      'ipg-sb-spend-el', ieEK);
+      var rows = [].slice.call(pg.doc.querySelectorAll('[data-spend-seat]'));
+      rows.forEach(function (el) {
+        var seat = el.getAttribute('data-spend-seat');
+        var m = REALFIN.members.filter(function (x) { return x.seat === seat; })[0];
+        if (!m) return;
+        var txt = el.textContent || '';
+        fusedCombos(m, ieEK).forEach(function (pr) {
+          if (txt.indexOf(money(pr[0])) >= 0) bad.push('spend/' + sub + ' ' + seat + ' ' + pr[1]);
+        });
+      });
+    });
+    if (bad.length) console.log('        ' + bad.slice(0, 8).join('\n        '));
+    return bad.length === 0;
+  })());
+
+  // ---- carve (b): a single spender's own spend, ONLY where it belongs ----
+  var spBd = setSel(subtab({ doc: nav(mxv, 'spend').doc, app: mxv.app }, 'donors'),
+                    'ipg-sb-spend-el', ieEK);
+  ok('[SBF3/BROWSE] IE spenders appear as rows in the SAME ranked list', (function () {
+    var ids = (spBd.html.match(/data-ie="([^"]+)"/g) || []).map(function (x) { return x.slice(9, -1); });
+    return ids.length === (REALFIN.ie_spenders[ieEK] || []).length && ids.length > 0;
+  })());
+  ok('[SBF3/BROWSE] the row amount is support+oppose, and it is the ordering key', (function () {
+    var sps = REALFIN.ie_spenders[ieEK] || [];
+    var okAll = sps.every(function (sp) {
+      return spBd.text.indexOf(money(sp.support.amount + sp.oppose.amount)) >= 0; });
+    // ordering: the whole list is descending by displayed amount
+    var amts = (spBd.html.match(/<div class="a">\$([0-9,]+)<\/div>/g) || [])
+      .map(function (x) { return Number(x.replace(/[^0-9]/g, '')); });
+    var sorted = amts.slice().sort(function (a, b) { return b - a; });
+    return okAll && amts.join(',') === sorted.join(',');
+  })());
+  ok('[SBF3/BROWSE] the split is visible on the row, both parts labeled', (function () {
+    var sps = REALFIN.ie_spenders[ieEK] || [];
+    return sps.every(function (sp) {
+      var okS = sp.support.amount <= 0 || spBd.text.indexOf(money(sp.support.amount) + ' for') >= 0;
+      var okO = sp.oppose.amount <= 0 || spBd.text.indexOf(money(sp.oppose.amount) + ' against') >= 0;
+      return okS && okO; });
+  })());
+  var spDetail = (function () {
+    var id = (spBd.html.match(/data-ie="([^"]+)"/) || [])[1];
+    spBd.doc.querySelector('[data-ie="' + id + '"]').onclick();
+    return { id: id, doc: spBd.doc, app: spBd.app,
+             html: spBd.app.innerHTML, text: spBd.app.textContent || '' };
+  })();
+  ok('[SBF3/IE] the row opens the IE detail view', spDetail.html.indexOf('ipg-sb-ie-overlay') >= 0
+     && spDetail.text.indexOf('Independent-expenditure committee') >= 0);
+  ok('[SBF3/IE] support and oppose render as SEPARATE figures', (function () {
+    var sp = (REALFIN.ie_spenders[ieEK] || []).filter(function (x) {
+      return x.committee_id === spDetail.id; })[0];
+    return !!sp && spDetail.text.indexOf(money(sp.support.amount)) >= 0
+        && spDetail.text.indexOf(money(sp.oppose.amount)) >= 0;
+  })());
+  ok('[SBF3/IE] the fused figure is labeled "total deployed", never "independent"',
+     spDetail.text.indexOf('total deployed') >= 0
+       && /total deployed/.test(spDetail.text)
+       && spDetail.text.indexOf('independent deployed') < 0);
+  ok('[SBF3/IE] every targeted member is listed, with both streams separately', (function () {
+    var sp = (REALFIN.ie_spenders[ieEK] || []).filter(function (x) {
+      return x.committee_id === spDetail.id; })[0];
+    return !!sp && (sp.targets || []).every(function (t) {
+      return spDetail.text.indexOf('Seat ' + t.seat) >= 0
+          && spDetail.text.indexOf(money(t.support.amount)) >= 0
+          && spDetail.text.indexOf(money(t.oppose.amount)) >= 0; });
+  })());
+  (function () { var b = spDetail.doc.getElementById('ipg-sb-ie-close'); if (b) b.onclick(); })();
+
+  // ---- carve (a): election-wide aggregate, parts summing EXACTLY to the displayed total ----
+  var spInd = setSel(subtab({ doc: nav(mxv, 'spend').doc, app: mxv.app }, 'industries'),
+                     'ipg-sb-spend-el', ieEK);
+  ok('[SBF3/INDUSTRY] three labeled segments render where all three streams exist', (function () {
+    return spInd.text.indexOf('Direct ') >= 0
+        && spInd.text.indexOf('Independent support ') >= 0
+        && spInd.text.indexOf('Independent opposition ') >= 0;
+  })());
+  ok('[SBF3/INDUSTRY] the headline is "total deployed", never "independent"',
+     spInd.text.indexOf('total deployed') >= 0);
+  ok('[SBF3/INDUSTRY] the displayed parts sum EXACTLY to the displayed total (largest-remainder)',
+     (function () {
+       var rows = spInd.html.split('ipg-sb-indrow-top').slice(1);
+       if (!rows.length) return false;
+       var bad = [];
+       rows.forEach(function (chunk) {
+         var tot = (chunk.match(/<span class="a">\$([0-9,]+)/) || [])[1];
+         if (!tot) return;
+         var parts = (chunk.match(/class="ipg-sb-bd [^"]*">[^$]*\$([0-9,]+)</g) || [])
+           .map(function (x) { return Number((x.match(/\$([0-9,]+)/) || [])[1].replace(/,/g, '')); });
+         var sum = parts.reduce(function (a, b) { return a + b; }, 0);
+         if (parts.length && sum !== Number(tot.replace(/,/g, ''))) bad.push(tot + ' vs ' + sum);
+       });
+       if (bad.length) console.log('        ' + bad.join('\n        '));
+       return bad.length === 0;
+     })());
+  ok('[SBF3/INDUSTRY] the IE money is actually in the totals (charter-schools carries it)',
+     (function () {
+       var sps = REALFIN.ie_spenders[ieEK] || [];
+       var su = sps.reduce(function (a, x) { return a + Number(x.support.amount || 0); }, 0);
+       var op = sps.reduce(function (a, x) { return a + Number(x.oppose.amount || 0); }, 0);
+       return spInd.text.indexOf(String(Math.round(su).toLocaleString('en-US'))) >= 0
+           && spInd.text.indexOf(String(Math.round(op).toLocaleString('en-US'))) >= 0;
+     })());
+
+  // ---- the member-page bar stays DIRECT-ONLY (exit 1 still holds where it was ratified) ----
+  ok('[SBF3/AMEND] the member-page industry bar is still direct-only', (function () {
+    var mvy = nav(mxv, 'member');
+    var pg = setSel(pick(mvy, '4A'), 'ipg-sb-fin-el', defaultElection(finBy('4A')));
+    return pg.text.indexOf('direct contributions only') >= 0
+        && pg.text.indexOf('total deployed') < 0;
+  })());
+
+  // ---- the two carves occur ONLY on the surfaces that own them ----
+  ok('[SBF3/AMEND] "total deployed" appears on NO per-member surface', (function () {
+    var bad = [], mvz = nav(mxv, 'member');
+    REALFIN.members.forEach(function (m) {
+      var pg = pick(mvz, m.seat);
+      if (pg.text.indexOf('total deployed') >= 0) bad.push(m.seat);
+    });
+    var mix = setSel(subtab({ doc: nav(mxv, 'spend').doc, app: mxv.app }, 'mix'),
+                     'ipg-sb-spend-el', ieEK);
+    if (mix.text.indexOf('total deployed') >= 0) bad.push('spend/mix');
+    var sbm = setSel(subtab({ doc: nav(mxv, 'spend').doc, app: mxv.app }, 'members'),
+                     'ipg-sb-spend-el', ieEK);
+    if (sbm.text.indexOf('total deployed') >= 0) bad.push('spend/members');
+    return bad.length === 0;
+  })());
+
+  // ---- B.4: the label bug's regression ----
+  ok('[SBF3/LABEL] no cross-member view renders a district in its election control', (function () {
+    var bad = [];
+    ['members', 'donors', 'industries', 'mix'].forEach(function (sub) {
+      var pg = subtab({ doc: nav(mxv, 'spend').doc, app: mxv.app }, sub);
+      var sel = pg.html.split('id="ipg-sb-spend-el"')[1];
+      if (sel && /District/.test(sel.split('</select>')[0])) bad.push(sub);
+    });
+    return bad.length === 0;
+  })());
+  ok('[SBF3/LABEL] the control reads the artifact\'s election-wide labels',
+     Object.keys(REALFIN.election_labels || {}).every(function (k) {
+       return !/District/.test(REALFIN.election_labels[k]); })
+       && Object.keys(REALFIN.election_labels || {}).length > 0);
+  ok('[SBF3/LABEL] the member page still shows its OWN per-member label (line 1171 untouched)',
+     (function () {
+       var m = REALFIN.members.filter(function (x) {
+         return Object.keys(x.elections || {}).some(function (k) {
+           return /District/.test(x.elections[k].label || ''); }); })[0];
+       if (!m) return false;
+       var k = Object.keys(m.elections).filter(function (kk) {
+         return /District/.test(m.elections[kk].label); })[0];
+       var pg = trySel(pick(nav(mxv, 'member'), m.seat), 'ipg-sb-fin-el', k);
+       return pg.text.indexOf(m.elections[k].label) >= 0;
+     })());
+
+  // ---- needs_review is MINTED, never surfaced (Ishan's ruling at SBFIN-3 A review) ----
+  // Reopening condition: ingest_ie distinguishing a unique-but-inexact resolution from a
+  // genuine collision. Today Rung 2 flags unconditionally, so the flag cannot tell a
+  // missing middle initial from a two-candidate ambiguity — which is why it is not shown.
+  ok('[SBF3/NOFLAG] needs_review is present in the artifact', (function () {
+    var seen = false;
+    Object.keys(REALFIN.ie_spenders || {}).forEach(function (k) {
+      (REALFIN.ie_spenders[k] || []).forEach(function (sp) {
+        (sp.targets || []).forEach(function (t) {
+          (t.rows || []).forEach(function (r) { if ('needs_review' in r) seen = true; }); }); }); });
+    return seen;
+  })());
+  ok('[SBF3/NOFLAG] needs_review reaches NO rendered surface', (function () {
+    var bad = [], probe = /needs.?review|needs_review|unverified match|match method|surname_plus_given/i;
+    ['members', 'donors', 'industries', 'mix'].forEach(function (sub) {
+      var pg = setSel(subtab({ doc: nav(mxv, 'spend').doc, app: mxv.app }, sub),
+                      'ipg-sb-spend-el', ieEK);
+      if (probe.test(pg.text) || probe.test(pg.html)) bad.push('spend/' + sub);
+    });
+    var sv2 = setSel(subtab({ doc: nav(mxv, 'spend').doc, app: mxv.app }, 'donors'),
+                     'ipg-sb-spend-el', ieEK);
+    var id2 = (sv2.html.match(/data-ie="([^"]+)"/) || [])[1];
+    if (id2) {
+      sv2.doc.querySelector('[data-ie="' + id2 + '"]').onclick();
+      var t2 = sv2.app.textContent || '', h2 = sv2.app.innerHTML;
+      if (probe.test(t2) || probe.test(h2)) bad.push('ie-detail');
+      var cb2 = sv2.doc.getElementById('ipg-sb-ie-close'); if (cb2) cb2.onclick();
+    }
+    var mv3 = nav(mxv, 'member');
+    REALFIN.members.forEach(function (m) {
+      var pg = pick(mv3, m.seat);
+      if (probe.test(pg.text) || probe.test(pg.html)) bad.push('member ' + m.seat);
+    });
+    if (bad.length) console.log('        ' + bad.join(', '));
+    return bad.length === 0;
+  })());
+
   // ---- finance failure is ISOLATED --------------------------------------
   var vfin = await boot(REAL, 'finfail');
   ok('[SBF/ISOLATE] a finance failure states itself and does NOT error the tool',
