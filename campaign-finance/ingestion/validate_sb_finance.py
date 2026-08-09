@@ -1,8 +1,16 @@
 # validate_sb_finance.py — SBFIN-1 / HALT-SBF-A, A.3. The finance artifact's examination.
 #
-# Check names are STABLE: SBF-1..SBF-13. A rename is a lane decision, not an edit,
+# Check names are STABLE: SBF-1..SBF-16. A rename is a lane decision, not an edit,
 # because the gate line and the lane reports cite them. SBFIN-2 A.3 ADDED names (9..13)
 # rather than repointing existing ones, so every pre-existing citation still resolves.
+#
+# RETIRED at SBFIN-2 B, with the flat `donors`/`coverage` pair they read:
+#   SBF-6      -> semantic reinstated as SBF-6c on donors_by_election
+#   SBF-7a-d   -> semantics reinstated as SBF-13a-d on coverage_by_election
+#   SBF-8      -> semantic reinstated as SBF-13g on coverage_by_election
+# Nothing was dropped: each retired name's rule is asserted on the new basis, and SBF-14
+# asserts the retired keys stay gone so they cannot return unguarded. A check disappearing
+# needs the same accounting as one appearing.
 #
 # What this exists to catch, in order of how badly it would hurt:
 #   SBF-5  a fused stream total appearing anywhere in the artifact — the firewall's
@@ -103,18 +111,21 @@ def validate(art, ed=None):
             r.ok(f"SBF-1d seat {seat}: person ref resolves in rollups.by_person",
                  ref in bp, f"ref={ref!r}")
 
-        # SBF-6 — donor detail presence must equal by_person membership, both ways.
-        # Still keyed to the SUPERSEDED flat list, which is what has_donor_detail tracks
-        # until HALT-SBF2-B removes it. Names are stable: this check is unchanged.
-        r.ok(f"SBF-6 seat {seat}: donor detail iff person-anchored",
-             bool(m.get("has_donor_detail")) == (kind == "person" and bool(m.get("donors"))),
-             f"kind={kind} has_donor_detail={m.get('has_donor_detail')} n={len(m.get('donors') or [])}")
-
         # SBF-6b — the SBFIN-2 shape. NOT `or {}`: an empty LIST is falsy, and coercing it
         # would hide exactly the pre-SBFIN-2 shape this check exists to catch.
         dmap = {} if m.get("donors_by_election") is None else m["donors_by_election"]
         r.ok(f"SBF-6b seat {seat}: donors_by_election is a map, never a flat list",
              isinstance(dmap, dict), f"got {type(dmap).__name__}")
+
+        # SBF-6c — SBF-6's SEMANTIC, reinstated on the new basis. SBF-6 itself was retired
+        # at HALT-SBF2-B with the flat list it read, but "donor detail iff person-anchored"
+        # was never a property OF that list — only measured through it. Retiring the check
+        # without reinstating the rule would have been coverage loss wearing the costume of
+        # coverage retirement.
+        n_rows = sum(len(v) for v in dmap.values()) if isinstance(dmap, dict) else -1
+        r.ok(f"SBF-6c seat {seat}: donor detail iff person-anchored",
+             bool(m.get("has_donor_detail")) == (kind == "person" and n_rows > 0),
+             f"kind={kind} has_donor_detail={m.get('has_donor_detail')} rows={n_rows}")
 
         for election, e in (m.get("elections") or {}).items():
             vals = [round(float(e[s]["amount"]), 2) for s in STREAMS]
@@ -155,31 +166,17 @@ def validate(art, ed=None):
                          int(e[s]["count"]) == expc[s],
                          f"artifact={e[s]['count']} source={expc[s]}")
 
-        # SBF-7 / SBF-8 — coverage reconciliation on the SUPERSEDED flat pair. Unchanged
-        # names, unchanged semantics; removed with the keys at HALT-SBF2-B.
-        cov = m.get("coverage")
-        if cov:
-            rows = m.get("donors") or []
-            rowsum = round(sum(float(x["amount"]) for x in rows), 2)
-            bucketsum = round(sum(float(v) for v in cov["dollars"].values()), 2)
-            r.ok(f"SBF-7a seat {seat}: coverage dollars sum to donor total",
-                 abs(bucketsum - float(cov["donor_total"])) < CENT,
-                 f"buckets={bucketsum} total={cov['donor_total']}")
-            r.ok(f"SBF-7b seat {seat}: donor rows sum to donor total",
-                 abs(rowsum - float(cov["donor_total"])) < CENT,
-                 f"rows={rowsum} total={cov['donor_total']}")
-            r.ok(f"SBF-7c seat {seat}: donor count matches rows",
-                 int(cov["donor_count"]) == len(rows))
-            sh = sum(float(v) for v in cov["shares"].values())
-            r.ok(f"SBF-7d seat {seat}: shares sum to 1", abs(sh - 1.0) < 1e-6 or not rows,
-                 f"shares sum={sh}")
-            r.ok(f"SBF-8 seat {seat}: threshold flag agrees with substantive share",
-                 bool(cov["meets_industry_threshold"]) ==
-                 (float(cov["substantive_share"]) >= float(art.get("industry_threshold", 0.5))),
-                 f"share={cov['substantive_share']} flag={cov['meets_industry_threshold']}")
+        # SBF-7a-d and SBF-8 were RETIRED at HALT-SBF2-B with the flat `donors`/`coverage`
+        # pair they read. Their semantics are not lost: SBF-13a-d and SBF-13g assert the
+        # identical properties on the per-election pair, which is now the only basis.
+        # SBF-14 — the retirement made structural. If the flat pair ever comes back, the
+        # checks that guarded it are gone, so say so here rather than let it return
+        # unguarded.
+        r.ok(f"SBF-14 seat {seat}: the superseded flat donors/coverage pair is absent",
+             "donors" not in m and "coverage" not in m,
+             f"found {[k for k in ('donors', 'coverage') if k in m]}")
 
-        # SBF-13 — the same reconciliation on the per-election pair, which is the basis
-        # the render moves to at B. Distinct names because the two coexist for one commit.
+        # SBF-13 — the coverage reconciliation, per election.
         covmap = m.get("coverage_by_election") or {}
         r.ok(f"SBF-13e seat {seat}: coverage_by_election is a map",
              isinstance(covmap, dict), f"got {type(covmap).__name__}")
@@ -283,6 +280,37 @@ def validate(art, ed=None):
          int(counts.get("itemized_rows", -1)) == n_items,
          f"header={counts.get('itemized_rows')} recount={n_items}")
 
+    # SBF-15 — the vocabulary slices. A label the render cannot resolve is a raw internal
+    # key shown to a reader (the F2 shape, one artifact over), so resolvability is asserted
+    # rather than hoped for; and a cluster_id pointing at nothing is a referential defect,
+    # not an empty panel.
+    vocab = art.get("industry_tags") or {}
+    used_inds, used_clusters = set(), set()
+    for d in dmaps:
+        for v in d.values():
+            for x in v:
+                used_inds.update(x.get("industries") or [])
+                if x.get("cluster_id"):
+                    used_clusters.add(x["cluster_id"])
+    r.ok("SBF-15a every industry on a donor row has a vocabulary entry",
+         not (used_inds - set(vocab)), f"missing {sorted(used_inds - set(vocab))}")
+    r.ok("SBF-15b every vocabulary entry carries a label and a colour",
+         all(v.get("label") and v.get("color") for v in vocab.values()),
+         f"incomplete {sorted(k for k, v in vocab.items() if not (v.get('label') and v.get('color')))}")
+    r.ok("SBF-15c the vocabulary carries no unused entries",
+         not (set(vocab) - used_inds), f"unused {sorted(set(vocab) - used_inds)}")
+    clusters = art.get("donor_clusters") or {}
+    r.ok("SBF-15d every cluster_id on a donor row resolves",
+         not (used_clusters - set(clusters)), f"dangling {sorted(used_clusters - set(clusters))}")
+    r.ok("SBF-15e no donor family carries a stream-total field",
+         not any(("total" in c) or ("member_totals" in c) for c in clusters.values()),
+         "cluster totals are elections-wide and would trip SBF-5c")
+
+    # SBF-16 — the two-step replace, closed. Asserted from the artifact, not assumed from
+    # a diff: A's intermediate marker and the keys it described are both gone.
+    r.ok("SBF-16a superseded_keys is absent (the two-step replace is closed)",
+         "superseded_keys" not in art, "A's intermediate marker survived into B")
+
     # SBF-9e — the self-funder set re-derived from the SOURCE, not trusted from the
     # artifact. This is the check that would catch a builder that simply forgot to drop:
     # SBF-9d only proves the artifact is internally consistent with its own list.
@@ -313,7 +341,7 @@ def self_test():
     green that means nothing (the validate_votes false-green lesson, SBVOTE-1 HALT-A)."""
     base = {"industry_threshold": 0.5, "members": [
         {"seat": "1A", "name": "X", "candidacy_ref": "a-1", "ref_kind": "candidate",
-         "has_donor_detail": False, "donors": {}, "coverage": {}, "elections": {
+         "has_donor_detail": False, "donors_by_election": {}, "elections": {
              "2024": {"label": "L", "direct": {"amount": 10.0, "count": 1},
                       "self_funding": {"amount": 5.0, "count": 0},
                       "ie_support": {"amount": 0.0, "count": 0},
@@ -326,14 +354,6 @@ def self_test():
         mm = {"seat": "2A", "name": "P", "candidacy_ref": "person-p", "ref_kind": "person",
               "finance_state": "full", "has_donor_detail": True,
               "self_funder_donor_ids": ["d-self"],
-              "donors": [{"donor_id": "d-give", "amount": 15.0, "count": 3,
-                          "industry_class": "substantive"}],
-              "coverage": {"donor_total": 15.0, "donor_count": 1,
-                           "dollars": {"substantive": 15.0, "individual_only": 0.0,
-                                       "unclassified": 0.0},
-                           "shares": {"substantive": 1.0, "individual_only": 0.0,
-                                      "unclassified": 0.0},
-                           "substantive_share": 1.0, "meets_industry_threshold": True},
               "donors_by_election": {"2024": [{"donor_id": "d-give", "amount": 10.0, "count": 2,
                                    "industry_class": "substantive",
                                    "items": [{"date": "2024-01-02", "amount": 6.0},
@@ -374,33 +394,11 @@ def self_test():
     t.append(("SBF-1 bites: an unknown kind fails",
               any(not ok and n.startswith("SBF-1 ") for n, ok, _ in
                   run({**base, "members": [{**base["members"][0], "ref_kind": "wat"}]}).checks)))
-    t.append(("SBF-6 bites: claimed donor detail with no rows fails",
-              any(not ok and n.startswith("SBF-6") for n, ok, _ in
-                  run({**base, "members": [{**base["members"][0],
-                                            "has_donor_detail": True}]}).checks)))
-    t.append(("SBF-8 bites: a flat threshold flag disagreeing with its share fails",
-              any(not ok and n.startswith("SBF-8") for n, ok, _ in
-                  run({**base, "members": [{**base["members"][0], "coverage": {
-                      "donor_total": 0.0, "donor_count": 0,
-                      "dollars": {"substantive": 0.0, "individual_only": 0.0,
-                                  "unclassified": 0.0},
-                      "shares": {"substantive": 0.1, "individual_only": 0.0,
-                                 "unclassified": 0.0},
-                      "substantive_share": 0.1, "meets_industry_threshold": True}}]}).checks)))
-    t.append(("SBF-13g bites: a per-election threshold flag disagreeing with its share fails",
-              any(not ok and n.startswith("SBF-13g") for n, ok, _ in
-                  run({**base, "members": [{**base["members"][0], "coverage_by_election": {"2024": {
-                      "donor_total": 0.0, "donor_count": 0,
-                      "dollars": {"substantive": 0.0, "individual_only": 0.0, "unclassified": 0.0},
-                      "shares": {"substantive": 0.1, "individual_only": 0.0, "unclassified": 0.0},
-                      "substantive_share": 0.1, "meets_industry_threshold": True}}}]}).checks)))
-    t.append(("SBF-13f bites: a flat coverage_by_election record fails as a shape error",
-              any(not ok and n.startswith("SBF-13f") for n, ok, _ in
-                  run({**base, "members": [{**base["members"][0], "coverage_by_election": {
-                      "donor_total": 0.0, "donor_count": 0,
-                      "dollars": {"substantive": 0.0, "individual_only": 0.0, "unclassified": 0.0},
-                      "shares": {"substantive": 1.0, "individual_only": 0.0, "unclassified": 0.0},
-                      "substantive_share": 1.0, "meets_industry_threshold": True}}]}).checks)))
+    # SBF-13's biting cases. These were lost to an over-greedy edit while retiring the
+    # SBF-8 case and restored the moment the old/new check-name diff surfaced it — the
+    # same accounting the retirements themselves get. A check whose failure path never
+    # runs is a green that means nothing, and that applies to checks that KEEP their name
+    # just as much as to ones that lose it.
     t.append(("SBF-13b bites: donor rows not summing to the coverage total fails",
               any(not ok and n.startswith("SBF-13b") for n, ok, _ in
                   run({**base, "members": [person_member(coverage_by_election={"2024": {
@@ -410,6 +408,30 @@ def self_test():
                       "shares": {"substantive": 1.0, "individual_only": 0.0,
                                  "unclassified": 0.0},
                       "substantive_share": 1.0, "meets_industry_threshold": True}})]}).checks)))
+    t.append(("SBF-13f bites: a flat (pre-SBFIN-2) coverage record fails as a shape error",
+              any(not ok and n.startswith("SBF-13f") for n, ok, _ in
+                  run({**base, "members": [person_member(coverage_by_election={
+                      "donor_total": 0.0, "donor_count": 0,
+                      "dollars": {"substantive": 0.0, "individual_only": 0.0,
+                                  "unclassified": 0.0},
+                      "shares": {"substantive": 1.0, "individual_only": 0.0,
+                                 "unclassified": 0.0},
+                      "substantive_share": 1.0,
+                      "meets_industry_threshold": True})]}).checks)))
+    t.append(("SBF-13g bites: a threshold flag disagreeing with its share fails",
+              any(not ok and n.startswith("SBF-13g") for n, ok, _ in
+                  run({**base, "members": [person_member(coverage_by_election={"2024": {
+                      "donor_total": 10.0, "donor_count": 1,
+                      "dollars": {"substantive": 10.0, "individual_only": 0.0,
+                                  "unclassified": 0.0},
+                      "shares": {"substantive": 0.1, "individual_only": 0.0,
+                                 "unclassified": 0.0},
+                      "substantive_share": 0.1,
+                      "meets_industry_threshold": True}})]}).checks)))
+    t.append(("SBF-6c bites: claimed donor detail with no rows fails",
+              any(not ok and n.startswith("SBF-6c") for n, ok, _ in
+                  run({**base, "members": [{**base["members"][0],
+                                            "has_donor_detail": True}]}).checks)))
 
     # ---- SBFIN-2 A.3: the F1 identity and the itemized rows ---------------------
     t.append(("the correct person shape raises NO SBF-9/10 error",
@@ -491,6 +513,53 @@ def self_test():
               any(not ok and n.startswith("SBF-6b") for n, ok, _ in
                   run({**base, "members": [{**base["members"][0],
                                             "donors_by_election": []}]}).checks)))
+    # ---- SBFIN-2 B: the two-step replace closed, and the vocabulary slices ----
+    t.append(("SBF-14 bites: the flat donors key coming back fails",
+              any(not ok and n.startswith("SBF-14") for n, ok, _ in
+                  run({**base, "members": [{**base["members"][0], "donors": []}]}).checks)))
+    t.append(("SBF-14 bites: the flat coverage key coming back fails",
+              any(not ok and n.startswith("SBF-14") for n, ok, _ in
+                  run({**base, "members": [{**base["members"][0], "coverage": None}]}).checks)))
+    t.append(("SBF-16a bites: A's superseded_keys marker surviving into B fails",
+              any(not ok and n.startswith("SBF-16a") for n, ok, _ in
+                  run({**base, "superseded_keys": {"x": "y"}}).checks)))
+    vocab_ok = {**base, "members": [person_member()],
+                "industry_tags": {"substantive-tag": {"label": "L", "color": "#000"}},
+                "donor_clusters": {}}
+    t.append(("the vocabulary shape raises NO SBF-15 error when it matches the rows",
+              not any(not ok and n.startswith("SBF-15") for n, ok, _ in
+                      run({**vocab_ok, "members": [person_member(donors_by_election={"2024": [
+                          {"donor_id": "d-give", "amount": 10.0, "count": 2,
+                           "industry_class": "substantive", "industries": ["substantive-tag"],
+                           "items": [{"date": "2024-01-02", "amount": 6.0},
+                                     {"date": "2024-02-03", "amount": 4.0}]}]})]}).checks)))
+    t.append(("SBF-15a bites: an industry with no vocabulary entry fails",
+              any(not ok and n.startswith("SBF-15a") for n, ok, _ in
+                  run({**vocab_ok, "members": [person_member(donors_by_election={"2024": [
+                      {"donor_id": "d-give", "amount": 10.0, "count": 2,
+                       "industry_class": "substantive", "industries": ["no-such-tag"],
+                       "items": [{"date": "2024-01-02", "amount": 6.0},
+                                 {"date": "2024-02-03", "amount": 4.0}]}]})]}).checks)))
+    t.append(("SBF-15b bites: a vocabulary entry missing its colour fails",
+              any(not ok and n.startswith("SBF-15b") for n, ok, _ in
+                  run({**base, "industry_tags": {"t": {"label": "L"}},
+                       "members": [person_member()]}).checks)))
+    t.append(("SBF-15c bites: an unused vocabulary entry fails",
+              any(not ok and n.startswith("SBF-15c") for n, ok, _ in
+                  run({**base, "industry_tags": {"never-used": {"label": "L", "color": "#000"}},
+                       "members": [person_member()]}).checks)))
+    t.append(("SBF-15d bites: a cluster_id pointing at nothing fails",
+              any(not ok and n.startswith("SBF-15d") for n, ok, _ in
+                  run({**base, "donor_clusters": {}, "members": [person_member(
+                      donors_by_election={"2024": [
+                          {"donor_id": "d-give", "amount": 10.0, "count": 2,
+                           "industry_class": "substantive", "cluster_id": "rollup-nope",
+                           "items": [{"date": "2024-01-02", "amount": 6.0},
+                                     {"date": "2024-02-03", "amount": 4.0}]}]})]}).checks)))
+    t.append(("SBF-15e bites: a donor family carrying a total field fails",
+              any(not ok and n.startswith("SBF-15e") for n, ok, _ in
+                  run({**base, "donor_clusters": {"r-1": {"name": "F", "total": 5.0}},
+                       "members": [person_member()]}).checks)))
     t.append(("SBF-12a bites: a header donor_rows count that lies fails",
               any(not ok and n.startswith("SBF-12a") for n, ok, _ in
                   run({**base, "counts": {"donor_rows": 999, "itemized_rows": 3},

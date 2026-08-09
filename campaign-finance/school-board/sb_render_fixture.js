@@ -128,7 +128,13 @@ var fentry = REG.split('### SBFIN-1 — finance state strings 1–4')[1].split('
 function fString(re) { var m = fentry.match(re); return m ? m[1] : null; }
 var F1 = fString(/`(No campaign finance records are on file[^`]*)`/);
 var F2 = fString(/`(Itemized donor detail for this campaign[^`]*)`/);
-var F3 = fString(/`(This chart classifies \{N\}%[^`]*)`/);
+// String 3 was SUPERSEDED at SBFIN-2 B; the register carries the replacement as 3'.
+// Read the superseding text, and assert the superseded one is gone from the page.
+var F3 = fString(/`(\{N\}% of these donor dollars carry a substantive industry tag[^`]*)`/);
+var F3OLD = fString(/`(This chart classifies \{N\}%[^`]*)`/);
+var F5 = fString(/\*\*All-elections scope label:\*\* `([^`]+)`/);
+var F6 = fString(/`(Combined across every school board election[^`]*)`/);
+var F7 = fString(/`(A “Self-Funding \/ Candidate Loan” segment[^`]*)`/);
 var F4 = fString(/`(Industry classification of this member[^`]*)`/);
 // {N} is substituted at render, so the register form is matched on its stable halves.
 function around(tpl, marker) { return String(tpl).split(marker); }
@@ -138,6 +144,9 @@ function around(tpl, marker) { return String(tpl).split(marker); }
      !!(S1 && S2 && S3 && S4 && S5), JSON.stringify({ S1: !!S1, S2: !!S2, S3: !!S3, S4: !!S4, S5: !!S5 }));
   ok('SBFIN-1 register entry yielded all four finance strings',
      !!(F1 && F2 && F3 && F4), JSON.stringify({ F1: !!F1, F2: !!F2, F3: !!F3, F4: !!F4 }));
+  ok('SBFIN-2 register amendment yielded the superseding + three new strings',
+     !!(F3OLD && F5 && F6 && F7),
+     JSON.stringify({ F3OLD: !!F3OLD, F5: !!F5, F6: !!F6, F7: !!F7 }));
 
   // ---------- C3 state 1: the born artifact, 0 votes -> string 1 ----------
   var born = await boot(REAL, 'ok');
@@ -328,6 +337,9 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   var money = function (x) { return '$' + Math.round(x).toLocaleString('en-US'); };
   var finBy = function (seat) {
     return REALFIN.members.filter(function (m) { return m.seat === seat; })[0]; };
+  // The embed's own default: most recent election first, All elections never default.
+  var defaultElection = function (fm) {
+    return Object.keys(fm.elections || {}).sort().reverse()[0]; };
 
   // ---- B.4: exactly TWO data fetches, enumerated -------------------------
   var gets = FETCHED.filter(function (u) { return u.indexOf('formspree') < 0; });
@@ -364,8 +376,27 @@ function around(tpl, marker) { return String(tpl).split(marker); }
        && pFull24.text.indexOf(money(finBy('4A').elections['2024'].self_funding.amount)) >= 0
        && pFull24.text.indexOf(money(finBy('4A').elections['2024'].direct.amount
                                    + finBy('4A').elections['2024'].self_funding.amount)) < 0);
-  ok('[SBF/STATE] member page is DIRECT-ONLY: no IE figure appears on it',
-     pFull24.text.indexOf('Independent') < 0);
+  // The old form asserted the WORD 'Independent' never appeared. Exit 1 requires the
+  // view to state its own direct-only scope, so that sentence now legitimately contains
+  // the word — and a word-absence test would have to be deleted or the sentence dropped.
+  // Neither: the check now asserts what it always meant, that no IE FIGURE renders.
+  ok('[SBF/STATE] member page is DIRECT-ONLY: no IE figure appears on it', (function () {
+    var bad = [];
+    REALFIN.members.forEach(function (m) {
+      if (!m.elections) return;
+      var pg = pick(mv, m.seat);
+      Object.keys(m.elections).forEach(function (k) {
+        var e = m.elections[k];
+        [['ie_support', e.ie_support], ['ie_oppose', e.ie_oppose]].forEach(function (pr) {
+          var amt = Number((pr[1] || {}).amount || 0);
+          if (amt > 0 && pg.text.indexOf(money(amt)) >= 0) bad.push(m.seat + ' ' + k + ' ' + pr[0]);
+        });
+      });
+    });
+    return bad.length === 0;
+  })());
+  ok('[SBF/STATE] the member page states its own direct-only scope (exit 1)',
+     pick(mv, '4A').text.indexOf('direct contributions only') >= 0);
 
   var pThin = pick(mv, '1A');                                  // totals-only, 3
   ok('[SBF/STATE] totals-only: the ratified thinness string renders',
@@ -391,17 +422,264 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   ok('[SBF/BAR] above threshold: the bar renders with the disclosure line',
      pFull.html.indexOf('ipg-sb-bar-seg') >= 0
        && !!F3 && pFull.text.indexOf(around(F3, '{N}')[1]) >= 0);
-  var pBelow = pick(mv, '6B');
+  ok('[SBF/BAR] the SUPERSEDED string 3 no longer renders anywhere',
+     !!F3OLD && pFull.text.indexOf(around(F3OLD, '{N}')[1]) < 0);
+  // state.finElection persists across seat changes (pre-existing behaviour, and now
+  // load-bearing because coverage is per-election), so the scope is set EXPLICITLY here
+  // rather than inherited from whichever selector a previous check happened to drive.
+  var pBelow = setSel(pick(mv, '6B'), 'ipg-sb-fin-el', defaultElection(finBy('6B')));
   ok('[SBF/BAR] below threshold: NO bar, and string 4 renders as the primary state',
      pBelow.html.indexOf('ipg-sb-bar-seg') < 0
        && !!F4 && pBelow.text.indexOf(around(F4, '{N}')[0]) >= 0);
   ok('[SBF/BAR] below-threshold copy carries the member’s own measured share',
-     pBelow.text.indexOf(String(Math.round(finBy('6B').coverage.substantive_share * 1000) / 10) + '% of donor dollars') >= 0);
+     pBelow.text.indexOf(String(Math.round(
+       finBy('6B').coverage_by_election[defaultElection(finBy('6B'))].substantive_share * 1000) / 10)
+       + '% of donor dollars') >= 0);
 
+  // ======================================================================
+  // SBFIN-2 B.6 — the F1 repair, the labeled bar, the profile, the block, the footer.
+  // ======================================================================
+
+  // ---- F1, asserted on EVERY member and EVERY election ----
+  // The defect was a donor list on one basis beside a Raised figure on another. This
+  // walks every stored scope and asserts, from the RENDERED page, that the donor rows
+  // shown sum to that election's direct figure — and that the self-funder is not among
+  // them. SBF-9 asserts the same identity in the artifact; this asserts it survives the
+  // render, which is where F1 actually lived.
+  ok('[SBF2/F1] every rendered donor list sums to that election\'s direct figure', (function () {
+    var bad = [];
+    REALFIN.members.forEach(function (m) {
+      if (m.finance_state !== 'full') return;
+      Object.keys(m.elections).forEach(function (k) {
+        var pg = setSel(pick(mv, m.seat), 'ipg-sb-fin-el', k);
+        var rows = m.donors_by_election[k] || [];
+        var sum = rows.reduce(function (a, r) { return a + Number(r.amount || 0); }, 0);
+        var direct = Number(m.elections[k].direct.amount || 0);
+        if (Math.abs(sum - direct) > 0.005) { bad.push(m.seat + ' ' + k + ' artifact'); return; }
+        // Raised renders, and the F1 basis (direct + self_funding) does NOT.
+        var self = Number(m.elections[k].self_funding.amount || 0);
+        if (pg.text.indexOf(money(direct)) < 0) bad.push(m.seat + ' ' + k + ' no-raised');
+        if (self > 0 && pg.text.indexOf(money(direct + self)) >= 0)
+          bad.push(m.seat + ' ' + k + ' F1-basis-rendered');
+      });
+    });
+    return bad.length === 0;
+  })(), 'offenders listed above');
+
+  ok('[SBF2/F1] no self-funder appears as a donor row on any rendered page', (function () {
+    var bad = [];
+    REALFIN.members.forEach(function (m) {
+      var ids = m.self_funder_donor_ids || [];
+      if (!ids.length) return;
+      Object.keys(m.elections || {}).forEach(function (k) {
+        var pg = setSel(pick(mv, m.seat), 'ipg-sb-fin-el', k);
+        ids.forEach(function (id) {
+          if (pg.html.indexOf('data-donor="' + id + '"') >= 0) bad.push(m.seat + ' ' + k + ' ' + id);
+        });
+      });
+    });
+    return bad.length === 0;
+  })());
+
+  // The three census-named cases, by name, so a regression names itself.
+  ok('[SBF2/F1] the three census cases render Raised, not Raised+self-funding', (function () {
+    var cases = [['9A', 'Boyle'], ['5A', 'Blaise'], ['10A', 'Smith']];
+    var seats = REALFIN.members.filter(function (m) {
+      return /Boyle|Blaise|Rhymefest/.test(m.name || ''); });
+    if (seats.length !== 3) return false;
+    return seats.every(function (m) {
+      var e = m.elections['2024']; if (!e) return false;
+      var pg = setSel(pick(mv, m.seat), 'ipg-sb-fin-el', '2024');
+      var d = Number(e.direct.amount || 0), sf = Number(e.self_funding.amount || 0);
+      var rows = m.donors_by_election['2024'] || [];
+      var sum = rows.reduce(function (a, r) { return a + Number(r.amount || 0); }, 0);
+      return pg.text.indexOf(money(d)) >= 0
+          && pg.text.indexOf(money(d + sf)) < 0
+          && Math.abs(sum - d) < 0.005;
+    });
+  })());
+
+  // ---- B.2: the bar filters in place, from segment AND legend, and toggles clear ----
+  var pBar = setSel(pick(mv, '4A'), 'ipg-sb-fin-el', defaultElection(finBy('4A')));
+  var segKey = (function () {
+    var m = pBar.html.match(/class="ipg-sb-bar-seg" data-industry="([^"]+)"/); return m ? m[1] : null; })();
+  ok('[SBF2/BAR] segments carry an industry key', !!segKey, String(segKey));
+  var pSeg = (function () {
+    var b = pBar.doc.querySelector('.ipg-sb-bar-seg[data-industry="' + segKey + '"]');
+    b.onclick({ preventDefault: function () {}, stopPropagation: function () {} });
+    return { doc: pBar.doc, app: pBar.app, html: pBar.app.innerHTML, text: pBar.app.textContent || '' };
+  })();
+  ok('[SBF2/BAR] clicking a SEGMENT filters the donor list in place',
+     pSeg.text.indexOf('Donor list filtered to') >= 0 && pSeg.html.indexOf('ipg-sb-fin-clear') >= 0);
+  ok('[SBF2/BAR] the filtered list contains only donors carrying that industry', (function () {
+    var fm = finBy('4A'), k = defaultElection(fm);
+    var want = (fm.donors_by_election[k] || []).filter(function (d) {
+      return ((d.industries && d.industries.length) ? d.industries : ['unclassified']).indexOf(segKey) >= 0; });
+    var shown = (pSeg.html.match(/data-donor="([^"]+)"/g) || []).map(function (x) {
+      return x.slice(12, -1); });
+    return shown.length > 0 && shown.every(function (id) {
+      return want.some(function (d) { return d.donor_id === id; }); });
+  })());
+  var pSeg2 = (function () {
+    var b = pSeg.doc.querySelector('.ipg-sb-bar-seg[data-industry="' + segKey + '"]');
+    b.onclick({ preventDefault: function () {}, stopPropagation: function () {} });
+    return { doc: pSeg.doc, app: pSeg.app, html: pSeg.app.innerHTML, text: pSeg.app.textContent || '' };
+  })();
+  ok('[SBF2/BAR] clicking the same segment again CLEARS the filter (toggle)',
+     pSeg2.text.indexOf('Donor list filtered to') < 0);
+  var pLeg = (function () {
+    var b = pSeg2.doc.querySelector('.ipg-sb-legend-item[data-industry="' + segKey + '"]');
+    b.onclick({ preventDefault: function () {}, stopPropagation: function () {} });
+    return { doc: pSeg2.doc, app: pSeg2.app, html: pSeg2.app.innerHTML, text: pSeg2.app.textContent || '' };
+  })();
+  ok('[SBF2/BAR] the LEGEND row filters identically to the segment',
+     pLeg.text.indexOf('Donor list filtered to') >= 0);
+  (function () {
+    var b = pLeg.doc.querySelector('.ipg-sb-legend-item[data-industry="' + segKey + '"]');
+    b.onclick({ preventDefault: function () {}, stopPropagation: function () {} });
+  })();
+  ok('[SBF2/BAR] every segment label comes from the artifact vocabulary, never a raw key',
+     (function () {
+       var labels = (pBar.html.match(/<span class="l">([^<]+)<\/span>/g) || []);
+       var vocab = Object.keys(REALFIN.industry_tags || {}).map(function (k) {
+         return REALFIN.industry_tags[k].label; });
+       return labels.length > 0 && labels.every(function (x) {
+         return vocab.indexOf(x.replace(/<[^>]+>/g, '')) >= 0; });
+     })());
+  ok('[SBF2/BAR] the direct-only sentence renders with the bar (exit 1)',
+     pBar.text.indexOf('direct contributions only') >= 0);
+  ok('[SBF2/F11] the self-funding-tag string renders exactly where that tag is charted',
+     (function () {
+       var bad = [];
+       REALFIN.members.forEach(function (m) {
+         if (m.finance_state !== 'full') return;
+         Object.keys(m.elections).forEach(function (k) {
+           var cov = (m.coverage_by_election || {})[k];
+           if (!cov || !cov.meets_industry_threshold) return;
+           var rows = m.donors_by_election[k] || [];
+           var has = rows.some(function (d) { return (d.industries || []).indexOf('self-funding') >= 0; });
+           var pg = setSel(pick(mv, m.seat), 'ipg-sb-fin-el', k);
+           var shown = pg.text.indexOf(F7) >= 0;
+           if (has !== shown) bad.push(m.seat + ' ' + k + ' has=' + has + ' shown=' + shown);
+         });
+       });
+       return bad.length === 0;
+     })());
+
+  // ---- ratification 4: All elections ----
+  var pAll = setSel(pick(mv, '4A'), 'ipg-sb-fin-el', 'all');
+  ok('[SBF2/ALL] All elections is an option and is NOT the default',
+     pBar.html.indexOf('value="all"') >= 0
+       && pBar.html.indexOf('value="all" selected') < 0);
+  ok('[SBF2/ALL] its ratified disclosure renders whenever it is active',
+     !!F6 && pAll.text.indexOf(F6) >= 0
+       && pBar.text.indexOf(F6) < 0);
+  ok('[SBF2/ALL] Raised is the sum of the member\'s own elections, one stream only',
+     (function () {
+       var fm = finBy('4A');
+       var d = Object.keys(fm.elections).reduce(function (a, k) {
+         return a + Number(fm.elections[k].direct.amount || 0); }, 0);
+       return pAll.text.indexOf(money(d)) >= 0;
+     })());
+  ok('[SBF2/ALL] the Donors tile is DISTINCT donors, not the sum of per-election counts',
+     (function () {
+       var fm = finBy('4A'), ids = {}, perElection = 0;
+       Object.keys(fm.donors_by_election).forEach(function (k) {
+         (fm.donors_by_election[k] || []).forEach(function (d) { ids[d.donor_id] = 1; perElection++; });
+       });
+       var distinct = Object.keys(ids).length;
+       return distinct < perElection && pAll.html.indexOf('>' + distinct + '</div><div class="l">Donors<') >= 0;
+     })());
+
+  // ---- B.3: the donor profile ----
+  // Re-establish the scope explicitly: the All-elections checks above left state.finElection
+  // on 'all', and the profile is scoped to whatever is active — which is the point of the
+  // check below, so it must be set rather than inherited.
+  var pDef = setSel(pick(mv, '4A'), 'ipg-sb-fin-el', defaultElection(finBy('4A')));
+  var firstDonor = (function () { var m = pDef.html.match(/data-donor="([^"]+)"/); return m ? m[1] : null; })();
+  var pProf = (function () {
+    var b = pDef.doc.querySelector('[data-donor="' + firstDonor + '"]');
+    b.onclick();
+    return { doc: pDef.doc, app: pDef.app, html: pDef.app.innerHTML, text: pDef.app.textContent || '' };
+  })();
+  ok('[SBF2/PROFILE] a donor row opens the profile', !!firstDonor
+     && pProf.html.indexOf('ipg-sb-donor-overlay') >= 0
+     && pProf.text.indexOf('Donor profile') >= 0);
+  ok('[SBF2/PROFILE] every itemized row renders with an ISO-sourced date', (function () {
+    var fm = finBy('4A'), k = defaultElection(fm);
+    var row = (fm.donors_by_election[k] || []).filter(function (d) {
+      return d.donor_id === firstDonor; })[0];
+    if (!row || !row.items.length) return false;
+    var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return row.items.every(function (it) {
+      var m2 = /^(\d{4})-(\d{2})-(\d{2})$/.exec(it.date);
+      return pProf.text.indexOf(MON[Number(m2[2]) - 1] + ' ' + Number(m2[3]) + ', ' + m2[1]) >= 0;
+    });
+  })());
+  ok('[SBF2/PROFILE] the profile is scoped to the active election', (function () {
+    var fm = finBy('4A'), k = defaultElection(fm);
+    var row = (fm.donors_by_election[k] || []).filter(function (d) {
+      return d.donor_id === firstDonor; })[0];
+    return !!row && pProf.text.indexOf(money(row.amount)) >= 0;
+  })());
+  ok('[SBF2/PROFILE] NO self-funding chip can render (no itemized row carries is_self)',
+     pProf.html.indexOf('ipg-sb-ichip') < 0 || pProf.text.indexOf('self-funding') < 0);
+  ok('[SBF2/PROFILE] chips use the ratified elections vocabulary where the flag is present',
+     (function () {
+       var anyInKind = false;
+       REALFIN.members.forEach(function (m) {
+         Object.keys(m.donors_by_election || {}).forEach(function (k) {
+           (m.donors_by_election[k] || []).forEach(function (d) {
+             (d.items || []).forEach(function (it) { if (it.is_in_kind) anyInKind = true; }); }); }); });
+       return anyInKind;   // the vocabulary has a live case in the data
+     })());
+  (function () { var cb = pProf.doc.getElementById('ipg-sb-donor-close'); if (cb) cb.onclick(); })();
+
+  // ---- B.4: the Verified block, WITHOUT a link ----
+  var pVer = pick(mv, '4A');
+  ok('[SBF2/VERIFIED] the banner, the filed committee name and the source date render',
+     pVer.text.indexOf('Verified · Illinois State Board of Elections') >= 0
+       && pVer.text.indexOf(finBy('4A').committees[0].name) >= 0
+       && pVer.text.indexOf('Updated ' + finBy('4A').committees[0].last_updated) >= 0);
+  ok('[SBF2/VERIFIED] NO Sunshine link is shipped, anywhere in the embed (ratification 5)',
+     EMBED_HTML.indexOf('illinoissunshine') < 0);
+  ok('[SBF2/VERIFIED] the banner is gated on data_quality, not assumed',
+     REALFIN.members.every(function (m) {
+       return (m.committees || []).every(function (c) { return c.data_quality === 'REAL'; }); }));
+
+  // ---- B.5: the ratified footer, on EVERY tab ----
+  ok('[SBF2/FOOTER] the ratified sentence renders on every tab, verbatim', (function () {
+    var want = 'We\u2019re committed to keeping this data as accurate as possible. If you have '
+      + 'questions about our data sources and methodology, a full methodology page is on the way. '
+      + 'If you spot an error in the data or a visualization, have something to add, or hit a bug, '
+      + 'click here to let us know.';
+    var tabs = ['member', 'record', 'matrix', 'spend', 'methodology'], missing = [];
+    tabs.forEach(function (t) {
+      var pg = nav(mxv, t);
+      if (pg.text.replace(/\s+/g, ' ').indexOf(want) < 0) missing.push(t);
+    });
+    return missing.length === 0;
+  })());
+  ok('[SBF2/FOOTER] its trigger is wired to the existing feedback flow',
+     nav(mxv, 'member').html.indexOf('ipg-sb-fb-inline ipg-sb-fb-btn') >= 0);
+  ok('[SBF2/FOOTER] methodologyUrl is a real key, not a hardcoded branch (F8)',
+     /methodologyUrl\s*:/.test(EMBED_HTML));
+
+  // ---- the two-step replace, closed at the render layer ----
+  ok('[SBF2/CLOSED] the embed reads NO flat donors/coverage key',
+     !/fm\.donors\b/.test(EMBED_HTML) && !/fm\.coverage\b/.test(EMBED_HTML));
+  ok('[SBF2/CLOSED] the artifact carries no superseded_keys and no flat pair',
+     !('superseded_keys' in REALFIN)
+       && REALFIN.members.every(function (m) {
+            return !('donors' in m) && !('coverage' in m); }));
+
+  var mv2 = nav(mxv, 'member');
   var flipped = JSON.parse(JSON.stringify(REALFIN));
   flipped.members.forEach(function (m) {
-    if (m.seat === '6B' && m.coverage) {
-      m.coverage.substantive_share = 0.91; m.coverage.meets_industry_threshold = true; }
+    if (m.seat === '6B' && m.coverage_by_election) {
+      Object.keys(m.coverage_by_election).forEach(function (k) {
+        m.coverage_by_election[k].substantive_share = 0.91;
+        m.coverage_by_election[k].meets_industry_threshold = true; }); }
   });
   FIN = flipped;
   var vflip = await boot(REAL, 'ok');

@@ -81,6 +81,10 @@ const IPG_SB_FEEDBACK = {
   endpoint: 'https://formspree.io/f/xjgdkkrk',
   accessKey: null,
   subjectPrefix: '[IPG School Board Tool] ',
+  // Set once the methodology page exists; null renders the sentence with no link. Mirrors
+  // the council's FEEDBACK_CONFIG key (SBFIN-2 F8) so the footer sentence is switchable
+  // without a code edit.
+  methodologyUrl: null,
   floatingButton: true,
 };
 </script>
@@ -253,6 +257,43 @@ const IPG_SB_FEEDBACK = {
 #ipg-sb-app .ipg-sb-fb-btn:hover{background:var(--teal)}
 
 /* FOOTER */
+/* ---- SBFIN-2 B: labeled industry bar, donor profile, verified block ---- */
+#ipg-sb-app .ipg-sb-verified{display:inline-block;margin:10px 0 2px;padding:4px 10px;border-radius:999px;
+  background:var(--aff-bg);color:var(--teal);font-size:12px;font-weight:600;letter-spacing:.02em}
+#ipg-sb-app .ipg-sb-dollarbar{display:flex;width:100%;height:34px;border-radius:7px;overflow:hidden;
+  margin:6px 0 10px;border:1px solid var(--line)}
+#ipg-sb-app .ipg-sb-bar-seg{border:0;padding:0 6px;cursor:pointer;color:#fff;font:inherit;
+  display:flex;align-items:center;justify-content:space-between;gap:6px;overflow:hidden;min-width:0}
+#ipg-sb-app .ipg-sb-bar-seg .l{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ipg-sb-app .ipg-sb-bar-seg .p{font-size:11px;opacity:.85;white-space:nowrap}
+#ipg-sb-app .ipg-sb-bar-legend{display:flex;flex-direction:column;gap:2px;margin:0 0 12px}
+#ipg-sb-app .ipg-sb-legend-item{display:flex;align-items:center;gap:8px;padding:5px 6px;border:0;
+  background:none;font:inherit;text-align:left;cursor:pointer;border-radius:6px;color:var(--ink)}
+#ipg-sb-app .ipg-sb-legend-item:hover{background:var(--neu-bg)}
+#ipg-sb-app .ipg-sb-legend-item.dim{opacity:.42}
+#ipg-sb-app .ipg-sb-legend-item i{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+#ipg-sb-app .ipg-sb-legend-item .l{flex:1 1 auto;font-size:13px}
+#ipg-sb-app .ipg-sb-legend-item .p{font-size:12px;color:var(--ink-mid);width:48px;text-align:right}
+#ipg-sb-app .ipg-sb-legend-item .a{font-size:13px;font-weight:600;width:96px;text-align:right}
+#ipg-sb-app .ipg-sb-filterbar{margin:12px 0 8px;padding:9px 12px;background:var(--neu-bg);
+  border-radius:8px;font-size:13px;color:var(--ink)}
+#ipg-sb-app .ipg-sb-donor-click{display:flex;width:100%;text-align:left;border:0;background:none;
+  font:inherit;cursor:pointer;border-radius:6px}
+#ipg-sb-app .ipg-sb-donor-click:hover{background:var(--neu-bg)}
+#ipg-sb-app .ipg-sb-chip-ind{display:inline-block;padding:2px 8px;border-radius:999px;color:#fff;
+  font-size:11px;font-weight:600;margin-right:4px}
+#ipg-sb-app .ipg-sb-dtype,#ipg-sb-app .ipg-sb-dscope{font-size:12px;color:var(--ink-mid)}
+#ipg-sb-app .ipg-sb-role{font-size:11px;color:var(--ink-mid);font-weight:400}
+#ipg-sb-app .ipg-sb-item{display:flex;justify-content:space-between;gap:12px;padding:7px 2px;
+  border-bottom:1px solid var(--line);font-size:13px}
+#ipg-sb-app .ipg-sb-item .l{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#ipg-sb-app .ipg-sb-item .a{font-weight:600;white-space:nowrap}
+#ipg-sb-app .ipg-sb-ichip{display:inline-block;padding:1px 7px;border-radius:999px;font-size:11px;
+  background:var(--neu-bg);color:var(--ink-mid)}
+#ipg-sb-app .ipg-sb-feedback-bar{margin-top:22px;padding:16px 18px;background:var(--white);
+  border:1px solid var(--line);border-radius:10px;font-size:13.5px;line-height:1.55;color:var(--ink)}
+#ipg-sb-app .ipg-sb-fb-inline{border:0;background:none;padding:0;font:inherit;color:var(--teal);
+  text-decoration:underline;cursor:pointer}
 #ipg-sb-app .ipg-sb-foot{margin-top:26px;padding:22px max(30px,calc((100% - var(--content))/2)) 30px;
   border-top:1px solid var(--line);font-size:12.5px;line-height:1.65;color:#8a7e70;background:var(--tan)}
 #ipg-sb-app .ipg-sb-foot strong{color:var(--ink-mid)}
@@ -389,7 +430,8 @@ const IPG_SB_FEEDBACK = {
   var state = { view:'member', seat:null, tag:'All', recQuery:'', recTag:'All',
                 status:'loading', error:null,
                 finStatus:'loading', finError:null,
-                finElection:null, finShowAllDonors:false, spendElection:null };
+                finElection:null, finShowAllDonors:false, spendElection:null,
+                finIndustry:'All', finDonor:null };
 
   // ==========================================================
   // THE RENDER BOUNDARY — D-1's four-value map, declared as data.
@@ -427,8 +469,52 @@ const IPG_SB_FEEDBACK = {
     thinness: 'Itemized donor detail for this campaign is not yet ingested; totals are computed from state filings.',
     // {N} is the member's precomputed substantive_share — rendered from the
     // artifact, NEVER recomputed here.
-    barDisclosure: 'This chart classifies {N}% of this member’s donor dollars by industry; individual donors and not-yet-classified contributions are excluded.',
-    belowThreshold: 'Industry classification of this member’s donors is still in progress — {N}% of donor dollars are classified so far, not yet enough to chart reliably.'
+    belowThreshold: 'Industry classification of this member’s donors is still in progress — {N}% of donor dollars are classified so far, not yet enough to chart reliably.',
+
+    // ---- SBFIN-2 B strings. DRAFTED for ratification at B's diff review; the four
+    // above are the SBFIN-1 ratified set and are unchanged except barDisclosure, whose
+    // replacement is flagged below.
+    //
+    // barDisclosure REPLACES the SBFIN-1 string, which read: 'This chart classifies {N}%
+    // of this member’s donor dollars by industry; individual donors and not-yet-classified
+    // contributions are excluded.' Under B.2 the bar charts every industry tag — including
+    // `Individual Donor` and `Not Yet Classified`, which ARE tags in the vocabulary and
+    // render as their own labeled segments (the council's renderDollarBar behaviour that
+    // exit 1 mirrors). The old sentence would have become false the moment those segments
+    // appeared. The >=50% threshold still gates the bar; what the sentence now reports is
+    // what the number actually measures.
+    barDisclosure: '{N}% of these donor dollars carry a substantive industry tag; the rest are individual donors or not yet classified, and appear as their own segments.',
+    barHead: 'Where this member’s money comes from',
+    barSub: 'Each segment is one industry; width is its share of direct contributions in this view. Click a segment to filter the donor list below.',
+    barSegmentHint: 'Click to filter the donor list below.',
+    // Exit 1, stated in the view's own sentence rather than left to a gate.
+    barDirectOnly: 'Independent spending is not included here — this chart is direct contributions only.',
+    // F11. The industry TAG and the is_self STREAM are different classifiers sharing one
+    // word. The live case: a member's spouse can carry the self-funding tag while not
+    // being the candidate, so her money is inside Raised and belongs in this chart.
+    selfTagVsStream: 'A “Self-Funding / Candidate Loan” segment is an industry tag on the donor, not the candidate’s own money: contributions the candidate made to their own committee are excluded from this chart and shown in the Self-funding tile above.',
+
+    // Ratification 4 — the All-elections label and the disclosure that must accompany it.
+    allElections: 'All elections',
+    allElectionsDisclosure: 'Combined across every school board election this member has run in, including runs for a different seat.',
+
+    filtered: 'Donor list filtered to {N}',
+    clearFilter: 'Clear filter',
+    filterEmpty: 'No donors in this category for this view.',
+
+    verified: 'Verified · Illinois State Board of Elections',
+    updated: 'Updated {N}',
+
+    profileKicker: 'Donor profile',
+    profileFoot: 'Press Esc, click outside, or use × to close.',
+    recipientsHead: 'Board members funded',
+    itemsHead: 'Contributions',
+    familyHead: 'Donor family',
+    familyNote: 'This donor is part of {N}. Amounts below are what each entity gave inside this tool.',
+    familyNoneHere: 'No school board contributions in this view.',
+    chipLoan: 'loan · not a gift',
+    chipInKind: 'in-kind',
+    chipAggregate: 'aggregate of {N}'
   };
 
   // Spend-by-Member copy — the council's Spend-by-alder strings transcribed
@@ -562,8 +648,11 @@ const IPG_SB_FEEDBACK = {
   function finElections(fm){
     return Object.keys((fm && fm.elections) || {}).sort().reverse();
   }
+  // Scope resolution reads finScopeKeys, NOT finElections: the All-elections option is a
+  // selectable scope, and resolving against the raw election list silently dropped it back
+  // to the most recent election. Caught by [SBF2/ALL] at B.6.
   function pickElection(fm, chosen){
-    var keys = finElections(fm);
+    var keys = finScopeKeys(fm);
     if(!keys.length) return null;
     return (chosen && keys.indexOf(chosen)>=0) ? chosen : keys[0];
   }
@@ -673,6 +762,281 @@ const IPG_SB_FEEDBACK = {
   // (G1 R1-a) — the separation is achieved by absence, and the three-stream view
   // is where the streams meet, side by side and never summed.
   // ==========================================================
+  // ==========================================================
+  // SBFIN-2 B.1 — the election scope, and the ALL-ELECTIONS view.
+  //
+  // F1's repair lives here. Before SBFIN-2 the tiles were election-scoped while the
+  // Donors tile, coverage bar and donor list read one all-elections, self-funding-
+  // inclusive list, so a self-funder rendered both as a top donor and as the tile that
+  // says it is "not included in Raised". Every surface below now reads ONE scope object,
+  // so the two bases cannot drift apart again: there is only one.
+  //
+  // The all-elections view is DERIVED here and never stored (SBFIN-2 A). Summing one
+  // stream across a member's own elections is not a stream fusion — the four streams stay
+  // in their own fields and nothing adds two of them together, which is what
+  // [SBF/NEVERSUM] asserts.
+  // ==========================================================
+  var ALL_ELECTIONS = 'all';
+  var STREAM_KEYS = ['direct', 'self_funding', 'ie_support', 'ie_oppose'];
+
+  function round2(n){ return Math.round(Number(n||0)*100)/100; }
+
+  // Scope options: the member's elections, plus All elections where there is more than
+  // one. A single-election member gets no selector and no All option — there would be
+  // nothing to combine.
+  function finScopeKeys(fm){
+    var keys = finElections(fm);
+    return keys.length > 1 ? keys.concat([ALL_ELECTIONS]) : keys;
+  }
+
+  // One row per donor across elections: amounts and counts summed, itemized rows
+  // concatenated and re-sorted by date. A donor who gave in both elections is ONE donor,
+  // which is why the Donors tile cannot just add the per-election counts.
+  function mergeDonorRows(map){
+    var by = {}, order = [];
+    Object.keys(map || {}).forEach(function(ek){
+      (map[ek] || []).forEach(function(d){
+        var e = by[d.donor_id];
+        if(!e){
+          e = by[d.donor_id] = { donor_id:d.donor_id, name:d.name, type:d.type,
+                                 industries:(d.industries||[]).slice(),
+                                 industry_class:d.industry_class, cluster_id:d.cluster_id,
+                                 amount:0, count:0, items:[] };
+          order.push(d.donor_id);
+        }
+        e.amount = round2(e.amount + Number(d.amount||0));
+        e.count += Number(d.count||0);
+        e.items = e.items.concat(d.items || []);
+      });
+    });
+    var out = order.map(function(id){ return by[id]; });
+    out.forEach(function(d){ d.items.sort(function(a,b){
+      return String(a.date||'').localeCompare(String(b.date||'')); }); });
+    out.sort(function(a,b){ return b.amount - a.amount ||
+      String(a.donor_id).localeCompare(String(b.donor_id)); });
+    return out;
+  }
+
+  // Mirrors build_sb_finance.coverage_for EXACTLY, and is used ONLY for the derived
+  // all-elections view. Every stored scope reads its precomputed coverage from the
+  // artifact — the render still does no arithmetic a gate cannot reproduce, and the
+  // fixture reproduces this one.
+  function coverageFrom(rows){
+    var d = { substantive:0, individual_only:0, unclassified:0 }, tot = 0;
+    rows.forEach(function(r){
+      var k = r.industry_class || 'unclassified';
+      d[k] = round2(d[k] + Number(r.amount||0));
+      tot = round2(tot + Number(r.amount||0));
+    });
+    var share = tot ? d.substantive / tot : 0;
+    return { donor_total:tot, donor_count:rows.length, dollars:d,
+             substantive_share:share,
+             meets_industry_threshold: share >= Number((F && F.industry_threshold) || 0.5) };
+  }
+
+  function finScope(fm, key){
+    if(!fm) return null;
+    if(key === ALL_ELECTIONS){
+      var acc = {};
+      STREAM_KEYS.forEach(function(s){ acc[s] = { amount:0, count:0 }; });
+      finElections(fm).forEach(function(k){
+        var e = (fm.elections||{})[k] || {};
+        STREAM_KEYS.forEach(function(s){
+          var v = e[s] || {};
+          acc[s].amount = round2(acc[s].amount + Number(v.amount||0));
+          acc[s].count += Number(v.count||0);
+        });
+      });
+      var rows = mergeDonorRows(fm.donors_by_election);
+      acc.key = ALL_ELECTIONS; acc.isAll = true; acc.label = SF.allElections;
+      acc.donors = rows; acc.coverage = rows.length ? coverageFrom(rows) : null;
+      return acc;
+    }
+    var e2 = (fm.elections||{})[key];
+    if(!e2) return null;
+    var out = { key:key, isAll:false, label:(e2.label || key),
+                donors: ((fm.donors_by_election||{})[key]) || [],
+                coverage: ((fm.coverage_by_election||{})[key]) || null };
+    STREAM_KEYS.forEach(function(s){ out[s] = e2[s] || { amount:0, count:0 }; });
+    return out;
+  }
+
+  // ==========================================================
+  // SBFIN-2 B.2 — the labeled, clickable industry bar. Exit 1: DIRECT-ONLY, and the view
+  // says so in its own sentence rather than leaving it to a gate (the council's
+  // alderMixSubView idiom). Mechanics mirror the council's renderDollarBar: one segment
+  // per industry, segment AND legend row both clickable on the same data-industry,
+  // toggle-to-clear, dimming, and filtering IN PLACE — no scroll, no navigation.
+  // ==========================================================
+  function indMeta(key){
+    var t = (F && F.industry_tags || {})[key];
+    return t || { label:key, color:'#a9a299' };
+  }
+  function industryTotals(rows){
+    var by = {}, order = [];
+    rows.forEach(function(d){
+      var inds = (d.industries && d.industries.length) ? d.industries : ['unclassified'];
+      inds.forEach(function(i){
+        if(!by[i]){ by[i] = { industry:i, amount:0, donors:0 }; order.push(i); }
+        by[i].amount = round2(by[i].amount + Number(d.amount||0));
+        by[i].donors += 1;
+      });
+    });
+    return order.map(function(k){ return by[k]; }).sort(function(a,b){
+      return b.amount - a.amount || a.industry.localeCompare(b.industry); });
+  }
+  function dollarBar(inds, active){
+    var grand = inds.reduce(function(s,x){ return s + Number(x.amount||0); }, 0);
+    if(grand <= 0) return '';
+    var isFiltered = !!(active && active !== 'All');
+    var h = '<div class="ipg-sb-dollarbar">';
+    inds.forEach(function(x){
+      var meta = indMeta(x.industry);
+      var p = (x.amount / grand) * 100;
+      if(p < 0.3) return;
+      var pstr = p >= 10 ? Math.round(p)+'%' : p.toFixed(1)+'%';
+      var dim = (isFiltered && active !== x.industry) ? ';opacity:.32' : '';
+      h += '<button type="button" class="ipg-sb-bar-seg" data-industry="'+esc(x.industry)+'"'
+         + ' style="flex:'+p+' 0 0;background:'+esc(meta.color)+dim+'"'
+         + ' title="'+esc(meta.label+' — '+money(x.amount)+' ('+pstr+'). '+SF.barSegmentHint)+'">'
+         + (p >= 8 ? '<span class="l">'+esc(meta.label)+'</span><span class="p">'+esc(pstr)+'</span>' : '')
+         + '</button>';
+    });
+    h += '</div><div class="ipg-sb-bar-legend">';
+    inds.forEach(function(x){
+      if(Number(x.amount||0) <= 0) return;
+      var meta = indMeta(x.industry);
+      var p = (x.amount / grand) * 100;
+      var pstr = p >= 10 ? Math.round(p)+'%' : p.toFixed(1)+'%';
+      var dim = (isFiltered && active !== x.industry) ? ' dim' : '';
+      h += '<button type="button" class="ipg-sb-legend-item'+dim+'" data-industry="'+esc(x.industry)+'">'
+         + '<i style="background:'+esc(meta.color)+'"></i>'
+         + '<span class="l">'+esc(meta.label)+'</span>'
+         + '<span class="p">'+esc(pstr)+'</span>'
+         + '<span class="a">'+esc(money(x.amount))+'</span></button>';
+    });
+    return h + '</div>';
+  }
+
+  // ==========================================================
+  // SBFIN-2 B.3 — the donor profile. Reads the artifact's itemized dated rows; scopes to
+  // the active election filter, so what the panel shows and what the page shows are the
+  // same money.
+  // ==========================================================
+  function scopeKeysFor(fm, scopeKey){
+    return scopeKey === ALL_ELECTIONS ? finElections(fm) : [scopeKey];
+  }
+  // Every seated member this donor gave to, within the school-board universe and the
+  // active scope. Thin by construction — 16 committees — and that is not a defect.
+  function donorRecipients(donorId, scopeKey){
+    var out = [];
+    ((F && F.members) || []).forEach(function(fm){
+      if(!fm.donors_by_election) return;
+      var amt = 0, cnt = 0, hit = false;
+      scopeKeysFor(fm, scopeKey).forEach(function(k){
+        (fm.donors_by_election[k] || []).forEach(function(d){
+          if(d.donor_id !== donorId) return;
+          hit = true; amt = round2(amt + Number(d.amount||0)); cnt += Number(d.count||0);
+        });
+      });
+      if(hit) out.push({ seat:fm.seat, name:fm.name, amount:amt, count:cnt });
+    });
+    out.sort(function(a,b){ return b.amount - a.amount; });
+    return out;
+  }
+  // A family member's giving inside THIS tool. The artifact deliberately carries no
+  // cluster totals — those are elections-wide and would describe a universe the reader is
+  // not looking at — so the figure shown is summed from the same rows as everything else.
+  function familyAmount(donorId, scopeKey){
+    var amt = 0;
+    ((F && F.members) || []).forEach(function(fm){
+      if(!fm.donors_by_election) return;
+      scopeKeysFor(fm, scopeKey).forEach(function(k){
+        (fm.donors_by_election[k] || []).forEach(function(d){
+          if(d.donor_id === donorId) amt = round2(amt + Number(d.amount||0));
+        });
+      });
+    });
+    return amt;
+  }
+  function itemChips(it){
+    var out = '';
+    // No `self-funding` chip can ever render here: the candidate's own contributions are
+    // dropped at donor grain upstream, so no itemized row in this artifact is one. The
+    // vocabulary keeps the other three.
+    if(it.is_loan) out += '<span class="ipg-sb-ichip loan">'+esc(SF.chipLoan)+'</span>';
+    if(it.is_in_kind) out += '<span class="ipg-sb-ichip inkind">'+esc(SF.chipInKind
+      + (it.in_kind_description ? ' · '+it.in_kind_description : ''))+'</span>';
+    if(it.is_aggregate) out += '<span class="ipg-sb-ichip agg">'
+      + esc(fill(SF.chipAggregate, String(it.contribution_count || '?')))+'</span>';
+    return out;
+  }
+  function fmtItemDate(s){
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s||''));
+    if(!m) return esc(String(s||'—'));
+    var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return esc((MON[Number(m[2])-1]||'') + ' ' + Number(m[3]) + ', ' + m[1]);
+  }
+  function findDonorRow(donorId, fm, scope){
+    for(var i=0;i<scope.donors.length;i++){
+      if(scope.donors[i].donor_id === donorId) return scope.donors[i];
+    }
+    return null;
+  }
+  function donorProfileHtml(fm, scope){
+    var d = findDonorRow(state.finDonor, fm, scope);
+    if(!d) return '';
+    var inds = (d.industries||[]).map(function(i){
+      var meta = indMeta(i);
+      return '<span class="ipg-sb-chip-ind" style="background:'+esc(meta.color)+'">'
+           + esc(meta.label)+'</span>'; }).join('');
+    var h = '<div class="ipg-sb-modal-overlay" id="ipg-sb-donor-overlay">'
+      + '<div class="ipg-sb-modal" role="dialog" aria-modal="true" aria-label="'+esc(SF.profileKicker)+'">'
+      + '<button class="ipg-sb-modal-close" id="ipg-sb-donor-close" aria-label="Close">×</button>'
+      + '<div class="ipg-sb-modal-head">'
+      + '<div class="ipg-sb-modal-kicker">'+esc(SF.profileKicker)+'</div>'
+      + '<div class="ipg-sb-modal-name serif">'+esc(d.name || d.donor_id)+'</div>'
+      + '<div class="ipg-sb-modal-meta">'+inds
+      + (d.type ? ' <span class="ipg-sb-dtype">'+esc(d.type)+'</span>' : '')
+      + ' <span class="ipg-sb-dscope">'+esc(scope.label)+'</span></div></div>';
+
+    h += '<div class="ipg-sb-stats">'
+       + statTile(money(d.amount), 'Given in this view')
+       + statTile(String(d.count), d.count===1 ? 'Contribution' : 'Contributions')
+       + '</div>';
+
+    // Donor family (rollup), where one exists.
+    var fam = d.cluster_id ? ((F && F.donor_clusters || {})[d.cluster_id]) : null;
+    if(fam){
+      h += '<div class="ipg-sb-fin-sub">'+esc(SF.familyHead)+'</div>'
+         + '<div class="ipg-sb-note">'+esc(fill(SF.familyNote, esc(fam.name||'')))+'</div>';
+      (fam.members||[]).forEach(function(mm){
+        var amt = familyAmount(mm.donor_id, scope.key);
+        h += '<div class="ipg-sb-donor"><div><div class="n">'+esc(mm.name || mm.donor_id)
+           + (mm.role ? ' <span class="ipg-sb-role">'+esc(mm.role)+'</span>' : '')+'</div>'
+           + (amt > 0 ? '' : '<div class="s">'+esc(SF.familyNoneHere)+'</div>')
+           + '</div><div class="a">'+esc(amt > 0 ? money(amt) : '—')+'</div></div>';
+      });
+    }
+
+    var recs = donorRecipients(d.donor_id, scope.key);
+    h += '<div class="ipg-sb-fin-sub">'+esc(SF.recipientsHead)+'</div>';
+    recs.forEach(function(r){
+      h += '<div class="ipg-sb-donor"><div><div class="n">Seat '+esc(r.seat)+' — '+esc(r.name)+'</div>'
+         + '<div class="s">'+esc(r.count + (r.count===1 ? ' contribution' : ' contributions'))+'</div>'
+         + '</div><div class="a">'+esc(money(r.amount))+'</div></div>';
+    });
+
+    h += '<div class="ipg-sb-fin-sub">'+esc(SF.itemsHead)+'</div>';
+    (d.items||[]).forEach(function(it){
+      h += '<div class="ipg-sb-item"><div class="l">'+fmtItemDate(it.date)
+         + '<span class="c">'+itemChips(it)+'</span></div>'
+         + '<div class="a">'+esc(money(it.amount))+'</div></div>';
+    });
+    h += '<div class="ipg-sb-modal-foot">'+esc(SF.profileFoot)+'</div>';
+    return h + '</div></div>';
+  }
+
   function financeSection(row){
     var h = '<div class="ipg-sb-card ipg-sb-fin">'
           + '<div class="ipg-sb-fin-h">Campaign finance</div>';
@@ -688,41 +1052,61 @@ const IPG_SB_FEEDBACK = {
     if(fm.finance_state==='no_record' || fm.finance_state==='vacancy')
       return h + '<div class="ipg-sb-empty">'+esc(SF.noRecord)+'</div></div>';
 
-    var keys = finElections(fm);
+    var keys = finScopeKeys(fm);
     if(!keys.length) return h + '<div class="ipg-sb-empty">'+esc(SF.noRecord)+'</div></div>';
-    var ek = pickElection(fm, state.finElection), e = fm.elections[ek];
+    var ek = pickElection(fm, state.finElection);
+    var scope = finScope(fm, ek);
+    if(!scope) return h + '<div class="ipg-sb-empty">'+esc(SF.noRecord)+'</div></div>';
 
-    // Election filter, labeled by election (ratification 3 / 9). Present whenever
-    // the member has more than one; a single election needs no control.
+    // ---- B.4: the Verified / ISBE block. Banner + filed committee name + source date.
+    // NO Sunshine link: the committee route errors for these committees (G2 R0 measured
+    // 500 on a real school-board committee against 200 on a council one), so the link is
+    // held. The block renders without it rather than not at all — the provenance is the
+    // point, and the link was only ever one way of showing it.
+    (fm.committees||[]).forEach(function(cm){
+      if(cm.data_quality === 'REAL')
+        h += '<div class="ipg-sb-verified">'+esc(SF.verified)+'</div>';
+      var bits = [];
+      if(cm.name) bits.push('<strong>'+esc(cm.name)+'</strong>');
+      if(cm.last_updated) bits.push(esc(fill(SF.updated, cm.last_updated)));
+      if(bits.length) h += '<div class="ipg-sb-meta">'+bits.join(' &middot; ')+'</div>';
+    });
+
+    // ---- Election scope. `All elections` is an explicit option (ratification 4), never
+    // the default: the most recent election leads, as it did before.
     if(keys.length>1){
       h += '<div class="ipg-sb-row"><label for="ipg-sb-fin-el">Election</label>'
          + '<select id="ipg-sb-fin-el">';
       keys.forEach(function(k){
-        h += '<option value="'+esc(k)+'"'+(k===ek?' selected':'')+'>'
-           + esc(fm.elections[k].label || k)+'</option>';
+        var lab = (k===ALL_ELECTIONS) ? SF.allElections : ((fm.elections[k]||{}).label || k);
+        h += '<option value="'+esc(k)+'"'+(k===ek?' selected':'')+'>'+esc(lab)+'</option>';
       });
       h += '</select></div>';
+      if(scope.isAll) h += '<div class="ipg-sb-note">'+esc(SF.allElectionsDisclosure)+'</div>';
     } else {
-      h += '<div class="ipg-sb-meta">'+esc(e.label || ek)+'</div>';
+      h += '<div class="ipg-sb-meta">'+esc(scope.label)+'</div>';
     }
 
-    // Stat tiles. Raised and Contributions come straight from the artifact's
-    // direct stream; Avg. gift is the only derived figure and is a ratio of two
-    // displayed numbers, never a sum of streams.
-    var raised = Number(e.direct.amount||0), ncontrib = Number(e.direct.count||0);
+    // ---- Stat tiles. Every one reads the SAME scope object as the donor list below it,
+    // which is the whole of F1's repair. Avg. gift is the only derived figure and is a
+    // ratio of two displayed numbers, never a sum of streams.
+    var raised = Number(scope.direct.amount||0), ncontrib = Number(scope.direct.count||0);
     var avg = ncontrib ? raised/ncontrib : 0;
     h += '<div class="ipg-sb-stats">';
     h += statTile(money(raised), 'Raised');
-    // Donor count is knowable only where donor detail exists. For a totals-only
-    // member it is NOT derivable from contribution counts, so the tile is omitted
-    // rather than filled with a number that would silently mean something else.
-    if(fm.coverage) h += statTile(String(fm.coverage.donor_count), 'Donors');
+    // Donor count is knowable only where donor detail exists. For a totals-only member it
+    // is NOT derivable from contribution counts, so the tile is omitted rather than filled
+    // with a number that would silently mean something else. Under All elections it is the
+    // DISTINCT donor count, not the sum of the per-election counts.
+    if(scope.coverage) h += statTile(String(scope.coverage.donor_count), 'Donors');
     h += statTile(money(avg), 'Avg. gift');
     h += statTile(String(ncontrib), 'Contributions');
     h += '</div>';
 
-    // Self-funding: its OWN tile, never folded into Raised (ratification 8).
-    var self = Number((e.self_funding||{}).amount||0);
+    // Self-funding: its OWN tile, never folded into Raised (ratification 8), and never a
+    // donor row (SBFIN-2 A dropped those donors upstream, which is why the two figures
+    // beside each other are now on the same basis).
+    var self = Number((scope.self_funding||{}).amount||0);
     if(self>0){
       h += '<div class="ipg-sb-selffund">'
          + '<div class="ipg-sb-stat"><div class="v">'+esc(money(self))+'</div>'
@@ -735,45 +1119,59 @@ const IPG_SB_FEEDBACK = {
     if(fm.finance_state==='totals_only')
       h += '<div class="ipg-sb-note">'+esc(SF.thinness)+'</div>';
 
-    // Industry bar — gated at the ratified >=50% substantive share. Both branches
-    // read the artifact's PRECOMPUTED share; neither recomputes it.
-    if(fm.coverage){
-      var n = pct(fm.coverage.substantive_share);
-      if(fm.coverage.meets_industry_threshold){
-        var d = fm.coverage.dollars, tot = Number(fm.coverage.donor_total||0);
-        var seg = [['substantive','Classified by industry','var(--teal)'],
-                   ['individual_only','Individual donors','var(--sage)'],
-                   // --nd is the tool's existing not-recorded neutral; "not yet
-                   // classified" is the same kind of absence, so it reuses that
-                   // colour rather than introducing one.
-                   ['unclassified','Not yet classified','var(--nd)']];
-        h += '<div class="ipg-sb-fin-sub">Where this member’s money comes from</div>'
-           + '<div class="ipg-sb-bar">';
-        seg.forEach(function(s){
-          var v = Number(d[s[0]]||0), w = tot ? (v/tot*100) : 0;
-          if(w>0) h += '<span class="ipg-sb-bar-seg" style="width:'+w.toFixed(2)+'%;background:'+s[2]+'" title="'+esc(s[1]+' — '+money(v))+'"></span>';
-        });
-        h += '</div><div class="ipg-sb-bar-key">';
-        seg.forEach(function(s){
-          h += '<span><i style="background:'+s[2]+'"></i>'+esc(s[1])+' '+esc(money(d[s[0]]||0))+'</span>';
-        });
-        h += '</div>';
-        h += '<div class="ipg-sb-note">'+esc(fill(SF.barDisclosure, n))+'</div>';
+    // ---- B.2: the labeled, clickable industry bar. Still gated at the ratified >=50%
+    // substantive share; what changed is what the bar CHARTS — industries, labeled and
+    // clickable, rather than three coverage classes.
+    var rows = scope.donors || [];
+    var filter = state.finIndustry;
+    if(scope.coverage && rows.length){
+      var n = pct(scope.coverage.substantive_share);
+      if(scope.coverage.meets_industry_threshold){
+        var inds = industryTotals(rows);
+        h += '<div class="ipg-sb-fin-sub">'+esc(SF.barHead)+'</div>'
+           + '<div class="ipg-sb-meta">'+esc(SF.barSub)+'</div>'
+           + dollarBar(inds, filter)
+           + '<div class="ipg-sb-note">'+esc(SF.barDirectOnly)+'</div>'
+           + '<div class="ipg-sb-note">'+esc(fill(SF.barDisclosure, n))+'</div>';
+        // F11: the word `self-funding` is an industry TAG on a donor, and it is not the
+        // is_self stream that has its own tile above. Rendered only when the tag is
+        // actually present, so the page explains a distinction it is currently drawing.
+        var hasSelfTag = inds.some(function(x){ return x.industry === 'self-funding'; });
+        if(hasSelfTag) h += '<div class="ipg-sb-note">'+esc(SF.selfTagVsStream)+'</div>';
       } else {
         h += '<div class="ipg-sb-note">'+esc(fill(SF.belowThreshold, n))+'</div>';
       }
     }
 
-    // Itemized donors — top 10 + toggle, for the members that have detail.
-    if(fm.donors && fm.donors.length){
-      var all = fm.donors, show = state.finShowAllDonors ? all.length : Math.min(10, all.length);
+    // ---- Industry filter, applied in place. No scroll, no navigation.
+    var shownRows = rows;
+    if(filter && filter !== 'All'){
+      shownRows = rows.filter(function(d){
+        var di = (d.industries && d.industries.length) ? d.industries : ['unclassified'];
+        return di.indexOf(filter) >= 0;
+      });
+      h += '<div class="ipg-sb-filterbar">'
+         + esc(fill(SF.filtered, indMeta(filter).label)) + ' &middot; '
+         + esc(shownRows.length + (shownRows.length===1 ? ' donor' : ' donors'))
+         + ' <button type="button" class="ipg-sb-more" id="ipg-sb-fin-clear">'
+         + esc(SF.clearFilter)+'</button></div>';
+    }
+
+    // ---- Itemized donors — top 10 + toggle. Rows are clickable into the profile.
+    if(rows.length){
+      var all = shownRows, show = state.finShowAllDonors ? all.length : Math.min(10, all.length);
       h += '<div class="ipg-sb-fin-sub">Top donors</div>';
+      if(!all.length){
+        h += '<div class="ipg-sb-empty">'+esc(SF.filterEmpty)+'</div>';
+      }
       for(var i=0;i<show;i++){
         var dn = all[i];
-        h += '<div class="ipg-sb-donor"><div><div class="n">'+esc(dn.name||dn.donor_id)+'</div>'
+        var indLabels = (dn.industries||[]).map(function(x){ return indMeta(x).label; });
+        h += '<button type="button" class="ipg-sb-donor ipg-sb-donor-click" data-donor="'+esc(dn.donor_id)+'">'
+           + '<div><div class="n">'+esc(dn.name||dn.donor_id)+'</div>'
            + '<div class="s">'+esc(dn.count + (dn.count===1?' contribution':' contributions'))
-           + (dn.industries && dn.industries.length ? ' &middot; '+esc(dn.industries.join(', ')) : '')
-           + '</div></div><div class="a">'+esc(money(dn.amount))+'</div></div>';
+           + (indLabels.length ? ' &middot; '+esc(indLabels.join(', ')) : '')
+           + '</div></div><div class="a">'+esc(money(dn.amount))+'</div></button>';
       }
       if(all.length>10)
         h += '<button type="button" class="ipg-sb-more" id="ipg-sb-fin-more">'
@@ -789,7 +1187,9 @@ const IPG_SB_FEEDBACK = {
          + 'identities. Counted in this member’s totals; not attributable to any listed donor.</div></div>'
          + '<div class="a">'+esc(money(fm.unitemized.amount))+'</div></div>';
     }
-    return h + '</div>';
+    h += '</div>';
+    if(state.finDonor) h += donorProfileHtml(fm, scope);
+    return h;
   }
 
   // ==========================================================
@@ -986,11 +1386,41 @@ const IPG_SB_FEEDBACK = {
     } else if(state.view==='matrix'){    h += matrixView();
     } else if(state.view==='spend'){     h += spendView();
     } else {                             h += methodologyView(); }
-    h += '</div><div class="ipg-sb-foot"><strong>Institute for the Public Good</strong> &middot; '
+    h += '</div>' + feedbackBarHtml()
+       + '<div class="ipg-sb-foot"><strong>Institute for the Public Good</strong> &middot; '
        + 'Vote positions are entered from public Board of Education records.</div>';
     app.innerHTML = h;
     wire();
     mountFab();
+  }
+
+  // ==========================================================
+  // SBFIN-2 B.5 — the ratified footer, VERBATIM, on every tab.
+  //
+  // The string is the council's composed feedbackBarHtml text on its
+  // methodologyUrl === null branch, ratified verbatim at SBFIN-2's charter. It renders
+  // from render(), outside the per-view branch, so no tab can be missed by construction.
+  //
+  // F8: `methodologyUrl` is a real key on IPG_SB_FEEDBACK, mirroring the council's
+  // FEEDBACK_CONFIG, rather than the branch being hardcoded — so the sentence can be
+  // switched to a real link later without a code edit.
+  //
+  // F9, flagged not silently resolved: the ratified sentence says a methodology page is
+  // "on the way" while this tool already ships a Methodology tab. The string is ratified
+  // and is NOT altered here; the tension is recorded for a later re-ratification.
+  // ==========================================================
+  function feedbackBarHtml(){
+    var m = IPG_SB_FEEDBACK.methodologyUrl;
+    var meth = m
+      ? 'If you have questions about our data sources and methodology, see our <a href="'
+        + esc(m) + '" target="_blank" rel="noopener">methodology page</a>. '
+      : 'If you have questions about our data sources and methodology, a full methodology page is on the way. ';
+    return '<div class="ipg-sb-feedback-bar">'
+      + '<strong>We\u2019re committed to keeping this data as accurate as possible.</strong> '
+      + meth
+      + 'If you spot an error in the data or a visualization, have something to add, or hit a bug, '
+      + '<button class="ipg-sb-fb-inline ipg-sb-fb-btn" type="button">click here to let us know</button>.'
+      + '</div>';
   }
 
   function wire(){
@@ -1014,7 +1444,36 @@ const IPG_SB_FEEDBACK = {
     if(se) se.onchange = function(){ state.spendElection = se.value; render(); };
     app.querySelectorAll('[data-spend-seat]').forEach(function(r){
       r.onclick = function(){ state.seat = r.getAttribute('data-spend-seat');
-                              state.view='member'; state.finElection=null; render(); }; });
+                              state.view='member'; state.finElection=null;
+                              state.finIndustry='All'; state.finDonor=null; render(); }; });
+
+    // B.2 — segment AND legend row carry the same data-industry and the same handler.
+    // Toggle-to-clear, and the filter applies IN PLACE: no scroll, no navigation.
+    app.querySelectorAll('[data-industry]').forEach(function(b){
+      b.onclick = function(e){
+        e.preventDefault(); e.stopPropagation();
+        var k = b.getAttribute('data-industry');
+        state.finIndustry = (state.finIndustry === k) ? 'All' : k;
+        state.finShowAllDonors = false;
+        render();
+      };
+    });
+    var fc = document.getElementById('ipg-sb-fin-clear');
+    if(fc) fc.onclick = function(){ state.finIndustry='All'; render(); };
+
+    // B.3 — the donor profile.
+    app.querySelectorAll('[data-donor]').forEach(function(b){
+      b.onclick = function(){ state.finDonor = b.getAttribute('data-donor'); render(); }; });
+    var ov = document.getElementById('ipg-sb-donor-overlay');
+    if(ov){
+      var close = function(){ state.finDonor = null;
+        document.removeEventListener('keydown', escFn); render(); };
+      var escFn = function(e){ if(e.key === 'Escape') close(); };
+      document.addEventListener('keydown', escFn);
+      ov.onclick = function(e){ if(e.target === ov) close(); };
+      var cb = document.getElementById('ipg-sb-donor-close');
+      if(cb) cb.onclick = close;
+    }
   }
 
   // ---- feedback -------------------------------------------------------

@@ -28,12 +28,11 @@
 # view is derived by summation at render and is NEVER stored — a stored cross-election
 # donor list is the shape that produced F1.
 #
-# TWO-STEP REPLACE, DELIBERATE AND TEMPORARY. A.1 said "replace". The superseded flat
-# `donors` / `coverage` keys survive this ONE commit because the embed reads them and
-# deleting them here fails [SBV/RENDER] (measured: 4 checks plus a TypeError in
-# financeSection). Artifact shape and render are coupled; the deletion lands at
-# HALT-SBF2-B with the render rebase. `superseded_keys` in the artifact says so in the
-# file itself. The end state is exactly as ratified.
+# THE TWO-STEP REPLACE IS CLOSED. A.1 said "replace"; A could only ADD, because the embed
+# read the flat `donors` / `coverage` pair and deleting them in the same commit failed
+# [SBV/RENDER] (4 checks plus a TypeError in financeSection). B rebased the render and
+# deleted the pair, along with `superseded_keys` and the SBF-6/7a-d/8 checks that existed
+# only to guard it. Nothing in this file reads or writes the flat shape any more.
 #
 # What F1 was: the member page's Donors tile, coverage bar and Top-donors list read one
 # all-elections, self-funding-INCLUSIVE list while the Raised tile beside them was
@@ -69,10 +68,14 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_rollups import EXCLUDED_CYCLES, WINDOWS_PATH, _bucket, _office_type  # noqa: E402
 
 DUES_TYPE = "IE Committee Dues Transfer"
+# The tool's existing not-recorded neutral, reused for an industry with no vocabulary entry.
+NEUTRAL_COLOR = "#a9a299"
 
-# 1.0 -> 1.1 at SBFIN-2 A: `donors` and `coverage` became per-election maps and donor rows
-# carry itemized dated entries. A shape change under an unchanged version number is a trap.
-SCHEMA_VERSION = 1.1
+# 1.0 -> 1.1 at SBFIN-2 A: per-election donor/coverage maps with itemized dated rows added
+# alongside the flat pair. 1.1 -> 1.2 at SBFIN-2 B: the flat pair removed and the industry
+# and donor-family vocabulary slices added. A shape change under an unchanged version
+# number is a trap, and a REMOVAL is a shape change.
+SCHEMA_VERSION = 1.2
 # Tags that carry no interest-group signal. The council's correlation card isolates the
 # complement of this set via its exclude-individual / exclude-unclassified toggles; the
 # ratified >=50% industry-bar gate is computed against 'substantive' below.
@@ -262,34 +265,6 @@ def scan_committee_rows(ed, candidacy_ids):
     return items, self_ids, (self_ids & nonself_ids)
 
 
-def donor_detail_flat(person, donors):
-    """The PRE-SBFIN-2 all-elections donor rows + coverage. SUPERSEDED, retained for
-    exactly one commit.
-
-    Why this still exists after A.1 said "replace": the embed reads `donors` and
-    `coverage`, and removing them in the same commit that adds the per-election keys
-    crashes the render fixture ([SBV/RENDER], measured: 4 failing checks plus a
-    TypeError in financeSection). The artifact shape and the render are coupled, so the
-    replace lands in two steps — A adds, B rebases the render and deletes these. Every
-    ratified property of the end state is unchanged; only the deletion moves by one
-    commit. This basis is the F1 basis (all elections, self-funding INCLUSIVE) and no new
-    surface may read it."""
-    rows = []
-    for did, v in (person.get("donors", {}).get("total") or {}).items():
-        d = donors.get(did) or {}
-        rows.append({
-            "donor_id": did,
-            "name": d.get("name"),
-            "type": d.get("type"),
-            "amount": round(float(v.get("amount") or 0.0), 2),
-            "count": int(v.get("count") or 0),
-            "industries": [i for i in (d.get("industries") or []) if i],
-            "industry_class": industry_class(d),
-        })
-    rows.sort(key=lambda r: (-r["amount"], r["donor_id"]))
-    return rows, coverage_for(rows)
-
-
 def donor_detail_by_election(person, donors, elections, items, self_ids):
     """Per-election donor rows + per-election coverage for a person-anchored member.
 
@@ -321,6 +296,105 @@ def donor_detail_by_election(person, donors, elections, items, self_ids):
     return rows_out, cov_out
 
 
+def committees_for(candidacy_ids, ed):
+    """The member's own committee records, for the Verified / ISBE block (B.4).
+
+    Four fields, all present on all 16 school-board committees (census R2): the filed
+    committee name, the SBE id, the data-quality state that gates the Verified banner, and
+    the source's last-updated date.
+
+    `il_sunshine_url` is deliberately NOT carried. The committee link is held (ratification
+    5): R0 measured `.../committees/38810/` returning HTTP 500 while a council committee
+    returns 200, so the route errors for these committees specifically. Carrying the URL
+    into the artifact would put a shippable link one line from a render that is not
+    authorized to ship it. `sbe_committee_id` is carried, so the URL remains derivable the
+    day the route is fixed."""
+    comms = ed.get("committees", {})
+    wanted = set(candidacy_ids)
+    out = []
+    for slug, cm in sorted(comms.items()):
+        if cm.get("candidate_id") not in wanted:
+            continue
+        out.append({
+            "committee_id": slug,
+            "name": cm.get("committee_name"),
+            "sbe_committee_id": cm.get("sbe_committee_id"),
+            "data_quality": cm.get("data_quality"),
+            "last_updated": cm.get("last_updated"),
+        })
+    return out
+
+
+def industry_vocab(members, ed):
+    """Label and colour for every industry tag that actually appears on a donor row.
+
+    Minted rather than hardcoded in the embed. The tags are EDITORIAL vocabulary sourced
+    from the Sheet via industry-tags.json, so a second hand-maintained copy in the render
+    layer would drift the moment an editor renames one — and the school-board embed
+    cannot reach `election-data.json` to look them up (it fetches two artifacts, N=2
+    ratified, and a third fetch is a stop condition). Carrying the slice that is actually
+    used costs ~13 entries and keeps one source of truth.
+
+    A tag with no vocabulary entry is carried with its raw key as the label and the
+    neutral colour, and REPORTED at build — never silently prettified into something that
+    disagrees with what the elections tool shows for the same tag."""
+    tags = ed.get("industry_tags") or {}
+    used = set()
+    for m in members:
+        for rows in (m.get("donors_by_election") or {}).values():
+            for r in rows:
+                used.update(r.get("industries") or [])
+    out, missing = {}, []
+    for key in sorted(used):
+        t = tags.get(key)
+        if t:
+            out[key] = {"label": t.get("label") or key, "color": t.get("color") or NEUTRAL_COLOR}
+        else:
+            missing.append(key)
+            out[key] = {"label": key, "color": NEUTRAL_COLOR, "unlabelled": True}
+    return out, missing
+
+
+def cluster_slice(members, ed):
+    """Donor-family (rollup) membership for the school-board universe.
+
+    Carries name, relationship, canonical id and members WITHOUT the cluster's
+    `total`/`member_totals` fields — deliberately, on two grounds. (1) Those totals are
+    elections-wide; inside this tool they would be a figure computed over a universe the
+    reader is not looking at. Family dollars here are summed at render from the SB donor
+    rows, so what is displayed is what the rest of the page is made of. (2) A key literally
+    named `total` anywhere in this artifact trips SBF-5c's whole-document ban, which is
+    working as designed.
+
+    Member names are carried because a family member may have given nothing in the
+    school-board universe and so appears in no donor row — an honest absence the panel
+    still has to name."""
+    clusters = ed.get("donor_clusters") or {}
+    donors = ed.get("donors") or {}
+    in_scope = set()
+    for m in members:
+        for rows in (m.get("donors_by_election") or {}).values():
+            for r in rows:
+                in_scope.add(r["donor_id"])
+    by_donor, out = {}, {}
+    for cid, c in clusters.items():
+        mem = [x if isinstance(x, str) else (x or {}).get("id") for x in (c.get("members") or [])]
+        mem = [x for x in mem if x]
+        if not (set(mem) & in_scope):
+            continue
+        roles = c.get("roles") or {}
+        out[cid] = {
+            "name": c.get("name"),
+            "relationship": c.get("relationship"),
+            "canonical_id": c.get("canonical_id"),
+            "members": [{"donor_id": x, "name": (donors.get(x) or {}).get("name"),
+                         "role": roles.get(x)} for x in mem],
+        }
+        for x in mem:
+            by_donor[x] = cid
+    return out, by_donor
+
+
 def build_member(m, ed):
     bp = ed["rollups"].get("by_person", {})
     bc = ed["rollups"].get("by_candidate", {})
@@ -338,18 +412,18 @@ def build_member(m, ed):
         "ref_kind": kind,
         "candidacies": [],
         "elections": {},
-        # SUPERSEDED by donors_by_election / coverage_by_election; deleted at HALT-SBF2-B
-        # once the render reads the new keys. Kept for one commit so the shape change and
-        # the render change can be separate commits (see donor_detail_flat).
-        "donors": [],
-        "coverage": None,
         # The repaired basis: per-election, self-funding-free, itemized. Empty dicts,
         # never empty lists — the shape is the same whether or not a member has detail.
+        # The flat `donors`/`coverage` pair that preceded these was deleted at
+        # HALT-SBF2-B, completing A's two-step replace.
         "donors_by_election": {},
         "coverage_by_election": {},
         # The ratified thinness state, carried as data rather than inferred at render.
         "has_donor_detail": False,
         "self_funder_donor_ids": [],
+        # The Verified / ISBE block's source fields (B.4). Empty for a member with no
+        # committee — the block then renders nothing rather than an unsourced banner.
+        "committees": [],
         "finance_state": None,
     }
 
@@ -370,18 +444,17 @@ def build_member(m, ed):
         # Elections first: the donor lists are keyed by them, and a donor election that
         # the figures do not know about is a defect, not a key to invent (SBF-9c).
         out["elections"] = elections_for(out["candidacies"], bce)
+        out["committees"] = committees_for(out["candidacies"], ed)
         items, self_ids, mixed = scan_committee_rows(ed, out["candidacies"])
         if mixed:
             raise SystemExit(
                 f"[build_sb_finance] FATAL: seat {m.get('seat')} has donor(s) carrying BOTH "
                 f"is_self and non-self rows {sorted(mixed)}; the donor-grain self-funding "
                 f"drop is no longer sufficient and a row-grain split is required")
-        flat_rows, flat_cov = donor_detail_flat(person, donors)
-        out["donors"], out["coverage"] = flat_rows, flat_cov
         rows, cov = donor_detail_by_election(person, donors, out["elections"].keys(),
                                              items, self_ids)
         out["donors_by_election"], out["coverage_by_election"] = rows, cov
-        out["has_donor_detail"] = bool(flat_rows)
+        out["has_donor_detail"] = any(bool(v) for v in rows.values())
         out["self_funder_donor_ids"] = sorted(self_ids)
         out["finance_state"] = "full"
         return out
@@ -392,11 +465,20 @@ def build_member(m, ed):
     out["resolves_in_by_candidate"] = ref in bc
     out["finance_state"] = "totals_only"
     out["elections"] = elections_for(out["candidacies"], bce)
+    out["committees"] = committees_for(out["candidacies"], ed)
     return out
 
 
 def build(sb, ed, sb_sha, ed_sha, stamp):
     members = [build_member(m, ed) for m in sb.get("members", [])]
+    inds, missing_inds = industry_vocab(members, ed)
+    clusters, cluster_by_donor = cluster_slice(members, ed)
+    for m in members:
+        for rows in (m.get("donors_by_election") or {}).values():
+            for r in rows:
+                cid = cluster_by_donor.get(r["donor_id"])
+                if cid:
+                    r["cluster_id"] = cid
     by_state = {}
     for m in members:
         by_state[m["finance_state"]] = by_state.get(m["finance_state"], 0) + 1
@@ -422,15 +504,10 @@ def build(sb, ed, sb_sha, ed_sha, stamp):
                            "the four streams are never summed in this artifact"),
         },
         "streams": list(STREAMS),
-        # Self-describing intermediate state: a reader opening this file between A and B
-        # must not have to guess which donor list is authoritative.
-        "superseded_keys": {
-            "members[].donors": "members[].donors_by_election",
-            "members[].coverage": "members[].coverage_by_election",
-            "note": ("the superseded pair is all-elections and self-funding-inclusive "
-                     "(the F1 basis); it is read only by the pre-SBFIN-2-B render and is "
-                     "deleted at HALT-SBF2-B. No new surface may read it."),
-        },
+        # Vocabulary slices, minted so the render layer holds no second copy (see
+        # industry_vocab / cluster_slice).
+        "industry_tags": inds,
+        "donor_clusters": clusters,
         "industry_threshold": 0.50,
         "counts": {"members": len(members), "by_finance_state": by_state,
                    "donor_rows": donor_rows, "itemized_rows": itemized_rows},
@@ -572,6 +649,12 @@ def main():
           " · ".join(f"{k}={v}" for k, v in sorted(c["by_finance_state"].items())))
     print(f"[build_sb_finance] {c['donor_rows']} donor-election rows · "
           f"{c['itemized_rows']} itemized rows")
+    print(f"[build_sb_finance] {len(art['industry_tags'])} industry tags · "
+          f"{len(art['donor_clusters'])} donor families in scope")
+    unl = sorted(k for k, v in art["industry_tags"].items() if v.get("unlabelled"))
+    if unl:
+        print(f"[build_sb_finance] NOTE: {len(unl)} industry tag(s) have no vocabulary "
+              f"entry and render their raw key: {unl}", file=sys.stderr)
     withcov = [m for m in art["members"] if m.get("has_donor_detail")]
     if withcov:
         # Per-election since A.1, so the threshold is reported per election bucket rather

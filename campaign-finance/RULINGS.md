@@ -1352,4 +1352,43 @@ transcribed verbatim:
 > the industry bar does not render on **16 of 21 member pages** and string 4 is the more visible
 > of the two bar strings.
 
+**String 3 SUPERSEDED at SBFIN-2 HALT-B.** The replacement, ratified at B's diff review:
+
+> 3′. **Industry-bar disclosure**, rendered on every bar that renders:
+>    `{N}% of these donor dollars carry a substantive industry tag; the rest are individual donors or not yet classified, and appear as their own segments.`
+
+> **Why the original could not stand.** String 3 asserted that individual donors and
+> not-yet-classified contributions were *excluded* from the chart. At SBFIN-2 B the bar became
+> the council's labeled per-industry bar (D2-D, exit 1), and `Individual Donor` and
+> `Not Yet Classified` are industry tags in the vocabulary — so they render as their own labeled
+> segments. The sentence would have become false on the page that carries it. The **threshold
+> gate is unchanged** (the bar still renders only at `substantive_share >= 0.50`); what changed
+> is that the sentence now describes what `{N}` measures rather than what the chart omits.
+>
+> **Two clauses of the original survive verbatim in force:** `{N}` is still the artifact's
+> precomputed `substantive_share` for a stored election scope, and string 4 is unchanged. The one
+> exception, stated rather than left implicit: under the **All elections** scope there is no
+> stored coverage record, so `{N}` is derived at render by the same bucket summation the builder
+> uses — asserted equal by the render fixture, so render and gate still cannot disagree.
+>
+> **Measured at SBFIN-2 B:** the per-election rebase moves the count from 5 of 13 members to
+> **7 of 26 election buckets** clearing the threshold. The 16-of-21 figure in the paragraph above
+> is SBFIN-1 vintage and is superseded by that measurement, not by re-derivation.
+
+**Also ratified at SBFIN-2 HALT-B**, id-less with strings 1–4, per the same convention:
+
+> 5. **All-elections scope label:** `All elections`
+> 6. **All-elections disclosure**, rendered whenever that scope is active:
+>    `Combined across every school board election this member has run in, including runs for a different seat.`
+> 7. **The self-funding-tag distinction** (SBFIN-2 F11), rendered only where the
+>    `self-funding` industry tag is actually present in the charted scope:
+>    `A “Self-Funding / Candidate Loan” segment is an industry tag on the donor, not the candidate’s own money: contributions the candidate made to their own committee are excluded from this chart and shown in the Self-funding tile above.`
+>
+> String 7 exists because two different classifiers share one word. The industry tag sits on the
+> **donor**; the `is_self` stream is a **relational** stamp meaning the donor identity-matches the
+> recipient candidate. The live case that forced the string: a member's spouse carries the
+> self-funding tag for `$47,000.00` and is **not** `is_self`, so that money is inside Raised and
+> belongs in the chart, while the candidate's own `$33,050.00` is excluded from it and tiled
+> separately. Rendering the bare word twice, meaning two things, was the alternative.
+
 *Provenance: SBFIN-1 G2 authorization (`sbfin-1-g2-authorization.md`, sha256 `2de786ac712eb1ef36851d96d31117b450defdd2d346d8ec5b6ef8019bb01d21`) B.3, strings 1–3 as drafted there; string 4 replaced per the HALT-B addendum (`sbfin-1-halt-b-addendum.md`, sha256 `fb0c8c01d808ffa7d7a0df16440388f991d3c585654a7ca82e8488396cb609e7`) item 2, whose replacement draft carries the measured share. Ratified by Ishan at the HALT-B diff. The adapted Spend-by-Member copy — the council's Spend-by-alder strings with `ward's council race` → `Board seat's race` and `alder` → `member` — follows the ratified-at-review convention and carries NO register entry, per the authorization's B.5. Id-less; no PS id allocated.*
