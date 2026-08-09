@@ -615,6 +615,10 @@ const IPG_SB_FEEDBACK = {
 
     // SBFIN-3 B.1: the direct-only sentence was REMOVED from Browse donors — with IE
     // spenders in the list it is false. `directOnlyDonors` is retired with it.
+    // SBFIN-3 C: the BOARD-WIDE all-elections disclosure. Deliberately not the member
+    // card's ratified string, which is written about one member's own runs ("every school
+    // board election this member has run in") and would be false on a board-wide surface.
+    allElectionsBoard: 'Every school board election this tool covers, combined. Direct contributions and independent spending are each summed within their own stream and are never added together.',
     mixedListNote: 'This list mixes two kinds of money: direct contributions to a member’s own committee, and independent spending by committees tagged IE PAC, which is made without coordinating with the candidate. An IE row’s amount is what that committee deployed — spending for and against, shown separately on the row and on click.',
     // SBFIN-3 B.3: this REPLACES the direct-only sentence on Industry Totals, which is now
     // false there. It says the thing the old sentence never did — that two different
@@ -1430,8 +1434,11 @@ const IPG_SB_FEEDBACK = {
   // Every donor row on the board, for one election. The single source all four views group.
   function spendDonorRows(ek){
     var out = [];
+    var eks = spendElectionsFor(ek);
     ((F && F.members) || []).forEach(function(m){
-      ((m.donors_by_election || {})[ek] || []).forEach(function(d){ out.push({ m: m, d: d }); });
+      eks.forEach(function(k){
+        ((m.donors_by_election || {})[k] || []).forEach(function(d){ out.push({ m: m, d: d }); });
+      });
     });
     return out;
   }
@@ -1533,8 +1540,55 @@ const IPG_SB_FEEDBACK = {
   // NO FUSED FIGURE IS STORED. The artifact carries support and oppose as separate keys;
   // every fused figure below is computed here, on a surface entitled to it.
   // ==========================================================
+  // Per election, or merged across every election. Merging sums support and oppose WITHIN
+  // their own streams — the two are never added here, only where a surface owns carve (b).
+  // Targets merge per seat and their rows concatenate, so the detail view reads the same
+  // whether one election is in scope or all of them.
   function ieSpenders(ek){
-    return ((F && F.ie_spenders) || {})[ek] || [];
+    var byE = (F && F.ie_spenders) || {};
+    if(ek !== ALL_ELECTIONS) return byE[ek] || [];
+    var by = {}, order = [];
+    spendElectionsFor(ek).forEach(function(k){
+      (byE[k] || []).forEach(function(sp){
+        var e = by[sp.committee_id];
+        if(!e){
+          e = by[sp.committee_id] = { committee_id: sp.committee_id, name: sp.name,
+                sbe_committee_id: sp.sbe_committee_id,
+                industries: (sp.industries || []).slice(),
+                support: { amount: 0, count: 0 }, oppose: { amount: 0, count: 0 },
+                _t: {}, targets: [] };
+          order.push(sp.committee_id);
+        }
+        ['support', 'oppose'].forEach(function(st){
+          e[st].amount = round2(e[st].amount + Number(sp[st].amount || 0));
+          e[st].count += Number(sp[st].count || 0);
+        });
+        (sp.targets || []).forEach(function(t){
+          var g = e._t[t.seat];
+          if(!g){
+            g = e._t[t.seat] = { seat: t.seat, member_id: t.member_id, name: t.name,
+                  candidacy_id: t.candidacy_id,
+                  support: { amount: 0, count: 0 }, oppose: { amount: 0, count: 0 }, rows: [] };
+          }
+          ['support', 'oppose'].forEach(function(st){
+            g[st].amount = round2(g[st].amount + Number(t[st].amount || 0));
+            g[st].count += Number(t[st].count || 0);
+          });
+          g.rows = g.rows.concat(t.rows || []);
+        });
+      });
+    });
+    return order.map(function(id){
+      var e = by[id];
+      e.targets = Object.keys(e._t).map(function(k){ return e._t[k]; });
+      e.targets.forEach(function(t){ t.rows.sort(function(a, b){
+        return String(a.date || '').localeCompare(String(b.date || '')); }); });
+      e.targets.sort(function(a, b){
+        return -(a.support.amount + a.oppose.amount) + (b.support.amount + b.oppose.amount); });
+      delete e._t;
+      return e;
+    }).sort(function(a, b){
+      return (b.support.amount + b.oppose.amount) - (a.support.amount + a.oppose.amount); });
   }
   function ieDeployed(sp){            // carve (b): a single spender's own spend
     return round2(Number(sp.support.amount || 0) + Number(sp.oppose.amount || 0));
@@ -1614,9 +1668,55 @@ const IPG_SB_FEEDBACK = {
            + esc(p[1]) + '</button>'; }).join('') + '</div>';
     h += '<div class="ipg-sb-row"><label for="ipg-sb-spend-el">Election</label><select id="ipg-sb-spend-el">';
     keys.forEach(function(k){
+      var lab = (k === ALL_ELECTIONS) ? SF.allElections : labels[k];
       h += '<option value="' + esc(k) + '"' + (k === ek ? ' selected' : '') + '>'
-         + esc(labels[k]) + '</option>'; });
-    return h + '</select></div>';
+         + esc(lab) + '</option>'; });
+    h += '</select></div>';
+    // The board-wide All-elections disclosure. NOT the member card's string, which is
+    // written about one member's own runs and would be false here.
+    if(ek === ALL_ELECTIONS) h += '<div class="ipg-sb-note">' + esc(SPC.allElectionsBoard) + '</div>';
+    return h;
+  }
+
+  // ==========================================================
+  // SBFIN-3 C — the all-elections LANDING scope, Political Spend only.
+  //
+  // Browse donors, Industry Totals and Industries by member open on All elections, so the
+  // IE money is on screen rather than one selector away: all school-board IE is 2024-only
+  // and the most-recent election is 2026, so a most-recent default showed none of it.
+  //
+  // SPEND BY MEMBER IS DELIBERATELY EXCLUDED. It keeps its most-recent default and is not
+  // offered the All-elections option. The MEMBER PAGE is untouched entirely — SBFIN-2
+  // ratification 4 stands, All elections is an option there and never its default.
+  //
+  // Everything below is derived at render from the per-election artifact. Nothing is
+  // minted: direct sums exactly as the member card's existing derivation does, and IE
+  // support and oppose sum across elections WITHIN their own streams — never with each
+  // other, never with direct. The amendment's carves are unchanged in kind, only in
+  // extent: a spender's row amount is still support+oppose (carve b) and Industry Totals'
+  // headline is still `total deployed` (carve a), now over every election.
+  // ==========================================================
+  var SPEND_ALL_SUBS = { donors: 1, industries: 1, mix: 1 };
+
+  function spendScopeOptions(sub){
+    var el = spendElectionKeys();
+    var keys = el.keys.slice();
+    if(SPEND_ALL_SUBS[sub]) keys.unshift(ALL_ELECTIONS);
+    return { keys: keys, labels: el.labels };
+  }
+  function spendScope(sub){
+    var el = spendElectionKeys();
+    if(SPEND_ALL_SUBS[sub]){
+      if(state.spendElection === ALL_ELECTIONS) return ALL_ELECTIONS;
+      if(state.spendElection && el.keys.indexOf(state.spendElection) >= 0) return state.spendElection;
+      return ALL_ELECTIONS;                 // the landing scope
+    }
+    if(state.spendElection && el.keys.indexOf(state.spendElection) >= 0) return state.spendElection;
+    return el.keys[0];                      // Spend by member: most recent, as before
+  }
+  // The concrete elections a scope covers. One key, or every key.
+  function spendElectionsFor(ek){
+    return ek === ALL_ELECTIONS ? spendElectionKeys().keys : [ek];
   }
 
   function spendView(){
@@ -1627,10 +1727,10 @@ const IPG_SB_FEEDBACK = {
         + esc(state.finError||'unknown error')+').</div></div>';
     if(!F || !F.members) return '<div class="ipg-sb-card"><div class="ipg-sb-empty">'+esc(SP.emptySurface)+'</div></div>';
 
-    var el = spendElectionKeys();
+    var sub = state.spendSub || 'members';
+    var el = spendScopeOptions(sub);
     if(!el.keys.length) return '<div class="ipg-sb-card"><div class="ipg-sb-empty">'+esc(SP.emptySurface)+'</div></div>';
-    var ek = (state.spendElection && el.keys.indexOf(state.spendElection)>=0)
-             ? state.spendElection : el.keys[0];
+    var ek = spendScope(sub);
     var h = spendChrome(ek, el.keys, el.labels);
     if(state.spendSub === 'donors')          h += browseDonorsBody(ek);
     else if(state.spendSub === 'industries') h += (state.spendIndustryDetail
@@ -1847,7 +1947,17 @@ const IPG_SB_FEEDBACK = {
     // Roster order, which is the board's own seat order — never a string sort, which
     // would put seat 10A before seat 2A.
     ((F && F.members) || []).forEach(function(m){
-      var rows = (m.donors_by_election || {})[ek] || [];
+      var rows;
+      if(ek === ALL_ELECTIONS){
+        // Same derivation the member card uses for its own All-elections view: one row per
+        // donor, amounts summed. A donor who gave in two elections is one donor.
+        var sub = {};
+        spendElectionsFor(ek).forEach(function(k){
+          if((m.donors_by_election || {})[k]) sub[k] = m.donors_by_election[k]; });
+        rows = mergeDonorRows(sub);
+      } else {
+        rows = (m.donors_by_election || {})[ek] || [];
+      }
       if(!rows.length) return;
       var inds = industryTotals(rows);
       var tot = inds.reduce(function(s, x){ return s + Number(x.amount || 0); }, 0);
@@ -2067,6 +2177,10 @@ const IPG_SB_FEEDBACK = {
         state.spendSearch=''; state.spendType='All'; state.spendIndustry='All';
         state.spendIndustryDetail=null; state.spendShowAll=false; state.finDonor=null;
         state.spendIE=null;
+        // Reset the scope too: each sub-tab lands on its OWN default (All elections for
+        // the three, most-recent for Spend by member). Carrying a chosen election across a
+        // sub-tab switch would mean a sub-tab never lands where it was ratified to land.
+        state.spendElection=null;
         render();
       };
     });

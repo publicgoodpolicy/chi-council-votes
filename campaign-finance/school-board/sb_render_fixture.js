@@ -341,6 +341,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   // SBFIN-1 / HALT-B — the finance surfaces.
   // ======================================================================
   var money = function (x) { return '$' + Math.round(x).toLocaleString('en-US'); };
+  var round2c = function (x) { return Math.round(Number(x || 0) * 100) / 100; };
   var finBy = function (seat) {
     return REALFIN.members.filter(function (m) { return m.seat === seat; })[0]; };
   // The embed's own default: most recent election first, All elections never default.
@@ -775,7 +776,10 @@ function around(tpl, marker) { return String(tpl).split(marker); }
        && spv.html.indexOf('ipg-sb-spend-row') >= 0);
 
   // ---- C.1 Browse donors ----
-  var pBd = subtab(spv, 'donors');
+  // FORM CHANGED at SBFIN-3 C (names kept): the three sub-tabs now LAND on All elections,
+  // so the two single-election assertions below drive the selector explicitly rather than
+  // inheriting a default that moved under them. What they assert is unchanged.
+  var pBd = setSel(subtab(spv, 'donors'), 'ipg-sb-spend-el', spendEK);
   ok('[SBF2/BROWSE] the list is rollup-first and ranks by dollars given', (function () {
     var fams = {}, singles = {};
     boardRows.forEach(function (x) {
@@ -825,7 +829,8 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   (function () { var cb = pBd2.doc.getElementById('ipg-sb-donor-close'); if (cb) cb.onclick(); })();
 
   // ---- C.2 Industry totals ----
-  var pInd = subtab({ doc: spv.doc, app: spv.app }, 'industries');
+  var pInd = setSel(subtab({ doc: spv.doc, app: spv.app }, 'industries'),
+                    'ipg-sb-spend-el', spendEK);
   // FORM CHANGED, name retired: '[SBF2/INDUSTRY] it states its own direct-only scope'.
   // Industry Totals now carries IE (carve (a), election-wide), so the direct-only sentence
   // was false there. The two-classifier disclosure replaces it and asserts more: that a
@@ -876,7 +881,8 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   (function () { var b = pDrill.doc.getElementById('ipg-sb-ind-back'); if (b) b.onclick(); })();
 
   // ---- C.3 Industries by member ----
-  var pMix = subtab({ doc: spv.doc, app: spv.app }, 'mix');
+  var pMix = setSel(subtab({ doc: spv.doc, app: spv.app }, 'mix'),
+                    'ipg-sb-spend-el', spendEK);
   ok('[SBF2/MIX] it states its own direct-only scope in its own sentence (exit 1)',
      pMix.text.indexOf('independent spending is not included here') >= 0);
   ok('[SBF2/MIX] one row per member that has donor rows in this election', (function () {
@@ -1183,6 +1189,189 @@ function around(tpl, marker) { return String(tpl).split(marker); }
     if (bad.length) console.log('        ' + bad.join(', '));
     return bad.length === 0;
   })());
+
+  // ======================================================================
+  // SBFIN-3 C — the all-elections LANDING scope, Political Spend only.
+  // ======================================================================
+  ok('[SBF3/LAND] the three sub-tabs LAND on All elections', (function () {
+    var bad = [];
+    ['donors', 'industries', 'mix'].forEach(function (sub) {
+      var pg = subtab({ doc: nav(mxv, 'spend').doc, app: mxv.app }, sub);
+      var sel = (pg.html.split('id="ipg-sb-spend-el"')[1] || '').split('</select>')[0];
+      if (!/value="all" selected/.test(sel)) bad.push(sub);
+    });
+    return bad.length === 0;
+  })());
+  ok('[SBF3/LAND] Spend by member does NOT land on it and is not offered it', (function () {
+    var pg = subtab({ doc: nav(mxv, 'spend').doc, app: mxv.app }, 'members');
+    var sel = (pg.html.split('id="ipg-sb-spend-el"')[1] || '').split('</select>')[0];
+    return sel.indexOf('value="all"') < 0
+        && new RegExp('value="' + spendEK + '" selected').test(sel);
+  })());
+  var freshV = await boot(REAL, 'ok');
+  ok('[SBF3/LAND] the member page default is UNCHANGED — most recent, never All elections',
+     (function () {
+       var mvL = nav(freshV, 'member');
+       var bad = [];
+       REALFIN.members.forEach(function (m) {
+         if (Object.keys(m.elections || {}).length < 2) return;
+         var pg = pick(mvL, m.seat);
+         var sel = (pg.html.split('id="ipg-sb-fin-el"')[1] || '').split('</select>')[0];
+         if (/value="all" selected/.test(sel)) bad.push(m.seat);
+         if (!new RegExp('value="' + defaultElection(m) + '" selected').test(sel)) bad.push(m.seat + '!def');
+       });
+       return bad.length === 0;
+     })());
+  ok('[SBF3/LAND] the board-wide disclosure renders, and is NOT the member card\'s string',
+     (function () {
+       var pg = subtab({ doc: nav(mxv, 'spend').doc, app: mxv.app }, 'donors');
+       return pg.text.indexOf('Every school board election this tool covers, combined') >= 0
+           && pg.text.indexOf('this member has run in') < 0;
+     })());
+  ok('[SBF3/LAND] the IE money is ON SCREEN at the landing scope (the point of the change)',
+     (function () {
+       var pg = subtab({ doc: nav(mxv, 'spend').doc, app: mxv.app }, 'donors');
+       var sps = REALFIN.ie_spenders[ieEK] || [];
+       return sps.length > 0 && sps.every(function (sp) {
+         return pg.html.indexOf('data-ie="' + sp.committee_id + '"') >= 0; });
+     })());
+
+  // ---- the amendment's walk, AT THE NEW SCOPE ----
+  function fusedCombosAll(m) {
+    var d = 0, sf = 0, su = 0, op = 0;
+    Object.keys(m.elections || {}).forEach(function (k) {
+      var e = m.elections[k];
+      d += Number(e.direct.amount || 0); sf += Number(e.self_funding.amount || 0);
+      su += Number(e.ie_support.amount || 0); op += Number(e.ie_oppose.amount || 0);
+    });
+    var singles = [d, sf, su, op];
+    return [[d + sf, 'direct+self'], [d + su, 'direct+support'], [d + op, 'direct+oppose'],
+            [su + op, 'support+oppose'], [d + su + op, 'all three']]
+      .filter(function (pr) {
+        return pr[0] > 0 && !singles.some(function (v) { return Math.abs(v - pr[0]) < 0.005; }); });
+  }
+  ok('[SBF3/AMEND] the by-figure walk passes at the ALL-ELECTIONS scope too', (function () {
+    var bad = [];
+    var pg = subtab({ doc: nav(mxv, 'spend').doc, app: mxv.app }, 'mix');
+    var rows = [].slice.call(pg.doc.querySelectorAll('[data-spend-seat]'));
+    rows.forEach(function (el) {
+      var seat = el.getAttribute('data-spend-seat');
+      var m = REALFIN.members.filter(function (x) { return x.seat === seat; })[0];
+      if (!m) return;
+      var txt = el.textContent || '';
+      fusedCombosAll(m).forEach(function (pr) {
+        if (txt.indexOf(money(pr[0])) >= 0) bad.push('mix ' + seat + ' ' + pr[1]);
+      });
+    });
+    if (bad.length) console.log('        ' + bad.join('\n        '));
+    return bad.length === 0;
+  })());
+  ok('[SBF3/NOFLAG] needs_review still absent at the ALL-ELECTIONS scope', (function () {
+    var probe = /needs.?review|needs_review|unverified match|match method|surname_plus_given/i;
+    var bad = [];
+    ['donors', 'industries', 'mix'].forEach(function (sub) {
+      var pg = subtab({ doc: nav(mxv, 'spend').doc, app: mxv.app }, sub);
+      if (probe.test(pg.text) || probe.test(pg.html)) bad.push(sub);
+    });
+    return bad.length === 0;
+  })());
+  ok('[SBF/FETCH] still exactly two data fetches after the scope change', (function () {
+    var gets2 = FETCHED.filter(function (u) { return u.indexOf('formspree') < 0; });
+    var uniq2 = gets2.filter(function (u, i) { return gets2.indexOf(u) === i; });
+    return uniq2.length === 2;
+  })());
+
+  // ---- THE SYNTHETIC MULTI-ELECTION CASE -------------------------------
+  // Required, and load-bearing: all school-board IE is 2024-only, so an all-elections IE
+  // view over the REAL artifact equals the 2024 view exactly. Every assertion above would
+  // pass on a build that silently ignored every election but one. This constructs a second
+  // election's IE and proves the summation actually happens.
+  await (async function () {
+    var synth = JSON.parse(JSON.stringify(REALFIN));
+    var src = (synth.ie_spenders[ieEK] || []);
+    var other = Object.keys(synth.election_labels).filter(function (k) { return k !== ieEK; })[0];
+    ok('[SBF3/SYNTH] a second election exists to sum into', !!other && src.length > 0, String(other));
+    // A second election's IE: the same two spenders, halved, so the expected sums are
+    // arithmetically distinct from either election alone.
+    synth.ie_spenders[other] = src.map(function (sp) {
+      return { committee_id: sp.committee_id, name: sp.name,
+               sbe_committee_id: sp.sbe_committee_id, industries: sp.industries.slice(),
+               support: { amount: round2c(sp.support.amount / 2), count: sp.support.count },
+               oppose: { amount: round2c(sp.oppose.amount / 2), count: sp.oppose.count },
+               targets: sp.targets.map(function (t) {
+                 return { seat: t.seat, member_id: t.member_id, name: t.name,
+                          candidacy_id: t.candidacy_id,
+                          support: { amount: round2c(t.support.amount / 2), count: t.support.count },
+                          oppose: { amount: round2c(t.oppose.amount / 2), count: t.oppose.count },
+                          rows: t.rows.map(function (r) {
+                            return { date: (other + r.date.slice(4)), amount: round2c(r.amount / 2),
+                                     stance: r.stance, match_method: r.match_method,
+                                     needs_review: r.needs_review }; }) }; }) };
+    });
+    FIN = synth;
+    var vs = await boot(REAL, 'ok');
+    {
+      var pg = subtab(nav(vs, 'spend'), 'donors');
+      var expect = src.map(function (sp) {
+        var s2 = synth.ie_spenders[other].filter(function (x) {
+          return x.committee_id === sp.committee_id; })[0];
+        return { id: sp.committee_id,
+                 support: round2c(sp.support.amount + s2.support.amount),
+                 oppose: round2c(sp.oppose.amount + s2.oppose.amount) }; });
+      // A zero stream is OMITTED from the row by design, so asserting "$0 against" would
+      // fail on a spender that never opposed anyone — the check must mirror the render.
+      ok('[SBF3/SYNTH] per-spender support and oppose SUM across the two elections',
+         expect.every(function (e) {
+           var okS = e.support <= 0 || pg.text.indexOf(money(e.support) + ' for') >= 0;
+           var okO = e.oppose <= 0 || pg.text.indexOf(money(e.oppose) + ' against') >= 0;
+           return okS && okO; }),
+         JSON.stringify(expect));
+      ok('[SBF3/SYNTH] the row amount is the summed support+oppose (carve b, all elections)',
+         expect.every(function (e) {
+           return pg.text.indexOf(money(round2c(e.support + e.oppose))) >= 0; }));
+      ok('[SBF3/SYNTH] the sums differ from EITHER election alone (the check cannot pass on one)',
+         expect.every(function (e) {
+           var one = src.filter(function (x) { return x.committee_id === e.id; })[0];
+           return Math.abs(e.support - one.support.amount) > 0.005
+               || Math.abs(e.oppose - one.oppose.amount) > 0.005; }));
+
+      var pi = subtab(nav(vs, 'spend'), 'industries');
+      var totSup = expect.reduce(function (a, e) { return a + e.support; }, 0);
+      var totOpp = expect.reduce(function (a, e) { return a + e.oppose; }, 0);
+      ok('[SBF3/SYNTH] per-industry segments sum across elections',
+         (totSup <= 0 || pi.text.indexOf(money(round2c(totSup))) >= 0)
+           && (totOpp <= 0 || pi.text.indexOf(money(round2c(totOpp))) >= 0));
+      ok('[SBF3/SYNTH] largest-remainder still holds: parts sum EXACTLY to the displayed total',
+         (function () {
+           var rows2 = pi.html.split('ipg-sb-indrow-top').slice(1), bad = [];
+           rows2.forEach(function (chunk) {
+             var tot = (chunk.match(/<span class="a">\$([0-9,]+)/) || [])[1];
+             if (!tot) return;
+             var parts = (chunk.match(/class="ipg-sb-bd [^"]*">[^$]*\$([0-9,]+)</g) || [])
+               .map(function (x) { return Number((x.match(/\$([0-9,]+)/) || [])[1].replace(/,/g, '')); });
+             var sum = parts.reduce(function (a, b) { return a + b; }, 0);
+             if (parts.length && sum !== Number(tot.replace(/,/g, ''))) bad.push(tot + ' vs ' + sum);
+           });
+           if (bad.length) console.log('        ' + bad.join('\n        '));
+           return bad.length === 0;
+         })());
+      var pm = subtab(nav(vs, 'spend'), 'mix');
+      ok('[SBF3/SYNTH] no per-member fused figure appears under cross-election summation',
+         (function () {
+           var bad = [];
+           [].slice.call(pm.doc.querySelectorAll('[data-spend-seat]')).forEach(function (el) {
+             var seat = el.getAttribute('data-spend-seat');
+             var m = synth.members.filter(function (x) { return x.seat === seat; })[0];
+             if (!m) return;
+             var txt = el.textContent || '';
+             fusedCombosAll(m).forEach(function (pr) {
+               if (txt.indexOf(money(pr[0])) >= 0) bad.push(seat + ' ' + pr[1]); });
+           });
+           return bad.length === 0;
+         })());
+      FIN = REALFIN;
+    }
+  })();
 
   // ---- finance failure is ISOLATED --------------------------------------
   var vfin = await boot(REAL, 'finfail');
