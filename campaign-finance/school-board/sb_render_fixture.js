@@ -1467,6 +1467,96 @@ function around(tpl, marker) { return String(tpl).split(marker); }
        return dead.length === 0;
      })());
 
+  // ======================================================================
+  // SBFIN-4 C — modal chrome, ALIGNED TO MEASURED VALUES.
+  //
+  // These checks do not carry the council's numbers: they READ the council embed at test
+  // time and compare declaration by declaration. A value typed from memory or eye into
+  // either file fails here, which is what "align-to-measured" has to mean if it is to be
+  // more than an instruction.
+  // ======================================================================
+  var COUNCIL = fs.readFileSync(path.join(REPO,
+    'campaign-finance/elections/reference/council-embed.html'), 'utf8');
+  function decls(css, selector) {
+    // last matching rule wins, as the cascade would
+    var re = new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*\\{([^}]*)\\}', 'g');
+    var m, body = null;
+    while ((m = re.exec(css)) !== null) body = m[1];
+    if (body === null) return null;
+    var out = {};
+    body.split(';').forEach(function (d) {
+      var i = d.indexOf(':'); if (i < 0) return;
+      out[d.slice(0, i).trim()] = d.slice(i + 1).trim().replace(/\s+/g, ' ');
+    });
+    return out;
+  }
+  function sameDecls(a, b, keys, label) {
+    if (!a || !b) { console.log('        ' + label + ': missing rule (' + !!a + '/' + !!b + ')'); return false; }
+    var bad = keys.filter(function (k) { return String(a[k]) !== String(b[k]); });
+    if (bad.length) bad.forEach(function (k) {
+      console.log('        ' + label + ' ' + k + ': council=' + a[k] + ' school-board=' + b[k]); });
+    return bad.length === 0;
+  }
+
+  ok('[SBF4/CHROME] the modal foot matches the council rule, declaration for declaration',
+     sameDecls(decls(COUNCIL, '.ipg-modal-foot'),
+               decls(EMBED_HTML, '#ipg-sb-app .ipg-sb-modal-foot'),
+               ['font-size', 'color', 'margin-top', 'text-align', 'font-style'], 'modal-foot'));
+
+  ok('[SBF4/CHROME] the in-modal section heading matches the council\'s in-modal rule',
+     sameDecls(decls(COUNCIL, '.ipg-modal .ipg-section-h'),
+               decls(EMBED_HTML, '#ipg-sb-app .ipg-sb-modal .ipg-sb-fin-sub'),
+               ['font-size', 'font-weight', 'letter-spacing', 'text-transform',
+                'margin', 'padding-bottom', 'border-bottom'], 'section-h'));
+
+  ok('[SBF4/CHROME] the in-modal row matches the council\'s card idiom',
+     (function () {
+       var c = decls(COUNCIL, '.ipg-modal .ipg-cf-row');
+       var b = decls(EMBED_HTML, '#ipg-sb-app .ipg-sb-modal .ipg-sb-donor');
+       return sameDecls(c, b, ['border-radius', 'padding', 'margin-bottom'], 'cf-row')
+           && !!b && /1px solid/.test(String(b['border']));
+     })());
+
+  // THE BREAKPOINT RECONCILIATION, and why it goes the other way. Aligning the threshold to
+  // the council's 640px would add a second @media to this embed and break [SBV2/BP] `one
+  // breakpoint scale` — a ratified SBVOTE-2 design decision. So the RULES align to the
+  // council (all three, byte for byte) while the THRESHOLD stays this tool's 600px. The
+  // residual is a 40px band, 601–640px, where the council's modal is full-bleed and this
+  // one is still a card. Stated, not smoothed.
+  ok('[SBF4/CHROME] all three council mobile modal rules are present, at this tool\'s 600px',
+     (function () {
+       var cm = /@media\s*\(\s*max-width\s*:\s*640px\s*\)\s*\{([\s\S]*?)\n\}/.exec(COUNCIL);
+       var bm = /@media\(max-width:600px\)\{([\s\S]*?)\n\}/.exec(EMBED_HTML);
+       if (!cm || !bm) { console.log('        missing mobile block'); return false; }
+       var cB = cm[1], bB = bm[1];
+       var pairs = [['.ipg-modal-overlay', '.ipg-sb-modal-overlay', ''],
+                    ['.ipg-modal', '.ipg-sb-modal', ''],
+                    ['.ipg-modal-summary .ipg-stat', '.ipg-sb-modal .ipg-sb-stat', '#ipg-sb-app ']];
+       return pairs.every(function (pr) {
+         var c = decls(cB, pr[0]), b = decls(bB, pr[2] + pr[1]);
+         if (!c || !b) { console.log('        mobile missing ' + pr[1]); return false; }
+         return Object.keys(c).every(function (k) {
+           if (String(c[k]) === String(b[k])) return true;
+           console.log('        mobile ' + pr[1] + ' ' + k + ': council=' + c[k] + ' sb=' + b[k]);
+           return false;
+         });
+       });
+     })());
+  ok('[SBF4/CHROME] the reconciliation kept ONE breakpoint scale (SBVOTE-2 [SBV2/BP])',
+     (EMBED_HTML.match(/@media/g) || []).length === 1);
+
+  ok('[SBF4/CHROME] the one breakpoint still carries this tool\'s own non-modal rules',
+     (function () {
+       var m = /@media\(max-width:600px\)\{([\s\S]*?)\n\}/.exec(EMBED_HTML);
+       return !!m && m[1].indexOf('ipg-sb-rec-vote') >= 0 && m[1].indexOf('ipg-sb-fb-fab') >= 0;
+     })());
+
+  ok('[SBF4/CHROME] the alignment is scoped to the modal — the member page keeps its own row style',
+     (function () {
+       var global = decls(EMBED_HTML, '#ipg-sb-app .ipg-sb-donor');
+       return !!global && !global['border-radius'] && String(global['padding']) === '10px 0';
+     })());
+
   // ---- finance failure is ISOLATED --------------------------------------
   var vfin = await boot(REAL, 'finfail');
   ok('[SBF/ISOLATE] a finance failure states itself and does NOT error the tool',
