@@ -472,11 +472,43 @@ not exist in the other. **Firewall compliance is therefore a per-path property**
 be established, and re-established, per embed, and a new tool brings its own path with its
 own compliance obligation.
 
-**What each reads** [C5.2, SOURCED]: the council embed fetches the council artifact
-(`council-data.json`), with an optional sharded mode reading the index and contributions
-shards; the elections embed renders the elections artifact (`election-data.json`) and
-deploys as a single inlined file. Neither renders the donor entity-type or last-editor
-fields — established by sweep at the lane of record (§8).
+**Hand-maintenance leaves residue, and residue reads as evidence** [C5.1, SOURCED; measured at
+SBVOTE-2 G1]: the council embed carries four CSS rules for a brand lockup that no markup uses —
+`#ipg-council-app .ipg-brand`, `.ipg-brand svg`, `.ipg-brand .wm`, `.ipg-brand .wm small` —
+while the header renders an `h1` and a subtitle paragraph and nothing else. The styles are
+dead. A design census read them as evidence of a rendered lockup and a downstream
+authorization inherited the over-read, instructing that an SVG be copied that does not exist
+(planner error 34). The correction of record: **any future lockup work starts from asset
+creation, not from copying markup that was never there** — and on a hand-maintained path, a
+selector's presence in a stylesheet is not evidence that anything renders it.
+
+**What each reads** [C5.2, SOURCED]: **three embeds now, three separate paths.** The council
+embed fetches the council artifact (`council-data.json`) from the raw-CDN `refs/heads/main/`
+form, with an optional sharded mode (index + contributions shards) that ships
+present-but-unconfigured — the code path exists and the URLs are commented out, so the
+monolith is what actually loads. The school-board embed fetches the school-board artifact
+(`school-board-data.json`) from the same `refs/heads/main/` form. The elections embed fetches
+the elections artifact (`election-data.json`) from the bare `main/` form — overridable per
+mount (`data-src`, then `window.IPG_DATA_URL`, then the baked default) where the other two are
+baked only — and fetches two verification artifacts at runtime besides
+(`elections/reconciliation-report.json`, `elections/known-gaps.json`), so the methodology
+figures cannot drift from the artifacts they cite. **URL form is therefore not uniform across
+the three: two use `refs/heads/main/`, one uses `main/`.** **None of the three** renders the
+donor entity-type or last-editor fields — established by sweep at the lane of record (§8) for
+the first two, and re-measured across all three sources at this lane.
+
+**"Inlined" describes the elections embed's code, never its data** [C5.2, SOURCED]: the
+inlining folds `data.js` / `render.js` / `app.js` + styles into one Code Block. The artifact
+still arrives over the network at runtime, exactly as the other two do. It could not be
+otherwise at the sizes involved — roughly 7.8 MB of artifact against a ~191 KB embed — so the
+prior two-embed phrasing *"deploys as a single inlined file"* is a true statement about code
+that must not be read as a statement about data. **No embed inlines an artifact.**
+
+**Outbound, so the enumeration is not silently one-directional:** C5.2 is a reads row, and
+reads are not the whole of an embed's traffic. The council and school-board embeds each POST
+feedback to one shared Formspree endpoint (`https://formspree.io/f/xjgdkkrk`), separated only
+by subject prefix (`[IPG Council Tool] ` / `[IPG School Board Tool] `); no credential ships,
+and the destination cannot reach the editorial Sheet. The elections embed has no outbound POST.
 
 **Corollary of record** [C5.3, SOURCED]: **data-layer firewall asserts do not cover
 render-layer sums.** The artifact can keep direct and independent spending cleanly separated
@@ -762,6 +794,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-cbr | `campaign-finance/ingestion/convert_bulk_receipts.py` | `ac33aa394c4f8905c307390160fbe397a09399199a3396b07f29f01729bbe582` |
 | S-av | `campaign-finance/sync_allvotes.py` | `a0c4f23df6e4f012e683088e012dc91692fe65399e6fcae2acd1ec9b40e61384` |
 | S-cemb | `campaign-finance/elections/reference/council-embed.html` | `f439227d3dd9781df90b34454b46e26f438b6433057ea60d61a5b72fd934f14f` |
+| S-sbemb | `campaign-finance/school-board/school-board-embed.html` | `f1f6885d69c37143a3686fb4f8f1f88476e674b8b30484c28ea351bfdaf0ea12` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
 | S-edat | `campaign-finance/elections/embed/data.js` | `e36af72ece73ff47b1322abd08548b1f3a1a7624f896381c6c8f10fd6b043ecc` |
 | S-eren | `campaign-finance/elections/embed/render.js` | `bc5ccf5b1720a366487419f2d3267591e4332da14a1ba6cade46606b2f35d9d2` |
@@ -850,8 +883,11 @@ that catch defect classes the existing gates structurally cannot see.
 | C4.9 | S-syn | 691-713 (`coverage_figure`), 801-809 (the per-artifact report and its stated collection scope) |
 | C4.9 | A-esg0 | §2 (pull-model established from bytes; the coverage gap and its collection scope) |
 | C5.1 | A-fw1 | 7-16 (fix sites exist only in the elections path; artifact layer separate) |
-| C5.2 | S-cemb | 42-52 (dataUrl + optional sharded mode); S-eemb 19-24 (elections artifact + inlined deploy) |
-| C5.2 | A-ba1g2 | 49 (Rider 2: neither embed renders entity-type / last-editor) |
+| C5.2 | S-cemb | 47 (dataUrl at the `refs/heads/main/` form), 48-52 (sharded mode, present-but-commented), 68 (feedback endpoint), 3409+3427 (subject prefix) |
+| C5.2 | S-sbemb | 61-64 (dataUrl + the `refs/heads/main/` rationale in situ), 789 (the artifact fetch), 75+77 (feedback endpoint + subject prefix), 769 (the POST) |
+| C5.2 | S-eapp | 15 (DEFAULT_SRC at the bare `main/` form), 19-21 (ART_BASE + the two verification artifacts), 295 (src resolution: data-src → window.IPG_DATA_URL → baked default) |
+| C5.2 | S-eemb | 17-18 (data-src override documented), 19-24 (artifact + the code-only inlining: data.js/render.js/app.js + styles into one Code Block) |
+| C5.2 | A-ba1g2 | 49 (Rider 2: neither embed renders entity-type / last-editor — a TWO-embed sweep, predating the school-board path; the third was measured at REF-C52 and agrees) |
 | C5.5 | S-edat | 110-116 (selectorOptions — the {year} {body} pattern), 820-838 (officeRaces election scoping via the year-prefix join), 769 (the race's window rides the VM), 786 (priorElection re-homed to the base VM) |
 | C5.5 | S-eren | 871-876 (selectorNav), 759-761 (the verbatim prior-note; the formerly-cited on_current_record string is DELETED — its retirement is C5.7's affordance clause) |
 | C5.5 | S-eapp | 140-152 (selector state + read-only ?election= boot), 207-218 (scope switch resets the active race — the ruled B6 resolution) |
