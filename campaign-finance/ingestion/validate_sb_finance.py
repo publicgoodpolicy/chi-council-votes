@@ -33,7 +33,7 @@
 #
 #     python3 campaign-finance/ingestion/validate_sb_finance.py \
 #         school-board-finance.json [--elections election-data.json] [--self-test]
-import argparse, json, re, sys
+import argparse, json, os, re, sys
 
 STREAMS = ("direct", "self_funding", "ie_support", "ie_oppose")
 # Any key whose value equals a sum of two or more streams would be a fused total; these
@@ -306,6 +306,203 @@ def validate(art, ed=None):
          not any(("total" in c) or ("member_totals" in c) for c in clusters.values()),
          "cluster totals are elections-wide and would trip SBF-5c")
 
+    # ---- SBF-17 — the IE slice (SBFIN-3 A.4) --------------------------------
+    ie = art.get("ie_spenders") or {}
+    labels = art.get("election_labels") or {}
+    member_cands = {c for m in members for c in (m.get("candidacies") or [])}
+    seat_of = {c: m.get("seat") for m in members for c in (m.get("candidacies") or [])}
+
+    # SBF-17d's oracle. NOT a second copy of the bucketing rule: the builder SELECTS a
+    # bucket, this asserts CONTAINMENT of every row's date in the bucket it was filed
+    # under. An independent property, which is what a validator owes.
+    wins = {}
+    try:
+        wp = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..",
+                          "elections", "election-windows.json")
+        for w in (json.load(open(wp)).get("school_board") or []):
+            wins[w["id"]] = (w.get("start"), w.get("end"))
+    except (OSError, json.JSONDecodeError, KeyError):
+        wins = {}
+    r.ok("SBF-17d0 the election-windows file was readable (the containment oracle exists)",
+         bool(wins), "without it SBF-17d asserts nothing")
+
+    ie_rows_total = 0
+    for ek, spenders in ie.items():
+        # SBF-17d1 — the trap's front door. If the builder ever keys on `cycle` instead of
+        # date, the bucket is named "2027" and every containment test below would be
+        # SKIPPED for want of a window. An unknown bucket key must therefore fail loudly
+        # on its own, before containment is even reachable.
+        r.ok(f"SBF-17d1 {ek}: the IE bucket is a known election window, not a cycle value",
+             (not wins) or ek in wins, f"known windows {sorted(wins)}")
+        r.ok(f"SBF-17g {ek}: the IE bucket is a list of spenders",
+             isinstance(spenders, list), f"got {type(spenders).__name__}")
+        for sp in (spenders if isinstance(spenders, list) else []):
+            sid = sp.get("committee_id")
+            sup = round(float(sp["support"]["amount"]), 2)
+            opp = round(float(sp["oppose"]["amount"]), 2)
+            # SBF-17a — no fused field. The two streams may never be added into a stored
+            # key, and no total-shaped name may appear at spender or target level.
+            banned = BANNED_TOTAL_KEYS & set(sp)
+            r.ok(f"SBF-17a {ek} {sid}: spender carries no total-shaped key",
+                 not banned, f"found {sorted(banned)}")
+            fused = round(sup + opp, 2)
+            offenders = [k for k, v in sp.items()
+                         if k not in ("support", "oppose") and isinstance(v, (int, float))
+                         and fused and abs(float(v) - fused) < CENT]
+            r.ok(f"SBF-17a {ek} {sid}: no spender field equals support+oppose",
+                 not offenders, f"fields {offenders}")
+            tsup = topp = 0.0
+            tsupc = toppc = 0
+            for t in (sp.get("targets") or []):
+                tb = BANNED_TOTAL_KEYS & set(t)
+                r.ok(f"SBF-17a {ek} {sid} {t.get('seat')}: target carries no total-shaped key",
+                     not tb, f"found {sorted(tb)}")
+                tf = round(float(t["support"]["amount"]) + float(t["oppose"]["amount"]), 2)
+                toff = [k for k, v in t.items()
+                        if k not in ("support", "oppose") and isinstance(v, (int, float))
+                        and tf and abs(float(v) - tf) < CENT]
+                r.ok(f"SBF-17a {ek} {sid} {t.get('seat')}: no target field equals support+oppose",
+                     not toff, f"fields {toff}")
+                # SBF-17c — every target is a seated member's candidacy, on that member's seat.
+                r.ok(f"SBF-17c {ek} {sid} {t.get('seat')}: target resolves to a seated candidacy",
+                     t.get("candidacy_id") in member_cands
+                     and seat_of.get(t.get("candidacy_id")) == t.get("seat"),
+                     f"candidacy={t.get('candidacy_id')} seat={t.get('seat')}")
+                # SBF-17f — rows reconcile to the target's own figures, both streams.
+                rs = {"support": 0.0, "oppose": 0.0}
+                rc = {"support": 0, "oppose": 0}
+                for row in (t.get("rows") or []):
+                    st = row.get("stance")
+                    r.ok(f"SBF-17h {ek} {sid} {t.get('seat')}: row stance is support or oppose",
+                         st in ("support", "oppose"), f"stance={st!r}")
+                    if st in rs:
+                        rs[st] = round(rs[st] + float(row.get("amount") or 0.0), 2)
+                        rc[st] += 1
+                    # SBF-17d — the cycle/date trap, asserted by containment.
+                    d = row.get("date")
+                    r.ok(f"SBF-17d {ek} {sid} {t.get('seat')} {d}: row is dated ISO",
+                         isinstance(d, str) and ISO_DATE.match(d or ""), f"date={d!r}")
+                    if wins and ek in wins and isinstance(d, str):
+                        st_, en_ = wins[ek]
+                        r.ok(f"SBF-17d {ek} {sid} {t.get('seat')} {d}: date lies inside the "
+                             f"election's own window",
+                             (st_ is None or d >= st_) and (en_ is None or d <= en_),
+                             f"window=({st_},{en_})")
+                    ie_rows_total += 1
+                for st in ("support", "oppose"):
+                    r.ok(f"SBF-17f {ek} {sid} {t.get('seat')} {st}: rows sum to the target figure",
+                         abs(rs[st] - round(float(t[st]["amount"]), 2)) < CENT,
+                         f"rows={rs[st]} target={t[st]['amount']}")
+                    r.ok(f"SBF-17f {ek} {sid} {t.get('seat')} {st}: row count matches",
+                         rc[st] == int(t[st]["count"]), f"rows={rc[st]} target={t[st]['count']}")
+                tsup = round(tsup + float(t["support"]["amount"]), 2)
+                topp = round(topp + float(t["oppose"]["amount"]), 2)
+                tsupc += int(t["support"]["count"]); toppc += int(t["oppose"]["count"])
+            r.ok(f"SBF-17f {ek} {sid}: targets sum to the spender's support",
+                 abs(tsup - sup) < CENT, f"targets={tsup} spender={sup}")
+            r.ok(f"SBF-17f {ek} {sid}: targets sum to the spender's oppose",
+                 abs(topp - opp) < CENT, f"targets={topp} spender={opp}")
+            r.ok(f"SBF-17f {ek} {sid}: target counts sum to the spender's",
+                 tsupc == int(sp["support"]["count"]) and toppc == int(sp["oppose"]["count"]),
+                 f"{tsupc}/{toppc} vs {sp['support']['count']}/{sp['oppose']['count']}")
+
+    # SBF-17b — reconcile to the SOURCE rows, not just internally.
+    if ed:
+        src = {}
+        for x in ed.get("independent_expenditures", []):
+            if x.get("target_candidate_id") not in member_cands:
+                continue
+            if x.get("cycle") in ("pre-2011", "undated"):
+                continue
+            k = x.get("spender_committee_id")
+            e = src.setdefault(k, {"support": 0.0, "oppose": 0.0, "n": 0})
+            st = "oppose" if x.get("stance") == "oppose" else "support"
+            e[st] = round(e[st] + float(x.get("amount") or 0.0), 2)
+            e["n"] += 1
+        got = {}
+        for spenders in ie.values():
+            for sp in spenders:
+                g = got.setdefault(sp["committee_id"], {"support": 0.0, "oppose": 0.0})
+                g["support"] = round(g["support"] + float(sp["support"]["amount"]), 2)
+                g["oppose"] = round(g["oppose"] + float(sp["oppose"]["amount"]), 2)
+        r.ok("SBF-17b the spender set equals the source's", set(got) == set(src),
+             f"artifact={sorted(got)} source={sorted(src)}")
+        for k in sorted(set(got) & set(src)):
+            for st in ("support", "oppose"):
+                r.ok(f"SBF-17b {k} {st}: equals the source rows",
+                     abs(got[k][st] - src[k][st]) < CENT,
+                     f"artifact={got[k][st]} source={src[k][st]}")
+        r.ok("SBF-17b every source IE row for a seated member is carried",
+             ie_rows_total == sum(v["n"] for v in src.values()),
+             f"artifact={ie_rows_total} source={sum(v['n'] for v in src.values())}")
+
+    # SBF-17e — the RATIFIED measured totals, pinned to this vintage. Same shape as
+    # SBF-1e's ratified population: it is meant to fail on a data refresh, because an
+    # unexplained change in these figures is the stop, not the update (PS-85). Keyed on the
+    # SBE id so a slug rename does not silently disarm it.
+    RATIFIED_IE = {
+        "26066": {"support": 444453.78, "oppose": 366064.00, "rows": 28},
+        "39901": {"support": 375117.96, "oppose": 0.00, "rows": 49},
+    }
+    if ie:
+        seen_ie = {}
+        for spenders in ie.values():
+            for sp in spenders:
+                k = str(sp.get("sbe_committee_id"))
+                e = seen_ie.setdefault(k, {"support": 0.0, "oppose": 0.0, "rows": 0})
+                e["support"] = round(e["support"] + float(sp["support"]["amount"]), 2)
+                e["oppose"] = round(e["oppose"] + float(sp["oppose"]["amount"]), 2)
+                e["rows"] += sum(len(t.get("rows") or []) for t in (sp.get("targets") or []))
+        r.ok("SBF-17e the ratified spender set is exactly the two measured committees",
+             set(seen_ie) == set(RATIFIED_IE), f"got {sorted(seen_ie)}")
+        for k, want in RATIFIED_IE.items():
+            got = seen_ie.get(k)
+            if got is None:
+                continue
+            for f in ("support", "oppose"):
+                r.ok(f"SBF-17e {k} {f}: equals the ratified measured figure",
+                     abs(got[f] - want[f]) < CENT, f"got={got[f]} ratified={want[f]}")
+            r.ok(f"SBF-17e {k}: row count equals the ratified measured count",
+                 got["rows"] == want["rows"], f"got={got['rows']} ratified={want['rows']}")
+        grand = round(sum(v["support"] + v["oppose"] for v in seen_ie.values()), 2)
+        grows = sum(v["rows"] for v in seen_ie.values())
+        r.ok("SBF-17e the whole IE slice equals the ratified $1,185,635.74 over 77 rows",
+             abs(grand - 1185635.74) < CENT and grows == 77,
+             f"got ${grand} over {grows} rows")
+
+    # SBF-18 — the election-wide label (A.3) and the bug it fixes.
+    used_elections = {k for m in members for k in (m.get("elections") or {})}
+    r.ok("SBF-18a election_labels covers every election a member has",
+         not (used_elections - set(labels)), f"missing {sorted(used_elections - set(labels))}")
+    dist = [k for k, v in labels.items() if "District" in str(v)]
+    r.ok("SBF-18b no election-wide label carries a district (the R.4 regression)",
+         not dist, f"district-bearing labels {dist}")
+
+    # SBF-19 — ratification 8, asserted rather than trusted: the coverage/threshold figures
+    # are DONOR-only and the IE addition did not move them. Recomputed from donor rows
+    # alone and compared to what is stored.
+    for m in members:
+        dm = m.get("donors_by_election")
+        cm = m.get("coverage_by_election")
+        if not isinstance(dm, dict) or not isinstance(cm, dict):
+            continue
+        for ek, rows in dm.items():
+            cov = cm.get(ek)
+            if not isinstance(cov, dict):
+                continue
+            buckets = {"substantive": 0.0, "individual_only": 0.0, "unclassified": 0.0}
+            for x in rows:
+                buckets[x.get("industry_class", "unclassified")] = round(
+                    buckets[x.get("industry_class", "unclassified")] + float(x["amount"]), 2)
+            tot = round(sum(float(x["amount"]) for x in rows), 2)
+            share = (buckets["substantive"] / tot) if tot else 0.0
+            r.ok(f"SBF-19 seat {m.get('seat')} {ek}: coverage buckets are donor-only",
+                 all(abs(buckets[k] - round(float(cov["dollars"][k]), 2)) < CENT for k in buckets),
+                 f"recomputed={buckets} stored={cov['dollars']}")
+            r.ok(f"SBF-19 seat {m.get('seat')} {ek}: substantive share unmoved by the IE slice",
+                 abs(share - float(cov["substantive_share"])) < 1e-6,
+                 f"recomputed={share} stored={cov['substantive_share']}")
+
     # SBF-16 — the two-step replace, closed. Asserted from the artifact, not assumed from
     # a diff: A's intermediate marker and the keys it described are both gone.
     r.ok("SBF-16a superseded_keys is absent (the two-step replace is closed)",
@@ -513,6 +710,97 @@ def self_test():
               any(not ok and n.startswith("SBF-6b") for n, ok, _ in
                   run({**base, "members": [{**base["members"][0],
                                             "donors_by_election": []}]}).checks)))
+    # ---- SBFIN-3 A.4: the IE slice, the labels, the donor-only coverage ----
+    def ie_member(**over):
+        mm = {"seat": "3B", "name": "R", "candidacy_ref": "person-r", "ref_kind": "person",
+              "finance_state": "full", "has_donor_detail": False,
+              "candidacies": ["riv-2024"], "donors_by_election": {}, "coverage_by_election": {},
+              "elections": {"2024": {"label": "L", "direct": {"amount": 0.0, "count": 0},
+                                     "self_funding": {"amount": 0.0, "count": 0},
+                                     "ie_support": {"amount": 0.0, "count": 0},
+                                     "ie_oppose": {"amount": 0.0, "count": 0},
+                                     "candidacies": ["riv-2024"]}}}
+        mm.update(over)
+        return mm
+    def ie_art(bucket, **over):
+        a = {**base, "members": [ie_member()],
+             "election_labels": {"2024": "2024", "2026": "2026"},
+             "ie_spenders": bucket}
+        a.update(over)
+        return a
+    def spender(**over):
+        sp = {"committee_id": "ie-c-1", "name": "S", "sbe_committee_id": "1",
+              "industries": ["charter-schools"],
+              "support": {"amount": 100.0, "count": 1},
+              "oppose": {"amount": 40.0, "count": 1},
+              "targets": [{"seat": "3B", "member_id": "r", "name": "R",
+                           "candidacy_id": "riv-2024",
+                           "support": {"amount": 100.0, "count": 1},
+                           "oppose": {"amount": 40.0, "count": 1},
+                           "rows": [{"date": "2024-10-01", "amount": 100.0, "stance": "support",
+                                     "match_method": "exact", "needs_review": False},
+                                    {"date": "2024-10-02", "amount": 40.0, "stance": "oppose",
+                                     "match_method": "exact", "needs_review": False}]}]}
+        sp.update(over)
+        return sp
+    # The control. SBF-17e is deliberately EXCLUDED: it is a vintage assert about the two
+    # real committees and their ratified figures, so it fires on any synthetic artifact by
+    # design. Every other 17/18/19 check is a shape or reconciliation rule and must be
+    # silent on a well-formed one.
+    t.append(("the correct IE shape raises NO SBF-17/18/19 error (17e excepted, see note)",
+              not any(not ok and not n.startswith("SBF-17e")
+                      and (n.startswith("SBF-17") or n.startswith("SBF-18")
+                           or n.startswith("SBF-19"))
+                      for n, ok, _ in run(ie_art({"2024": [spender()]})).checks)))
+    # THE CYCLE/DATE TRAP, as a test case. Every school-board IE row carries cycle 2027 and
+    # a 2024 date; a builder keying on cycle files them under "2027". Two checks must fire:
+    # the bucket is not a window (17d1), and — were the bucket named plausibly — the dates
+    # would not be contained (17d).
+    t.append(("SBF-17d1 bites: a cycle-2027 bucket holding 2024-dated rows fails",
+              any(not ok and n.startswith("SBF-17d1") for n, ok, _ in
+                  run(ie_art({"2027": [spender()]})).checks)))
+    t.append(("SBF-17d bites: a 2024-dated row filed under the 2026 window fails",
+              any(not ok and n.startswith("SBF-17d ") for n, ok, _ in
+                  run(ie_art({"2026": [spender()]})).checks)))
+    t.append(("SBF-17a bites: a stored field equal to support+oppose fails",
+              any(not ok and n.startswith("SBF-17a") for n, ok, _ in
+                  run(ie_art({"2024": [spender(deployed=140.0)]})).checks)))
+    t.append(("SBF-17a bites: a total-shaped key on a spender fails",
+              any(not ok and n.startswith("SBF-17a") for n, ok, _ in
+                  run(ie_art({"2024": [spender(total=999.0)]})).checks)))
+    t.append(("SBF-17c bites: a target that is not a seated candidacy fails",
+              any(not ok and n.startswith("SBF-17c") for n, ok, _ in
+                  run(ie_art({"2024": [spender(targets=[{**spender()["targets"][0],
+                                                         "candidacy_id": "not-a-member"}])]})).checks)))
+    t.append(("SBF-17f bites: rows not summing to the target figure fails",
+              any(not ok and n.startswith("SBF-17f") for n, ok, _ in
+                  run(ie_art({"2024": [spender(targets=[{**spender()["targets"][0],
+                                                         "support": {"amount": 999.0, "count": 1}}])]})).checks)))
+    t.append(("SBF-17h bites: a row with a stance that is neither support nor oppose fails",
+              any(not ok and n.startswith("SBF-17h") for n, ok, _ in
+                  run(ie_art({"2024": [spender(targets=[{**spender()["targets"][0],
+                      "rows": [{"date": "2024-10-01", "amount": 100.0, "stance": "neutral"}]}])]})).checks)))
+    t.append(("SBF-17e bites: a spender total drifting from the ratified figure fails",
+              any(not ok and n.startswith("SBF-17e") for n, ok, _ in
+                  run(ie_art({"2024": [spender(sbe_committee_id="26066",
+                                               support={"amount": 1.0, "count": 1})]})).checks)))
+    t.append(("SBF-18a bites: an election with no election-wide label fails",
+              any(not ok and n.startswith("SBF-18a") for n, ok, _ in
+                  run({**ie_art({"2024": [spender()]}), "election_labels": {"2026": "2026"}}).checks)))
+    t.append(("SBF-18b bites: a district-bearing election-wide label fails (the R.4 bug)",
+              any(not ok and n.startswith("SBF-18b") for n, ok, _ in
+                  run({**ie_art({"2024": [spender()]}),
+                       "election_labels": {"2024": "2024: District 10", "2026": "2026"}}).checks)))
+    t.append(("SBF-19 bites: coverage buckets that do not come from the donor rows fail",
+              any(not ok and n.startswith("SBF-19") for n, ok, _ in
+                  run({**base, "members": [person_member(coverage_by_election={"2024": {
+                      "donor_total": 10.0, "donor_count": 1,
+                      "dollars": {"substantive": 4.0, "individual_only": 6.0,
+                                  "unclassified": 0.0},
+                      "shares": {"substantive": 1.0, "individual_only": 0.0,
+                                 "unclassified": 0.0},
+                      "substantive_share": 1.0, "meets_industry_threshold": True}})]}).checks)))
+
     # ---- SBFIN-2 B: the two-step replace closed, and the vocabulary slices ----
     t.append(("SBF-14 bites: the flat donors key coming back fails",
               any(not ok and n.startswith("SBF-14") for n, ok, _ in

@@ -73,9 +73,10 @@ NEUTRAL_COLOR = "#a9a299"
 
 # 1.0 -> 1.1 at SBFIN-2 A: per-election donor/coverage maps with itemized dated rows added
 # alongside the flat pair. 1.1 -> 1.2 at SBFIN-2 B: the flat pair removed and the industry
-# and donor-family vocabulary slices added. A shape change under an unchanged version
-# number is a trap, and a REMOVAL is a shape change.
-SCHEMA_VERSION = 1.2
+# and donor-family vocabulary slices added. 1.2 -> 1.3 at SBFIN-3 A: the IE slice and the
+# election-wide labels added. A shape change under an unchanged version number is a trap,
+# and a REMOVAL is a shape change.
+SCHEMA_VERSION = 1.3
 # Tags that carry no interest-group signal. The council's correlation card isolates the
 # complement of this set via its exclude-individual / exclude-unclassified toggles; the
 # ratified >=50% industry-bar gate is computed against 'substantive' below.
@@ -325,8 +326,125 @@ def committees_for(candidacy_ids, ed):
     return out
 
 
-def industry_vocab(members, ed):
-    """Label and colour for every industry tag that actually appears on a donor row.
+def election_labels(ed):
+    """A.3 — the ELECTION-WIDE label, one per window, minted from election-windows.json.
+
+    The bug this fixes: `elections[].label` is a PER-MEMBER label. build_rollups writes a
+    returner's prior window as "2024: District N" — the member's own prior race, which is
+    correct and ruled on a member page (P1D-PERSON strings 1/2). The cross-member Political
+    Spend selector assigned those labels in a roster loop, so the last member won and the
+    board-wide control read "2024: District 10".
+
+    Sourced from election-windows.json, the file that DEFINES the buckets: zero inference.
+    The richer `elections[].label` ("2024 Chicago Board of Education") is deliberately NOT
+    carried — reaching it needs a year-prefix match from window id to election id, which is
+    exactly the inference this avoids. If that name is ever wanted it gets a real join in
+    its own lane."""
+    try:
+        wins = json.load(open(WINDOWS_PATH))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return {w["id"]: (w.get("label") or w["id"]) for w in (wins.get("school_board") or [])}
+
+
+def ie_slice(sb_members, ed):
+    """A.1 — independent expenditure, per election, per spender committee.
+
+    THE CYCLE/DATE TRAP, and why this buckets by date. Every school-board IE row carries
+    `cycle` 2027 while every date falls in 2024-09-18..2024-11-05: the SBE cycle field is
+    the useless 4-year bucket. Keying on it would file the entire $1,185,635.74 under 2027
+    and leave the 2024 view empty. Rows bucket by DATE through the shared `_bucket`, which
+    is what by_candidate_election already does (SBF-17d asserts it).
+
+    SUPPORT AND OPPOSE ARE SEPARATE KEYS AND NOTHING SUMS THEM. The fused figure the
+    ratified Browse-donors row displays is computed at RENDER, on the two permitted
+    surfaces only. Storing it would put a fused key in the artifact, which SBF-5's banned
+    names correctly forbid — the firewall is structural here, not a matter of care."""
+    comms = ed.get("committees", {})
+    cands = {c["id"]: c for c in ed.get("candidates", [])}
+    race_office = {r["id"]: r.get("office") for r in ed.get("races", [])}
+    try:
+        windows = json.load(open(WINDOWS_PATH))
+    except (OSError, json.JSONDecodeError):
+        windows = {}
+
+    # Which candidacies belong to a seated member, and whose page they land on.
+    owner = {}
+    for m in sb_members:
+        for cid in (m.get("candidacies") or []):
+            owner[cid] = m
+    out = {}
+    for ie in ed.get("independent_expenditures", []):
+        if ie.get("cycle") in EXCLUDED_CYCLES:
+            continue
+        tc = ie.get("target_candidate_id")
+        m = owner.get(tc)
+        if m is None:
+            continue
+        crec = cands.get(tc) or {}
+        ot = _office_type(race_office.get(crec.get("race_id")))
+        wins = windows.get(ot) if ot else None
+        w = _bucket(ie.get("date"), wins) if wins else None
+        if w is None:
+            continue
+        spk = ie.get("spender_committee_id")
+        cm = comms.get(spk) or {}
+        bucket = out.setdefault(w["id"], {})
+        sp = bucket.get(spk)
+        if sp is None:
+            sp = bucket[spk] = {
+                "committee_id": spk,
+                "name": cm.get("committee_name") or spk,
+                "sbe_committee_id": cm.get("sbe_committee_id"),
+                "industries": [t for t in (cm.get("industry_tags") or []) if t],
+                "support": {"amount": 0.0, "count": 0},
+                "oppose": {"amount": 0.0, "count": 0},
+                "_targets": {},
+            }
+        stream = "oppose" if ie.get("stance") == "oppose" else "support"
+        amt = round(float(ie.get("amount") or 0.0), 2)
+        sp[stream]["amount"] = round(sp[stream]["amount"] + amt, 2)
+        sp[stream]["count"] += 1
+        t = sp["_targets"].get(m["seat"])
+        if t is None:
+            t = sp["_targets"][m["seat"]] = {
+                "seat": m["seat"], "member_id": m.get("member_id"), "name": m.get("name"),
+                "candidacy_id": tc,
+                "support": {"amount": 0.0, "count": 0},
+                "oppose": {"amount": 0.0, "count": 0},
+                "rows": [],
+            }
+        t[stream]["amount"] = round(t[stream]["amount"] + amt, 2)
+        t[stream]["count"] += 1
+        # needs_review and match_method are carried VERBATIM from the source. 29 of the 77
+        # rows are flagged, all of them Rung 2 (`surname_plus_given`) name-variant matches
+        # on one member. Carried so a render decision can be made on data rather than on a
+        # re-derivation; how (or whether) to surface it is B's ruling, not this file's.
+        t["rows"].append({
+            "date": ie.get("date"), "amount": amt, "stance": stream,
+            "match_method": ie.get("match_method"),
+            "needs_review": bool(ie.get("needs_review")),
+        })
+    # Order: spenders by their own deployment, targets likewise. The ordering VALUE is
+    # computed here and thrown away — it is never stored, because a stored support+oppose
+    # is the fused key SBF-5 bans.
+    final = {}
+    for ek, spenders in out.items():
+        rows = []
+        for sp in spenders.values():
+            tg = list(sp.pop("_targets").values())
+            for t in tg:
+                t["rows"].sort(key=lambda r: (r["date"] or "", -r["amount"]))
+            tg.sort(key=lambda t: -(t["support"]["amount"] + t["oppose"]["amount"]))
+            sp["targets"] = tg
+            rows.append(sp)
+        rows.sort(key=lambda s: -(s["support"]["amount"] + s["oppose"]["amount"]))
+        final[ek] = rows
+    return final
+
+
+def industry_vocab(members, ed, ies=None):
+    """Label and colour for every industry tag used by ANY surface — donor or spender.
 
     Minted rather than hardcoded in the embed. The tags are EDITORIAL vocabulary sourced
     from the Sheet via industry-tags.json, so a second hand-maintained copy in the render
@@ -344,6 +462,13 @@ def industry_vocab(members, ed):
         for rows in (m.get("donors_by_election") or {}).values():
             for r in rows:
                 used.update(r.get("industries") or [])
+    # SBFIN-3 A.2: spender tags too. The widening is the rule even in a vintage where it
+    # adds no key — today `charter-schools` is already present because INCS Action also
+    # gave $1,000 directly, and a mint that depended on that coincidence would break the
+    # first time an IE committee spent without also giving.
+    for spenders in (ies or {}).values():
+        for sp in spenders:
+            used.update(sp.get("industries") or [])
     out, missing = {}, []
     for key in sorted(used):
         t = tags.get(key)
@@ -471,7 +596,9 @@ def build_member(m, ed):
 
 def build(sb, ed, sb_sha, ed_sha, stamp):
     members = [build_member(m, ed) for m in sb.get("members", [])]
-    inds, missing_inds = industry_vocab(members, ed)
+    ies = ie_slice(members, ed)
+    labels = election_labels(ed)
+    inds, missing_inds = industry_vocab(members, ed, ies)
     clusters, cluster_by_donor = cluster_slice(members, ed)
     for m in members:
         for rows in (m.get("donors_by_election") or {}).values():
@@ -508,6 +635,10 @@ def build(sb, ed, sb_sha, ed_sha, stamp):
         # industry_vocab / cluster_slice).
         "industry_tags": inds,
         "donor_clusters": clusters,
+        # SBFIN-3: the election-WIDE label (A.3) and the IE slice (A.1). No fused
+        # support+oppose field exists in either, by construction.
+        "election_labels": labels,
+        "ie_spenders": ies,
         "industry_threshold": 0.50,
         "counts": {"members": len(members), "by_finance_state": by_state,
                    "donor_rows": donor_rows, "itemized_rows": itemized_rows},
@@ -651,6 +782,14 @@ def main():
           f"{c['itemized_rows']} itemized rows")
     print(f"[build_sb_finance] {len(art['industry_tags'])} industry tags · "
           f"{len(art['donor_clusters'])} donor families in scope")
+    for ek in sorted(art["ie_spenders"], reverse=True):
+        sps = art["ie_spenders"][ek]
+        nrow = sum(len(t["rows"]) for s2 in sps for t in s2["targets"])
+        flagged = sum(1 for s2 in sps for t in s2["targets"] for r in t["rows"] if r["needs_review"])
+        sup = round(sum(s2["support"]["amount"] for s2 in sps), 2)
+        opp = round(sum(s2["oppose"]["amount"] for s2 in sps), 2)
+        print(f"[build_sb_finance] IE {ek}: {len(sps)} spender(s) · {nrow} rows · "
+              f"support {sup:,.2f} · oppose {opp:,.2f} · {flagged} needs_review")
     unl = sorted(k for k, v in art["industry_tags"].items() if v.get("unlabelled"))
     if unl:
         print(f"[build_sb_finance] NOTE: {len(unl)} industry tag(s) have no vocabulary "
