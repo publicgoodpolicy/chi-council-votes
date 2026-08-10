@@ -15,9 +15,23 @@
  * sources. Consolidates the former ad-hoc /tmp/gate_spend.js (24 checks) and the
  * reconstructed /tmp/bundle_gate.js (5-item set) into one committed, fixture-driven
  * gate. Read-only: touches no source, artifact, or election-data.json.
+ *
+ * [PREVIEW/VINTAGE] (SBE-RERUN-1). This gate does NOT build its own input, and the
+ * preview is a build product of election-data.json. Before SBE-RERUN-1 nothing tied
+ * the two together: a gate run straight after a data change read whatever preview was
+ * last built and reported greens about that older vintage. It happened — the preview
+ * was 2 days stale, every PREVIEW_DATA check ([F2], [EXCL/*], [AGG/PS-96], [PERSON/*],
+ * [E6], [E7], parity) attested the pre-refresh data, and the run came back ALL PASS
+ * while a pinned figure had actually moved. So the gate now refuses to attest a
+ * vintage it cannot vouch for: build_preview.js stamps window.PREVIEW_SOURCE_SHA and
+ * this gate hard-exits(2) unless it equals the sha256 of election-data.json on disk.
+ * Deliberately a staleness ASSERT, not an embedded build step — the gate's job is to
+ * verify, and a gate that silently regenerates its own input can still be handed a
+ * mismatched pair without saying so. An absent stamp fails too (fail-closed: a preview
+ * predating this check cannot be vouched for either).
  */
 'use strict';
-var fs = require('fs'), path = require('path');
+var fs = require('fs'), path = require('path'), crypto = require('crypto');
 
 // jsdom resolution (portable): project/global install, else the ad-hoc /tmp sandbox.
 function resolveJSDOM() {
@@ -36,6 +50,51 @@ if (!fs.existsSync(PREVIEW)) {
     'Run the pre-deploy ritual first:\n' +
     '  node tools/build_embed.js\n  node tools/build_preview.js --bundle');
   process.exit(2);
+}
+
+// --------------------------------------------------------------------
+// [PREVIEW/VINTAGE] — the staleness assert. See the header note.
+// --------------------------------------------------------------------
+var ARTIFACT = path.join(__dirname, '..', '..', '..', 'election-data.json');
+
+// PURE, so the biting cases below can drive it without a filesystem or a DOM.
+function previewVintageVerdict(diskSha, stampSha) {
+  if (!stampSha) {
+    return { ok: false, reason: 'preview carries NO window.PREVIEW_SOURCE_SHA — it predates ' +
+      'the vintage stamp; rebuild it (node tools/build_preview.js --bundle)' };
+  }
+  if (stampSha !== diskSha) {
+    return { ok: false, reason: 'preview was built from election-data.json ' + stampSha.slice(0, 12) +
+      '… but the tree now holds ' + diskSha.slice(0, 12) + '… — STALE; rebuild it ' +
+      '(node tools/build_preview.js --bundle)' };
+  }
+  return { ok: true, reason: 'preview matches election-data.json ' + diskSha.slice(0, 12) + '…' };
+}
+
+function assertPreviewVintage(T, window, JSDOMref) {
+  var diskSha = crypto.createHash('sha256').update(fs.readFileSync(ARTIFACT)).digest('hex');
+  var v = previewVintageVerdict(diskSha, window.PREVIEW_SOURCE_SHA);
+  T.ok('[PREVIEW/VINTAGE] the preview was built from the election-data.json now on disk — ' +
+    v.reason, v.ok);
+
+  // BITING CASES — this assert exists because the gate was green against stale data,
+  // so it must be proved capable of failing. Three, covering both failure modes and
+  // the pass, with the third driven end-to-end through the real read path (a jsdom
+  // document carrying a wrong stamp) rather than the pure function alone.
+  T.ok('[PREVIEW/VINTAGE:bite] a DIFFERENT sha is rejected',
+    previewVintageVerdict('a'.repeat(64), 'b'.repeat(64)).ok === false);
+  T.ok('[PREVIEW/VINTAGE:bite] an ABSENT stamp is rejected (fail-closed)',
+    previewVintageVerdict('a'.repeat(64), undefined).ok === false &&
+    previewVintageVerdict('a'.repeat(64), '').ok === false);
+  (function () {
+    var stale = new JSDOMref('<!doctype html><script>window.PREVIEW_SOURCE_SHA=' +
+      JSON.stringify('c'.repeat(64)) + ';</script>', { runScripts: 'dangerously' });
+    var got = previewVintageVerdict(diskSha, stale.window.PREVIEW_SOURCE_SHA);
+    T.ok('[PREVIEW/VINTAGE:bite] a real stale-stamped document read through the same path ' +
+      'is rejected', got.ok === false && /STALE/.test(got.reason));
+  })();
+
+  return v;
 }
 
 // ====================================================================
@@ -989,6 +1048,17 @@ async function assertPersonSurface(T, ctx, fx) {
   var ctx = makeCtx(dom.window);
   var fx = FIXTURES.school_board;
   var T = { n: 0, fail: 0, ok: function (name, cond) { this.n++; if (!cond) this.fail++; console.log((cond ? 'PASS  ' : 'FAIL  ') + name); } };
+
+  // FIRST, and hard-exiting: everything below reads PREVIEW_DATA. If the preview is
+  // not this artifact's, the greens below would describe a vintage that is not in the
+  // tree — worse than a red, because it reads as attestation. Refuse to continue.
+  var vintage = assertPreviewVintage(T, dom.window, JSDOM);
+  if (!vintage.ok) {
+    console.error('\ngate_bundle: REFUSING TO ATTEST — ' + vintage.reason +
+      '\nNo further checks were run; the ' + T.n + ' above are the vintage assert and its ' +
+      'biting cases only.');
+    process.exit(2);
+  }
 
   await assertBoot(T, ctx, fx);
   await assertRaceSet(T, ctx, fx);

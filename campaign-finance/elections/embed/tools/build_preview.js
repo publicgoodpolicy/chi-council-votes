@@ -17,7 +17,7 @@
  * Usage (from embed/):  node tools/build_preview.js [--race <raceId>]
  */
 'use strict';
-var fs = require('fs'), path = require('path');
+var fs = require('fs'), path = require('path'), crypto = require('crypto');
 var dir = path.join(__dirname, '..');
 var repoRoot = path.join(dir, '..', '..', '..');
 var dataPath = path.join(repoRoot, 'campaign-finance', 'election-data.json');
@@ -43,8 +43,18 @@ if (raceArg) {
   navSlug = D.raceSlug(race);
 }
 
+// VINTAGE STAMP (SBE-RERUN-1). sha256 of the election-data.json bytes this preview
+// was built from. gate_bundle.js compares it against the artifact on disk and REFUSES
+// to run when they differ — the preview is a build product, and a gate that reads a
+// stale one reports greens about a vintage that is no longer in the tree. Measured
+// case: at SBE-RERUN-1 the preview was 2 days older than the refreshed artifact and
+// every PREVIEW_DATA check silently attested the old data, including a pinned figure
+// that had in fact moved. The stamp is what makes that state unrepresentable.
+var srcSha = crypto.createHash('sha256').update(fs.readFileSync(dataPath)).digest('hex');
+
 var shim =
   'var PREVIEW_DATA = ' + safeData + ';\n' +
+  'window.PREVIEW_SOURCE_SHA = ' + JSON.stringify(srcSha) + ';\n' +
   'window.IPG_PREVIEW_RACE = ' + JSON.stringify(navSlug) + ';\n' +
   '(function () {\n' +
   '  var orig = window.fetch;\n' +
