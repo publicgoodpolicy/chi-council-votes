@@ -1212,12 +1212,51 @@ async function assertPersonSurface(T, ctx, fx) {
       T.ok('[SBF/ARTIFACT] school-board finance artifact present', false);
       return;
     }
+    // --school-board is passed for [SBF/SYNC]'s benefit: the validator hard-exits before
+    // any of its 7,500+ checks unless the artifact's `_sync.inputs` shas match BOTH files
+    // on disk. Without the flag the roster half would be reported UNVERIFIED rather than
+    // checked.
     var res = require('child_process').spawnSync('python3',
       [path.join(root, 'ingestion', 'validate_sb_finance.py'), art,
-       '--elections', path.join(root, 'election-data.json')],
+       '--elections', path.join(root, 'election-data.json'),
+       '--school-board', path.join(root, 'school-board-data.json')],
       { encoding: 'utf8' });
     var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
     T.ok('[SBF/ARTIFACT] finance artifact validates against its source — ' + tail,
+         res.status === 0);
+  })();
+
+  // [SBF/VSELF] the finance VALIDATOR's own biting cases. Found unrun at the SBE-RERUN-1
+  // vacuity sweep: validate_sb_finance.py --self-test was invoked from nowhere in the
+  // repo, so its bites — including [SBF/SYNC]'s — proved nothing at gate time. A self-test
+  // no gate runs is the same green-that-means-nothing its own docstring warns about.
+  // [SBF/SELF] above is the BUILDER's self-test; this is the validator's. Both now run.
+  (function () {
+    var res = require('child_process').spawnSync('python3',
+      [path.join(__dirname, '..', '..', '..', 'ingestion', 'validate_sb_finance.py'),
+       '--self-test'], { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[SBF/VSELF] school-board finance VALIDATOR self-test green — ' + tail,
+         res.status === 0);
+  })();
+
+  // [SHARD/STALE] council shards vs the council monolith. RATIFIED at the SBE-RERUN-1
+  // sweep: validate_shard_freshness (validate_council_data.py:420) is the good precedent
+  // for a build-product vintage tie — it compares the index shard's generated_at to the
+  // monolith's and then the totals behind it — but it runs only `if a.shards`, and NO
+  // gate passed the flag. Freshness verified solely inside build_all.sh means this gate
+  // could be green while the shards on disk are stale. The gate's job is to attest the
+  // tree, and the shards are in the tree. Measured cost at adoption: 0.68 s for the
+  // 40 MB monolith plus the three shards — the ~39 MB parse that keeps the council RENDER
+  // fixture ungated is not a reason to skip a parse this cheap.
+  (function () {
+    var root = path.join(__dirname, '..', '..', '..');
+    var res = require('child_process').spawnSync('python3',
+      [path.join(root, 'ingestion', 'validate_council_data.py'),
+       path.join(root, 'council-data.json'), '--shards', path.join(root, 'shards')],
+      { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[SHARD/STALE] council shards are current with council-data.json — ' + tail,
          res.status === 0);
   })();
 

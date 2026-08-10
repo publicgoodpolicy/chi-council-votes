@@ -33,7 +33,7 @@
 #
 #     python3 campaign-finance/ingestion/validate_sb_finance.py \
 #         school-board-finance.json [--elections election-data.json] [--self-test]
-import argparse, json, os, re, sys
+import argparse, hashlib, json, os, re, sys
 
 STREAMS = ("direct", "self_funding", "ie_support", "ie_oppose")
 # Any key whose value equals a sum of two or more streams would be a fused total; these
@@ -533,6 +533,78 @@ def validate(art, ed=None):
     return r
 
 
+def _sha256_file(path):
+    """None when the file cannot be read — the caller reports that as a SKIP, not a pass."""
+    try:
+        with open(path, "rb") as f:
+            h = hashlib.sha256()
+            for chunk in iter(lambda: f.read(1 << 20), b""):
+                h.update(chunk)
+            return h.hexdigest()
+    except OSError:
+        return None
+
+
+def sync_verdict(art, paths, sha=_sha256_file):
+    """[SBF/SYNC] — the vintage assert. PURE apart from `sha`, so the self-test can drive
+    every path without a filesystem.
+
+    `build_sb_finance.py:6` states that both inputs are hashed into `_sync` "so the vintage
+    is never inferred" — and until SBE-RERUN-1 this validator never read that stamp. It
+    opened the finance artifact and whatever `--elections` file it was handed and compared
+    their CONTENTS, with nothing establishing they were the pair the artifact was built
+    from. That is the [PREVIEW/VINTAGE] shape: a build product read as a stand-in for its
+    subject, with no tie between the vintages.
+
+    It bites harder here than it did on the preview. This validator is the gate's largest
+    line (7,500+ checks), and SBF-17e — the RATIFIED pinned IE totals — lives inside it. A
+    contiguous truncation that skips `build_sb_finance`, which C1.11 expressly permits with
+    justification, would have run every one of those checks against a stale finance
+    artifact, and SBF-17e would have reported a vintage no longer in the tree. Green.
+
+    Rules, fail-closed:
+      * `_sync.inputs` absent or malformed -> FAIL. A stamp that can go missing and still
+        pass is not a stamp.
+      * a named input that IS readable and whose sha differs -> FAIL.
+      * a named input that cannot be read -> SKIP, reported by name. `--elections` is
+        documented as omittable; an unverifiable input must be visible, not silently
+        treated as agreeing.
+    Returns (ok, [report lines]).
+    """
+    sync = art.get("_sync")
+    inputs = (sync or {}).get("inputs")
+    if not isinstance(sync, dict) or not isinstance(inputs, dict) or not inputs:
+        return False, ["SBF/SYNC: artifact carries no usable `_sync.inputs` — cannot "
+                       "establish it was built from these files. Rebuild with "
+                       "build_sb_finance.py."]
+    lines, ok = [], True
+    for name in sorted(inputs):
+        want = (inputs.get(name) or {}).get("sha256")
+        path = paths.get(name)
+        if not want:
+            ok = False
+            lines.append(f"SBF/SYNC: `_sync.inputs[{name}]` carries no sha256")
+            continue
+        if path is None:
+            ok = False
+            lines.append(f"SBF/SYNC: `_sync` names input {name} but this validator was "
+                         f"given no path for it")
+            continue
+        got = sha(path)
+        if got is None:
+            lines.append(f"SBF/SYNC: SKIP {name} — {path} not readable, so its stamp "
+                         f"({want[:12]}…) is UNVERIFIED")
+            continue
+        if got != want:
+            ok = False
+            lines.append(f"SBF/SYNC: {name} STALE PAIR — artifact was built from "
+                         f"{want[:12]}… but {path} is {got[:12]}…. Re-run "
+                         f"build_sb_finance.py, or validate against the matching input.")
+        else:
+            lines.append(f"SBF/SYNC: {name} matches {got[:12]}…")
+    return ok, lines
+
+
 def self_test():
     """Each case proves a check BITES — a validator whose failure path never runs is a
     green that means nothing (the validate_votes false-green lesson, SBVOTE-1 HALT-A)."""
@@ -862,6 +934,41 @@ def self_test():
               not any(not ok and n.startswith("SBF-5") for n, ok, _ in run(base).checks)))
     t.append(("_subset_sums covers all 2+ combinations", len(_subset_sums([1, 2, 4, 8])) == 11))
 
+    # ---- [SBF/SYNC] the vintage assert. Every failure path is driven, because this
+    # check exists BECAUSE a stamp that was written but never read produced a green.
+    ROSTER, ELECT = "school-board-data.json", "election-data.json"
+    SR, SE = "a" * 64, "b" * 64
+    synced = {"_sync": {"inputs": {ROSTER: {"sha256": SR}, ELECT: {"sha256": SE}}}}
+    P = {ROSTER: "/roster", ELECT: "/elect"}
+    fake = lambda table: (lambda p: table.get(p))
+
+    t.append(("SBF/SYNC passes when both inputs match their stamps",
+              sync_verdict(synced, P, fake({"/roster": SR, "/elect": SE}))[0] is True))
+    t.append(("SBF/SYNC bites: a wrong ELECTIONS sha fails",
+              sync_verdict(synced, P, fake({"/roster": SR, "/elect": "c" * 64}))[0] is False))
+    t.append(("SBF/SYNC bites: a wrong ROSTER sha fails",
+              sync_verdict(synced, P, fake({"/roster": "d" * 64, "/elect": SE}))[0] is False))
+    t.append(("SBF/SYNC bites: an ABSENT _sync fails (fail-closed)",
+              sync_verdict({}, P, fake({}))[0] is False and
+              sync_verdict({"_sync": {}}, P, fake({}))[0] is False and
+              sync_verdict({"_sync": {"inputs": {}}}, P, fake({}))[0] is False))
+    t.append(("SBF/SYNC bites: a stamped input with no sha256 fails",
+              sync_verdict({"_sync": {"inputs": {ROSTER: {}}}}, P, fake({"/roster": SR}))[0] is False))
+    # An unreadable input is a SKIP, not a pass-by-silence: it must be named in the report.
+    _ok, _lines = sync_verdict(synced, P, fake({"/roster": SR}))
+    t.append(("SBF/SYNC: an unreadable input is reported UNVERIFIED, not silently agreed",
+              _ok is True and any("UNVERIFIED" in l and ELECT in l for l in _lines)))
+    # The real artifact on disk must be self-consistent with the real inputs beside it.
+    _here = os.path.dirname(os.path.abspath(__file__))
+    _root = os.path.join(_here, "..")
+    try:
+        _art = json.load(open(os.path.join(_root, "school-board-finance.json")))
+        t.append(("SBF/SYNC: the committed artifact matches the committed inputs",
+                  sync_verdict(_art, {ROSTER: os.path.join(_root, ROSTER),
+                                      ELECT: os.path.join(_root, ELECT)})[0] is True))
+    except OSError:
+        t.append(("SBF/SYNC: the committed artifact matches the committed inputs", False))
+
     fails = 0
     for name, ok in t:
         print(("SELF-TEST PASS  " if ok else "SELF-TEST FAIL  ") + name)
@@ -875,6 +982,8 @@ def main():
     ap.add_argument("artifact", nargs="?", default="school-board-finance.json")
     ap.add_argument("--elections", default="election-data.json",
                     help="cross-check figures against their source; omit to skip SBF-4/1c/1d/3")
+    ap.add_argument("--school-board", default="school-board-data.json",
+                    help="the roster input, for the [SBF/SYNC] vintage assert only")
     ap.add_argument("--self-test", action="store_true")
     ap.add_argument("--verbose", action="store_true", help="print every executed check")
     a = ap.parse_args()
@@ -882,6 +991,20 @@ def main():
         sys.exit(self_test())
 
     art = json.load(open(a.artifact))
+
+    # [SBF/SYNC] BEFORE anything else. See sync_verdict's docstring: every check below
+    # reads this artifact as though it were built from the files on disk right now, and
+    # until this landed nothing established that. Hard-exit rather than degrade — a
+    # mismatched pair makes all 7,500+ results describe a vintage that is not in the tree.
+    ok, lines = sync_verdict(art, {"school-board-data.json": a.school_board,
+                                   "election-data.json": a.elections})
+    for ln in lines:
+        print("[validate_sb_finance] " + ln, file=(sys.stderr if not ok else sys.stdout))
+    if not ok:
+        print("[validate_sb_finance] REFUSING TO VALIDATE — the artifact was not built "
+              "from these inputs; no checks were run.", file=sys.stderr)
+        sys.exit(1)
+
     ed = None
     try:
         ed = json.load(open(a.elections))
