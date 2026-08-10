@@ -84,7 +84,14 @@ var glue =
 // is untouched.
 if (argv.indexOf('--bundle') >= 0) {
   var bundleHtml = read('elections-embed.inlined.html');
-  var shimTag = '<script>\n' + shim + '\n</script>\n';
+  // SECOND VINTAGE STAMP. PREVIEW_SOURCE_SHA ties the preview to the DATA; this ties it
+  // to the CODE it was spliced from. Without both, rebuilding one of the three and not
+  // the other leaves a gap the gate cannot see: bundle==sources passes, preview-data==
+  // artifact passes, and the preview still carries the previous bundle.
+  var bundleSha = crypto.createHash('sha256')
+    .update(fs.readFileSync(path.join(dir, 'elections-embed.inlined.html'))).digest('hex');
+  var shimTag = '<script>\n' + shim +
+    'window.PREVIEW_BUNDLE_SHA = ' + JSON.stringify(bundleSha) + ';\n' + '\n</script>\n';
   var injected = bundleHtml.replace('</head>', shimTag + '</head>');
   if (injected === bundleHtml) { console.error('--bundle: no </head> seam found in elections-embed.inlined.html'); process.exit(1); }
   var bOutDir = path.join(dir, 'preview');

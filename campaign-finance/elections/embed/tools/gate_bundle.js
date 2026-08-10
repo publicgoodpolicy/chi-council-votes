@@ -29,6 +29,20 @@
  * verify, and a gate that silently regenerates its own input can still be handed a
  * mismatched pair without saying so. An absent stamp fails too (fail-closed: a preview
  * predating this check cannot be vouched for either).
+ *
+ * [BUNDLE/VINTAGE] (SBE-RERUN-1, the same sweep). The data axis was only half of it. The
+ * preview is spliced from elections-embed.inlined.html, which is itself a build product of
+ * data.js + render.js + app.js — so editing render.js and running this gate without
+ * `build_embed.js` attested the PREVIOUS render code, with the same ~110 DOM checks
+ * reporting green about it. Because build_embed inlines the three sources verbatim, the
+ * tie is computable: this gate calls build_embed.render() (one implementation, two
+ * invokers — it keeps no copy of the template) and compares, then checks
+ * window.PREVIEW_BUNDLE_SHA so the middle link is bound too. Both hard-exit(2) before any
+ * DOM check, and both are reported before exiting so a broken run names every stale link.
+ * The full chain is now asserted end to end:
+ *     data.js + render.js + app.js  --[BUNDLE/VINTAGE] 1--> elections-embed.inlined.html
+ *     elections-embed.inlined.html  --[BUNDLE/VINTAGE] 2--> preview
+ *     election-data.json            --[PREVIEW/VINTAGE]---> preview
  */
 'use strict';
 var fs = require('fs'), path = require('path'), crypto = require('crypto');
@@ -53,9 +67,78 @@ if (!fs.existsSync(PREVIEW)) {
 }
 
 // --------------------------------------------------------------------
-// [PREVIEW/VINTAGE] — the staleness assert. See the header note.
+// [BUNDLE/VINTAGE] — the CODE half of the same assert. See the header note.
+//
+// [PREVIEW/VINTAGE] closed preview -> election-data.json. It did not close the rest of
+// the chain: data.js + render.js + app.js -> elections-embed.inlined.html -> preview.
+// build_embed.js inlines the three sources VERBATIM and stamps nothing, so editing
+// render.js and running this gate without rebuilding attested the PREVIOUS render code
+// — and the ~110 DOM checks below are exactly the ones that would have reported green
+// about it. Because the inlining is verbatim the tie is computable: recompute the
+// bundle from the sources and compare. Two links, both asserted:
+//   1. sources -> bundle   recompute via build_embed.render() (one implementation, two
+//                          invokers — no second copy of the template here)
+//   2. bundle  -> preview  window.PREVIEW_BUNDLE_SHA, stamped by build_preview --bundle
+// Link 2 exists because link 1 alone leaves a gap: rebuild the bundle but not the
+// preview and both other asserts still pass while the preview carries the old code.
 // --------------------------------------------------------------------
 var ARTIFACT = path.join(__dirname, '..', '..', '..', 'election-data.json');
+var BUNDLE_MOD = require('./build_embed.js');   // exports render(); writes nothing on require
+
+function sha256Buf(buf) { return crypto.createHash('sha256').update(buf).digest('hex'); }
+
+// PURE, like previewVintageVerdict below.
+function bundleVintageVerdict(expectSha, actualSha, stampSha) {
+  if (!actualSha) {
+    return { ok: false, reason: 'elections-embed.inlined.html is missing — build it ' +
+      '(node tools/build_embed.js)' };
+  }
+  if (expectSha !== actualSha) {
+    return { ok: false, reason: 'elections-embed.inlined.html is ' + actualSha.slice(0, 12) +
+      '… but data.js + render.js + app.js recompose to ' + expectSha.slice(0, 12) +
+      '… — the bundle is STALE against its sources; rebuild it (node tools/build_embed.js) ' +
+      'and then the preview' };
+  }
+  if (!stampSha) {
+    return { ok: false, reason: 'preview carries NO window.PREVIEW_BUNDLE_SHA — it predates ' +
+      'the bundle stamp; rebuild it (node tools/build_preview.js --bundle)' };
+  }
+  if (stampSha !== actualSha) {
+    return { ok: false, reason: 'preview was spliced from bundle ' + stampSha.slice(0, 12) +
+      '… but the bundle on disk is ' + actualSha.slice(0, 12) + '… — the preview is STALE ' +
+      'against the bundle; rebuild it (node tools/build_preview.js --bundle)' };
+  }
+  return { ok: true, reason: 'sources -> bundle -> preview all at ' + actualSha.slice(0, 12) + '…' };
+}
+
+function assertBundleVintage(T, window) {
+  var expect = sha256Buf(Buffer.from(BUNDLE_MOD.render(), 'utf8'));
+  var actual = fs.existsSync(BUNDLE_MOD.OUT) ? sha256Buf(fs.readFileSync(BUNDLE_MOD.OUT)) : null;
+  var v = bundleVintageVerdict(expect, actual, window.PREVIEW_BUNDLE_SHA);
+  T.ok('[BUNDLE/VINTAGE] the shipped bundle recomposes from data.js + render.js + app.js, ' +
+    'and the preview was spliced from it — ' + v.reason, v.ok);
+
+  // BITING CASES. The first is the real one: mutate ONE source in memory and recompose,
+  // so the failure is produced by an actually-different bundle rather than by a doctored
+  // comparison. The rest drive each remaining branch.
+  BUNDLE_MOD.SOURCES.forEach(function (f) {
+    var over = {}; over[f] = '/* [BUNDLE/VINTAGE] biting case */';
+    var mutated = sha256Buf(Buffer.from(BUNDLE_MOD.render(over), 'utf8'));
+    var got = bundleVintageVerdict(mutated, actual, window.PREVIEW_BUNDLE_SHA);
+    T.ok('[BUNDLE/VINTAGE:bite] a one-source change in ' + f + ' recomposes to a different ' +
+      'bundle and is rejected', mutated !== actual && got.ok === false && /STALE/.test(got.reason));
+  });
+  T.ok('[BUNDLE/VINTAGE:bite] a MISSING bundle is rejected (fail-closed)',
+    bundleVintageVerdict('a'.repeat(64), null, 'a'.repeat(64)).ok === false);
+  T.ok('[BUNDLE/VINTAGE:bite] an ABSENT preview bundle-stamp is rejected (fail-closed)',
+    bundleVintageVerdict('a'.repeat(64), 'a'.repeat(64), undefined).ok === false);
+  T.ok('[BUNDLE/VINTAGE:bite] a preview spliced from a DIFFERENT bundle is rejected',
+    bundleVintageVerdict('a'.repeat(64), 'a'.repeat(64), 'b'.repeat(64)).ok === false);
+  T.ok('[BUNDLE/VINTAGE:bite] the all-matching case passes',
+    bundleVintageVerdict('a'.repeat(64), 'a'.repeat(64), 'a'.repeat(64)).ok === true);
+
+  return v;
+}
 
 // PURE, so the biting cases below can drive it without a filesystem or a DOM.
 function previewVintageVerdict(diskSha, stampSha) {
@@ -1070,10 +1153,15 @@ async function assertPersonSurface(T, ctx, fx) {
   // FIRST, and hard-exiting: everything below reads PREVIEW_DATA. If the preview is
   // not this artifact's, the greens below would describe a vintage that is not in the
   // tree — worse than a red, because it reads as attestation. Refuse to continue.
+  // Both links of the chain, sources -> bundle -> preview -> data. Run BOTH before
+  // exiting so a broken run reports every stale link, not just the first.
+  var bundle = assertBundleVintage(T, dom.window);
   var vintage = assertPreviewVintage(T, dom.window, JSDOM);
-  if (!vintage.ok) {
-    console.error('\ngate_bundle: REFUSING TO ATTEST — ' + vintage.reason +
-      '\nNo further checks were run; the ' + T.n + ' above are the vintage assert and its ' +
+  if (!bundle.ok || !vintage.ok) {
+    console.error('\ngate_bundle: REFUSING TO ATTEST — ' +
+      [bundle.ok ? null : bundle.reason, vintage.ok ? null : vintage.reason]
+        .filter(Boolean).join('\n                             AND — ') +
+      '\nNo further checks were run; the ' + T.n + ' above are the vintage asserts and their ' +
       'biting cases only.');
     process.exit(2);
   }

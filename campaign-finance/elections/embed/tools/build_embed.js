@@ -9,7 +9,19 @@ var fs = require('fs'), path = require('path');
 var dir = path.join(__dirname, '..');
 function read(f) { return fs.readFileSync(path.join(dir, f), 'utf8'); }
 
-var html = '<!doctype html>\n<html lang="en">\n<head>\n' +
+// ONE IMPLEMENTATION, TWO INVOKERS (the check_docs precedent). This file is the only
+// place the bundle's composition is written down; gate_bundle.js's [BUNDLE/VINTAGE]
+// calls render() to recompute the expected bytes rather than keeping a second copy of
+// the template, which would drift the moment either side changed. `overrides` swaps a
+// source's text in memory — that is how [BUNDLE/VINTAGE]'s biting case produces a real
+// mutated bundle instead of merely testing a string comparison. Nothing is written
+// unless this file is run as a script.
+function render(overrides) {
+  overrides = overrides || {};
+  function src(f) {
+    return Object.prototype.hasOwnProperty.call(overrides, f) ? overrides[f] : read(f);
+  }
+  return '<!doctype html>\n<html lang="en">\n<head>\n' +
   '<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
   '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
   '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
@@ -22,11 +34,17 @@ var html = '<!doctype html>\n<html lang="en">\n<head>\n' +
   '     Data is fetched at runtime from the GitHub raw CDN (election-data.json).\n' +
   '     ============================================================ -->\n' +
   '<div id="ipg-elect-root" data-office="school_board"></div>\n' +
-  '<script>\n' + read('data.js') + '\n</script>\n' +
-  '<script>\n' + read('render.js') + '\n</script>\n' +
-  '<script>\n' + read('app.js') + '\n</script>\n' +
+  '<script>\n' + src('data.js') + '\n</script>\n' +
+  '<script>\n' + src('render.js') + '\n</script>\n' +
+  '<script>\n' + src('app.js') + '\n</script>\n' +
   '</body>\n</html>\n';
+}
 
-var out = path.join(dir, 'elections-embed.inlined.html');   // embed root (dist/ is gitignored)
-fs.writeFileSync(out, html);
-console.log('built ' + path.relative(process.cwd(), out) + '  (' + (html.length / 1024).toFixed(1) + ' KB, self-contained)');
+var OUT = path.join(dir, 'elections-embed.inlined.html');   // embed root (dist/ is gitignored)
+module.exports = { render: render, OUT: OUT, SOURCES: ['data.js', 'render.js', 'app.js'] };
+
+if (require.main === module) {
+  var html = render();
+  fs.writeFileSync(OUT, html);
+  console.log('built ' + path.relative(process.cwd(), OUT) + '  (' + (html.length / 1024).toFixed(1) + ' KB, self-contained)');
+}
