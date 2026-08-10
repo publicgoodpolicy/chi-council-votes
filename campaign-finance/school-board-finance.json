@@ -1,15 +1,15 @@
 {
   "schema_version": 1.3,
-  "generated_at": "2026-08-09T19:14:25Z",
+  "generated_at": "2026-08-10T02:58:06Z",
   "source": "derived: school-board-data.json (bridge) x election-data.json (rollups)",
   "_sync": {
-    "generated_at": "2026-08-09T19:14:25Z",
+    "generated_at": "2026-08-10T02:58:06Z",
     "inputs": {
       "school-board-data.json": {
         "sha256": "47b1085841fbf33e030c3626e621cbfbec0841669cabdb919e8cd98f8f80d8d5"
       },
       "election-data.json": {
-        "sha256": "60dbdac69c3cf93a689e3284f74983d74224e76db5d14223b68378bd6fdd37f3"
+        "sha256": "54244697a4b4b14d63c2e84baac7904377279cd206eeb86dc9154e3779db7e21"
       }
     },
     "convention": "figures are election-labeled and sourced from rollups.by_candidate_election; by_candidate is resolution-only; the four streams are never summed in this artifact"
@@ -746,6 +746,28 @@
         }
       ]
     },
+    "rollup-500": {
+      "name": "Ironworkers District Council of Chicago & Vicinity",
+      "relationship": "affiliated entities",
+      "canonical_id": "ironworkers-district-council-of-chicago-vicinity",
+      "members": [
+        {
+          "donor_id": "ironworkers-district-council-of-chicago-vicinity",
+          "name": "Ironworkers District Council of Chicago & Vicinity",
+          "role": "parent"
+        },
+        {
+          "donor_id": "ironworkers-district-council-of-chicago-pac",
+          "name": "Ironworkers District Council of Chicago PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "ironworkers-district-council-of-chicago",
+          "name": "Ironworkers District Council of Chicago",
+          "role": "alt-name"
+        }
+      ]
+    },
     "rollup-505": {
       "name": "Illinois Restaurant Association",
       "relationship": "affiliated entities",
@@ -775,6 +797,11 @@
           "donor_id": "illinois-restaurateur-s-pac",
           "name": "Illinois Restaurateur's PAC",
           "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "illinois-restaurateurs",
+          "name": "Illinois Restaurateurs",
+          "role": "alt-name"
         },
         {
           "donor_id": "illinois-restaurateurs-pac",
@@ -1603,8 +1630,8 @@
       "no_record": 4,
       "vacancy": 1
     },
-    "donor_rows": 1289,
-    "itemized_rows": 1998
+    "donor_rows": 1300,
+    "itemized_rows": 2011
   },
   "members": [
     {
@@ -1673,7 +1700,7 @@
           "name": "Friends of Ed Bannon",
           "sbe_committee_id": "38810",
           "data_quality": "REAL",
-          "last_updated": "2026-07-22"
+          "last_updated": "2026-08-09"
         }
       ],
       "finance_state": "totals_only",
@@ -2014,9 +2041,9 @@
             "amount": 7500.0,
             "count": 2,
             "industries": [
-              "unclassified"
+              "labor-trades"
             ],
-            "industry_class": "unclassified",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2024-06-20",
@@ -3836,9 +3863,9 @@
             "amount": 2500.0,
             "count": 1,
             "industries": [
-              "unclassified"
+              "labor-trades"
             ],
-            "industry_class": "unclassified",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2025-12-30",
@@ -4936,32 +4963,32 @@
           "donor_total": 218220.61,
           "donor_count": 84,
           "dollars": {
-            "substantive": 163619.46,
+            "substantive": 171119.46,
             "individual_only": 28877.15,
-            "unclassified": 25724.0
+            "unclassified": 18224.0
           },
           "shares": {
-            "substantive": 0.749789,
+            "substantive": 0.784158,
             "individual_only": 0.13233,
-            "unclassified": 0.117881
+            "unclassified": 0.083512
           },
-          "substantive_share": 0.749789,
+          "substantive_share": 0.784158,
           "meets_industry_threshold": true
         },
         "2026": {
           "donor_total": 122631.3,
           "donor_count": 71,
           "dollars": {
-            "substantive": 42821.3,
+            "substantive": 45321.3,
             "individual_only": 69910.0,
-            "unclassified": 9900.0
+            "unclassified": 7400.0
           },
           "shares": {
-            "substantive": 0.349187,
+            "substantive": 0.369574,
             "individual_only": 0.570083,
-            "unclassified": 0.08073
+            "unclassified": 0.060343
           },
-          "substantive_share": 0.349187,
+          "substantive_share": 0.369574,
           "meets_industry_threshold": false
         }
       },
@@ -4975,7 +5002,7 @@
           "name": "Friends of Jennifer Custer",
           "sbe_committee_id": "39805",
           "data_quality": "REAL",
-          "last_updated": "2026-07-22"
+          "last_updated": "2026-08-09"
         }
       ],
       "finance_state": "full",
@@ -7198,7 +7225,7 @@
           "name": "Ebony DeBerry for School Board",
           "sbe_committee_id": "39821",
           "data_quality": "REAL",
-          "last_updated": "2026-07-22"
+          "last_updated": "2026-08-09"
         }
       ],
       "finance_state": "full",
@@ -7270,7 +7297,7 @@
           "name": "Debby For District 2B",
           "sbe_committee_id": "39834",
           "data_quality": "REAL",
-          "last_updated": "2026-07-22"
+          "last_updated": "2026-08-09"
         }
       ],
       "finance_state": "totals_only",
@@ -7290,8 +7317,8 @@
         "2026": {
           "label": "2026",
           "direct": {
-            "amount": 6404.33,
-            "count": 16
+            "amount": 7731.83,
+            "count": 17
           },
           "self_funding": {
             "amount": 0.0,
@@ -7320,7 +7347,7 @@
           "name": "Friends of Norma Rios Sierra",
           "sbe_committee_id": "41082",
           "data_quality": "REAL",
-          "last_updated": "2026-07-22"
+          "last_updated": "2026-08-09"
         }
       ],
       "finance_state": "totals_only",
@@ -9236,7 +9263,7 @@
           "name": "Community for Carlos Rivas",
           "sbe_committee_id": "39786",
           "data_quality": "REAL",
-          "last_updated": "2026-07-22"
+          "last_updated": "2026-08-09"
         }
       ],
       "finance_state": "full",
@@ -11919,7 +11946,7 @@
           "name": "Neighbors for Karen Zaccor for ERSB",
           "sbe_committee_id": "39866",
           "data_quality": "REAL",
-          "last_updated": "2026-07-22"
+          "last_updated": "2026-08-09"
         }
       ],
       "finance_state": "full",
@@ -16751,7 +16778,7 @@
           "name": "Ellen for Education",
           "sbe_committee_id": "39858",
           "data_quality": "REAL",
-          "last_updated": "2026-07-22"
+          "last_updated": "2026-08-09"
         }
       ],
       "finance_state": "full",
@@ -17514,9 +17541,9 @@
             "amount": 500.0,
             "count": 1,
             "industries": [
-              "unclassified"
+              "labor-teachers"
             ],
-            "industry_class": "unclassified",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2024-09-19",
@@ -18373,16 +18400,16 @@
           "donor_total": 89427.49,
           "donor_count": 49,
           "dollars": {
-            "substantive": 61131.49,
+            "substantive": 61631.49,
             "individual_only": 14380.0,
-            "unclassified": 13916.0
+            "unclassified": 13416.0
           },
           "shares": {
-            "substantive": 0.683587,
+            "substantive": 0.689178,
             "individual_only": 0.160801,
-            "unclassified": 0.155612
+            "unclassified": 0.150021
           },
-          "substantive_share": 0.683587,
+          "substantive_share": 0.689178,
           "meets_industry_threshold": true
         },
         "2026": {
@@ -18410,7 +18437,7 @@
           "name": "Friends of Jitu Brown",
           "sbe_committee_id": "39853",
           "data_quality": "REAL",
-          "last_updated": "2026-07-22"
+          "last_updated": "2026-08-09"
         }
       ],
       "finance_state": "full",
@@ -18453,8 +18480,8 @@
         "2026": {
           "label": "2026",
           "direct": {
-            "amount": 8770.0,
-            "count": 12
+            "amount": 11120.0,
+            "count": 21
           },
           "self_funding": {
             "amount": 0.0,
@@ -19293,6 +19320,24 @@
             ]
           },
           {
+            "donor_id": "bernstein-peter-d",
+            "name": "Bernstein, Peter D",
+            "type": "Individual",
+            "amount": 500.0,
+            "count": 1,
+            "industries": [
+              "individual"
+            ],
+            "industry_class": "individual_only",
+            "items": [
+              {
+                "date": "2026-06-23",
+                "amount": 500.0,
+                "contribution_type": "Individual Contribution"
+              }
+            ]
+          },
+          {
             "donor_id": "fox-leslie",
             "name": "Fox, Leslie",
             "type": "Individual",
@@ -19323,6 +19368,24 @@
             "items": [
               {
                 "date": "2026-06-17",
+                "amount": 500.0,
+                "contribution_type": "Individual Contribution"
+              }
+            ]
+          },
+          {
+            "donor_id": "smith-nicholas",
+            "name": "Smith, Nicholas",
+            "type": "Individual",
+            "amount": 500.0,
+            "count": 1,
+            "industries": [
+              "individual"
+            ],
+            "industry_class": "individual_only",
+            "items": [
+              {
+                "date": "2026-06-23",
                 "amount": 500.0,
                 "contribution_type": "Individual Contribution"
               }
@@ -19365,6 +19428,52 @@
             ]
           },
           {
+            "donor_id": "pope-sohel-natanya",
+            "name": "Pope-Sohel, Natanya",
+            "type": "Individual",
+            "amount": 300.0,
+            "count": 3,
+            "industries": [
+              "individual"
+            ],
+            "industry_class": "individual_only",
+            "items": [
+              {
+                "date": "2026-06-23",
+                "amount": 100.0,
+                "contribution_type": "Individual Contribution"
+              },
+              {
+                "date": "2026-06-23",
+                "amount": 100.0,
+                "contribution_type": "Individual Contribution"
+              },
+              {
+                "date": "2026-06-23",
+                "amount": 100.0,
+                "contribution_type": "Individual Contribution"
+              }
+            ]
+          },
+          {
+            "donor_id": "williams-dawn",
+            "name": "Williams, Dawn",
+            "type": "Individual",
+            "amount": 300.0,
+            "count": 1,
+            "industries": [
+              "individual"
+            ],
+            "industry_class": "individual_only",
+            "items": [
+              {
+                "date": "2026-06-29",
+                "amount": 300.0,
+                "contribution_type": "Individual Contribution"
+              }
+            ]
+          },
+          {
             "donor_id": "beach-ii-charles-s",
             "name": "Beach II, Charles S",
             "type": "Individual",
@@ -19377,6 +19486,60 @@
             "items": [
               {
                 "date": "2026-06-23",
+                "amount": 250.0,
+                "contribution_type": "Individual Contribution"
+              }
+            ]
+          },
+          {
+            "donor_id": "kuzas-robert-d",
+            "name": "Kuzas, Robert D",
+            "type": "Individual",
+            "amount": 250.0,
+            "count": 1,
+            "industries": [
+              "individual"
+            ],
+            "industry_class": "individual_only",
+            "items": [
+              {
+                "date": "2026-06-23",
+                "amount": 250.0,
+                "contribution_type": "Individual Contribution"
+              }
+            ]
+          },
+          {
+            "donor_id": "lovelace-lewis",
+            "name": "Lovelace, Lewis",
+            "type": "Individual",
+            "amount": 250.0,
+            "count": 1,
+            "industries": [
+              "individual"
+            ],
+            "industry_class": "individual_only",
+            "items": [
+              {
+                "date": "2026-06-30",
+                "amount": 250.0,
+                "contribution_type": "Individual Contribution"
+              }
+            ]
+          },
+          {
+            "donor_id": "marystone-maggie",
+            "name": "Marystone, Maggie",
+            "type": "Individual",
+            "amount": 250.0,
+            "count": 1,
+            "industries": [
+              "individual"
+            ],
+            "industry_class": "individual_only",
+            "items": [
+              {
+                "date": "2026-06-13",
                 "amount": 250.0,
                 "contribution_type": "Individual Contribution"
               }
@@ -19438,17 +19601,17 @@
           "meets_industry_threshold": false
         },
         "2026": {
-          "donor_total": 8770.0,
-          "donor_count": 11,
+          "donor_total": 11120.0,
+          "donor_count": 18,
           "dollars": {
             "substantive": 0.0,
-            "individual_only": 3850.0,
+            "individual_only": 6200.0,
             "unclassified": 4920.0
           },
           "shares": {
             "substantive": 0.0,
-            "individual_only": 0.438997,
-            "unclassified": 0.561003
+            "individual_only": 0.557554,
+            "unclassified": 0.442446
           },
           "substantive_share": 0.0,
           "meets_industry_threshold": false
@@ -19464,7 +19627,7 @@
           "name": "Committee to Elect Michilla Blaise",
           "sbe_committee_id": "37001",
           "data_quality": "REAL",
-          "last_updated": "2026-07-22"
+          "last_updated": "2026-08-09"
         }
       ],
       "finance_state": "full",
@@ -20526,7 +20689,7 @@
           {
             "donor_id": "friends-of-theresa-mah",
             "name": "Friends of Theresa Mah",
-            "type": "Other",
+            "type": "Individual",
             "amount": 1000.0,
             "count": 1,
             "industries": [
@@ -21554,7 +21717,7 @@
           "name": "Neighbors for Anusha",
           "sbe_committee_id": "39855",
           "data_quality": "REAL",
-          "last_updated": "2026-07-22"
+          "last_updated": "2026-08-09"
         }
       ],
       "finance_state": "full",
@@ -21597,8 +21760,8 @@
         "2026": {
           "label": "2026",
           "direct": {
-            "amount": 155259.34,
-            "count": 138
+            "amount": 162759.34,
+            "count": 141
           },
           "self_funding": {
             "amount": 0.0,
@@ -21793,9 +21956,9 @@
             "amount": 2000.0,
             "count": 1,
             "industries": [
-              "unclassified"
+              "labor-trades"
             ],
-            "industry_class": "unclassified",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2024-12-17",
@@ -23072,6 +23235,24 @@
             ]
           },
           {
+            "donor_id": "hiller-david",
+            "name": "Hiller, David",
+            "type": "Individual",
+            "amount": 2500.0,
+            "count": 1,
+            "industries": [
+              "individual"
+            ],
+            "industry_class": "individual_only",
+            "items": [
+              {
+                "date": "2026-07-27",
+                "amount": 2500.0,
+                "contribution_type": "Individual Contribution"
+              }
+            ]
+          },
+          {
             "donor_id": "krehbiel-liam",
             "name": "Krehbiel, Liam",
             "type": "Individual",
@@ -23090,6 +23271,24 @@
             ]
           },
           {
+            "donor_id": "meier-steven",
+            "name": "Meier, Steven",
+            "type": "Individual",
+            "amount": 2500.0,
+            "count": 1,
+            "industries": [
+              "individual"
+            ],
+            "industry_class": "individual_only",
+            "items": [
+              {
+                "date": "2026-07-27",
+                "amount": 2500.0,
+                "contribution_type": "Individual Contribution"
+              }
+            ]
+          },
+          {
             "donor_id": "swanson-beth",
             "name": "Swanson, Beth",
             "type": "Individual",
@@ -23102,6 +23301,24 @@
             "items": [
               {
                 "date": "2026-06-30",
+                "amount": 2500.0,
+                "contribution_type": "Individual Contribution"
+              }
+            ]
+          },
+          {
+            "donor_id": "tully-matthew",
+            "name": "Tully, Matthew",
+            "type": "Individual",
+            "amount": 2500.0,
+            "count": 1,
+            "industries": [
+              "individual"
+            ],
+            "industry_class": "individual_only",
+            "items": [
+              {
+                "date": "2026-07-27",
                 "amount": 2500.0,
                 "contribution_type": "Individual Contribution"
               }
@@ -23848,9 +24065,9 @@
             "amount": 500.0,
             "count": 1,
             "industries": [
-              "unclassified"
+              "labor-trades"
             ],
-            "industry_class": "unclassified",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2026-05-01",
@@ -24979,32 +25196,32 @@
           "donor_total": 74348.5,
           "donor_count": 56,
           "dollars": {
-            "substantive": 3000.0,
+            "substantive": 5000.0,
             "individual_only": 50650.0,
-            "unclassified": 20698.5
+            "unclassified": 18698.5
           },
           "shares": {
-            "substantive": 0.040351,
+            "substantive": 0.067251,
             "individual_only": 0.681251,
-            "unclassified": 0.278398
+            "unclassified": 0.251498
           },
-          "substantive_share": 0.040351,
+          "substantive_share": 0.067251,
           "meets_industry_threshold": false
         },
         "2026": {
-          "donor_total": 155259.34,
-          "donor_count": 118,
+          "donor_total": 162759.34,
+          "donor_count": 121,
           "dollars": {
-            "substantive": 12500.0,
-            "individual_only": 135009.34,
-            "unclassified": 7750.0
+            "substantive": 13000.0,
+            "individual_only": 142509.34,
+            "unclassified": 7250.0
           },
           "shares": {
-            "substantive": 0.08051,
-            "individual_only": 0.869573,
-            "unclassified": 0.049917
+            "substantive": 0.079873,
+            "individual_only": 0.875583,
+            "unclassified": 0.044544
           },
-          "substantive_share": 0.08051,
+          "substantive_share": 0.079873,
           "meets_industry_threshold": false
         }
       },
@@ -25016,7 +25233,7 @@
           "name": "Citizens for Biggs",
           "sbe_committee_id": "39881",
           "data_quality": "REAL",
-          "last_updated": "2026-07-22"
+          "last_updated": "2026-08-09"
         }
       ],
       "finance_state": "full",
@@ -25422,7 +25639,7 @@
           {
             "donor_id": "friends-of-theresa-mah",
             "name": "Friends of Theresa Mah",
-            "type": "Other",
+            "type": "Individual",
             "amount": 6943.32,
             "count": 2,
             "industries": [
@@ -26045,9 +26262,9 @@
             "amount": 500.0,
             "count": 1,
             "industries": [
-              "unclassified"
+              "labor-teachers"
             ],
-            "industry_class": "unclassified",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2024-10-19",
@@ -26549,16 +26766,16 @@
           "donor_total": 206081.53,
           "donor_count": 58,
           "dollars": {
-            "substantive": 73130.02,
+            "substantive": 73630.02,
             "individual_only": 15901.0,
-            "unclassified": 117050.51
+            "unclassified": 116550.51
           },
           "shares": {
-            "substantive": 0.35486,
+            "substantive": 0.357286,
             "individual_only": 0.077159,
-            "unclassified": 0.567981
+            "unclassified": 0.565555
           },
-          "substantive_share": 0.35486,
+          "substantive_share": 0.357286,
           "meets_industry_threshold": false
         },
         "2026": {
@@ -26586,7 +26803,7 @@
           "name": "Friends of Yesenia Lopez",
           "sbe_committee_id": "39844",
           "data_quality": "REAL",
-          "last_updated": "2026-07-22"
+          "last_updated": "2026-08-09"
         }
       ],
       "finance_state": "full",
@@ -28070,7 +28287,7 @@
           "name": "Friends for Angel Gutierrez",
           "sbe_committee_id": "39873",
           "data_quality": "REAL",
-          "last_updated": "2026-07-22"
+          "last_updated": "2026-08-09"
         }
       ],
       "finance_state": "full",
@@ -29088,7 +29305,7 @@
           "name": "Therese Boyle for District 9 CPS BOE",
           "sbe_committee_id": "39843",
           "data_quality": "REAL",
-          "last_updated": "2026-07-22"
+          "last_updated": "2026-08-09"
         }
       ],
       "finance_state": "full",
@@ -29131,8 +29348,8 @@
         "2026": {
           "label": "2026",
           "direct": {
-            "amount": 89624.3,
-            "count": 56
+            "amount": 90624.3,
+            "count": 57
           },
           "self_funding": {
             "amount": 0.0,
@@ -30553,6 +30770,25 @@
             ]
           },
           {
+            "donor_id": "ironworkers-district-council-of-chicago-vicinity",
+            "name": "Ironworkers District Council of Chicago & Vicinity",
+            "type": "PAC",
+            "amount": 1000.0,
+            "count": 1,
+            "industries": [
+              "labor-trades"
+            ],
+            "industry_class": "substantive",
+            "items": [
+              {
+                "date": "2026-08-01",
+                "amount": 1000.0,
+                "contribution_type": "Transfer In"
+              }
+            ],
+            "cluster_id": "rollup-500"
+          },
+          {
             "donor_id": "ivankovich-daniel",
             "name": "Ivankovich, Daniel",
             "type": "Individual",
@@ -31130,19 +31366,19 @@
           "meets_industry_threshold": false
         },
         "2026": {
-          "donor_total": 89624.3,
-          "donor_count": 48,
+          "donor_total": 90624.3,
+          "donor_count": 49,
           "dollars": {
-            "substantive": 18000.0,
+            "substantive": 19000.0,
             "individual_only": 68624.3,
             "unclassified": 3000.0
           },
           "shares": {
-            "substantive": 0.200838,
-            "individual_only": 0.765689,
-            "unclassified": 0.033473
+            "substantive": 0.209657,
+            "individual_only": 0.757239,
+            "unclassified": 0.033104
           },
-          "substantive_share": 0.200838,
+          "substantive_share": 0.209657,
           "meets_industry_threshold": false
         }
       },
@@ -31156,7 +31392,7 @@
           "name": "Citizens for Che \"Rhymefest\" Smith",
           "sbe_committee_id": "39788",
           "data_quality": "REAL",
-          "last_updated": "2026-07-22"
+          "last_updated": "2026-08-09"
         }
       ],
       "finance_state": "full",

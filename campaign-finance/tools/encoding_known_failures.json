@@ -1,5 +1,5 @@
 {
-  "comment": "SBFIN-4 check_encoding known failures. SHRINK-ONLY: max_entries is pinned at creation and may never rise; the checker fails in code if entries exceed it, if an entry lacks an owner, or if a listed entry NO LONGER fails (remove it). That last rule is why this file is safe here: the decoders were fixed at their sites in this commit, but the artifact still carries the bad name because no pipeline has run. The moment the elections chain re-runs, this entry stops failing and the checker DEMANDS its removal — the re-run cannot quietly leave the pin standing.",
+  "comment": "SBFIN-4 check_encoding known failures. SHRINK-ONLY: max_entries is pinned at creation and may never rise; the checker fails in code if entries exceed it, if an entry lacks an owner, or if a listed entry NO LONGER fails (remove it). CORRECTED AT SBE-RERUN-1 (2026-08-09): this comment previously claimed the entry would stop failing the moment the elections chain re-ran. The chain re-ran and it did NOT. The decoder fix prevents NEW corruption only; it cannot repair a value already persisted, because ingest_ie builds dname_idx from existing donor names (ingest_ie.py:232) and resolve_donor (:248-260) returns the existing donor id on a norm() match without ever refreshing `name`. norm() collapses both U+0092 and U+2019 to a space — the same property that keeps the donor id stable is what guarantees the stale display name is matched and kept. Repair requires a name-refresh path in ingest_ie.resolve_donor, which is its own lane (it would refresh every donor's display name from the bulk on every run, changing the alias-not-rewrite posture and touching PS-97's territory). Until that lands, this entry persists and the pin correctly keeps failing.",
   "created": "2026-08-09",
   "max_entries": 1,
   "entries": [
@@ -8,9 +8,9 @@
       "collection": "donors",
       "key": "daniel-o-keefe",
       "field": "name",
-      "owner": "SBFIN-4 — clears at the next elections-chain re-run",
+      "owner": "SBE-RERUN-1 — persists until a name-refresh path lands in ingest_ie.resolve_donor",
       "dated": "2026-08-09",
-      "note": "0x92 (cp1252 right single quote) read as latin-1 -> U+0092. Decoders fixed at ingest_ie.py and enrich_committee_names.py in the same commit; the artifact predates the fix. Urban Center Action's joint-top funder at 19.3%, live on the deployed elections tool. The donor id is unaffected — norm() strips both the control and the apostrophe, so the slug is daniel-o-keefe either way."
+      "note": "0x92 (cp1252 right single quote) read as latin-1 -> U+0092. Decoders fixed at ingest_ie.py and enrich_committee_names.py at SBFIN-4. MEASURED AT SBE-RERUN-1: the chain re-ran and this did NOT clear. The reader is correct — the bulk carries b'O\\x92Keefe' and cp1252 decodes it to 'O’Keefe' — but the write path discards that string, keeping the pre-existing donor record's stale name (see the file comment for the mechanism). Urban Center Action's joint-top funder at 19.3%, live on the deployed elections tool as O\\x92Keefe. The donor id is unaffected — norm() strips both the control and the apostrophe, so the slug is daniel-o-keefe either way."
     }
   ]
 }

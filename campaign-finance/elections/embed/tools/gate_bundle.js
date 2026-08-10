@@ -775,9 +775,27 @@ async function assertExclusionUniformity(T, ctx, fx) {
   // 2. [EXCL/SEIU] the live fixture at its post-fix value: the funder total drops from
   // $11,513,949.64 (incl. $11,392,124.39 pre-2011) to the in-subject remainder, and the
   // identity (top funder) is no longer a pre-2011-only entity.
+  //
+  // RE-PINNED 121825.25 -> 215075.25 at SBE-RERUN-1 (2026-08-09), RATIFIED BY ISHAN as
+  // class 1 — a data movement, not a drift. This is a ratified change, not a quiet edit;
+  // the evidence is recorded here so a later reader does not have to re-derive it:
+  //   * +$93,250.00 in-subject, from 12 new NON-DUES funder rows all dated 2026-07-15
+  //     (one Q2 2026 filing) — Mary Beth Canty for Illinois $30,000, Friends of Robyn
+  //     Gabel $20,000, IL Democratic County Chairs Assoc $10,000, and nine more at
+  //     $6,250 and below. That sum is the delta TO THE CENT.
+  //   * separately, one same-donor same-date DUES row corrected by SBE,
+  //     seiu-il-council-dues 2026-04-15 $600,750.00 -> $750.00. Invisible to THIS pin
+  //     by design — dues are excluded ([DUES/UNIF] working) — which is why the gross
+  //     funder receipts FELL $506,750 while the in-subject total ROSE $93,250. A drop
+  //     in gross alongside a rise here is the expected shape, not a contradiction.
+  //   * the pre-2011 bucket was verified UNMOVED: 201 rows, $11,392,124.39, delta
+  //     $0.00. The exclusion machinery is intact; only in-subject money moved.
+  // The identity half of the assertion never moved: top funder stayed SEIU Healthcare
+  // IL IN PAC at $34,000. Funders 33 -> 43.
   var seiu = ED.spenderFunders(idx, 'ie-committee-18574');
-  T.ok('[EXCL/SEIU] SEIU PAC funder total == 121825.25 in-subject (was 11513949.64) and top funder is SEIU Healthcare IL IN PAC',
-    seiu.total === 121825.25 && seiu.funders[0] && seiu.funders[0].name === 'SEIU Healthcare IL IN PAC');
+  T.ok('[EXCL/SEIU] SEIU PAC funder total == 215075.25 in-subject (was 11513949.64 pre-exclusion; ' +
+    're-pinned from 121825.25, ratified 2026-08-09) and top funder is SEIU Healthcare IL IN PAC',
+    seiu.total === 215075.25 && seiu.funders[0] && seiu.funders[0].name === 'SEIU Healthcare IL IN PAC');
 
   // 3. [EXCL/WMT] Welcome Wal-Mart: 100% pre-2011 receipts -> empty funder set, the
   // ratified string 2 renders, and NO identity claim appears (E3, structural).
