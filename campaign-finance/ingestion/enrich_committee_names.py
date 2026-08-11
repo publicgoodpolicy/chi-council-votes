@@ -30,25 +30,59 @@ def read_tsv(path):
         for row in csv.DictReader((ln.replace('\r\n','\n') for ln in f),delimiter='\t'):
             yield row
 
-def enrich(d, committees_path):
+def _load_map(path):
     F=FIELD_MAP
-    id2name={}
-    for row in read_tsv(committees_path):
+    out={}
+    for row in read_tsv(path):
         cid=str(row.get(F['id']) or '').strip(); nm=(row.get(F['name']) or '').strip()
-        if cid and nm: id2name[cid]=nm
+        if cid and nm: out[cid]=nm
+    return out
+
+
+def enrich(d, committees_path, fallback_path=None):
+    """PRIMARY = the curated reference/ie-committee-names.tsv; FALLBACK = the SBE
+    Committees bulk, consulted only for ids the primary does not carry.
+
+    SBE-RERUN-1 (planner error 55). Brief §4 recommended passing the SBE Committees bulk
+    here so a newly-appearing IE committee would get a real name instead of rendering as
+    `ie-committee-<id>`. That is true, and it was the only property anyone checked — but
+    the curated TSV was contributing a second one nobody had established: Illinois
+    Sunshine provenance and its normalized spellings. Passing the bulk discarded that
+    silently, and `ie-committee-539` shipped as 'Illinois Farm Bureau  ACTIVATOR' (double
+    space, the bulk's own spelling in both the 7.22 and 8.09 pulls) on the live tool. The
+    only thing that caught it was an UNWIRED harness.
+
+    Primary-with-fallback keeps both properties: curated spellings win, and a committee
+    the TSV has never seen still resolves. Committees taken from the fallback are RETURNED
+    BY ID, not merely counted — a new arrival must be visible so the TSV can be updated
+    deliberately, rather than inferred from a total that happens to add up.
+
+    Whitespace is deliberately NOT normalized here. Silently rewriting a source-of-record's
+    strings is the wrong instrument: it would have hidden this defect rather than surfaced
+    it, and it would make the artifact disagree with the SBE record for reasons no reader
+    could see. The assertion belongs in a checker; the fix belongs in the curated file.
+    """
+    id2name=_load_map(committees_path)
+    fb=_load_map(fallback_path) if fallback_path else {}
     comms=d['committees']; donors=d['donors']
     dname_idx={norm(v.get('name') or ''):vid for vid,v in donors.items()}
-    renamed=0; rebridged=0; unmatched=[]
+    renamed=0; rebridged=0; unmatched=[]; from_fallback=[]
     for k,c in comms.items():
         if c.get('type')!='independent_expenditure': continue
-        nm=id2name.get(str(c.get('sbe_committee_id') or ''))
+        sbe=str(c.get('sbe_committee_id') or '')
+        nm=id2name.get(sbe)
+        if not nm:
+            nm=fb.get(sbe)
+            if nm: from_fallback.append({'sbe_committee_id':sbe,'name':nm})
         if not nm: unmatched.append(c.get('sbe_committee_id')); continue
         c['committee_name']=nm; renamed+=1
         if not c.get('donor_id'):                       # re-bridge to giving face if name now matches
             did=dname_idx.get(norm(nm))
             if did: c['donor_id']=did; donors[did]['committee_id']=k; rebridged+=1
-    return {'committees_in_map':len(id2name),'ie_renamed':renamed,
-            'ie_rebridged':rebridged,'ie_unmatched':[u for u in unmatched if u]}
+    return {'committees_in_map':len(id2name),'fallback_in_map':len(fb),
+            'ie_renamed':renamed,'ie_rebridged':rebridged,
+            'ie_from_fallback':from_fallback,
+            'ie_unmatched':[u for u in unmatched if u]}
 
 def smoke():
     d=json.load(open('council-data.v5.json'))
@@ -69,9 +103,22 @@ def smoke():
 if __name__=='__main__':
     if '--smoke' in sys.argv: smoke(); sys.exit()
     ap=argparse.ArgumentParser()
-    ap.add_argument('--council',required=True); ap.add_argument('--committees',required=True)
+    ap.add_argument('--council',required=True)
+    ap.add_argument('--committees',required=True,
+                    help='PRIMARY name map — normally reference/ie-committee-names.tsv '
+                         '(curated, Illinois Sunshine provenance and spellings)')
+    ap.add_argument('--fallback-committees',
+                    help='the SBE Committees bulk, consulted ONLY for ids the primary '
+                         'lacks; any committee resolved from it is reported by id')
     ap.add_argument('--out',required=True)
     a=ap.parse_args()
-    d=json.load(open(a.council)); s=enrich(d,a.committees)
+    d=json.load(open(a.council)); s=enrich(d,a.committees,a.fallback_committees)
     json.dump(d,open(a.out,'w'),indent=2,ensure_ascii=True)
-    print('[enrich]',json.dumps(s,indent=2)); print('[write]',a.out)
+    print('[enrich]',json.dumps(s,indent=2))
+    if s['ie_from_fallback']:
+        print('[enrich] NOTE: %d committee(s) resolved from the FALLBACK bulk, not the '
+              'curated TSV — add them to reference/ie-committee-names.tsv so their '
+              'spelling is owned:' % len(s['ie_from_fallback']))
+        for e in s['ie_from_fallback']:
+            print('           %s  %r' % (e['sbe_committee_id'], e['name']))
+    print('[write]',a.out)
