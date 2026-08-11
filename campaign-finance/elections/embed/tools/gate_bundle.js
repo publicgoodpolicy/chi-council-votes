@@ -1190,6 +1190,20 @@ async function assertPersonSurface(T, ctx, fx) {
     T.ok('[DOCS] check_docs (PS-73) green — ' + tail, res.status === 0);
   })();
 
+  // [DOCS/SELF] check_docs's OWN biting cases. Found unrun at SBE-RERUN-1's inverse sweep
+  // (which asked what INVOKES each checker, the complement of the sweep that asked what
+  // each checker READS): both invokers above call check_docs.py bare, so its 19 cases —
+  // every rule firing, shrink-only, owner-required — proved nothing at gate time. A
+  // checker whose failure paths never execute is the same green-that-means-nothing its
+  // known-failures discipline exists to prevent. Green at adoption.
+  (function () {
+    var res = require('child_process').spawnSync('python3',
+      [path.join(__dirname, '..', '..', '..', 'tools', 'check_docs.py'), '--self-test'],
+      { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[DOCS/SELF] check_docs self-test green — ' + tail, res.status === 0);
+  })();
+
   // [SHEET/SCOPE] no-editorial-writeback (EDIT-SAFE-1/S2): one implementation
   // (campaign-finance/tools/check_sheet_scopes.py), two invokers — build_all.sh's
   // validation gate and this line, mirroring [DOCS] above. Static and network-free:
@@ -1199,6 +1213,33 @@ async function assertPersonSurface(T, ctx, fx) {
       [path.join(__dirname, '..', '..', '..', 'tools', 'check_sheet_scopes.py')], { encoding: 'utf8' });
     var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
     T.ok('[SHEET/SCOPE] no-editorial-writeback holds — ' + tail, res.status === 0);
+  })();
+
+  // [SHEET/SELF] check_sheet_scopes's own biting cases — the [DOCS/SELF] case exactly,
+  // found by the same sweep. Nine cases, including a real-repo negative control, so the
+  // suite proves both that each rule fires AND that the live tree is clean by that rule.
+  // Also network-free. Green at adoption.
+  (function () {
+    var res = require('child_process').spawnSync('python3',
+      [path.join(__dirname, '..', '..', '..', 'tools', 'check_sheet_scopes.py'), '--self-test'],
+      { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[SHEET/SELF] check_sheet_scopes self-test green — ' + tail, res.status === 0);
+  })();
+
+  // [IE/DIST] the ingest_ie ward-absent/district-present collision cases (IE-DIST-1).
+  // Its own docstring: "These are non-optional precisely BECAUSE the fix is dormant on
+  // live data" — no real expenditure resolves into a same-name school-board cohort, so
+  // the full-dataset run proves the fix changes NOTHING, and these synthetic fixtures are
+  // the only proof the ACTIVE path behaves when a collision does exist. Nothing in the
+  // repo ran them. A dormant guard with no exercised test is a guard nobody has checked
+  // still works. Plain stdlib, no pytest, reads no artifact. 26 cases, green at adoption.
+  (function () {
+    var res = require('child_process').spawnSync('python3',
+      [path.join(__dirname, '..', '..', '..', 'ingestion', 'test_ingest_ie_district.py')],
+      { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[IE/DIST] ingest_ie district-collision cases green — ' + tail, res.status === 0);
   })();
 
   // [VOTES/SELF] the votes-family self-test (SBVOTE-1/A.4), third invoker of the same
