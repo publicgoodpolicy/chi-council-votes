@@ -83,6 +83,7 @@ def validate(d):
     errors.extend(validate_committee_linkage(d))
     errors.extend(validate_aggregate_absence(d))
     errors.extend(validate_donor_referential(d))
+    errors.extend(validate_donor_parentage(d))
     errors.extend(validate_votes(d))
     errors.extend(validate_members(d))
     return errors, warnings
@@ -508,6 +509,30 @@ def validate_donor_referential(d):
     return []
 
 
+def validate_donor_parentage(d):
+    """[DONOR/PARENT] SBE-RERUN-1 G — every donor carries parent_id.
+
+    PORTED from smoke_b1.js, which asserted it and was invoked by nothing. transform_slice1
+    writes parent_id on ALL donors and MECHANISM_REFERENCE §1 makes that a precondition of
+    ingest_ie's internal build_rollups; a donor without one is silently dropped from parent
+    attribution, so every rollup that keys by parent — and the funder rows built on it —
+    quietly under-counts. Nothing asserted it: the gate's rollup checks would probably
+    break if it happened, but 'probably breaks something downstream' is not an assertion.
+
+    Collection-absent is a clean skip, not a pass-by-accident: school-board-data.json has
+    no donors at all, and this validator is shared across all three artifacts.
+    """
+    donors = d.get('donors')
+    if not isinstance(donors, dict) or not donors:
+        return []
+    bad = [k for k, v in donors.items() if not (v or {}).get('parent_id')]
+    if bad:
+        return [f"[DONOR/PARENT] {len(bad)} donor(s) carry no parent_id (first: {bad[:3]}) — "
+                f"transform_slice1 writes it on ALL donors; without it the donor is dropped "
+                f"from parent attribution and every by_parent rollup under-counts"]
+    return []
+
+
 def validate_person_links(d):
     """HALT-P1-C — the person-entity firewall, as four STRUCTURAL invariants (relations that
     hold at any data vintage, never pinned dollars — so the Q2 re-ingest can't false-trip them).
@@ -916,6 +941,29 @@ def self_test():
                        'term_end': '', 'source_url': 'u', 'candidacy_ref': '',
                        'votes': {'c1': 'Affirmative'}}]},
          "no known `seat`")
+
+    # [DONOR/PARENT] biting cases (SBE-RERUN-1 G). Ported from smoke_b1.js along with the
+    # assertion itself; the assertion is only worth having if its failure path runs.
+    def pcase(name, artifact, should_fail):
+        errs = validate_donor_parentage(artifact)
+        ok = bool(errs) == should_fail
+        results.append((name, ok))
+        print(f"SELF-TEST {'PASS' if ok else 'FAIL'}  {name}")
+        if not ok:
+            print(f"          should_fail={should_fail}, got: {errs}")
+
+    pcase("[DONOR/PARENT] bites: a donor with NO parent_id fails",
+          {'donors': {'a': {'parent_id': 'a'}, 'b': {}}}, True)
+    pcase("[DONOR/PARENT] bites: an EMPTY parent_id fails (not just a missing key)",
+          {'donors': {'a': {'parent_id': ''}}}, True)
+    pcase("[DONOR/PARENT] bites: a null parent_id fails",
+          {'donors': {'a': {'parent_id': None}}}, True)
+    pcase("[DONOR/PARENT] passes when every donor is parented (self-parent is valid)",
+          {'donors': {'a': {'parent_id': 'a'}, 'b': {'parent_id': 'a'}}}, False)
+    pcase("[DONOR/PARENT] a donors-less artifact SKIPS cleanly (school-board shape)",
+          {'members': []}, False)
+    pcase("[DONOR/PARENT] an empty donors map skips rather than passing vacuously",
+          {'donors': {}}, False)
 
     bad = [n for n, ok in results if not ok]
     print(f"self-test: {len(results)} checks · "

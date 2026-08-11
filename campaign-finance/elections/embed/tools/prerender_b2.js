@@ -51,7 +51,23 @@ var page = R.renderPage({ office: OFFICE, topView: 'byrace', officeRaces: omVM, 
 var fails = 0;
 function ok(name, cond) { console.log((cond ? 'PASS  ' : 'FAIL  ') + name); if (!cond) fails++; }
 
-console.log('=== B2 render assertions (school_board, District 2A active) ===');
+// [DATA/ONEPASS] PORTED from smoke_b1.js at SBE-RERUN-1 G. Ishan's instruction was to
+// port it into validate_council_data alongside the parent_id check; it cannot live there.
+// The invariant is a property of the JS data layer's load — loadData records what it
+// actually visited in index._stats — and the Python validator has no access to it. This is
+// its correct home: an already-gated harness that calls D.loadData on the real artifact.
+// It asserts loadData makes exactly ONE pass over each row collection; a regression to a
+// nested scan would still produce right answers while going quadratic on a 7.9 MB artifact,
+// which is the kind of defect no output check would ever notice.
+console.log('=== B2 data-layer invariants (ported from smoke_b1.js) ===');
+ok('[DATA/ONEPASS] single pass over contributions (' + indexAll._stats.contributionRowsVisited +
+   ' === ' + json.contributions.length + ')',
+   indexAll._stats.contributionRowsVisited === json.contributions.length);
+ok('[DATA/ONEPASS] single pass over IEs (' + indexAll._stats.ieRowsVisited + ' === ' +
+   json.independent_expenditures.length + ')',
+   indexAll._stats.ieRowsVisited === json.independent_expenditures.length);
+
+console.log('\n=== B2 render assertions (school_board, District 2A active) ===');
 ok('renders DeBerry card', /Ebony DeBerry/.test(page));
 ok('renders Leon card', /Bruce Leon/.test(page));
 ok('neutral order: DeBerry before Leon', page.indexOf('Ebony DeBerry') < page.indexOf('Bruce Leon'));
@@ -65,7 +81,13 @@ ok('Leon 2024-window figures intact at the data layer ($620,403 / self $620,025 
   (function () { var f = D.candidateFigures(index, 'leon-sb-d03', null, W24);
     return Math.round(f.contributions.total) === 620403 && Math.round(f.contributions.selfFunded) === 620025 &&
            Math.round(f.contributions.thirdParty) === 378 && Math.round(f.independentSupport) === 24766; })());
-ok('DeBerry 2024-window opposition intact at the data layer ($126,078)',
+// The support half was PORTED from smoke_b1.js at SBE-RERUN-1 G — a THIRD uncovered
+// subject, found while confirming the other 11 before deleting that file. Opposition was
+// already asserted here; support == 0 was asserted nowhere. An opposed-only candidate
+// whose support silently became non-zero is exactly the kind of firewall leak the
+// separate-streams rule exists to prevent, so the zero is the load-bearing half.
+ok('DeBerry 2024-window IE intact at the data layer (support $0 / opposition $126,078)',
+  D.candidateFigures(index, 'deberry-sb-d03', null, W24).independentSupport === 0 &&
   Math.round(D.candidateFigures(index, 'deberry-sb-d03', null, W24).independentOpposition) === 126078);
 ok('three figure bars present', /From contributors/.test(page) && /Independent support/.test(page) && /Independent opposition/.test(page));
 // "Mostly self-funded" is a base-view chip (absent from the toggle DOM); assert the

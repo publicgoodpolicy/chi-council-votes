@@ -1285,6 +1285,24 @@ async function assertPersonSurface(T, ctx, fx) {
          res.status === 0);
   })();
 
+  // [ELECT/VALID] the elections artifact validated — the gap the inverse sweep left last.
+  // This gate is ABOUT election-data.json and never validated it. council-data.json came in
+  // at [SHARD/STALE] and the roster at [SBV/ROSTER]; the elections artifact was checked only
+  // as chain step 9, at build time — the validate_shard_freshness shape, on the primary
+  // subject. Every invariant the shared validator carries (cluster integrity, INV-ELECT
+  // stamping, person-links, committee linkage, [AGG/PS-96-DEFECT], and [DONOR/PARENT]
+  // ported here from smoke_b1.js at SBE-RERUN-1 G) now holds at gate time, not only at
+  // build time. No --shards: the elections artifact has no shard tier, the embed fetches
+  // it whole (MECHANISM_REFERENCE C5.2).
+  (function () {
+    var root = path.join(__dirname, '..', '..', '..');
+    var res = require('child_process').spawnSync('python3',
+      [path.join(root, 'ingestion', 'validate_council_data.py'),
+       path.join(root, 'election-data.json')], { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[ELECT/VALID] election-data.json validates clean — ' + tail, res.status === 0);
+  })();
+
   // [SBF/SELF] + [SBF/ARTIFACT] the finance layer (SBFIN-1/HALT-SBF-A). Two lines, the
   // [SBV/SELF] + [SBV/ROSTER] shape exactly: the builder's own unit cases, then the minted
   // artifact's examination against its source.
