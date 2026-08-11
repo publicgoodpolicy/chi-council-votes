@@ -1409,6 +1409,23 @@ async function assertPersonSurface(T, ctx, fx) {
          res.status === 0);
   })();
 
+  // [RENDER/B2] the elections data+render harness (SBE-RERUN-1 F). 120 assertions over the
+  // pure data + render layers. Wired because the inverse sweep found it invoked by nothing
+  // in code — only by DEPLOY.md:59's "Verify before pasting" ritual — and FAILING, with
+  // paste debt outstanding in front of it. It covers ten subjects no other check does
+  // (the ie-cmte-toggle absence pin, coming-soon for city_council/mayor, the "· soon"
+  // marking, footer disclaimer copy, the elections embed's Recoleta @font-face, single
+  // openModal/closeModal, cycle pills removed, the cycle data-layer arg, the IE scope
+  // counts 110/218/328, and the Custer/Biggs vacating notes), which is why it was repaired
+  // rather than deleted. It reads election-data.json directly — no preview, so
+  // [PREVIEW/VINTAGE] does not apply — and as of F it writes nothing.
+  (function () {
+    var res = require('child_process').spawnSync('node',
+      [path.join(__dirname, 'prerender_b2.js')], { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[RENDER/B2] elections data+render harness green — ' + tail, res.status === 0);
+  })();
+
   // [SBV/RENDER] the school-board embed's render fixture (SBVOTE-1/C). It boots the real
   // embed in jsdom and asserts every birth state: string 1 on zero votes, string 3 on a
   // member with no positions, the vacancy as a seat with NO member page, `-` as

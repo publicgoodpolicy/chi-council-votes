@@ -1,10 +1,19 @@
 #!/usr/bin/env node
 /* B2 verification harness (NOT app code). Exercises the pure data + render
  * layers exactly as the future SEO pre-render will: load election-data.json,
- * render the school_board page (sb-d03 / District 2A active), write a
- * self-contained preview HTML (no fetch/CDN needed — open it directly to
- * eyeball), and assert the prototype-fidelity output. Run from embed/:
+ * render the school_board page (sb-d03 / District 2A active) and assert the
+ * prototype-fidelity output. Run from embed/:
  *   node tools/prerender_b2.js
+ *
+ * GATED at SBE-RERUN-1 F as [RENDER/B2], and READ-ONLY as of the same commit. It had
+ * been invoked by nothing in code — only by DEPLOY.md:59's "Verify before pasting"
+ * ritual — and it had been FAILING three assertions while outstanding paste debt sat in
+ * front of it. Two were a stale DeBerry pin (eda9d31's recency ingest, repinned below
+ * with the cause); the third was a LIVE double-space regression in a committee name that
+ * this harness alone caught, fixed at source in commit D and now asserted by [NAMES/WS].
+ * The unconditional write of tools/preview_b2.html was removed — see the note at the
+ * former write site. Its 120 assertions cover ten subjects no other check does, which is
+ * why it was repaired rather than deleted.
  *
  * HALT-P1-C: District 2A (sb-d03) is now a TOGGLE race (its returners Leon+DeBerry
  * carry verified person-links), so the page renders the This/Last/All view. The
@@ -32,12 +41,12 @@ var rv = D.viewModels.raceView(index, index.raceBySlug['district-2a'], null);
 var page = R.renderPage({ office: OFFICE, topView: 'byrace', officeRaces: omVM, activeSlug: 'district-2a', raceView: rv,
   selector: { options: D.selectorOptions(OFFICE), active: '2026' } });
 
-var full = '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
-  '<meta name="viewport" content="width=device-width,initial-scale=1"><title>School Board — preview</title>' +
-  '<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">' +
-  R.styles() + '</head><body style="margin:0"><div class="ipg-elect">' + page + '</div></body></html>';
-var out = path.join(__dirname, 'preview_b2.html');
-fs.writeFileSync(out, full);
+// The preview WRITE was removed at SBE-RERUN-1 F. It wrote tools/preview_b2.html
+// unconditionally and BEFORE the first assertion — nothing in the repo referenced the
+// output, DEPLOY.md asks for the assertions and not a file, and the eyeball affordance is
+// superseded by build_preview.js --bundle, whose preview is vintage-stamped and is what
+// the gate loads. It was also the only structural bar to running this harness as a gate
+// line: a check must not write. R.styles() is still exercised below via the render path.
 
 var fails = 0;
 function ok(name, cond) { console.log((cond ? 'PASS  ' : 'FAIL  ') + name); if (!cond) fails++; }
@@ -123,7 +132,14 @@ function sumLines(cd) { return Math.round(cd.lines.reduce(function (s, l) { retu
 var leonC = D.candidateContributors(index, 'leon-sb-d03', null);
 var debC = D.candidateContributors(index, 'deberry-sb-d03', null);
 ok('Leon contributor lines sum EXACTLY to $620,403', sumLines(leonC) === 620403 && Math.round(leonC.total) === 620403);
-ok('DeBerry contributor lines sum EXACTLY to $534,950', sumLines(debC) === 534950 && Math.round(debC.total) === 534950);
+// REPINNED 534950 -> 537306 at SBE-RERUN-1 F, cause identified and ratified: eda9d31
+// (HALT-Q2R, "Q2 recency ingest") added +13 rows / +$2,356.26 to DeBerry — exactly what a
+// recency ingest does. Walked the artifact history to date it: 534,950.12 / 200 rows held
+// from 96cdce1 through dd30588 (HALT-SLUG-A) and became 537,306.38 / 213 rows at eda9d31.
+// DeBerry's committee 39821 is UNMOVED across the SBE-RERUN-1 refresh ($537,306.38 both
+// sides), so today's run is not involved. The pin was never updated because nothing ran
+// this harness. Benign and explained — the [EXCL/SEIU] discipline's clean case.
+ok('DeBerry contributor lines sum EXACTLY to $537,306', sumLines(debC) === 537306 && Math.round(debC.total) === 537306);
 ok('Leon contributor list flags a self/loan line', leonC.lines.some(function (l) { return l.isSelf; }));
 ok('contributor list has NO small-dollar aggregate line (every contribution itemized)', leonC.lines.some(function (l) { return l.isAggregate; }) === false && debC.lines.some(function (l) { return l.isAggregate; }) === false);
 
@@ -243,8 +259,10 @@ ok('"Show all N donors" toggle reveals the remainder inline', /Show all \d+ dono
 ok('NO small-dollar aggregate line in the panel (every contribution itemized)',
   debPanel.indexOf('class="crow plain"><div class="who">Small-dollar donors') < 0 &&
   debCd2.lines.some(function (l) { return l.isAggregate; }) === false);
-ok('full set (real + self) sums EXACTLY to the headline ($534,950)',
-  Math.round(debCd2.lines.reduce(function (s, l) { return s + l.total; }, 0)) === 534950);
+// REPINNED 534950 -> 537306, same cause as :126 above (eda9d31 HALT-Q2R). Same figure
+// reached a second way — through the expanded panel's line set rather than cd.total.
+ok('full set (real + self) sums EXACTLY to the headline ($537,306)',
+  Math.round(debCd2.lines.reduce(function (s, l) { return s + l.total; }, 0)) === 537306);
 
 console.log('\n=== B3-REVISE-4 assertions (resolved IE committee names) ===');
 // Real name resolved at the source (enrich), shown primary + funder subtitle.
@@ -442,6 +460,5 @@ ok('cycle filter degrades cleanly (single cycle: 2027 == current)',
 ok('real Recoleta @font-face present (onlinewebfonts CDN) + Georgia fallback',
   /@font-face\{font-family:"Recoleta";src:url\("https:\/\/db\.onlinewebfonts\.com/.test(R.styles()) && /--display:Recoleta,Georgia/.test(R.styles()));
 
-console.log('\nwrote ' + path.relative(process.cwd(), out) + '  (open in a browser to eyeball — self-contained, no fetch)');
-console.log(fails ? (fails + ' ASSERTION(S) FAILED') : 'ALL ASSERTIONS PASSED');
+console.log('\n' + (fails ? (fails + ' ASSERTION(S) FAILED') : 'ALL ASSERTIONS PASSED'));
 process.exit(fails ? 1 : 0);
