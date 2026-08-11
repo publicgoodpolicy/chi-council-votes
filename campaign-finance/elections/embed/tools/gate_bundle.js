@@ -1320,6 +1320,26 @@ async function assertPersonSurface(T, ctx, fx) {
     T.ok('[ENC/SELF] check_encoding self-test green — ' + stail, st.status === 0);
   })();
 
+  // [NAMES/WS] + [NAMES/SELF] displayed-name hygiene on the names WE own (SBE-RERUN-1 E).
+  // Added because NO gate line asserted committee names at all — which is how
+  // 'Illinois Farm Bureau  ACTIVATOR' (double space) shipped to the deployed tool in
+  // 85f71c6, caught only by prerender_b2.js, an UNWIRED harness. Scoped to committees +
+  // donor_clusters, the names this project authors or curates; donor names are the filer's
+  // own string as SBE recorded it (74 carry double spaces) and are deliberately out — see
+  // check_names.py's scope note. This asserts a PROPERTY; a pin on the 15 exact values is
+  // banked for ratification, since a legitimate rename must not read as a failure.
+  (function () {
+    var chk = path.join(__dirname, '..', '..', '..', 'tools', 'check_names.py');
+    var res = require('child_process').spawnSync('python3', [chk], { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[NAMES/WS] no curated display name carries a double space or edge whitespace — ' +
+      tail, res.status === 0);
+    var st = require('child_process').spawnSync('python3', [chk, '--self-test'],
+                                                { encoding: 'utf8' });
+    var stail = ((st.stdout || '') + (st.stderr || '')).trim().split('\n').pop();
+    T.ok('[NAMES/SELF] check_names self-test green — ' + stail, st.status === 0);
+  })();
+
   // [SBF/NOSHEET] the scope silence made an asserted absence (HALT-B addendum 3).
   // check_sheet_scopes discovers files by SHEET_MARKERS; a builder that touches no
   // Sheet is simply not discovered, so its 8/8 green says nothing about it either
