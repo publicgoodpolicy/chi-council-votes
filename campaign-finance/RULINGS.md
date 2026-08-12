@@ -973,6 +973,48 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: HALT-A SBFIN-5 authorization, revision B (`HALT-A-SBFIN-5-revB.md`), sha256 `62bd537a020fbe2e2a4833d98611d98103a1e191fb5a9326002d5d3b0b388864`, §P3 item 19, transcribed verbatim; ratified by Ishan 2026-08-10, id allocated 2026-08-11 at this transcription. Phrased at class rather than instance per PS-94. The occasion was `[SBF4/CHROME] "the in-modal row matches the council's card idiom"`, whose body read `border-radius`, `padding`, `margin-bottom` and a `border` regex — the card's skin — while the council's row was a two-column grid and this tool's was not, so four layout declarations differed under a green check; the occasion is not the subject. Discharged at SBFIN-5 A by extending that body rather than narrowing the name, the option the ruling prefers where the missing subject is real and in scope. Distinct from PS-73, which governs whether a documented claim is checked at all; PS-100 governs whether a check's name reports its own reach.*
 
+### PS-101 — the disclosure obligation attaches even where the excluded magnitude is $0.00
+
+> PS-95's disclosure obligation attaches even where the excluded magnitude is **$0.00**
+
+*Provenance: handover rev P (`handover-2026-08-12-revP-rev2.md`), sha256 `a5de139e6d52f852c29fcbbaa49c9869c80bc8bdf4c4bf7a3bf11f42b2743f3a`, 36,541 B / 561 L, §"Decisions this arc — fourteen, of which four moved", line 315 — the decision cell of the D-11 row — transcribed verbatim; ratified by Ishan in relay during the SBFIN-5 / RECONCILE-2 arc, cited to 2026-08-12 per the MUNI-ENABLE-1 lane brief (`d1044b23f88fd3115fd9d740ea6b8c16c61d376cf8b9815eec11c0de9ba8e7a3`) §G1; rev P states no per-decision ratification date. Rev P's status cell reads **RATIFIED — not transcribed**. Id allocated at this transcription. The banked source is a decisions-table cell, so the quoted text is a single clause rather than a ruling paragraph; per this register's form note transcription is never harmonization, and the clause stands as banked rather than being expanded into prose the source does not carry. Extends PS-95's disclosure obligation to the zero-magnitude case. Until this entry rev P was the sole record of this text, an exposure rev P stated at its own open ledger item 0 and this transcription discharges.*
+
+### PS-102 — PS-96's school-board obligation is already discharged by the ratified thinness string
+
+> PS-96's obligation on the school-board surface is already discharged by the ratified thinness string `[SBF/STATE]` asserts
+
+*Provenance: handover rev P (`handover-2026-08-12-revP-rev2.md`), sha256 `a5de139e6d52f852c29fcbbaa49c9869c80bc8bdf4c4bf7a3bf11f42b2743f3a`, §"Decisions this arc — fourteen, of which four moved", line 316 — the decision cell of the D-12 row — transcribed verbatim; ratified by Ishan in relay during the SBFIN-5 / RECONCILE-2 arc, cited to 2026-08-12 per the MUNI-ENABLE-1 lane brief §G1; rev P states no per-decision ratification date. Rev P's status cell reads **RATIFIED — not transcribed**. Id allocated at this transcription. A finding that an existing mechanism already satisfies PS-96 on this surface, not a new obligation — recorded because the finding is what prevents a redundant second disclosure being built. Source is a decisions-table cell; the clause stands as banked. Bears on PS-96.*
+
+### PS-103 — the known-gaps ledger extends by a second entry class rather than retreating from the completeness claim
+
+> extend the known-gaps ledger with a **second entry class** rather than retreating from the completeness claim
+
+*Provenance: handover rev P (`handover-2026-08-12-revP-rev2.md`), sha256 `a5de139e6d52f852c29fcbbaa49c9869c80bc8bdf4c4bf7a3bf11f42b2743f3a`, §"Decisions this arc — fourteen, of which four moved", line 317 — the decision cell of the D-13(a) row — transcribed verbatim; ratified by Ishan in relay during the SBFIN-5 / RECONCILE-2 arc, cited to 2026-08-12 per the MUNI-ENABLE-1 lane brief §G1; rev P states no per-decision ratification date. Rev P's status cell reads **RATIFIED, shipped — not transcribed**, so the decision was already implemented when this entry was written. Id allocated at this transcription. The label (a) is the source's, marking the ratified option among those put; the alternatives are not recorded in rev P and are therefore not recoverable from this entry. Source is a decisions-table cell; the clause stands as banked.*
+
+### PS-104 — ledger entries state the two exports and do not characterize SBE's conduct
+
+> ledger entries state the two exports; **do not characterize SBE's conduct**
+
+*Provenance: handover rev P (`handover-2026-08-12-revP-rev2.md`), sha256 `a5de139e6d52f852c29fcbbaa49c9869c80bc8bdf4c4bf7a3bf11f42b2743f3a`, §"Decisions this arc — fourteen, of which four moved", line 318 — the decision cell of the D-14 row — transcribed verbatim; ratified by Ishan in relay during the SBFIN-5 / RECONCILE-2 arc, cited to 2026-08-12 per the MUNI-ENABLE-1 lane brief §G1; rev P states no per-decision ratification date. Rev P's status cell reads **RATIFIED, shipped — not transcribed**, so the decision was already implemented when this entry was written. Id allocated at this transcription. A published-copy constraint on the known-gaps ledger PS-103 extends: the entry reports what the two exports say, and attributes no intent, error or fault to the source agency. Source is a decisions-table cell; the clause stands as banked.*
+
+### PS-105 — City Council and Mayoral elections are delivered as three arcs
+
+> - **D-15.** City Council and Mayoral elections are delivered as **three arcs**: (1) municipal office code enablement (this lane), (2) council data authoring, (3) mayoral data authoring. Data arcs are calendar-gated on 2027 filing activity reaching SBE.
+
+*Provenance: MUNI-ENABLE-1 lane brief (`lane-brief-MUNI-ENABLE-1-2026-08-12.md`), sha256 `d1044b23f88fd3115fd9d740ea6b8c16c61d376cf8b9815eec11c0de9ba8e7a3`, 10,339 B / 162 L, §"Ratified decisions this lane implements or records", the D-15 bullet, transcribed verbatim; ratified by Ishan in relay 2026-08-12. Id allocated at this transcription. "This lane" in the quoted text is MUNI-ENABLE-1, the lane whose brief banked it. The calendar gate is a dependency on external filing activity, not a schedule: the measurement it rests on is that 2027 municipal finance is absent from the current bulk vintage, cited to the ELECTIONS-SCOPE-1 probe report (`ddcddee2612d1f28b9329923c448c3e30604f7eaf9239c0cdf80c1b3c55cf2e7`) §P4 per PS-38. Until this entry the lane brief was the sole record of this text.*
+
+### PS-106 — page topology is three pages, one per election
+
+> - **D-16.** Page topology is **three pages**, one per election, each with its own URL. `build_embed.js` gains an office parameter and emits one inlined file per office.
+
+*Provenance: MUNI-ENABLE-1 lane brief (`lane-brief-MUNI-ENABLE-1-2026-08-12.md`), sha256 `d1044b23f88fd3115fd9d740ea6b8c16c61d376cf8b9815eec11c0de9ba8e7a3`, §"Ratified decisions this lane implements or records", the D-16 bullet, transcribed verbatim; ratified by Ishan in relay 2026-08-12. Id allocated at this transcription. A display decision in the PS-88 sense, given an id here because the lane brief allocated one rather than routing it to the id-less section. It resolves the one-page-versus-three question the ELECTIONS-SCOPE-1 probe measured without deciding; the measured facts it was ratified against — that the emitted payload is already office-invariant and that `build_embed.js` carries no parameterization point for the mount attribute — are cited to that report (`ddcddee2612d1f28b9329923c448c3e30604f7eaf9239c0cdf80c1b3c55cf2e7`) §"Facts bearing on page topology" per PS-38. Until this entry the lane brief was the sole record of this text.*
+
+### PS-107 — code before data: no municipal committee id before officeType() and ELECTION_WINDOWS carry municipal support
+
+> - **D-17.** **Code before data:** no municipal (`city_council` or `mayor`) committee id is authored into any local registry — `race-map.json`, `council-data.json`, `election-data.json`, or any successor registry — before `officeType()` and `ELECTION_WINDOWS` carry municipal support. Scope is the class of registries, not any one file (PS-94). Rationale, measured: `requireWin()`'s throw is latent and gated solely on `committee_id` being null (report, P1.1).
+
+*Provenance: MUNI-ENABLE-1 lane brief (`lane-brief-MUNI-ENABLE-1-2026-08-12.md`), sha256 `d1044b23f88fd3115fd9d740ea6b8c16c61d376cf8b9815eec11c0de9ba8e7a3`, §"Ratified decisions this lane implements or records", the D-17 bullet, transcribed verbatim; ratified by Ishan in relay 2026-08-12. Id allocated at this transcription. "(report, P1.1)" in the quoted text is the ELECTIONS-SCOPE-1 probe report (`ddcddee2612d1f28b9329923c448c3e30604f7eaf9239c0cdf80c1b3c55cf2e7`), whose P1.1 measured the throw and its guard; the citation is the source's own and is resolved here rather than rewritten, per PS-38 and this register's rule that transcription is never harmonization. The named registries are instances of the governed class, not its definition — the class scoping is the ruling's own, taken per PS-94. Until this entry the lane brief was the sole record of this text.*
+
 ---
 
 ## Rulings ratified without an id
