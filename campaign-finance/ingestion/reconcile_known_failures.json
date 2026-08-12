@@ -1,0 +1,17 @@
+{
+  "comment": "RECONCILE-2 HALT-A validate_reconcile known failures. SHRINK-ONLY: max_entries is pinned at creation and may never rise; the checker fails in code if entries exceed it, if an entry lacks an owner or a removal condition, or if a listed entry NO LONGER fails (remove it). WHY THIS PIN EXISTS: HALT-A stamps the CURRENT, STALE report with its TRUE inputs — the 07-23 D2 Totals and the election-data.json vintage the report was actually built from (a743d5b0..., independently asserted by 0e0e03a's own commit message). The tree now holds 0f4766e6... because SBE-RERUN-1 refreshed the artifact on 08-10 and the report was never re-run. So a truthful stamp and a green guard are incompatible until the refresh lands — planner error 82 of record, both requirements written into the same brief. Stamping the current sha instead would be a FALSE stamp of a report that was not built from it, which the run brief expressly forbids. The red is the guard's first true positive, not a defect in it. REMOVAL CONDITION, NAMED: RECONCILE-2 HALT-B re-runs reconcile.py against the ~/bulk-2026-08-09 pull, which rewrites run.inputs to the 08-09 vintage and makes election-data.json match the tree. Removing this entry is part of HALT-B's final step, and HALT-B cannot be declared done while this pin is still needed. If a SECOND input ever moves, this pin must not absorb it: max_entries is 1 and the checker fails on growth.",
+  "created": "2026-08-12",
+  "max_entries": 1,
+  "entries": [
+    {
+      "artifact": "reconciliation-report.json",
+      "check": "RECON/SYNC",
+      "input": "election-data.json",
+      "recorded_sha256": "a743d5b0591dd7b9cf1255c4850cd14b6266c364a3a2afe1a5afcefbb66a6159",
+      "owner": "RECONCILE-2 HALT-A — persists until HALT-B's refresh re-runs reconcile.py against ~/bulk-2026-08-09",
+      "removal_condition": "HALT-B re-runs reconcile.py; run.inputs moves to the 08-09 vintage and election-data.json matches the tree. Remove this entry as part of HALT-B's final step.",
+      "dated": "2026-08-12",
+      "note": "The report was built 2026-07-24 (0e0e03a) from election-data.json a743d5b0...; SBE-RERUN-1 moved that artifact to 0f4766e6... on 2026-08-10 (381cbfc) without re-running reconcile. This entry pins that one divergence and nothing else: d2totals (16f30c16...), fileddocs (7b21ac3e...) and known-gaps.json (6ead3615...) all match on disk today and are NOT pinned. This is open ledger 1 made mechanical — the artifact is stale against its own input, it is CDN-served, and it reaches readers with no paste in the way."
+    }
+  ]
+}

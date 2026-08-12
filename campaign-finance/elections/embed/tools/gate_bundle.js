@@ -1358,6 +1358,38 @@ async function assertPersonSurface(T, ctx, fx) {
     T.ok('[NAMES/SELF] check_names self-test green — ' + stail, st.status === 0);
   })();
 
+  // [RECON/ARTIFACT] + [RECON/SELF] the reconciliation report (RECONCILE-2 A).
+  //
+  // Until this landed, NOTHING in the tree asserted this artifact's presence, its
+  // parseability or its freshness — measured at RECONCILE-1 H4. It is the wrong artifact
+  // to leave unguarded: the elections embed fetches it from the CDN, so it is the only
+  // thing this project publishes where a PUSH reaches readers with no paste in the way.
+  //
+  // The line is GREEN WITH ONE PINNED RED inside it. The report is stamped with its TRUE
+  // inputs — the 07-23 vintage it was actually built from — while the tree holds the 08-10
+  // election-data.json, because SBE-RERUN-1 refreshed the artifact and reconcile was never
+  // re-run. A truthful stamp and a matching guard are incompatible until HALT-B's refresh,
+  // so that single divergence is pinned SHRINK-ONLY in reconcile_known_failures.json with
+  // its removal condition named in the file. The other three inputs are NOT pinned and
+  // match on disk today. Ratified 2026-08-12; planner error 82 records the conflict.
+  (function () {
+    var root = path.join(__dirname, '..', '..', '..');
+    var vr = path.join(root, 'ingestion', 'validate_reconcile.py');
+    var art = path.join(root, 'elections', 'reconciliation-report.json');
+    if (!fs.existsSync(art)) {
+      T.ok('[RECON/ARTIFACT] reconciliation report present', false);
+      return;
+    }
+    var res = require('child_process').spawnSync('python3', [vr, art], { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[RECON/ARTIFACT] reconciliation report parses and its stamped inputs still hash as recorded — '
+      + tail, res.status === 0);
+    var rst = require('child_process').spawnSync('python3', [vr, '--self-test'],
+                                                 { encoding: 'utf8' });
+    var rtail = ((rst.stdout || '') + (rst.stderr || '')).trim().split('\n').pop();
+    T.ok('[RECON/SELF] validate_reconcile self-test green — ' + rtail, rst.status === 0);
+  })();
+
   // [SBF/NOSHEET] the scope silence made an asserted absence (HALT-B addendum 3).
   // check_sheet_scopes discovers files by SHEET_MARKERS; a builder that touches no
   // Sheet is simply not discovered, so its 8/8 green says nothing about it either

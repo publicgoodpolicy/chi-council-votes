@@ -5,7 +5,25 @@
     "fileddocs_file": "/Users/ishandaya/probe-bulk-2026-07-21/raw-bulk/fileddocs_639202311261528856.txt",
     "pulled": "2026-07-22",
     "threshold": 500.0,
-    "scope": "elections candidate committees (v1); IE and council lanes deferred"
+    "scope": "elections candidate committees (v1); IE and council lanes deferred",
+    "inputs": {
+      "election-data.json": {
+        "sha256": "a743d5b0591dd7b9cf1255c4850cd14b6266c364a3a2afe1a5afcefbb66a6159",
+        "path": "campaign-finance/election-data.json"
+      },
+      "d2totals": {
+        "sha256": "16f30c16c74c125a685ce561116426a6cde3d0238951b4f0a0fcbfbd3373d532",
+        "path": "/Users/ishandaya/bulk-2026-07-23/d2totals_639202695385819853.txt"
+      },
+      "fileddocs": {
+        "sha256": "7b21ac3e5d01737f3ddb1b7f277cf8072da67d6624cd9342a949bb50534fe010",
+        "path": "/Users/ishandaya/probe-bulk-2026-07-21/raw-bulk/fileddocs_639202311261528856.txt"
+      },
+      "known-gaps.json": {
+        "sha256": "6ead36158cf8cf166a8180b99ac8d0a438a86b8305e7fbefcb8553e8f04f16b1",
+        "path": "campaign-finance/elections/known-gaps.json"
+      }
+    }
   },
   "headline": {
     "d2_itemized_total": 5477436.05,

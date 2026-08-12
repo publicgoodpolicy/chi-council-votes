@@ -1,0 +1,320 @@
+#!/usr/bin/env python3
+"""Validate reconciliation-report.json — its provenance stamp and its structure.
+
+RECONCILE-2 HALT-A. This artifact had NO validator and no gate coverage of any kind:
+RECONCILE-1 H4 measured that nothing in the tree asserted its presence, its parseability
+or its freshness. That is the wrong artifact to leave unguarded, because it is the only
+one this project publishes that reaches readers **with no paste in the way** — the
+elections embed fetches it from the CDN, so a push is a publication.
+
+Two checks, deliberately narrow:
+
+  [RECON/SYNC]   every input named in `run.inputs` still hashes to the recorded sha256.
+  [RECON/SHAPE]  the report parses and carries the expected top-level key inventory.
+
+What this does NOT do: re-derive any figure. It is a provenance and structure check, not
+a second reconcile. The arithmetic is reconcile.py's to own; this establishes that the
+artifact on disk was built from the files it claims, which is the thing nothing else
+could tell you.
+
+The [SBF/SYNC] precedent is followed on construction — a pure verdict function with the
+hasher injected, so the self-test drives every branch with no filesystem — and departed
+from on hosting: there was no existing validator to put it inside, so this file is the
+new invoker.
+
+Usage:
+  validate_reconcile.py campaign-finance/elections/reconciliation-report.json [--self-test]
+
+Exit: 0 clean; 1 on any failure.
+"""
+import argparse
+import hashlib
+import json
+import os
+import sys
+
+EXPECTED_TOP = {'run', 'headline', 'no_sbe_id_committees', 'join_failures',
+                'filings_missing_totals', 'disclosed', 'stale_annotations', 'committees'}
+EXPECTED_RUN = {'data_file', 'd2totals_file', 'fileddocs_file', 'pulled', 'threshold',
+                'scope', 'inputs'}
+
+
+def _sha256_file(path, _chunk=1 << 20):
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for block in iter(lambda: f.read(_chunk), b''):
+            h.update(block)
+    return h.hexdigest()
+
+
+# The repo root: the directory that `run.data_file`'s relative path is written against.
+# reconcile.py records `campaign-finance/election-data.json`, which is repo-root-relative,
+# while the bulk inputs are absolute. Resolving relative paths against the CWD instead made
+# the check pass or fail depending on where it was invoked from — caught by the ABSENT
+# branch on the first real run, from campaign-finance/ingestion.
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
+
+
+def _resolve(path, root=None):
+    """Absolute paths as given; relative paths against the repo root, never the CWD."""
+    return path if os.path.isabs(path) else os.path.join(root or REPO_ROOT, path)
+
+
+def sync_verdict(report, sha=_sha256_file, exists=os.path.exists, root=None):
+    """[RECON/SYNC] — the provenance assert. PURE apart from `sha` and `exists`.
+
+    Fail-closed rules, in order:
+
+      * `run.inputs` absent, not a dict, or empty -> FAIL. A stamp that can go missing and
+        still pass is not a stamp (the [SBF/SYNC] formulation, and the reason it is quoted
+        rather than paraphrased is that the failure mode is identical).
+      * an entry missing `sha256` or `path` -> FAIL. Both are load-bearing: the sha is the
+        anchor, the path is what makes it resolvable.
+      * a recorded input that is ABSENT on disk -> FAIL, reported as absent. This is the
+        case the brief asked to be handled honestly. Two of the three inputs live outside
+        the repo in sealed bulk archives, so absence is normal on a machine that never held
+        that pull — and passing silently there would make the check vacuous exactly where
+        it is most needed. It fails, and says which file and where it was expected.
+      * a present input whose content hash differs from the record -> FAIL, naming the
+        input and both hashes.
+
+    Returns (ok, lines, failed) — `failed` is the set of input names that failed, which the
+    known-failures layer consumes. `ok` is the RAW verdict, before pinning.
+    """
+    run = report.get('run') if isinstance(report, dict) else None
+    inputs = (run or {}).get('inputs') if isinstance(run, dict) else None
+    if not isinstance(inputs, dict) or not inputs:
+        return False, ['RECON/SYNC: report carries no usable `run.inputs` — cannot establish '
+                       'what it was built from. Rebuild with reconcile.py.'], set()
+    lines, ok, failed = [], True, set()
+    for name in sorted(inputs):
+        rec = inputs.get(name)
+        if not isinstance(rec, dict) or not rec.get('sha256') or not rec.get('path'):
+            lines.append(f'RECON/SYNC: `{name}` entry is malformed — needs both `sha256` and `path`')
+            ok = False; failed.add(name)
+            continue
+        want, path = rec['sha256'], _resolve(rec['path'], root)
+        if not exists(path):
+            lines.append(f'RECON/SYNC: `{name}` recorded at {path} is ABSENT on this machine — '
+                         f'cannot verify sha256 {want[:12]}…')
+            ok = False; failed.add(name)
+            continue
+        got = sha(path)
+        if got != want:
+            lines.append(f'RECON/SYNC: `{name}` MOVED — recorded {want[:12]}… but {path} '
+                         f'now hashes {got[:12]}…')
+            ok = False; failed.add(name)
+        else:
+            lines.append(f'RECON/SYNC: `{name}` matches {want[:12]}…')
+    return ok, lines, failed
+
+
+KNOWN_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                          'reconcile_known_failures.json')
+
+
+def apply_known(failed_inputs, known):
+    """SHRINK-ONLY known-failures, mirroring check_docs (PS-73) and check_encoding.
+
+    `failed_inputs` is the set of input names [RECON/SYNC] found failing. Returns
+    (unknown, stale, lines): failures NOT pinned, pins that no longer fail, and the report
+    lines. The gate is green only when both are empty.
+
+    Enforced in code, so a pin cannot quietly widen:
+      * `entries` longer than `max_entries` -> GREW, fails. A second moved input is NOT
+        absorbed by a pin written for the first.
+      * an entry lacking `owner` or `removal_condition` -> fails. The ruling requires the
+        removal condition to live in the file: a pinned red nobody remembers the reason for
+        is worse than a visible red.
+      * an entry that no longer fails -> STALE, fails. That is how HALT-B's refresh forces
+        the pin's removal rather than leaving it to memory.
+    """
+    lines, unknown, stale = [], [], []
+    entries = (known or {}).get('entries') or []
+    maxn = (known or {}).get('max_entries')
+    if not isinstance(maxn, int) or len(entries) > maxn:
+        lines.append(f'RECON/KNOWN: known-failures GREW ({len(entries)} > {maxn}) — SHRINK-ONLY')
+        return failed_inputs, [], lines
+    for e in entries:
+        if not e.get('owner') or not e.get('removal_condition'):
+            lines.append(f"RECON/KNOWN: entry {e.get('input')!r} lacks an owner or a "
+                         f"removal_condition — both are required")
+            return failed_inputs, [], lines
+    pinned = {e.get('input') for e in entries}
+    unknown = sorted(set(failed_inputs) - pinned)
+    stale = sorted(pinned - set(failed_inputs))
+    for s in stale:
+        lines.append(f'RECON/KNOWN: pinned input {s!r} NO LONGER fails — remove it (shrink). '
+                     f'Its removal condition has been met.')
+    for p in sorted(pinned & set(failed_inputs)):
+        e = [x for x in entries if x.get('input') == p][0]
+        lines.append(f'RECON/KNOWN: {p!r} failing as pinned — {e.get("owner")}')
+    return unknown, stale, lines
+
+
+def shape_verdict(report):
+    """[RECON/SHAPE] — the report parses and carries the expected inventory.
+
+    Nothing asserted this artifact was even parseable before. The inventory is pinned at
+    the top level and inside `run` only: per-committee record shape is reconcile.py's
+    business, and pinning it here would make this file a second schema to maintain.
+    """
+    if not isinstance(report, dict):
+        return False, ['RECON/SHAPE: report is not a JSON object']
+    lines, ok = [], True
+    missing = EXPECTED_TOP - set(report)
+    extra = set(report) - EXPECTED_TOP
+    if missing:
+        lines.append('RECON/SHAPE: missing top-level key(s): ' + ', '.join(sorted(missing)))
+        ok = False
+    if extra:
+        lines.append('RECON/SHAPE: unexpected top-level key(s): ' + ', '.join(sorted(extra)))
+        ok = False
+    run = report.get('run')
+    if not isinstance(run, dict):
+        lines.append('RECON/SHAPE: `run` is not an object')
+        ok = False
+    else:
+        rmissing = EXPECTED_RUN - set(run)
+        rextra = set(run) - EXPECTED_RUN
+        if rmissing:
+            lines.append('RECON/SHAPE: `run` missing key(s): ' + ', '.join(sorted(rmissing)))
+            ok = False
+        if rextra:
+            lines.append('RECON/SHAPE: `run` has unexpected key(s): ' + ', '.join(sorted(rextra)))
+            ok = False
+    if ok:
+        lines.append(f'RECON/SHAPE: {len(EXPECTED_TOP)} top-level and {len(EXPECTED_RUN)} '
+                     f'`run` keys as expected')
+    return ok, lines
+
+
+# ---------------------------------------------------------------- self-test
+def _self_test():
+    t, fails = [], 0
+
+    def ok(name, cond):
+        nonlocal fails
+        t.append((name, cond))
+        if not cond:
+            fails += 1
+
+    good = {'run': {k: 'x' for k in EXPECTED_RUN}, 'headline': {},
+            'no_sbe_id_committees': [], 'join_failures': [], 'filings_missing_totals': [],
+            'disclosed': [], 'stale_annotations': [], 'committees': {}}
+    good['run']['inputs'] = {'a.json': {'sha256': 'abc', 'path': '/tmp/a.json'}}
+
+    H = lambda p: 'abc'
+    E = lambda p: True
+
+    ok('sync: matching sha passes', sync_verdict(good, sha=H, exists=E)[0])
+    ok('sync: absent `inputs` fails',
+       not sync_verdict({'run': {}}, sha=H, exists=E)[0])
+    ok('sync: empty `inputs` fails',
+       not sync_verdict({'run': {'inputs': {}}}, sha=H, exists=E)[0])
+    ok('sync: `inputs` not a dict fails',
+       not sync_verdict({'run': {'inputs': []}}, sha=H, exists=E)[0])
+    ok('sync: entry missing sha256 fails',
+       not sync_verdict({'run': {'inputs': {'a': {'path': '/tmp/a'}}}}, sha=H, exists=E)[0])
+    ok('sync: entry missing path fails',
+       not sync_verdict({'run': {'inputs': {'a': {'sha256': 'abc'}}}}, sha=H, exists=E)[0])
+    ok('sync: absent file fails rather than passing silently',
+       not sync_verdict(good, sha=H, exists=lambda p: False)[0])
+    ok('sync: absent file names the file',
+       'ABSENT' in ' '.join(sync_verdict(good, sha=H, exists=lambda p: False)[1]))
+    ok('sync: drifted sha fails',
+       not sync_verdict(good, sha=lambda p: 'zzz', exists=E)[0])
+    ok('sync: drifted sha names the input',
+       'MOVED' in ' '.join(sync_verdict(good, sha=lambda p: 'zzz', exists=E)[1]))
+    ok('sync: no report at all fails', not sync_verdict(None, sha=H, exists=E)[0])
+    # the CWD-dependence the first real run caught
+    ok('sync: a relative path resolves against the repo root, not the CWD',
+       sync_verdict({'run': {'inputs': {'a': {'sha256': 'abc', 'path': 'sub/a.json'}}}},
+                    sha=H, exists=lambda p: p == os.path.join('/ROOT', 'sub/a.json'),
+                    root='/ROOT')[0])
+    ok('sync: an absolute path is used as given',
+       sync_verdict({'run': {'inputs': {'a': {'sha256': 'abc', 'path': '/abs/a.json'}}}},
+                    sha=H, exists=lambda p: p == '/abs/a.json', root='/ROOT')[0])
+
+    ok('shape: expected inventory passes', shape_verdict(good)[0])
+    ok('shape: missing top-level key fails',
+       not shape_verdict({k: v for k, v in good.items() if k != 'committees'})[0])
+    ok('shape: unexpected top-level key fails',
+       not shape_verdict(dict(good, surprise=1))[0])
+    ok('shape: missing `run` key fails',
+       not shape_verdict(dict(good, run={k: 'x' for k in EXPECTED_RUN if k != 'inputs'}))[0])
+    ok('shape: unexpected `run` key fails',
+       not shape_verdict(dict(good, run=dict(good['run'], generated_at='2026-01-01')))[0])
+    ok('shape: non-object report fails', not shape_verdict([])[0])
+
+    # ---- known-failures layer (shrink-only), the ruling's two conditions ----
+    PIN = {'max_entries': 1, 'entries': [
+        {'input': 'election-data.json', 'owner': 'o', 'removal_condition': 'HALT-B refresh'}]}
+    ok('known: a pinned failure is absorbed', apply_known({'election-data.json'}, PIN)[:2] == ([], []))
+    ok('known: a SECOND moved input is NOT absorbed by the pin',
+       apply_known({'election-data.json', 'd2totals'}, PIN)[0] == ['d2totals'])
+    ok('known: growth beyond max_entries fails',
+       'GREW' in ' '.join(apply_known(set(), {'max_entries': 1, 'entries': [
+           {'input': 'a', 'owner': 'o', 'removal_condition': 'r'},
+           {'input': 'b', 'owner': 'o', 'removal_condition': 'r'}]})[2]))
+    ok('known: an entry lacking removal_condition fails',
+       'removal_condition' in ' '.join(apply_known(set(), {'max_entries': 1, 'entries': [
+           {'input': 'a', 'owner': 'o'}]})[2]))
+    ok('known: an entry lacking owner fails',
+       'owner' in ' '.join(apply_known(set(), {'max_entries': 1, 'entries': [
+           {'input': 'a', 'removal_condition': 'r'}]})[2]))
+    ok('known: a pin that no longer fails is STALE (forces removal at HALT-B)',
+       apply_known(set(), PIN)[1] == ['election-data.json'])
+    ok('known: no pins and no failures is clean', apply_known(set(), {'max_entries': 0, 'entries': []})[:2] == ([], []))
+
+    for n, c in t:
+        print(('  PASS ' if c else '  FAIL ') + n)
+    print(f"self-test: {len(t)} checks · " + ("ALL PASS" if not fails else f"FAILED {fails}"))
+    return 1 if fails else 0
+
+
+def main():
+    ap = argparse.ArgumentParser(description='Validate reconciliation-report.json (RECONCILE-2 A).')
+    ap.add_argument('report', nargs='?', help='reconciliation-report.json path')
+    ap.add_argument('--self-test', action='store_true')
+    a = ap.parse_args()
+
+    if a.self_test:
+        sys.exit(_self_test())
+    if not a.report:
+        ap.error('report path required (or pass --self-test)')
+
+    try:
+        report = json.load(open(a.report))
+    except OSError as e:
+        print(f'[validate_reconcile] ERROR cannot open {a.report}: {e}', file=sys.stderr)
+        sys.exit(1)
+    except json.JSONDecodeError as e:
+        print(f'[validate_reconcile] ERROR {a.report} is not valid JSON: {e}', file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        known = json.load(open(KNOWN_PATH))
+    except OSError:
+        known = {'max_entries': 0, 'entries': []}
+
+    sok, slines = shape_verdict(report)
+    _raw_ok, ylines, failed = sync_verdict(report)
+    unknown, stale, klines = apply_known(failed, known)
+    yok = not unknown and not stale
+
+    bad = not (sok and yok)
+    for ln in slines + ylines + klines:
+        print('[validate_reconcile] ' + ln, file=(sys.stderr if bad else sys.stdout))
+    for u in unknown:
+        print(f'[validate_reconcile] RECON/KNOWN: {u!r} is failing and is NOT pinned — '
+              f'either fix it or ratify a pin', file=sys.stderr)
+    n_ok = int(sok) + int(yok)
+    print(f'[validate_reconcile] 2 checks · ' + ('OK: 0 errors' if n_ok == 2
+                                                 else f'FAILED {2 - n_ok}')
+          + (f' · {len(failed)} pinned' if failed and yok else ''))
+    sys.exit(0 if n_ok == 2 else 1)
+
+
+if __name__ == '__main__':
+    main()

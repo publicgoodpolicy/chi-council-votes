@@ -28,7 +28,9 @@ Exit codes: 0 = clean (no committee over threshold, no coverage miss);
 """
 import argparse
 import csv
+import hashlib
 import json
+import os
 import sys
 from collections import defaultdict
 from datetime import datetime
@@ -271,6 +273,51 @@ def reconcile_committee(periods, contribs, d2_item, d2_ink, threshold):
     }
 
 
+def _sha256_file(path, _chunk=1 << 20):
+    """Content hash of an input. Streamed: two of the three inputs are 50-150 MB."""
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for block in iter(lambda: f.read(_chunk), b''):
+            h.update(block)
+    return h.hexdigest()
+
+
+def build_inputs_map(data_path, d2totals_path, fileddocs_path, known_gaps_path=None,
+                     sha=_sha256_file):
+    """RECONCILE-2 / D-10 — the provenance stamp, keyed by content.
+
+    Four of five derived artifacts in this repo already carry provenance in their own body;
+    this report was the last without one, and the cost was concrete: the D2 Totals vintage
+    the current report was built against (`16f30c16...`) is recoverable ONLY by hashing a
+    file outside the repo, and the invocation that produced it survives only in a commit
+    message. A reader of the artifact could not tell what it was built from.
+
+    Shape follows `school-board-finance.json._sync.inputs` — basename key, `sha256` inside —
+    with two deliberate differences:
+
+      * NO `generated_at`. D-10. This report is DETERMINISTIC: no timestamp, no random, no
+        unsorted iteration, explicit sort on committee and period ordering, so a re-run on
+        identical inputs is byte-identical. A timestamp would forfeit that, and the property
+        is what makes a refresh diff purely data-driven. A content hash is the better anchor
+        anyway: it identifies the input by what it IS, not by when a script ran.
+      * `path` alongside `sha256`. Two of the three inputs live OUTSIDE the repo, in sealed
+        bulk archives, so a hash with no path cannot be resolved back to a file. The path is
+        also carried in `run`'s sibling keys; the duplication is deliberate, so the map reads
+        on its own rather than by cross-reference.
+
+    `known_gaps` is included when passed. It is an input that changes the output — a matched
+    gap becomes DISCLOSED and leaves the exit triggers — so omitting it would leave the stamp
+    claiming completeness it does not have. `sha` is injected so a test can drive every path
+    without a filesystem, the `[SBF/SYNC]` precedent.
+    """
+    named = [('election-data.json', data_path),
+             ('d2totals', d2totals_path),
+             ('fileddocs', fileddocs_path)]
+    if known_gaps_path:
+        named.append(('known-gaps.json', known_gaps_path))
+    return {name: {'sha256': sha(path), 'path': path} for name, path in named}
+
+
 def run(data_path, d2totals_path, fileddocs_path, pulled, threshold, known_gaps_path=None):
     data = json.load(open(data_path))
     committees = data.get('committees', {})
@@ -390,6 +437,8 @@ def run(data_path, d2totals_path, fileddocs_path, pulled, threshold, known_gaps_
             'pulled': pulled,
             'threshold': threshold,
             'scope': 'elections candidate committees (v1); IE and council lanes deferred',
+            'inputs': build_inputs_map(data_path, d2totals_path, fileddocs_path,
+                                       known_gaps_path),
         },
         'headline': {
             'd2_itemized_total': tot_d2,
