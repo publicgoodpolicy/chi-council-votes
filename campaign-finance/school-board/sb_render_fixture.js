@@ -1509,11 +1509,17 @@ function around(tpl, marker) { return String(tpl).split(marker); }
                ['font-size', 'font-weight', 'letter-spacing', 'text-transform',
                 'margin', 'padding-bottom', 'border-bottom'], 'section-h'));
 
-  ok('[SBF4/CHROME] the in-modal row matches the council\'s card idiom',
+  // SBFIN-5 A / PS-100 — the BODY is extended to the NAME, not the name narrowed to the
+  // body. Until now this read border-radius, padding and margin-bottom plus a border
+  // regex: the card's skin. It called that "the card idiom" while the council's row was a
+  // two-column grid and this one was not, so four layout declarations differed under a
+  // green check. D-3 adopts those four, so the honest fix is to read them.
+  ok('[SBF4/CHROME] the in-modal row matches the council\'s card idiom — layout AND skin',
      (function () {
        var c = decls(COUNCIL, '.ipg-modal .ipg-cf-row');
        var b = decls(EMBED_HTML, '#ipg-sb-app .ipg-sb-modal .ipg-sb-donor');
-       return sameDecls(c, b, ['border-radius', 'padding', 'margin-bottom'], 'cf-row')
+       return sameDecls(c, b, ['display', 'grid-template-columns', 'gap', 'align-items',
+                               'border-radius', 'padding', 'margin-bottom'], 'cf-row')
            && !!b && /1px solid/.test(String(b['border']));
      })());
 
@@ -1555,6 +1561,111 @@ function around(tpl, marker) { return String(tpl).split(marker); }
      (function () {
        var global = decls(EMBED_HTML, '#ipg-sb-app .ipg-sb-donor');
        return !!global && !global['border-radius'] && String(global['padding']) === '10px 0';
+     })());
+
+  // ======================================================================
+  // SBFIN-5 A — the guards for the class the C fixture is structurally blind to.
+  //
+  // [SBF4/CHROME] compares DECLARATIONS between the two files. Both files declared
+  // padding:40px 20px on their overlay, so it passed — correctly — while the school-board
+  // padding computed to 0px live, because `#ipg-sb-app *` (l.94) at (1,0,0) beat it at
+  // (0,1,0). Same declaration, different DOM parent, different winner. No amount of
+  // widening the declaration comparison reaches that; these read the two facts that
+  // decide it instead — where the node sits, and whether the reset is contested.
+  //
+  // Names are scoped to what each body asserts, per PS-100.
+  // ======================================================================
+  function ruleAt(css, selector) {
+    // EXACT selector at a line start, so an indented @media copy or a longer selector
+    // sharing this tail cannot be picked up instead. decls() above deliberately takes the
+    // LAST match to model the cascade; here we need one identified rule, not the winner.
+    var re = new RegExp('(^|\\n)' + selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*\\{([^}]*)\\}');
+    var m = re.exec(css);
+    if (!m) return null;
+    var out = {};
+    m[2].split(';').forEach(function (d) {
+      var i = d.indexOf(':'); if (i < 0) return;
+      out[d.slice(0, i).trim()] = d.slice(i + 1).trim().replace(/\s+/g, ' ');
+    });
+    return out;
+  }
+
+  ok('[SBF5/DOM] the donor and IE overlays are emitted into #ipg-sb-app\'s innerHTML, never appended to body',
+     (function () {
+       // Under D-1-alt the CURRENT position is the ratified one, so this pins it. A future
+       // relocation fails here first — which is correct, because relocation additionally
+       // requires the lifecycle work: close() nulls state and re-renders rather than
+       // removing a node, so a body-level overlay would stop closing and duplicate on
+       // re-open, silently. The feedback overlay IS body-level by design and is excluded.
+       var emitted = /h \+= donorProfileHtml\(/.test(EMBED_HTML)
+                  && /h \+= ieDetailHtml\(/.test(EMBED_HTML)
+                  && /app\.innerHTML = h;/.test(EMBED_HTML);
+       var bodyAppended = /document\.body\.(appendChild|insertAdjacentHTML)[^;]*(donor|ie)-overlay/i
+                            .test(EMBED_HTML);
+       if (!emitted) console.log('        overlay emission path not found (builder -> h -> app.innerHTML)');
+       if (bodyAppended) console.log('        a donor/IE overlay is appended to document.body');
+       return emitted && !bodyAppended;
+     })());
+
+  ok('[SBF5/RESET] the #ipg-sb-app * reset declares exactly box-sizing, margin, padding',
+     (function () {
+       var r = ruleAt(EMBED_HTML, '#ipg-sb-app *');
+       var got = r ? Object.keys(r).sort().join(',') : '(missing)';
+       if (got !== 'box-sizing,margin,padding') console.log('        reset declares: ' + got);
+       return got === 'box-sizing,margin,padding';
+     })());
+
+  ok('[SBF5/RESET] every reset property the modal rules also declare is re-declared at (1,1,0)',
+     (function () {
+       // THE check that would have caught the original defect. Note the conditional: a reset
+       // property is only required to be re-declared where the modal rule CONTESTS it. Both
+       // box-sizing and margin are uncontested here and must stay that way — re-declaring
+       // box-sizing is exactly what D-2b proposed and Ishan withdrew, since every width
+       // formula in this file is written for border-box.
+       var reset = ruleAt(EMBED_HTML, '#ipg-sb-app *');
+       if (!reset) { console.log('        reset rule not found'); return false; }
+       var props = Object.keys(reset);
+       return [['.ipg-sb-modal-overlay', '#ipg-sb-app .ipg-sb-modal-overlay'],
+               ['.ipg-sb-modal',         '#ipg-sb-app .ipg-sb-modal']].every(function (pr) {
+         var base = ruleAt(EMBED_HTML, pr[0]), raised = ruleAt(EMBED_HTML, pr[1]) || {};
+         if (!base) { console.log('        base rule missing: ' + pr[0]); return false; }
+         return props.every(function (p) {
+           if (!(p in base)) return true;                 // uncontested — the reset owns it
+           if (p in raised) return true;
+           console.log('        ' + pr[0] + ' declares ' + p
+                       + ' at (0,1,0) with no (1,1,0) re-declaration — the reset wins and it is dead');
+           return false;
+         });
+       });
+     })());
+
+  ok('[SBF5/RESET] the mobile modal rules keep the #ipg-sb-app prefix so they still outrank the base re-declarations',
+     (function () {
+       // Found by bite-testing the guards above: dropping these two selectors back to
+       // (0,1,0) breaks mobile full-bleed — the panel takes the desktop 40px/32px padding
+       // at phone widths — and NOTHING failed. [SBF4/CHROME]'s mobile check looks the rule
+       // up by a tail-matching regex, so it finds it under either selector and compares
+       // declarations that did not change. That is the same declaration-vs-cascade blindness
+       // this lane exists to close, one level up. At equal specificity source order decides
+       // and this block is later, so the prefix is what keeps mobile winning.
+       var m = /@media\(max-width:600px\)\{([\s\S]*?)\n\}/.exec(EMBED_HTML);
+       if (!m) { console.log('        mobile block not found'); return false; }
+       return ['#ipg-sb-app .ipg-sb-modal-overlay{', '#ipg-sb-app .ipg-sb-modal{'].every(function (s) {
+         if (m[1].indexOf(s) >= 0) return true;
+         console.log('        mobile block is missing the raised selector: ' + s);
+         return false;
+       });
+     })());
+
+  ok('[SBF5/RESET] the modal declares no box-sizing — the panel stays border-box (D-2b withdrawn)',
+     (function () {
+       // Class-3 protection for this HALT, in durable form. content-box would import a 24px
+       // horizontal overflow across [601,744), a 36px overflow at every width <= 600px, and
+       // a wrapped mobile stat row that defeats SBFIN-4 C's two-tiles-per-row rule.
+       var n = (EMBED_HTML.match(/box-sizing/g) || []).length;
+       var m = ruleAt(EMBED_HTML, '#ipg-sb-app .ipg-sb-modal');
+       if (n !== 1) console.log('        box-sizing appears ' + n + ' times; expected exactly 1 (the l.94 reset)');
+       return n === 1 && !!m && !('box-sizing' in m);
      })());
 
   // ---- finance failure is ISOLATED --------------------------------------

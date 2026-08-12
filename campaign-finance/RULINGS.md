@@ -963,6 +963,16 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: REFRESH-1 G1 ratification record, revision 2 (`refresh-1-g1-ratification-rev2.md`), sha256 `08228a3f3e146269f763ffe1c96786693f6cb5dc743669f2b1bd9ee99e429ee1`, §"THE SINGLE-SOURCE RULING", lines 32–38, transcribed verbatim; ratified by Ishan 2026-08-07 after observing that the inverted legacy label appears nowhere in the editorial Sheet. Id allocated at the G3 relay (`0b5e43d1…` §COMMIT 1) rather than at issue, so the allocation is checked rather than assumed. Governs D2 and D6. The removal's magnitude on the surface losing an unreferenced vote is a measurement and is cited to the G2 report (`987fd58f…`) §2.4 per PS-38.*
 
+### PS-100 — a check's name is scoped to what its body asserts
+
+> **A check's name is scoped to what its body asserts.** Where a name claims more than the body
+> verifies, **the name is the defect**: either the name is rewritten to the body's actual subject, or
+> the body is extended to the name's claim, **in the same commit**. A check whose name over-reads its
+> body is a **vacuity even when the check itself is correct and passing** — it reports coverage that
+> does not exist, and the gap it conceals is invisible precisely because the line is green.
+
+*Provenance: HALT-A SBFIN-5 authorization, revision B (`HALT-A-SBFIN-5-revB.md`), sha256 `62bd537a020fbe2e2a4833d98611d98103a1e191fb5a9326002d5d3b0b388864`, §P3 item 19, transcribed verbatim; ratified by Ishan 2026-08-10, id allocated 2026-08-11 at this transcription. Phrased at class rather than instance per PS-94. The occasion was `[SBF4/CHROME] "the in-modal row matches the council's card idiom"`, whose body read `border-radius`, `padding`, `margin-bottom` and a `border` regex — the card's skin — while the council's row was a two-column grid and this tool's was not, so four layout declarations differed under a green check; the occasion is not the subject. Discharged at SBFIN-5 A by extending that body rather than narrowing the name, the option the ruling prefers where the missing subject is real and in scope. Distinct from PS-73, which governs whether a documented claim is checked at all; PS-100 governs whether a check's name reports its own reach.*
+
 ---
 
 ## Rulings ratified without an id

@@ -268,8 +268,24 @@ const IPG_SB_FEEDBACK = {
 #ipg-sb-app .ipg-sb-modal .ipg-sb-fin-sub{font-size:13px;font-weight:700;letter-spacing:.14em;
   text-transform:uppercase;color:var(--sage);margin:24px 0 12px;padding-bottom:9px;
   border-bottom:2px solid var(--tan)}
-#ipg-sb-app .ipg-sb-modal .ipg-sb-donor{background:var(--white);border:1px solid var(--line);
+/* SBFIN-5 A / D-3 — the first four declarations are copied from the council's
+   .ipg-modal .ipg-cf-row, which is the alignment target. They are NOT a fix for
+   "the amount cannot align": this row already resolved display:flex with
+   justify-content:space-between and gap:14px from the page rule below, so
+   single-line rows already read name-left / amount-right. The measured delta is
+   flex vs grid 1fr auto, plus align-items — this tool resolved `stretch` where the
+   council declares `flex-start` — and it shows when the NAME WRAPS: under grid the
+   amount column keeps its natural width and stays top-aligned. */
+#ipg-sb-app .ipg-sb-modal .ipg-sb-donor{display:grid;grid-template-columns:1fr auto;gap:14px;
+  align-items:flex-start;
+  background:var(--white);border:1px solid var(--line);
   border-radius:10px;padding:13px 16px;margin-bottom:8px}
+/* SBFIN-5 A / D-4 — the in-modal stat tile goes white, matching the council's
+   .ipg-modal-summary .ipg-stat. SCOPED TO THE MODAL deliberately: the tile rule is
+   shared with the member page (SCOPE-CENSUS `both` bucket), and re-colouring it at
+   the page rule would repaint the member-page finance tiles too, which this HALT's
+   class 3 forbids. Background only — the tile's box model is untouched. */
+#ipg-sb-app .ipg-sb-modal .ipg-sb-stat{background:var(--white)}
 /* ---- SBFIN-3: IE rows, the three-stream industry row ---- */
 #ipg-sb-app .ipg-sb-pac-tag{display:inline-block;padding:1px 7px;border-radius:999px;
   background:var(--neu-bg);color:var(--ink-mid);font-size:11px;font-weight:600}
@@ -370,6 +386,17 @@ const IPG_SB_FEEDBACK = {
   --ink-muted:#9a8e7e; --ink-label:#7d7264; --ink-mid:#6a5d4e;
   color:var(--ink);
 }
+/* SBFIN-5 A — the padding above is DEAD without these two rules. `#ipg-sb-app *`
+   (l.94) declares padding at specificity (1,0,0); the two rules above are (0,1,0),
+   so the reset won and both computed to 0px: the overlay had no gutter and the
+   panel no interior padding. Re-declared here at (1,1,0) so the authored values
+   actually reach the element.
+   The box model is deliberately NOT touched. The panel stays border-box from the
+   l.94 reset, which is what `max-width:min(680px,calc(100vw - 40px))` above, and
+   `max-width:100vw` and `calc(50% - 10px)` in the mobile block, were each written
+   for. See the mobile block for the specificity that keeps those rules winning. */
+#ipg-sb-app .ipg-sb-modal-overlay{padding:40px 20px}
+#ipg-sb-app .ipg-sb-modal{padding:32px 32px 26px}
 .ipg-sb-modal-close{position:absolute;top:14px;right:18px;font-size:28px;font-weight:300;line-height:1;
   width:32px;height:32px;border:none;background:none;cursor:pointer;color:var(--ink-muted)}
 .ipg-sb-modal-close:hover{color:var(--teal)}
@@ -465,8 +492,13 @@ const IPG_SB_FEEDBACK = {
   #ipg-sb-app .ipg-sb-rec-vote{grid-template-columns:1fr}
   #ipg-sb-app .ipg-sb-rec-right{justify-self:start}
   .ipg-sb-fb-fab{right:14px;bottom:14px;padding:10px 13px;font-size:12px}
-  .ipg-sb-modal-overlay{padding:0;align-items:stretch}
-  .ipg-sb-modal{border-radius:0;min-height:100vh;padding:24px 18px 20px;max-width:100vw}
+  /* SBFIN-5 A — raised from (0,1,0) to (1,1,0). The base rules added above are
+     (1,1,0); at (0,1,0) these would lose to them and mobile full-bleed would break
+     (the panel would take the desktop 40px/32px padding at phone widths). At EQUAL
+     specificity source order decides, and this block is later in the file, so these
+     win. Declarations are unchanged — only the selector moved. */
+  #ipg-sb-app .ipg-sb-modal-overlay{padding:0;align-items:stretch}
+  #ipg-sb-app .ipg-sb-modal{border-radius:0;min-height:100vh;padding:24px 18px 20px;max-width:100vw}
   /* The council's THIRD mobile modal rule, absent from this embed until now: it halves the
      stat tiles so two fit a phone row. A fifth measured difference, found while applying
      R.4's four. */
