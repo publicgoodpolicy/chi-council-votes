@@ -286,6 +286,29 @@ const IPG_SB_FEEDBACK = {
    the page rule would repaint the member-page finance tiles too, which this HALT's
    class 3 forbids. Background only — the tile's box model is untouched. */
 #ipg-sb-app .ipg-sb-modal .ipg-sb-stat{background:var(--white)}
+/* SBFIN-5 B / D-5 — the nested child set. No child idiom existed in either embed, so this
+   is new vocabulary rather than an alignment; the AFFORDANCE is not new — the parent row
+   reuses .ipg-sb-donor-click, this tool's existing clickable-row idiom (the brief named
+   council's .ipg-cf-clickable, which does not exist in this file; substitution reported).
+   Children read as subordinate by being smaller than the parent on every axis — 8px radius
+   against 10px, 9px 13px padding against 13px 16px, 13.5px amount against the parent's —
+   and by hanging off a tan left rail that carries the nesting without a connector. */
+#ipg-sb-app .ipg-sb-modal .ipg-sb-recip{align-items:center}
+#ipg-sb-app .ipg-sb-modal .ipg-sb-recip.open{border-color:var(--sage)}
+#ipg-sb-app .ipg-sb-caret{display:inline-block;width:11px;color:var(--sage);font-size:11px}
+#ipg-sb-app .ipg-sb-kids{margin:-4px 0 8px 16px;border-left:2px solid var(--tan);
+  padding-left:11px}
+#ipg-sb-app .ipg-sb-kidhead{display:flex;justify-content:space-between;gap:12px;
+  margin:8px 0 4px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  font-weight:600;color:var(--ink-label)}
+#ipg-sb-app .ipg-sb-kidhead .a{font-variant-numeric:tabular-nums;letter-spacing:0}
+#ipg-sb-app .ipg-sb-kid{display:grid;grid-template-columns:1fr auto;gap:12px;
+  align-items:flex-start;background:var(--white);border:1px solid var(--line);
+  border-radius:8px;padding:9px 13px;margin-bottom:5px;font-size:13px}
+#ipg-sb-app .ipg-sb-kid .l{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  color:var(--ink-mid)}
+#ipg-sb-app .ipg-sb-kid .a{font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;
+  font-size:13.5px}
 /* ---- SBFIN-3: IE rows, the three-stream industry row ---- */
 #ipg-sb-app .ipg-sb-pac-tag{display:inline-block;padding:1px 7px;border-radius:999px;
   background:var(--neu-bg);color:var(--ink-mid);font-size:11px;font-weight:600}
@@ -520,7 +543,11 @@ const IPG_SB_FEEDBACK = {
                 finElection:null, finShowAllDonors:false, spendElection:null,
                 finIndustry:'All', finDonor:null,
                 spendSub:'members', spendSearch:'', spendType:'All', spendIndustry:'All',
-                spendIndustryDetail:null, spendShowAll:false, spendIE:null };
+                spendIndustryDetail:null, spendShowAll:false, spendIE:null,
+                // SBFIN-5 B — which recipient rows are expanded, keyed by seat. Reset
+                // whenever the donor or the election scope changes, so an open row never
+                // carries over onto a different subject.
+                finOpenRecip:{} };
 
   // ==========================================================
   // THE RENDER BOUNDARY — D-1's four-value map, declared as data.
@@ -1094,18 +1121,43 @@ const IPG_SB_FEEDBACK = {
   }
   // Every seated member this donor gave to, within the school-board universe and the
   // active scope. Thin by construction — 16 committees — and that is not a defect.
+  // SBFIN-5 B — the parent total and its children come out of ONE walk.
+  //
+  // MODAL-NEST-1 refuted H4: an item carries date, amount and its flags and NO member,
+  // donor, election or stream key. Member identity existed at spendDonorAggregate and was
+  // dropped in the concat, so the flat list below the recipient rows could not be
+  // attributed to any of them — for the 59 donors spanning more than one member, no
+  // recipient figure was reconstructible from what was on screen.
+  //
+  // Identity is threaded HERE rather than downstream because this is the loop that already
+  // sums the parent. Children are the same `d` rows the total adds, grouped by the election
+  // key the loop is already iterating, so children sum to their parent BY CONSTRUCTION and
+  // not by a second agreeing computation. Guard 3 asserts it anyway. One resolution passed
+  // down (scopeKey, in), nothing re-derived downstream — the SBFIN-4 A convention.
+  //
+  // The amount/count arithmetic is UNCHANGED: same addends, same order, same round2 points.
+  // The election grouping is additive.
   function donorRecipients(donorId, scopeKey){
     var out = [];
     ((F && F.members) || []).forEach(function(fm){
       if(!fm.donors_by_election) return;
-      var amt = 0, cnt = 0, hit = false;
+      var amt = 0, cnt = 0, hit = false, groups = [];
       scopeKeysFor(fm, scopeKey).forEach(function(k){
+        var gAmt = 0, gCnt = 0, gItems = [], gHit = false;
         (fm.donors_by_election[k] || []).forEach(function(d){
           if(d.donor_id !== donorId) return;
           hit = true; amt = round2(amt + Number(d.amount||0)); cnt += Number(d.count||0);
+          gHit = true; gAmt = round2(gAmt + Number(d.amount||0)); gCnt += Number(d.count||0);
+          gItems = gItems.concat(d.items || []);
         });
+        if(gHit) groups.push({ ek:k, label:((F && F.election_labels)||{})[k] || k,
+                               amount:gAmt, count:gCnt, items:gItems });
       });
-      if(hit) out.push({ seat:fm.seat, name:fm.name, amount:amt, count:cnt });
+      // D-8 — most recent election first, the order the board-wide selector already uses.
+      groups.sort(function(a,b){ return String(b.ek).localeCompare(String(a.ek)); });
+      groups.forEach(function(g){ g.items.sort(function(a,b){
+        return String(a.date||'').localeCompare(String(b.date||'')); }); });
+      if(hit) out.push({ seat:fm.seat, name:fm.name, amount:amt, count:cnt, elections:groups });
     });
     out.sort(function(a,b){ return b.amount - a.amount; });
     return out;
@@ -1207,19 +1259,50 @@ const IPG_SB_FEEDBACK = {
       });
     }
 
+    // SBFIN-5 B / D-5 — the contributions nest under the recipient they were given to.
+    // The flat "Contributions" table that used to sit below this list is GONE: it listed
+    // every item this donor gave anywhere in scope, under a set of per-recipient totals it
+    // could not be attributed to. D-5b scopes children to the (donor, recipient) pair, so
+    // expanding a row shows that row's money and never the donor's whole footprint.
     var recs = donorRecipients(d.donor_id, scope.key);
     h += '<div class="ipg-sb-fin-sub">'+esc(SF.recipientsHead)+'</div>';
     recs.forEach(function(r){
-      h += '<div class="ipg-sb-donor"><div><div class="n">Seat '+esc(r.seat)+' — '+esc(r.name)+'</div>'
-         + '<div class="s">'+esc(r.count + (r.count===1 ? ' contribution' : ' contributions'))+'</div>'
-         + '</div><div class="a">'+esc(money(r.amount))+'</div></div>';
-    });
-
-    h += '<div class="ipg-sb-fin-sub">'+esc(SF.itemsHead)+'</div>';
-    (d.items||[]).forEach(function(it){
-      h += '<div class="ipg-sb-item"><div class="l">'+fmtItemDate(it.date)
-         + '<span class="c">'+itemChips(it)+'</span></div>'
-         + '<div class="a">'+esc(money(it.amount))+'</div></div>';
+      var open = !!state.finOpenRecip[r.seat];
+      var nEl = (r.elections || []).length;
+      // D-5a — collapsed by default, and the parent says what is inside it before you open
+      // it: how many contributions, and across how many elections. The election count is
+      // load-bearing under the All-elections landing scope (SBFIN-3 C), where a parent can
+      // span cycles; without it a reader cannot tell a one-cycle row from a two-cycle one.
+      var sub = r.count + (r.count===1 ? ' contribution' : ' contributions')
+              + (nEl > 1 ? ' · ' + nEl + ' elections' : '');
+      h += '<button type="button" class="ipg-sb-donor ipg-sb-donor-click ipg-sb-recip'
+         + (open ? ' open' : '') + '" data-recip="'+esc(r.seat)+'" aria-expanded="'+(open?'true':'false')+'">'
+         + '<div><div class="n"><span class="ipg-sb-caret" aria-hidden="true">'+(open?'▾':'▸')+'</span> '
+         + 'Seat '+esc(r.seat)+' — '+esc(r.name)+'</div>'
+         + '<div class="s">'+esc(sub)+'</div></div>'
+         + '<div class="a">'+esc(money(r.amount))+'</div></button>';
+      if(!open) return;
+      // money() rounds each figure independently, so summing rounded children drifts against
+      // the rounded parent — measured at up to $3 across a 38-item group before this. The
+      // remedy is the one already ratified in this file for the industry bar (apportion, the
+      // elections tool's largest-remainder): apportion the subtotals to the parent, then each
+      // group's children to ITS apportioned subtotal, so the chain is exact at both levels.
+      // The parent keeps its own rounded true value; only the parts are allocated.
+      var subs = apportion((r.elections || []).map(function(g){ return { raw:g.amount }; }), r.amount);
+      h += '<div class="ipg-sb-kids">';
+      (r.elections || []).forEach(function(g, gi){
+        // D-8 — an election sub-header carrying its own subtotal. Children may not mix
+        // elections undifferentiated; no ruling permitting that was sought or given.
+        h += '<div class="ipg-sb-kidhead"><span>'+esc(g.label)+'</span>'
+           + '<span class="a">'+esc(fmtWhole(subs[gi]))+'</span></div>';
+        var kids = apportion(g.items.map(function(it){ return { raw:Number(it.amount||0) }; }), subs[gi]);
+        g.items.forEach(function(it, ii){
+          h += '<div class="ipg-sb-kid"><div class="l">'+fmtItemDate(it.date)
+             + '<span class="c">'+itemChips(it)+'</span></div>'
+             + '<div class="a">'+esc(fmtWhole(kids[ii]))+'</div></div>';
+        });
+      });
+      h += '</div>';
     });
     h += '<div class="ipg-sb-modal-foot">'+esc(SF.profileFoot)+'</div>';
     return h + '</div></div>';
@@ -2225,12 +2308,18 @@ const IPG_SB_FEEDBACK = {
       var n=document.getElementById('ipg-sb-rec-q'); if(n){ n.focus(); n.setSelectionRange(p,p);} };
     app.querySelectorAll('.ipg-sb-fb-btn').forEach(function(b){ b.onclick = openFeedback; });
     var fe = document.getElementById('ipg-sb-fin-el');
-    if(fe) fe.onchange = function(){ state.finElection = fe.value; state.finShowAllDonors=false; render(); };
+    // SBFIN-5 B — an election change re-scopes every recipient total, so the expanded rows
+    // are cleared with it: a row left open across a scope change would redraw with different
+    // children under a different parent figure, which reads as the disclosure changing under
+    // the reader rather than the scope changing.
+    if(fe) fe.onchange = function(){ state.finElection = fe.value; state.finShowAllDonors=false;
+                                     state.finOpenRecip = {}; render(); };
     var fm = document.getElementById('ipg-sb-fin-more');
     if(fm) fm.onclick = function(){ state.finShowAllDonors = !state.finShowAllDonors; render(); };
     var se = document.getElementById('ipg-sb-spend-el');
     if(se) se.onchange = function(){ state.spendElection = se.value;
-                                     state.spendShowAll = false; render(); };
+                                     state.spendShowAll = false;
+                                     state.finOpenRecip = {}; render(); };
 
     // C: sub-tabs. Switching sub-tab clears the sub-tab-local state (filters, drill,
     // paging) so a control left set on one view cannot silently scope another.
@@ -2299,12 +2388,24 @@ const IPG_SB_FEEDBACK = {
     var fc = document.getElementById('ipg-sb-fin-clear');
     if(fc) fc.onclick = function(){ state.finIndustry='All'; render(); };
 
-    // B.3 — the donor profile.
+    // B.3 — the donor profile. Opening a DIFFERENT donor clears the expanded rows, so an
+    // open seat never carries over onto a subject it was not opened against (SBFIN-5 B).
     app.querySelectorAll('[data-donor]').forEach(function(b){
-      b.onclick = function(){ state.finDonor = b.getAttribute('data-donor'); render(); }; });
+      b.onclick = function(){
+        var id = b.getAttribute('data-donor');
+        if(id !== state.finDonor) state.finOpenRecip = {};
+        state.finDonor = id; render(); }; });
+    // SBFIN-5 B / D-5a — expand-collapse on the recipient row. Toggle only: it moves no
+    // other state, so the row's money and the modal's scope are unchanged by opening it.
+    app.querySelectorAll('[data-recip]').forEach(function(b){
+      b.onclick = function(){
+        var k = b.getAttribute('data-recip');
+        if(state.finOpenRecip[k]) delete state.finOpenRecip[k];
+        else state.finOpenRecip[k] = 1;
+        render(); }; });
     var ov = document.getElementById('ipg-sb-donor-overlay');
     if(ov){
-      var close = function(){ state.finDonor = null;
+      var close = function(){ state.finDonor = null; state.finOpenRecip = {};
         document.removeEventListener('keydown', escFn); render(); };
       var escFn = function(e){ if(e.key === 'Escape') close(); };
       document.addEventListener('keydown', escFn);

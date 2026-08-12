@@ -622,7 +622,13 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   ok('[SBF2/PROFILE] a donor row opens the profile', !!firstDonor
      && pProf.html.indexOf('ipg-sb-donor-overlay') >= 0
      && pProf.text.indexOf('Donor profile') >= 0);
-  ok('[SBF2/PROFILE] every itemized row renders with an ISO-sourced date', (function () {
+  // SBFIN-5 B — the itemized rows this check is about are now CHILDREN of their recipient
+  // row and collapsed by default (D-5a), so expanding is part of the check's own setup. The
+  // subject is unchanged; only where the rows live moved. Named for what the body does, per
+  // PS-100 — an unexpanded assertion here would have passed vacuously on an empty match.
+  var pKids = fire(pProf, pProf.doc.querySelector('[data-recip="4A"]'));
+  ok('[SBF2/PROFILE] every itemized row renders with an ISO-sourced date once its recipient row is expanded',
+     (function () {
     var fm = finBy('4A'), k = defaultElection(fm);
     var row = (fm.donors_by_election[k] || []).filter(function (d) {
       return d.donor_id === firstDonor; })[0];
@@ -630,7 +636,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
     var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     return row.items.every(function (it) {
       var m2 = /^(\d{4})-(\d{2})-(\d{2})$/.exec(it.date);
-      return pProf.text.indexOf(MON[Number(m2[2]) - 1] + ' ' + Number(m2[3]) + ', ' + m2[1]) >= 0;
+      return pKids.text.indexOf(MON[Number(m2[2]) - 1] + ' ' + Number(m2[3]) + ', ' + m2[1]) >= 0;
     });
   })());
   ok('[SBF2/PROFILE] the profile is scoped to the active election', (function () {
@@ -1655,6 +1661,150 @@ function around(tpl, marker) { return String(tpl).split(marker); }
          console.log('        mobile block is missing the raised selector: ' + s);
          return false;
        });
+     })());
+
+  // ======================================================================
+  // SBFIN-5 B — Guard 3. Parent/child sum agreement on the nested disclosure.
+  //
+  // Nothing asserted this before: sum integrity held at DONOR grain (0 mismatches in 1,300
+  // rows) while no individual RECIPIENT figure was reconstructible from anything on screen.
+  // Now that the children are attributable, a parent above a child set that does not sum to
+  // it would be a visible arithmetic contradiction on a published surface, so it is checked
+  // at the DOM — the rendered figures, not the model that produced them.
+  // ======================================================================
+  function moneyNum(s) { var m = /\$([\d,]+(?:\.\d+)?)/.exec(String(s || ''));
+                         return m ? Number(m[1].replace(/,/g, '')) : null; }
+
+  // A FRESH boot, not landV: the pages above are driven in place, so by this point landV
+  // sits on whatever view the last check left it on. Reusing it made this guard throw on a
+  // null node rather than fail on an arithmetic — a guard that cannot reach its subject is
+  // worth less than no guard, so it gets its own page and navigates explicitly.
+  var sumV = await boot(REAL, 'ok');
+  fire(sumV, sumV.doc.querySelector('[data-view="spend"]'));
+  ok('[SBF5/SUM] every expanded recipient equals the sum of its election subtotals, and each subtotal equals its own child rows',
+     (function () {
+       var pg = fire(sumV, sumV.doc.querySelector('[data-spendsub="donors"]'));
+       var donors = pg.doc.querySelectorAll('[data-donor]');
+       var parents = 0, groups = 0, kids = 0, bad = [];
+       for (var i = 0; i < donors.length; i++) {
+         var open = fire(pg, pg.doc.querySelectorAll('[data-donor]')[i]);
+         // Expand every recipient. Each fire re-renders, so re-query rather than holding nodes.
+         var guard = 0;
+         while (guard++ < 40) {
+           var shut = open.doc.querySelector('[data-recip][aria-expanded="false"]');
+           if (!shut) break;
+           open = fire(open, shut);
+         }
+         var recips = open.doc.querySelectorAll('[data-recip]');
+         for (var r = 0; r < recips.length; r++) {
+           var btn = recips[r];
+           var parent = moneyNum(btn.querySelector('.a') && btn.querySelector('.a').textContent);
+           var kidsBox = btn.nextElementSibling;
+           if (!kidsBox || kidsBox.className.indexOf('ipg-sb-kids') < 0) {
+             bad.push('no child box for seat ' + btn.getAttribute('data-recip')); continue;
+           }
+           parents++;
+           var subTotal = 0, ch = kidsBox.children, cur = null, curSum = 0;
+           for (var c = 0; c < ch.length; c++) {
+             var cls = ch[c].className || '';
+             if (cls.indexOf('ipg-sb-kidhead') >= 0) {
+               if (cur !== null && Math.abs(curSum - cur) > 0.005)
+                 bad.push('group ' + cur + ' != items ' + curSum.toFixed(2));
+               cur = moneyNum(ch[c].querySelector('.a').textContent); curSum = 0; groups++;
+               subTotal = Math.round((subTotal + cur) * 100) / 100;
+             } else if (cls.indexOf('ipg-sb-kid') >= 0) {
+               var v = moneyNum(ch[c].querySelector('.a').textContent);
+               curSum = Math.round((curSum + v) * 100) / 100; kids++;
+             }
+           }
+           if (cur !== null && Math.abs(curSum - cur) > 0.005)
+             bad.push('group ' + cur + ' != items ' + curSum.toFixed(2));
+           if (Math.abs(subTotal - parent) > 0.005)
+             bad.push('parent ' + parent + ' != subtotals ' + subTotal.toFixed(2));
+         }
+       }
+       if (bad.length) bad.slice(0, 5).forEach(function (b) { console.log('        ' + b); });
+       if (!parents) { console.log('        no expanded recipient rows found'); return false; }
+       console.log('        (' + donors.length + ' donors · ' + parents + ' parents · '
+                   + groups + ' election groups · ' + kids + ' child rows)');
+       return bad.length === 0;
+     })());
+
+  ok('[SBF5/SCOPE] each expanded recipient shows exactly that recipient\'s own items, matched against an independent recompute',
+     (function () {
+       // Found by bite-testing Guard 3: removing the (donor, recipient) filter from
+       // donorRecipients does NOT fail [SBF5/SUM], because parent and children come from
+       // the same loop and stay internally consistent while both become wrong. Sum
+       // agreement is necessary and not sufficient — D-5b needs its own check, against an
+       // oracle rebuilt from the artifact rather than from the render's own model.
+       // (In that bite the run died of memory exhaustion rather than a named failure,
+       // which is exactly the kind of evidence a guard should replace.)
+       function oracle(donorId, seat) {
+         var m = REALFIN.members.filter(function (x) { return x.seat === seat; })[0];
+         if (!m) return [];
+         var out = [];
+         Object.keys(m.donors_by_election || {}).forEach(function (k) {
+           (m.donors_by_election[k] || []).forEach(function (d) {
+             if (d.donor_id === donorId) out = out.concat(d.items || []); });
+         });
+         return out;   // landing scope is All elections (SBFIN-3 C), so every key counts
+       }
+       var pg = fire(sumV, sumV.doc.querySelector('[data-spendsub="donors"]'));
+       var first = pg.doc.querySelector('[data-donor]');
+       if (!first) { console.log('        no donor rows on Browse donors'); return false; }
+       var donorId = first.getAttribute('data-donor');
+       var cur = fire(pg, first), guard = 0;
+       while (guard++ < 40) {
+         var shut = cur.doc.querySelector('[data-recip][aria-expanded="false"]');
+         if (!shut) break;
+         cur = fire(cur, shut);
+       }
+       var recips = cur.doc.querySelectorAll('[data-recip]');
+       var bad = [], seats = 0, seen = 0;
+       for (var i = 0; i < recips.length; i++) {
+         var seat = recips[i].getAttribute('data-recip');
+         var box = recips[i].nextElementSibling;
+         if (!box || box.className.indexOf('ipg-sb-kids') < 0) { bad.push('seat ' + seat + ': no child box'); continue; }
+         var kids = box.querySelectorAll('.ipg-sb-kid');
+         var exp = oracle(donorId, seat);
+         seats++; seen += kids.length;
+         if (kids.length !== exp.length) {
+           bad.push('seat ' + seat + ': rendered ' + kids.length + ' children, oracle ' + exp.length); continue;
+         }
+         var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+         var want = exp.map(function (it) {
+           var m2 = /^(\d{4})-(\d{2})-(\d{2})$/.exec(it.date);
+           return m2 ? MON[Number(m2[2]) - 1] + ' ' + Number(m2[3]) + ', ' + m2[1] : String(it.date);
+         }).sort();
+         var got = Array.prototype.map.call(kids, function (k) {
+           return (k.querySelector('.l').textContent || '').trim().split('  ')[0].trim(); }).sort();
+         for (var q = 0; q < want.length; q++) {
+           if (got[q].indexOf(want[q]) !== 0) {
+             bad.push('seat ' + seat + ': expected ' + want[q] + ', rendered ' + got[q]); break; }
+         }
+       }
+       if (bad.length) bad.slice(0, 5).forEach(function (b) { console.log('        ' + b); });
+       if (!seats) { console.log('        no recipients expanded'); return false; }
+       console.log('        (donor ' + donorId + ' · ' + seats + ' recipients · ' + seen + ' children vs oracle)');
+       return bad.length === 0;
+     })());
+
+  ok('[SBF5/SUM] the donor profile reaches no IE structure, so it cannot render a donor-to-committee-to-candidate figure',
+     (function () {
+       // D-6, the static half. The two streams share no key (H3: 0 matches at donor_id
+       // grain), and that absence is what makes [SBF/NEVERSUM] structurally unbreakable
+       // here. This pins it at the render path: the donor modal's builder must not touch
+       // the IE structure at all, so no figure it draws can span donor -> committee ->
+       // candidate. The IE spender's own surface keeps its own spending, as before.
+       var i = EMBED_HTML.indexOf('function donorProfileHtml(');
+       if (i < 0) { console.log('        donorProfileHtml not found'); return false; }
+       var d = 0, j = EMBED_HTML.indexOf('{', i), k = j;
+       do { if (EMBED_HTML[k] === '{') d++; else if (EMBED_HTML[k] === '}') d--; k++; } while (d > 0);
+       var body = EMBED_HTML.slice(i, k);
+       var reach = ['ie_spenders', 'ieSpenders', 'ieDeployed', 'ieSpenderById', 'spendIE'];
+       var hit = reach.filter(function (t) { return body.indexOf(t) >= 0; });
+       if (hit.length) console.log('        donorProfileHtml reaches: ' + hit.join(', '));
+       return hit.length === 0;
      })());
 
   ok('[SBF5/RESET] the modal declares no box-sizing — the panel stays border-box (D-2b withdrawn)',
