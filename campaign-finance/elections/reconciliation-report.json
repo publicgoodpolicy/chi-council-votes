@@ -1,52 +1,52 @@
 {
   "run": {
     "data_file": "campaign-finance/election-data.json",
-    "d2totals_file": "/Users/ishandaya/bulk-2026-07-23/d2totals_639202695385819853.txt",
-    "fileddocs_file": "/Users/ishandaya/probe-bulk-2026-07-21/raw-bulk/fileddocs_639202311261528856.txt",
-    "pulled": "2026-07-22",
+    "d2totals_file": "/Users/ishandaya/bulk-2026-08-09/d2totals_639219035546970587.txt",
+    "fileddocs_file": "/Users/ishandaya/bulk-2026-08-09/fileddocs_639219039653203272.txt",
+    "pulled": "2026-08-09",
     "threshold": 500.0,
     "scope": "elections candidate committees (v1); IE and council lanes deferred",
     "inputs": {
       "election-data.json": {
-        "sha256": "a743d5b0591dd7b9cf1255c4850cd14b6266c364a3a2afe1a5afcefbb66a6159",
+        "sha256": "0f4766e6ed9ff612a1265be5cd551b1deb7a19591e5a560c826d466db5e9e4fb",
         "path": "campaign-finance/election-data.json"
       },
       "d2totals": {
-        "sha256": "16f30c16c74c125a685ce561116426a6cde3d0238951b4f0a0fcbfbd3373d532",
-        "path": "/Users/ishandaya/bulk-2026-07-23/d2totals_639202695385819853.txt"
+        "sha256": "8419861f5e7b9cf021b0838913ef7a2a3d6345929f746252f0ab0fe6be543b3d",
+        "path": "/Users/ishandaya/bulk-2026-08-09/d2totals_639219035546970587.txt"
       },
       "fileddocs": {
-        "sha256": "7b21ac3e5d01737f3ddb1b7f277cf8072da67d6624cd9342a949bb50534fe010",
-        "path": "/Users/ishandaya/probe-bulk-2026-07-21/raw-bulk/fileddocs_639202311261528856.txt"
+        "sha256": "85c7ea3c6eab4b142881b18220c4b272db2b60a937f4740f2d3cf5504778eeb3",
+        "path": "/Users/ishandaya/bulk-2026-08-09/fileddocs_639219039653203272.txt"
       },
       "known-gaps.json": {
-        "sha256": "6ead36158cf8cf166a8180b99ac8d0a438a86b8305e7fbefcb8553e8f04f16b1",
+        "sha256": "68391d1cab76ec5932d99915ffad72ac8747e58f18a06fa4dfb4b6c9cc7af350",
         "path": "campaign-finance/elections/known-gaps.json"
       }
     }
   },
   "headline": {
-    "d2_itemized_total": 5477436.05,
-    "ours_itemized_total": 5476686.05,
-    "residual": -750.0,
-    "dollar_weighted_match_pct": 99.99,
+    "d2_itemized_total": 5479786.05,
+    "ours_itemized_total": 5471386.05,
+    "residual": -8400.0,
+    "dollar_weighted_match_pct": 99.85,
     "committees_candidate": 53,
     "committees_with_sbe_id": 53,
     "committees_no_sbe_id": 0,
     "committees_with_periods": 53,
-    "reconciled": 51,
-    "residual_state": 2,
+    "reconciled": 50,
+    "residual_state": 3,
     "too_new": 0,
-    "pending_a1_total": 67550.0,
+    "pending_a1_total": 275300.0,
     "aggregate_total": 0.0,
     "inkind_d2_total": 2429482.51,
-    "inkind_ours_total": 2427732.51,
+    "inkind_ours_total": 2425232.51,
     "over_threshold": [],
     "coverage_miss_committees": [],
     "join_failures": 0,
     "filings_missing_totals": 3,
     "overlap_superseded": 2,
-    "disclosed": 2,
+    "disclosed": 3,
     "stale_annotations": 0
   },
   "no_sbe_id_committees": [],
@@ -99,6 +99,18 @@
           "residual": -250.0,
           "reason": "SBE-side: committee's sworn itemized total for 1/1/2026\u20133/31/2026 includes a $250 Schedule A receipt (paper-filed D-2, received 4/1/2026) that does not appear in any SBE electronic receipts source.",
           "annotated": "2026-07-20"
+        }
+      ]
+    },
+    {
+      "committee": "cand-villalobos-sb-2024-d7",
+      "periods": [
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "residual": -7650.0,
+          "reason": "SBE-side: the per-committee export no longer carries the 7 itemized contribution rows it previously carried for this period. The rows are present in the archived export and absent from the current one; both bulk receipt vintages contain no row for this period of any status, and no superseding filing, amended report, archived predecessor, or changed committee id accounts for the difference. The committee's D-2 cover total continues to swear $7,650.00 in itemized receipts. The full row loss is $10,150.00 \u2014 $1,300.00 individual plus $6,350.00 loans, totalling the $7,650.00 itemized figure above, plus $2,500.00 in-kind carried separately as inkind_delta. Our figures reproduce the current export exactly. Unrecoverable by ingest.",
+          "annotated": "2026-08-12"
         }
       ]
     }
@@ -498,7 +510,9 @@
         }
       ],
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 9,
       "d2_itemized": 219159.34,
       "ours_itemized": 219159.34,
@@ -507,7 +521,7 @@
       "ours_inkind": 10448.5,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 7500.0,
       "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -606,12 +620,12 @@
     "cand-blaise-sb-d10": {
       "committee_name": "Committee to Elect Michilla Blaise",
       "sbe_committee_id": "37001",
-      "superseded_filings": 4,
+      "superseded_filings": 5,
       "state": "RECONCILED",
       "flags": [],
       "periods_count": 19,
-      "d2_itemized": 29745.75,
-      "ours_itemized": 29745.75,
+      "d2_itemized": 32095.75,
+      "ours_itemized": 32095.75,
       "residual": 0.0,
       "d2_inkind": 477.76,
       "ours_inkind": 477.76,
@@ -804,8 +818,8 @@
         {
           "beg": "2026-04-01",
           "end": "2026-06-30",
-          "d2_itemized": 4600.0,
-          "ours_itemized": 4600.0,
+          "d2_itemized": 6950.0,
+          "ours_itemized": 6950.0,
           "residual": 0.0,
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
@@ -2048,7 +2062,7 @@
     "cand-gonzalez-sb-d16": {
       "committee_name": "Juan Ignacio Gonzalez for Chicago Schools",
       "sbe_committee_id": "41111",
-      "superseded_filings": 0,
+      "superseded_filings": 1,
       "state": "RECONCILED",
       "flags": [
         "PENDING-A1"
@@ -2302,7 +2316,7 @@
       "ours_inkind": 0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 1000.0,
+      "pending": 5500.0,
       "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -2513,7 +2527,9 @@
       "sbe_committee_id": "41134",
       "superseded_filings": 0,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 2,
       "d2_itemized": 1250.0,
       "ours_itemized": 1250.0,
@@ -2522,7 +2538,7 @@
       "ours_inkind": 10648.27,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 1250.0,
       "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -3167,7 +3183,9 @@
       "sbe_committee_id": "39783",
       "superseded_filings": 0,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 10,
       "d2_itemized": 69750.84,
       "ours_itemized": 69750.84,
@@ -3176,7 +3194,7 @@
       "ours_inkind": 3210.31,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 3000.0,
       "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -3504,7 +3522,7 @@
       "ours_inkind": 35934.0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 6500.0,
+      "pending": 196000.0,
       "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -3828,7 +3846,7 @@
       "ours_inkind": 512.5,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 14800.0,
+      "pending": 15800.0,
       "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -3979,7 +3997,9 @@
       "sbe_committee_id": "39788",
       "superseded_filings": 3,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 10,
       "d2_itemized": 226642.77,
       "ours_itemized": 226642.77,
@@ -3988,7 +4008,7 @@
       "ours_inkind": 2229.3,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 1000.0,
       "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -4318,29 +4338,39 @@
       "committee_name": "Eva is ALL About Our Kids",
       "sbe_committee_id": "39840",
       "superseded_filings": 1,
-      "state": "RECONCILED",
-      "flags": [],
-      "periods_count": 8,
+      "state": "RESIDUAL",
+      "flags": [
+        "OVER-THRESHOLD",
+        "COVERAGE-MISS",
+        "DISCLOSED"
+      ],
+      "periods_count": 9,
       "d2_itemized": 31200.0,
-      "ours_itemized": 31200.0,
-      "residual": 0.0,
+      "ours_itemized": 23550.0,
+      "residual": -7650.0,
       "d2_inkind": 2500.0,
-      "ours_inkind": 2500.0,
-      "inkind_delta": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": -2500.0,
       "aggregate": 0.0,
       "pending": 0.0,
-      "last_period_end": "2026-03-31",
-      "coverage_miss_periods": [],
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "d2_itemized": 7650.0
+        }
+      ],
       "per_period": [
         {
           "beg": "2024-04-01",
           "end": "2024-06-30",
           "d2_itemized": 7650.0,
-          "ours_itemized": 7650.0,
-          "residual": 0.0,
+          "ours_itemized": 0.0,
+          "residual": -7650.0,
           "d2_inkind": 2500.0,
-          "ours_inkind": 2500.0,
-          "coverage_miss": false
+          "ours_inkind": 0.0,
+          "coverage_miss": true
         },
         {
           "beg": "2024-07-01",
@@ -4411,6 +4441,25 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ],
+      "disclosed": [
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "residual": -7650.0,
+          "reason": "SBE-side: the per-committee export no longer carries the 7 itemized contribution rows it previously carried for this period. The rows are present in the archived export and absent from the current one; both bulk receipt vintages contain no row for this period of any status, and no superseding filing, amended report, archived predecessor, or changed committee id accounts for the difference. The committee's D-2 cover total continues to swear $7,650.00 in itemized receipts. The full row loss is $10,150.00 \u2014 $1,300.00 individual plus $6,350.00 loans, totalling the $7,650.00 itemized figure above, plus $2,500.00 in-kind carried separately as inkind_delta. Our figures reproduce the current export exactly. Unrecoverable by ingest.",
+          "annotated": "2026-08-12"
         }
       ]
     },
@@ -4590,7 +4639,7 @@
       "superseded_filings": 10,
       "state": "RECONCILED",
       "flags": [],
-      "periods_count": 17,
+      "periods_count": 18,
       "d2_itemized": 234588.49,
       "ours_itemized": 234588.49,
       "residual": 0.0,
@@ -4599,7 +4648,7 @@
       "inkind_delta": 0.0,
       "aggregate": 0.0,
       "pending": 0.0,
-      "last_period_end": "2026-03-31",
+      "last_period_end": "2026-06-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -4765,6 +4814,16 @@
         {
           "beg": "2026-01-01",
           "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
           "d2_itemized": 0.0,
           "ours_itemized": 0.0,
           "residual": 0.0,

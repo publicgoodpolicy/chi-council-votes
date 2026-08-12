@@ -152,6 +152,45 @@ def apply_known(failed_inputs, known):
     return unknown, stale, lines
 
 
+def claim_verdict(report, gaps, tol=0.005):
+    """[RECON/CLAIM] — the disclosed total reconciles against the residual.
+
+    RECONCILE-2 C. The figures in this report were guarded from HALT-A; the CLAIM the
+    elections embed makes ABOUT them was not. Its methodology tab renders that every
+    divergence is individually accounted for, followed by the known-gaps count and their
+    summed magnitude — so that sentence is true only while the ledger's total equals the
+    residual. Nothing asserted it. `reconcile.py` exits 1 on `over_threshold` /
+    `coverage_miss_committees` / `stale_annotations`, and it caught this lane's blocker for
+    that reason, but exit status is not a gate line and the relationship itself is not among
+    its triggers: a future refresh could move the residual without tripping any of them and
+    leave the published sentence stale.
+
+    The left side is computed exactly as the embed computes it —
+    `sum(Math.abs(g.amount || 0))`, elections-embed.inlined.html:2666 — so the check and the
+    page cannot disagree about what "the disclosed total" means.
+
+    What this does NOT assert: that any individual annotation is correct, or that a
+    divergence deserves disclosure. It asserts only that the published arithmetic closes.
+    Judging an annotation is editorial and has an evidence requirement the ledger states in
+    its own `description`.
+    """
+    h = (report or {}).get('headline') if isinstance(report, dict) else None
+    if not isinstance(h, dict) or 'residual' not in h:
+        return False, ['RECON/CLAIM: report has no `headline.residual` — cannot check the claim']
+    entries = (gaps or {}).get('gaps')
+    if not isinstance(entries, list):
+        return False, ['RECON/CLAIM: known-gaps carries no `gaps` list']
+    disclosed = round(sum(abs(float(g.get('amount') or 0)) for g in entries), 2)
+    residual = abs(float(h['residual']))
+    if abs(disclosed - residual) > tol:
+        return False, [f'RECON/CLAIM: disclosed total ${disclosed:,.2f} across {len(entries)} '
+                       f'gap(s) does NOT equal |residual| ${residual:,.2f} — the methodology '
+                       f'tab\'s "every divergence is individually accounted for" is FALSE by '
+                       f'${abs(residual - disclosed):,.2f}']
+    return True, [f'RECON/CLAIM: disclosed ${disclosed:,.2f} across {len(entries)} gap(s) '
+                  f'== |residual| ${residual:,.2f}']
+
+
 def shape_verdict(report):
     """[RECON/SHAPE] — the report parses and carries the expected inventory.
 
@@ -267,6 +306,20 @@ def _self_test():
        apply_known(set(), PIN)[1] == ['election-data.json'])
     ok('known: no pins and no failures is clean', apply_known(set(), {'max_entries': 0, 'entries': []})[:2] == ([], []))
 
+    # ---- [RECON/CLAIM] ----
+    R={'headline':{'residual':-8400.0}}
+    G={'gaps':[{'amount':-500.0},{'amount':-250.0},{'amount':-7650.0}]}
+    ok('claim: disclosed total equals |residual|', claim_verdict(R,G)[0])
+    ok('claim: a changed gap amount fails', not claim_verdict(R,{'gaps':[{'amount':-500.0},{'amount':-250.0},{'amount':-7000.0}]})[0])
+    ok('claim: a removed gap fails', not claim_verdict(R,{'gaps':[{'amount':-500.0},{'amount':-250.0}]})[0])
+    ok('claim: a moved residual fails', not claim_verdict({'headline':{'residual':-9000.0}},G)[0])
+    ok('claim: sign is ignored — |amount| is summed as the embed does',
+       claim_verdict(R,{'gaps':[{'amount':500.0},{'amount':250.0},{'amount':7650.0}]})[0])
+    ok('claim: absent residual fails', not claim_verdict({'headline':{}},G)[0])
+    ok('claim: absent gaps list fails', not claim_verdict(R,{})[0])
+    ok('claim: the failure names the shortfall',
+       'FALSE by' in ' '.join(claim_verdict(R,{'gaps':[{'amount':-500.0}]})[1]))
+
     for n, c in t:
         print(('  PASS ' if c else '  FAIL ') + n)
     print(f"self-test: {len(t)} checks · " + ("ALL PASS" if not fails else f"FAILED {fails}"))
@@ -303,17 +356,33 @@ def main():
     unknown, stale, klines = apply_known(failed, known)
     yok = not unknown and not stale
 
-    bad = not (sok and yok)
-    for ln in slines + ylines + klines:
+    # [RECON/CLAIM] resolves known-gaps through the SAME stamped input the other checks use,
+    # so it inherits run.inputs' path resolution rather than carrying its own.
+    gp = ((report.get('run') or {}).get('inputs') or {}).get('known-gaps.json') or {}
+    gaps, clines = None, []
+    if gp.get('path'):
+        try:
+            gaps = json.load(open(_resolve(gp['path'])))
+        except (OSError, json.JSONDecodeError) as e:
+            clines = [f'RECON/CLAIM: known-gaps not readable at {gp["path"]}: {e}']
+    else:
+        clines = ['RECON/CLAIM: `run.inputs` names no known-gaps.json — cannot check the claim']
+    if gaps is not None:
+        cok, clines = claim_verdict(report, gaps)
+    else:
+        cok = False
+
+    bad = not (sok and yok and cok)
+    for ln in slines + ylines + klines + clines:
         print('[validate_reconcile] ' + ln, file=(sys.stderr if bad else sys.stdout))
     for u in unknown:
         print(f'[validate_reconcile] RECON/KNOWN: {u!r} is failing and is NOT pinned — '
               f'either fix it or ratify a pin', file=sys.stderr)
-    n_ok = int(sok) + int(yok)
-    print(f'[validate_reconcile] 2 checks · ' + ('OK: 0 errors' if n_ok == 2
-                                                 else f'FAILED {2 - n_ok}')
+    n_ok = int(sok) + int(yok) + int(cok)
+    print(f'[validate_reconcile] 3 checks · ' + ('OK: 0 errors' if n_ok == 3
+                                                 else f'FAILED {3 - n_ok}')
           + (f' · {len(failed)} pinned' if failed and yok else ''))
-    sys.exit(0 if n_ok == 2 else 1)
+    sys.exit(0 if n_ok == 3 else 1)
 
 
 if __name__ == '__main__':
