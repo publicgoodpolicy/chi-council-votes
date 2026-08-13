@@ -207,6 +207,23 @@ var OFFICE_TYPE_ORACLE = {
 // school-board `start: null` idiom — see the ruling and the note in election-windows.json.
 var MUNICIPAL_WINDOWS_ORACLE = { '2027': { start: '2023-05-15', end: '2027-12-31' } };
 
+// D-21 (PS-111) + D-22 (PS-112), MUNI-ENABLE-1 G5. The ratified display strings, transcribed
+// here from the ratification package and stated independently of render.js for the same PS-82
+// reason as the tables above. Every school-board entry is BYTE-IDENTICAL to what shipped before
+// G5; if one of them ever changes, [MUNI/COPY] fails and the change has to be ratified rather
+// than absorbed. The methodology allowlist is part of the same oracle because D-22's gate is a
+// copy decision: it governs which office may show which methodology.
+var RATIFIED_COPY_ORACLE = {
+  browseFraming: 'Everyone who gave to a candidate or funded an independent-expenditure committee in these races, by affiliation.',
+  raceFilterAll: {
+    school_board: 'All school-board races',
+    city_council: 'All City Council races',
+    mayor: 'All mayoral races'
+  },
+  personElectionNoun: { school_board: 'school board election', municipal: 'municipal election' },
+  methodologyOffices: { school_board: 1 }
+};
+
 var FIXTURES = {
   school_board: {
     office: 'school_board',
@@ -1533,6 +1550,101 @@ async function assertPersonSurface(T, ctx, fx) {
   // invariant "municipal finance never renders without a window table". What it still catches
   // is an edit that drops municipal windows while municipal ids exist, which self-test bite 5
   // pins by removing the window table in memory and requiring the injected id to fail again.
+  // [MUNI/COPY] the D-21 (PS-111) ratified display strings. Two halves, because a table that
+  // matches its oracle while nothing renders from it is the vacuity PS-100 warns about: the
+  // check asserts render.js's table equals RATIFIED_COPY_ORACLE token for token in BOTH
+  // directions, AND that a really rendered page carries the strings. The school-board entries
+  // are the ones that must not move — they shipped before G5 and nothing already ratified was
+  // reworded — so a silent edit to any of them fails here rather than reaching a reader.
+  (function () {
+    var R = require(path.join(__dirname, '..', 'render.js'));
+    var D = require(path.join(__dirname, '..', 'data.js'));
+    var got = R._ratified || {};
+    var mismatch = [];
+    // Compare on ANY primitive, not just strings. The first draft tested `typeof === 'string'`
+    // and so silently passed a removed numeric entry — methodologyOffices carries 1, not "1",
+    // and Object.keys(1) is empty, so a missing key compared clean. Caught by bite 5, which
+    // revoked school_board's methodology and watched this line stay green while [MUNI/METH]
+    // failed. A checker that only bites on the types it happened to be written against is the
+    // PS-100 shape one layer down.
+    function isObj(v) { return v !== null && typeof v === 'object'; }
+    function cmp(label, a, b) {
+      if (!isObj(a) || !isObj(b)) {
+        if (a !== b) mismatch.push(label + ': ' + JSON.stringify(b) + '≠' + JSON.stringify(a));
+        return;
+      }
+      Object.keys(a).forEach(function (k) { cmp(label + '.' + k, a[k], b[k]); });
+      Object.keys(b).forEach(function (k) { if (!(k in a)) mismatch.push(label + '.' + k + ': extra ' + JSON.stringify(b[k])); });
+    }
+    cmp('browseFraming', RATIFIED_COPY_ORACLE.browseFraming, got.browseFraming);
+    cmp('raceFilterAll', RATIFIED_COPY_ORACLE.raceFilterAll, got.raceFilterAll);
+    cmp('personElectionNoun', RATIFIED_COPY_ORACLE.personElectionNoun, got.personElectionNoun);
+    cmp('methodologyOffices', RATIFIED_COPY_ORACLE.methodologyOffices, got.methodologyOffices);
+
+    // rendered-reach half: the strings must actually appear in real output, not just in a table
+    var json = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', '..', 'election-data.json'), 'utf8'));
+    var reach = [];
+    var isb = D.loadData(json, { office: 'school_board' });
+    var spend = D.spendSubtab(isb, 'school_board', 'donors', null, '2026',
+      { search: '', type: 'All', industry: 'All', flag: 'All' }, 'all', null);
+    var page = R.renderPage({ office: 'school_board', topView: 'spend', cycles: D.availableCycles(isb),
+      cycle: null, officeRaces: D.viewModels.officeRaces(isb, 'school_board', '2026'), activeSlug: null,
+      raceView: null, spend: spend, selector: { options: D.selectorOptions('school_board'), active: '2026' }, verify: {} });
+    if (page.indexOf(RATIFIED_COPY_ORACLE.browseFraming) < 0) reach.push('browseFraming absent from a rendered Browse-donors page');
+    ['school_board', 'city_council', 'mayor'].forEach(function (off) {
+      var idx = D.loadData(json, { office: off });
+      var sv = D.spendSubtab(idx, off, 'candidates', null, null,
+        { search: '', type: 'All', industry: 'All', flag: 'All' }, 'all', null);
+      var html = R.renderSpend(sv, off);
+      var m = html.match(/<option value="all"[^>]*>([^<]*)</);
+      if (!m || m[1] !== RATIFIED_COPY_ORACLE.raceFilterAll[off]) {
+        reach.push(off + ' race-filter default rendered ' + JSON.stringify(m && m[1]) +
+          ', expected ' + JSON.stringify(RATIFIED_COPY_ORACLE.raceFilterAll[off]));
+      }
+    });
+    T.ok('[MUNI/COPY] the ratified display strings match the oracle and reach real output — ' +
+      (mismatch.length || reach.length
+        ? 'DRIFT [' + mismatch.join('; ') + '] UNREACHED [' + reach.join('; ') + ']'
+        : Object.keys(RATIFIED_COPY_ORACLE.raceFilterAll).length + ' race-filter labels + framing + ' +
+          Object.keys(RATIFIED_COPY_ORACLE.personElectionNoun).length + ' election nouns, all pinned and rendered'),
+      mismatch.length === 0 && reach.length === 0);
+  })();
+
+  // [MUNI/METH] the D-22 (PS-112) methodology gate, asserted on RENDERED output rather than on
+  // the allowlist alone. The failure it exists to prevent is specific and was measured before
+  // the gate landed: methodologyView renders ahead of the readiness test, so all three offices
+  // shipped a methodology saying the tool tracks school board elections. Both directions are
+  // checked — school board must still render its methodology (the gate must not have broken the
+  // one office that has one), and the other two must render coming-soon carrying no school-board
+  // copy at all.
+  (function () {
+    var R = require(path.join(__dirname, '..', 'render.js'));
+    var D = require(path.join(__dirname, '..', 'data.js'));
+    var json = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', '..', 'election-data.json'), 'utf8'));
+    var bad = [];
+    ['school_board', 'city_council', 'mayor'].forEach(function (off) {
+      var idx = D.loadData(json, { office: off });
+      var html = R.renderPage({ office: off, topView: 'methodology', cycles: D.availableCycles(idx),
+        cycle: null, officeRaces: D.viewModels.officeRaces(idx, off, null), activeSlug: null,
+        raceView: null, spend: null, selector: { options: D.selectorOptions(off), active: null },
+        verify: { reconUrl: 'x', gapsUrl: 'y' } });
+      var isMeth = html.indexOf('How this tool is built') >= 0;
+      var soon = /— coming soon<\/h2>/.test(html);
+      var saysSB = /school board/i.test(html);
+      if (RATIFIED_COPY_ORACLE.methodologyOffices[off]) {
+        if (!isMeth || soon) bad.push(off + ' has a ratified methodology but did not render it');
+      } else {
+        if (isMeth) bad.push(off + ' rendered a methodology it has not ratified');
+        if (!soon) bad.push(off + ' did not render coming-soon on the methodology tab');
+        if (saysSB) bad.push(off + ' methodology tab still carries school-board copy');
+      }
+    });
+    T.ok('[MUNI/METH] the methodology tab renders only for an office with a ratified ' +
+      'methodology — ' + (bad.length ? bad.join('; ')
+        : 'school_board renders it; city_council and mayor render coming-soon carrying no school-board copy'),
+      bad.length === 0);
+  })();
+
   // [MUNI/TABLE] the D-18 (PS-108) cross-language drift oracle. The office-type table exists
   // in two languages — data.js OFFICE_TYPE and build_rollups.py OFFICE_TYPE — because one
   // predicate cannot span both. Each is asserted against OFFICE_TYPE_ORACLE above, never

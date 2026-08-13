@@ -968,6 +968,10 @@
       var yr = (/^(\d{4})-/.exec(membs[m].election_id || '') || [])[1] || '';
       sections.push({
         candidacyId: membs[m].candidacy_id, electionId: membs[m].election_id, year: yr,
+        // D-21(iii) (PS-111): the section's own office TYPE, so render picks the election
+        // noun from the race this section is about rather than from the person's frame — a
+        // person may in principle span types (a board member later seeking a ward).
+        officeType: officeType(race.office),
         raceLabel: race.district || raceCode(race),
         contributions: contrib,                          // direct only — never an IE stream
         qualifier: mc.election_note || ''                // string 5: verbatim from the data

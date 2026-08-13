@@ -80,6 +80,36 @@
   };
   function pageLabel(o) { return ({ school_board: 'School Board', city_council: 'City Council', mayor: 'Mayor' })[o] || o; }
 
+  // ---- ratified display strings (MUNI-ENABLE-1 G5: D-21/PS-111, D-22/PS-112) ----
+  // Named rather than inlined so [MUNI/COPY] can pin them against an independently stated
+  // oracle. Every school-board string below is BYTE-IDENTICAL to what shipped before G5 —
+  // nothing already ratified is reworded; only the office-specific ones gain siblings.
+
+  // D-21(i): one string for all offices. The office-specific adjective is dropped rather than
+  // made per-office — "in these races" already scopes the sentence, and a per-office adjective
+  // table would be machinery to restore a word the sentence does not need.
+  var BROWSE_FRAMING = 'Everyone who gave to a candidate or funded an independent-expenditure committee in these races, by affiliation.';
+
+  // D-21(ii): per PAGE OFFICE, following SCOPE-UI B2's ratified name-the-body reasoning.
+  var RACE_FILTER_ALL = {
+    school_board: 'All school-board races',
+    city_council: 'All City Council races',
+    mayor: 'All mayoral races'
+  };
+
+  // D-21(iii): per office TYPE, not per office — the 2027 election's entity is *municipal*,
+  // not any one of the offices contested in it, following SCOPE-UI B3's prose pattern.
+  var PERSON_ELECTION_NOUN = { school_board: 'school board election', municipal: 'municipal election' };
+
+  // D-22: the methodology tab is gated on the office having a RATIFIED methodology, NOT on its
+  // finance readiness. methodologyView renders BEFORE the readiness test (see renderPage), so
+  // without this gate the council and mayor pages would each ship a methodology stating the
+  // tool tracks school board elections. Gating on finance instead would let the
+  // wrong-methodology state reappear the moment municipal money lands; gating on ratification
+  // makes it impossible. Each data arc ships a ratified methodology for its office before that
+  // office goes live, and adds the office here in the same commit.
+  var METHODOLOGY_OFFICES = { school_board: 1 };
+
   function styles() {
     return '<style>' +
       // Real Recoleta — the council embed's exact @font-face (onlinewebfonts CDN),
@@ -640,7 +670,8 @@
     var sections = vm.sections.map(function (s) {
       // Strings 1/2 (ratified pattern; the race identity slot is the district where one
       // exists, else the race code — President is citywide, no district).
-      var head = '<p class="contrib-h person-member-h">' + esc(s.year) + ' school board election — ' + esc(s.raceLabel) + '</p>';
+      var noun = PERSON_ELECTION_NOUN[s.officeType] || PERSON_ELECTION_NOUN.school_board;
+      var head = '<p class="contrib-h person-member-h">' + esc(s.year) + ' ' + noun + ' — ' + esc(s.raceLabel) + '</p>';
       var body;
       if (s.contributions.count > 0) {
         body = '<div class="elect-statgrid person-member-figs">' +
@@ -1063,7 +1094,7 @@
       ? ' · <b>Filtered by ' + esc(bits.join(' + ')) + '.</b> <button class="clear-filters" type="button" data-clear-filters>Clear filters</button>' : '';
     return '<p class="browse-meta">' + n + (n === 1 ? ' result' : ' results') +
       (ieCount ? ' (' + ieCount + ' independent-expenditure ' + (ieCount === 1 ? 'committee' : 'committees') + ')' : '') + ' matched.' + filtSummary +
-      '<span class="framing">Everyone who gave to a school-board candidate or funded an independent-expenditure committee in these races, by affiliation. ' +
+      '<span class="framing">' + BROWSE_FRAMING + ' ' +
       'Affiliated donors are combined into one group; an <span class="kind ie">IE PAC</span> opens its profile. Click any row for its footprint.</span></p>';
   }
 
@@ -1094,12 +1125,15 @@
   }
 
   // E-7 race filter for the grouped spend-by-candidate view. AND-composes with the time control
-  // 'all' = every in-guard school-board race; a single race degrades to one section.
-  function candidateRaceFilter(raceOptions, raceFilter) {
+  // 'all' = every in-guard race for the office in view; a single race degrades to one section.
+  // `office` is the PAGE office, threaded from renderPage rather than read off the spend vm:
+  // the label is a display decision, so it stays out of the data layer (D-21(ii)/PS-111).
+  function candidateRaceFilter(raceOptions, raceFilter, office) {
     if (!raceOptions || !raceOptions.length) return '';
     var opt = function (id, label, sel) { return '<option value="' + esc(id) + '"' + (sel ? ' selected' : '') + '>' + esc(label) + '</option>'; };
     return '<div class="elect-controls"><div class="elect-field grow"><label>Race</label><select data-race-filter>' +
-      opt('all', 'All school-board races', raceFilter === 'all' || !raceFilter) +
+      opt('all', RACE_FILTER_ALL[office] || RACE_FILTER_ALL.school_board,
+          raceFilter === 'all' || !raceFilter) +
       raceOptions.map(function (r) { return opt(r.id, r.label, raceFilter === r.id); }).join('') +
       '</select></div></div>';
   }
@@ -1149,12 +1183,12 @@
     return note + legend + '<div class="indchart">' + rows + '</div>';
   }
 
-  function renderSpend(vm) {
+  function renderSpend(vm, office) {
     var tab = vm.tab || 'donors', body;
     if (tab === 'candidates') {
       // E-7: full roster grouped by race (President -> d01 -> d20), ranked within each race by
       // contributions.total (direct raised, single-stream). The three figures stay SEPARATE.
-      body = candidateRaceFilter(vm.raceOptions, vm.raceFilter) +
+      body = candidateRaceFilter(vm.raceOptions, vm.raceFilter, office) +
         '<p class="contrib-note">Candidates grouped by race, ranked within each race by money raised (direct ' +
         'contributions). The three figures — raised, independent support, independent opposition — are shown ' +
         'separately and never added together.</p>' +
@@ -1252,8 +1286,11 @@
   function renderPage(state) {
     var inner;
     if (state.topView === 'methodology') {
-      // Tool-wide static page — renders regardless of office/data readiness.
-      inner = methodologyView(state.verify);
+      // D-22 (PS-112): NOT tool-wide any more. The methodology describes ONE office's
+      // subject and sources, so an office with no ratified methodology renders coming-soon
+      // on this tab like every other tab, rather than shipping another office's copy.
+      inner = METHODOLOGY_OFFICES[state.office]
+        ? methodologyView(state.verify) : officeComingSoon(state.office);
       return '<div class="wrap">' + masthead(state.office, state.topView) +
         '<section>' + inner + '</section>' + footer() + '</div>';
     }
@@ -1267,7 +1304,7 @@
       var content = selectorNav(state.selector) + (byrace
         ? (renderOfficeNav(state.officeRaces, state.activeSlug) +
            '<div aria-live="polite">' + (state.raceView ? renderRaceView(state.raceView) : '') + '</div>')
-        : (state.spend ? renderSpend(state.spend) : spendPlaceholder()));
+        : (state.spend ? renderSpend(state.spend, state.office) : spendPlaceholder()));
       // The legacy SBE 4-year cycle pills are removed from the election views: they
       // cannot express 2024-vs-2026 (both cycle '2027') and duplicate the election
       // toggle, which is now the SOLE time selector. (Council still uses cycle pills.)
@@ -1285,6 +1322,12 @@
     methodologyView: methodologyView,
     renderFunderModal: renderFunderModal, renderCommitteeProfile: renderCommitteeProfile,
     renderPersonModal: renderPersonModal, renderPersonMissing: renderPersonMissing,
+    // Ratified display strings + the methodology gate, exported for [MUNI/COPY] to pin against
+    // an independently stated oracle (D-21/PS-111, D-22/PS-112). Test hook only — the render
+    // paths above are the app's consumers, exactly as data.js exports OFFICE_TYPE for
+    // [MUNI/TABLE] without the app ever reading it.
+    _ratified: { browseFraming: BROWSE_FRAMING, raceFilterAll: RACE_FILTER_ALL,
+                 personElectionNoun: PERSON_ELECTION_NOUN, methodologyOffices: METHODOLOGY_OFFICES },
     tagsHtml: tagsHtml, readableText: readableText,
     donorRow: donorRow, contributorPanel: contributorPanel, iePanel: iePanel,
     renderPage: renderPage, pageLabel: pageLabel,
