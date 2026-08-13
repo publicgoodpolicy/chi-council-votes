@@ -1015,6 +1015,187 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: MUNI-ENABLE-1 lane brief (`lane-brief-MUNI-ENABLE-1-2026-08-12.md`), sha256 `d1044b23f88fd3115fd9d740ea6b8c16c61d376cf8b9815eec11c0de9ba8e7a3`, §"Ratified decisions this lane implements or records", the D-17 bullet, transcribed verbatim; ratified by Ishan in relay 2026-08-12. Id allocated at this transcription. "(report, P1.1)" in the quoted text is the ELECTIONS-SCOPE-1 probe report (`ddcddee2612d1f28b9329923c448c3e30604f7eaf9239c0cdf80c1b3c55cf2e7`), whose P1.1 measured the throw and its guard; the citation is the source's own and is resolved here rather than rewritten, per PS-38 and this register's rule that transcription is never harmonization. The named registries are instances of the governed class, not its definition — the class scoping is the ruling's own, taken per PS-94. Until this entry the lane brief was the sole record of this text.*
 
+### PS-108 — the office-type table replaces the prefix test, in both languages, under one drift oracle
+
+> ## D-18 — `officeType` replacement: one table shape, two languages, one drift oracle
+>
+> **Spec.** Replace the prefix test with an eight-token table mapping both keyspaces the G2 report
+> measured (item 1.5):
+>
+> ```
+> school_board → school_board        city_council → municipal
+> school_board_president → school_board    alderperson → municipal
+> school_board_member → school_board       mayor → municipal
+>                                          city_clerk → municipal
+>                                          city_treasurer → municipal
+> ```
+>
+> `city_clerk` / `city_treasurer` are included: their races exist in the artifact, are reachable
+> from no page (`OFFICE_RACE_OFFICES` intentionally unmapped), and excluding them would recreate
+> the null-collapse for two races if either ever carries finance.
+>
+> **Sites.** Two of the three move in this lane: `data.js` `officeType()` and `build_rollups.py`
+> `_office_type()`, same table in each language. They cannot share one predicate across languages
+> (PS-94's preference), so they share one **oracle**: the gate fixture that already pins
+> window-value drift is extended to pin office-type-table drift between the two — a structural
+> catch, per the fixture's own stated design. The third site, `ingest_ie.py:160`, is **explicitly
+> out of scope**: its exact-only matching for ward/mayor is deliberate per its own comment, its
+> subject is IE target matching, and it routes to the data arcs (arcs 2 and 3 of PS-105).
+>
+> **Recommendation: ratify as specified.** Alternative rejected: a page-office-only table —
+> measured to break `raceWin` and `resolvePersonRef` (G2 item 1.5).
+
+*Provenance: MUNI-ENABLE-1 G2 ratification package (`MUNI-ENABLE-1-G2-ratification-package.md`), sha256 `82230d309cb0d05d340ac9a4e74e188593a65203ebf7ef90213fea6dfd1017f7`, 11,885 B / 201 L, §"D-18 — `officeType` replacement: one table shape, two languages, one drift oracle", lines 15–41, transcribed verbatim; ratified by Ishan in relay 2026-08-12 **as drafted** — the package states nothing was amended. Id allocated at this transcription. Region: the full section as banked, recommendation apparatus included — Ishan ratified the sections as drafted, so the recommendation and its rejected alternative are part of the ratified text rather than a separate advisory layer, and per this register's form note transcription is never harmonization. A scope clarification was taken after ratification and is part of the complete ratified record: this decision's inclusion of `city_clerk` and `city_treasurer` is **tables only** — both races remain reachable from no page, by design, and no page mapping changes in this lane. Until this entry the package file was the sole record of this text.*
+
+### PS-109 — MUNI-ENABLE-1 is the F4 lane PS-79(c) scoped out to
+
+> ## D-19 — MUNI-ENABLE-1 is the F4 lane PS-79(c) scoped out to
+>
+> PS-79(c), verbatim from the register: *"F4's municipal key is NOT fixed here — ratified as scoped
+> out… F4's own lane adds the key and fixes the silent degradation in `build_rollups.py`. Flagged
+> so the failure is chosen, not discovered."* This lane's subject is municipal enablement; it is
+> the natural F4 lane. Declaring it so means this lane: (a) adds the `municipal` key to
+> `election-windows.json` (values per D-20), and (b) fixes `build_rollups.py:143–144` so a missing
+> or corrupt windows file is an **error, never `windows={}`** — PS-79/B1 ("a missing window is an
+> error, never an empty filter") applied at the Python site that currently violates its shape.
+>
+> **Recommendation: ratify.** Alternative: leave (b) to yet another lane — but that leaves B1
+> enforced in JS and silently violated in Python through the very arc that makes municipal windows
+> real.
+
+*Provenance: MUNI-ENABLE-1 G2 ratification package (`MUNI-ENABLE-1-G2-ratification-package.md`), sha256 `82230d309cb0d05d340ac9a4e74e188593a65203ebf7ef90213fea6dfd1017f7`, 11,885 B / 201 L, §"D-19 — MUNI-ENABLE-1 is the F4 lane PS-79(c) scoped out to", lines 43–55, transcribed verbatim; ratified by Ishan in relay 2026-08-12 **as drafted** — the package states nothing was amended. Id allocated at this transcription. Region: the full section as banked, recommendation apparatus included — Ishan ratified the sections as drafted, so the recommendation and its rejected alternative are part of the ratified text rather than a separate advisory layer, and per this register's form note transcription is never harmonization. Until this entry the package file was the sole record of this text.*
+
+### PS-110 — municipal window values
+
+> ## D-20 — Municipal window values
+>
+> **Spec**, in all three sites the report counted (the `data.js` object, the JSON array, the gate
+> fixture — updated in one commit, since the fixture exists to fail on their drift):
+>
+> ```
+> municipal / '2027':  start: '2023-05-15'   end: '2027-12-31'   label: '2027'  (JSON only)
+> ```
+>
+> **Rationale.** `start` is the 2027 council-era boundary from the repo's own `CYCLES` table
+> (2023-05-15 → 2027-05-17, election 2027-02-23, runoff 2027-04-06 — G2/P4 measurements). The
+> school-board idiom of `start: null` is **rejected for municipal** on a measured ground: council
+> incumbent committees carry receipts to 1999 (119,785 rows), and an open-past start would pour up
+> to sixteen years of receipts into a single "2027" figure — a coverage misstatement PS-93's
+> every-figure-states-what-it-covers clause exists to prevent. School board's open start was
+> harmless only because no committee predated the tool's subject. `end: '2027-12-31'` follows the
+> school-board year-end idiom and captures post-runoff wind-down filings; the alternative
+> `2027-05-17` (cycle end) is stated for the record.
+>
+> **Also recorded, not proposed:** whether a `'2023'` municipal window should ever exist (2023
+> aldermanic IE measured at $3.51M) is a **data-arc scope question**; the tool's municipal masthead
+> copy says 2027, and this lane adds nothing before it.
+>
+> **Bucketer-order note:** the two bucketers' iteration-order divergence (G2 item 1.3) remains
+> immaterial — the proposed window is disjoint from all school-board windows and is the sole
+> municipal entry.
+
+*Provenance: MUNI-ENABLE-1 G2 ratification package (`MUNI-ENABLE-1-G2-ratification-package.md`), sha256 `82230d309cb0d05d340ac9a4e74e188593a65203ebf7ef90213fea6dfd1017f7`, 11,885 B / 201 L, §"D-20 — Municipal window values", lines 57–82, transcribed verbatim; ratified by Ishan in relay 2026-08-12 **as drafted** — the package states nothing was amended. Id allocated at this transcription. Region: the full section as banked, recommendation apparatus included — Ishan ratified the sections as drafted, so the recommendation and its rejected alternative are part of the ratified text rather than a separate advisory layer, and per this register's form note transcription is never harmonization. Until this entry the package file was the sole record of this text.*
+
+### PS-111 — replacement copy for the office-specific display strings
+
+> ## D-21 — Replacement copy for strings (i), (ii), (iii)
+>
+> Drafted with the register text in context; exact strings for ratification. The shipped
+> school-board strings stay **byte-identical** in every case — nothing already ratified is
+> reworded.
+>
+> **(i) Browse-donors framing (`render.js:1066`)** — the office-specific phrase generalizes;
+> "in these races" already scopes the sentence:
+>
+> > Everyone who gave to a candidate or funded an independent-expenditure committee in these
+> > races, by affiliation.
+>
+> One string for all offices. Alternative (a per-office adjective table) adds machinery to restore
+> a word the sentence does not need.
+>
+> **(ii) Race-filter default (`render.js:1102`)** — per-office, following SCOPE-UI B2's ratified
+> name-the-body reasoning:
+>
+> > school_board: `All school-board races`  (unchanged, byte-identical)
+> > city_council: `All City Council races`
+> > mayor: `All mayoral races`
+>
+> **(iii) Person-modal section header (`render.js:643`)** — per-office-**type** election noun,
+> following SCOPE-UI B3's ratified prose pattern ("the 2024 school board election"; the 2027
+> election's entity is *municipal*, not any one office):
+>
+> > school_board type: `{year} school board election — {raceLabel}`  (unchanged)
+> > municipal type:   `{year} municipal election — {raceLabel}`
+>
+> Rendered example, from the report's own counterfactual frame: "2027 municipal election — Ward 1".
+
+*Provenance: MUNI-ENABLE-1 G2 ratification package (`MUNI-ENABLE-1-G2-ratification-package.md`), sha256 `82230d309cb0d05d340ac9a4e74e188593a65203ebf7ef90213fea6dfd1017f7`, 11,885 B / 201 L, §"D-21 — Replacement copy for strings (i), (ii), (iii)", lines 84–113, transcribed verbatim; ratified by Ishan in relay 2026-08-12 **as drafted** — the package states nothing was amended. Id allocated at this transcription. Region: the full section as banked, recommendation apparatus included — Ishan ratified the sections as drafted, so the recommendation and its rejected alternative are part of the ratified text rather than a separate advisory layer, and per this register's form note transcription is never harmonization. Until this entry the package file was the sole record of this text.*
+
+### PS-112 — the methodology view is gated on office readiness, not drafted ahead of its data
+
+> ## D-22 — Methodology: gate it, don't draft it
+>
+> String (iv) is the highest-exposure finding: the Methodology view renders **before** the
+> readiness test, so under PS-106 the council and mayor pages would each ship a methodology
+> stating the tool tracks *school board* elections (measured: all three offices render it today).
+>
+> **Spec:** route the methodology branch through office readiness — an office without a ratified
+> methodology renders coming-soon on that tab like every other tab. School-board methodology bytes
+> unchanged. **The obligation this creates is stated now so it is chosen, not discovered:** each
+> data arc (council, mayor) must ship a ratified municipal methodology before its office goes
+> live, and that obligation is carried onto those arcs' briefs.
+>
+> **Recommendation: ratify the gate.** Alternative — drafting a municipal methodology now — is
+> rejected: it would describe a tool state that does not exist (no data, no committee ids), and
+> reader-facing copy describing nothing is the errors-78–84 shape waiting to happen. The gate
+> converts the wrong-methodology state from a copy hazard into an impossibility.
+
+*Provenance: MUNI-ENABLE-1 G2 ratification package (`MUNI-ENABLE-1-G2-ratification-package.md`), sha256 `82230d309cb0d05d340ac9a4e74e188593a65203ebf7ef90213fea6dfd1017f7`, 11,885 B / 201 L, §"D-22 — Methodology: gate it, don't draft it", lines 115–130, transcribed verbatim; ratified by Ishan in relay 2026-08-12 **as drafted** — the package states nothing was amended. Id allocated at this transcription. Region: the full section as banked, recommendation apparatus included — Ishan ratified the sections as drafted, so the recommendation and its rejected alternative are part of the ratified text rather than a separate advisory layer, and per this register's form note transcription is never harmonization. Until this entry the package file was the sole record of this text.*
+
+### PS-113 — the municipal body label is accepted as dormant rather than split per office
+
+> ## D-23 — `OFFICE_BODY_LABEL.municipal = 'Municipal'`; the shared label is accepted as dormant
+>
+> `city_council` and `mayor` sharing one office type yields the identical selector label
+> ("2027 Municipal") on both pages — and the selector **renders on neither** until a second
+> municipal election exists (`options.length >= 2`, confirmed twice in G2 item 4). The label is
+> dormant for years. **Recommendation:** accept it, record the dormancy, and bank "distinguish
+> municipal selector labels per office" for whenever a 2031 window is authored. The alternative
+> (per-office types duplicating identical window dates) buys an invisible string with a real drift
+> surface.
+
+*Provenance: MUNI-ENABLE-1 G2 ratification package (`MUNI-ENABLE-1-G2-ratification-package.md`), sha256 `82230d309cb0d05d340ac9a4e74e188593a65203ebf7ef90213fea6dfd1017f7`, 11,885 B / 201 L, §"D-23 — `OFFICE_BODY_LABEL.municipal = 'Municipal'`; the shared label is accepted as dormant", lines 132–140, transcribed verbatim; ratified by Ishan in relay 2026-08-12 **as drafted** — the package states nothing was amended. Id allocated at this transcription. Region: the full section as banked, recommendation apparatus included — Ishan ratified the sections as drafted, so the recommendation and its rejected alternative are part of the ratified text rather than a separate advisory layer, and per this register's form note transcription is never harmonization. Until this entry the package file was the sole record of this text.*
+
+### PS-114 — municipal race ordering brings the grouped view into agreement with the nav
+
+> ## D-24 — `raceOrderKey` municipal ordering
+>
+> Only `spendByCandidateGrouped` uses it; nav ordering (`byRaceOrder`) is already correct —
+> citywide first, wards ascending. **Spec:** extend `raceOrderKey`'s named-id handling so the
+> grouped view matches the nav's shape: citywide trio first, ordered **mayor, city clerk, city
+> treasurer**, then wards by number; school-board behavior unchanged. Per PS-86's second block, no
+> new ordering convention is invented — the grouped view is brought into agreement with the
+> measured nav order, and the trio's internal order (ballot prominence) is the one new fact,
+> ratified here. A fixture case pins nav/grouped agreement for municipal.
+
+*Provenance: MUNI-ENABLE-1 G2 ratification package (`MUNI-ENABLE-1-G2-ratification-package.md`), sha256 `82230d309cb0d05d340ac9a4e74e188593a65203ebf7ef90213fea6dfd1017f7`, 11,885 B / 201 L, §"D-24 — `raceOrderKey` municipal ordering", lines 142–150, transcribed verbatim; ratified by Ishan in relay 2026-08-12 **as drafted** — the package states nothing was amended. Id allocated at this transcription. Region: the full section as banked, recommendation apparatus included — Ishan ratified the sections as drafted, so the recommendation and its rejected alternative are part of the ratified text rather than a separate advisory layer, and per this register's form note transcription is never harmonization. A scope clarification was taken after ratification and is part of the complete ratified record: this decision's inclusion of `city_clerk` and `city_treasurer` is **tables only** — both races remain reachable from no page, by design, and no page mapping changes in this lane. Until this entry the package file was the sole record of this text.*
+
+### PS-115 — the person surface is enabled uniformly; no municipal carve-out
+
+> ## D-25 — Person surface: enabled uniformly, no municipal carve-out
+>
+> The D-18 table naturally lets `resolvePersonRef` resolve municipal ids. Measured consequences
+> (G2 item 5): **no in-page person link renders for municipal today** (0 `priorElection`, 0
+> `on_current_record`); only the read-only `?person=` deep link reaches the surface; a resolved
+> municipal person renders one member section with honest zeros. That is PS-86's "inside the
+> frame, absence is information" and PS-89 rev 2's deep-link path behaving as designed, with
+> PS-90's IE exclusion untouched. **Recommendation:** no carve-out — adding a municipal exception
+> at `data.js:894` would be a new hardcode of exactly the class this lane removes. The synthetic-
+> committee-id case stays covered by the D-17/PS-107 guard (now demonstrated at all **three**
+> `requireWin` sites, the person-surface site included).
+
+*Provenance: MUNI-ENABLE-1 G2 ratification package (`MUNI-ENABLE-1-G2-ratification-package.md`), sha256 `82230d309cb0d05d340ac9a4e74e188593a65203ebf7ef90213fea6dfd1017f7`, 11,885 B / 201 L, §"D-25 — Person surface: enabled uniformly, no municipal carve-out", lines 152–162, transcribed verbatim; ratified by Ishan in relay 2026-08-12 **as drafted** — the package states nothing was amended. Id allocated at this transcription. Region: the full section as banked, recommendation apparatus included — Ishan ratified the sections as drafted, so the recommendation and its rejected alternative are part of the ratified text rather than a separate advisory layer, and per this register's form note transcription is never harmonization. Until this entry the package file was the sole record of this text.*
+
 ---
 
 ## Rulings ratified without an id
