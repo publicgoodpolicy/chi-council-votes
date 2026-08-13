@@ -949,7 +949,20 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 > against what the record *claims* the surface was; with it, drift that predates the lane is
 > separable from drift the lane caused — and the two have been confused before.
 
+> **Amendment (MUNI-ENABLE-1 lane close, 2026-08-13).** PS-98's comparison rule — hash
+> `capture + "\n"` — assumed the clipboard round-trip always strips the file's final newline.
+> Measured false at this lane's paste: the pre-paste capture of the school-board elections block
+> ended `3e` (newline stripped) and the post-paste capture of the same block, same clipboard,
+> ended `0a` (newline retained). Appending unconditionally therefore manufactures a one-byte
+> difference whenever the newline survived, producing a false mismatch. Ruled: the comparison
+> normalizes both sides to exactly one trailing newline, then compares. Both captures at this
+> lane's paste match cleanly under the corrected rule (pre `73a4b6ab…`, post `a94c9f5c…`). The
+> failure direction is benign — a false mismatch halts rather than vouches — but the rule was
+> correct by luck, not by construction.
+
 *Provenance: REFRESH-1 G3 authorization, sha256 `0b5e43d1…` (full sha at §PS-97), §COMMIT 1; ratified by Ishan 2026-08-07. **Fresh authoring**, promoting a recommendation queued since REPAIR-AGG-1. The attempt history (the run that succeeded against the prior failures) is a historical finding and is cited to handover rev I's lessons section rather than restated here, per PS-34/PS-38. Closes the ledger item that carried the recommendation.*
+
+*Provenance, amendment (the comparison normalizes both sides to one trailing newline): `PS-98-amendment-proposed-2026-08-13.md`, sha256 `76d27cb574f43206511138dc869863d38f7e5105e66c57d93e62d813519957ad`, 1,292 B / 19 L, the text below the `---`, lines 10–19, transcribed verbatim; **the source file predates ratification and self-describes as "Ratification status: pending Ishan"** — ratification occurred in relay 2026-08-13, after the file was written, and the file's own terms make it the transcription source once ratified. Recorded that way rather than silently, so a reader finding the file later does not read "pending" as the amendment's status. Recorded under the PS-93 pattern: PS-98's pre-amendment text is unaltered, including the sentence the amendment corrects, because transcription is never harmonization and an amendment says what now governs rather than editing the superseded clause away. The measurements it rests on are the MUNI-ENABLE-1 lane-close paste captures, cited per PS-38: pre `73a4b6ab…` (191,350 B, newline stripped), post `a94c9f5c…` (199,559 B, newline retained), both matching the repo file under the corrected rule. The defect was found by the false mismatch it produced, not by review of the rule.*
 
 ### PS-99 — the votes family is single-source: every published position comes from the vote ingest
 
