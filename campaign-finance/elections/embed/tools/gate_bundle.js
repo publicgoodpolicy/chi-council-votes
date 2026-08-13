@@ -185,6 +185,28 @@ function assertPreviewVintage(T, window, JSDOMref) {
 // mayor blocks here when their cohorts land; the assertion functions below are
 // office-agnostic and consume one of these blocks unchanged.
 // ====================================================================
+// CROSS-OFFICE ORACLES (MUNI-ENABLE-1 G4, D-18/PS-108 and D-20/PS-110). Stated here
+// INDEPENDENTLY of every implementation, on the same reasoning the per-office `windows` block
+// below states window values independently: an oracle that reads its expectation from its
+// subject checks nothing (PS-82). D-18 puts the office-type table in two languages that cannot
+// share a predicate, so they share this oracle instead — [MUNI/TABLE] asserts BOTH against it
+// rather than either against the other, which is what makes a one-sided edit a failure instead
+// of a silent divergence. Deliberately NOT inside FIXTURES.school_board: the subject spans
+// offices, and burying a cross-office fact in a per-office block is how it goes stale.
+var OFFICE_TYPE_ORACLE = {
+  school_board: 'school_board',
+  school_board_president: 'school_board',
+  school_board_member: 'school_board',
+  city_council: 'municipal',
+  alderperson: 'municipal',
+  mayor: 'municipal',
+  city_clerk: 'municipal',
+  city_treasurer: 'municipal'
+};
+// D-20's ratified municipal values. `start` is the 2027 council-era cycle boundary, NOT the
+// school-board `start: null` idiom — see the ruling and the note in election-windows.json.
+var MUNICIPAL_WINDOWS_ORACLE = { '2027': { start: '2023-05-15', end: '2027-12-31' } };
+
 var FIXTURES = {
   school_board: {
     office: 'school_board',
@@ -1505,12 +1527,72 @@ async function assertPersonSurface(T, ctx, fx) {
   // for a test's convenience. So the checker deep-copies the artifact in memory, grants one
   // municipal candidacy a committee id, and reads the joint effect off the public API.
   //
-  // SELF-RETIRING BY CONSTRUCTION: today the unless-branch is false and the guard holds
-  // because no municipal committee id exists; once G4 lands municipal support the branch
-  // becomes true and this same body is the standing invariant "municipal finance never
-  // renders without a window table". Bite 5 of the self-test proves that transition now,
-  // against an in-memory post-G4 data.js, so the retirement is demonstrated rather than
-  // promised.
+  // ALREADY RETIRED ITSELF (G4). Built at G3 the unless-branch was false and the guard held
+  // because no municipal committee id existed; G4 landed the office-type and municipal window
+  // tables, so the branch is true and this same body — unchanged — is now the standing
+  // invariant "municipal finance never renders without a window table". What it still catches
+  // is an edit that drops municipal windows while municipal ids exist, which self-test bite 5
+  // pins by removing the window table in memory and requiring the injected id to fail again.
+  // [MUNI/TABLE] the D-18 (PS-108) cross-language drift oracle. The office-type table exists
+  // in two languages — data.js OFFICE_TYPE and build_rollups.py OFFICE_TYPE — because one
+  // predicate cannot span both. Each is asserted against OFFICE_TYPE_ORACLE above, never
+  // against the other: comparing them only to each other would pass while both drifted the
+  // same way, and comparing either to the oracle alone would let the other rot unwatched.
+  // Both directions of set difference are checked, so an ADDED token fails as loudly as a
+  // missing one — the failure mode where a ninth office is enumerated in one language only.
+  (function () {
+    // data.js required from source. Sound because [BUNDLE/VINTAGE] above already pins that
+    // the shipped bundle recomposes from these exact sources, so source and shipped cannot
+    // disagree without that check failing first.
+    var EDsrc = require(path.join(__dirname, '..', 'data.js'));
+    var expect = OFFICE_TYPE_ORACLE;
+    var jsTable = EDsrc.OFFICE_TYPE || {};
+    var py = require('child_process').spawnSync('python3',
+      ['-c', 'import sys,json; sys.path.insert(0,' +
+        JSON.stringify(path.join(__dirname, '..', '..', '..', 'ingestion')) +
+        '); import build_rollups; print(json.dumps(build_rollups.OFFICE_TYPE))'],
+      { encoding: 'utf8' });
+    var pyTable = {};
+    try { pyTable = JSON.parse((py.stdout || '{}').trim()); } catch (e) {}
+    function diff(a, b) {
+      var out = [];
+      Object.keys(a).forEach(function (k) { if (a[k] !== b[k]) out.push(k + ':' + a[k] + '≠' + (b[k] === undefined ? 'absent' : b[k])); });
+      Object.keys(b).forEach(function (k) { if (!(k in a)) out.push(k + ':absent≠' + b[k]); });
+      return out;
+    }
+    var dJs = diff(expect, jsTable), dPy = diff(expect, pyTable);
+    T.ok('[MUNI/TABLE] the office-type table agrees with the oracle in BOTH languages (' +
+      Object.keys(expect).length + ' tokens) — ' +
+      (dJs.length || dPy.length
+        ? 'DRIFT js[' + dJs.join(', ') + '] py[' + dPy.join(', ') + ']'
+        : 'data.js and build_rollups.py both match'),
+      py.status === 0 && dJs.length === 0 && dPy.length === 0);
+  })();
+
+  // [MUNI/WINDOW] the D-20 (PS-110) municipal window values, in all three places they live:
+  // data.js's ELECTION_WINDOWS object, election-windows.json's array, and the oracle above.
+  // The two shapes differ (object-keyed-by-id vs ordered array with an id field), so the
+  // check normalizes before comparing rather than pretending they are the same structure.
+  (function () {
+    var EDsrc = require(path.join(__dirname, '..', 'data.js'));
+    var expect = MUNICIPAL_WINDOWS_ORACLE;
+    var js = (EDsrc.ELECTION_WINDOWS || {}).municipal || {};
+    var jsonPath = path.join(__dirname, '..', '..', 'election-windows.json');
+    var arr = [];
+    try { arr = (JSON.parse(fs.readFileSync(jsonPath, 'utf8')) || {}).municipal || []; } catch (e) {}
+    var fromJson = {};
+    arr.forEach(function (w) { fromJson[w.id] = { start: w.start, end: w.end }; });
+    function norm(o) {
+      return Object.keys(o).sort().map(function (k) {
+        return k + '[' + (o[k].start === null ? 'null' : o[k].start) + '..' + o[k].end + ']'; }).join(',');
+    }
+    var e = norm(expect), a = norm(js), b = norm(fromJson);
+    T.ok('[MUNI/WINDOW] municipal window values agree across data.js, election-windows.json ' +
+      'and the oracle — oracle ' + e + (e === a && e === b ? ' (both match)' :
+        ' | data.js ' + (a || 'ABSENT') + ' | json ' + (b || 'ABSENT')),
+      e === a && e === b);
+  })();
+
   (function () {
     var chk = path.join(__dirname, 'check_muni_guard.js');
     var res = require('child_process').spawnSync('node', [chk], { encoding: 'utf8' });

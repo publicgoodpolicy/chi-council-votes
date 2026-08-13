@@ -473,11 +473,27 @@ ok('cycle filter degrades cleanly (single cycle: 2027 == current)',
   ok('spend subtabs genuinely thread cycle (industries direct @2027 < all-time, both > 0)',
     dir('2027') > 0 && dir('2027') < dir(null) && dir('bogus-cycle') === 0);
 })();
+// MUNI-ENABLE-1 G4: the coming-soon invariant, now asserted with its PRECONDITION rather than
+// alone. Before G4 these two offices rendered coming-soon because officeType returned null and
+// nothing municipal could resolve; after G4 they must render coming-soon for the honest reason
+// — no municipal candidacy owns a committee, so no race reports finance. Enablement must not
+// have promoted an empty office to a live one. Asserting the zero-committee-id precondition in
+// the same case is what stops this from silently becoming a claim about the wrong cause: if a
+// municipal committee id ever lands, this case fails loudly instead of quietly still passing.
+var MUNI_OFFICES = ['alderperson', 'mayor', 'city_clerk', 'city_treasurer'];
+var raceOfficeById = {};
+json.races.forEach(function (r) { raceOfficeById[r.id] = r.office; });
+var muniWithCommittee = json.candidates.filter(function (c) {
+  return MUNI_OFFICES.indexOf(raceOfficeById[c.race_id]) >= 0 && c.committee_id != null; }).length;
+ok('precondition: zero municipal candidacies own a committee (0 measured, ' +
+   muniWithCommittee + ' found)', muniWithCommittee === 0);
 ['city_council', 'mayor'].forEach(function (off) {
   var oi = D.loadData(json, { office: off });
   var om = D.viewModels.officeRaces(oi, off);
   var pg = R.renderPage({ office: off, topView: 'byrace', cycles: D.availableCycles(oi), cycle: null, officeRaces: om, activeSlug: null, raceView: null });
-  ok(off + ' renders a clean coming-soon (no crash, full page)', /coming soon/i.test(pg) && pg.indexOf('<div class="wrap">') >= 0 && pg.length > 600);
+  var anyFinance = om.groups.some(function (g) { return g.races.some(function (r) { return r.hasFinance; }); });
+  ok(off + ' renders a clean coming-soon AFTER municipal enablement (no crash, full page, no race reports finance)',
+    /coming soon/i.test(pg) && pg.indexOf('<div class="wrap">') >= 0 && pg.length > 600 && !anyFinance);
 });
 ok('real Recoleta @font-face present (onlinewebfonts CDN) + Georgia fallback',
   /@font-face\{font-family:"Recoleta";src:url\("https:\/\/db\.onlinewebfonts\.com/.test(R.styles()) && /--display:Recoleta,Georgia/.test(R.styles()));

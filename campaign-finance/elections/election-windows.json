@@ -3,5 +3,9 @@
   "school_board": [
     {"id": "2024", "start": null, "end": "2024-12-31", "label": "2024"},
     {"id": "2026", "start": "2025-01-01", "end": "2026-12-31", "label": "2026"}
+  ],
+  "_municipal_start_note": "municipal deliberately does NOT use school_board's open `start: null`. Council incumbent committees carry receipts back to 1999; an open past would pour up to sixteen years of them into a single 2027 figure. The bound is the 2027 council-era cycle start from the repo's CYCLES table (D-20 / PS-110).",
+  "municipal": [
+    {"id": "2027", "start": "2023-05-15", "end": "2027-12-31", "label": "2027"}
   ]
 }

@@ -29,12 +29,17 @@
  * id, and drives all three call sites. If none throws PS-79/B1, municipal support exists.
  * The probe is in-memory only; no file is written and the real artifact is never mutated.
  *
- * BUILT TO RETIRE ITSELF (lane brief, G3). Today the unless-branch is false and the guard
- * holds because no municipal committee id exists. Once G4 lands municipal support the
- * unless-branch becomes true and this same body becomes the standing invariant "municipal
- * finance never renders without a window table" — the check does not need rewriting to
- * change role, which is why it is phrased as a conditional rather than as "there are no
- * municipal committee ids".
+ * IT HAS ALREADY RETIRED ITSELF, and that is recorded rather than assumed. Built at G3, the
+ * unless-branch was false and the guard held because no municipal committee id existed. G4
+ * landed the office-type table and the municipal window table, so the branch is now true and
+ * this same body — unchanged — is the standing invariant "municipal finance never renders
+ * without a window table". Phrasing it as a conditional rather than as "there are no
+ * municipal committee ids" is what let the role change without a rewrite.
+ *
+ * WHAT IT STILL CATCHES, post-G4: an edit that drops or breaks municipal windows while
+ * municipal committee ids exist. With support present AND zero offenders the check would
+ * otherwise pass for two reasons at once, so self-test bite 5 removes the window table in
+ * memory and requires the injected id to fail again.
  *
  * THE MUNICIPAL OFFICE SET IS STATED INDEPENDENTLY of data.js, on the same reasoning the
  * window fixture in gate_bundle.js states window values independently: an oracle that reads
@@ -199,21 +204,23 @@ function selfTest() {
   ok('control: the pass line reports BOTH halves (offenders and support state)',
     typeof base.stats.offenders === 'number' && typeof base.stats.supported === 'boolean');
 
-  // bite 1 — an injected municipal committee id FAILS while support is absent
+  // bite 1 — THE UNLESS-BRANCH, now real. Municipal support exists as of G4, so an injected
+  // municipal committee id must PASS. Pre-G4 this same case asserted the opposite and was
+  // carried by an in-memory simulation of the post-G4 code; the simulation is retired because
+  // the state it simulated is the state on disk.
   var b1 = clone(); firstMuni(b1).committee_id = 'SYNTHETIC-MUNI-CMTE';
-  var r1 = evaluate(b1);
-  ok('bite: a synthetic municipal committee id FAILS the guard', !r1.pass);
-  ok('bite: the failure names PS-107 and the offending candidacy',
-    r1.fails.join(' ').indexOf('PS-107') >= 0 &&
-    r1.fails.join(' ').indexOf('SYNTHETIC-MUNI-CMTE') >= 0);
+  ok('bite: with municipal support present, an injected municipal committee id PASSES',
+    evaluate(b1).pass);
 
-  // bite 2 — the probe really does observe the PS-79/B1 throw today
-  ok('bite: the support probe observes a PS-79/B1 throw at raceView',
-    base.stats.sites.raceView && base.stats.sites.raceView.state === 'threw');
-  ok('bite: the support probe observes a PS-79/B1 throw at raceBrowse',
-    base.stats.sites.raceBrowse && base.stats.sites.raceBrowse.state === 'threw');
-  ok('bite: personView is unreachable for municipal today (officeType gate), not erroring',
-    base.stats.sites.personView && base.stats.sites.personView.state === 'unreachable');
+  // bite 2 — the probe observes support at all three requireWin sites. Asserted rather than
+  // assumed, so a regression that removes municipal support from any ONE site is caught by
+  // name instead of surfacing as a distant render failure.
+  ok('bite: the support probe reports ok at raceView',
+    base.stats.sites.raceView && base.stats.sites.raceView.state === 'ok');
+  ok('bite: the support probe reports ok at raceBrowse',
+    base.stats.sites.raceBrowse && base.stats.sites.raceBrowse.state === 'ok');
+  ok('bite: the support probe reports ok at personView (reachable since the office-type table)',
+    base.stats.sites.personView && base.stats.sites.personView.state === 'ok');
 
   // bite 3 — SCOPE: a school-board committee id must NOT trip a municipal guard
   var b3 = clone();
@@ -231,38 +238,48 @@ function selfTest() {
   ok('bite: with no municipal candidacy the guard FAILS as VACUOUS, not passes',
     !r4.pass && r4.fails.join(' ').indexOf('VACUOUS') >= 0);
 
-  // bite 5 — the unless-branch: with municipal support simulated, the SAME injected id passes.
-  // Proves the guard retires itself at G4 rather than having to be rewritten.
-  var patched = simulateSupportedData();
-  if (patched) {
-    var r5 = patched.evaluate(patched.withInjectedId());
-    ok('bite: with municipal support present, an injected municipal id PASSES (self-retiring)',
-      r5.pass);
+  // bite 5 — THE DIRECTION THAT CAN STILL GO WRONG, and the reason this check is not vacuous
+  // post-G4. With municipal support present and no offenders the guard passes for two reasons
+  // at once, so the biting case has to remove one of them: strip the municipal window table
+  // in memory and the SAME injected id must fail again. This is the standing invariant the
+  // guard became — "municipal finance never renders without a window table" — and it is what
+  // would catch a future edit that dropped municipal windows while municipal ids existed.
+  var stripped = simulateWindowsRemoved();
+  if (stripped) {
+    ok('bite: with the municipal window table removed, an injected municipal id FAILS again',
+      !stripped.evaluate(stripped.withInjectedId()).pass);
+    ok('bite: with municipal windows removed but NO offender, the guard still PASSES ' +
+       '(the antecedent governs, not support alone)',
+      stripped.evaluate(json).pass);
   } else {
-    ok('bite: municipal-support simulation could not be built (anchors moved — re-derive)', false);
+    ok('bite: window-removal simulation could not be built (anchors moved — re-derive)', false);
   }
 
   console.log('\nself-test: ' + checks + ' checks · ' + (fails ? fails + ' FAILED' : 'ALL PASS'));
   return fails;
 }
 
-/* Build an in-memory data.js whose officeType/ELECTION_WINDOWS carry municipal, and return an
- * evaluate() bound to it. This simulates the POST-G4 state so bite 5 can prove the guard's
- * unless-branch works before that state exists. Anchors are matched exactly and their absence
- * is reported rather than silently skipped. Nothing is written. */
-function simulateSupportedData() {
+/* Build an in-memory data.js with the MUNICIPAL WINDOW TABLE REMOVED, and return an evaluate()
+ * bound to it. Bite 5 uses it to keep the guard non-vacuous now that municipal support is real:
+ * with both support present and zero offenders the guard would pass for two reasons at once, so
+ * the biting case removes one.
+ *
+ * DISPOSITION NOTE (MUNI-ENABLE-1 G4). This replaces simulateSupportedData(), which patched
+ * municipal support INTO an in-memory data.js so the pre-G4 self-test could prove the guard's
+ * unless-branch before that state existed. G4 put that state on disk, so the old simulation's
+ * anchors no longer matched and its assertion had inverted; it is retired rather than repaired,
+ * and the direction that can still go wrong is simulated instead.
+ *
+ * Anchors are matched exactly and their absence is REPORTED (bite 5 fails loudly) rather than
+ * silently skipped — the failure mode that would otherwise turn this bite into a no-op the next
+ * time these lines move. Nothing is written. */
+function simulateWindowsRemoved() {
   var Module = require('module');
   var srcPath = path.join(__dirname, '..', 'data.js');
   var src = fs.readFileSync(srcPath, 'utf8');
-  var OT = "  function officeType(office) { return (office && office.indexOf('school_board') === 0) ? 'school_board' : null; }";
-  var W = "  var ELECTION_WINDOWS = { school_board: {\n    '2024': { start: null, end: '2024-12-31' },\n    '2026': { start: '2025-01-01', end: '2026-12-31' } } };";
-  if (src.indexOf(OT) < 0 || src.indexOf(W) < 0) return null;
-  src = src.replace(OT,
-    "  var OFFICE_TYPE = { school_board:'school_board', school_board_president:'school_board',\n" +
-    "    school_board_member:'school_board', city_council:'municipal', alderperson:'municipal',\n" +
-    "    mayor:'municipal', city_clerk:'municipal', city_treasurer:'municipal' };\n" +
-    "  function officeType(office) { return OFFICE_TYPE[office] || null; }");
-  src = src.replace(W, W.replace(/ } };$/, " }, municipal: { '2027': { start: '2023-05-15', end: '2027-12-31' } } };"));
+  var MUNI = "    municipal: {\n      '2027': { start: '2023-05-15', end: '2027-12-31' } } };";
+  if (src.indexOf(MUNI) < 0) return null;
+  src = src.replace(MUNI, "    /* municipal window table removed by the muni-guard bite */ };");
   var m = new Module('muni-guard-sim');
   m.paths = Module._nodeModulePaths(path.dirname(srcPath));
   m._compile(src, srcPath.replace(/\.js$/, '.sim.js'));

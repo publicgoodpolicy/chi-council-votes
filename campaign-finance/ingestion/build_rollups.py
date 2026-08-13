@@ -10,8 +10,50 @@ EXCLUDED_CYCLES={'pre-2011','undated'}
 # row to an election by FILING DATE (the SBE 'cycle' field is the useless 4-year bucket).
 WINDOWS_PATH=os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','elections','election-windows.json')
 
+# D-18 (PS-108): the office-type table replacing the prefix test. Mirrors data.js's
+# OFFICE_TYPE token for token — same table, two languages. They cannot share one predicate
+# across languages, so [MUNI/TABLE] pins both to one independently stated oracle rather than
+# deriving either from the other (PS-82). Enumerates both keyspaces the callers pass: the
+# page office and race.office. city_clerk / city_treasurer are table entries only; their
+# races remain reachable from no page.
+OFFICE_TYPE={
+    'school_board':'school_board',
+    'school_board_president':'school_board',
+    'school_board_member':'school_board',
+    'city_council':'municipal',
+    'alderperson':'municipal',
+    'mayor':'municipal',
+    'city_clerk':'municipal',
+    'city_treasurer':'municipal',
+}
 def _office_type(office):
-    return 'school_board' if office and office.startswith('school_board') else None
+    return OFFICE_TYPE.get(office)
+
+
+def load_windows():
+    """D-19 (PS-109): a missing or corrupt windows file is an ERROR, never an empty filter.
+
+    PS-79/B1 ("a missing window is an error, never an empty filter") was enforced in JS and
+    silently violated here: `windows={}` produced no buckets at all, so by_candidate_election
+    came out empty and nothing said why. PS-79(c) scoped the municipal key out to "F4's own
+    lane"; MUNI-ENABLE-1 is that lane (D-19), so the degradation is fixed in the same arc that
+    makes municipal windows real."""
+    try:
+        with open(WINDOWS_PATH) as f:
+            w=json.load(f)
+    except OSError as e:
+        raise SystemExit('FATAL [PS-109] election-windows.json unreadable at %s: %s\n'
+                         '  Refusing to bucket with an empty window table: a missing window is '
+                         'an error, never an empty filter (PS-79/B1).' % (WINDOWS_PATH,e))
+    except json.JSONDecodeError as e:
+        raise SystemExit('FATAL [PS-109] election-windows.json is not valid JSON at %s: %s\n'
+                         '  Refusing to bucket with an empty window table.' % (WINDOWS_PATH,e))
+    if not isinstance(w,dict) or not [k for k,v in w.items()
+                                      if not k.startswith('_') and isinstance(v,list) and v]:
+        raise SystemExit('FATAL [PS-109] election-windows.json at %s carries no office-type '
+                         'window list.\n  Refusing to bucket with an empty window table.'
+                         % WINDOWS_PATH)
+    return w
 
 _NAME_DROP={'jr','sr','ii','iii','iv','mr','mrs','ms','dr'}
 def _name_key(n):
@@ -138,10 +180,7 @@ def build(d):
     # council rollup shape is provably untouched (council data has no candidates/races).
     by_candidate_election={}
     if election_mode:
-        try:
-            windows=json.load(open(WINDOWS_PATH))
-        except (OSError,json.JSONDecodeError):
-            windows={}
+        windows=load_windows()   # D-19 (PS-109): fail loud, never windows={}
         cands={c['id']:c for c in d.get('candidates',[])}
         race_office={r['id']:r.get('office') for r in d.get('races',[])}
         # Prior-election bucket labels for by_candidate_election DERIVE FROM PERSON LINKS

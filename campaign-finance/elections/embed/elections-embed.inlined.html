@@ -63,10 +63,39 @@
   // by FILING DATE in [start,end] inclusive; start:null = open-ended past. This is the
   // ADDITIVE per-election date filter layered onto the existing cycle filtering (2024 &
   // 2026 both live in cycle '2027', so only a date slice separates them). Keep in sync.
-  var ELECTION_WINDOWS = { school_board: {
-    '2024': { start: null, end: '2024-12-31' },
-    '2026': { start: '2025-01-01', end: '2026-12-31' } } };
-  function officeType(office) { return (office && office.indexOf('school_board') === 0) ? 'school_board' : null; }
+  // D-20 (PS-110): municipal's start is the 2027 council-era boundary from the repo's CYCLES
+  // table, NOT the school-board `start: null` idiom. That idiom was harmless only because no
+  // school-board committee predated the tool's subject; council incumbent committees carry
+  // receipts back to 1999, and an open past would pour up to sixteen years of them into a
+  // single "2027" figure — the coverage misstatement PS-93 exists to prevent.
+  var ELECTION_WINDOWS = {
+    school_board: {
+      '2024': { start: null, end: '2024-12-31' },
+      '2026': { start: '2025-01-01', end: '2026-12-31' } },
+    municipal: {
+      '2027': { start: '2023-05-15', end: '2027-12-31' } } };
+  // D-18 (PS-108): the office-type table replacing the prefix test. It enumerates BOTH
+  // keyspaces officeType is called with — the page office (school_board / city_council /
+  // mayor, from selectorOptions, spendWin, spendElectionIds, electionOf) and race.office
+  // (from raceWin and resolvePersonRef). The prefix test collapsed both for school board by
+  // accident, since `school_board` prefixes its own race offices; municipal has no such
+  // relationship (`city_council` and `alderperson` share nothing), so a page-office-only
+  // table would silently break raceWin and resolvePersonRef. city_clerk / city_treasurer are
+  // included as TABLE entries only — their races remain reachable from no page — because
+  // excluding them would recreate the null-collapse for two races if either ever carries
+  // finance. The Python mirror is build_rollups.OFFICE_TYPE; [MUNI/TABLE] pins them together
+  // against an independently stated oracle, since one predicate cannot span two languages.
+  var OFFICE_TYPE = {
+    school_board: 'school_board',
+    school_board_president: 'school_board',
+    school_board_member: 'school_board',
+    city_council: 'municipal',
+    alderperson: 'municipal',
+    mayor: 'municipal',
+    city_clerk: 'municipal',
+    city_treasurer: 'municipal'
+  };
+  function officeType(office) { return OFFICE_TYPE[office] || null; }
   function winFor(office, electionId) {
     var t = officeType(office), o = t && ELECTION_WINDOWS[t]; return (o && o[electionId]) || null;
   }
@@ -125,7 +154,13 @@
   // The former per-spend-tab This/Last/All filter is retired: the global selector is the
   // ONE control answering the election question, and no cross-election ('all') time scope
   // is offered anywhere (ruled at SCOPE-UI G1/A1).
-  var OFFICE_BODY_LABEL = { school_board: 'School Board' };
+  // D-23 (PS-113): city_council and mayor share the `municipal` type, so both pages would
+  // draw the identical "{year} Municipal" label. That is accepted as DORMANT, not fixed: the
+  // selector renders only at options.length >= 2 (render.js selectorNav) and municipal has
+  // one window, so the label reaches no page until a second municipal election is authored.
+  // Distinguishing the two per office is banked for that day; per-office types duplicating
+  // identical window dates would buy an invisible string with a real drift surface.
+  var OFFICE_BODY_LABEL = { school_board: 'School Board', municipal: 'Municipal' };
   function selectorOptions(office) {
     var t = officeType(office), body = t && OFFICE_BODY_LABEL[t];
     if (!body) return [];
@@ -1299,6 +1334,10 @@
   return {
     OFFICE_RACE_OFFICES: OFFICE_RACE_OFFICES,
     OFFICE_GROUPS: OFFICE_GROUPS,
+    // Exported for [MUNI/TABLE] / [MUNI/WINDOW] only — the cross-language drift oracle D-18
+    // (PS-108) requires. Read by tools, never by the app: officeType() is the app's accessor.
+    OFFICE_TYPE: OFFICE_TYPE,
+    ELECTION_WINDOWS: ELECTION_WINDOWS,
     EXCLUDED_CYCLES: EXCLUDED_CYCLES,
     loadData: loadData,
     candidateFigures: candidateFigures,
