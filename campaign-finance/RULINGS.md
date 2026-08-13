@@ -1129,7 +1129,15 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 >
 > Rendered example, from the report's own counterfactual frame: "2027 municipal election — Ward 1".
 
+> **Amendment (MUNI-ENABLE-1 G5, 2026-08-12).** PS-111's preamble and its item (i) cannot both
+> hold — item (i)'s office-neutral string rewords the shipped framing sentence. Ruled: item (i)
+> governs; the preamble's byte-identity sentence is over-broad as to (i) and accurate as to (ii)
+> and (iii). The framing change is the lane's one reader-visible school-board copy change and
+> rides the lane-close paste. The contradiction was planner drafting error 90.
+
 *Provenance: MUNI-ENABLE-1 G2 ratification package (`MUNI-ENABLE-1-G2-ratification-package.md`), sha256 `82230d309cb0d05d340ac9a4e74e188593a65203ebf7ef90213fea6dfd1017f7`, 11,885 B / 201 L, §"D-21 — Replacement copy for strings (i), (ii), (iii)", lines 84–113, transcribed verbatim; ratified by Ishan in relay 2026-08-12 **as drafted** — the package states nothing was amended. Id allocated at this transcription. Region: the full section as banked, recommendation apparatus included — Ishan ratified the sections as drafted, so the recommendation and its rejected alternative are part of the ratified text rather than a separate advisory layer, and per this register's form note transcription is never harmonization. Until this entry the package file was the sole record of this text.*
+
+*Provenance, amendment (item (i) governs; the preamble is over-broad as to it): `PS-111-amendment-ratified-2026-08-12.md`, sha256 `40724273cb1214ae6f7675d6853d4d880712019e4df4d84a2994a221a9af010f`, 739 B / 13 L, the text below the `---`, lines 9–13, transcribed verbatim; ratified by Ishan in relay 2026-08-12, the same relay that ruled the contradiction. The amendment is recorded under the PS-93 pattern: PS-111's pre-amendment text is unaltered, and the preamble it qualifies still reads as banked, because transcription is never harmonization — the amendment says which clause governs rather than editing the losing one away. The contradiction it resolves was found at G5 while implementing item (i) and is planner drafting error 90. Its consequence is carried in the arc: the framing change is the lane's one reader-visible school-board copy change and rides the lane-close paste.*
 
 ### PS-112 — the methodology view is gated on office readiness, not drafted ahead of its data
 
@@ -1195,6 +1203,17 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 > `requireWin` sites, the person-surface site included).
 
 *Provenance: MUNI-ENABLE-1 G2 ratification package (`MUNI-ENABLE-1-G2-ratification-package.md`), sha256 `82230d309cb0d05d340ac9a4e74e188593a65203ebf7ef90213fea6dfd1017f7`, 11,885 B / 201 L, §"D-25 — Person surface: enabled uniformly, no municipal carve-out", lines 152–162, transcribed verbatim; ratified by Ishan in relay 2026-08-12 **as drafted** — the package states nothing was amended. Id allocated at this transcription. Region: the full section as banked, recommendation apparatus included — Ishan ratified the sections as drafted, so the recommendation and its rejected alternative are part of the ratified text rather than a separate advisory layer, and per this register's form note transcription is never harmonization. Until this entry the package file was the sole record of this text.*
+
+### PS-116 — the elections embed fetches on refs/heads/main/, not the bare main fragment
+
+> **D-26.** The elections embed's artifact URLs move from the bare `main/` fragment to
+> `refs/heads/main/`, matching the council and school-board embeds. Rationale, carried from D-5:
+> `main` resolves against branches and tags, so a tag named `main` would silently repoint every
+> fetch; `refs/heads/` is immune. Taken at MUNI-ENABLE-1 G7b — one paste is already owed, and the
+> pasted-surface count triples after this lane, so this is the cheapest moment the form will have.
+> The D-5 rationale comment rides in-line beside the URL. Discharges open ledger 8.
+
+*Provenance: D-26 proposed text (`D-26-proposed-2026-08-12.md`), sha256 `9b191a207d737c2be4112ad9c0bfd5140918e2ce45834f53d0beb4184744e3f7`, 983 B / 16 L, the text below the `---`, lines 11–16, transcribed verbatim; **the source file predates ratification and self-describes as "Ratification status: pending Ishan"** — ratification occurred in relay 2026-08-12, after the file was written, and the file's own terms make it the transcription source and its sha its identity once ratified. Recorded that way rather than silently: the bytes are the ratified text, but the document around them is a proposal, and a reader finding it later must not read "pending" as the ruling's status. Id allocated at this transcription. Implemented at MUNI-ENABLE-1 G7b (`a1fd2e98`), which also pinned the form on every emission as `[ELECT/URL]`; the premise that council and school board already carried `refs/heads/main/` was verified by reading both before implementing. Discharges rev P open ledger 8. Carries D-5's rationale, which is cited in the text rather than restated here.*
 
 ---
 
