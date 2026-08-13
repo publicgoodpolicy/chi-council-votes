@@ -1150,8 +1150,21 @@
   // (direct raised — a SINGLE legitimate stream; support/oppose stay separate, never fused).
   // No money drop-guard: empty races and $0 / committee-less candidates are included so the
   // render can label them honestly. Optional raceFilter ('all' | race_id) AND-composes with win.
+  // D-24 (PS-114): citywide municipal races sort ahead of districted ones, which is what
+  // byRaceOrder already does for the nav (geo_key null first, then ascending) — the grouped
+  // view is brought into AGREEMENT with the measured nav order rather than given a new
+  // convention of its own (PS-86). Before this, `mayor`, `city-clerk` and `city-treasurer`
+  // carried no digit in their ids and all fell to the 9999 tie-bucket, sorting last and
+  // arbitrarily among themselves. The trio's internal order — mayor, city clerk, city
+  // treasurer — is ballot prominence, and is the one new fact D-24 ratifies; it also happens
+  // to match the order generate_races emits, which is what the nav's stable sort produces.
+  //
+  // The negative range is disjoint from school_board_president's -1 so the two can never tie
+  // even though office scoping means they are never sorted together today.
+  var CITYWIDE_ORDER = { mayor: -4, 'city-clerk': -3, 'city-treasurer': -2 };
   function raceOrderKey(r) {
     if (r.office === 'school_board_president' || r.id === 'sb-president') return -1;
+    if (CITYWIDE_ORDER.hasOwnProperty(r.id)) return CITYWIDE_ORDER[r.id];
     var m = /(\d+)/.exec(r.id || '');
     return m ? parseInt(m[1], 10) : 9999;
   }
@@ -1324,6 +1337,14 @@
     // (PS-108) requires. Read by tools, never by the app: officeType() is the app's accessor.
     OFFICE_TYPE: OFFICE_TYPE,
     ELECTION_WINDOWS: ELECTION_WINDOWS,
+    // D-24 (PS-114) test hook. The two comparators must agree, but the citywide trio is
+    // UNREACHABLE through the public view models: no page maps more than one municipal office
+    // (OFFICE_RACE_OFFICES gives city_council only `alderperson` and mayor only `mayor`, with
+    // clerk/treasurer on no page at all, per the ratified scope clarification), so the trio and
+    // the wards never appear in one sort. Pinning their agreement therefore needs the
+    // comparators themselves. Exported for the fixture only; the app sorts through the view
+    // models, never through these.
+    _ordering: { raceOrderKey: raceOrderKey, byRaceOrder: byRaceOrder },
     EXCLUDED_CYCLES: EXCLUDED_CYCLES,
     loadData: loadData,
     candidateFigures: candidateFigures,

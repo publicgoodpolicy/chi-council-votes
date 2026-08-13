@@ -495,6 +495,59 @@ ok('precondition: zero municipal candidacies own a committee (0 measured, ' +
   ok(off + ' renders a clean coming-soon AFTER municipal enablement (no crash, full page, no race reports finance)',
     /coming soon/i.test(pg) && pg.indexOf('<div class="wrap">') >= 0 && pg.length > 600 && !anyFinance);
 });
+// ---- MUNI-ENABLE-1 G6 ----
+// D-24 (PS-114): the grouped view's comparator and the nav's must order the municipal race set
+// identically. Compared as ORDERS, not as key values — the two return different things (a sort
+// key vs a comparator) and only their resulting sequence is the ratified fact. The citywide trio
+// is unreachable through the view models (no page maps more than one municipal office), so the
+// comparators are exercised directly; see the _ordering export note in data.js.
+(function () {
+  var MUNI = ['alderperson', 'mayor', 'city_clerk', 'city_treasurer'];
+  var races = json.races.filter(function (r) { return MUNI.indexOf(r.office) >= 0; });
+  var byNav = races.slice().sort(D._ordering.byRaceOrder).map(function (r) { return r.id; });
+  var byGrouped = races.slice().sort(function (a, b) {
+    return D._ordering.raceOrderKey(a) - D._ordering.raceOrderKey(b); }).map(function (r) { return r.id; });
+  ok('D-24: nav and grouped orderings agree across the whole municipal race set (' + races.length + ' races)',
+    byNav.join(',') === byGrouped.join(','));
+  ok('D-24: the citywide trio leads, in ballot-prominence order (mayor, clerk, treasurer)',
+    byGrouped.slice(0, 3).join(',') === 'mayor,city-clerk,city-treasurer');
+  ok('D-24: wards follow the trio, ascending by number',
+    byGrouped.slice(3).join(',') === json.races.filter(function (r) { return r.office === 'alderperson'; })
+      .map(function (r) { return r.ward | 0; }).sort(function (a, b) { return a - b; })
+      .map(function (n) { return 'ward-' + String(n).padStart(2, '0'); }).join(','));
+  ok('D-24: no municipal race falls into the 9999 tie-bucket any more',
+    races.every(function (r) { return D._ordering.raceOrderKey(r) !== 9999; }));
+  // school-board ordering is unchanged — the president still leads its own office's set
+  var sb = json.races.filter(function (r) { return String(r.office).indexOf('school_board') === 0; });
+  ok('D-24: school-board ordering is unchanged (president still leads)',
+    sb.slice().sort(function (a, b) { return D._ordering.raceOrderKey(a) - D._ordering.raceOrderKey(b); })[0].id === 'sb-president');
+})();
+
+// D-25 (PS-115): NO municipal carve-out on the person surface. This is a no-code decision — its
+// implementation is the ABSENCE of an exception at resolvePersonRef — so the fixture is the only
+// thing that can hold it. A future edit re-adding a municipal exception would make a municipal
+// ref resolve to null again, and this case is what would catch it.
+(function () {
+  var ro = {};
+  json.races.forEach(function (r) { ro[r.id] = r.office; });
+  var muni = json.candidates.filter(function (c) {
+    return ['alderperson', 'mayor', 'city_clerk', 'city_treasurer'].indexOf(ro[c.race_id]) >= 0; })[0];
+  var idx = D.loadData(json, { office: 'city_council' });
+  var vm = D.personView(idx, muni.id);
+  ok('D-25: a municipal candidacy RESOLVES on the person surface (no carve-out)', !!vm);
+  ok('D-25: it renders one member section with honest zeros, not a fabricated total',
+    !!vm && vm.sections.length === 1 && vm.careerTotal === 0 && vm.sections[0].contributions.total === 0);
+  ok('D-25: its section carries the municipal office type, so the ratified noun applies',
+    !!vm && vm.sections[0].officeType === 'municipal');
+  ok('D-25: PS-90 holds — no IE value enters the municipal person view-model',
+    !!vm && !('ieSupport' in vm.sections[0]) && !('ieOppose' in vm.sections[0]));
+  // and the school-board person surface is untouched by the removal of the gate
+  var isb = D.loadData(json, { office: 'school_board' });
+  var pid = Object.keys(isb.rollups.by_person)[0];
+  ok('D-25: the school-board person surface still resolves as before',
+    !!D.personView(isb, pid) && D.personView(isb, pid).sections.length > 0);
+})();
+
 ok('real Recoleta @font-face present (onlinewebfonts CDN) + Georgia fallback',
   /@font-face\{font-family:"Recoleta";src:url\("https:\/\/db\.onlinewebfonts\.com/.test(R.styles()) && /--display:Recoleta,Georgia/.test(R.styles()));
 
