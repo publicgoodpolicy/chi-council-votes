@@ -5,20 +5,30 @@ doesn't count for the page's SEO), one per office, all from one codebase.
 
 ## What to paste
 
-`elections-embed.inlined.html` is the self-contained, paste-ready block
-(data.js + render.js + app.js inlined; Poppins via Google Fonts; Recoleta via the
-council embed's `@font-face`). Regenerate it after any source change:
+**One file per page**, each self-contained and paste-ready (data.js + render.js +
+app.js inlined; Poppins via Google Fonts; Recoleta via the council embed's
+`@font-face`). Regenerate all three after any source change:
 
 ```
 cd campaign-finance/elections/embed
-node tools/build_embed.js        # -> elections-embed.inlined.html
+node tools/build_embed.js        # -> all three files below
 ```
+
+| Page          | File                                        |
+|---------------|---------------------------------------------|
+| /school-board | `elections-embed.inlined.html`              |
+| /city-council | `elections-embed.city-council.inlined.html` |
+| /mayor        | `elections-embed.mayor.inlined.html`        |
+
+The payload is byte-identical across the three; they differ only in the baked
+`data-office` and in the paste instruction naming their page. Each file names its
+page in the comment at the top — check it before pasting, because three ~194 KB
+files that differ in two lines are easy to confuse.
 
 ## The three pages
 
 Create three Squarespace pages, each with its own `<title>`/H1/meta, and on each
-add a **Code Block** containing the inlined HTML. The only per-page difference is
-the `data-office` attribute on the mount div:
+add a **Code Block** containing that page's file from the table above.
 
 | Page          | `data-office`  | State now                                  |
 |---------------|----------------|--------------------------------------------|
@@ -26,11 +36,9 @@ the `data-office` attribute on the mount div:
 | /city-council | `city_council` | Coming-soon (committees not yet mapped)    |
 | /mayor        | `mayor`        | Coming-soon (committees not yet mapped)    |
 
-In the pasted block, set:
-
-```html
-<div id="ipg-elect-root" data-office="school_board"></div>   <!-- or city_council / mayor -->
-```
+`data-office` is **already baked into each file** (D-16 / PS-106, MUNI-ENABLE-1 G7)
+— nothing in the pasted block is edited by hand. It used to be one file whose mount
+attribute the paster edited per page; that step is retired.
 
 `city_council` and `mayor` render a clean "coming soon — finance processing as
 candidates file" state (not an error) until their candidate committees are mapped

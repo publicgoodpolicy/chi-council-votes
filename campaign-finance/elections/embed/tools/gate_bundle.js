@@ -111,23 +111,74 @@ function bundleVintageVerdict(expectSha, actualSha, stampSha) {
   return { ok: true, reason: 'sources -> bundle -> preview all at ' + actualSha.slice(0, 12) + '…' };
 }
 
+// D-16 (PS-106), G7: THREE emissions, one per office. Link 1 (sources -> bundle) is asserted
+// for each; link 2 (bundle -> preview) stays SCHOOL-BOARD ONLY, because build_preview splices
+// elections-embed.inlined.html and no preview exists for the other two. Saying that out loud
+// matters: a reader could otherwise read three green lines as three previews being vouched for.
 function assertBundleVintage(T, window) {
-  var expect = sha256Buf(Buffer.from(BUNDLE_MOD.render(), 'utf8'));
-  var actual = fs.existsSync(BUNDLE_MOD.OUT) ? sha256Buf(fs.readFileSync(BUNDLE_MOD.OUT)) : null;
-  var v = bundleVintageVerdict(expect, actual, window.PREVIEW_BUNDLE_SHA);
-  T.ok('[BUNDLE/VINTAGE] the shipped bundle recomposes from data.js + render.js + app.js, ' +
-    'and the preview was spliced from it — ' + v.reason, v.ok);
+  var offices = Object.keys(BUNDLE_MOD.OFFICES);
+  var shas = {}, verdict = null;
+  offices.forEach(function (office) {
+    var expect = sha256Buf(Buffer.from(BUNDLE_MOD.render(office), 'utf8'));
+    var out = BUNDLE_MOD.outFor(office);
+    var actual = fs.existsSync(out) ? sha256Buf(fs.readFileSync(out)) : null;
+    shas[office] = actual;
+    // Only school board has a preview to be stale against; the others pass a matching stamp so
+    // the shared verdict function drives link 1 alone rather than being forked into a variant.
+    var stamp = office === 'school_board' ? window.PREVIEW_BUNDLE_SHA : actual;
+    var v = bundleVintageVerdict(expect, actual, stamp);
+    if (office === 'school_board') verdict = v;
+    T.ok('[BUNDLE/VINTAGE] the ' + office + ' bundle recomposes from data.js + render.js + ' +
+      'app.js' + (office === 'school_board' ? ', and the preview was spliced from it' : '') +
+      ' — ' + v.reason, v.ok);
+  });
+
+  // The payload is office-INVARIANT by construction — the office reaches only the mount
+  // attribute and the paste instruction. Pinned because it is the property that makes three
+  // emissions cheap: if a future edit ever made render output office-dependent below the
+  // wrapper, three bundles would silently become three codebases.
+  var payloads = offices.map(function (office) {
+    var html = BUNDLE_MOD.render(office);
+    return sha256Buf(Buffer.from(html.slice(html.indexOf('<script>')), 'utf8'));
+  });
+  T.ok('[BUNDLE/VINTAGE] the payload below the mount wrapper is identical across all ' +
+    offices.length + ' offices — ' + (payloads[0] || '').slice(0, 12) + '…',
+    payloads.every(function (h) { return h === payloads[0]; }));
 
   // BITING CASES. The first is the real one: mutate ONE source in memory and recompose,
   // so the failure is produced by an actually-different bundle rather than by a doctored
-  // comparison. The rest drive each remaining branch.
-  BUNDLE_MOD.SOURCES.forEach(function (f) {
-    var over = {}; over[f] = '/* [BUNDLE/VINTAGE] biting case */';
-    var mutated = sha256Buf(Buffer.from(BUNDLE_MOD.render(over), 'utf8'));
-    var got = bundleVintageVerdict(mutated, actual, window.PREVIEW_BUNDLE_SHA);
-    T.ok('[BUNDLE/VINTAGE:bite] a one-source change in ' + f + ' recomposes to a different ' +
-      'bundle and is rejected', mutated !== actual && got.ok === false && /STALE/.test(got.reason));
+  // comparison. Run per OFFICE now, since a one-source edit must invalidate every emission,
+  // not just the one that happens to be checked first.
+  offices.forEach(function (office) {
+    BUNDLE_MOD.SOURCES.forEach(function (f) {
+      var over = {}; over[f] = '/* [BUNDLE/VINTAGE] biting case */';
+      var mutated = sha256Buf(Buffer.from(BUNDLE_MOD.render(office, over), 'utf8'));
+      var stamp = office === 'school_board' ? window.PREVIEW_BUNDLE_SHA : shas[office];
+      var got = bundleVintageVerdict(mutated, shas[office], stamp);
+      T.ok('[BUNDLE/VINTAGE:bite] a one-source change in ' + f + ' recomposes to a different ' +
+        office + ' bundle and is rejected',
+        mutated !== shas[office] && got.ok === false && /STALE/.test(got.reason));
+    });
   });
+
+  // NEW failure mode three files introduce, and the one a human paster can actually cause:
+  // the RIGHT bytes in the WRONG place. Emitting city_council's bundle to school board's path
+  // must be rejected — the payloads are identical, so only the wrapper distinguishes them and
+  // a check comparing payloads alone would wave this through.
+  offices.forEach(function (a) {
+    offices.forEach(function (b) {
+      if (a === b) return;
+      var wrong = sha256Buf(Buffer.from(BUNDLE_MOD.render(b), 'utf8'));
+      var expectA = sha256Buf(Buffer.from(BUNDLE_MOD.render(a), 'utf8'));
+      T.ok('[BUNDLE/VINTAGE:bite] the ' + b + ' bundle sitting at the ' + a + ' path is rejected',
+        wrong !== expectA && bundleVintageVerdict(expectA, wrong, wrong).ok === false);
+    });
+  });
+
+  // An unknown office must not silently produce school-board bytes under another name.
+  var threw = false;
+  try { BUNDLE_MOD.render('comptroller'); } catch (e) { threw = /unknown office/.test(e.message); }
+  T.ok('[BUNDLE/VINTAGE:bite] rendering an UNKNOWN office throws rather than defaulting', threw);
   T.ok('[BUNDLE/VINTAGE:bite] a MISSING bundle is rejected (fail-closed)',
     bundleVintageVerdict('a'.repeat(64), null, 'a'.repeat(64)).ok === false);
   T.ok('[BUNDLE/VINTAGE:bite] an ABSENT preview bundle-stamp is rejected (fail-closed)',
@@ -137,7 +188,7 @@ function assertBundleVintage(T, window) {
   T.ok('[BUNDLE/VINTAGE:bite] the all-matching case passes',
     bundleVintageVerdict('a'.repeat(64), 'a'.repeat(64), 'a'.repeat(64)).ok === true);
 
-  return v;
+  return verdict;   // school board's — the only emission with a preview behind it
 }
 
 // PURE, so the biting cases below can drive it without a filesystem or a DOM.
