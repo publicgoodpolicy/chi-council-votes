@@ -2740,7 +2740,13 @@
 (function () {
   'use strict';
   var ROOT_ID = 'ipg-elect-root';
-  var DEFAULT_SRC = 'https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/main/campaign-finance/election-data.json';
+  // D-5's refs/heads/main/ form, carried here at D-26 (MUNI-ENABLE-1 G7b, discharging open
+  // ledger 8): "main" is a fragment GitHub resolves against branches AND tags, so a future tag
+  // named "main" would silently repoint every fetch below; refs/heads/main/ is structurally
+  // unambiguous. This was the last embed on the bare form — council and school board already
+  // carry refs/heads/. Taken now because one paste is already owed this lane and the pasted
+  // surfaces triple after it, so this is the cheapest moment the form will have.
+  var DEFAULT_SRC = 'https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/refs/heads/main/campaign-finance/election-data.json';
   // Verification artifacts, fetched at runtime from the same raw-CDN base as the data, so
   // the methodology page's numbers can never drift from the artifacts it cites (they deploy
   // together on push, paste-free). URLs are baked; they don't drift.

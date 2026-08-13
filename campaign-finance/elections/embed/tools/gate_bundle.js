@@ -1601,6 +1601,37 @@ async function assertPersonSurface(T, ctx, fx) {
   // invariant "municipal finance never renders without a window table". What it still catches
   // is an edit that drops municipal windows while municipal ids exist, which self-test bite 5
   // pins by removing the window table in memory and requiring the injected id to fail again.
+  // [ELECT/URL] the D-26 ratified raw-CDN URL form, asserted on EVERY EMITTED FILE rather than
+  // on app.js. What ships is what gets pasted, and after G7 there are three pasted surfaces
+  // carrying this string — checking the source would leave a stale emission able to carry the
+  // old form silently. Mirrors sb_render_fixture's [MAP] check for the school-board embed,
+  // which is where the precedent and the ratified form both come from (D-5).
+  //
+  // Both directions, because only one of them is the actual hazard: every raw.githubusercontent
+  // URL must carry refs/heads/main/, AND none may carry the bare `.../chi-council-votes/main/`
+  // fragment. A one-sided check would pass a file that had gained a second, bare-form URL
+  // alongside a correct one.
+  (function () {
+    var BARE = /chi-council-votes\/main\//;
+    var GOOD = /chi-council-votes\/refs\/heads\/main\//;
+    var bad = [];
+    Object.keys(BUNDLE_MOD.OFFICES).forEach(function (office) {
+      var out = BUNDLE_MOD.outFor(office);
+      if (!fs.existsSync(out)) { bad.push(office + ': emission missing'); return; }
+      var html = fs.readFileSync(out, 'utf8');
+      var urls = (html.match(/https:\/\/raw\.githubusercontent\.com[^"'\s]+/g) || []);
+      if (!urls.length) { bad.push(office + ': no raw-CDN URL found at all (check went vacuous)'); return; }
+      urls.forEach(function (u) {
+        if (!GOOD.test(u)) bad.push(office + ': not on refs/heads/main/ — ' + u);
+      });
+      if (BARE.test(html)) bad.push(office + ': still carries the bare main/ fragment somewhere');
+    });
+    T.ok('[ELECT/URL] every emission fetches on the ratified refs/heads/main/ form and none ' +
+      'carries the bare main/ fragment — ' +
+      (bad.length ? bad.join('; ') : Object.keys(BUNDLE_MOD.OFFICES).length + ' emissions clean'),
+      bad.length === 0);
+  })();
+
   // [MUNI/COPY] the D-21 (PS-111) ratified display strings. Two halves, because a table that
   // matches its oracle while nothing renders from it is the vacuity PS-100 warns about: the
   // check asserts render.js's table equals RATIFIED_COPY_ORACLE token for token in BOTH
