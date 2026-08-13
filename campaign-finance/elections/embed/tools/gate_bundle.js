@@ -1493,6 +1493,35 @@ async function assertPersonSurface(T, ctx, fx) {
     T.ok('[SBV/RENDER] school-board embed render fixture green — ' + tail, res.status === 0);
   })();
 
+  // [MUNI/GUARD] + [MUNI/SELF] the D-17 / PS-107 code-before-data guard (MUNI-ENABLE-1 G3),
+  // built BEFORE the change it guards. It asserts one conditional: a municipal candidacy may
+  // carry a committee id only where the render path can window municipal money. The hazard is
+  // measured — requireWin() throws for an office with no window table, latent behind
+  // committee_id being null, at THREE call sites (raceView, raceBrowse, personView), all of
+  // which the checker drives. Same two-line shell-out shape as [DOCS] and [RENDER/B2].
+  //
+  // It probes rather than introspects: officeType/ELECTION_WINDOWS are closed over in data.js
+  // and exporting them to let a test read them would move the bundle and stale the live page
+  // for a test's convenience. So the checker deep-copies the artifact in memory, grants one
+  // municipal candidacy a committee id, and reads the joint effect off the public API.
+  //
+  // SELF-RETIRING BY CONSTRUCTION: today the unless-branch is false and the guard holds
+  // because no municipal committee id exists; once G4 lands municipal support the branch
+  // becomes true and this same body is the standing invariant "municipal finance never
+  // renders without a window table". Bite 5 of the self-test proves that transition now,
+  // against an in-memory post-G4 data.js, so the retirement is demonstrated rather than
+  // promised.
+  (function () {
+    var chk = path.join(__dirname, 'check_muni_guard.js');
+    var res = require('child_process').spawnSync('node', [chk], { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[MUNI/GUARD] no municipal committee id outruns municipal window support — ' + tail,
+      res.status === 0);
+    var st = require('child_process').spawnSync('node', [chk, '--self-test'], { encoding: 'utf8' });
+    var stail = ((st.stdout || '') + (st.stderr || '')).trim().split('\n').pop();
+    T.ok('[MUNI/SELF] muni-guard self-test green — ' + stail, st.status === 0);
+  })();
+
   console.log('\n' + T.n + ' checks · ' + (T.fail ? ('FAILED ' + T.fail) : 'ALL PASS'));
   process.exit(T.fail ? 1 : 0);
 })();
