@@ -202,6 +202,20 @@ const IPG_SB_FEEDBACK = {
 #ipg-sb-app .ipg-sb-rec-tag{font-size:11px;font-weight:500;padding:2px 8px;border-radius:999px;
   background:var(--tan);color:var(--ink-mid)}
 #ipg-sb-app .ipg-sb-rec-title{font-size:15px;font-weight:500;line-height:1.3;color:var(--ink)}
+/* SBV-PORT-1 G4 — the featured marker (PS-123), the cast-by asterisk and its
+   attribution (PS-121/R5a), the key-votes section and the outcome group heads
+   (PS-124). Box-sizing is inherited from the app reset, not re-declared. */
+#ipg-sb-app .ipg-sb-star{font-size:11px;font-weight:600;letter-spacing:.04em;
+  color:var(--ink-mid);white-space:nowrap;margin-left:6px}
+#ipg-sb-app .ipg-sb-castby-mark{text-decoration:none;border:0;cursor:help;
+  font-weight:700;color:var(--ink-mid);margin-left:3px}
+#ipg-sb-app .ipg-sb-castby{font-size:11.5px;color:var(--ink-mid);font-style:italic;
+  margin-top:3px;line-height:1.35}
+#ipg-sb-app .ipg-sb-keyvotes{margin-bottom:18px}
+#ipg-sb-app .ipg-sb-keyvotes h4{font-size:13px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--ink-mid);margin:0 0 8px}
+#ipg-sb-app .ipg-sb-outcome-head{font-size:13px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--ink-mid);margin:18px 0 8px}
 #ipg-sb-app .ipg-sb-rec-right{display:flex;align-items:center;gap:14px;justify-self:end}
 /* The louder solid chip the council uses on the record surface. */
 #ipg-sb-app .ipg-sb-rec-pos{font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px;
@@ -574,6 +588,32 @@ const IPG_SB_FEEDBACK = {
   };
 
   // ==========================================================
+  // SBV-PORT-1 RATIFIED STRINGS — transcribed verbatim from the register:
+  // `SBV-PORT-1 — display strings R5a and R6` (castBy, president),
+  // PS-125 (notRecorded), and `SBV-PORT-1 G2R — key-votes methodology
+  // strings` (keyVotes1, keyVotes2). The register is the authority these
+  // must match, not the package files. Editorial text; do not reword in code.
+  // The register hard-wraps its quoted prose; these are the unwrapped forms,
+  // which is what the fixture joins-and-compares against.
+  // ==========================================================
+  var SV = {
+    castBy: 'Vote cast by {name}, who held this seat at the time.',
+    president: 'The Board President votes only to break ties.',
+    notRecorded: 'A position shown as Not recorded means no vote is recorded for that seat — the member may have been absent, not yet seated, or the seat may have been vacant at the time.',
+    keyVotes1: 'Some votes carry a key vote designation. A key vote is one that drew significant public attention — through community or advocacy pressure, sustained media coverage, or because it was novel or precedent-setting.',
+    keyVotes2: 'The key-vote label is an editorial judgment about prominence, not a different way of counting the vote. A key vote is recorded with the exact same factual Yes / No / Present / Not recorded positions as every other vote; it is simply surfaced more prominently.'
+  };
+
+  // Ratified display strings — the key-votes heading and its show-empty state,
+  // ratified as written by Ishan 2026-08-16 with the show-empty form. Editorial
+  // text; do not reword in code. Carried here rather than in SV because they are
+  // this gate's ratification, not a register transcription.
+  var SPF = {
+    keyVotesHeading: 'Key votes',
+    keyVotesEmpty: 'No votes are currently marked as key votes.'
+  };
+
+  // ==========================================================
   // SBFIN-1 FINANCE STRINGS — states 1–4, ratified at HALT-B review.
   // String 4 is the PRIMARY bar-section state, not a fallback: measured at
   // HALT-A, 8 of the 13 donor-detail pages render below threshold and only 5
@@ -822,6 +862,99 @@ const IPG_SB_FEEDBACK = {
     var m={}; (D&&D.votemeta||[]).forEach(function(vm){ if(vm.vote_id) m[vm.vote_id]=vm; }); return m;
   }
 
+  // ---- SBV-PORT-1 G4 helpers -------------------------------------------
+  // The roster's spelling of the presiding seat. It is the seat label, not a
+  // display string — the artifact, the Sheet column and this must agree.
+  var PRESIDENT_SEAT = 'President';
+  var EM_DASH = '—';
+
+  // PS-125: the President column renders only when it carries at least one
+  // RECORDED position. While all-blank it is omitted from every view, and R6's
+  // methodology sentence carries its meaning instead. Derived from the data on
+  // every call — nothing pins "the President never votes"; a single tie-break
+  // surfaces the seat everywhere, automatically.
+  function presidentRenders(){
+    return (((D&&D.rollcall||{}).votes)||[]).some(function(v){
+      var p = v.positions && v.positions[PRESIDENT_SEAT];
+      return p!=null && p!=='' && display(p).recorded;
+    });
+  }
+  // Every seat-iterating surface goes through this, so the omission cannot be
+  // implemented in one view and forgotten in another.
+  function visibleRoster(){
+    var pres = presidentRenders();
+    return (D&&D.members||[]).filter(function(m){
+      return pres || m.seat !== PRESIDENT_SEAT; });
+  }
+  function seatVisible(seat){
+    return seat !== PRESIDENT_SEAT || presidentRenders();
+  }
+  // PS-125: if the column DOES render, its blanks are an em dash, never the
+  // not-recorded label — the blanks are structural under R6, not a gap.
+  function displayAt(seat, v){
+    var d = display(v);
+    if(seat === PRESIDENT_SEAT && !d.recorded)
+      return { label: EM_DASH, cls: d.cls, rec: d.rec, mx: d.mx, recorded: false };
+    return d;
+  }
+  function pillAt(seat, v){
+    var d = displayAt(seat, v);
+    return '<span class="ipg-sb-pill '+d.cls+'">'+esc(d.label)+'</span>';
+  }
+  function recPosAt(seat, v){
+    var d = displayAt(seat, v);
+    return '<span class="ipg-sb-rec-pos '+d.rec+'">'+esc(d.label)+'</span>';
+  }
+
+  // PS-121: a cast-by attribution for a (vote, seat), or null. Seat-keyed,
+  // reading the same key `seatPosition` uses.
+  function castByFor(voteId, seat){
+    var rc = rollcallById(voteId);
+    var cb = rc && rc.cast_by;
+    return (cb && cb[String(seat)]) || null;
+  }
+  // The asterisk is the embed's; the name is the artifact's (R5a).
+  function castByMark(name){
+    return name ? '<abbr class="ipg-sb-castby-mark" title="'
+      + esc(SV.castBy.replace('{name}', name)) + '">*</abbr>' : '';
+  }
+  function castByNote(name){
+    return name ? '<div class="ipg-sb-castby">'
+      + esc(SV.castBy.replace('{name}', name)) + '</div>' : '';
+  }
+
+  // PS-123: the flag rides the votemeta entry and only when true.
+  function isFeatured(vm){ return !!(vm && vm.featured); }
+  function featuredVotes(){
+    return (D&&D.votemeta||[]).filter(isFeatured);
+  }
+  // The council's measured marker form: star + short code.
+  function featuredMark(vm){
+    return isFeatured(vm)
+      ? '<span class="ipg-sb-star">★ '+esc(vm.code||'')+'</span>' : '';
+  }
+
+  // PS-124: the ratified group order. Votes carry `outcome` on the rollcall
+  // record (PS-122); the header renders the outcome name verbatim.
+  var OUTCOME_ORDER = ['Split', 'Unanimous with Abstentions', 'Withdrawn', 'Unanimous'];
+  function groupByOutcome(rows){
+    var by = {}, out = [];
+    rows.forEach(function(v){ (by[v.outcome] = by[v.outcome] || []).push(v); });
+    OUTCOME_ORDER.forEach(function(k){ if(by[k] && by[k].length) out.push({outcome:k, votes:by[k]}); });
+    // An outcome outside the ratified order would otherwise vanish silently;
+    // PS-122 makes that unreachable at ingest, and this keeps it visible if it
+    // ever becomes reachable by another path.
+    Object.keys(by).sort().forEach(function(k){
+      if(OUTCOME_ORDER.indexOf(k) < 0) out.push({outcome:k, votes:by[k]});
+    });
+    return out;
+  }
+  // PS-124: the member page moves from sheet row order to date-descending.
+  function votemetaSorted(){
+    return (D&&D.votemeta||[]).slice().sort(function(a,b){
+      return String(b.date||'').localeCompare(String(a.date||'')); });
+  }
+
   // ---- finance helpers ------------------------------------------------
   // Everything below reads school-board-finance.json ONLY. No figure is derived
   // here: the artifact carries election-labeled streams and precomputed coverage
@@ -875,9 +1008,11 @@ const IPG_SB_FEEDBACK = {
   function seatSelector(){
     var h = '<div class="ipg-sb-card"><div class="ipg-sb-row"><label for="ipg-sb-seat-sel">Seat</label>'
           + '<select id="ipg-sb-seat-sel">';
-    (D.members||[]).forEach(function(m){
-      // The vacancy APPEARS in the selector — the seat is a real fact about
-      // the board — and selecting it reaches a seat notice, not a member page.
+    // The vacancy APPEARS in the selector — the seat is a real fact about the
+    // board — and selecting it reaches a seat notice, not a member page. The
+    // President does NOT, while its column is all-blank (PS-125): one filter,
+    // shared by every seat-iterating surface.
+    visibleRoster().forEach(function(m){
       h += '<option value="'+esc(m.seat)+'"'+(m.seat===state.seat?' selected':'')+'>'
          + esc(m.seat)+' — '+esc(memberLabel(m))+'</option>';
     });
@@ -887,10 +1022,14 @@ const IPG_SB_FEEDBACK = {
   function memberView(){
     var roster = (D.members||[]);
     if(!roster.length) return '<div class="ipg-sb-card"><div class="ipg-sb-empty">No roster is available yet.</div></div>';
-    if(state.seat==null) state.seat = (members()[0]||roster[0]).seat;
+    if(state.seat==null) state.seat = (visibleRoster().filter(isMember)[0]||roster[0]).seat;
     var row = seatRow(state.seat);
     var h = seatSelector();
     if(!row) return h + '<div class="ipg-sb-card"><div class="ipg-sb-empty">That seat is not in the roster.</div></div>';
+    // PS-125: while the President's column is all-blank the seat is omitted from
+    // every view, so a stale or hand-typed selection cannot reach it either.
+    if(!seatVisible(row.seat))
+      return h + '<div class="ipg-sb-card"><div class="ipg-sb-empty">'+esc(SV.president)+'</div></div>';
 
     // ---- string 5: the vacancy renders as a SEAT, with NO member page ----
     if(!isMember(row)){
@@ -931,14 +1070,19 @@ const IPG_SB_FEEDBACK = {
       });
       h += '</div>';
     }
-    var shown = (D.votemeta||[]).filter(function(vm){
+    // PS-124: date-descending. This list previously rendered in sheet row order
+    // — the ingest imposes none, so the artifact's array order was the Sheet's.
+    var shown = votemetaSorted().filter(function(vm){
       return state.tag==='All' || voteTags(vm).indexOf(state.tag)>=0; });
     if(!shown.length){
       h += '<div class="ipg-sb-empty">No votes carry the tag &ldquo;'+esc(state.tag)+'&rdquo;.</div>';
     } else {
       shown.forEach(function(vm){
+        var cbName = castByFor(vm.vote_id, row.seat);
         h += '<div class="ipg-sb-vote">'
-           + '<h4>'+esc(vm.full || vm.code)+' '+pill(seatPosition(vm, row.seat))+'</h4>'
+           + '<h4>'+esc(vm.full || vm.code)+' '+featuredMark(vm)+' '
+           + pillAt(row.seat, seatPosition(vm, row.seat))+castByMark(cbName)+'</h4>'
+           + castByNote(cbName)
            + (vm.date ? '<div class="ipg-sb-when">'+esc(vm.date)+'</div>' : '')
            + (vm.desc ? '<p>'+esc(vm.desc)+'</p>' : '')
            + (vm.source_url ? '<div class="ipg-sb-when"><a href="'+esc(vm.source_url)+'" target="_blank" rel="noopener">Source</a></div>' : '')
@@ -2160,25 +2304,58 @@ const IPG_SB_FEEDBACK = {
       if(!q) return true;
       return (String(v.title||'')+' '+String(vm.desc||'')).toLowerCase().indexOf(q)>=0;
     });
-    if(!rows.length) return h + '<div class="ipg-sb-empty">No votes match these filters.</div></div>';
-    h += '<div class="ipg-sb-rec">';
-    rows.forEach(function(v){
+    // One row renderer, so the markers and the attribution cannot be applied to
+    // the key-votes section and forgotten in the grouped list below it.
+    function recRow(v){
       var vm = meta[v.id]||{}, tag = vm.tag||v.tag;
       var p = (v.positions && v.positions[String(state.seat)]);
-      h += '<div class="ipg-sb-rec-vote"><div>'
+      var cbName = castByFor(v.id, state.seat);
+      return '<div class="ipg-sb-rec-vote"><div>'
          + '<div class="ipg-sb-rec-meta">'+(v.date?esc(v.date):'')
-         + (tag?'<span class="ipg-sb-rec-tag">'+esc(tag)+'</span>':'')+'</div>'
-         + '<div class="ipg-sb-rec-title">'+esc(v.title||vm.full||v.id)+'</div></div>'
-         + '<div class="ipg-sb-rec-right">'+recPos(p==null||p===''?NOT_RECORDED:p)+'</div>'
+         + (tag?'<span class="ipg-sb-rec-tag">'+esc(tag)+'</span>':'')
+         + featuredMark(vm)+'</div>'
+         + '<div class="ipg-sb-rec-title">'+esc(v.title||vm.full||v.id)+'</div>'
+         + castByNote(cbName)+'</div>'
+         + '<div class="ipg-sb-rec-right">'
+         + recPosAt(state.seat, p==null||p===''?NOT_RECORDED:p)+castByMark(cbName)+'</div>'
          + '</div>';
+    }
+
+    // PS-123's key-votes surface, in the SHOW-EMPTY form ratified at G4: the
+    // heading and an empty state render even when nothing is flagged, so the
+    // feature is never invisible. Sits above the full record.
+    var featIds = {};
+    featuredVotes().forEach(function(vm){ if(vm.vote_id) featIds[vm.vote_id]=1; });
+    var featRows = rows.filter(function(v){ return featIds[v.id]; });
+    h += '<div class="ipg-sb-keyvotes"><h4>'+esc(SPF.keyVotesHeading)+'</h4>';
+    if(!featRows.length){
+      h += '<div class="ipg-sb-empty">'+esc(SPF.keyVotesEmpty)+'</div>';
+    } else {
+      h += '<div class="ipg-sb-rec">';
+      featRows.forEach(function(v){ h += recRow(v); });
+      h += '</div>';
+    }
+    h += '</div>';
+
+    if(!rows.length) return h + '<div class="ipg-sb-empty">No votes match these filters.</div></div>';
+    // PS-124: grouped by outcome in the ratified order, date-descending WITHIN
+    // each group (`rows` is already date-descending and grouping is stable), the
+    // header carrying the outcome name verbatim.
+    groupByOutcome(rows).forEach(function(g){
+      h += '<h4 class="ipg-sb-outcome-head">'+esc(g.outcome)+'</h4>'
+         + '<div class="ipg-sb-rec">';
+      g.votes.forEach(function(v){ h += recRow(v); });
+      h += '</div>';
     });
-    return h + '</div></div>';
+    return h + '</div>';
   }
 
   // All-seats matrix — the council's compare-by-issue idiom WITH its legend.
   function matrixView(){
     if(!voteCount()) return emptyToolCard();
-    var roster = (D.members||[]), votes = votesSorted();
+    // PS-124 leaves matrix ORDERING untouched; PS-125 governs PRESENCE, so the
+    // all-blank President seat is omitted here too (ratified 2026-08-16).
+    var roster = visibleRoster(), votes = votesSorted();
     var h = '<div class="ipg-sb-card">';
     h += '<div class="ipg-sb-mx-legend"><strong>Key:</strong>';
     ['Affirmative','Oppositional','Neutral','-'].forEach(function(k){
@@ -2188,15 +2365,18 @@ const IPG_SB_FEEDBACK = {
     h += '</div>';
     h += '<div class="ipg-sb-matrix-wrap"><table class="ipg-sb-matrix"><thead><tr>'
        + '<th class="seat-col">Seat</th>';
-    votes.forEach(function(v){ h += '<th>'+esc(v.title||v.id)+'</th>'; });
+    var mxMeta = metaByVoteId();
+    votes.forEach(function(v){
+      h += '<th>'+esc(v.title||v.id)+featuredMark(mxMeta[v.id])+'</th>'; });
     h += '</tr></thead><tbody>';
     roster.forEach(function(m){
       h += '<tr'+(isMember(m)?'':' class="vacant-row"')+'>'
          + '<td class="seat-col">'+esc(m.seat)+' — '+esc(memberLabel(m))+'</td>';
       votes.forEach(function(v){
         var p = (v.positions && v.positions[String(m.seat)]);
-        var d = display(p==null||p===''?NOT_RECORDED:p);
-        h += '<td class="'+d.mx+'">'+esc(d.label)+'</td>';
+        var d = displayAt(m.seat, p==null||p===''?NOT_RECORDED:p);
+        var cbName = castByFor(v.id, m.seat);
+        h += '<td class="'+d.mx+'">'+esc(d.label)+castByMark(cbName)+'</td>';
       });
       h += '</tr>';
     });
@@ -2218,6 +2398,15 @@ const IPG_SB_FEEDBACK = {
          + '</li>';
     });
     h += '</ul>';
+    // ---- PS-125's methodology sentence, verbatim ----
+    h += '<p>'+esc(SV.notRecorded)+'</p>';
+    // ---- R6's president sentence, verbatim ----
+    h += '<h3>The Board President</h3>';
+    h += '<p>'+esc(SV.president)+'</p>';
+    // ---- PS-123's two key-votes strings, verbatim ----
+    h += '<h3>'+esc(SPF.keyVotesHeading)+'</h3>';
+    h += '<p>'+esc(SV.keyVotes1)+'</p>';
+    h += '<p>'+esc(SV.keyVotes2)+'</p>';
     h += '<h3>Seats and members</h3>';
     h += '<p>Appointed members are labelled; elected members are not, because election is the '
        + 'default this tool exists to track. A seat with no member is shown as '

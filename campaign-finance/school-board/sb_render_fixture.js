@@ -329,8 +329,16 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   ok('[SBV2/MX] it carries the legend, with all four keys',
      mxv.html.indexOf('ipg-sb-mx-legend') >= 0
        && ['mx-aff','mx-opp','mx-neu','mx-na'].every(function (k) { return mxv.html.indexOf(k) >= 0; }));
-  ok('[SBV2/MX] every roster seat has a row, the vacancy included and marked',
-     (mxv.html.match(/class="seat-col"/g) || []).length === REAL.members.length + 1
+  // PS-125 amends this assertion's premise: every roster seat has a row EXCEPT the
+  // President while its column carries no recorded position. The vacancy is still
+  // included and marked — a vacant seat is a real fact, a blank President column is
+  // structural. The `+ 1` is the header's own seat-col cell.
+  var mxPresidentShown = REAL.rollcall.votes.some(function (v) {
+    var p = v.positions && v.positions.President; return p != null && p !== '' && p !== '-'; });
+  ok('[SBV2/MX] every roster seat has a row, the vacancy included and marked '
+     + '(the President omitted while all-blank, PS-125)',
+     (mxv.html.match(/class="seat-col"/g) || []).length
+       === REAL.members.length + 1 - (mxPresidentShown ? 0 : 1)
        && mxv.html.indexOf('vacant-row') >= 0);
 
   // Feedback: the trigger exists and OPENS — and nothing is ever submitted.
@@ -1825,6 +1833,145 @@ function around(tpl, marker) { return String(tpl).split(marker); }
        && vfin.text.indexOf('Could not load Board voting data') < 0);
   ok('[SBF/ISOLATE] the voting record still renders under finance failure',
      vfin.html.indexOf('ipg-sb-seat-sel') >= 0);
+
+  // ================= SBV-PORT-1 G4 ==========================================
+  /* The four new strings are read from the REGISTER, not retyped — same reason as
+   * S1-S5 above. These entries carry their prose as NESTED blockquotes (`> > …`)
+   * hard-wrapped across lines, so a contiguous run is joined with single spaces:
+   * the ruling is one string and the wrapping is the register's own transcription
+   * artifact. Non-contiguous runs are separate strings. */
+  function nestedRuns(head) {
+    var e = REG.split('### ' + head)[1].split('\n### ')[0], runs = [], cur = [];
+    e.split('\n').forEach(function (l) {
+      if (l.indexOf('> > ') === 0) cur.push(l.slice(4).trim());
+      else if (cur.length) { runs.push(cur.join(' ')); cur = []; }
+    });
+    if (cur.length) runs.push(cur.join(' '));
+    return runs;
+  }
+  var R56 = nestedRuns('SBV-PORT-1 — display strings R5a and R6');
+  var G4_CASTBY = R56[0], G4_PRES = R56[1];
+  var G4_NOTREC = nestedRuns('PS-125')[0];
+  var G4_KEY = nestedRuns('SBV-PORT-1 G2R — key-votes methodology strings')[0];
+  ok('[G4/REG] the register yielded R5a, R6, PS-125 and the key-votes prose',
+     !!(G4_CASTBY && G4_PRES && G4_NOTREC && G4_KEY),
+     JSON.stringify({ castBy: !!G4_CASTBY, pres: !!G4_PRES,
+                      notRec: !!G4_NOTREC, key: !!G4_KEY }));
+
+  /* A G4 artifact: one vote per ratified outcome, one featured, one cast-by, and a
+   * President column that is all-blank (the live shape Ishan attests). */
+  var OUTS = ['Unanimous', 'Split', 'Unanimous with Abstentions', 'Withdrawn'];
+  function g4Art(opts) {
+    opts = opts || {};
+    var a = JSON.parse(JSON.stringify(REAL));
+    a.votemeta = []; a.rollcall.votes = [];
+    OUTS.forEach(function (oc, i) {
+      var id = 'G' + (i + 1);
+      var vm = { code: id, full: 'Board vote ' + (i + 1), date: '2026-03-0' + (i + 1),
+                 desc: 'Desc ' + (i + 1) + '.', tag: 'Budget',
+                 source_url: 'https://example.org/' + id, vote_id: id };
+      if (opts.featured && i === 1) vm.featured = true;
+      a.votemeta.push(vm);
+      var p = {}; seats.forEach(function (s) { p[s] = '-'; });
+      p[subject.seat] = 'Affirmative';
+      if (opts.presidentVotes && i === 0) p.President = 'Affirmative';
+      var rv = { id: id, date: '2026-03-0' + (i + 1), title: 'Board vote ' + (i + 1),
+                 source_url: 'https://example.org/' + id, tag: 'Budget',
+                 type: '["board-vote"]', outcome: oc, positions: p };
+      if (opts.castBy && i === 0) { rv.cast_by = {}; rv.cast_by[subject.seat] = 'Frank Thomas'; }
+      a.rollcall.votes.push(rv);
+    });
+    a.rollcall.term_votes = OUTS.length;
+    return a;
+  }
+
+  // ---- PS-124: outcome-grouped records view, ratified order ----------------
+  var g4 = await boot(g4Art({ featured: true, castBy: true }), 'ok');
+  var g4rec = nav(pick(g4, subject.seat), 'record');
+  var ORDER = ['Split', 'Unanimous with Abstentions', 'Withdrawn', 'Unanimous'];
+  var heads = ORDER.map(function (o) {
+    return g4rec.html.indexOf('ipg-sb-outcome-head">' + o + '<'); });
+  ok('[G4/ORDER] the records view carries a group header per outcome, name verbatim',
+     heads.every(function (i) { return i >= 0; }), JSON.stringify(heads));
+  ok('[G4/ORDER] the groups render in the ratified order Split, UwA, Withdrawn, Unanimous',
+     heads[0] < heads[1] && heads[1] < heads[2] && heads[2] < heads[3]);
+  // date-descending WITHIN a group: two Unanimous votes, later first.
+  var twoUnan = g4Art({});
+  twoUnan.rollcall.votes[3].outcome = 'Unanimous';        // G4 (2026-03-04)
+  var g4b = await boot(twoUnan, 'ok');
+  var g4brec = nav(pick(g4b, subject.seat), 'record');
+  ok('[G4/ORDER] within a group the order is date-descending',
+     g4brec.html.indexOf('Board vote 4') < g4brec.html.indexOf('Board vote 1'));
+
+  // ---- PS-124: the member page moves from sheet order to date-descending ---
+  // nav() explicitly: `g4` was left on the RECORD view by g4rec above, and picking a
+  // seat does not change the view — reading the member page off `pick` alone made
+  // both assertions below vacuous, which the bite-tests caught.
+  var g4mem = nav(pick(g4, subject.seat), 'member');
+  ok('[G4/ORDER] the member page renders date-descending, not sheet row order',
+     g4mem.html.indexOf('Board vote 4') < g4mem.html.indexOf('Board vote 1'));
+
+  // ---- PS-123: the ★ {code} marker and the show-empty key-votes surface ----
+  ok('[G4/FEAT] a featured vote carries the ratified star + short-code marker',
+     g4rec.html.indexOf('ipg-sb-star') >= 0 && g4rec.text.indexOf('★ G2') >= 0);
+  ok('[G4/FEAT] the key-votes surface renders its heading with a featured vote present',
+     g4rec.html.indexOf('ipg-sb-keyvotes') >= 0);
+  var g4none = await boot(g4Art({ castBy: true }), 'ok');
+  var g4noneRec = nav(pick(g4none, subject.seat), 'record');
+  ok('[G4/FEAT] zero flagged: the surface SHOWS with its heading and an empty state '
+     + '(show-empty ratified, not suppressed)',
+     g4noneRec.html.indexOf('ipg-sb-keyvotes') >= 0
+       && g4noneRec.text.indexOf('Key votes') >= 0
+       && g4noneRec.html.indexOf('ipg-sb-star') < 0);
+
+  // ---- PS-121 / R5a: the asterisk and the attribution ----------------------
+  var CB_EXPECT = G4_CASTBY.replace('{name}', 'Frank Thomas');
+  ok('[G4/CASTBY] a cast-by position is marked with an asterisk',
+     g4rec.html.indexOf('ipg-sb-castby-mark') >= 0);
+  ok('[G4/CASTBY] the attribution renders the register string with the artifact name',
+     g4rec.text.indexOf(CB_EXPECT) >= 0, CB_EXPECT);
+  ok('[G4/CASTBY] the attribution also reaches the member page',
+     g4mem.text.indexOf(CB_EXPECT) >= 0);
+  ok('[G4/CASTBY] a vote with no cast-by record carries no attribution and no mark',
+     (g4rec.text.match(/who held this seat at the time/g) || []).length === 1);
+
+  // ---- PS-125: the conditional President render ---------------------------
+  var g4mx = nav(g4, 'matrix');
+  ok('[G4/PRES] while all-blank the President is omitted from the matrix (PS-125 '
+     + 'governs presence; PS-124 carves out ordering only)',
+     g4mx.html.indexOf('>President —') < 0 && g4mx.html.indexOf('seat-col') >= 0);
+  ok('[G4/PRES] while all-blank the President is omitted from the seat selector',
+     g4.html.indexOf('value="President"') < 0);
+  var g4p = await boot(g4Art({ presidentVotes: true }), 'ok');
+  var g4pmx = nav(g4p, 'matrix');
+  ok('[G4/PRES] one recorded position surfaces the President again, everywhere',
+     g4pmx.html.indexOf('President') >= 0 && g4p.html.indexOf('value="President"') >= 0);
+  var presCells = (g4pmx.html.match(/<td class="mx-na">—<\/td>/g) || []).length;
+  ok('[G4/PRES] when it renders, its blank cells are an em dash, never "Not recorded"',
+     presCells >= 1, 'em-dash cells: ' + presCells);
+  ok('[G4/PRES] the em dash is scoped to the President — other seats still read '
+     + '"Not recorded"', g4pmx.text.indexOf('Not recorded') >= 0);
+
+  // ---- the four verbatim methodology insertions ---------------------------
+  var g4meth = nav(g4, 'methodology');
+  ok('[G4/METH] R6’s president sentence renders verbatim',
+     g4meth.text.indexOf(G4_PRES) >= 0, G4_PRES);
+  ok('[G4/METH] PS-125’s not-recorded sentence renders verbatim',
+     g4meth.text.indexOf(G4_NOTREC) >= 0, G4_NOTREC);
+  // The register carries the key-votes prose as one wrapped run; the page renders it
+  // as the two ratified strings. Asserting the concatenation reproduces the register
+  // proves both halves byte-exact AND that nothing was dropped between them.
+  var kvPs = [], seenKvHead = false;
+  Array.prototype.slice.call(g4meth.doc.querySelectorAll('.ipg-sb-meth > *'))
+    .forEach(function (el) {
+      if (el.tagName === 'H3') { seenKvHead = (el.textContent.trim() === 'Key votes'); return; }
+      if (seenKvHead && el.tagName === 'P') kvPs.push(el.textContent.trim());
+    });
+  ok('[G4/METH] the key-votes prose renders as exactly two paragraphs',
+     kvPs.length === 2, 'found ' + kvPs.length);
+  ok('[G4/METH] the two paragraphs joined reproduce the register run byte-for-byte '
+     + '(both halves exact, nothing dropped between them)',
+     kvPs.join(' ') === G4_KEY, JSON.stringify(kvPs.join(' ').slice(0, 80)));
 
   // ---------- no writes ---------------------------------------------------
   ok('[NOWRITE] embed and artifacts are byte-unchanged by this fixture',
