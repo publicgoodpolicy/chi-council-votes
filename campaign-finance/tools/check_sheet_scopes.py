@@ -53,6 +53,11 @@ EDITORIAL_TABS = {
     # the roster and the vote positions — so they are editorial, and `ingest_sb_votes`
     # reads them under a read-only credential like every other pipeline reader.
     "SB Members", "SB Votes",
+    # SBV-PORT-1/G3: the cast-by attributions (PS-121). Hand-authored like its two
+    # siblings — an editor enters predecessor names — so it is editorial for the same
+    # reason, and is declared in the same commit that adds the read, which is what
+    # rule 6 exists to force. Optional at ingest; that does not soften the scope.
+    "SB Cast By",
 }
 # Machine-owned tabs. sync_allvotes clears+rewrites this one by design; its six
 # editor columns are protected by EDIT-SAFE-1/S1's fail-loud read, not by scope.

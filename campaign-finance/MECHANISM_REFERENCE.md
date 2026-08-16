@@ -791,7 +791,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-rol | `campaign-finance/ingestion/build_rollups.py` | `a37a9ee4a1fe93a66dae7c6ecb50e3face70f05078e7fbc97e088a4cafb4fe89` |
 | S-seed | `campaign-finance/elections/build_election_seed.py` | `a2122eab99c8e6db401801a97e43537a4eea62ae1f7b4f13cdb03e8a761a20f7` |
 | S-vld | `campaign-finance/ingestion/validate_council_data.py` | `7d6a5b63942866aa1a6f57647b63b7a63d140298ab7a3ae93b8c1ec85d1b1e23` |
-| S-sbv | `campaign-finance/ingest_sb_votes.py` | `e7d60ebc18dcf303e418acbb4596d77b54bf28bfc99e75c71d2c56c3995af259` |
+| S-sbv | `campaign-finance/ingest_sb_votes.py` | `d4d7f6050b1f7dac07e07d27067fbf35ffe4f29a05e6cee74687412338a110b3` |
 | S-rst | `campaign-finance/ingestion/restamp_committee_linkage.py` | `6ceb82f9bbcffa08fdb21904b8585982a6bff7e3982e0b810937e2958019d06e` |
 | S-cbr | `campaign-finance/ingestion/convert_bulk_receipts.py` | `ac33aa394c4f8905c307390160fbe397a09399199a3396b07f29f01729bbe582` |
 | S-av | `campaign-finance/sync_allvotes.py` | `a0c4f23df6e4f012e683088e012dc91692fe65399e6fcae2acd1ec9b40e61384` |
@@ -843,9 +843,9 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.15 | S-av | 156-158 (the seed map, flip-free), 221-238 (apply_featured: votemeta rebuilt whole, positions set-only — the asymmetry the rule closes) |
 | C1.15 | S-vld | 420-470 (`validate_shard_freshness` — the two-namespace stamp discriminator and the deep total assert), 948-951 (the `--shards` opt-in), 761-923 (`self_test` — the roster-and-votes fixtures, incl. the undeclared-shape false-green case and MEMBER-1..7), 927-930 + 945-947 (its pre-argparse handler and the `--self-test` flag) |
 | C1.15 | S-bld | 114 (the validator invoked with `--shards`) |
-| C1.16 | S-sbv | whole file (`ingest_sb_votes.py` — the school-board ingest: read-only scope by construction, no write verb anywhere; `mint_member_id` the D-3 slug rule with the four ratified examples as `--self-test` cases; `read_votes` the blank→marker mapping and the fatal unknown-token branch; `build` the artifact assembly, own-namespace stamps, and the `candidacy_ref` carry-through) |
+| C1.16 | S-sbv | whole file (`ingest_sb_votes.py` — the school-board ingest: read-only scope by construction, no write verb anywhere; `mint_member_id` the D-3 slug rule with the four ratified examples as `--self-test` cases; `read_votes` the blank→marker mapping, the fatal unknown-token branch, the structural header contract and the `Outcomes`/`Featured` validation (PS-122, PS-123); `read_cast_by` the optional third tab and its five fatalities (PS-121); `build` the artifact assembly, own-namespace stamps, the `candidacy_ref` carry-through, and the outcome, featured and cast-by carry) |
 | C1.16 | S-vld | 315-417 (`validate_members` — MEMBER-1..7, the roster column contract, deliberately outside `validate_votes`' early return), 87 (wired into validate), 149-170 (`ROSTER_SCHEMAS` — the per-shape declaration the contract hangs on), 172 (`_ISO_DATE`, the date predicate a′ names) |
-| C1.16 | S-chk | `EDITORIAL_TABS` (both school-board source tabs declared) + `ROLES` (`ingest_sb_votes.py` classified `pipeline-reader`) — the pair that makes the read-only property structural rather than promised |
+| C1.16 | S-chk | `EDITORIAL_TABS` (all three school-board source tabs declared, the third optional at ingest per PS-121) + `ROLES` (`ingest_sb_votes.py` classified `pipeline-reader`) — the pair that makes the read-only property structural rather than promised |
 | C2.1 | S-ing | 86-127 (rules), 130-141 (classifier), 314-320 (assignment), 492-496 (partial preserve) |
 | C2.1 | S-syn | 520-526 (merge) |
 | C2.2 | S-ing | 497-500; S-syn 170-174, 528-531 |
