@@ -1259,14 +1259,17 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: SBV-PORT-1 ratification package, revision 1 (`SBV-PORT-1-ratification-package-rev1.md`), sha256 `5c9c6225970e87cdc3304f1036d49babd239521560efd013a69028b316ad51b6`, 4,870 B / 81 L, §R3, lines 27–34, transcribed verbatim from the marked ruling region. Ratified by Ishan 2026-08-13 as Option A with absence banked, as the transcribed text records. Id allocated at the SBV-PORT-1 G1 transcription relay. The map's coverage is a measurement and is cited rather than restated per PS-38: the SBV-PORT-1 probe report (`dfe828be612…`, §P4.2(b)) censused every position cell in both source tabs and the six source tokens this ruling names are exactly the tokens that occur, with no residue. The artifact-side vocabulary this map targets is D-1's, carried at §"SBVOTE-1 — D-2 as amended (a′)"'s sibling rulings and implemented in `ingest_sb_votes.py`; the banked absence state has no schema home in the current artifact.*
 
-### PS-120 — vote `code` is the board file number, suffixed where one number covers several rows
+### PS-120 — vote `code` is the board file number; every row of a repeated number takes a letter suffix (rev 2)
 
-> `code` is the board file number where unique. Where one file number covers multiple vote
-> rows, the first row in meeting-date order keeps the bare number and subsequent rows suffix
-> `-2`, `-3`, … . `code` is reader-facing via `votemeta` and this convention is a display
-> decision.
+> `code` is the board file number where the number covers exactly one vote row. Where one
+> file number covers multiple vote rows, **every** such row suffixes an uppercase letter —
+> `-A`, `-B`, `-C`, … — assigned in meeting-date order, and by row order within a date; no
+> row keeps the bare repeated number. A bare file number therefore always denotes a unique
+> vote. `code` is reader-facing via `votemeta` and this convention is a display decision.
+> Ratified by Ishan 2026-08-13, superseding the first-keeps-bare numeric-suffix form of
+> rev 1.
 
-*Provenance: SBV-PORT-1 ratification package, revision 1 (`SBV-PORT-1-ratification-package-rev1.md`), sha256 `5c9c6225970e87cdc3304f1036d49babd239521560efd013a69028b316ad51b6`, 4,870 B / 81 L, §R4, lines 37–40, transcribed verbatim from the marked ruling region. Ratified by Ishan 2026-08-13. Id allocated at the SBV-PORT-1 G1 transcription relay. **Entered as a numbered ruling although its own text names it a display decision** — PS-88's id-less form is permissive ("may") and is scoped to display-decision *sets* ratified as one package, while the register's numbered section already carries display rulings (PS-111, PS-113); this is a single convention enforced fatally at ingest, where a duplicate `code` aborts the run, so it is a data-integrity rule with a reader-facing consequence rather than a string. The suffix run's measured depth is a count and is cited rather than restated per PS-38: SBV-PORT-1 G0 attestation (`71e2765d…`) Finding 1, carried into conformance spec rev 2 (`370d646e…`).*
+*Provenance: SBV-PORT-1 ratification addendum R4 rev 2 (`SBV-PORT-1-ratification-addendum-R4rev2.md`), sha256 `48934440fec662df98fdc4ac408bccd72452807faecb9ebad2084cf718487a45`, 2,178 B / 36 L, §"R4 (rev 2)", lines 17–23, transcribed verbatim from the marked ruling region. Ratified by Ishan 2026-08-13; the date appears inside the transcribed text as well as here because transcription is verbatim, never harmonized. **Supersedes rev 1's text in full** — SBV-PORT-1 ratification package revision 1 (`5c9c6225970e87cdc3304f1036d49babd239521560efd013a69028b316ad51b6`, §R4, lines 37–40), which rode G1 (`f3d66ec1…`) and whose text is recorded here by sha and span and deliberately not retained, per the register's superseded-revision rule. The rev 2 text lands under rev 1's own id per the register's measured supersession pattern (PS-86 rev 3, PS-89 rev 2, PS-91 rev 2); that pattern was verified against practice at the SBV-PORT-1 G2 measurements before transcription rather than assumed. Occasion: under rev 1 a bare number was ambiguous between "the only vote on this file" and "the first of several"; under rev 2 the bare form is unambiguous. Rev 1's carried note — that this is entered numbered although its own text names it a display decision, PS-88's id-less form being permissive and scoped to display-decision sets while the numbered section already carries display rulings (PS-111, PS-113) — stands unchanged for rev 2. Measured depth is a count and is cited rather than restated per PS-38: 31 renames across 12 repeated file numbers, deepest run `-E`, per the addendum's apparatus and SBV-PORT-1 conformance spec rev 3 (`0ebbd8ae…`).*
 
 ### PS-121 — cast-by attribution for predecessor votes: every fatality binds to the votes data, never to roster occupancy
 
@@ -1288,6 +1291,53 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 > and render as the ordinary not-recorded state.
 
 *Provenance: SBV-PORT-1 ratification addendum (`SBV-PORT-1-ratification-addendum-R5rev2.md`), sha256 `bf47a416ede127d1f7d1155eb0d13f8fd199481a26d4ab347220df32218b1082`, 2,705 B / 42 L, §"R5 (rev 2)", lines 14–29, transcribed verbatim from the marked ruling region. Ratified by Ishan 2026-08-13. Id allocated at the SBV-PORT-1 G1 transcription relay. **Supersedes R5 of the ratification package revision 1** (`5c9c6225970e87cdc3304f1036d49babd239521560efd013a69028b316ad51b6`, §R5, lines 43–51) **in full**; the superseded revision's text is recorded here by sha and span and is deliberately not transcribed, per the register's superseded-revision rule. Occasion, recorded because it is why the fatality clauses read as they do: revision 1 made fatal any cast-by record naming a seat whose roster row is the vacancy for the vote's date, which the SBV-PORT-1 G0 attestation (`71e2765d…`) Finding 3 measured to be fatal on every record of the only 2026 case, and which presupposed a per-date occupancy determination the roster cannot perform — it carries no time dimension, and `term_end` is blank on all its rows (probe report `dfe828be612…` §P2.2 and §P4.2 finding 5). Ratified as candidate planner error 96. The display string this ruling invokes is carried id-less at §"SBV-PORT-1 — display strings R5a and R6".*
+
+### PS-122 — the school-board outcome vocabulary is closed and blank is fatal
+
+> The `SB Votes` tab carries an `Outcomes` column immediately after `President`. Its value
+> vocabulary is exactly: `Unanimous`, `Split`, `Unanimous with Abstentions`, `Withdrawn`.
+> Any other value, including blank, is fatal at ingest, naming row and column. The value is
+> carried into the artifact as each vote's `outcome` field and is displayed as its own
+> label, verbatim.
+
+*Provenance: SBV-PORT-1 ratification package 2, revision 1 (`SBV-PORT-1-ratification-package-2-rev1.md`), sha256 `b88d016a52b3cda574eba18a38308cf5b3f760d7b2099ab8a418c7ee58d2f30c`, 5,924 B / 87 L, §P2-R1, lines 13–17, transcribed verbatim from the marked ruling region. Ratified by Ishan 2026-08-15. Id allocated at the SBV-PORT-1 G2R transcription relay against the measured next free id, not at issue. Follows the assert-strictly-at-validation pattern of §"SBVOTE-1 — D-2 as amended (a′)" and PS-121. The vocabulary's four values are a measured census and are cited rather than restated per PS-38: SBV-PORT-1 G2 measurements (`c02d3548…`), against Ishan's conformed export (`c92bc9f6…`). Extends the closed header contract PS-121's sibling gate measured — see PS-123, which adds the second and last trailing column.*
+
+### PS-123 — the featured mechanism: a `Featured` column, a `featured` flag, and the 1:1 emission deliberately kept
+
+> The `SB Votes` tab carries a `Featured` column immediately after `Outcomes`, valued
+> `TRUE` or blank, mirroring the council's editorial source convention. Any other value is
+> fatal at ingest, naming row and column. The school-board artifact keeps its 1:1
+> `votemeta`/`rollcall` emission — `votemeta` remains the full vote set — and a flagged
+> vote carries `featured: true` on its `votemeta` entry. The council's set-membership
+> tiering is deliberately not adopted: the school-board member page iterates `votemeta`,
+> and tiering would silently narrow it to featured votes only (G2 item 7(a), the measured
+> render consequence). Featured votes are marked on every displaying surface with the
+> council's measured marker form, star + short code (`★ {code}`).
+
+*Provenance: SBV-PORT-1 ratification package 2, revision 1 (`SBV-PORT-1-ratification-package-2-rev1.md`), sha256 `b88d016a52b3cda574eba18a38308cf5b3f760d7b2099ab8a418c7ee58d2f30c`, 5,924 B / 87 L, §P2-R2, lines 20–28, transcribed verbatim from the marked ruling region. Ratified by Ishan 2026-08-15. Id allocated at the SBV-PORT-1 G2R transcription relay. The council mechanism this ruling declines to copy wholesale was measured before the divergence was chosen, not inferred: the council carries no `featured` boolean at all — membership in `votemeta` (9 records) versus `rollcall.votes` (175) is its flag — and the school-board member page's `votemeta` iteration is what makes that shape unsafe here. Counts and marker form are cited rather than restated per PS-38: SBV-PORT-1 G2 measurements (`c02d3548…`) item 7(a). Zero flagged votes is a valid state by the package's apparatus; the surface's empty form is a G4 display decision and is deliberately not ruled here.*
+
+### PS-124 — outcome-ordered display: the records view groups, the member page only sorts, the matrix is untouched
+
+> The records view groups votes by outcome, in the fixed order: `Split`, then `Unanimous
+> with Abstentions`, then `Withdrawn`, then `Unanimous`; date-descending within each group;
+> each group under a header carrying the outcome name verbatim. The member page's vote
+> list, currently unordered (sheet row order — G2 item 8), becomes date-descending; it does
+> not group by outcome. The matrix view's ordering is unchanged.
+
+*Provenance: SBV-PORT-1 ratification package 2, revision 1 (`SBV-PORT-1-ratification-package-2-rev1.md`), sha256 `b88d016a52b3cda574eba18a38308cf5b3f760d7b2099ab8a418c7ee58d2f30c`, 5,924 B / 87 L, §P2-R4, lines 40–44, transcribed verbatim from the marked ruling region. Ratified by Ishan 2026-08-15. Id allocated at the SBV-PORT-1 G2R transcription relay. Entered numbered rather than id-less on PS-120's reasoning: this is a display **decision**, not a ratified string — the only verbatim reader-facing text it specifies is the outcome name itself, which is artifact data. The baseline it replaces was measured, not assumed: the member page iterates `votemeta` with no sort while only the records and matrix views call the date-descending path (SBV-PORT-1 G2 measurements `c02d3548…` item 8, which corrected a tool-wide reading of the probe report's `rollcall`-scoped row).*
+
+### PS-125 — the not-recorded display, corrected: the President column renders only when it carries a recorded position
+
+> The President column renders only when it carries at least one recorded position; while
+> all-blank it is omitted from every view, and the R6 methodology sentence carries its
+> meaning. If it renders, its blank cells display `—` (an em dash), never `Not recorded`.
+> All other blank position cells continue to render `Not recorded`, including a
+> predecessor's in-tenure absences (PS-121's consequence clause, standing). The methodology
+> carries, verbatim:
+> > A position shown as Not recorded means no vote is recorded for that seat — the member
+> > may have been absent, not yet seated, or the seat may have been vacant at the time.
+
+*Provenance: SBV-PORT-1 ratification package 2, revision 1 (`SBV-PORT-1-ratification-package-2-rev1.md`), sha256 `b88d016a52b3cda574eba18a38308cf5b3f760d7b2099ab8a418c7ee58d2f30c`, 5,924 B / 87 L, §P2-R5, lines 47–54, transcribed verbatim from the marked ruling region; the source's own `>` methodology lines appear here nested inside the register's quote prefix, with no character otherwise altered. Ratified by Ishan 2026-08-15. Id allocated at the SBV-PORT-1 G2R transcription relay. **Entered numbered although it carries a verbatim methodology string**, because the string is inseparable from the render ruling it completes and splitting a single fenced ruling across two entry forms is not a transcription act; PS-111 is the register's precedent for a numbered entry carrying ratified display copy. Occasion: the SBV-PORT-1 G2 measurements (`c02d3548…`) item 4 measured that all four stored positions render through one map in which `-` reads `Not recorded`, so the all-blank President column asserted a recording gap against the ratified clause at §"SBV-PORT-1 — display strings R5a and R6" that President blanks are structural, not missing data. This ruling resolves that contradiction and leaves PS-121's consequence clause expressly standing.*
 
 ---
 
@@ -1738,3 +1788,20 @@ Two display strings ratified with the SBV-PORT-1 ratification package, transcrib
 > Blank President position cells are structural under this sentence, not missing data.
 
 *Provenance: SBV-PORT-1 ratification package, revision 1 (`SBV-PORT-1-ratification-package-rev1.md`), sha256 `5c9c6225970e87cdc3304f1036d49babd239521560efd013a69028b316ad51b6`, 4,870 B / 81 L — §R5a, lines 54–55, and §R6, lines 58–60 — both transcribed verbatim from the marked ruling region. Ratified by Ishan 2026-08-13. **One presentational transform, stated rather than left for a reader to discover:** the register's own quote prefix is applied to every transcribed line, so each source's own `>` string line appears here as a nested quote; the two headings are the sources' own, promoted to bold because the register reserves `###` for entries. No character of either ruling's text is otherwise altered. Id-less per PS-88, the ratified form for a display-decision set, and named for its lane after the pattern of §"SBVOTE-1 G1+G3 — display strings 1–5" and §"SBFIN-1 — finance state strings 1–4"; no PS id allocated. R5a is invoked by PS-121, which carries the cast-by mechanism and is the reason the marker and string exist; R6's blank-cell clause is what makes the President column's `n/a` folding under PS-119 structural rather than a gap. R6's wording is the planner's proposal from Ishan's stated direction, ratified as drafted.*
+
+### SBV-PORT-1 G2R — key-votes methodology strings
+
+The methodology copy ratified with SBV-PORT-1 ratification package 2, transcribed verbatim:
+
+> **P2-R3 — Key-votes methodology strings**
+>
+> The school-board methodology carries, verbatim:
+>
+> > Some votes carry a key vote designation. A key vote is one that drew significant public
+> > attention — through community or advocacy pressure, sustained media coverage, or because
+> > it was novel or precedent-setting.
+> > The key-vote label is an editorial judgment about prominence, not a different way of
+> > counting the vote. A key vote is recorded with the exact same factual Yes / No / Present
+> > / Not recorded positions as every other vote; it is simply surfaced more prominently.
+
+*Provenance: SBV-PORT-1 ratification package 2, revision 1 (`SBV-PORT-1-ratification-package-2-rev1.md`), sha256 `b88d016a52b3cda574eba18a38308cf5b3f760d7b2099ab8a418c7ee58d2f30c`, 5,924 B / 87 L, §P2-R3, lines 31–37, transcribed verbatim from the marked ruling region; the register's own quote prefix is applied to every line, so the source's `>` string lines appear nested, and the source's `###` heading is promoted to bold because the register reserves `###` for entries — no character of the ruling text is otherwise altered. Ratified by Ishan 2026-08-15. Id-less per PS-88, the ratified form for a display-decision set, and named for its lane and gate after the pattern of §"SBVOTE-1 G1+G3 — display strings 1–5". Entered as a **new** entry rather than accreted into §"SBV-PORT-1 — display strings R5a and R6": that heading names its contents by ruling id, so adding a third would have required a rename, and the two sets govern different surfaces. **The package's P2-R3 conditional was tested before transcription and did not fire** — whether the council's governing key-votes strings carry a register entry was measured at G2R, and they do not: a search of this register for `key vote`, `key-vote`, `featured vote` and `prominence` resolves only to PS-114's unrelated "ballot prominence", so no register form conflicts with this mirror. The two deliberate divergences from the council's strings — the "divided votes" framing dropped, and the council's `Absent` position name replaced by `Not recorded` — are the package's, recorded in its apparatus; the council strings themselves were relayed verbatim into the drafting context at SBV-PORT-1 G2 (`c02d3548…`) item 7(a) per the class-3 rule. No PS id allocated.*
