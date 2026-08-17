@@ -1339,6 +1339,19 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: SBV-PORT-1 ratification package 2, revision 1 (`SBV-PORT-1-ratification-package-2-rev1.md`), sha256 `b88d016a52b3cda574eba18a38308cf5b3f760d7b2099ab8a418c7ee58d2f30c`, 5,924 B / 87 L, §P2-R5, lines 47–54, transcribed verbatim from the marked ruling region; the source's own `>` methodology lines appear here nested inside the register's quote prefix, with no character otherwise altered. Ratified by Ishan 2026-08-15. Id allocated at the SBV-PORT-1 G2R transcription relay. **Entered numbered although it carries a verbatim methodology string**, because the string is inseparable from the render ruling it completes and splitting a single fenced ruling across two entry forms is not a transcription act; PS-111 is the register's precedent for a numbered entry carrying ratified display copy. Occasion: the SBV-PORT-1 G2 measurements (`c02d3548…`) item 4 measured that all four stored positions render through one map in which `-` reads `Not recorded`, so the all-blank President column asserted a recording gap against the ratified clause at §"SBV-PORT-1 — display strings R5a and R6" that President blanks are structural, not missing data. This ruling resolves that contradiction and leaves PS-121's consequence clause expressly standing.*
 
+### PS-126 — commit-message custody: the stored message is the planner-reviewed bytes, exactly
+
+> A commit message is the planner-reviewed bytes, exactly. The executor drafts the message
+> as a file against the staged diff; the planner approves the text verbatim by manifest;
+> the commit stores those bytes with no addition, no cleanup transformation, and no
+> harness or tooling trailer. Before the commit is reported, the stored message is
+> verified byte-identical to the approved draft via `git cat-file commit`. A message that
+> must change after approval — for any reason, including a ratification landing between
+> HALT and commit — returns to the planner as a new revision with a fresh manifest; it is
+> never edited en route.
+
+*Provenance: SBV-PORT-1 ratification addendum, commit-message custody (`SBV-PORT-1-ratification-addendum-RCM.md`), sha256 `d8c25baf1c191b52d20149f0b9793788b368ac87fc776147e2b35856056e585f`, 1,553 B / 29 L, §R-CM, lines 11–18, transcribed verbatim from the marked ruling region. Ratified by Ishan's relay of the SBV-PORT-1 G8 release, 2026-08-17. Id allocated at the G8 transcription relay against the measured next free id, not at issue. **Practised before it was recorded**, which is why the entry is a transcription rather than a proposal: the form was exercised at G1 (`f3d66ec1`), G2R (`b97606f8`), G3 (`e26c2010`), G4 (`d62efe6f`) and G6 (`010c5a87`) before this commit. The no-trailer clause records as standing behaviour a deliberate deviation from the executor's harness default, first taken at G1 and flagged there; under this ruling it needs no per-commit flagging. The return-as-a-new-revision clause is not hypothetical: G4's rev-2 cycle exercised it when a ratification landed between the HALT and the commit and falsified a claim inside the approved bytes — recorded as planner error 97, whose correction path this clause is.*
+
 ---
 
 ## Rulings ratified without an id
