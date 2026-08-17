@@ -174,7 +174,17 @@ function around(tpl, marker) { return String(tpl).split(marker); }
      JSON.stringify({ F3OLD: !!F3OLD, F5: !!F5, F6: !!F6, F7: !!F7 }));
 
   // ---------- C3 state 1: the born artifact, 0 votes -> string 1 ----------
-  var born = await boot(REAL, 'ok');
+  // Tested BY CONSTRUCTION, not by the accident of a tool that happened to be empty:
+  // `REAL` carried zero votes until SBV-PORT-1 G6 and now carries 273, which silently
+  // emptied this case of its subject. The born state stays reachable — it is what a
+  // fresh deployment renders — so the case keeps its subject rather than losing it.
+  // Everything but the votes stays real, which is what the roster checks below read.
+  var bornArt = JSON.parse(JSON.stringify(REAL));
+  bornArt.votemeta = [];
+  bornArt.rollcall.votes = [];
+  bornArt.rollcall.term_votes = 0;
+  bornArt.members.forEach(function (m) { m.votes = {}; });
+  var born = await boot(bornArt, 'ok');
   ok('[C3/1] born artifact (0 votes) renders string 1 verbatim, not a blank and not an error',
      born.text.indexOf(S1) >= 0);
   ok('[C3/1] the born state is NOT an error state',
