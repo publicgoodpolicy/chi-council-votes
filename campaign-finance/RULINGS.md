@@ -1352,6 +1352,35 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: SBV-PORT-1 ratification addendum, commit-message custody (`SBV-PORT-1-ratification-addendum-RCM.md`), sha256 `d8c25baf1c191b52d20149f0b9793788b368ac87fc776147e2b35856056e585f`, 1,553 B / 29 L, §R-CM, lines 11–18, transcribed verbatim from the marked ruling region. Ratified by Ishan's relay of the SBV-PORT-1 G8 release, 2026-08-17. Id allocated at the G8 transcription relay against the measured next free id, not at issue. **Practised before it was recorded**, which is why the entry is a transcription rather than a proposal: the form was exercised at G1 (`f3d66ec1`), G2R (`b97606f8`), G3 (`e26c2010`), G4 (`d62efe6f`) and G6 (`010c5a87`) before this commit. The no-trailer clause records as standing behaviour a deliberate deviation from the executor's harness default, first taken at G1 and flagged there; under this ruling it needs no per-commit flagging. The return-as-a-new-revision clause is not hypothetical: G4's rev-2 cycle exercised it when a ratification landed between the HALT and the commit and falsified a claim inside the approved bytes — recorded as planner error 97, whose correction path this clause is.*
 
+### PS-127 — the roster surface enumerates the full roster; vote surfaces keep PS-125
+
+> **The roster surface enumerates the full roster; vote surfaces keep PS-125.**
+>
+> (i) The roster tab renders every roster row, always: all members, the vacancy, and
+> the President, regardless of whether any President position is recorded. It draws
+> from a single named full-roster reader whose comment states that it is the deliberate,
+> sole exception to the visibility filter; no other surface may read it.
+>
+> (ii) Vote-enumerating surfaces — the seat selector, the matrix, and the record
+> view's seat domain — remain governed by PS-125 unchanged: the President appears on
+> them only when a recorded President position exists.
+>
+> (iii) The President's member page exists and is reachable from the roster tab. While
+> no President position is recorded, it renders the President's roster facts and R6's
+> sentence, and no vote table. The existing member-view guard that returns R6's
+> sentence in place of a page is superseded by this page.
+>
+> (iv) On the first recorded President position, PS-125's resurfacing proceeds
+> unchanged everywhere, and the President's member page renders votes as any member's
+> page does. Clause (iii)'s "no vote table" is the no-recorded-position state, not a
+> permanent property.
+>
+> (v) The vacancy row appears on the roster tab like any row, labeled with the
+> ratified vacancy string, and clicks through to the existing no-member-page card.
+> The roster tab displays no per-seat vote or position counts.
+
+*Provenance: SBV-BOARD-1 ratification package, revision 1 (`SBV-BOARD-1-ratification-package-rev1.md`), sha256 `ffdb627fc8768313f51b63a678e58985f563fde6cfe94f9994a2473c3694ddad`, 11,406 B / 198 L, §R1, lines 33–56, transcribed verbatim from the marked ruling region. Ratified by Ishan 2026-08-17 as drafted, **including clause (iv)** — the package flagged clause (iv) for explicit strike-or-keep and it was kept, so the "no vote table" of clause (iii) is ruled to be the no-recorded-position state rather than a permanent property. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-126`; no `### PS-127` heading present), never carried from the lane brief, which stated PS-127 only as an expectation. **One presentational transform, stated rather than left for a reader to discover:** every line of the source's marked region carries the source's own `>` prefix, and that prefix is the register's quoted-block marker carried across at the same level rather than nested — the text after the marker is unaltered, character for character. This differs from §"SBV-PORT-1 — display strings R5a and R6", where the source's `>` marked display strings nested inside unprefixed prose and the nesting was therefore preserved; here the prefix is uniform across the region and carries no such distinction, which the region's inline backticks carry instead. This ruling resolves the interaction PS-125 leaves open once a roster surface exists: PS-125 is unamended and continues to govern every vote-enumerating surface under clause (ii), while clause (i) creates a single named exception for the roster surface alone. Clause (iii) supersedes the member-view guard that PS-125's implementation installed; the guard is not repealed for any other seat.*
+
 ---
 
 ## Rulings ratified without an id
@@ -1818,3 +1847,65 @@ The methodology copy ratified with SBV-PORT-1 ratification package 2, transcribe
 > > / Not recorded positions as every other vote; it is simply surfaced more prominently.
 
 *Provenance: SBV-PORT-1 ratification package 2, revision 1 (`SBV-PORT-1-ratification-package-2-rev1.md`), sha256 `b88d016a52b3cda574eba18a38308cf5b3f760d7b2099ab8a418c7ee58d2f30c`, 5,924 B / 87 L, §P2-R3, lines 31–37, transcribed verbatim from the marked ruling region; the register's own quote prefix is applied to every line, so the source's `>` string lines appear nested, and the source's `###` heading is promoted to bold because the register reserves `###` for entries — no character of the ruling text is otherwise altered. Ratified by Ishan 2026-08-15. Id-less per PS-88, the ratified form for a display-decision set, and named for its lane and gate after the pattern of §"SBVOTE-1 G1+G3 — display strings 1–5". Entered as a **new** entry rather than accreted into §"SBV-PORT-1 — display strings R5a and R6": that heading names its contents by ruling id, so adding a third would have required a rename, and the two sets govern different surfaces. **The package's P2-R3 conditional was tested before transcription and did not fire** — whether the council's governing key-votes strings carry a register entry was measured at G2R, and they do not: a search of this register for `key vote`, `key-vote`, `featured vote` and `prominence` resolves only to PS-114's unrelated "ballot prominence", so no register form conflicts with this mirror. The two deliberate divergences from the council's strings — the "divided votes" framing dropped, and the council's `Absent` position name replaced by `Not recorded` — are the package's, recorded in its apparatus; the council strings themselves were relayed verbatim into the drafting context at SBV-PORT-1 G2 (`c02d3548…`) item 7(a) per the class-3 rule. No PS id allocated.*
+
+### SBV-BOARD-1 — display decisions D-R2a–D-R2d
+
+Four display decisions ratified with the SBV-BOARD-1 ratification package, transcribed verbatim:
+
+> **D-R2a — Tab label:** `The Board`
+>
+> **D-R2b — President page heading:** `The Board President`
+>
+> **D-R2c — Roster row content:** each row renders the member's name, seat code, the
+> appointed/elected designation, and term start where present — the same facts the
+> member page renders today, no more. The vacancy row renders the seat code and the
+> ratified vacancy string.
+>
+> **D-R2d — President roster row:** renders the name and the designation
+> `Board President` in place of a seat code.
+
+*Provenance: SBV-BOARD-1 ratification package, revision 1 (`SBV-BOARD-1-ratification-package-rev1.md`), sha256 `ffdb627fc8768313f51b63a678e58985f563fde6cfe94f9994a2473c3694ddad`, 11,406 B / 198 L, §R2, lines 82–92, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, with the text after the marker unaltered character for character — the same transform stated at §PS-127 and for the same reason. Ratified by Ishan 2026-08-17 as drafted. Id-less per PS-88, the ratified form for a display-decision set, and named for its lane after the pattern of §"SBV-PORT-1 — display strings R5a and R6" and §"SBVOTE-1 G1+G3 — display strings 1–5"; no PS id allocated. Entered as a **separate** entry from §"SBV-BOARD-1 — funding methodology heading and strings F1–F6", ratified in the same package at the same moment: the two sets govern different surfaces — the roster tab and member page here, the methodology tab there — which is the same ground on which §"SBV-PORT-1 G2R — key-votes methodology strings" was kept separate from its lane's earlier entry. D-R2b's text deliberately matches the heading the methodology tab already carries above R6's sentence; that incumbent heading is an unratified literal, and whether one ratified string comes to serve both sites is a mechanical question at implementation, not a ruling made here. D-R2c's "ratified vacancy string" and D-R2d's designation are display content only; the roster tab's prohibition on per-seat counts is ruled at §PS-127 (v), not here.*
+
+### SBV-BOARD-1 — funding methodology heading and strings F1–F6
+
+The funding-methodology heading and six strings ratified with the SBV-BOARD-1 ratification package, transcribed verbatim:
+
+> **D-R4h — Methodology funding heading:** `How the money figures work`
+>
+> **F1 — Sources:** `Campaign finance figures are computed from committee filings
+> with the State Board of Elections.`
+>
+> **F2 — Scope:** the methodology re-emits the ratified all-elections disclosure
+> (SBFIN-1 string 6) verbatim from its existing string-table entry:
+> `Combined across every school board election this member has run in, including runs
+> for a different seat.`
+>
+> **F3 — Streams:** `Direct contributions to a candidate's committee and independent
+> spending supporting or opposing a candidate are different kinds of money. Each is
+> totaled within its own stream, and no combined figure of the two is shown for any
+> member.`
+>
+> **F4 — Dues:** `Transfers of member dues between political committees are excluded
+> from all totals. In this dataset they account for {DUES}.` The figure renders from
+> the artifact and is never written into copy; the sentence renders at every
+> magnitude including $0.00.
+>
+> **F5 — Classification:** `Industry classification of donors is an editorial layer
+> and is always in progress. Each chart states how much of the money it shows carries
+> a substantive industry tag, and money without itemized donor detail remains in a
+> member's totals even where a chart cannot break it down.`
+>
+> **F6 — Correlation:** `These figures place money and votes side by side. They do
+> not assert that one caused the other.`
+
+The scope of `{DUES}`, ratified as addendum R4a and transcribed here with these strings per its own amendment note, verbatim:
+
+> `{DUES}` renders the excluded dues-transfer magnitude of the school-board finance
+> artifact's own dataset: the value the school-board builder accumulates from exactly
+> the rows its dues exclusion skips, within its own committee scope and after its own
+> prior filters, emitted into the artifact at each build. The rendered figure is that
+> emitted value at the artifact's current vintage, whatever it is, $0.00 included.
+> No figure from any other dataset — the elections artifact at large, the council
+> dataset, or any future scope — answers to F4's "this dataset."
+
+*Provenance: two sources, both transcribed verbatim from their marked ruling regions, with the source's own `>` prefix carried across at the same level rather than nested and the text after the marker unaltered character for character — the transform stated at §PS-127. **The heading and F1–F6:** SBV-BOARD-1 ratification package, revision 1 (`SBV-BOARD-1-ratification-package-rev1.md`), sha256 `ffdb627fc8768313f51b63a678e58985f563fde6cfe94f9994a2473c3694ddad`, 11,406 B / 198 L, §R4, lines 131–157. **The `{DUES}` scope paragraph:** SBV-BOARD-1 ratification addendum R4a (`SBV-BOARD-1-ratification-addendum-R4a.md`), sha256 `fa6686a240fa1094ccb68432f8ba952b7c9854c24f7d559855963b5bd3c550ea`, 1,968 B / 31 L, §R4a, lines 15–21. Both ratified by Ishan 2026-08-17 as drafted. Id-less per PS-88; R4a carries no id of its own per the PS-93 pattern for amendments and transcribes into this entry rather than beside it, as its amendment note directs; no PS id allocated for either. **This entry discharges the funding-methodology gap** carried as an open item since SBFIN-1 put finance data on a surface whose methodology tab carried none — folded into this lane by Ishan's ratification of 2026-08-17 rather than taken as a lane of its own. **F2's citation was tested before transcription and resolves:** `SBFIN-1 string 6` is the all-elections disclosure numbered 6 in the block "Also ratified at SBFIN-2 HALT-B, id-less with strings 1–4" under §"SBFIN-1 — finance state strings 1–4", and its text there matches F2's quotation. **F4's `{DUES}` was measured before this transcription and is not hypothetical:** the finance artifact carries no such field today and the school-board builder's dues exclusion is a single unaccumulated skip, so the value R4a rules to be rendered is one the builder does not yet emit; the magnitude at the artifact's current vintage measured $0.00 across zero rows, which is the case F4's own "every magnitude including $0.00" clause and PS-101 provide for. The emission is this lane's build work and rides the commit that creates it; nothing in this entry asserts the field exists.*
