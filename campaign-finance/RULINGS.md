@@ -1722,7 +1722,33 @@ String 5, ratified at G3 as D-4's seat label:
 >    **no member page**. The seat is a real fact about the board and is carried as one; the
 >    string is the embed's, never the artifact's.
 
+Amended at SBV-BOARD-1 G1b, 2026-08-17. String 4 is superseded by the text below; the entry above is not rewritten, and strings 1, 2, 3 and 5 are untouched. Transcribed verbatim:
+
+> At the register's id-less entry "SBVOTE-1 G1+G3 — display strings 1–5", the
+> ratified string numbered **4**, the methodology sentence, which reads
+> pre-amendment:
+>
+> > Vote positions are entered from public Board of Education records and meeting
+> > minutes; each vote links to its source.
+>
+> is amended to read, verbatim:
+>
+> > Vote positions are entered from the Board Rule voting data file, which compiles
+> > public Board of Education records and meeting minutes; each vote links to its
+> > source.
+>
+> The index and the pre-amendment text above are a paired pointer: if the string
+> numbered 4 at transcription does not match the quoted pre-amendment text byte for
+> byte, the premise has failed and the transcription halts. Neither half is corrected
+> against the other by anyone but Ishan, in a new revision.
+>
+> The amendment carries no id (PS-93 pattern) and transcribes as an amendment block
+> against the existing entry, which is not rewritten. Strings 1, 2, 3 and 5 of that
+> entry are untouched.
+
 *Provenance, two sources: strings 1–4 — SBVOTE-1 G1 brief (`sbvote-1-g1-brief.md`), sha256 `9bede0e526270f47a2514f24a1859d65a0e95c558651f69f8587493f1e251e31`, lines 69–76 (§V5), ratified by Ishan 2026-08-08. String 5 — SBVOTE-1 G3 decision record (`sbvote-1-g3-decision-record.md`), sha256 `5d22cf1ca32bd891bba6a5badbdd3c5735681d4c7d12aa1b8ecddcb8a178a1b9`, §D-4; ratified by Ishan 2026-08-08. **Entry name of record:** the brief anticipated `SBVOTE-1 G1 — strings 1–4`; the set gained string 5 at G3, so the heading names both gates — the rename is deliberate and is why a citation to the anticipated name resolves here. Id-less per PS-88, the ratified form for a display-decision set. The strings ship with the school-board embed (HALT-SBV-C), which is launch-gated and not authorized at this commit; the entry records what was ratified, not what has rendered.*
+
+*Provenance, amendment (the sources sentence names Board Rule as the vote-data origin): SBV-BOARD-1 ratification addendum R-BR, revision 3 (`SBV-BOARD-1-ratification-addendum-RBR-rev3.md`), sha256 `5e9c942b99b76f7da90d6808c85297527139ea7a2ecae3736a06135c356dc5ce`, 6,088 B / 110 L, §R-BR3, lines 66–86, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan 2026-08-17. Rev 3 supersedes rev 2 (`76863d048b92629057c958f70994ae8b7fb01f014f33b7e6c5484f9af80a5c51`, 4,832 B / 87 L), which supersedes rev 1 (`85e024345e1cab3e075bb3b749d453c540a477d46415593760e9af14527d4aad`, 4,034 B / 72 L); both filed aside, neither extracted from, and every span above re-derived from rev 3's own bytes rather than carried from rev 2. Recorded under the PS-93 pattern: no id is allocated, and the pre-amendment string 4 stands unaltered above because transcription is never harmonization — an amendment says what now governs rather than editing the superseded clause away. **The amendment's own paired-pointer clause was executed before this transcription, not after:** the entry was located by content (one heading match) and the item numbered 4 found by content within it, and the register's string 4 was compared to the pre-amendment text quoted inside the ruling — equal at 117 characters, under a normalization applied to both sides and stated here, namely strip quote markers and backticks and collapse the source's line-wrap whitespace to single spaces, no other change. Had they differed the transcription would have halted with neither half corrected. **The clause exists because rev 2 failed it:** rev 2 directed the amendment at string 1, which is the empty-tool state, and the executor held rather than transcribing a misdirected amendment or renumbering inside a fence — planner error 100, ratified 2026-08-17, with rev 3 moving the pre-amendment text inside the fence so the pointer is checkable against its own quotation. **One placement note, stated rather than left for a reader to discover:** the amendment's ratified text does not open with the `**Amendment (lane, date).**` phrase that PS-93's, PS-98's and PS-111's amendment sources each carry in their own first line, so that label is not manufactured here; the lane and date are carried in the register's own prose immediately above the quoted block, in this entry's existing idiom, and the ruling text begins where the quote begins.*
 
 ### SBVOTE-1 — D-2 as amended (a′)
 
@@ -1909,3 +1935,37 @@ The scope of `{DUES}`, ratified as addendum R4a and transcribed here with these 
 > dataset, or any future scope — answers to F4's "this dataset."
 
 *Provenance: two sources, both transcribed verbatim from their marked ruling regions, with the source's own `>` prefix carried across at the same level rather than nested and the text after the marker unaltered character for character — the transform stated at §PS-127. **The heading and F1–F6:** SBV-BOARD-1 ratification package, revision 1 (`SBV-BOARD-1-ratification-package-rev1.md`), sha256 `ffdb627fc8768313f51b63a678e58985f563fde6cfe94f9994a2473c3694ddad`, 11,406 B / 198 L, §R4, lines 131–157. **The `{DUES}` scope paragraph:** SBV-BOARD-1 ratification addendum R4a (`SBV-BOARD-1-ratification-addendum-R4a.md`), sha256 `fa6686a240fa1094ccb68432f8ba952b7c9854c24f7d559855963b5bd3c550ea`, 1,968 B / 31 L, §R4a, lines 15–21. Both ratified by Ishan 2026-08-17 as drafted. Id-less per PS-88; R4a carries no id of its own per the PS-93 pattern for amendments and transcribes into this entry rather than beside it, as its amendment note directs; no PS id allocated for either. **This entry discharges the funding-methodology gap** carried as an open item since SBFIN-1 put finance data on a surface whose methodology tab carried none — folded into this lane by Ishan's ratification of 2026-08-17 rather than taken as a lane of its own. **F2's citation was tested before transcription and resolves:** `SBFIN-1 string 6` is the all-elections disclosure numbered 6 in the block "Also ratified at SBFIN-2 HALT-B, id-less with strings 1–4" under §"SBFIN-1 — finance state strings 1–4", and its text there matches F2's quotation. **F4's `{DUES}` was measured before this transcription and is not hypothetical:** the finance artifact carries no such field today and the school-board builder's dues exclusion is a single unaccumulated skip, so the value R4a rules to be rendered is one the builder does not yet emit; the magnitude at the artifact's current vintage measured $0.00 across zero rows, which is the case F4's own "every magnitude including $0.00" clause and PS-101 provide for. The emission is this lane's build work and rides the commit that creates it; nothing in this entry asserts the field exists.*
+
+### SBV-BOARD-1 — Board Rule methodology attribution
+
+The methodology attribution ratified with SBV-BOARD-1 addendum R-BR, transcribed verbatim:
+
+> The school-board voting methodology carries, verbatim, rendered with "Board Rule"
+> as a link to https://board-rule.ghost.io/:
+>
+> > All vote data in this tool is drawn from the voting data file maintained by
+> > Board Rule, a newsletter covering the Chicago Board of Education.
+>
+> The sentence renders in the votes-methodology region, adjacent to the existing
+> sources sentence, before the funding section.
+
+*Provenance: SBV-BOARD-1 ratification addendum R-BR, revision 3 (`SBV-BOARD-1-ratification-addendum-RBR-rev3.md`), sha256 `5e9c942b99b76f7da90d6808c85297527139ea7a2ecae3736a06135c356dc5ce`, 6,088 B / 110 L, §R-BR1, lines 36–43, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, and the ruling's own nested quote — the display sentence itself — is preserved at its own depth, text unaltered character for character. Ratified by Ishan 2026-08-17. Id-less per PS-88, the ratified form for a display-decision set, and named for its lane after the pattern of §"SBV-PORT-1 — display strings R5a and R6"; no PS id allocated, and the next free numbered id is untouched by this commit. Rev 3 supersedes rev 2 and rev 1, both filed aside and neither extracted from; R-BR1's text is character-identical across revisions but its line span is not, and the span above was re-derived from rev 3's own bytes. The sentence's placement clause is a render instruction that binds the lane's methodology commit, not a claim about what the surface carries today: at this commit the methodology region carries no Board Rule attribution, and this entry is the ruling that puts one there. The link target is the ruling's, transcribed as given; the characterization of Board Rule as a newsletter covering the Chicago Board of Education is the ratification's own, checked planner-side against the site and recorded in the addendum's apparatus.*
+
+### SBV-BOARD-1 — Board Rule vote-surface attribution footer
+
+The vote-surface footer ratified with SBV-BOARD-1 addendum R-BR, transcribed verbatim:
+
+> Every school-board voting surface that renders vote positions or vote records
+> carries at its foot, verbatim, with "Board Rule" as a link to
+> https://board-rule.ghost.io/:
+>
+> > Vote data from the Board Rule voting data file.
+>
+> The scope is functional, not enumerated: a surface carries the footer exactly when
+> it represents votes. At current HEAD that is the member view's vote list, the
+> complete record, the all-seats matrix, and the key-votes surface. The roster tab
+> carries no footer while it represents no votes (R1(v)); the President page carries
+> the footer exactly when its vote table renders (R1(iii)–(iv)). No council or
+> elections surface carries it under this ruling.
+
+*Provenance: SBV-BOARD-1 ratification addendum R-BR, revision 3 (`SBV-BOARD-1-ratification-addendum-RBR-rev3.md`), sha256 `5e9c942b99b76f7da90d6808c85297527139ea7a2ecae3736a06135c356dc5ce`, 6,088 B / 110 L, §R-BR2, lines 49–60, transcribed verbatim from the marked ruling region, under the same transform stated for §R-BR1 above. Ratified by Ishan 2026-08-17. Id-less per PS-88; no PS id allocated. Entered as a **separate** entry from §"SBV-BOARD-1 — Board Rule methodology attribution", ratified in the same addendum at the same moment, on the ground the SBV-PORT-1 G2R entry used: the two govern different surfaces — the methodology region there, every vote-representing surface here — and a single heading naming both would have to be renamed by any third. **The ruling's "at current HEAD" enumeration is the ratification's own reading of the surfaces, not a register measurement**, and it is deliberately subordinate to the functional rule stated in the same clause: the scope is what represents votes, and the four named surfaces are that scope's extension at the moment of ratification, not its definition. The cross-references to R1's clauses resolve to §PS-127, whose clause (v) keeps counts off the roster tab and whose clauses (iii)–(iv) make the President's vote table conditional; the footer inherits that conditionality rather than restating it. The prohibition on council and elections surfaces is the ruling's own and matches this lane's standing scope.*
