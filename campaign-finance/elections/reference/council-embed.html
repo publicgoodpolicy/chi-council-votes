@@ -1027,6 +1027,22 @@ const FEEDBACK_CONFIG = {
   function cycleKey(c){var s=String(c),pre=/^pre-?(\d{4})/i.exec(s);if(pre)return (+pre[1])-0.5;var y=/(\d{4})/.exec(s);return y?+y[1]:1e9;}
   function sortCycles(arr){return arr.slice().sort(function(a,b){return cycleKey(a)-cycleKey(b);});}
   function fmtMoneyExact(n){return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+  // ELEC-FIGURE-1 R3 — the dues-exclusion disclosure renders FROM the artifact, never from
+  // copy. Open ledger 25: the figure lived as a literal here with no checker binding it to
+  // the data, so it could go stale silently on a live page. build_rollups now emits
+  // dues_excluded {amount, count} and the artifact validator pins both to an independent
+  // recount, to the cent.
+  //   * every magnitude renders, $0.00 across 0 included — PS-101 attaches the disclosure
+  //     obligation at zero, and a missing sentence would read as "no exclusion applies";
+  //   * absent or non-numeric field renders NOTHING — no partial sentence, no fallback
+  //     literal. A half-rendered disclosure is worse than none, and a fallback literal
+  //     would reintroduce exactly the defect this repair removes.
+  function duesDisclosure(){
+    var d=state.cf&&state.cf.dues_excluded;
+    if(!d||typeof d.amount!=='number'||typeof d.count!=='number') return '';
+    return '<p>Transfers of member dues between political committees are excluded from all totals. '
+      +'In this dataset they account for '+fmtMoneyExact(d.amount)+' across '+d.count+' transactions.</p>';
+  }
   function fmtDate(s){if(!s)return '';const d=new Date(s+'T00:00:00');return d.toLocaleDateString('en-US',{month:'short',year:'numeric'})}
   function fmtDateLong(s){if(!s)return '';const d=new Date(s+'T00:00:00');return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
 
@@ -2583,7 +2599,7 @@ function recTagChips(){
       <p>Not all political money flows directly to a candidate's campaign. A significant share is spent <em>independently</em> &mdash; by committees that support or oppose a candidate without coordinating with them. This tool surfaces that money too, and because it behaves differently from a direct contribution, we handle and label it with particular care.</p>
       <h4 class="ipg-meth-sub">What an independent expenditure is</h4>
       <p>An independent expenditure (IE) is money a committee spends to support or oppose a candidate <em>without</em> giving it to, or coordinating with, that candidate's campaign &mdash; a mailer, an ad buy, a field operation for or against someone. By law it is independent: the candidate need not know about it, approve it, or receive a cent of it. We draw IEs from the State Board of Elections' expenditure filings, counting only those the filer marked as supporting or opposing a specific candidate, and we match each one by candidate name (using ward to disambiguate) to the current 50 alderpersons, shown as <strong>support</strong> or <strong>opposition</strong> spending. Spending that named a <em>former</em> officeholder is out of scope, as pre-2011 contributions are. Because filers re-report the same expenditure across quarterly filings, we collapse exact duplicates so each is counted once.</p>
-      <p>Transfers of member dues between political committees are excluded from all totals. In this dataset they account for $36,121,256.16 across 252 transactions.</p>
+      ${duesDisclosure()}
       <div class="ipg-meth-callout">
         <p><strong>IE spending <em>for</em> a member is not a contribution <em>to</em> that member.</strong> It means an outside committee spent money on that race &mdash; not that the member solicited, received, or controlled it. Because independent expenditures are by definition made without the candidate's involvement, any association between IE activity and a member's vote is <strong>even more attenuated</strong> than for a direct contribution. The association-is-not-causation principle applies here with extra force.</p>
       </div>

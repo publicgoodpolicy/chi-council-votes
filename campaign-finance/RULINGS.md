@@ -1797,6 +1797,39 @@ disclosed by magnitude at methodology level, and no existing string is amended):
 
 *Provenance, string 9 and the no-view disposition: LEDGER-0 G3 (authorization sha256 `5017136c6b86b5ff5f847b6de7331faed4c8ed1c171e927913e60cd7dd4ee60a`; reasoning `ledger-0-g3-package-part1.md` §2, `911398da…`); ratified by Ishan 2026-08-07 as D16(iii). Ground: PS-93's carve-out condition — a named out-of-subject view must name what it is, and a view scoped by time cannot honestly present rows with no time, so the condition is satisfied by not rendering rather than by naming. The heading's range is extended to 1–9; strings 1–8 are unaltered.*
 
+> At the register's id-less entry `EXCL-UNIFORM G1 — display decisions E1–E7 and
+> strings 1–9`, the ratified string carrying the dues-exclusion disclosure, which reads
+> pre-amendment:
+>
+> > > 8. **Methodology-level, council surface:**
+> > >    `Transfers of member dues between political committees are excluded from all totals. In this dataset they account for $36,121,256.16 across 252 transactions.`
+> >
+> > (quoted byte-exact from the register at extraction lines 44–45 of `d1d390b1…`,
+> > including the register's own `> ` markers; the pointer's index is string 8 of the
+> > EXCL-UNIFORM G1 entry, located by the figure literal, which occurs once in the
+> > register)
+>
+> is amended so that the figure and count render from the artifact rather than living in
+> copy, reading:
+>
+> > Transfers of member dues between political committees are excluded from all totals.
+> > In this dataset they account for {DUES_AMOUNT} across {DUES_COUNT} transactions.
+>
+> where `{DUES_AMOUNT}` renders `dues_excluded.amount` as currency to the cent and
+> `{DUES_COUNT}` renders `dues_excluded.count`, both from the artifact the surface
+> serves, at every magnitude including $0.00 and 0 (PS-101). If the field is absent or
+> non-numeric, the sentence does not render — a partial sentence never ships.
+>
+> The index and the pre-amendment text above are a paired pointer under PS-129: if the
+> located string at transcription does not match the quoted pre-amendment text byte for
+> byte under a normalization applied to both sides and stated, the transcription halts,
+> and neither half is corrected against the other by anyone but Ishan, in a new
+> revision. The amendment carries no id (PS-93 pattern) and transcribes as an amendment
+> block against the existing entry, which is not rewritten; all other strings of that
+> entry are untouched.
+
+*Provenance, amendment (the dues-exclusion disclosure renders from the artifact): ELEC-FIGURE-1 ratification package, revision 2 (`ELEC-FIGURE-1-ratification-package-rev2.md`), sha256 `218e6785b034f2c251c5ab1ecced5f30221dbe86c9a8b21410ec83a01f2341ae`, 10,152 B / 155 L, ruling region R3, lines 90–121, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan 2026-08-18 as drafted. Recorded under the PS-93 pattern: no id is allocated, the next free numbered id is untouched, and string 8's pre-amendment lines stand unaltered above, because an amendment says what now governs rather than editing the superseded reading away. The paired pointer was checked at the moment of use under PS-129 — the figure literal occurs exactly once in the register, and the located lines matched the package's quoted pre-amendment text byte for byte with no normalization required.*
+
 ### SBVOTE-1 G1+G3 — display strings 1–5
 
 Strings 1–4 as ratified at G1, transcribed verbatim from the brief's V5:
