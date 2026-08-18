@@ -143,8 +143,29 @@ function regString(re) { var m = entry.match(re); return m ? m[1] : null; }
 var S1 = regString(/`(Voting records for the Chicago Board of Education[^`]*)`/);
 var S2 = regString(/\*\*Appointed-member badge:\*\* `([^`]+)`/);
 var S3 = regString(/`(No recorded votes yet for this member\.)`/);
-var S4 = regString(/`(Vote positions are entered from public Board[^`]*)`/);
+// String 4 was AMENDED at SBV-BOARD-1 G1b (R-BR3); the register carries the
+// pre-amendment text unaltered above the amendment block, per the PS-93 pattern. Read
+// the SUPERSEDING text and assert the superseded one is gone from the page — the same
+// shape SBFIN-2 B's string 3' already uses below.
+var S4OLD = regString(/`(Vote positions are entered from public Board[^`]*)`/);
 var S5 = regString(/\*\*Vacant seat label:\*\* `([^`]+)`/);
+
+/* SBV-BOARD-1 G4 — the funding methodology and the Board Rule strings, read from the
+ * register for the same reason every other string here is. The backticked ruling
+ * strings are hard-wrapped with the register's own `> ` continuation, so a match is
+ * unwrapped before comparison: the wrapping is a transcription artifact, the string is
+ * one line. */
+function unwrap(s) { return s ? s.replace(/\n>\s*/g, ' ').replace(/\s+/g, ' ').trim() : null; }
+var fundEntry = REG.split('### SBV-BOARD-1 — funding methodology heading and strings F1–F6')[1]
+  .split('\n### ')[0];
+function fundString(re) { var m = fundEntry.match(re); return unwrap(m ? m[1] : null); }
+var FUND_H = fundString(/\*\*D-R4h[^*]*\*\*[^`]*`([^`]+)`/);
+var FUND_F1 = fundString(/\*\*F1[^*]*\*\*[^`]*`([^`]+)`/);
+var FUND_F3 = fundString(/\*\*F3[^*]*\*\*[^`]*`([^`]+)`/);
+var FUND_F5 = fundString(/\*\*F5[^*]*\*\*[^`]*`([^`]+)`/);
+var FUND_F6 = fundString(/\*\*F6[^*]*\*\*[^`]*`([^`]+)`/);
+var FUND_F4 = fundString(/\*\*F4[^*]*\*\*[^`]*`([^`]+)`/);
+var ALL_ELECT_DISC = fundString(/`(Combined across every school board election[^`]+)`/);
 
 /* SBFIN-1's four finance-state strings, read from the register for the same reason:
  * the entry of record is what the page must match. Retyping them here would only
@@ -166,7 +187,8 @@ function around(tpl, marker) { return String(tpl).split(marker); }
 
 (async function () {
   ok('register entry yielded all five strings',
-     !!(S1 && S2 && S3 && S4 && S5), JSON.stringify({ S1: !!S1, S2: !!S2, S3: !!S3, S4: !!S4, S5: !!S5 }));
+     !!(S1 && S2 && S3 && S4OLD && S5),
+     JSON.stringify({ S1: !!S1, S2: !!S2, S3: !!S3, S4OLD: !!S4OLD, S5: !!S5 }));
   ok('SBFIN-1 register entry yielded all four finance strings',
      !!(F1 && F2 && F3 && F4), JSON.stringify({ F1: !!F1, F2: !!F2, F3: !!F3, F4: !!F4 }));
   ok('SBFIN-2 register amendment yielded the superseding + three new strings',
@@ -274,8 +296,10 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   ok('[S2] an elected member carries NO badge (the exception is what gets labeled)',
      ev.html.indexOf('ipg-sb-badge') < 0);
   var meth = nav(born, 'methodology');
-  ok('[S4] the methodology surface carries string 4 verbatim',
-     meth.text.indexOf(S4) >= 0);
+  // String 4 as AMENDED by R-BR3 — the superseding text, read from the register's
+  // amendment block. The superseded text is asserted ABSENT at [C3].
+  ok('[S4] the methodology surface carries string 4 verbatim, as amended',
+     meth.text.indexOf(nestedRuns('SBVOTE-1 G1+G3 — display strings 1–5')[1]) >= 0);
 
   // ---------- the render boundary: exactly one map, four pairs ------------
   var mapBlock = EMBED_HTML.split('var POSITION_DISPLAY = {')[1].split('};')[0];
@@ -2072,6 +2096,50 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   ok('[C4/R1a] the roster tab is reachable from the President\'s page, so the '
      + 'omitted selector strands no one',
      presBlank.html.indexOf('data-view="board"') >= 0);
+
+  // ---------- SBV-BOARD-1 G4: C3, the funding methodology ------------------
+  // The check the council's methodology lacks: the rendered dues figure PINNED to
+  // the artifact's own value, so the sentence cannot go stale while the data moves.
+  var g4m = nav(await boot(REAL, 'ok'), 'methodology');
+  var BR_ATTR = nestedRuns('SBV-BOARD-1 — Board Rule methodology attribution')[0];
+  // The SBVOTE-1 entry now yields two nested runs: [0] the pre-amendment string 4,
+  // [1] R-BR3's superseding text. The superseding one is what the page must carry.
+  var S4RUNS = nestedRuns('SBVOTE-1 G1+G3 — display strings 1–5');
+  var BR_SRC = S4RUNS[1];
+  ok('[C3] premise: the register yielded R-BR1\'s sentence, R-BR3\'s superseding '
+     + 'string 4, and all of R4\'s heading and strings',
+     !!(BR_ATTR && BR_SRC && FUND_H && FUND_F1 && FUND_F3 && FUND_F4 && FUND_F5
+        && FUND_F6 && ALL_ELECT_DISC) && S4RUNS.length === 2,
+     JSON.stringify({ runs: S4RUNS.length, attr: !!BR_ATTR, h: !!FUND_H }));
+  ok('[C3] the page carries R-BR3\'s AMENDED string 4 and no longer the superseded one',
+     g4m.text.indexOf(BR_SRC) >= 0 && g4m.text.indexOf(S4OLD) < 0);
+  var FIN_DUES = (REALFIN.dues_excluded || {});
+  ok('[C3] premise: the finance artifact emits dues_excluded with a numeric amount',
+     typeof FIN_DUES.amount === 'number' && typeof FIN_DUES.count === 'number',
+     JSON.stringify(FIN_DUES));
+  var duesRendered = '$' + Number(FIN_DUES.amount).toLocaleString('en-US',
+    { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  ok('[C3] the rendered dues figure equals the artifact value, to the cent',
+     g4m.text.indexOf(duesRendered) >= 0, 'expected ' + duesRendered);
+  ok('[C3] the figure is NOT written into the copy: the ratified sentence carries '
+     + 'the {DUES} placeholder in source and no literal amount',
+     EMBED_HTML.indexOf('they account for {DUES}.') >= 0
+       && !/they account for \$[0-9]/.test(EMBED_HTML));
+  ok('[C3] the funding methodology renders its heading and all six strings',
+     [FUND_H, FUND_F1, FUND_F3, FUND_F5, FUND_F6]
+       .every(function (s) { return g4m.text.indexOf(s) >= 0; })
+       && g4m.text.indexOf(ALL_ELECT_DISC) >= 0);
+  ok('[C3] F2 re-emits the ratified all-elections disclosure from the existing '
+     + 'string-table entry — one string, not a second copy',
+     (EMBED_HTML.split(ALL_ELECT_DISC).length - 1) === 1);
+  ok('[C3] R-BR1\'s attribution sentence renders in the votes region with its link, '
+     + 'and R-BR3\'s amended sources sentence renders beside it',
+     g4m.text.indexOf(BR_ATTR) >= 0 && g4m.text.indexOf(BR_SRC) >= 0
+       && g4m.html.indexOf('href="https://board-rule.ghost.io/"') >= 0);
+  ok('[C3] the funding section sits after the votes items and before '
+     + 'seats-and-members, per the ratified placement',
+     g4m.text.indexOf(BR_ATTR) < g4m.text.indexOf(FUND_H)
+       && g4m.text.indexOf(FUND_H) < g4m.text.indexOf('Seats and members'));
 
   // ---------- SBV-BOARD-1 G3b: C5, the R-BR2 attribution footer ------------
   // The footer renders on exactly the surfaces that REPRESENT VOTES and on no

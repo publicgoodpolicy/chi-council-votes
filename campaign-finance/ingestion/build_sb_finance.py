@@ -68,15 +68,45 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_rollups import EXCLUDED_CYCLES, WINDOWS_PATH, _bucket, _office_type  # noqa: E402
 
 DUES_TYPE = "IE Committee Dues Transfer"
+
+# SBV-BOARD-1 G4 — R4a's {DUES}. The accumulator sits AT the exclusion predicate in
+# scan_committee_rows, counting exactly the rows that predicate skips and nothing else.
+# It is not a second walk over the contributions with the filters retyped: this builder
+# already warns that a second copy of a filter is a divergence waiting to happen, and a
+# separately-computed magnitude would be exactly that — a number that agrees with the
+# exclusion today and drifts from it silently.
+#
+# Keyed by row IDENTITY, not summed per call. scan_committee_rows runs once per member,
+# and two members can share a committee; adding up per-call subtotals would count a
+# shared committee's dues twice. `id()` is stable for the lifetime of the loaded `ed`,
+# which is this process, and the amount is carried beside it so the total needs no
+# second lookup.
+_DUES_SKIPPED: dict = {}
+
+
+def dues_excluded_total():
+    """R4a: the magnitude the dues exclusion removed, over the school-board scope.
+
+    Zero rows is a real answer, not a missing one — PS-101 attaches the disclosure
+    obligation at every magnitude including $0.00, and at this vintage the school-board
+    committees carry no dues rows at all.
+    """
+    # float() explicitly: an empty accumulator sums to int 0, which would serialise
+    # as `0` where every other money amount in this artifact is `0.0`.
+    return round(float(sum(_DUES_SKIPPED.values())), 2)
+
+
 # The tool's existing not-recorded neutral, reused for an industry with no vocabulary entry.
 NEUTRAL_COLOR = "#a9a299"
 
 # 1.0 -> 1.1 at SBFIN-2 A: per-election donor/coverage maps with itemized dated rows added
 # alongside the flat pair. 1.1 -> 1.2 at SBFIN-2 B: the flat pair removed and the industry
 # and donor-family vocabulary slices added. 1.2 -> 1.3 at SBFIN-3 A: the IE slice and the
-# election-wide labels added. A shape change under an unchanged version number is a trap,
-# and a REMOVAL is a shape change.
-SCHEMA_VERSION = 1.3
+# election-wide labels added. 1.3 -> 1.4 at SBV-BOARD-1 G4: `dues_excluded` added, the
+# magnitude R4a rules the methodology renders as {DUES}. A shape change under an unchanged
+# version number is a trap, and a REMOVAL is a shape change — an ADDITION is one too, which
+# is why this moves for a purely additive key that no existing reader would have missed.
+SCHEMA_VERSION = 1.4
 # Tags that carry no interest-group signal. The council's correlation card isolates the
 # complement of this set via its exclude-individual / exclude-unclassified toggles; the
 # ratified >=50% industry-bar gate is computed against 'substantive' below.
@@ -242,6 +272,10 @@ def scan_committee_rows(ed, candidacy_ids):
         if c.get("cycle") in EXCLUDED_CYCLES:
             continue
         if c.get("contribution_type") == DUES_TYPE:
+            # R4a: counted here, at the predicate that skips it, and after the
+            # is_aggregate and EXCLUDED_CYCLES filters above — so the figure is what
+            # THIS exclusion removes, not what earlier predicates already dropped.
+            _DUES_SKIPPED[id(c)] = round(float(c.get("amount") or 0.0), 2)
             continue
         did = c.get("donor_id")
         if did is None or did not in donors or did in aggregate_ids:
@@ -595,6 +629,9 @@ def build_member(m, ed):
 
 
 def build(sb, ed, sb_sha, ed_sha, stamp):
+    # R4a's accumulator is process-global; cleared here so a second build() in one
+    # process (the self-test does exactly that) cannot inherit the first one's rows.
+    _DUES_SKIPPED.clear()
     members = [build_member(m, ed) for m in sb.get("members", [])]
     ies = ie_slice(members, ed)
     labels = election_labels(ed)
@@ -640,6 +677,11 @@ def build(sb, ed, sb_sha, ed_sha, stamp):
         "election_labels": labels,
         "ie_spenders": ies,
         "industry_threshold": 0.50,
+        # R4a — the magnitude the dues exclusion removed, rendered by the embed as
+        # {DUES}. Emitted at every build and at every magnitude, $0.00 included
+        # (PS-101), so the disclosure never depends on the number being interesting.
+        "dues_excluded": {"amount": dues_excluded_total(),
+                          "count": len(_DUES_SKIPPED)},
         "counts": {"members": len(members), "by_finance_state": by_state,
                    "donor_rows": donor_rows, "itemized_rows": itemized_rows},
         "members": members,

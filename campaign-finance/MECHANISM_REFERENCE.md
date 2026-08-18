@@ -796,7 +796,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-cbr | `campaign-finance/ingestion/convert_bulk_receipts.py` | `ac33aa394c4f8905c307390160fbe397a09399199a3396b07f29f01729bbe582` |
 | S-av | `campaign-finance/sync_allvotes.py` | `a0c4f23df6e4f012e683088e012dc91692fe65399e6fcae2acd1ec9b40e61384` |
 | S-cemb | `campaign-finance/elections/reference/council-embed.html` | `f439227d3dd9781df90b34454b46e26f438b6433057ea60d61a5b72fd934f14f` |
-| S-sbemb | `campaign-finance/school-board/school-board-embed.html` | `f1f6885d69c37143a3686fb4f8f1f88476e674b8b30484c28ea351bfdaf0ea12` |
+| S-sbemb | `campaign-finance/school-board/school-board-embed.html` | `e3bb4d40abef7cd5335150257c493eb9a913ad1d29b2353fdc37f11fd94e7956` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
 | S-edat | `campaign-finance/elections/embed/data.js` | `e36af72ece73ff47b1322abd08548b1f3a1a7624f896381c6c8f10fd6b043ecc` |
 | S-eren | `campaign-finance/elections/embed/render.js` | `bc5ccf5b1720a366487419f2d3267591e4332da14a1ba6cade46606b2f35d9d2` |
@@ -886,7 +886,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C4.9 | A-esg0 | §2 (pull-model established from bytes; the coverage gap and its collection scope) |
 | C5.1 | A-fw1 | 7-16 (fix sites exist only in the elections path; artifact layer separate) |
 | C5.2 | S-cemb | 47 (dataUrl at the `refs/heads/main/` form), 48-52 (sharded mode, present-but-commented), 68 (feedback endpoint), 3409+3427 (subject prefix) |
-| C5.2 | S-sbemb | 61-64 (dataUrl + the `refs/heads/main/` rationale in situ), 789 (the artifact fetch), 75+77 (feedback endpoint + subject prefix), 769 (the POST) |
+| C5.2 | S-sbemb | 66-70 (the `refs/heads/main/` rationale in situ, then `dataUrl` and `financeUrl` — TWO artifacts since SBFIN-1, where this row previously named one), 2979+2989 (the two artifact fetches), 81+83 (feedback endpoint + subject prefix), 2959 (the POST) |
 | C5.2 | S-eapp | 15 (DEFAULT_SRC at the bare `main/` form), 19-21 (ART_BASE + the two verification artifacts), 295 (src resolution: data-src → window.IPG_DATA_URL → baked default) |
 | C5.2 | S-eemb | 17-18 (data-src override documented), 19-24 (artifact + the code-only inlining: data.js/render.js/app.js + styles into one Code Block) |
 | C5.2 | A-ba1g2 | 49 (Rider 2: neither embed renders entity-type / last-editor — a TWO-embed sweep, predating the school-board path; the third was measured at REF-C52 and agrees) |

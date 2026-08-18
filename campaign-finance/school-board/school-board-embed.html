@@ -601,7 +601,10 @@ const IPG_SB_FEEDBACK = {
     emptyTool: 'Voting records for the Chicago Board of Education begin with the board seated in January 2025. Votes will appear here as they are recorded.',
     appointed: 'Appointed',
     noVotesForMember: 'No recorded votes yet for this member.',
-    methodology: 'Vote positions are entered from public Board of Education records and meeting minutes; each vote links to its source.',
+    // AMENDED at SBV-BOARD-1 G1b (R-BR3): string 4 now names the Board Rule voting
+    // data file as the origin and the Board of Education records as what it compiles.
+    // Register: §"SBVOTE-1 G1+G3 — display strings 1–5", amendment block.
+    methodology: 'Vote positions are entered from the Board Rule voting data file, which compiles public Board of Education records and meeting minutes; each vote links to its source.',
     vacant: 'Vacant'
   };
 
@@ -645,7 +648,34 @@ const IPG_SB_FEEDBACK = {
     // token at render. Editorial text; do not reword in code.
     voteFooter: 'Vote data from the Board Rule voting data file.',
     boardRuleName: 'Board Rule',
-    boardRuleUrl: 'https://board-rule.ghost.io/'
+    boardRuleUrl: 'https://board-rule.ghost.io/',
+    // R-BR1, register entry §"SBV-BOARD-1 — Board Rule methodology attribution".
+    // Held whole for the same reason as the footer; the link is applied to the
+    // `Board Rule` token at render.
+    attribution: 'All vote data in this tool is drawn from the voting data file maintained by Board Rule, a newsletter covering the Chicago Board of Education.'
+  };
+
+  // ==========================================================
+  // SBV-BOARD-1 G4 — R4's funding methodology, register entry
+  // §"SBV-BOARD-1 — funding methodology heading and strings F1–F6", with R4a's
+  // {DUES} scope. Editorial text; do not reword in code.
+  //
+  // F2 does NOT retype the all-elections disclosure: R4 rules it re-emitted
+  // verbatim FROM ITS EXISTING STRING-TABLE ENTRY, so it reads SF.allElections-
+  // Disclosure at render. One string, two surfaces — the same discipline that
+  // keeps SV.president single-sourced across three.
+  //
+  // {DUES} is the ONLY figure in this copy and it renders from the artifact's
+  // `dues_excluded.amount`, never written into the string — the open-ledger
+  // constraint the council's methodology violates with a hard-coded total.
+  // ==========================================================
+  var SFM = {
+    heading: 'How the money figures work',
+    f1: 'Campaign finance figures are computed from committee filings with the State Board of Elections.',
+    f3: 'Direct contributions to a candidate\'s committee and independent spending supporting or opposing a candidate are different kinds of money. Each is totaled within its own stream, and no combined figure of the two is shown for any member.',
+    f4: 'Transfers of member dues between political committees are excluded from all totals. In this dataset they account for {DUES}.',
+    f5: 'Industry classification of donors is an editorial layer and is always in progress. Each chart states how much of the money it shows carries a substantive industry tag, and money without itemized donor detail remains in a member\'s totals even where a chart cannot break it down.',
+    f6: 'These figures place money and votes side by side. They do not assert that one caused the other.'
   };
 
   // ==========================================================
@@ -953,12 +983,16 @@ const IPG_SB_FEEDBACK = {
   // applied to its `Board Rule` token after escaping, so the string stays one
   // checkable unit rather than three fragments concatenated around a link.
   // ==========================================================
-  function voteSourceFooter(){
+  // ONE link-application helper, shared by the footer (R-BR2) and the methodology
+  // attribution (R-BR1): both rulings require `Board Rule` to carry the same link,
+  // and two copies of the anchor is how they would come to differ.
+  function linkBoardRule(sentence){
     var link = '<a href="'+esc(SBD.boardRuleUrl)+'" target="_blank" rel="noopener">'
              + esc(SBD.boardRuleName)+'</a>';
-    return '<div class="ipg-sb-votesrc">'
-         + esc(SBD.voteFooter).replace(esc(SBD.boardRuleName), link)
-         + '</div>';
+    return esc(sentence).replace(esc(SBD.boardRuleName), link);
+  }
+  function voteSourceFooter(){
+    return '<div class="ipg-sb-votesrc">'+linkBoardRule(SBD.voteFooter)+'</div>';
   }
   // PS-125: if the column DOES render, its blanks are an em dash, never the
   // not-recorded label — the blanks are structural under R6, not a gap.
@@ -1038,6 +1072,21 @@ const IPG_SB_FEEDBACK = {
   function money(n){
     n = Number(n||0);
     return '$' + Math.round(n).toLocaleString('en-US');
+  }
+  // R4a's {DUES} renders with CENTS. money() rounds to whole dollars, which is right
+  // for headline figures and wrong here: both R4 and R4a name the $0.00 case
+  // explicitly, so this figure must be able to show one, and a dues total is an exact
+  // sum of filed amounts rather than a headline.
+  function moneyCents(n){
+    return '$' + Number(n||0).toLocaleString('en-US',
+      { minimumFractionDigits:2, maximumFractionDigits:2 });
+  }
+  // The figure comes from the ARTIFACT, never from copy — the open-ledger constraint.
+  // Returns null when the finance artifact is not yet readable, so the caller renders
+  // a loading state rather than the ratified sentence carrying a fabricated number.
+  function duesFigure(){
+    var d = F && F.dues_excluded;
+    return (d && typeof d.amount === 'number') ? moneyCents(d.amount) : null;
   }
   function pct(share){ return Math.round(Number(share||0)*1000)/10; }
   function fill(tpl, n){ return String(tpl).replace('{N}', String(n)); }
@@ -2552,8 +2601,11 @@ const IPG_SB_FEEDBACK = {
   function methodologyView(){
     var h = '<div class="ipg-sb-card ipg-sb-meth">';
     h += '<h3>How this tool works</h3>';
-    // ---- string 4, verbatim ----
+    // ---- string 4, verbatim (as amended by R-BR3) ----
     h += '<p>'+esc(S.methodology)+'</p>';
+    // ---- R-BR1's attribution sentence, verbatim, adjacent to the sources
+    // sentence above and before the funding section below, per the ruling ----
+    h += '<p>'+linkBoardRule(SBD.attribution)+'</p>';
     h += '<h3>How to read a position</h3><ul>';
     Object.keys(POSITION_DISPLAY).forEach(function(k){
       var d = POSITION_DISPLAY[k];
@@ -2573,6 +2625,22 @@ const IPG_SB_FEEDBACK = {
     h += '<h3>'+esc(SPF.keyVotesHeading)+'</h3>';
     h += '<p>'+esc(SV.keyVotes1)+'</p>';
     h += '<p>'+esc(SV.keyVotes2)+'</p>';
+    // ==========================================================
+    // R4's funding methodology — after the votes items, before seats-and-members,
+    // per the package's placement note. F2 re-emits the ratified all-elections
+    // disclosure from its own string-table entry rather than a second copy.
+    // F4's {DUES} renders from the artifact (R4a); it is the only figure here.
+    // ==========================================================
+    h += '<h3>'+esc(SFM.heading)+'</h3>';
+    h += '<p>'+esc(SFM.f1)+'</p>';
+    h += '<p>'+esc(SF.allElectionsDisclosure)+'</p>';
+    h += '<p>'+esc(SFM.f3)+'</p>';
+    var duesFig = duesFigure();
+    h += duesFig
+      ? '<p>'+esc(SFM.f4).replace('{DUES}', esc(duesFig))+'</p>'
+      : '<p class="ipg-sb-meta">Loading campaign finance data&hellip;</p>';
+    h += '<p>'+esc(SFM.f5)+'</p>';
+    h += '<p>'+esc(SFM.f6)+'</p>';
     h += '<h3>Seats and members</h3>';
     h += '<p>Appointed members are labelled; elected members are not, because election is the '
        + 'default this tool exists to track. A seat with no member is shown as '
