@@ -1394,6 +1394,87 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance, amendment (the seat selector on the President's page): SBV-BOARD-1 ratification addendum R1a (`SBV-BOARD-1-ratification-addendum-R1a.md`), sha256 `dbfe0fb50b65f3d88dd77335252325bdbd17d177fa897a921f814944d60d966e`, 2,585 B / 39 L, §R1a, lines 16–25, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at this entry's own provenance above. Ratified by Ishan 2026-08-17. Recorded under the PS-93 pattern: no id is allocated, the next free numbered id is untouched, and PS-127's clauses stand unaltered above, because transcription is never harmonization and an amendment says what now governs rather than editing the superseded reading away. **Unlike this lane's other amendment, the ruling text carries its own `**Amendment …**` opener**, as PS-93's, PS-98's and PS-111's sources each do, so none was manufactured here and none was withheld — the phrase is the source's. **The occasion was a measurement, not a review.** Clauses (ii) and (iii) are each satisfiable and jointly produced a seat selector displaying `1A` above a page headed `The Board President`: clause (ii) forbids listing the President while no position is recorded, clause (iii) requires the page, and the member view opens with the selector for every seat. The executor built the page to the ruling as written, drove it through the render fixture, measured the contradiction on the rendered DOM, and held before staging rather than choosing among plausible resolutions — the hold report is `64e1714cb66c64aa8109b4815dd01b1ca782495a0db7d64ed015572728f73135`, 8,176 B / 167 L. This amendment supersedes that built state. Its implementation rides the same commit as this transcription by Ishan's ratified fold, so no commit in this repository's history carries the contradiction the amendment corrects.*
 
+### PS-128 — checker-derivation convention: a new check declares how its subject is bound; the hollow mode is closed, sentinels are named, a crash is not an assertion
+
+> **Checker-derivation convention.** A check added to any check file the gate invokes
+> declares how its subject is bound, in a comment at the check or its family, in the
+> commit that adds it, using the measured vocabulary of the ARC-BOUNDARY-1 survey of
+> record: **A** — pinned independently of live repo state; **B** — live-derived, premise
+> asserted by the check itself; **C** — live-derived, premise unasserted; **D** —
+> live-derived, premise asserted by a designated sibling sentinel; **E** — hybrid,
+> constructed on one axis and live on another.
+>
+> (i) **Mode C is closed for new checks.** A new live-derived check carries its own
+> premise assertion or is covered by a named sentinel under (ii). The two generative
+> hollow shapes the survey verified are named as what this clause prevents: an absence
+> assertion over live source text without a paired presence assertion of its containing
+> structure, and an empty-fallback feeding a universally-quantified pass. The pairing
+> already practiced in the `[G4/PRES]` family is the model, and this clause codifies
+> existing practice rather than inventing one.
+>
+> (ii) **Mode D is permitted only named.** The dependent check's declaration names the
+> sentinel it relies on and the subject the sentinel asserts. Positional, undocumented
+> protection is mode C for the purposes of this ruling: a sentinel protects only what it
+> is declared to cover.
+>
+> (iii) **Mode E declarations name both axes** — which is constructed and which is live —
+> so the unremarked residual live axis the survey found in the repaired case cannot recur
+> silently.
+>
+> (iv) **No obligation attaches to the Python self-test population.** The survey measured
+> it as effectively entirely pinned, with one deliberate fail-loud exception and zero
+> instances of the hollow class; the figures are cited to the survey of record rather
+> than restated here. The rule imposes no ceremony where the defect has no instances.
+>
+> (v) **A crash is not an assertion.** Premise assertions state their premise; detection
+> by crash in an incumbent check is real detection with unusable diagnosis and does not
+> satisfy this ruling. A check about premises that cannot state its own premise is the
+> defect it exists to prevent, and any parse such a check depends on is guarded.
+>
+> (vi) **Prospective only.** This ruling classifies and constrains new checks. It requires
+> no reclassification, annotation, or repair of the existing population; widening or
+> repairing an existing check remains finding-by-finding work under the standing
+> check-widening discipline, stated in the commit message that does it.
+>
+> Class defended against: the plausibility class, checker-shaped — a check asserting its
+> subject's presence from structure rather than measurement.
+
+*Provenance: ARC-BOUNDARY-1 ratification package, revision 1 (`ARC-BOUNDARY-1-ratification-package-rev1.md`), sha256 `42a1b1f3b25b0b97d3708ca2a1353fe9229c3c0da8d8000f2ada2752e7a67112`, 10,659 B / 158 L, ruling region A, lines 41–84, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan 2026-08-18 as drafted. Id allocated at this transcription.*
+
+### PS-129 — paired-pointer convention: a pointer in a load-bearing instruction carries the text it points at, checked at the moment of use
+
+> **Paired-pointer convention.** Wherever a planner-authored instruction directs an edit,
+> transcription, or extraction against existing text or structure by pointer — an index,
+> ordinal, name, heading, coordinate span, or a sha with a content claim attached — the
+> pointer travels paired: the instruction carries, beside the pointer, the pointed-at
+> text or the measured content claim, verbatim, with any normalization applied to both
+> sides stated. The executor checks the two halves against each other at the moment of
+> use. A mismatch halts; neither half is corrected against the other by anyone but Ishan,
+> in a new revision.
+>
+> (i) **Scope.** All load-bearing relay instructions that point into existing prose or
+> structure: register amendments and register-directed edits, brief instructions against
+> register or reference text, conformance-spec pointers, and extraction directives.
+>
+> (ii) **A sha with a claim attached is a paired pointer.** The sha identifies the
+> carrier; the claim asserts its content; both halves are checked — the sha by hash, the
+> claim by content — before anything relies on the pairing. A sound sha does not validate
+> the claim attached to it.
+>
+> (iii) **Transit damage is not a pointer mismatch.** Damage to a pointer's carrier in
+> relay is detected at receipt verification and remedied by re-obtaining the carrier at
+> its stated identity; a pointer mismatch inside a verified carrier is remedied only per
+> the halt clause above. The two failures are reported as what they are, never conflated.
+>
+> (iv) **Adjacent defenses unchanged.** Coordinates into code are re-derived by name at
+> HEAD; a reference pin and its coordinate rows move together as one object. This ruling
+> governs pointers in instructions; it neither loosens nor duplicates either.
+>
+> Class defended against: the pointer sub-class of the plausibility class — a reference
+> named from remembered structure rather than resolved against bytes already held.
+
+*Provenance: ARC-BOUNDARY-1 ratification package, revision 1 (`ARC-BOUNDARY-1-ratification-package-rev1.md`), sha256 `42a1b1f3b25b0b97d3708ca2a1353fe9229c3c0da8d8000f2ada2752e7a67112`, 10,659 B / 158 L, ruling region B, lines 103–133, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan 2026-08-18 as drafted. Id allocated at this transcription.*
+
 ---
 
 ## Rulings ratified without an id
