@@ -185,6 +185,11 @@ const IPG_SB_FEEDBACK = {
 #ipg-sb-app .ipg-sb-roster-name{font-size:16px;color:var(--teal);font-weight:600}
 #ipg-sb-app .ipg-sb-roster-row .ipg-sb-meta{margin-top:3px}
 
+/* SBV-BOARD-1 — R-BR2 vote-source attribution footer */
+#ipg-sb-app .ipg-sb-votesrc{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);
+  color:var(--ink-mid);font-size:12px}
+#ipg-sb-app .ipg-sb-votesrc a{color:var(--teal)}
+
 /* POSITION PILLS — the tinted key-vote idiom */
 #ipg-sb-app .ipg-sb-pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;
   border-radius:999px;border:1px solid transparent;white-space:nowrap;line-height:1.4}
@@ -633,7 +638,14 @@ const IPG_SB_FEEDBACK = {
   // and is deliberately not duplicated here — one source, not two.
   var SBD = {
     presidentDesignation: 'Board President',  // D-R2d — the roster row's seat slot
-    presidentHeading: 'The Board President'   // D-R2b — the President page's heading
+    presidentHeading: 'The Board President',  // D-R2b — the President page's heading
+    // R-BR2, register entry §"SBV-BOARD-1 — Board Rule vote-surface attribution
+    // footer". Held WHOLE rather than split around the link, so the ratified
+    // sentence is one checkable string; the link is applied to the `Board Rule`
+    // token at render. Editorial text; do not reword in code.
+    voteFooter: 'Vote data from the Board Rule voting data file.',
+    boardRuleName: 'Board Rule',
+    boardRuleUrl: 'https://board-rule.ghost.io/'
   };
 
   // ==========================================================
@@ -929,6 +941,25 @@ const IPG_SB_FEEDBACK = {
   function fullRoster(){
     return (D&&D.members||[]).slice();
   }
+  // ==========================================================
+  // SBV-BOARD-1 — R-BR2: the vote-surface attribution footer.
+  //
+  // ONE EMISSION SITE, several render sites — the SV.president shape. Every
+  // surface that represents votes calls this; none builds the sentence itself,
+  // so the ratified string exists once and the link cannot drift between
+  // surfaces.
+  //
+  // The ratified sentence is held whole in SBD.voteFooter and the anchor is
+  // applied to its `Board Rule` token after escaping, so the string stays one
+  // checkable unit rather than three fragments concatenated around a link.
+  // ==========================================================
+  function voteSourceFooter(){
+    var link = '<a href="'+esc(SBD.boardRuleUrl)+'" target="_blank" rel="noopener">'
+             + esc(SBD.boardRuleName)+'</a>';
+    return '<div class="ipg-sb-votesrc">'
+         + esc(SBD.voteFooter).replace(esc(SBD.boardRuleName), link)
+         + '</div>';
+  }
   // PS-125: if the column DOES render, its blanks are an em dash, never the
   // not-recorded label — the blanks are structural under R6, not a gap.
   function displayAt(seat, v){
@@ -1177,7 +1208,10 @@ const IPG_SB_FEEDBACK = {
            + '</div>';
       });
     }
-    return h + '</div>' + financeSection(row);
+    // R-BR2: the footer sits at the foot of the VOTE surface — after the vote
+    // list, BEFORE the finance section. Below the finance figures it would read
+    // as attributing those to Board Rule too, and they are SBE filings.
+    return h + voteSourceFooter() + '</div>' + financeSection(row);
   }
 
   // ==========================================================
@@ -2435,7 +2469,10 @@ const IPG_SB_FEEDBACK = {
       g.votes.forEach(function(v){ h += recRow(v); });
       h += '</div>';
     });
-    return h + '</div>';
+    // R-BR2: one footer at the foot of the complete record, below both the
+    // key-votes surface and the grouped record — the key-votes block renders
+    // inside this view, so this foot is its foot too.
+    return h + voteSourceFooter() + '</div>';
   }
 
   // All-seats matrix — the council's compare-by-issue idiom WITH its legend.
@@ -2468,7 +2505,7 @@ const IPG_SB_FEEDBACK = {
       });
       h += '</tr>';
     });
-    return h + '</tbody></table></div></div>';
+    return h + '</tbody></table></div>' + voteSourceFooter() + '</div>';
   }
 
   // ==========================================================

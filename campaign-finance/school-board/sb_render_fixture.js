@@ -393,13 +393,31 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   ok('[SBF/FETCH] both are school-board-family artifacts',
      uniq.every(function (u) {
        return /school-board-(data|finance)\.json$/.test(u); }), uniq.join(' | '));
-  ok('[SBF/FETCH] the feedback endpoint is the only other target in the source',
-     (EMBED_HTML.match(/https:\/\/[^"' ]+/g) || [])
-       .filter(function (u) { return u.indexOf('raw.githubusercontent') < 0
-                                  && u.indexOf('fonts.googleapis') < 0
-                                  && u.indexOf('fonts.gstatic') < 0
-                                  && /^https:\/\/[a-z0-9.-]+\.[a-z]{2,}/i.test(u); })
-       .every(function (u) { return u.indexOf('formspree.io') >= 0; }));
+  // WIDENED AT SBV-BOARD-1 G3b, DELIBERATELY AND BY RATIFICATION — flagged in the
+  // gate report, never done silently. Until R-BR2 the feedback endpoint was the
+  // only permitted external target and this asserted exactly that. R-BR2 ratifies
+  // a SECOND: the Board Rule attribution link, which every vote surface must
+  // carry. The claim is therefore updated rather than weakened — the permitted
+  // set is still enumerated exactly, and the new member is pinned to the ratified
+  // URL rather than to its domain, so a different Board Rule address, or any
+  // third target, still fails.
+  var RATIFIED_BR_URL = 'https://board-rule.ghost.io/';
+  var externals = (EMBED_HTML.match(/https:\/\/[^"' ]+/g) || [])
+    .filter(function (u) { return u.indexOf('raw.githubusercontent') < 0
+                               && u.indexOf('fonts.googleapis') < 0
+                               && u.indexOf('fonts.gstatic') < 0
+                               && /^https:\/\/[a-z0-9.-]+\.[a-z]{2,}/i.test(u); });
+  ok('[SBF/FETCH] the feedback endpoint and the ratified Board Rule link are the '
+     + 'only other targets in the source',
+     externals.every(function (u) {
+       return u.indexOf('formspree.io') >= 0 || u === RATIFIED_BR_URL; }),
+     externals.join(' | '));
+  ok('[SBF/FETCH] the Board Rule target is present and is the RATIFIED url, not '
+     + 'merely some board-rule address',
+     externals.filter(function (u) { return u.indexOf('board-rule') >= 0; })
+       .every(function (u) { return u === RATIFIED_BR_URL; })
+       && externals.indexOf(RATIFIED_BR_URL) >= 0,
+     externals.filter(function (u) { return u.indexOf('board-rule') >= 0; }).join(' | '));
 
   // ---- the four member-page populations ---------------------------------
   // One page per ratified finance_state, so a regression in any one is visible.
@@ -2054,6 +2072,51 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   ok('[C4/R1a] the roster tab is reachable from the President\'s page, so the '
      + 'omitted selector strands no one',
      presBlank.html.indexOf('data-view="board"') >= 0);
+
+  // ---------- SBV-BOARD-1 G3b: C5, the R-BR2 attribution footer ------------
+  // The footer renders on exactly the surfaces that REPRESENT VOTES and on no
+  // other. R-BR2's scope is functional, not enumerated, so this is asserted as
+  // a partition over the rendered views rather than as a list of four names.
+  //
+  // The sentence is read FROM THE REGISTER, not retyped: a fixture carrying its
+  // own copy would only prove the copy agrees with itself. Same mechanism as
+  // [G4/METH]'s register read.
+  var BR_FOOT = nestedRuns('SBV-BOARD-1 — Board Rule vote-surface attribution footer')[0];
+  ok('[C5] premise: the register yielded the ratified footer sentence',
+     !!BR_FOOT && BR_FOOT.length > 20, JSON.stringify(BR_FOOT));
+
+  var g5 = await boot(g4Art({ featured: true }), 'ok');
+  var g5mem = pick(nav(g5, 'member'), subject.seat);
+  var g5rec = nav(g5mem, 'record');
+  var g5mx = nav(g5, 'matrix');
+  var g5board = nav(g5, 'board');
+  var g5meth = nav(g5, 'methodology');
+
+  ok('[C5] the footer renders VERBATIM from the register on the member page\'s '
+     + 'vote list, the complete record and the all-seats matrix',
+     [g5mem, g5rec, g5mx].every(function (v) { return v.text.indexOf(BR_FOOT) >= 0; }),
+     JSON.stringify([g5mem, g5rec, g5mx].map(function (v) {
+       return v.text.indexOf(BR_FOOT) >= 0; })));
+  ok('[C5] `Board Rule` carries the ratified link on every surface that shows it',
+     [g5mem, g5rec, g5mx].every(function (v) {
+       return v.html.indexOf('href="https://board-rule.ghost.io/"') >= 0; }));
+  ok('[C5] it renders on NO surface that represents no votes — not the roster '
+     + 'tab, not the methodology tab',
+     g5board.text.indexOf(BR_FOOT) < 0 && g5meth.text.indexOf(BR_FOOT) < 0);
+  ok('[C5] one emission site: the ratified sentence appears once in the source, '
+     + 'and every render site calls the emitter rather than rebuilding it',
+     (EMBED_HTML.split(BR_FOOT).length - 1) === 1,
+     'occurrences: ' + (EMBED_HTML.split(BR_FOOT).length - 1));
+
+  // The President inherits the footer through the SAME conditional as its vote
+  // table — R1a's shape reused, never a second predicate.
+  var g5pBlank = await presPage({});
+  var g5pVoting = await presPage({ presidentVotes: true });
+  ok('[C5] the President\'s page carries NO footer while it renders no vote table',
+     g5pBlank.text.indexOf(BR_FOOT) < 0 && g5pBlank.html.indexOf('ipg-sb-vote') < 0);
+  ok('[C5] and carries it exactly when the vote table renders — one predicate, '
+     + 'not two',
+     g5pVoting.text.indexOf(BR_FOOT) >= 0 && g5pVoting.html.indexOf('ipg-sb-vote') >= 0);
 
   // ---------- SBV-BOARD-1 G2: C1 and C2 ------------------------------------
   // C1 — every TABS id has a matching dispatch branch. The dispatch's terminal
