@@ -1983,6 +1983,81 @@ function around(tpl, marker) { return String(tpl).split(marker); }
      + '(both halves exact, nothing dropped between them)',
      kvPs.join(' ') === G4_KEY, JSON.stringify(kvPs.join(' ').slice(0, 80)));
 
+  // ---------- SBV-BOARD-1 G2: C1 and C2 ------------------------------------
+  // C1 — every TABS id has a matching dispatch branch. The dispatch's terminal
+  // `else` renders methodologyView() unconditionally, so a tab declared without
+  // a branch renders the Methodology tab under the new tab's label and reports
+  // nothing. This converts that silence into a gate failure.
+  //
+  // PREMISE ASSERTED, not assumed: the two lists are asserted non-empty and of
+  // the expected shape BEFORE they are compared. Parsing either one to nothing
+  // would otherwise make the comparison pass vacuously — the fixture's own
+  // [G4/PRES] matrix check is the pattern followed here.
+  // Guarded rather than chained: an unguarded split throws when the declaration is
+  // renamed, and the crash pre-empts the premise assertion below — the check could
+  // not name the premise it exists to name. Measured, at this gate's bite-test.
+  var tabsAfter = EMBED_HTML.split('var TABS = [')[1];
+  var tabsBlock = tabsAfter ? tabsAfter.split('];')[0] : '';
+  var tabIds = (tabsBlock.match(/\['([a-z]+)'/g) || []).map(function (x) { return x.slice(2, -1); });
+  // Matched on the branch condition alone, NOT on a following `h +=`: the spend
+  // branch opens with comments and a local before it appends, and requiring the
+  // append made this parse miss it. Found by the check firing, not by review.
+  var branchIds = (EMBED_HTML.match(/state\.view==='([a-z]+)'\)\{/g) || [])
+    .map(function (x) { return x.match(/'([a-z]+)'/)[1]; });
+  ok('[C1] premise: the TABS block and the dispatch chain both parse to non-empty id lists',
+     tabIds.length >= 5 && branchIds.length >= 4,
+     JSON.stringify({ tabIds: tabIds, branchIds: branchIds }));
+  ok('[C1] every TABS id has a matching dispatch branch, or is the terminal else\'s view',
+     tabIds.every(function (id) {
+       return branchIds.indexOf(id) >= 0 || id === 'methodology'; }),
+     JSON.stringify({ tabIds: tabIds, branchIds: branchIds }));
+  ok('[C1] the roster tab is declared and dispatched, and its label is D-R2a verbatim',
+     tabIds.indexOf('board') >= 0 && branchIds.indexOf('board') >= 0
+       && tabsBlock.indexOf("['board','The Board']") >= 0);
+
+  // C2 — fullRoster() is the roster view's alone, and the PS-125 filter's own
+  // call sites are unchanged. Comments are stripped first: fullRoster's comment
+  // block names both fullRoster and visibleRoster repeatedly, and counting
+  // those would measure the prose rather than the code.
+  var CODE2 = EMBED_HTML.replace(/\/\/[^\n]*/g, '').replace(/\/\*[\s\S]*?\*\//g, '');
+
+  /* Split the comment-stripped source into top-level `function NAME()` bodies, so a
+   * caller is attributed to the function it actually sits in rather than to a regex
+   * window of arbitrary length. */
+  function fnBodies(src) {
+    var out = {}, re = /function ([A-Za-z_$][\w$]*)\s*\(/g, m, marks = [];
+    while ((m = re.exec(src))) marks.push({ name: m[1], at: m.index });
+    marks.forEach(function (mk, i) {
+      out[mk.name] = src.slice(mk.at, i + 1 < marks.length ? marks[i + 1].at : src.length);
+    });
+    return out;
+  }
+  var BODIES = fnBodies(CODE2);
+  var fullCallers = Object.keys(BODIES).filter(function (nm) {
+    return nm !== 'fullRoster' && BODIES[nm].indexOf('fullRoster()') >= 0; });
+  var visCallers = Object.keys(BODIES).filter(function (nm) {
+    return nm !== 'visibleRoster' && BODIES[nm].indexOf('visibleRoster()') >= 0; });
+
+  ok('[C2] premise: both roster readers are declared exactly once, and the body '
+     + 'split found them',
+     (CODE2.match(/function fullRoster\s*\(/g) || []).length === 1
+       && (CODE2.match(/function visibleRoster\s*\(/g) || []).length === 1
+       && !!BODIES.fullRoster && !!BODIES.visibleRoster && !!BODIES.boardView,
+     JSON.stringify({ bodies: Object.keys(BODIES).length }));
+  ok('[C2] fullRoster() is called by exactly ONE function, and it is boardView()',
+     fullCallers.length === 1 && fullCallers[0] === 'boardView',
+     JSON.stringify(fullCallers));
+  ok('[C2] no vote-enumerating surface reads the full roster',
+     ['seatSelector', 'matrixView', 'recordView', 'memberView']
+       .every(function (fn) { return fullCallers.indexOf(fn) < 0; }),
+     JSON.stringify(fullCallers));
+  ok('[C2] visibleRoster()\'s existing callers are unchanged: seatSelector, '
+     + 'memberView, matrixView',
+     visCallers.length === 3
+       && ['seatSelector', 'memberView', 'matrixView']
+            .every(function (fn) { return visCallers.indexOf(fn) >= 0; }),
+     JSON.stringify(visCallers));
+
   // ---------- no writes ---------------------------------------------------
   ok('[NOWRITE] embed and artifacts are byte-unchanged by this fixture',
      sha(EMBED) === EMBED_SHA0 && sha(DATA) === DATA_SHA0 && sha(FINDATA) === FIN_SHA0);

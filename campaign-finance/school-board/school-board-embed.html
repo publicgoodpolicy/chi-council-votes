@@ -172,6 +172,19 @@ const IPG_SB_FEEDBACK = {
   color:#fff;background:var(--teal);margin-left:9px;vertical-align:middle}
 #ipg-sb-app .ipg-sb-meta{color:var(--ink-mid);font-size:13px;margin-top:8px}
 
+/* SBV-BOARD-1 — THE BOARD (roster rows). Same clickable-row idiom as
+   .ipg-sb-spend-row, named for its own surface rather than borrowed, so a
+   change to the finance row's treatment cannot silently restyle the roster. */
+#ipg-sb-app .ipg-sb-roster-row{display:flex;gap:14px;align-items:flex-start;
+  padding:14px 0;border-bottom:1px solid var(--line);cursor:pointer}
+#ipg-sb-app .ipg-sb-roster-row:last-child{border-bottom:none}
+#ipg-sb-app .ipg-sb-roster-row:hover{background:var(--tan)}
+#ipg-sb-app .ipg-sb-roster-seat{flex:0 0 108px;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-label);font-weight:600}
+#ipg-sb-app .ipg-sb-roster-main{flex:1 1 auto;min-width:0}
+#ipg-sb-app .ipg-sb-roster-name{font-size:16px;color:var(--teal);font-weight:600}
+#ipg-sb-app .ipg-sb-roster-row .ipg-sb-meta{margin-top:3px}
+
 /* POSITION PILLS — the tinted key-vote idiom */
 #ipg-sb-app .ipg-sb-pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;
   border-radius:999px;border:1px solid transparent;white-space:nowrap;line-height:1.4}
@@ -613,6 +626,13 @@ const IPG_SB_FEEDBACK = {
     keyVotesEmpty: 'No votes are currently marked as key votes.'
   };
 
+  // Ratified display string — SBV-BOARD-1 D-R2d, register entry
+  // §"SBV-BOARD-1 — display decisions D-R2a–D-R2d". The designation the
+  // President's roster row carries IN PLACE OF a seat code. D-R2a's tab label
+  // lives in TABS as a literal, matching the incumbent pattern for tab labels,
+  // and is deliberately not duplicated here — one source, not two.
+  var SBD = { presidentDesignation: 'Board President' };
+
   // ==========================================================
   // SBFIN-1 FINANCE STRINGS — states 1–4, ratified at HALT-B review.
   // String 4 is the PRIMARY bar-section state, not a fallback: measured at
@@ -889,6 +909,23 @@ const IPG_SB_FEEDBACK = {
   function seatVisible(seat){
     return seat !== PRESIDENT_SEAT || presidentRenders();
   }
+  // ==========================================================
+  // SBV-BOARD-1 — PS-127 (i): THE DELIBERATE, SOLE EXCEPTION.
+  //
+  // The roster surface enumerates EVERY roster row — all members, the vacancy,
+  // and the President — regardless of whether any President position is
+  // recorded. This function is that exception to visibleRoster()'s PS-125
+  // filter, and it is the only one the ruling grants.
+  //
+  // NO OTHER SURFACE MAY CALL IT. boardView() is its sole caller. A second
+  // caller would resurrect the President on a vote-enumerating surface, which
+  // PS-125 still governs unchanged under PS-127 (ii) — the failure would be
+  // silent, because the President's row renders perfectly well anywhere. That
+  // is why the constraint is asserted by [C2] rather than left to this comment.
+  // ==========================================================
+  function fullRoster(){
+    return (D&&D.members||[]).slice();
+  }
   // PS-125: if the column DOES render, its blanks are an em dash, never the
   // not-recorded label — the blanks are structural under R6, not a gap.
   function displayAt(seat, v){
@@ -987,7 +1024,14 @@ const IPG_SB_FEEDBACK = {
   }
 
   // ---- chrome ---------------------------------------------------------
-  var TABS = [['member','By member'],['record','Complete record'],
+  // D-R2a ratifies the label `The Board`; Ishan ratified its POSITION as first,
+  // leftmost, 2026-08-17, with the incumbents keeping their relative order after
+  // it. Order here is presentation only: nothing derives the landing view from
+  // this array — `state.view` is initialised to the literal 'member' below, TABS
+  // is never indexed, and the embed has no hash, history or storage routing.
+  // Moving this entry therefore changes the strip and nothing else.
+  var TABS = [['board','The Board'],
+              ['member','By member'],['record','Complete record'],
               ['matrix','All seats'],['spend','Political Spend'],
               ['methodology','Methodology']];
 
@@ -2383,6 +2427,47 @@ const IPG_SB_FEEDBACK = {
     return h + '</tbody></table></div></div>';
   }
 
+  // ==========================================================
+  // SBV-BOARD-1 — THE BOARD. PS-127 (i) and (v); D-R2c and D-R2d.
+  //
+  // (i)  Every roster row, always — via fullRoster(), the ruling's sole
+  //      exception to the PS-125 filter. This is that function's only caller.
+  // (v)  NO per-seat vote or position counts render here, deliberately: seat
+  //      10B is the vacancy and its position column holds its PREDECESSOR's
+  //      votes, which PS-121's cast-by attribution explains on the surfaces
+  //      that show them. A count on a roster row would carry the number with
+  //      none of that attribution, so the roster's job is people and
+  //      click-through and nothing arithmetic.
+  // D-R2c  name, seat code, the appointed designation, term start where
+  //      present — the same facts the member page renders today, no more. The
+  //      appointed/elected designation is rendered as the member page renders
+  //      it: appointed carries the badge, elected carries none, which is
+  //      ratified string 2's rule (the exception is what gets labeled).
+  // D-R2d  the President's row carries `Board President` in the seat slot.
+  // ==========================================================
+  function boardView(){
+    var roster = fullRoster();
+    if(!roster.length)
+      return '<div class="ipg-sb-card"><div class="ipg-sb-empty">No roster is available yet.</div></div>';
+    var h = '<div class="ipg-sb-card">';
+    roster.forEach(function(m){
+      var slot = (m.seat === PRESIDENT_SEAT)
+        ? SBD.presidentDesignation
+        : ('Seat ' + m.seat);
+      h += '<div class="ipg-sb-roster-row" data-board-seat="'+esc(m.seat)+'">'
+         + '<div class="ipg-sb-roster-seat">'+esc(slot)+'</div>'
+         + '<div class="ipg-sb-roster-main">'
+         + '<div class="ipg-sb-roster-name">'+esc(memberLabel(m))
+         + (isMember(m) && m.seat_type==='appointed'
+              ? '<span class="ipg-sb-badge">'+esc(S.appointed)+'</span>' : '')
+         + '</div>'
+         + (isMember(m) && m.term_start
+              ? '<div class="ipg-sb-meta">Term began '+esc(m.term_start)+'</div>' : '')
+         + '</div></div>';
+    });
+    return h + '</div>';
+  }
+
   function methodologyView(){
     var h = '<div class="ipg-sb-card ipg-sb-meth">';
     h += '<h3>How this tool works</h3>';
@@ -2445,6 +2530,7 @@ const IPG_SB_FEEDBACK = {
       h += spendView(_ek);
       if(state.finDonor) h += donorProfileHtml(null, { key:_ek, label:_lab });
       if(state.spendIE)  h += ieDetailHtml(_ek, _lab);
+    } else if(state.view==='board'){     h += boardView();
     } else {                             h += methodologyView(); }
     h += '</div>' + feedbackBarHtml()
        + '<div class="ipg-sb-foot"><strong>Institute for the Public Good</strong> &middot; '
@@ -2558,6 +2644,16 @@ const IPG_SB_FEEDBACK = {
       var icb = document.getElementById('ipg-sb-ie-close');
       if(icb) icb.onclick = iclose;
     }
+    // SBV-BOARD-1 — the roster's click-through. A PARALLEL attribute, not a
+    // reuse of `data-spend-seat`: that one's handler additionally clears three
+    // finance-state keys, which is right when arriving from Political Spend and
+    // meaningless from a roster, and reusing it would tie the roster's
+    // behaviour to the finance view's reset policy. The existing attribute is
+    // untouched. Tag reset mirrors the seat selector's own handler, which is
+    // the incumbent "you are now looking at a different member" transition.
+    app.querySelectorAll('[data-board-seat]').forEach(function(r){
+      r.onclick = function(){ state.seat = r.getAttribute('data-board-seat');
+                              state.tag='All'; state.view='member'; render(); }; });
     app.querySelectorAll('[data-spend-seat]').forEach(function(r){
       r.onclick = function(){ state.seat = r.getAttribute('data-spend-seat');
                               state.view='member'; state.finElection=null;
@@ -2607,7 +2703,12 @@ const IPG_SB_FEEDBACK = {
   // ---- feedback -------------------------------------------------------
   function fbContext(){
     var bits = [];
+    // R3: this map is a SECOND declaration of the tab labels and had already
+    // drifted — `spend` was missing, so a report filed from Political Spend
+    // recorded the raw view id. The new tab and the pre-existing omission are
+    // repaired together, in the commit that adds the tab.
     var name = ({member:'By member',record:'Complete record',matrix:'All seats',
+                 spend:'Political Spend',board:'The Board',
                  methodology:'Methodology'})[state.view] || state.view;
     bits.push('View: '+name);
     if(state.seat){
