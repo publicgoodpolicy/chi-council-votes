@@ -1983,6 +1983,78 @@ function around(tpl, marker) { return String(tpl).split(marker); }
      + '(both halves exact, nothing dropped between them)',
      kvPs.join(' ') === G4_KEY, JSON.stringify(kvPs.join(' ').slice(0, 80)));
 
+  // ---------- SBV-BOARD-1 G3: C4 -------------------------------------------
+  // PS-127 (iii)/(iv): the President's page exists, and its vote table is
+  // conditional on the SAME predicate every other PS-125 surface consumes. Both
+  // states are driven from the synthetic constructor, one flag apart.
+  //
+  // MODE-E CAVEAT, recorded at drafting [SBV-BOARD-PROBE-1 report §P7.7]: g4Art
+  // is synthetic on the VOTE axis only — it deep-copies REAL and keeps the live
+  // roster, so `President` here is a live seat label, not a pinned one. If the
+  // roster's spelling of the presiding seat ever moved, these fixtures would keep
+  // constructing votes against a stale key and the omission half of this family
+  // could pass while meaning nothing. The premise assertion below is what stops
+  // that: it fails loudly if the President seat is not in the roster at all.
+  var presRow = REAL.members.filter(function (m) { return m.seat === 'President'; })[0];
+  ok('[C4] premise: the live roster carries the President seat this family binds to',
+     !!presRow, JSON.stringify(REAL.members.map(function (m) { return m.seat; })));
+
+  function presPage(opts) {                    // roster tab -> click the President row
+    return (async function () {
+      var bv = nav(await boot(g4Art(opts), 'ok'), 'board');
+      var r = bv.doc.querySelector('[data-board-seat="President"]');
+      r.dispatchEvent(new bv.doc.defaultView.MouseEvent('click', { bubbles: true }));
+      var app = bv.doc.getElementById('ipg-sb-app');
+      return { doc: bv.doc, html: app.innerHTML, text: app.textContent || '' };
+    })();
+  }
+  var presBlank = await presPage({});                          // no recorded position
+  var presVoting = await presPage({ presidentVotes: true });   // one recorded position
+
+  ok('[C4] the President is reachable from the roster tab and renders a PAGE, '
+     + 'not the sentence-in-place-of-a-page the superseded guard returned',
+     presBlank.html.indexOf('The Board President') >= 0
+       && presBlank.text.indexOf('Sean B. Harden') >= 0);
+  ok('[C4] while no position is recorded: R6\'s sentence renders and NO vote table does',
+     presBlank.text.indexOf(G4_PRES) >= 0
+       && presBlank.html.indexOf('ipg-sb-vote') < 0);
+  ok('[C4] one recorded position flips the SAME page to a vote table, and R6\'s '
+     + 'sentence-in-place-of-votes stops rendering',
+     presVoting.html.indexOf('ipg-sb-vote') >= 0
+       && presVoting.html.indexOf('The Board President') >= 0);
+  ok('[C4] the flip is the PS-125 predicate, not a second one: the seat selector '
+     + 'and the matrix resurface the President in the same state that gives it votes',
+     presVoting.html.indexOf('value="President"') >= 0
+       && presBlank.html.indexOf('value="President"') < 0);
+
+  // R1a — the seat selector on the President's page. Before the amendment this
+  // page rendered the selector showing `1A` above a page headed `The Board
+  // President`: a control asserting one seat over another member's content.
+  // Asserted in BOTH directions, and paired with a presence assertion of the
+  // page itself so neither direction can pass on a page that failed to render.
+  ok('[C4/R1a] premise: both President pages rendered, so the selector assertions '
+     + 'below are about a real page and not about nothing',
+     presBlank.html.indexOf('The Board President') >= 0
+       && presVoting.html.indexOf('The Board President') >= 0);
+  ok('[C4/R1a] while the shared predicate is false the President\'s page renders '
+     + 'NO seat selector',
+     presBlank.html.indexOf('ipg-sb-seat-sel') < 0);
+  ok('[C4/R1a] when it is true the page carries the selector as any member page does',
+     presVoting.html.indexOf('ipg-sb-seat-sel') >= 0);
+  // Booted fresh rather than driven off presBlank: pick() reaches for the seat
+  // selector to drive it, and the President's page deliberately has none, so
+  // navigating away from that page through the selector is not possible. That is
+  // the amendment working, not a fixture defect — it is why the tab strip, which
+  // renders on every view with The Board first, is the way back.
+  var otherPage = nav(await boot(g4Art({}), 'ok'), 'member');
+  ok('[C4/R1a] every OTHER member page keeps its selector — the omission is the '
+     + 'President\'s alone',
+     otherPage.html.indexOf('ipg-sb-seat-sel') >= 0
+       && otherPage.html.indexOf('The Board President') < 0);
+  ok('[C4/R1a] the roster tab is reachable from the President\'s page, so the '
+     + 'omitted selector strands no one',
+     presBlank.html.indexOf('data-view="board"') >= 0);
+
   // ---------- SBV-BOARD-1 G2: C1 and C2 ------------------------------------
   // C1 — every TABS id has a matching dispatch branch. The dispatch's terminal
   // `else` renders methodologyView() unconditionally, so a tab declared without

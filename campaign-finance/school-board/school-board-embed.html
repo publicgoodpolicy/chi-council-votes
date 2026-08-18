@@ -631,7 +631,10 @@ const IPG_SB_FEEDBACK = {
   // President's roster row carries IN PLACE OF a seat code. D-R2a's tab label
   // lives in TABS as a literal, matching the incumbent pattern for tab labels,
   // and is deliberately not duplicated here — one source, not two.
-  var SBD = { presidentDesignation: 'Board President' };
+  var SBD = {
+    presidentDesignation: 'Board President',  // D-R2d — the roster row's seat slot
+    presidentHeading: 'The Board President'   // D-R2b — the President page's heading
+  };
 
   // ==========================================================
   // SBFIN-1 FINANCE STRINGS — states 1–4, ratified at HALT-B review.
@@ -1068,12 +1071,37 @@ const IPG_SB_FEEDBACK = {
     if(!roster.length) return '<div class="ipg-sb-card"><div class="ipg-sb-empty">No roster is available yet.</div></div>';
     if(state.seat==null) state.seat = (visibleRoster().filter(isMember)[0]||roster[0]).seat;
     var row = seatRow(state.seat);
-    var h = seatSelector();
+    // ==========================================================
+    // PS-127 as amended (R1a): the President's page renders NO seat selector
+    // while no recorded President position exists. Clause (ii) forbids listing
+    // the President in the selector in that state, so the control has no
+    // truthful state on this page and is omitted rather than rendered false —
+    // before this amendment it displayed `1A` above a page headed
+    // `The Board President`.
+    //
+    // ONE PREDICATE. seatVisible() is the same test that governs the vote table
+    // below and every other PS-125 surface; when a tie-break vote makes it true
+    // the President joins the selector under clause (ii) and this page carries
+    // the selector as any member page does, in the same instant. Every other
+    // page's selector is untouched, because `President` is the only seat that
+    // can fail seatVisible().
+    // ==========================================================
+    var h = (row && !seatVisible(row.seat)) ? '' : seatSelector();
     if(!row) return h + '<div class="ipg-sb-card"><div class="ipg-sb-empty">That seat is not in the roster.</div></div>';
-    // PS-125: while the President's column is all-blank the seat is omitted from
-    // every view, so a stale or hand-typed selection cannot reach it either.
-    if(!seatVisible(row.seat))
-      return h + '<div class="ipg-sb-card"><div class="ipg-sb-empty">'+esc(SV.president)+'</div></div>';
+    // ==========================================================
+    // SBV-BOARD-1 — PS-127 (iii): THE PRESIDENT HAS A PAGE.
+    //
+    // The guard that used to stand here returned R6's sentence IN PLACE OF a
+    // page whenever seatVisible() was false. PS-127 (iii) supersedes it: the
+    // President's member page exists and is reachable from the roster tab. The
+    // guard is not repealed for any other seat — it governed only this one,
+    // because `President` is the only seat visibleRoster() ever filters.
+    //
+    // R1(ii) is untouched by this: the seat selector still reads
+    // visibleRoster(), so while the column is all-blank the President is not
+    // SELECTABLE — the page is reached from the roster tab, and only there.
+    // ==========================================================
+    var isPresident = (row.seat === PRESIDENT_SEAT);
 
     // ---- string 5: the vacancy renders as a SEAT, with NO member page ----
     if(!isMember(row)){
@@ -1085,7 +1113,10 @@ const IPG_SB_FEEDBACK = {
     }
 
     h += '<div class="ipg-sb-card">'
-       + '<div class="ipg-sb-seat">Seat '+esc(row.seat)+'</div>'
+       // D-R2b gives the President page its own heading, in place of the seat
+       // label every other member page carries.
+       + '<div class="ipg-sb-seat">'
+       + esc(isPresident ? SBD.presidentHeading : 'Seat '+row.seat)+'</div>'
        // ---- string 2: the badge marks the EXCEPTION; elected carry none ----
        + '<div class="ipg-sb-name serif">'+esc(row.name)
        + (row.seat_type==='appointed' ? '<span class="ipg-sb-badge">'+esc(S.appointed)+'</span>' : '')
@@ -1095,6 +1126,19 @@ const IPG_SB_FEEDBACK = {
     if(row.source_url) meta.push('<a href="'+esc(row.source_url)+'" target="_blank" rel="noopener">Source</a>');
     if(meta.length) h += '<div class="ipg-sb-meta">'+meta.join(' &middot; ')+'</div>';
     h += '</div>';
+
+    // ==========================================================
+    // PS-127 (iii) and (iv): the President's vote table is conditional, and the
+    // condition is seatVisible() — THE SAME PREDICATE every other PS-125 surface
+    // consumes, never a second one. While no President position is recorded the
+    // page carries R6's sentence and no vote table; on the first recorded
+    // position this branch stops firing and the page renders votes exactly as
+    // any member's does, at the same instant the seat resurfaces on the selector
+    // and the matrix. One predicate, so the surfaces cannot disagree.
+    // ==========================================================
+    if(isPresident && !seatVisible(row.seat))
+      return h + '<div class="ipg-sb-card"><div class="ipg-sb-empty">'+esc(SV.president)+'</div></div>'
+             + financeSection(row);
 
     // The finance section is INDEPENDENT of the voting record: a member with no
     // recorded votes still has campaign finance, and the born state (zero votes)
