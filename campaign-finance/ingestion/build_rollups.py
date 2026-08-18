@@ -6,6 +6,43 @@ from datetime import datetime, timezone
 
 EXCLUDED_CYCLES={'pre-2011','undated'}
 
+# ELEC-FIGURE-1 R1 — the dues-exclusion magnitude, emitted rather than discarded.
+# This module is the single implementation serving BOTH artifacts, so the accumulator
+# sits AT the exclusion predicate (all three sites below) and the field it feeds is
+# emitted into whichever artifact build() was handed.
+DUES_TYPE='IE Committee Dues Transfer'
+
+# ELEC-FIGURE-1 §2 (widening relay) — this module now OWNS council-data.json's
+# schema_version. Before this lane the value was an unowned literal: written by no code,
+# read by no code, unmoved since the file was created — so a schema change could land with
+# the version silently stale, which is the drift this ownership closes.
+#
+# CONDITIONED ON THE FIELD'S PRESENCE, not on a filename, and the choice is forced rather
+# than preferred: build() receives a loaded document, never a path (ingest_ie calls
+# build(d) directly with no filename in scope), so presence is the only signal available at
+# the point the write must happen. It also preserves R1 (iv)'s "if any" exactly —
+# election-data.json carries no version field, so none is written and none is invented.
+COUNCIL_SCHEMA_VERSION='2.1'
+# Keyed by id() of the row, NOT appended: the three predicate sites are three passes
+# over the SAME contributions list, so a row excluded by all three must still count
+# once (R1 i). id() is stable for the lifetime of the loaded document, which is the
+# lifetime of one build() call — and the dict is cleared at build() entry because
+# build() runs more than once per pipeline run (ingest_ie calls it, then the
+# orchestrator calls it again). Without that reset the second invocation would
+# accumulate on top of the first.
+_DUES_SKIPPED={}
+def _dues_record(c):
+    _DUES_SKIPPED[id(c)]=round(float(c.get('amount') or 0.0),2)
+def dues_excluded_total():
+    """R1: {amount, count} over every row the dues predicate excluded this build.
+
+    Zero rows is a real answer, not a missing one — PS-101 attaches the disclosure
+    obligation at every magnitude, $0.00 included, so this is emitted unconditionally.
+    float() explicitly: an empty accumulator sums to int 0, which would serialise as
+    `0` where every other money amount in these artifacts is `0.0`.
+    """
+    return {'amount':round(float(sum(_DUES_SKIPPED.values())),2),'count':len(_DUES_SKIPPED)}
+
 # election-windows.json lives beside race-map.json in elections/; it buckets a finance
 # row to an election by FILING DATE (the SBE 'cycle' field is the useless 4-year bucket).
 WINDOWS_PATH=os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','elections','election-windows.json')
@@ -100,6 +137,7 @@ def _bucket(date,wins):
     return None
 
 def build(d):
+    _DUES_SKIPPED.clear()   # R1 (i): reset at every build() entry — build() runs more than once per pipeline run
     donors=d['donors']; comms=d['committees']; contribs=d['contributions']
     ies=d.get('independent_expenditures',[])
     agg={k for k,v in donors.items() if v.get('type')=='Aggregate'}
@@ -125,7 +163,7 @@ def build(d):
         if c['cycle'] in EXCLUDED_CYCLES: continue
         # Internal union-dues transfers into a committee's own PAC fund the PAC; they
         # are not giving/spend on the Council. ingest_ie types them distinctly.
-        if c.get('contribution_type')=='IE Committee Dues Transfer': continue
+        if c.get('contribution_type')==DUES_TYPE: _dues_record(c); continue
         dv=donors.get(c.get('donor_id'))
         if dv is None or c['donor_id'] in agg: continue
         amt=c.get('amount') or 0.0; cyc=c['cycle']
@@ -226,7 +264,7 @@ def build(d):
         for c in contribs:
             if c.get('is_aggregate'): continue
             if c['cycle'] in EXCLUDED_CYCLES: continue
-            if c.get('contribution_type')=='IE Committee Dues Transfer': continue
+            if c.get('contribution_type')==DUES_TYPE: _dues_record(c); continue
             rc=comms.get(c['committee_id'])
             if not (rc and rc.get('candidate_id')): continue
             eb=slot(rc['candidate_id'],c.get('date'))
@@ -274,7 +312,7 @@ def build(d):
             for c in contribs:
                 if c.get('is_aggregate'): continue
                 if c['cycle'] in EXCLUDED_CYCLES: continue
-                if c.get('contribution_type')=='IE Committee Dues Transfer': continue
+                if c.get('contribution_type')==DUES_TYPE: _dues_record(c); continue
                 slug=c.get('committee_id'); ppid=slug_person.get(slug)
                 if not ppid: continue
                 dv=donors.get(c.get('donor_id'))
@@ -325,6 +363,14 @@ def build(d):
     # this is the single place that always fires on a (re)build. Stamp real build
     # time — the field was previously static and falsely read as "stale".
     d['generated_at']=datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+    # ELEC-FIGURE-1 R1 — emitted at every magnitude including zero (R1 ii), per-artifact
+    # (R1 iii): this reflects the exclusions from THIS document's substrate, this build.
+    d['dues_excluded']=dues_excluded_total()
+    # ELEC-FIGURE-1 §2 — the version is written here, so it is a build product rather than
+    # a hand-carried literal. String type preserved. See COUNCIL_SCHEMA_VERSION above for
+    # why this keys off the field's presence rather than the artifact's name.
+    if 'schema_version' in d:
+        d['schema_version']=COUNCIL_SCHEMA_VERSION
     return {'by_parent':len(by_parent),'by_industry':len(by_industry),
             'by_alder':len(by_alder),'ies':len(ies),
             'by_candidate':len(by_candidate),'by_race':len(by_race),

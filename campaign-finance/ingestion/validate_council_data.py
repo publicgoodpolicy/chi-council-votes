@@ -86,6 +86,7 @@ def validate(d):
     errors.extend(validate_donor_parentage(d))
     errors.extend(validate_votes(d))
     errors.extend(validate_members(d))
+    errors.extend(validate_dues_excluded(d))
     return errors, warnings
 
 
@@ -767,6 +768,100 @@ def validate_committee_linkage(d):
     return errs
 
 
+# ELEC-FIGURE-1 R2 — the dues-exclusion field, pinned at the validator level.
+#
+# The predicate and the cycle set are stated HERE rather than imported from
+# build_rollups, deliberately: this is the [MUNI/TABLE] / [AGG/PS-96-PARITY] shape under
+# PS-82 — a check that derives its expectation from the code it checks proves only that
+# the code equals itself. Two statements, one oracle, and they are pinned against each
+# other by the value rule below.
+DUES_TYPE_CHECK = 'IE Committee Dues Transfer'
+EXCLUDED_CYCLES_CHECK = {'pre-2011', 'undated'}
+
+# ELEC-FIGURE-1 §2 — the schema version this lane's shape requires, asserted at the other
+# end of the ownership build_rollups now holds. Stated here rather than imported, for the
+# PS-82 reason the predicate above is stated here. Presence-conditional to match the
+# builder: election-data.json carries no version field and none is invented.
+COUNCIL_SCHEMA_VERSION_CHECK = '2.1'
+
+
+def _dues_recount(contribs):
+    """Independent recount of what the dues predicate actually excludes.
+
+    SCOPE, measured rather than assumed: the builder's accumulator sits at the dues
+    predicate, which every rollup pass reaches only AFTER the is_aggregate and
+    excluded-cycle filters. A row those filters already dropped was never excluded *by
+    the dues predicate*, so counting it here would compare two different populations.
+    That distinction is not academic: at this vintage council-data.json's two readings
+    coincide (252 rows either way) but election-data.json's do not — one dues row sits in
+    an excluded cycle, so a naive all-dues recount would report 103 rows against the
+    builder's 102 and fail a correct build.
+    """
+    amount, count = 0.0, 0
+    for c in contribs:
+        if c.get('is_aggregate'):
+            continue
+        if c.get('cycle') in EXCLUDED_CYCLES_CHECK:
+            continue
+        if c.get('contribution_type') != DUES_TYPE_CHECK:
+            continue
+        amount += round(float(c.get('amount') or 0.0), 2)
+        count += 1
+    return round(float(amount), 2), count
+
+
+def validate_dues_excluded(d):
+    """R2 (i) premise rule and (ii) value rule. Errors, never skips.
+
+    PS-128 declaration: MODE B — live-derived, premise asserted by the check itself.
+    The premise (the field is present and well-formed) is asserted before the value is
+    compared, so an artifact that simply lacks the field fails loudly here instead of
+    passing vacuously. This is the [C3] shape lifted to the validator level.
+    """
+    errors = []
+    if 'contributions' not in d:
+        return errors          # not a contributions-bearing artifact; nothing to assert
+
+    # §2 — the version half of the premise. An artifact carrying schema_version must carry
+    # the version this lane's shape requires; the field is now a build product, so a stale
+    # value means the artifact was not built by the current builder.
+    if 'schema_version' in d and d['schema_version'] != COUNCIL_SCHEMA_VERSION_CHECK:
+        errors.append(f"schema_version {d['schema_version']!r} != "
+                      f"{COUNCIL_SCHEMA_VERSION_CHECK!r} — the dues_excluded field's shape "
+                      f"requires it, and build_rollups writes it (ELEC-FIGURE-1)")
+
+    dx = d.get('dues_excluded')
+
+    # (i) premise rule — absence or malformation is an ERROR, never a skip.
+    if dx is None:
+        errors.append("dues_excluded: field absent — the dues-exclusion magnitude must be "
+                      "emitted at every magnitude including zero (ELEC-FIGURE-1 R1/R2)")
+        return errors
+    if not isinstance(dx, dict):
+        errors.append(f"dues_excluded: expected an object, got {type(dx).__name__}")
+        return errors
+    amt, cnt = dx.get('amount'), dx.get('count')
+    if not isinstance(amt, (int, float)) or isinstance(amt, bool):
+        errors.append(f"dues_excluded.amount: expected a number, got {amt!r}")
+    elif amt < 0:
+        errors.append(f"dues_excluded.amount: negative ({amt})")
+    if not isinstance(cnt, int) or isinstance(cnt, bool):
+        errors.append(f"dues_excluded.count: expected an integer, got {cnt!r}")
+    elif cnt < 0:
+        errors.append(f"dues_excluded.count: negative ({cnt})")
+    if errors:
+        return errors
+
+    # (ii) value rule — to the cent, against the validator's own recount.
+    exp_amt, exp_cnt = _dues_recount(d.get('contributions', []))
+    if round(float(amt), 2) != exp_amt:
+        errors.append(f"dues_excluded.amount {amt} != independent recount {exp_amt} "
+                      f"(to the cent, over this artifact's own contributions)")
+    if cnt != exp_cnt:
+        errors.append(f"dues_excluded.count {cnt} != independent recount {exp_cnt}")
+    return errors
+
+
 def summary(d):
     donors = d.get('donors', {})
     classified = sum(1 for o in donors.values()
@@ -964,6 +1059,62 @@ def self_test():
           {'members': []}, False)
     pcase("[DONOR/PARENT] an empty donors map skips rather than passing vacuously",
           {'donors': {}}, False)
+
+    # ELEC-FIGURE-1 R2 (iii) — the dues-exclusion rules, fired on synthetic fixtures.
+    # PS-128 declaration: MODE A — pinned independently of live repo state. No artifact
+    # on disk is read; each fixture is a literal, and every negative case is proved to
+    # fail before the positive cases are trusted.
+    def dcase(name, artifact, expect):
+        """expect: a substring that must appear in some error, or None for 'must pass'."""
+        errs = validate_dues_excluded(artifact)
+        ok = (not errs) if expect is None else any(expect in e for e in errs)
+        results.append((name, ok))
+        print(f"SELF-TEST {'PASS' if ok else 'FAIL'}  {name}")
+        if not ok:
+            print(f"          expected {expect!r}, got: {errs}")
+
+    _row = {'contribution_type': 'IE Committee Dues Transfer', 'amount': 100.0, 'cycle': '2027'}
+    _other = {'contribution_type': 'IE Committee Receipt', 'amount': 5.0, 'cycle': '2027'}
+
+    dcase("[DUES/PREMISE] a contributions-bearing artifact with NO dues_excluded errors",
+          {'contributions': [_row]}, "field absent")
+    dcase("[DUES/PREMISE] a non-object dues_excluded errors",
+          {'contributions': [_row], 'dues_excluded': 100.0}, "expected an object")
+    dcase("[DUES/PREMISE] a non-numeric amount errors",
+          {'contributions': [_row], 'dues_excluded': {'amount': '100', 'count': 1}},
+          "expected a number")
+    dcase("[DUES/PREMISE] a non-integer count errors",
+          {'contributions': [_row], 'dues_excluded': {'amount': 100.0, 'count': 1.5}},
+          "expected an integer")
+    dcase("[DUES/PREMISE] a negative amount errors",
+          {'contributions': [], 'dues_excluded': {'amount': -1.0, 'count': 0}}, "negative")
+    dcase("[DUES/VALUE] a mismatched amount errors",
+          {'contributions': [_row], 'dues_excluded': {'amount': 99.0, 'count': 1}},
+          "!= independent recount")
+    dcase("[DUES/VALUE] a mismatched count errors",
+          {'contributions': [_row], 'dues_excluded': {'amount': 100.0, 'count': 2}},
+          "count 2 != independent recount 1")
+    dcase("[DUES/VALUE] the correct pair passes",
+          {'contributions': [_row, _other], 'dues_excluded': {'amount': 100.0, 'count': 1}},
+          None)
+    dcase("[DUES/VALUE] zero rows with a zero field passes (PS-101: zero is a real answer)",
+          {'contributions': [_other], 'dues_excluded': {'amount': 0.0, 'count': 0}}, None)
+    dcase("[DUES/VALUE] a dues row in an EXCLUDED cycle is not counted — the row the "
+          "predicate never reaches",
+          {'contributions': [dict(_row, cycle='pre-2011')],
+           'dues_excluded': {'amount': 0.0, 'count': 0}}, None)
+    dcase("[DUES/VALUE] an is_aggregate dues row is not counted either",
+          {'contributions': [dict(_row, is_aggregate=True)],
+           'dues_excluded': {'amount': 0.0, 'count': 0}}, None)
+    dcase("[DUES/PREMISE] an artifact with no contributions key SKIPS cleanly",
+          {'members': []}, None)
+    # §2 — the version assertion, both ways.
+    dcase("[DUES/SCHEMA] the ruled schema_version passes",
+          {'contributions': [_row], 'schema_version': '2.1',
+           'dues_excluded': {'amount': 100.0, 'count': 1}}, None)
+    dcase("[DUES/SCHEMA] a stale schema_version errors",
+          {'contributions': [_row], 'schema_version': '2.0',
+           'dues_excluded': {'amount': 100.0, 'count': 1}}, "schema_version '2.0' !=")
 
     bad = [n for n, ok in results if not ok]
     print(f"self-test: {len(results)} checks · "

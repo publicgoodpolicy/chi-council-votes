@@ -8,7 +8,7 @@
     "scope": "elections candidate committees (v1); IE and council lanes deferred",
     "inputs": {
       "election-data.json": {
-        "sha256": "0f4766e6ed9ff612a1265be5cd551b1deb7a19591e5a560c826d466db5e9e4fb",
+        "sha256": "88c6c459945ba2a9081d60f184efc1c25b266fb128c7756cec10f4fe3a3c453a",
         "path": "campaign-finance/election-data.json"
       },
       "d2totals": {

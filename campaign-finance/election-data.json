@@ -300605,7 +300605,7 @@
       "election_date": "2027-02-23"
     }
   },
-  "generated_at": "2026-08-10T02:57:48Z",
+  "generated_at": "2026-08-18T16:28:56Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "current_cycle": "2027",
   "default_cycle": "all",
@@ -303065,5 +303065,9 @@
         }
       ]
     }
+  },
+  "dues_excluded": {
+    "amount": 22870336.28,
+    "count": 102
   }
 }
