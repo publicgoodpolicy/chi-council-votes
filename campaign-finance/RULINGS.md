@@ -457,6 +457,27 @@ the fourth member.
 
 *Provenance: HALT-F5-SEED ruling record, sha256 `bd25b641…` (full sha at §PS-80), lines 25–33; ratified 2026-08-03. The coverage limit and Route B constraint are part of the ruling as drafted. Cited by reference C4.5 (validator requirement).*
 
+> At `### PS-81`, the Route B constraint sentence, which reads pre-amendment, byte for
+> byte:
+>
+> > **Route B constraint, ratified with this rule:** if the race-map schema route is ever taken, the 93 hand-authored entries are authored **from source documents**, never backfilled from `race_id`. A circular backfill retires the validator while keeping the defect, which is worse than not taking the route.
+>
+> is amended so that its population is named by referent rather than by count: the
+> prohibition attaches to **the rows authored in `race-map.json`'s collections, whatever
+> their count** — authored from source documents, never backfilled from `race_id`. The
+> figure "93" in the pre-amendment text is a snapshot of the population at ratification,
+> not a definition of it; measured 2026-08-18, the authored union is 98 and two distinct
+> populations of 93 exist in the repository, so a count cannot serve as the referent
+> (ELEC-IDENTITY-PROBE-1, `afbe2267…`). The constraint's substance is unchanged.
+>
+> The pointer is armed with **the full sentence above** — the phrase "Route B
+> constraint" occurs twice in the entry and is not a usable index — and is checked byte
+> for byte at the located line at transcription; a mismatch halts, neither half
+> corrected by anyone but Ishan in a new revision (PS-129). The amendment carries no id;
+> the pre-amendment text is not rewritten.
+
+*Provenance, amendment (Route B's population named by referent rather than by count): ELEC-IDENTITY-1 ratification package, revision 1 (`ELEC-IDENTITY-1-ratification-package-rev1.md`), sha256 `85e25e021473891fe8c409d3cf1200cfac47e204c022181b99cfe69d46677ed1`, 7,492 B / 111 L, region R2, lines 42–61, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan 2026-08-18 as drafted. Recorded under the PS-93 pattern: no id is allocated, the next free numbered id is untouched, and the Route B sentence stands unaltered above, because an amendment says what now governs rather than editing the superseded reading away. The paired pointer was checked at the moment of use under PS-129 and armed on the FULL SENTENCE, not on the phrase `Route B constraint`, which occurs twice in this entry and is not a usable index: the sentence matched exactly once, at the line located by content, byte for byte against the pre-amendment half held at `2286de858844f949f5f88125b897c9082eae8022cd6f4b80e7f3c960ec045881`, with no normalization required on either side.*
+
 ### PS-82 — a guard does not consume the field it guards
 
 > ## 5. PS-82 (draft) — A guard does not consume the field it guards
