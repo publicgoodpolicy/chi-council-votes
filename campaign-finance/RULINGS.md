@@ -1194,6 +1194,37 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: MUNI-ENABLE-1 G2 ratification package (`MUNI-ENABLE-1-G2-ratification-package.md`), sha256 `82230d309cb0d05d340ac9a4e74e188593a65203ebf7ef90213fea6dfd1017f7`, 11,885 B / 201 L, §"D-22 — Methodology: gate it, don't draft it", lines 115–130, transcribed verbatim; ratified by Ishan in relay 2026-08-12 **as drafted** — the package states nothing was amended. Id allocated at this transcription. Region: the full section as banked, recommendation apparatus included — Ishan ratified the sections as drafted, so the recommendation and its rejected alternative are part of the ratified text rather than a separate advisory layer, and per this register's form note transcription is never harmonization. Until this entry the package file was the sole record of this text.*
 
+> At `### PS-112 — the methodology view is gated on office readiness, not drafted ahead
+> of its data`, the rejected-alternative sentence, which reads pre-amendment, byte for
+> byte:
+>
+> > **Recommendation: ratify the gate.** Alternative — drafting a municipal methodology now — is
+> > rejected: it would describe a tool state that does not exist (no data, no committee ids), and
+> > reader-facing copy describing nothing is the errors-78–84 shape waiting to happen. The gate
+> > converts the wrong-methodology state from a copy hazard into an impossibility.
+>
+> is amended so that the rejection is read against its own premise: that premise — no
+> data, no committee ids, and no mechanism to render figures from artifacts — was
+> retired in part by ELEC-IDENTITY-1 (fifty derived council committee ids) and
+> ELEC-FIGURE-1 (figures render from the artifact, never live in copy). **The spec is
+> unchanged and still governs**: the gate stands, and each office ships a ratified
+> methodology before it goes live. ELEC-METH-1 (open ledger 31, Ishan's ratified
+> sequencing) discharges the authoring half of that obligation ahead of the data arcs;
+> the gate is what makes early authoring safe, because ratified text renders nowhere
+> until an office is enlisted. The rejection is not deleted and is not wrong for its
+> moment; it does not bar this lane's authoring.
+>
+> The index and the pre-amendment text above are a paired pointer under PS-129: the
+> sentence's opening phrase is measured to occur exactly once in the register at
+> drafting [planner measurement against `24c68834…`], and the located text at
+> transcription is checked byte for byte against the quoted block above under a
+> normalization applied to both sides and stated; a mismatch halts, and neither half is
+> corrected against the other by anyone but Ishan, in a new revision. The amendment
+> carries no id (PS-93 pattern) and transcribes as an amendment block against the
+> existing entry, which is not rewritten.
+
+*Provenance, amendment (the rejected alternative read against its own retired premise): ELEC-METH-1 ratification package, revision 1 (`ELEC-METH-1-ratification-package-rev1.md`), sha256 `97423e822fbf148d4c689fc72355429430e95895b34abdaefce6dc3edb582845`, 11,481 B / 180 L, region R3, lines 74–101, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan in relay 2026-08-19 as drafted. Recorded under the PS-93 pattern: no id is allocated, the next free numbered id is untouched, and PS-112's pre-amendment text stands unaltered above, because transcription is never harmonization and an amendment says what now governs rather than editing the superseded reading away. **The paired pointer was checked at the moment of use under PS-129, not at drafting:** the armed opening phrase `Alternative — drafting a municipal methodology now` was measured — not assumed — to occur exactly once in the register, inside this entry; the located block was compared byte for byte against the package's quoted pre-amendment text under a normalization applied to both sides and stated here, namely strip exactly the package's outer `> ` quoting level, the register's own `> ` markers being part of the compared text on both sides and no other change; and both sides were asserted non-empty before equality was asserted, so the comparison cannot pass vacuously. Result: 365 characters on each side, byte-identical, no further normalization required.*
+
 ### PS-113 — the municipal body label is accepted as dormant rather than split per office
 
 > ## D-23 — `OFFICE_BODY_LABEL.municipal = 'Municipal'`; the shared label is accepted as dormant
@@ -2117,3 +2148,88 @@ The vote-surface footer ratified with SBV-BOARD-1 addendum R-BR, transcribed ver
 > elections surface carries it under this ruling.
 
 *Provenance: SBV-BOARD-1 ratification addendum R-BR, revision 3 (`SBV-BOARD-1-ratification-addendum-RBR-rev3.md`), sha256 `5e9c942b99b76f7da90d6808c85297527139ea7a2ecae3736a06135c356dc5ce`, 6,088 B / 110 L, §R-BR2, lines 49–60, transcribed verbatim from the marked ruling region, under the same transform stated for §R-BR1 above. Ratified by Ishan 2026-08-17. Id-less per PS-88; no PS id allocated. Entered as a **separate** entry from §"SBV-BOARD-1 — Board Rule methodology attribution", ratified in the same addendum at the same moment, on the ground the SBV-PORT-1 G2R entry used: the two govern different surfaces — the methodology region there, every vote-representing surface here — and a single heading naming both would have to be renamed by any third. **The ruling's "at current HEAD" enumeration is the ratification's own reading of the surfaces, not a register measurement**, and it is deliberately subordinate to the functional rule stated in the same clause: the scope is what represents votes, and the four named surfaces are that scope's extension at the moment of ratification, not its definition. The cross-references to R1's clauses resolve to §PS-127, whose clause (v) keeps counts off the roster tab and whose clauses (iii)–(iv) make the President's vote table conditional; the footer inherits that conditionality rather than restating it. The prohibition on council and elections surfaces is the ruling's own and matches this lane's standing scope.*
+
+### ELEC-METH-1 — council methodology strings C1–C4
+
+The council methodology strings ratified with the ELEC-METH-1 ratification package, transcribed verbatim:
+
+> The elections tool's **city_council** methodology, ratified as a set. These strings
+> render only when `city_council` is a member of the methodology allowlist (PS-112's
+> gate), which no commit of this lane performs.
+>
+> 1. **C1, subject:** `This page covers campaign finance for Chicago's city council
+>    elections.`
+> 2. **C2, source:** `Contribution data comes from committee filings with the Illinois
+>    State Board of Elections.`
+> 3. **C3, windowing:** `Contributions are counted by date within each election's
+>    window, not by the cycle label a filing carries.`
+> 4. **C4, dues disclosure (artifact-rendered; the EXCL-UNIFORM G1 amendment's form,
+>    applied to this surface):** `Transfers of member dues between political committees
+>    are excluded from all totals. In this dataset they account for {DUES_AMOUNT}
+>    across {DUES_COUNT} transactions.` — where `{DUES_AMOUNT}` renders
+>    `dues_excluded.amount` as currency to the cent and `{DUES_COUNT}` renders
+>    `dues_excluded.count`, **both from the artifact the surface serves**
+>    (`election-data.json`), at every magnitude including $0.00 and 0 (PS-101). If the
+>    field is absent or non-numeric, the sentence does not render — a partial sentence
+>    never ships.
+>
+> The tool-wide verification figures (data currency, match rate, committee count, known
+> gaps and their total) continue to render from the two runtime verification artifacts
+> through the existing verify path, never written into copy.
+>
+> **Scope of the set:** these four strings are the ratified council methodology as of
+> this lane. The data arc that enlists `city_council` measures the live tool and may
+> extend the set only by ratification. PS-96's residual-disclosure obligation attaches
+> if and when a donor-grain keyed figure ships on this tool; none renders today
+> [G0 report, G0.5], so no residual string is authored ahead of its figure.
+
+*Provenance: ELEC-METH-1 ratification package, revision 1 (`ELEC-METH-1-ratification-package-rev1.md`), sha256 `97423e822fbf148d4c689fc72355429430e95895b34abdaefce6dc3edb582845`, 11,481 B / 180 L, region R1, lines 19–47, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan in relay 2026-08-19 as drafted — the package states nothing was amended. Id-less per PS-88; no numbered id is allocated for it and the next free numbered id is untouched.*
+
+### ELEC-METH-1 — mayoral methodology strings M1–M4
+
+The mayoral methodology strings ratified with the ELEC-METH-1 ratification package, transcribed verbatim:
+
+> The elections tool's **mayor** methodology, ratified as a set, authored from nothing
+> [G0.10]. These strings render only when `mayor` is a member of the allowlist, which
+> no commit of this lane performs.
+>
+> 1. **M1, subject:** `This page covers campaign finance for Chicago's 2027 mayoral
+>    election.`
+> 2. **M2, source:** `Contribution data comes from committee filings with the Illinois
+>    State Board of Elections.`
+> 3. **M3, candidacy posture:** `Candidates appear here when their candidacy is
+>    documented in a public filing. This tool does not anticipate candidacies.`
+> 4. **M4, dues disclosure:** identical to C4 in text and binding, rendered from the
+>    same artifact fields under the same all-magnitudes and no-partial-sentence rules.
+>
+> **What this set deliberately does not say:** nothing about any person, committee, or
+> identification. The attested committee 34198 ↔ Johnson ↔ office Mayor identification
+> exists only in the ELEC-IDENTITY-1 package and its ISBE captures, not in the repo
+> [G0.10]; a published sentence whose sole source is a file outside the repo is the
+> rev-P custody exposure on a reader-facing surface, and D-17/PS-107 forbids the
+> registry row that would repo-source it. M3 states the method instead of the instance.
+> Identification stops where its source stops.
+
+*Provenance: ELEC-METH-1 ratification package, revision 1 (`ELEC-METH-1-ratification-package-rev1.md`), sha256 `97423e822fbf148d4c689fc72355429430e95895b34abdaefce6dc3edb582845`, 11,481 B / 180 L, region R2, lines 51–70, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan in relay 2026-08-19 as drafted — the package states nothing was amended. Id-less per PS-88; no numbered id is allocated for it and the next free numbered id is untouched.*
+
+### ELEC-METH-1 — methodology figure posture and the member-branch subject invariant
+
+The methodology figure posture and the member-branch subject invariant, ratified with the ELEC-METH-1 ratification package, transcribed verbatim:
+
+> **(i) Figure posture (decision F).** No literal figure lives in ratified methodology
+> copy on the elections tool. A methodology figure renders from the artifact the
+> surface serves or from the runtime verification artifacts, and a sentence whose
+> figure cannot render does not render partially. Office-scoped render support — the
+> office parameterization of the methodology view and the binding of C4/M4's fields —
+> is **prerequisite work of the data arc that enlists the office**, named on that arc's
+> brief [G0 findings F3, F5]; PS-112's gate is what enforces that the methodology
+> cannot ship without it.
+>
+> **(ii) Member-branch subject invariant (decision D′).** Each member office of the
+> methodology allowlist renders a methodology whose subject names its own office; a
+> member office rendering another office's subject copy is a gate failure. The
+> invariant is asserted in the gate on **rendered output per member office**, closing
+> the measured hole at F2 [G0 report] where the anti-copy assertion lived only in the
+> non-member branch and evaporated for exactly the office a future key enlists.
+
+*Provenance: ELEC-METH-1 ratification package, revision 1 (`ELEC-METH-1-ratification-package-rev1.md`), sha256 `97423e822fbf148d4c689fc72355429430e95895b34abdaefce6dc3edb582845`, 11,481 B / 180 L, region R4, lines 105–119, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan in relay 2026-08-19 as drafted — the package states nothing was amended. Id-less per PS-88; no numbered id is allocated for it and the next free numbered id is untouched.*
