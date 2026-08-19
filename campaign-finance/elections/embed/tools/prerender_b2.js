@@ -473,28 +473,97 @@ ok('cycle filter degrades cleanly (single cycle: 2027 == current)',
   ok('spend subtabs genuinely thread cycle (industries direct @2027 < all-time, both > 0)',
     dir('2027') > 0 && dir('2027') < dir(null) && dir('bogus-cycle') === 0);
 })();
-// MUNI-ENABLE-1 G4: the coming-soon invariant, now asserted with its PRECONDITION rather than
-// alone. Before G4 these two offices rendered coming-soon because officeType returned null and
-// nothing municipal could resolve; after G4 they must render coming-soon for the honest reason
-// — no municipal candidacy owns a committee, so no race reports finance. Enablement must not
-// have promoted an empty office to a live one. Asserting the zero-committee-id precondition in
-// the same case is what stops this from silently becoming a claim about the wrong cause: if a
-// municipal committee id ever lands, this case fails loudly instead of quietly still passing.
+// MUNI-ENABLE-1 G4, RE-EXPRESSED at ELEC-IDENTITY-1 S1 revision 2 (Ishan, option C).
+//
+// THE RETIRED PREMISE, recorded rather than deleted. G4's case asserted "no municipal
+// candidacy owns a committee" as the precondition of the coming-soon rendering, so that
+// coming-soon could not "silently become a claim about the wrong cause", and it said of
+// itself: "if a municipal committee id ever lands, this case fails loudly instead of
+// quietly still passing." ELEC-IDENTITY-1 R1 landed exactly that — 50 alderperson
+// candidacies now carry a committee id derived from ward-map.json — and the case failed
+// loudly, as designed. It is re-expressed here, not weakened and not deleted.
+//
+// WHAT REPLACES IT (S1 i–ii). `render.js` is NOT changed and no reader-facing display
+// outcome is ratified: readiness still keys on committee presence, so city_council now
+// renders its by-race listing rather than coming-soon, with every figure zero. That state
+// is PINNED as the measured present of an emission no page serves. The display decision —
+// coming-soon vs pending-cards vs otherwise — is deferred to the moment it is ripe, and
+// the zero-money assertion below is the tripwire that forces it: the day windowed
+// municipal money first exists, this file fails loudly and the decision goes to Ishan by
+// the lane that lands the money, with real data in view. That is G4's own move, re-armed
+// against the boundary that now matters.
 var MUNI_OFFICES = ['alderperson', 'mayor', 'city_clerk', 'city_treasurer'];
 var raceOfficeById = {};
 json.races.forEach(function (r) { raceOfficeById[r.id] = r.office; });
-var muniWithCommittee = json.candidates.filter(function (c) {
-  return MUNI_OFFICES.indexOf(raceOfficeById[c.race_id]) >= 0 && c.committee_id != null; }).length;
-ok('precondition: zero municipal candidacies own a committee (0 measured, ' +
-   muniWithCommittee + ' found)', muniWithCommittee === 0);
-['city_council', 'mayor'].forEach(function (off) {
-  var oi = D.loadData(json, { office: off });
-  var om = D.viewModels.officeRaces(oi, off);
-  var pg = R.renderPage({ office: off, topView: 'byrace', cycles: D.availableCycles(oi), cycle: null, officeRaces: om, activeSlug: null, raceView: null });
-  var anyFinance = om.groups.some(function (g) { return g.races.some(function (r) { return r.hasFinance; }); });
-  ok(off + ' renders a clean coming-soon AFTER municipal enablement (no crash, full page, no race reports finance)',
-    /coming soon/i.test(pg) && pg.indexOf('<div class="wrap">') >= 0 && pg.length > 600 && !anyFinance);
+var muniCands = json.candidates.filter(function (c) {
+  return MUNI_OFFICES.indexOf(raceOfficeById[c.race_id]) >= 0; });
+
+// S1 (ii) — presence where the derivation IS defined. R1 is alderperson-scoped.
+var alderCands = muniCands.filter(function (c) { return raceOfficeById[c.race_id] === 'alderperson'; });
+var alderWithId = alderCands.filter(function (c) { return c.committee_id != null; }).length;
+ok('S1(ii): every alderperson candidacy carries a derived committee id (' +
+   alderWithId + ' of ' + alderCands.length + ', expected 50 of 50)',
+  alderCands.length === 50 && alderWithId === 50);
+
+// S1 (ii) — absence where it is NOT defined. Vacuously true while those offices carry no
+// candidacies at all; the assertion exists for the day one lands, so a mayoral row
+// arriving with a committee id is revisited by the lane that lands it.
+var nonAlderWithId = muniCands.filter(function (c) {
+  return raceOfficeById[c.race_id] !== 'alderperson' && c.committee_id != null; });
+ok('S1(ii): no municipal candidacy outside alderperson carries a committee id (' +
+   nonAlderWithId.length + ' found) — the derivation\'s scope boundary; a mayoral or ' +
+   'clerk/treasurer row arriving with one must be revisited by the lane that lands it',
+  nonAlderWithId.length === 0);
+
+// S1 (i) — THE TRIPWIRE. Windowed on DATES, never on the cycle-2027 label (which spans
+// 2023-05-15 onward and would count 2023-2026 money as 2027's). The window literal mirrors
+// data.js's municipal table, which [MUNI/WINDOW] pins against its own oracle — two
+// statements, one oracle, per PS-82.
+var MUNI_WIN = { start: '2023-05-15', end: '2027-12-31' };
+var muniCmteIds = {};
+muniCands.forEach(function (c) { if (c.committee_id != null) muniCmteIds[c.committee_id] = 1; });
+var muniMoney = { rows: 0, total: 0 };
+(json.contributions || []).forEach(function (c) {
+  if (!muniCmteIds[c.committee_id]) return;
+  if (!c.date || c.date < MUNI_WIN.start || c.date > MUNI_WIN.end) return;
+  muniMoney.rows++; muniMoney.total += c.amount || 0;
 });
+ok('S1(i) TRIPWIRE: zero windowed municipal contribution money at this vintage (' +
+   muniMoney.rows + ' rows, ' + muniMoney.total + ', by DATE ' + MUNI_WIN.start + '..' +
+   MUNI_WIN.end + ') — WHEN THIS FAILS, municipal money exists and the reader-facing ' +
+   'display decision (coming-soon vs pending-cards vs otherwise) is due to Ishan from the ' +
+   'lane that lands it; do not edit this assertion to accommodate the money',
+  muniMoney.rows === 0 && muniMoney.total === 0);
+
+// S1 (i) — the pinned present, city_council: readiness TRUE, by-race listing rendered.
+(function () {
+  var oi = D.loadData(json, { office: 'city_council' });
+  var om = D.viewModels.officeRaces(oi, 'city_council');
+  var pg = R.renderPage({ office: 'city_council', topView: 'byrace', cycles: D.availableCycles(oi), cycle: null, officeRaces: om, activeSlug: null, raceView: null });
+  var ready = om.groups.some(function (g) { return g.races.some(function (r) { return r.hasFinance; }); });
+  ok('S1(i): city_council readiness is TRUE and the by-race listing renders, not coming-soon ' +
+     '— pinned as the measured present; no display outcome is ratified by this assertion',
+    ready === true && !/coming soon/i.test(pg) && pg.indexOf('<div class="wrap">') >= 0 && pg.length > 600);
+  var worst = 0;
+  om.groups.forEach(function (g) { g.races.forEach(function (r) {
+    var rv = D.viewModels.raceView(oi, oi.raceBySlug[r.slug], null);
+    (rv && rv.candidates || []).forEach(function (c) {
+      var t = (c.figures && c.figures.total) || 0; if (t > worst) worst = t; });
+  }); });
+  ok('S1(i): every city_council candidate surface is live-shaped and ZERO-valued (largest ' +
+     'candidate total ' + worst + ') — the state the tripwire above guards', worst === 0);
+})();
+
+// S1 (i) — mayor: readiness FALSE, coming-soon still rendered. The absence side of (ii),
+// visible in the render layer.
+(function () {
+  var oi = D.loadData(json, { office: 'mayor' });
+  var om = D.viewModels.officeRaces(oi, 'mayor');
+  var pg = R.renderPage({ office: 'mayor', topView: 'byrace', cycles: D.availableCycles(oi), cycle: null, officeRaces: om, activeSlug: null, raceView: null });
+  var ready = om.groups.some(function (g) { return g.races.some(function (r) { return r.hasFinance; }); });
+  ok('S1(i): mayor readiness is FALSE and a clean coming-soon renders (no crash, full page)',
+    ready === false && /coming soon/i.test(pg) && pg.indexOf('<div class="wrap">') >= 0 && pg.length > 600);
+})();
 // ---- MUNI-ENABLE-1 G6 ----
 // D-24 (PS-114): the grouped view's comparator and the nav's must order the municipal race set
 // identically. Compared as ORDERS, not as key values — the two return different things (a sort

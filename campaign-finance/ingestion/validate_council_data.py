@@ -23,7 +23,7 @@ WARNINGS (printed; abort only with --strict):
   - cluster.total doesn't equal sum(member_totals) within $1
   - an independent-expenditure committee has a blank committee_name
 """
-import json, sys, argparse, re
+import json, os, sys, argparse, re
 from collections import defaultdict
 
 
@@ -87,6 +87,7 @@ def validate(d):
     errors.extend(validate_votes(d))
     errors.extend(validate_members(d))
     errors.extend(validate_dues_excluded(d))
+    errors.extend(validate_alder_linkage(d))
     return errors, warnings
 
 
@@ -810,6 +811,72 @@ def _dues_recount(contribs):
     return round(float(amount), 2), count
 
 
+def _invert_ward_map_check(raw):
+    """Independent inversion for the check side. Raises on a non-1:1 map, as R1 requires.
+
+    Stated here rather than imported from build_election_seed for the PS-82 reason the
+    dues predicate is: a check that derives its expectation from the code it checks proves
+    only that the code equals itself.
+    """
+    by_ward, seen = {}, {}
+    for cmte, ward in raw.items():
+        if str(cmte).startswith('_'):
+            continue
+        w = str(ward)
+        if w in by_ward or cmte in seen:
+            raise ValueError('ward-map inversion is not 1:1')
+        by_ward[w] = str(cmte)
+        seen[cmte] = w
+    return by_ward
+
+
+def validate_alder_linkage(d, ward_map_raw=None):
+    """ELEC-IDENTITY-1 R1's pin: each alderperson candidacy's derived committee_id.
+
+    PS-128 declaration: MODE B — live-derived, premise asserted by the check itself. The
+    premise (the artifact carries races and candidates, and a ward map is available to
+    invert) is asserted before any value is compared, so a missing input fails loudly
+    instead of passing vacuously over an empty population.
+
+    POPULATION, stated as the code's rather than as the concept's: the candidacies the
+    derivation reaches — those whose race is `alderperson` AND carries a ward. A ward with
+    no mapping row derives null and is asserted to BE null; that is the derivation's own
+    zero, not an exemption.
+    """
+    errors = []
+    if 'races' not in d or 'candidates' not in d:
+        return errors                      # not an elections-shaped artifact
+    if ward_map_raw is None:
+        # ward-map.json sits beside this validator, in campaign-finance/ingestion/.
+        p = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ward-map.json')
+        if not os.path.exists(p):
+            return errors                  # no map on disk: nothing to pin against
+        with open(p, encoding='utf-8') as f:
+            ward_map_raw = json.load(f)
+    try:
+        by_ward = _invert_ward_map_check(ward_map_raw)
+    except ValueError as e:
+        errors.append(f"alder linkage: {e} — the derivation's source is unusable")
+        return errors
+
+    rid_to_ward = {r['id']: r.get('ward') for r in d.get('races', [])
+                   if r.get('office') == 'alderperson' and r.get('ward') is not None}
+    if not rid_to_ward:
+        return errors                      # no alder races in this artifact
+    for c in d.get('candidates', []):
+        rid = c.get('race_id')
+        if rid not in rid_to_ward:
+            continue
+        expected = by_ward.get(str(rid_to_ward[rid]))
+        actual = c.get('committee_id')
+        if actual != expected:
+            errors.append(
+                f"alder linkage: candidacy {c.get('id')} on race {rid} (ward "
+                f"{rid_to_ward[rid]}) carries committee_id {actual!r}, expected "
+                f"{expected!r} from the inverted ward map")
+    return errors
+
+
 def validate_dues_excluded(d):
     """R2 (i) premise rule and (ii) value rule. Errors, never skips.
 
@@ -1115,6 +1182,51 @@ def self_test():
     dcase("[DUES/SCHEMA] a stale schema_version errors",
           {'contributions': [_row], 'schema_version': '2.0',
            'dues_excluded': {'amount': 100.0, 'count': 1}}, "schema_version '2.0' !=")
+
+    # ELEC-IDENTITY-1 R1 (iii) — the alder-linkage rules on synthetic fixtures.
+    # PS-128 declaration: MODE A — pinned independently of live repo state. No artifact
+    # and no ward map on disk is read; every fixture and every map is a literal.
+    def acase(name, artifact, ward_map, expect):
+        errs = validate_alder_linkage(artifact, ward_map)
+        ok = (not errs) if expect is None else any(expect in e for e in errs)
+        results.append((name, ok))
+        print(f"SELF-TEST {'PASS' if ok else 'FAIL'}  {name}")
+        if not ok:
+            print(f"          expected {expect!r}, got: {errs}")
+
+    _races = [{'id': 'ward-01', 'office': 'alderperson', 'ward': '1'},
+              {'id': 'ward-02', 'office': 'alderperson', 'ward': '2'},
+              {'id': 'sb-d01', 'office': 'school_board_member'}]
+    _wm = {'11111': 1}          # ward 1 mapped; ward 2 deliberately unmapped
+
+    acase("[ALDER/LINK] a correctly derived committee id passes",
+          {'races': _races, 'candidates': [{'id': 'inc-ward-01', 'race_id': 'ward-01',
+                                            'committee_id': '11111'}]}, _wm, None)
+    acase("[ALDER/LINK] a WRONG committee id errors",
+          {'races': _races, 'candidates': [{'id': 'inc-ward-01', 'race_id': 'ward-01',
+                                            'committee_id': '99999'}]}, _wm,
+          "expected '11111'")
+    acase("[ALDER/LINK] a ward with NO mapping row derives null, and null passes",
+          {'races': _races, 'candidates': [{'id': 'inc-ward-02', 'race_id': 'ward-02',
+                                            'committee_id': None}]}, _wm, None)
+    acase("[ALDER/LINK] an unmapped ward carrying a committee id errors "
+          "(the derivation's zero is asserted, not exempted)",
+          {'races': _races, 'candidates': [{'id': 'inc-ward-02', 'race_id': 'ward-02',
+                                            'committee_id': '11111'}]}, _wm, "expected None")
+    acase("[ALDER/LINK] a NON-1:1 inversion (two committees claiming one ward) errors",
+          {'races': _races, 'candidates': []}, {'11111': 1, '22222': 1}, "not 1:1")
+    # The committee-side duplicate (one committee mapped to two wards) is UNREACHABLE from
+    # a JSON object — object keys are unique by construction, so a committee cannot appear
+    # twice. The guard for it is kept as defence against a future non-dict source, and what
+    # is testable here is that near-miss keys are NOT silently merged: '11111' and '11111 '
+    # are distinct committees, so they collide on the ward side and error.
+    acase("[ALDER/LINK] near-miss committee keys are not merged; they collide on the ward",
+          {'races': _races, 'candidates': []}, {'11111': 1, '11111 ': 1}, "not 1:1")
+    acase("[ALDER/LINK] a non-alder candidacy is outside the population",
+          {'races': _races, 'candidates': [{'id': 'cand-x', 'race_id': 'sb-d01',
+                                            'committee_id': '77777'}]}, _wm, None)
+    acase("[ALDER/LINK] an artifact with no races SKIPS cleanly",
+          {'candidates': []}, _wm, None)
 
     bad = [n for n, ok in results if not ok]
     print(f"self-test: {len(results)} checks · "

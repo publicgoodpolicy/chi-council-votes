@@ -226,7 +226,37 @@ def _load_validator(repo_root):
     return mod
 
 
-def build_candidates(race_map, race_ids, rid_to_elec):
+def invert_ward_map(path):
+    """ELEC-IDENTITY-1 R1 — ward-map.json is committee -> ward; the derivation needs
+    ward -> committee, so it is INVERTED here.
+
+    The inversion asserts 1:1 in BOTH directions and raises on violation: a duplicated
+    ward (two committees claiming one ward) or a duplicated committee (one committee
+    mapped to two wards) is a build error, never a silent overwrite — an overwrite would
+    hand one ward's money to another ward's alderperson with nothing to detect it.
+    Returns {} when the map is absent: a derivation with no source derives nothing, and
+    zero is a real answer (PS-101), so an absent map is not fatal here.
+    """
+    if not os.path.exists(path):
+        return {}
+    raw = json.load(open(path))
+    by_ward, seen_cmte = {}, {}
+    for cmte, ward in raw.items():
+        if str(cmte).startswith("_"):
+            continue
+        w = str(ward)
+        if w in by_ward:
+            raise ValueError("ward-map inversion is not 1:1: ward %s claimed by committees "
+                             "%s and %s" % (w, by_ward[w], cmte))
+        if cmte in seen_cmte:
+            raise ValueError("ward-map inversion is not 1:1: committee %s mapped to wards "
+                             "%s and %s" % (cmte, seen_cmte[cmte], w))
+        by_ward[w] = str(cmte)
+        seen_cmte[cmte] = w
+    return by_ward
+
+
+def build_candidates(race_map, race_ids, rid_to_elec, rid_to_ward=None, ward_to_cmte=None):
     """Turn the race map into candidate records from two sources:
       * mappings        -- committee_id -> candidate (committee known; the join
                            into the reused finance layer).
@@ -329,6 +359,25 @@ def build_candidates(race_map, race_ids, rid_to_elec):
         if c.get("write_in"):
             rec["write_in"] = True
         cands.append(rec)
+
+    # ELEC-IDENTITY-1 R1 — the alder linkage, DERIVED at emit, never authored.
+    # Applied as one pass over the built records rather than inside the three collection
+    # branches, so there is exactly one site to reason about and the authored branches
+    # stay as they were. Clause (iii) held in code: race-map.json is untouched, its
+    # `committee_id: null` continues to assert "not identified in the authored record",
+    # and the artifact carries the derived value beside it.
+    #
+    # Derivation runs only where the record carries no committee id: an authored value
+    # is authored, and derivation never overwrites it. A ward with no mapping row derives
+    # nothing and the field stays null — zero is a real answer (PS-101).
+    if rid_to_ward and ward_to_cmte:
+        for rec in cands:
+            if rec.get("committee_id") is not None:
+                continue
+            w = rid_to_ward.get(rec.get("race_id"))
+            if w is None:
+                continue
+            rec["committee_id"] = ward_to_cmte.get(str(w))
     return cands, bad
 
 
@@ -345,8 +394,18 @@ def main():
     races, src = generate_races(R)
     race_ids = {r["id"] for r in races}
     rid_to_elec = {r["id"]: r["election_id"] for r in races}
+    # ELEC-IDENTITY-1 R1 — the alder linkage's two inputs, mirroring the rid_to_elec idiom.
+    # Only alderperson races carry a ward, so this map is also the predicate for which
+    # candidacies the derivation reaches.
+    rid_to_ward = {r["id"]: r["ward"] for r in races
+                   if r.get("office") == "alderperson" and r.get("ward") is not None}
+    ward_to_cmte = invert_ward_map(
+        os.path.join(R, "campaign-finance", "ingestion", "ward-map.json"))
+    print("ward-map inverted: %d ward(s) -> committee; alder races: %d"
+          % (len(ward_to_cmte), len(rid_to_ward)))
     race_map = load_race_map(race_map_path)
-    candidates, bad = build_candidates(race_map, race_ids, rid_to_elec)
+    candidates, bad = build_candidates(race_map, race_ids, rid_to_elec,
+                                       rid_to_ward, ward_to_cmte)
 
     # HALT-F5-SEED: unknown race_id is FATAL — warn-and-emit is retired. A dangling
     # race pointer downstream is the `!race` guard-pass-through class and a PS-79/B1
