@@ -275,6 +275,22 @@ var RATIFIED_COPY_ORACLE = {
   methodologyOffices: { school_board: 1 }
 };
 
+// [MUNI/SUBJ] oracle (ELEC-METH-1 G2, ruling: "### ELEC-METH-1 — methodology figure posture
+// and the member-branch subject invariant", clause (ii)). One discriminating subject token per
+// office. Each is a verbatim substring of ratified text, taken by file-read at authoring, never
+// relayed or recalled: school_board's from the shipped methodology copy in render.js (the
+// sentence "This tool tracks campaign finance for Chicago's school board elections.");
+// city_council's from register string C1; mayor's from register string M1. The tokens are
+// chosen to avoid apostrophes and the register's line wrapping so they compare byte-for-byte
+// against rendered HTML, and they are asserted mutually disjoint below rather than assumed —
+// a token that is a substring of another office's token would make the "no other office's
+// token" half unfalsifiable.
+var METHODOLOGY_SUBJECT_ORACLE = {
+  school_board: 'school board elections',
+  city_council: 'city council elections',
+  mayor: 'mayoral election'
+};
+
 var FIXTURES = {
   school_board: {
     office: 'school_board',
@@ -1724,6 +1740,83 @@ async function assertPersonSurface(T, ctx, fx) {
     T.ok('[MUNI/METH] the methodology tab renders only for an office with a ratified ' +
       'methodology — ' + (bad.length ? bad.join('; ')
         : 'school_board renders it; city_council and mayor render coming-soon carrying no school-board copy'),
+      bad.length === 0);
+  })();
+
+  // [MUNI/SUBJ] the member-branch subject invariant — ELEC-METH-1 R4(ii), decision D'.
+  //
+  // PS-128 derivation mode: **E (hybrid), both axes named.** CONSTRUCTED axis — the per-office
+  // subject tokens in METHODOLOGY_SUBJECT_ORACLE, stated in this file independently of live repo
+  // state. LIVE axis — the rendered methodology output, produced by render.js against
+  // election-data.json, and the allowlist membership read from render.js's own _ratified export.
+  // Not mode A (the rendered side is live), not mode B (the tokens are not derived from the
+  // subject under test), and not mode C/D (the premises are asserted here, by this check, not by
+  // a sibling).
+  //
+  // Why it exists, measured rather than supposed: [MUNI/METH]'s anti-school-board-copy assertion
+  // lives only in its NON-member branch, so it evaporates for exactly the office an enlisting
+  // commit adds. Simulated at ELEC-METH-1 G0 (finding F2): with city_council in both the
+  // allowlist and the copy oracle, [MUNI/METH] returned PASS while the council methodology tab
+  // rendered verbatim school-board copy. This check is what makes that state fail.
+  //
+  // Premise assertions run BEFORE any containment assertion, so the check cannot pass while
+  // measuring nothing (PS-128 (i), (v)): the token table must cover exactly the three offices,
+  // the tokens must be mutually disjoint, the member set must be non-empty, and every rendered
+  // page measured must be non-empty.
+  (function () {
+    var R = require(path.join(__dirname, '..', 'render.js'));
+    var D = require(path.join(__dirname, '..', 'data.js'));
+    var json = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', '..', 'election-data.json'), 'utf8'));
+    var OFFICES = ['school_board', 'city_council', 'mayor'];
+    var bad = [];
+
+    // --- premise 1: the token table covers exactly the offices under test
+    var tokKeys = Object.keys(METHODOLOGY_SUBJECT_ORACLE).sort();
+    if (tokKeys.join(',') !== OFFICES.slice().sort().join(',')) {
+      bad.push('subject-token table covers [' + tokKeys.join(',') + '], expected [' + OFFICES.slice().sort().join(',') + ']');
+    }
+    // --- premise 2: tokens mutually disjoint, or "contains no other office's token" is hollow
+    OFFICES.forEach(function (a) {
+      OFFICES.forEach(function (b) {
+        if (a !== b && METHODOLOGY_SUBJECT_ORACLE[b] &&
+            METHODOLOGY_SUBJECT_ORACLE[b].indexOf(METHODOLOGY_SUBJECT_ORACLE[a]) >= 0) {
+          bad.push('token for ' + a + ' is a substring of the token for ' + b + ' — not discriminating');
+        }
+      });
+    });
+    // --- premise 3: the member set is non-empty (an empty set would pass every member assertion)
+    var members = OFFICES.filter(function (o) { return !!(R._ratified || {}).methodologyOffices[o]; });
+    if (members.length === 0) bad.push('no member office in the methodology allowlist — nothing measured');
+
+    // --- the invariant itself, per MEMBER office, on rendered output
+    var checked = 0;
+    members.forEach(function (off) {
+      var idx = D.loadData(json, { office: off });
+      var html = R.renderPage({ office: off, topView: 'methodology', cycles: D.availableCycles(idx),
+        cycle: null, officeRaces: D.viewModels.officeRaces(idx, off, null), activeSlug: null,
+        raceView: null, spend: null, selector: { options: D.selectorOptions(off), active: null },
+        verify: { reconUrl: 'x', gapsUrl: 'y' } });
+      // --- premise 4: this page rendered something
+      if (!html || html.length === 0) { bad.push(off + ' rendered an empty methodology page'); return; }
+      checked++;
+      var own = METHODOLOGY_SUBJECT_ORACLE[off];
+      if (html.indexOf(own) < 0) {
+        bad.push(off + ' is a member but its methodology does not name its own subject (' + JSON.stringify(own) + ')');
+      }
+      OFFICES.forEach(function (other) {
+        if (other === off) return;
+        if (html.indexOf(METHODOLOGY_SUBJECT_ORACLE[other]) >= 0) {
+          bad.push(off + ' methodology carries ' + other + "'s subject copy (" +
+            JSON.stringify(METHODOLOGY_SUBJECT_ORACLE[other]) + ')');
+        }
+      });
+    });
+    if (checked !== members.length) bad.push('measured ' + checked + ' of ' + members.length + ' member offices');
+
+    T.ok('[MUNI/SUBJ] every member office renders a methodology naming its own subject and no ' +
+      'other office\'s — ' + (bad.length ? bad.join('; ')
+        : checked + ' member office(s) [' + members.join(',') + '] checked against ' +
+          tokKeys.length + ' disjoint subject tokens'),
       bad.length === 0);
   })();
 
