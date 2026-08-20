@@ -54,7 +54,7 @@ https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/main/campai
 
 That file **must be committed and pushed** (it is, as of the "publish" commit) for
 the CDN to serve it. To refresh the data: re-run the election build (see
-`README.md` run order), commit + push `election-data.json`, and the live embeds
+`campaign-finance/elections/README.md` run order), commit + push `election-data.json`, and the live embeds
 pick it up on next load (no re-paste needed).
 
 Override the source for testing with `data-src="..."` on the mount div, or

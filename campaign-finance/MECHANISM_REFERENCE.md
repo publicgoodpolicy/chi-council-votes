@@ -255,6 +255,21 @@ dollars stamp (advanced by the rollup builder, and therefore by the IE ingest's 
 rollup); `rollcall.generated_at` is the votes stamp. The shard-staleness check reads only the
 former.
 
+**The school-board finance builder excludes union dues at exactly one site, and for this
+dataset the exclusion is structurally vacuous** [C1.17, SOURCED; the $0.00 case RULED — see
+PS-101]: `build_sb_finance.py` applies the dues exclusion in a single place, a bare
+`continue` inside `scan_committee_rows()` keyed on the `DUES_TYPE` constant, and the R4a
+counter sits at that same predicate so the figure reports what THIS exclusion removes rather
+than what earlier predicates already dropped. The contribution filters run in a fixed order —
+slug scope, aggregate, excluded cycles, dues, donor resolution, self-funding, window — and the
+order is load-bearing for that counter, not incidental. The exclusion is nevertheless vacuous
+here **by disjointness rather than by luck**: `ie_slice()` reads the spend side
+(independent expenditures) while the dues predicate reads funding-side contributions, so no
+dues row is in the set the slice sums and the excluded total is $0.00 for this dataset. That
+is a property of the two sides, not of the data, and it is why a non-zero figure here would
+be a finding about the slice rather than about dues. Built at SBV-BOARD-1, on the data port
+SBV-PORT-1 landed.
+
 ---
 
 ## §2 — Donor field ownership map
@@ -643,6 +658,20 @@ panel rendering a fallback line).
 which multiplies render paths, not merely classification consumers. The surface count is
 current state and lives in the handover, not here.
 
+**The school-board board surfaces treat a vacancy as a real seat, and every vote carries its
+source** [C5.10, SOURCED; display decisions RULED — see the register's SBV-BOARD-1 entries]:
+the roster, seat selector and member surfaces of the school-board embed share ONE seat filter,
+so an omission cannot be implemented in one view and forgotten in another. A vacant seat
+**appears** in the selector — the seat is a real fact about the board — and selecting it
+reaches a seat notice rather than a member page, while the President is filtered from
+vote-enumerating surfaces for as long as its column records nothing (PS-125), with the roster
+surface the single ruled exception (PS-127 (i)) whose sole-caller constraint is asserted by a
+check rather than left to a comment. Each vote's `source_url` is carried from the ingest's
+fixed column through the artifact to both render sites, so a rendered position is one click
+from the record it came from. The embed makes an **enumerated** two fetches, both
+school-board-family artifacts, which a gate check asserts by count so a third is a failure
+rather than a silent drift. Landed at SBV-BOARD-1 over the SBV-PORT-1 data port.
+
 ---
 
 ## §6 — Defect visibility classes
@@ -684,7 +713,11 @@ invisible-defect detector class grew from three members to four within a single 
 worded size would have silently lied. The mitigation is **stating properties rather than
 quantities** (separate/hand-maintained rather than a path count; members by name rather
 than a member count), not a stronger grep — the audit-only taxonomy above is exactly where
-this risk lives.
+this risk lives. **A second thing no repo-side check can see** (HYG-B2): §8's archive
+pins name lane reports held outside the repo, so no check here can hash their contents
+and none ever will — `check_ref_pins.py` provides **visibility, not verification** for
+that set, reporting each pin out-of-reach by name on every run. An unverifiable pin that
+announces itself is honest; one that vanishes from the output reads as verified.
 
 **A guard does not consume the field it guards** [C6.6, RULED]: a validator, gate check,
 or guard derives its expectation from inputs independent of its subject — never from the
@@ -761,6 +794,19 @@ that catch defect classes the existing gates structurally cannot see.
    its **own** shrink-only known-failures file (`tools/reg_check_known_failures.json`),
    pinned at **zero**: the transcriptions that would populate it landed in the same
    commit, so any future headless citation fails the build by construction.
+   **What rule 3 cannot see, and the asymmetry inside it** (HYG-B2, item 27): both of
+   rule 3's universes are `git ls-files`-derived at two distinct call sites — `md_files()`
+   for the SUBJECT universe (which documents get checked) and rule 3's own `git ls-files`
+   for the TARGET universe (what a basename may resolve to). An **untracked** candidate
+   file is therefore invisible to the check and returns a meaningless green, so stage
+   before running any tracked-file checker. The two resolution paths are also
+   asymmetric: direct resolution consults the **filesystem**, while the basename
+   fallback consults the **git index** — an untracked-but-present file satisfies a
+   direct citation yet can never be a fallback target. §8's archive pins are tilde
+   paths, which `classify_token()` skips, so they sit outside every rule here; since
+   HYG-B2 they are guarded in shape by `campaign-finance/tools/check_ref_pins.py`,
+   which reports each one out-of-reach **by name** on every run rather than passing
+   over it in silence.
 6. **No-editorial-writeback checker** [P6, RULED — **BUILT**] (PS-33's fifth member, added by
    the PS-54 pattern) — `campaign-finance/tools/check_sheet_scopes.py`, one implementation with
    the same two invokers as P5. Static and network-free: it discovers every Sheet-touching
@@ -847,6 +893,9 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.16 | S-sbv | whole file (`ingest_sb_votes.py` — the school-board ingest: read-only scope by construction, no write verb anywhere; `mint_member_id` the D-3 slug rule with the four ratified examples as `--self-test` cases; `read_votes` the blank→marker mapping, the fatal unknown-token branch, the structural header contract and the `Outcomes`/`Featured` validation (PS-122, PS-123); `read_cast_by` the optional third tab and its five fatalities (PS-121); `build` the artifact assembly, own-namespace stamps, the `candidacy_ref` carry-through, and the outcome, featured and cast-by carry) |
 | C1.16 | S-vld | 318-420 (`validate_members` — MEMBER-1..7, the roster column contract, deliberately outside `validate_votes`' early return), 88 (wired into validate), 152-174 (`ROSTER_SCHEMAS` — the per-shape declaration the contract hangs on), 175 (`_ISO_DATE`, the date predicate a′ names) |
 | C1.16 | S-chk | `EDITORIAL_TABS` (all three school-board source tabs declared, the third optional at ingest per PS-121) + `ROLES` (`ingest_sb_votes.py` classified `pipeline-reader`) — the pair that makes the read-only property structural rather than promised |
+| C1.17 | S-sbf | 70 (`DUES_TYPE`, the constant the predicate keys on), 274-279 (the single dues-exclusion site — a bare `continue`, with R4a's counter at that same predicate) |
+| C1.17 | S-sbf | 268-289 (the filter order, load-bearing for that counter: slug scope 268, aggregate 270, excluded cycles 272, dues 274, donor 281, self 283, window 287-289) |
+| C1.17 | S-sbf | 384 (`ie_slice` — the spend side, disjoint from the funding-side dues predicate, which is what makes the exclusion vacuous at $0.00) |
 | C2.1 | S-ing | 86-127 (rules), 130-141 (classifier), 314-320 (assignment), 492-496 (partial preserve) |
 | C2.1 | S-syn | 520-526 (merge) |
 | C2.2 | S-ing | 497-500; S-syn 170-174, 528-531 |
@@ -888,7 +937,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.1 | A-fw1 | 7-16 (fix sites exist only in the elections path; artifact layer separate) |
 | C5.2 | S-cemb | 47 (dataUrl at the `refs/heads/main/` form), 48-52 (sharded mode, present-but-commented), 68 (feedback endpoint), 3425+3443 (subject prefix) |
 | C5.2 | S-sbemb | 66-70 (the `refs/heads/main/` rationale in situ, then `dataUrl` and `financeUrl` — TWO artifacts since SBFIN-1, where this row previously named one), 2979+2989 (the two artifact fetches), 81+83 (feedback endpoint + subject prefix), 2959 (the POST) |
-| C5.2 | S-eapp | 15 (DEFAULT_SRC at the bare `main/` form), 19-21 (ART_BASE + the two verification artifacts), 295 (src resolution: data-src → window.IPG_DATA_URL → baked default) |
+| C5.2 | S-eapp | 21 (DEFAULT_SRC at the ratified refs/heads/main/ form), 25-27 (ART_BASE + the two verification artifacts), 301 (src resolution: data-src → window.IPG_DATA_URL → baked default) |
 | C5.2 | S-eemb | 17-18 (data-src override documented), 19-24 (artifact + the code-only inlining: data.js/render.js/app.js + styles into one Code Block) |
 | C5.2 | A-ba1g2 | 49 (Rider 2: neither embed renders entity-type / last-editor — a TWO-embed sweep, predating the school-board path; the third was measured at REF-C52 and agrees) |
 | C5.5 | S-edat | 146-150 (selectorOptions — the {year} {body} pattern), 855-866 (officeRaces election scoping via the year-prefix join), 802-804 (the race's window rides the VM), 819-821 (priorElection re-homed to the base VM) |
@@ -912,6 +961,10 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.9 | S-rol | 143 (the Aggregate-donor set), 157 (member counts exclude it), 161-168 (the one direct-layer loop: row-flag and donor-set skips governing by_parent/by_industry/by_alder/by_candidate/by_race), 265 (by_candidate_election's row-flag-only skip), 312-319 (by_person's paired skips) |
 | C5.9 | S-t1 | 67-73 (slice1 by_parent paired skips), 90-93 (the [8-check] oracle mirrors both) |
 | C5.9 | S-ing | 518-521 (the retired underscore-prefix marking, comment of record) |
+| C5.10 | S-sbemb | 954-956 (`seatVisible` — the one seat filter every seat-iterating surface shares), 957-970 (PS-127 (i)'s sole exception and its single-caller constraint), 1135-1147 (`seatSelector`, the vacancy present by design at 1138-1141), 1187-1191 (the vacancy card — a seat notice, never a member page) |
+| C5.10 | S-sbv | 250 (`read_votes` reads `source_url` as a fixed column), 378 + 393 (the carry into the artifact, roster and vote sides) |
+| C5.10 | S-sbemb | 1206 (the per-vote Source link on the meta surface), 1256 (the vote card's Source link) |
+| C5.10 | S-sbemb | 60-64 (the enumerated N=2 fetch statement the gate asserts by count, so a third fetch fails rather than drifting silently) |
 | C5.9 | S-srv | 471-508 (cluster-preview totals mirror the rollup exclusion set exactly) |
 | C5.9 | S-rec | 39, 207-208 (contribution-type set-aside, excluded from the itemized compare) |
 | C5.9 | S-edat | 415-441 (contributor rollup counts every row; the broader render marking incl. small-dollar), 534 (row-flag carriage into the footprint VM) |
