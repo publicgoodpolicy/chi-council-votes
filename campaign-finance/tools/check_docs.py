@@ -203,6 +203,31 @@ def classify_token(tok):
     return t
 
 
+def resolve_basename(t, bidx, tracked):
+    """Rule 3's fallback, as a PURE decision so the self-test can bite it directly.
+
+    Returns ('ambiguous', hits) | ('weak', [hit]) | ('unresolved', []).
+
+    AMBIGUITY IS A FAILURE, NOT A WEAK PASS (HYG-B2 item 26, ratified fail-not-warn).
+    The direct-basename branch used to take `hits[0]` with no length guard while the
+    suffix branch below already required exactly one hit — so a citation whose basename
+    was shared by several tracked files bound silently to whichever `git ls-files`
+    happened to list first, and reported that binding as a WEAK-PASS a reader would scan
+    past. The index's ordering is not the document's intent. A shared basename now fails
+    and names every candidate, so the citing document has to say which file it means.
+
+    Single-hit basenames are unchanged: still a resolution, still reported WEAK-PASS.
+    """
+    base = os.path.basename(t)
+    hits = bidx.get(base, [])
+    if len(hits) > 1:
+        return "ambiguous", sorted(hits)
+    if not hits and "/" not in t:                      # unique suffix match, reported weak
+        h = [x for x in tracked if os.path.basename(x).endswith(base)]
+        hits = h if len(h) == 1 else []
+    return ("weak", hits) if hits else ("unresolved", [])
+
+
 def rule3(known):
     """Returns (failures, stats). Checks tracked markdown; RULINGS.md quoted blocks and
     provenance lines are out by construction."""
@@ -232,12 +257,13 @@ def rule3(known):
                 if (os.path.exists(os.path.join(REPO, t))
                         or os.path.exists(os.path.join(fdir, t))):
                     continue
-                base = os.path.basename(t)
-                hits = bidx.get(base, [])
-                if not hits and "/" not in t:          # unique suffix match, reported weak
-                    hits = [x for x in tracked if os.path.basename(x).endswith(base)]
-                    hits = hits if len(hits) == 1 else []
-                if hits:
+                kind, hits = resolve_basename(t, bidx, tracked)
+                if kind == "ambiguous":
+                    fails.append(f"{f}:{i}: ambiguous basename {t!r} — {len(hits)} tracked "
+                                 f"files share it ({', '.join(hits)}); cite the full path so "
+                                 f"the referent is the document's, not the index's ordering")
+                    continue
+                if kind == "weak":
                     stats["weak"].append(f"{f}:{i}: {t} -> {hits[0]}")
                     continue
                 if (f, t) in known_keys:
@@ -290,10 +316,21 @@ def load_known(path=KNOWN_PATH):
     with open(path, encoding="utf-8") as f:
         k = json.load(f)
     fails = []
+    # THE CEILING IS AN EQUALITY, NOT A MAXIMUM (HYG-B2 item 28, ratified).
+    # `>` alone let the pin drift above the count: discharge one entry without lowering
+    # max_entries and a slot of headroom stays open, into which a DIFFERENT violation can
+    # later be appended without ever tripping "GREW". Shrink-only then means shrink-only in
+    # entries but not in the pin, which is not the property the discipline claims. Equality
+    # closes it — the pin must be lowered by the same commit that removes the entry.
+    # Two failure names, because the causes differ and demand different responses.
     if len(k["entries"]) > k["max_entries"]:
         fails.append(f"known-failures file GREW: {len(k['entries'])} entries > pinned "
                      f"max_entries {k['max_entries']} — shrink-only is enforced; a new "
                      f"violation cannot be silenced by appending here")
+    elif k["max_entries"] != len(k["entries"]):
+        fails.append(f"known-failures RATCHET: max_entries {k['max_entries']} exceeds the "
+                     f"entry count {len(k['entries'])} — shrink the pin with the fix, or the "
+                     f"headroom silently readmits a different violation later")
     for e in k["entries"]:
         if not e.get("owner"):
             fails.append(f"known-failures entry has no owning lane: {e.get('file')} :: {e.get('token')}")
@@ -400,12 +437,49 @@ def self_test():
     os.unlink(tmp)
     t("shrink-only: appended entry beyond pinned max fails", any("GREW" in x for x in kf))
     with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as tf:
-        json.dump({"created": "2026-08-04", "max_entries": 2, "entries": [
+        # max_entries EQUALS the count here so this fixture trips the owner rule ALONE —
+        # under item 28's equality ratchet the old 2-for-1 pin would also raise RATCHET,
+        # and a fixture that fires two rules proves neither one cleanly.
+        json.dump({"created": "2026-08-04", "max_entries": 1, "entries": [
             {"file": "a.md", "token": "x.py", "dated": "2026-08-04"}]}, tf)
         tmp = tf.name
     _, kf = load_known(tmp)
     os.unlink(tmp)
     t("owner required: entry without owning lane fails", any("no owning lane" in x for x in kf))
+
+    # item 26 — the ambiguity guard, bitten on the pure fallback decision.
+    BIDX = {"README.md": ["README.md", "campaign-finance/elections/README.md"],
+            "solo.py": ["campaign-finance/tools/solo.py"]}
+    TRACKED = ["README.md", "campaign-finance/elections/README.md",
+               "campaign-finance/tools/solo.py"]
+    kind, hits = resolve_basename("README.md", BIDX, TRACKED)
+    t("item26: a two-hit basename is REJECTED as ambiguous, not weak-passed",
+      kind == "ambiguous" and len(hits) == 2)
+    t("item26: the rejection names EVERY hit, so the citing document can choose",
+      hits == ["README.md", "campaign-finance/elections/README.md"])
+    kind, hits = resolve_basename("solo.py", BIDX, TRACKED)
+    t("item26: a one-hit basename still WEAK-PASSes (unchanged behaviour)",
+      kind == "weak" and hits == ["campaign-finance/tools/solo.py"])
+    kind, hits = resolve_basename("campaign-finance/nope_xyz.py", BIDX, TRACKED)
+    t("item26: an unresolvable token is still unresolved (falls through to known-failures)",
+      kind == "unresolved" and hits == [])
+
+    # item 28 — the equality ratchet, both directions, GREW text preserved.
+    def _kf(max_entries, n):
+        with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as tf2:
+            json.dump({"created": "2026-08-04", "max_entries": max_entries,
+                       "entries": [{"file": f"{j}.md", "token": f"{j}.py",
+                                    "owner": "DOCS-M2", "dated": "2026-08-04"}
+                                   for j in range(n)]}, tf2)
+            nm = tf2.name
+        _, out = load_known(nm)
+        os.unlink(nm)
+        return out
+    t("item28: max_entries ABOVE the entry count is rejected (RATCHET)",
+      any("RATCHET" in x for x in _kf(3, 1)))
+    t("item28: max_entries BELOW the entry count keeps the GREW text",
+      any("GREW" in x for x in _kf(1, 3)))
+    t("item28: equality passes", _kf(2, 2) == [])
 
     print(f"self-test: {n} checks · " + ("ALL PASS" if not bad else f"FAILED {bad}"))
     return 1 if bad else 0
