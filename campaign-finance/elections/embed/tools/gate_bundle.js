@@ -1333,6 +1333,35 @@ async function assertPersonSurface(T, ctx, fx) {
     T.ok('[SHEET/SELF] check_sheet_scopes self-test green — ' + tail, res.status === 0);
   })();
 
+  // [REF/PINS] the §8 citation-appendix pin checker (HYG-B2 commit B, open ledger 20 f1).
+  // §8 pins every cited file by sha256 and hangs line-coordinates off those pins through a
+  // TAG, and until this lane nothing verified any of it: HYG-B2's H0 measured 10 of 22
+  // in-repo pins drifted off their files, with 32 of the 74 legend-anchored SOURCED rows
+  // scoped to bytes that had moved. Commit A restored the truth; this line is what keeps it
+  // true, and its absence WAS the ledger item. Same two-line shell-out shape as [DOCS].
+  //
+  // It verifies IDENTITY and STRUCTURE, never CLAIMS — whether a row's parenthetical still
+  // describes the code is human re-verification (commit A's protocol), and the checker's own
+  // header says so rather than letting a green imply coverage it does not have.
+  (function () {
+    var res = require('child_process').spawnSync('python3',
+      [path.join(__dirname, '..', '..', '..', 'tools', 'check_ref_pins.py')], { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[REF/PINS] §8 pins are current and every tag resolves — ' + tail, res.status === 0);
+  })();
+
+  // [REF/PINS-SELF] check_ref_pins's own biting cases — the [DOCS/SELF] shape. A pin checker
+  // that never fires is the green-that-means-nothing this lane exists to retire: its bites
+  // are in-memory mutations over a pure verdict function with the file resolver injected, so
+  // apply-and-restore is structural and no bite can leave residue. Green at adoption.
+  (function () {
+    var res = require('child_process').spawnSync('python3',
+      [path.join(__dirname, '..', '..', '..', 'tools', 'check_ref_pins.py'), '--self-test'],
+      { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[REF/PINS-SELF] check_ref_pins self-test green — ' + tail, res.status === 0);
+  })();
+
   // [IE/DIST] the ingest_ie ward-absent/district-present collision cases (IE-DIST-1).
   // Its own docstring: "These are non-optional precisely BECAUSE the fix is dormant on
   // live data" — no real expenditure resolves into a same-name school-board cohort, so
