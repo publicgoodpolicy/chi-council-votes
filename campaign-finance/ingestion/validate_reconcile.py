@@ -7,10 +7,19 @@ or its freshness. That is the wrong artifact to leave unguarded, because it is t
 one this project publishes that reaches readers **with no paste in the way** — the
 elections embed fetches it from the CDN, so a push is a publication.
 
-Two checks, deliberately narrow:
+The checks are the `CHECKS` tuple below, and the reported count derives from it rather
+than from a literal — so this list, the code, and the run agree by construction instead of
+by care. Deliberately narrow:
 
-  [RECON/SYNC]   every input named in `run.inputs` still hashes to the recorded sha256.
   [RECON/SHAPE]  the report parses and carries the expected top-level key inventory.
+  [RECON/SYNC]   every input named in `run.inputs` still hashes to the recorded sha256.
+  [RECON/CLAIM]  the known-gaps claim resolves through that same stamped input.
+
+This paragraph read "Two checks" over three for as long as [RECON/CLAIM] has existed: the
+count was a literal in three places and the docstring a fourth statement of it, so nothing
+tied them together and the prose rotted silently. `--self-test` now asserts that every name
+in `CHECKS` appears here and that this list names no other `RECON/` check, which is what
+keeps the sentence above honest when the next check lands.
 
 What this does NOT do: re-derive any figure. It is a provenance and structure check, not
 a second reconcile. The arithmetic is reconcile.py's to own; this establishes that the
@@ -31,7 +40,15 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import sys
+
+# The artifact-run checks, in the order main() evaluates them. THE source of the reported
+# count: main() derives both the total and the pass count from this tuple, and the module
+# docstring is asserted against it by `--self-test`, so the count cannot drift from the code
+# and the prose cannot drift from either. Adding a check means adding its name here and its
+# verdict in main() — nothing else states the number.
+CHECKS = ('RECON/SHAPE', 'RECON/SYNC', 'RECON/CLAIM')
 
 EXPECTED_TOP = {'run', 'headline', 'no_sbe_id_committees', 'join_failures',
                 'filings_missing_totals', 'disclosed', 'stale_annotations', 'committees'}
@@ -320,6 +337,15 @@ def _self_test():
     ok('claim: the failure names the shortfall',
        'FALSE by' in ' '.join(claim_verdict(R,{'gaps':[{'amount':-500.0}]})[1]))
 
+    # HYG-B2 commit D — the docstring is pinned to CHECKS, in BOTH directions. The prose read
+    # "Two checks" over three because nothing tied it to the code; a one-way check would let
+    # the reverse rot return (a name lingering here after its check is deleted).
+    _doc = __doc__ or ''
+    ok('count: the docstring names every check in CHECKS',
+       all(('[' + c + ']') in _doc for c in CHECKS))
+    ok('count: the docstring names no RECON/ check absent from CHECKS',
+       set(re.findall(r'\[(RECON/[A-Z]+)\]', _doc)) == set(CHECKS))
+
     for n, c in t:
         print(('  PASS ' if c else '  FAIL ') + n)
     print(f"self-test: {len(t)} checks · " + ("ALL PASS" if not fails else f"FAILED {fails}"))
@@ -372,17 +398,23 @@ def main():
     else:
         cok = False
 
-    bad = not (sok and yok and cok)
+    # ONE SOURCE OF TRUTH for the count (HYG-B2 commit D). It used to be the literal `3` at
+    # three sites with `n_ok` summed separately beside them, so a fourth verdict meant four
+    # hand-edits and missing one would misreport silently — the drift class a recount exists
+    # to catch, surviving only because the literal happened to be right. Both the total and
+    # the pass count now derive from this one pairing of CHECKS to its verdicts.
+    verdicts = dict(zip(CHECKS, (sok, yok, cok)))
+    n_checks, n_ok = len(CHECKS), sum(1 for v in verdicts.values() if v)
+    bad = n_ok != n_checks
     for ln in slines + ylines + klines + clines:
         print('[validate_reconcile] ' + ln, file=(sys.stderr if bad else sys.stdout))
     for u in unknown:
         print(f'[validate_reconcile] RECON/KNOWN: {u!r} is failing and is NOT pinned — '
               f'either fix it or ratify a pin', file=sys.stderr)
-    n_ok = int(sok) + int(yok) + int(cok)
-    print(f'[validate_reconcile] 3 checks · ' + ('OK: 0 errors' if n_ok == 3
-                                                 else f'FAILED {3 - n_ok}')
+    print(f'[validate_reconcile] {n_checks} checks · '
+          + ('OK: 0 errors' if not bad else f'FAILED {n_checks - n_ok}')
           + (f' · {len(failed)} pinned' if failed and yok else ''))
-    sys.exit(0 if n_ok == 3 else 1)
+    sys.exit(0 if not bad else 1)
 
 
 if __name__ == '__main__':
