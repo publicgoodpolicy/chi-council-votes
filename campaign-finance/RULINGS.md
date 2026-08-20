@@ -1527,6 +1527,31 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: ARC-BOUNDARY-1 ratification package, revision 1 (`ARC-BOUNDARY-1-ratification-package-rev1.md`), sha256 `42a1b1f3b25b0b97d3708ca2a1353fe9229c3c0da8d8000f2ada2752e7a67112`, 10,659 B / 158 L, ruling region B, lines 103–133, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan 2026-08-18 as drafted. Id allocated at this transcription.*
 
+> *Amendment (ARC-BOUNDARY-2 / HYG-B2).* **(v) Executor-side transcription
+> anchors are paired pointers.** Wherever the executor carries a reference
+> across its own steps — a coordinate, heading, or identity anchoring a
+> transcription, a commit-message claim, a report cross-reference, or a
+> re-stamp — the pair rule applies unchanged: the anchor travels with the
+> pointed-at text or measured value it claims, checked at the moment of
+> use, a mismatch halting rather than being corrected in place. The
+> convention banked at the ELEC-IDENTITY block is hereby register text;
+> planner-side scope under (i) is unchanged.
+
+*Provenance, amendment (the pair rule generalized to executor-side transcription anchors): HYG-B2 commit F dispatch (`hyg-b2-h6-dispatch.md`), sha256 `376fb6cfb7115d57dd619c87ce4466835c8892d021779eb1f81e4061c5de385e`, 5,271 B / 99 L, the ratified substance at §"Edit 1", transcribed verbatim from the marked text; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan 2026-08-20 as drafted. Recorded under the PS-93 pattern: the amendment carries no id of its own and PS-129's pre-amendment text stands unaltered above, because an amendment says what now governs rather than editing the superseded reading away. The next free numbered id is not left untouched by this commit, but by its second edit and not by this block: PS-130 is allocated below for the green-HEAD invariant, a separate ratified ruling. The paired pointer was checked at the moment of use under PS-129 (i): the entry's closing provenance sentence was located by the `### PS-129` heading and matched exactly once within the entry, byte for byte, with no normalization required on either side — the dispatch's rendering of that sentence carries a leading italic marker that in the file opens the `*Provenance:` span, which is a quoting artifact and not a text difference.*
+
+---
+
+### PS-130 — the green-HEAD invariant: main is never left red, and a red at HEAD is a halt, not a fix-forward
+
+> **The green-HEAD invariant.** `main` is never left red: every commit is
+> made against a gate reading ALL PASS at the bytes being committed, proven
+> by blob identity or an at-stage run, and every push publishes a HEAD whose
+> gate status is attested in its lane record. A red discovered at HEAD is a
+> halt-and-report, never a quiet fix-forward; the fix is its own reviewed
+> commit. Standing since the alder arcs; transcribed at ARC-BOUNDARY-2.
+
+*Provenance: HYG-B2 commit F dispatch (`hyg-b2-h6-dispatch.md`), sha256 `376fb6cfb7115d57dd619c87ce4466835c8892d021779eb1f81e4061c5de385e`, 5,271 B / 99 L, the ratified ruled text at §"Edit 2", transcribed verbatim from the marked text; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan 2026-08-20 as drafted. Id allocated at this transcription. The invariant is standing rather than new — it has governed since the alder arcs and is transcribed here so a repo-only reader can find the rule the work has been running on, which is the gap PS-87 names.*
+
 ---
 
 ## Rulings ratified without an id
