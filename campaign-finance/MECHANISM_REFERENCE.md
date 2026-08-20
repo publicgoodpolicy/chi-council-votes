@@ -786,24 +786,25 @@ that catch defect classes the existing gates structurally cannot see.
 | S-syn | `campaign-finance/sheets-sync/sync_overrides.py` | `0bac13ab7c15a02197822b77b7c1144ad3b12655b37322208476a3b0d3d73913` |
 | S-bld | `campaign-finance/build_all.sh` | `e034a6052cacd26b15fc1e682584fd9d8cc6d2a9430d2f456c1b98de24e81d56` |
 | S-t1 | `campaign-finance/ingestion/transform_slice1.py` | `5f807b26245ee22173d3903b9b8a3825f224c47c4f2d7ad11042ee87a6ccb68d` |
-| S-ie | `campaign-finance/ingestion/ingest_ie.py` | `242caca31d35adfd962f5f1c2897c07345afe1a26286f2cc6ffd779376847158` |
+| S-ie | `campaign-finance/ingestion/ingest_ie.py` | `d7ee840225cb805bc6b9a83e01ac157efbbd80f2a2bc857406d078cc8e1fdb9d` |
 | S-rep | `campaign-finance/ingestion/repair_clusters.py` | `90cc6912647479510d10d505debb84d18fbd28557bf5996b01a992eb1ddf283c` |
-| S-rol | `campaign-finance/ingestion/build_rollups.py` | `a37a9ee4a1fe93a66dae7c6ecb50e3face70f05078e7fbc97e088a4cafb4fe89` |
-| S-seed | `campaign-finance/elections/build_election_seed.py` | `a2122eab99c8e6db401801a97e43537a4eea62ae1f7b4f13cdb03e8a761a20f7` |
-| S-vld | `campaign-finance/ingestion/validate_council_data.py` | `7d6a5b63942866aa1a6f57647b63b7a63d140298ab7a3ae93b8c1ec85d1b1e23` |
+| S-rol | `campaign-finance/ingestion/build_rollups.py` | `3497822e951cd6257aa55a50440b25a976f3059316f0f29be03cbba7ce941df9` |
+| S-seed | `campaign-finance/elections/build_election_seed.py` | `7ba72ad8d638755b0c1b85a586beaa34dc7ff773e54fc7667063b9551842807c` |
+| S-vld | `campaign-finance/ingestion/validate_council_data.py` | `7a10fd16bdefa8f1c78e9ba491aa3bd0963dde743fbc866a1d676d1d24cdd129` |
 | S-sbv | `campaign-finance/ingest_sb_votes.py` | `d4d7f6050b1f7dac07e07d27067fbf35ffe4f29a05e6cee74687412338a110b3` |
 | S-rst | `campaign-finance/ingestion/restamp_committee_linkage.py` | `6ceb82f9bbcffa08fdb21904b8585982a6bff7e3982e0b810937e2958019d06e` |
 | S-cbr | `campaign-finance/ingestion/convert_bulk_receipts.py` | `ac33aa394c4f8905c307390160fbe397a09399199a3396b07f29f01729bbe582` |
 | S-av | `campaign-finance/sync_allvotes.py` | `a0c4f23df6e4f012e683088e012dc91692fe65399e6fcae2acd1ec9b40e61384` |
-| S-cemb | `campaign-finance/elections/reference/council-embed.html` | `f439227d3dd9781df90b34454b46e26f438b6433057ea60d61a5b72fd934f14f` |
+| S-cemb | `campaign-finance/elections/reference/council-embed.html` | `69e107cb4ad3caf1ed87d1a0b6e31b87608f811ea479f3ca9bcbabb59da8c7de` |
 | S-sbemb | `campaign-finance/school-board/school-board-embed.html` | `e3bb4d40abef7cd5335150257c493eb9a913ad1d29b2353fdc37f11fd94e7956` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
-| S-edat | `campaign-finance/elections/embed/data.js` | `e36af72ece73ff47b1322abd08548b1f3a1a7624f896381c6c8f10fd6b043ecc` |
-| S-eren | `campaign-finance/elections/embed/render.js` | `bc5ccf5b1720a366487419f2d3267591e4332da14a1ba6cade46606b2f35d9d2` |
-| S-eapp | `campaign-finance/elections/embed/app.js` | `ea8a6b01871dec4cb63a21996fbb4572f855e11a45f0cf9e0ff35fe56815a659` |
+| S-edat | `campaign-finance/elections/embed/data.js` | `7ae3cfc313d1e409a7506b942f83cf914e5754bc329ff7013b8de2a34d8d6502` |
+| S-eren | `campaign-finance/elections/embed/render.js` | `c661c5de123781199df623b90b8e5a481be0910ca415065a59ddeb42e4481a7b` |
+| S-eapp | `campaign-finance/elections/embed/app.js` | `4c4df660ffa73510b53f632576cfb38035bc037b30047c828a6b8cd1f1771f25` |
 | S-srv | `campaign-finance/editor/serve.py` | `f430f67b2d2367893ab4cb37a1c25ff84d71bb93b53a23b78f253ec17dccaa3a` |
-| S-rec | `campaign-finance/ingestion/reconcile.py` | `e832e648b5cf4ceee065e0ad07f610ff14b6c47a66609b300c7f2cdba6114ae2` |
-| S-chk | `campaign-finance/tools/check_sheet_scopes.py` | `bd118ab5b8a15fa1f032d6c350389690c948e99820b2b80f7fb93a98c55259b5` |
+| S-rec | `campaign-finance/ingestion/reconcile.py` | `7d7b9a62cdbcf18bef5c23e55bb439a8d9f88786323ae3ec4990ee50b66efa6f` |
+| S-chk | `campaign-finance/tools/check_sheet_scopes.py` | `e45c063d5b19ad0c25695257a5e0a71bdbd7fcf618789ac18d36da9bc065b191` |
+| S-sbf | `campaign-finance/ingestion/build_sb_finance.py` | `566e15999c29359d66c7e6c87b5f44c982e8df0fe5cd9c309ecb644bf6769553` |
 | A-probe | `~/probe-sync-2026-07-24/probe-report.md` | `4c678cf0c14dd370f8b52744bf473000340ce16449a5365841b6ac92d8e5f9bb` |
 | A-add | `~/probe-sync-a-2026-07-24/addendum-a-report.md` | `468ba24f4f418f72c2720608353c83e52694c41637cf9ff16a9b267d37e49ed6` |
 | A-ba1g0 | `~/halt-ba-1-2026-07-24/g0-report.md` | `9aeaa793fd5f4afe59d9ac504f7f00dd219f4417cbafdd3403e5a44f661e812e` |
@@ -824,8 +825,8 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.3 | S-syn | 526-537 (sole-restorer writes) |
 | C1.3 | A-ba1g0 | 44-54 (§G0.2 the firing configuration), 56-66 (§G0.3) |
 | C1.4 | S-seed | 57-61 (rollups-last rationale), 63-70 (governing rule) |
-| C1.4 | S-rol | 284-285 (runs-last comment) |
-| C1.5 | S-ie | 15 (imports rollups), 335 (internal rollup call) |
+| C1.4 | S-rol | 361-363 (runs-last comment) |
+| C1.5 | S-ie | 15 (imports rollups), 369 (internal rollup call) |
 | C1.5 | S-seed | 63-65 (must-never-run-without-parent rule) |
 | C1.5 | S-t1 | 10-16 (parent derivation from cluster state) |
 | C1.6 | S-rep | 10-24 (post-re-ingest repair: re-stamp / reparent / dissolve) |
@@ -834,17 +835,17 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.8 | S-bld | 4-8 (replaced the nightly Action) |
 | C1.9 | S-bld | 62, 79, 80, 86, 87, 88, 92-94 (invocation order conforming to the block; executable content verified byte-identical, comment-stripped, to the pre-amend revision recorded in the BA-1 lane) |
 | C1.12 | S-cbr | 469 (the `Archived == 'False'` selection), 357 (same predicate on the registry cross-check input), 501-508 (the disagreement trip-wire; selection ruled authoritative) |
-| C1.12 | S-ie | 234 (expenditure side), 319 (receipts/funder side) |
-| C1.13 | S-ie | 234 (archived), 235-236 (not Supporting/Opposing), 244 (unmatched target), 253-255 (candidate-committee spender skip), 257 (exact-duplicate collapse), 279-281 (the per-run `stats`, not persisted); 49-54 (`cycle_for`, the label minted for a dateless or out-of-range row) |
+| C1.12 | S-ie | 267 (expenditure side), 352 (receipts/funder side) |
+| C1.13 | S-ie | 267 (archived), 268-269 (not Supporting/Opposing), 277 (unmatched target), 286-288 (candidate-committee spender skip), 290 (exact-duplicate collapse), 312-314 (the per-run `stats`, not persisted); 49-54 (`cycle_for`, the label minted for a dateless or out-of-range row) |
 | C1.13 | A-l0g0 | §5 (the Supporting/Opposing volume, measured over the expenditures bulk; the archived volumes, measured per collection) |
 | C1.14 | S-cbr | 59-65 (`D2PART_NAME`, the five itemizable codes), 357 and 463 (the selection pass and the reassembly pass, both requiring membership) |
 | C1.14 | A-l0g0 | §5 (the D2Part tally over the receipts bulk: the out-of-map values are field-shifted artifacts, not types) |
-| C1.15 | S-vld | 195-312 (`validate_votes` — VOTES-ROSTER + VOTES-1..8, the single-source assertion at VOTES-5), 131-192 (`ROSTER_FIELDS`, `ROSTER_SCHEMAS` and `_roster` — the parameterization point: absence distinguishable from emptiness, and each shape declaring its position key and optional column contract), 86 (wired into validate) |
+| C1.15 | S-vld | 198-315 (`validate_votes` — VOTES-ROSTER + VOTES-1..8, the single-source assertion at VOTES-5), 140-195 (`ROSTER_FIELDS`, `ROSTER_SCHEMAS` and `_roster` — the parameterization point: absence distinguishable from emptiness, and each shape declaring its position key and optional column contract), 87 (wired into validate) |
 | C1.15 | S-av | 156-158 (the seed map, flip-free), 221-238 (apply_featured: votemeta rebuilt whole, positions set-only — the asymmetry the rule closes) |
-| C1.15 | S-vld | 420-470 (`validate_shard_freshness` — the two-namespace stamp discriminator and the deep total assert), 948-951 (the `--shards` opt-in), 761-923 (`self_test` — the roster-and-votes fixtures, incl. the undeclared-shape false-green case and MEMBER-1..7), 927-930 + 945-947 (its pre-argparse handler and the `--self-test` flag) |
+| C1.15 | S-vld | 423-473 (`validate_shard_freshness` — the two-namespace stamp discriminator and the deep total assert), 1259-1262 (the `--shards` opt-in), 948-1234 (`self_test` — the roster-and-votes fixtures, incl. the undeclared-shape false-green case and MEMBER-1..7), 1238-1241 + 1256-1258 (its pre-argparse handler and the `--self-test` flag) |
 | C1.15 | S-bld | 114 (the validator invoked with `--shards`) |
 | C1.16 | S-sbv | whole file (`ingest_sb_votes.py` — the school-board ingest: read-only scope by construction, no write verb anywhere; `mint_member_id` the D-3 slug rule with the four ratified examples as `--self-test` cases; `read_votes` the blank→marker mapping, the fatal unknown-token branch, the structural header contract and the `Outcomes`/`Featured` validation (PS-122, PS-123); `read_cast_by` the optional third tab and its five fatalities (PS-121); `build` the artifact assembly, own-namespace stamps, the `candidacy_ref` carry-through, and the outcome, featured and cast-by carry) |
-| C1.16 | S-vld | 315-417 (`validate_members` — MEMBER-1..7, the roster column contract, deliberately outside `validate_votes`' early return), 87 (wired into validate), 149-170 (`ROSTER_SCHEMAS` — the per-shape declaration the contract hangs on), 172 (`_ISO_DATE`, the date predicate a′ names) |
+| C1.16 | S-vld | 318-420 (`validate_members` — MEMBER-1..7, the roster column contract, deliberately outside `validate_votes`' early return), 88 (wired into validate), 152-174 (`ROSTER_SCHEMAS` — the per-shape declaration the contract hangs on), 175 (`_ISO_DATE`, the date predicate a′ names) |
 | C1.16 | S-chk | `EDITORIAL_TABS` (all three school-board source tabs declared, the third optional at ingest per PS-121) + `ROLES` (`ingest_sb_votes.py` classified `pipeline-reader`) — the pair that makes the read-only property structural rather than promised |
 | C2.1 | S-ing | 86-127 (rules), 130-141 (classifier), 314-320 (assignment), 492-496 (partial preserve) |
 | C2.1 | S-syn | 520-526 (merge) |
@@ -873,32 +874,32 @@ that catch defect classes the existing gates structurally cannot see.
 | C4.2 | A-bbg1 | 38-40 (SEIU propagation fixture: shared Sheet → elections artifact) |
 | C4.3 | A-probe | 152 (banked open-thread naming; mechanism deliberately not characterized here) |
 | C4.4 | S-syn | 546-586 (uniqueness-gated alias; never rewrite) |
-| C4.5 | S-seed | 257, 284, 309 (the three stamp sites), 354-359 (fatal unknown-race-id), 362-368 (mint-time shared check, fatal) |
-| C4.5 | S-vld | 599-665 (the ONE shared implementation: namespace/convention resolvers + election_mismatches), 668-677 (durable INV-ELECT gate), 82 (wired into validate) |
+| C4.5 | S-seed | 287, 314, 339 (the three stamp sites), 410-417 (fatal unknown-race-id), 419-427 (mint-time shared check, fatal) |
+| C4.5 | S-vld | 626-692 (the ONE shared implementation: namespace/convention resolvers + election_mismatches), 695-704 (durable INV-ELECT gate), 82 (wired into validate) |
 | C4.7 | S-ing | 681-706 (resolve_committee_claimants — the ONE resolver), 585-599 (deterministic linkage build consuming it) |
 | C4.7 | S-rst | whole script (claims-derived re-stamp; ruled-four-fields write; fifth-field fail-loud; idempotent) |
-| C4.7 | S-vld | 698-742 (INV-LINK-1..3), 680-687 (the PS-82-independence rationale and the coverage-limit statement, which live in the block header rather than in the function — the pre-amend row cited only the function while describing both), 83 (wired into validate) |
-| C4.6 | S-rol | 109-112, 127-130 (by_candidate/by_race keyed (id, cycle) — no election), 132-204 (by_candidate_election, the election-keyed variant) |
-| C4.6 | S-vld | 560-566 (INV-PERSON-1 pins by_candidate.all as dedup identity) |
+| C4.7 | S-vld | 725-773 (INV-LINK-1..3), 707-714 (the PS-82-independence rationale and the coverage-limit statement, which live in the block header rather than in the function — the pre-amend row cited only the function while describing both), 83 (wired into validate) |
+| C4.6 | S-rol | 187-192, 206-210 (by_candidate/by_race keyed (id, cycle) — no election), 212-282 (by_candidate_election, the election-keyed variant) |
+| C4.6 | S-vld | 587-592 (INV-PERSON-1 pins by_candidate.all as dedup identity) |
 | C4.8 | S-syn | 67-68 (the artifact list + known-failures path), 606-630 (shrink-only loader: growth and owner-less entries fail in code), 632-657 (`resolvable_donor_ids` — the union across artifacts, disk reads only), 659-685 (`check_tag_continuity` — unresolved ids, and a listed entry that no longer fails), 788-817 (the call site: runs before the write, aborts on failure) |
 | C4.8 | A-esg0 | §3 (the orphan census against the union, and the re-mint signature it caught) |
 | C4.9 | S-syn | 691-713 (`coverage_figure`), 801-809 (the per-artifact report and its stated collection scope) |
 | C4.9 | A-esg0 | §2 (pull-model established from bytes; the coverage gap and its collection scope) |
 | C5.1 | A-fw1 | 7-16 (fix sites exist only in the elections path; artifact layer separate) |
-| C5.2 | S-cemb | 47 (dataUrl at the `refs/heads/main/` form), 48-52 (sharded mode, present-but-commented), 68 (feedback endpoint), 3409+3427 (subject prefix) |
+| C5.2 | S-cemb | 47 (dataUrl at the `refs/heads/main/` form), 48-52 (sharded mode, present-but-commented), 68 (feedback endpoint), 3425+3443 (subject prefix) |
 | C5.2 | S-sbemb | 66-70 (the `refs/heads/main/` rationale in situ, then `dataUrl` and `financeUrl` — TWO artifacts since SBFIN-1, where this row previously named one), 2979+2989 (the two artifact fetches), 81+83 (feedback endpoint + subject prefix), 2959 (the POST) |
 | C5.2 | S-eapp | 15 (DEFAULT_SRC at the bare `main/` form), 19-21 (ART_BASE + the two verification artifacts), 295 (src resolution: data-src → window.IPG_DATA_URL → baked default) |
 | C5.2 | S-eemb | 17-18 (data-src override documented), 19-24 (artifact + the code-only inlining: data.js/render.js/app.js + styles into one Code Block) |
 | C5.2 | A-ba1g2 | 49 (Rider 2: neither embed renders entity-type / last-editor — a TWO-embed sweep, predating the school-board path; the third was measured at REF-C52 and agrees) |
-| C5.5 | S-edat | 110-116 (selectorOptions — the {year} {body} pattern), 820-838 (officeRaces election scoping via the year-prefix join), 769 (the race's window rides the VM), 786 (priorElection re-homed to the base VM) |
-| C5.5 | S-eren | 871-876 (selectorNav), 759-761 (the verbatim prior-note; the formerly-cited on_current_record string is DELETED — its retirement is C5.7's affordance clause) |
-| C5.5 | S-eapp | 140-152 (selector state + read-only ?election= boot), 207-218 (scope switch resets the active race — the ruled B6 resolution) |
-| C5.7 | S-edat | 878-960 (resolvePersonRef 884 — id-only resolution + durable link; personView 915 — member sections, window-scoped figures, career total, boolean out-of-window condition, no IE key), 1299 (exports) |
-| C5.7 | S-eren | 638-675 (renderPersonModal — per-member sections + ratified strings), 677-682 (renderPersonMissing — string 7), 710-717 (facet map with on_current_record retired), 723-726 (personAffordance — string 13 label), 762-764 (card affordance), 780-792 (pendingCard explicit on_current_record branch) |
-| C5.7 | S-eapp | 71-80 (openPerson — no window parameter), 91-92 (data-person dispatch, no winFromEl), 276-286 (read-only ?person= boot — the deep-link path) |
-| C5.8 | S-edat | 419-423 (spenderFunders exclusion — the funder-rollup gap closed), 469-473 (donorFootprint exclusion — load-bearing for the windowless opener) |
-| C5.8 | S-eren | 454-455 (iePanel basis label + string-2 empty state), 618-624 (committee-profile basis label, string-2 empty state, structural no-identity-claim) |
-| C5.8 | S-cemb | 1017-1026 (cfInSubject + cfDuesRow + cfCountable — the shared full-set predicates), 1299-1304 (donor-index split: dues out first, then in-subject totals + separate before-May-2011 accumulator), 1400/1420/1525/1596/1865/3082 (full-set call sites: industry, per-alder industry, flags, IE funders, industry-detail, correlation index; IE spender sums filtered in situ), 1511-1524 (flag rows seeded from flagged donors — a fully-excluded flag renders zero, never vanishes), 2025-2034 (string 7 on the structural zero), 2561 (string 8, methodology), 1094-1110 (alder-profile in-subject views + curated option + string 4), 1640-1661 (pre2011SubView — strings 3/4, display-only rows), 1721-1723 (strings 5/6 on the ranked list), 3008-3011 (view bindings) |
+| C5.5 | S-edat | 146-150 (selectorOptions — the {year} {body} pattern), 855-866 (officeRaces election scoping via the year-prefix join), 802-804 (the race's window rides the VM), 819-821 (priorElection re-homed to the base VM) |
+| C5.5 | S-eren | 899-907 (selectorNav), 784-791 (the verbatim prior-note; the formerly-cited on_current_record string is DELETED — its retirement is C5.7's affordance clause) |
+| C5.5 | S-eapp | 143-158 (selector state + read-only ?election= boot), 213-222 (scope switch resets the active race — the ruled B6 resolution) |
+| C5.7 | S-edat | 915-1000 (resolvePersonRef 919 — id-only resolution + durable link; personView 950 — member sections, window-scoped figures, career total, boolean out-of-window condition, no IE key), 1363 (exports) |
+| C5.7 | S-eren | 668-704 (renderPersonModal — per-member sections + ratified strings), 706-712 (renderPersonMissing — string 7), 737-747 (facet map with on_current_record retired), 752-757 (personAffordance — string 13 label), 793-795 (card affordance), 811-822 (pendingCard explicit on_current_record branch) |
+| C5.7 | S-eapp | 81-85 (openPerson — no window parameter), 97-98 (data-person dispatch, no winFromEl), 282-291 (read-only ?person= boot — the deep-link path) |
+| C5.8 | S-edat | 454-458 (spenderFunders exclusion — the funder-rollup gap closed), 504-508 (donorFootprint exclusion — load-bearing for the windowless opener) |
+| C5.8 | S-eren | 484-485 (iePanel basis label + string-2 empty state), 646-651 (committee-profile basis label, string-2 empty state, structural no-identity-claim) |
+| C5.8 | S-cemb | 1019-1026 (cfInSubject + cfDuesRow + cfCountable — the shared full-set predicates), 1316-1321 (donor-index split: dues out first, then in-subject totals + separate before-May-2011 accumulator), 1440/1460/1567/1636/1905/3123 (full-set call sites: industry, per-alder industry, flags, IE funders, industry-detail, correlation index; IE spender sums filtered in situ), 1557-1565 (flag rows seeded from flagged donors — a fully-excluded flag renders zero, never vanishes), 2067-2076 (string 7 on the structural zero), 2602 (string 8, methodology), 1115-1133 (alder-profile in-subject views + curated option + string 4), 1675-1698 (pre2011SubView — strings 3/4, display-only rows), 1758-1760 (strings 5/6 on the ranked list), 3048-3052 (view bindings) |
 | C5.3 | A-fw1 | 14-16 (artifact not fused), 60-62 (gates check values, not structure) |
 | C5.4 | A-probe | 152 (banked sizing item: multiple surfaces, per-path render compliance) |
 | C6.1 | A-ba1g0 | 56-66 (dollar/repairability distinctions); A-ba1g2 49 (render-invisibility distinction) |
@@ -908,14 +909,14 @@ that catch defect classes the existing gates structurally cannot see.
 | C7.2 | this document §1 (positional definition) + A-probe 42-72 (§P1 usage of record) |
 | C7.3 | A-probe | 74-94 (§P2), 90 (the overload stated) |
 | C7.4 | S-ing | 506-508 (the carry set) |
-| C5.9 | S-rol | 63 (the Aggregate-donor set), 77 (member counts exclude it), 82-88 (the one direct-layer loop: row-flag and donor-set skips governing by_parent/by_industry/by_alder/by_candidate/by_race), 188 (by_candidate_election's row-flag-only skip), 237-242 (by_person's paired skips) |
+| C5.9 | S-rol | 143 (the Aggregate-donor set), 157 (member counts exclude it), 161-168 (the one direct-layer loop: row-flag and donor-set skips governing by_parent/by_industry/by_alder/by_candidate/by_race), 265 (by_candidate_election's row-flag-only skip), 312-319 (by_person's paired skips) |
 | C5.9 | S-t1 | 67-73 (slice1 by_parent paired skips), 90-93 (the [8-check] oracle mirrors both) |
 | C5.9 | S-ing | 518-521 (the retired underscore-prefix marking, comment of record) |
 | C5.9 | S-srv | 471-508 (cluster-preview totals mirror the rollup exclusion set exactly) |
-| C5.9 | S-rec | 39, 196 (contribution-type set-aside, excluded from the itemized compare) |
-| C5.9 | S-edat | 383-410 (contributor rollup counts every row; the broader render marking incl. small-dollar), 499 (row-flag carriage into the footprint VM) |
-| C5.9 | S-eren | 373-392 (the labeled, non-clickable pinned aggregate line; rows sum to the headline), 482 (the aggregate-of-N row chip) |
-| C5.9 | S-cemb | 1125-1136 (alder-profile headline counts the tail into totals and stats), 1190-1209 (the restored disclosure line and its superseded HALT-MIG-1 comment of record), 3109 (correlation-index donor-type skip) |
+| C5.9 | S-rec | 39, 207-208 (contribution-type set-aside, excluded from the itemized compare) |
+| C5.9 | S-edat | 415-441 (contributor rollup counts every row; the broader render marking incl. small-dollar), 534 (row-flag carriage into the footprint VM) |
+| C5.9 | S-eren | 413-422 (the labeled, non-clickable pinned aggregate line; rows sum to the headline), 512 (the aggregate-of-N row chip) |
+| C5.9 | S-cemb | 1145-1153 (alder-profile headline counts the tail into totals and stats), 1192-1212 (the restored disclosure line and its superseded HALT-MIG-1 comment of record), 3125 (correlation-index donor-type skip) |
 | P1 | A-fw1 | 60-62 (proposed fused-per-candidate detector, not built) |
 
 **RULED pointers** (`claim-id | ruling | register entry`; ruling text and provenance live in
