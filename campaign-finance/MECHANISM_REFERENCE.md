@@ -672,6 +672,26 @@ from the record it came from. The embed makes an **enumerated** two fetches, bot
 school-board-family artifacts, which a gate check asserts by count so a third is a failure
 rather than a silent drift. Landed at SBV-BOARD-1 over the SBV-PORT-1 data port.
 
+**The school-board embed's `render()` is a view router, and no branch of it throws**
+[C5.11, SOURCED]: `render()` dispatches on `state.view` across five named views — member,
+record, matrix, spend, board — and its terminal `else` falls through to
+`methodologyView()` rather than throwing. The embed carries no office concept, and its
+President handling is `presidentRenders()` plus `seatVisible()` — a PS-125 filter, not an
+office branch. The throws-on-unknown-office behavior recorded near this surface belongs
+elsewhere: the build-time emitter `campaign-finance/elections/embed/tools/build_embed.js`
+refuses to emit a bundle for an office outside its enumerated map, and the gate's
+`[BUNDLE/VINTAGE:bite]` line asserts that refusal — a build-time guard on neither embed's
+render path.
+
+**The school-board funding methodology renders unconditionally within the methodology
+view** [C5.12, SOURCED]: the SFM fold sits inside `methodologyView()`, reached as the
+router's terminal else, rendering the SFM strings in their ratified order with the
+all-elections disclosure re-emitted from its own string-table entry and the dues figure
+substituted from `duesFigure()` behind a loading fallback — a data-readiness branch, not
+an office branch. Office-gated methodology rendering is the elections embed's behavior,
+implemented as the D-22 / PS-112 gate in its own `render.js` and asserted by the gate's
+`[MUNI/METH]` line; no such gate exists on this single-office surface.
+
 ---
 
 ## §6 — Defect visibility classes
@@ -965,6 +985,10 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.10 | S-sbv | 250 (`read_votes` reads `source_url` as a fixed column), 378 + 393 (the carry into the artifact, roster and vote sides) |
 | C5.10 | S-sbemb | 1206 (the per-vote Source link on the meta surface), 1256 (the vote card's Source link) |
 | C5.10 | S-sbemb | 60-64 (the enumerated N=2 fetch statement the gate asserts by count, so a third fetch fails rather than drifting silently) |
+| C5.11 | S-sbemb | 2654-2690 (`render` — the view router; its terminal `else` at 2683 falls through to `methodologyView` rather than throwing) |
+| C5.11 | S-sbemb | 2663-2666 (the member, record, matrix and spend tests), 2682 (the board test — the fifth named view) |
+| C5.12 | S-sbemb | 2601-2652 (`methodologyView` — the view the terminal else reaches), 2634-2643 (the SFM fold: heading through f6, with `SF.allElectionsDisclosure` re-emitted at 2636 and the `duesFigure` loading fallback at 2638-2641) |
+| C5.12 | S-sbemb | 672-679 (the SFM string declarations) |
 | C5.9 | S-srv | 471-508 (cluster-preview totals mirror the rollup exclusion set exactly) |
 | C5.9 | S-rec | 39, 207-208 (contribution-type set-aside, excluded from the itemized compare) |
 | C5.9 | S-edat | 415-441 (contributor rollup counts every row; the broader render marking incl. small-dollar), 534 (row-flag carriage into the footprint VM) |
