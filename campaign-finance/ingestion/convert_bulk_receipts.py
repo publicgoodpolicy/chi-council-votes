@@ -39,16 +39,29 @@ OUTPUT FORMATS (--format):
                Address/Zip/Vendor/Election/RptPd/FiledRcvdDate via the FiledDocs join),
                so downstream consumes it exactly as a committee-search export.
 
-Committee set: --committee-map council-data.json (ingest13/council) OR --committee-ids
-  <file> (explicit id list, one per line; export26/elections). Names for export26 come
-  from --committees (the committees bulk, committees.Name).
+Committee set (COUNCIL MODE is now the tracked artifact, CNCL-DATA-1 P1.2):
+  --council-list  campaign-finance/ingestion/council-2027-committees.tsv -- the ruled,
+                  curated selection (ids + wards). The run prints its sha256 and row
+                  count, so every rebuild names the set it ran against. This replaces
+                  deriving the council set from council-data.json, which stated no
+                  identity at run time.
+  --committee-map council-data.json (the older council derivation; unchanged, still
+                  available, mutually exclusive with --council-list).
+  --committee-ids <file> (explicit id list, one per line; export26/elections).
+  Names for export26 come from --committees (the committees bulk, committees.Name).
+
+REVIEW QUEUE (--queue-since YYYY-MM-DD, D3): each run can report the Chicago committees of
+  ANY type that took a receipt since the stated last-run date and are NOT on the selection
+  list. Activity-keyed with no creation-date clause -- see build_review_queue.
 """
 import argparse
 import collections
 import csv
+import hashlib
 import io
 import json
 import os
+import re
 import sys
 import unicodedata
 
@@ -80,9 +93,6 @@ OUT26 = ['CommitteeID', 'CommitteeName', 'ContributedBy', 'RcvdDate', 'Amount', 
          'Description', 'VendorName', 'VendorAddress1', 'VendorAddress2', 'VendorCity',
          'VendorState', 'VendorZip', 'DocName', 'Election', 'RptPdBegDate', 'RptPdEndDate',
          'FiledRcvdDate']
-
-# ward-28: no sbe id / name in council-data; Ishan-ruled to SBE 23112 "Citizens for Ervin".
-WARD28 = {'23112': {'name': 'Citizens for Ervin', 'ward': 28}}
 
 # SBE bulk exports are Windows-1252 (cp1252). cp1252 has FIVE unmapped bytes that crash a
 # strict decode; we pre-scan so a future pull carrying one fails LOUDLY rather than corrupt.
@@ -124,8 +134,36 @@ def build_committee_map(council_data_path):
     for k, v in d['committees'].items():
         if v.get('type') == 'candidate' and v.get('sbe_committee_id'):
             m[v['sbe_committee_id']] = {'name': v.get('committee_name'), 'ward': v.get('ward')}
-    m.update(WARD28)
     return m
+
+
+def build_council_selection(list_path):
+    """COUNCIL MODE selection: read the tracked artifact council-2027-committees.tsv.
+
+    Replaces deriving the council set from council-data.json. That derivation stated no
+    identity at run time -- nothing recorded which committees it had selected, or why --
+    so a rebuild could not be tied to the set it was built from. This reads a curated,
+    ruled file and returns its identity with it, so every run names what it ran against.
+
+    Returns (map, identity) where map is sbe_id -> {'name', 'ward'} (ward None when the
+    row's office_scope is not a ward, e.g. council-unspecified) and identity is
+    {'path', 'sha256', 'rows'}.
+    """
+    h = hashlib.sha256()
+    with open(list_path, 'rb') as f:
+        for b in iter(lambda: f.read(1 << 20), b''):
+            h.update(b)
+    m = {}
+    with open(list_path, newline='', encoding='utf-8') as f:
+        for r in csv.DictReader(f, delimiter='\t'):
+            cid = (r.get('committee_id') or '').strip()
+            if not cid:
+                continue
+            scope = (r.get('office_scope') or '').strip()
+            mo = re.match(r'^ward-(\d+)$', scope)
+            m[cid] = {'name': (r.get('name') or '').strip() or None,
+                      'ward': int(mo.group(1)) if mo else None}
+    return m, {'path': list_path, 'sha256': h.hexdigest(), 'rows': len(m)}
 
 
 def build_committees_name_map(committees_path, ids):
@@ -150,19 +188,40 @@ def _is_record_start(line_no_nl):
 
 
 def _fields_from_span(span_bytes):
-    """csv-semantic field extraction (matches the historical whole-file csv.reader)."""
+    """csv-semantic field extraction (matches the historical whole-file csv.reader).
+
+    ADMIT-AND-GUARD (CNCL-DATA-1 P1.2). This used to return None for any span that did not
+    parse to exactly NFIELDS columns, which sent SHORT records -- real receipt rows missing
+    only their trailing fields -- to the quarantine alongside genuinely unreassembled ones.
+    A short record now returns its fields right-padded to NFIELDS, so every RX index is
+    safe: the absent tail fields are genuinely absent, not shifted.
+
+    Records LONGER than NFIELDS are a different animal and are NOT admitted. An extra tab
+    shifts every field after the break, so their tails cannot be trusted and emitting them
+    would be silent corruption; they stay in the quarantine, where the over-broad clearance
+    assert still fails the run loudly if one belongs to a requested committee.
+
+    Returns (fields, kind), kind in 'exact' | 'short' | 'overlong' | 'unreassembled'.
+    """
     text = b'\n'.join(span_bytes).decode('cp1252')
-    reader = csv.reader(io.StringIO(text), delimiter='\t')
-    rows = list(reader)
-    # a well-formed single record parses to exactly one csv row with NFIELDS columns
-    if len(rows) == 1 and len(rows[0]) == NFIELDS:
-        return rows[0]
-    return None
+    rows = list(csv.reader(io.StringIO(text), delimiter='\t'))
+    if len(rows) != 1:
+        return None, 'unreassembled'
+    row = rows[0]
+    if len(row) == NFIELDS:
+        return row, 'exact'
+    if len(row) < NFIELDS:
+        return row + [''] * (NFIELDS - len(row)), 'short'
+    return row, 'overlong'
 
 
-def reassembly_parse(bulk_path, wanted_ids):
+def reassembly_parse(bulk_path, wanted_ids, queue_since=None):
     """Return {committee_id: [record(list of NFIELDS str)]} for wanted_ids, with the
-    3c global accounting assert and the quarantine over-broad clearance assert."""
+    3c global accounting assert and the quarantine over-broad clearance assert.
+
+    queue_since (YYYY-MM-DD) additionally accumulates, for EVERY committee in the file and
+    not just the wanted ones, the latest RcvDate at or after that date -- the activity
+    signal the D3 review queue keys on. Costs one dict; avoids a second pass over 1 GB."""
     wanted = set(wanted_ids)
     wanted_bytes = {w.encode('ascii') for w in wanted}
     rows = {w: [] for w in wanted}
@@ -170,25 +229,40 @@ def reassembly_parse(bulk_path, wanted_ids):
     sum_span_lines = 0
     emitted = 0
     quarantined = 0
+    n_short = 0
+    n_short_wanted = 0
+    n_overlong = 0
+    active_since = {}
     clearance_hits = []
 
     with open(bulk_path, 'rb') as f:
         header = f.readline()
-        hcols = _fields_from_span([header.rstrip(b'\n')])
+        hcols, _hkind = _fields_from_span([header.rstrip(b'\n')])
         if hcols != RECEIPTS_COLUMNS:
             raise SystemExit('FATAL: receipts header does not match the expected 29-column layout')
         cur = []
 
         def process(span):
-            nonlocal emitted, quarantined
-            fs = _fields_from_span([s.rstrip(b'\r') for s in span]) if len(span) == 1 else _fields_from_span(span)
-            if fs is not None:
+            nonlocal emitted, quarantined, n_short, n_short_wanted, n_overlong
+            sp = [s.rstrip(b'\r') for s in span] if len(span) == 1 else span
+            fs, kind = _fields_from_span(sp)
+            if fs is not None and kind != 'overlong':
                 emitted += 1
+                if kind == 'short':
+                    n_short += 1
                 cid = fs[RX['CommitteeID']]
+                if queue_since:
+                    d = fs[RX['RcvDate']][:10]
+                    if d >= queue_since and d > active_since.get(cid, ''):
+                        active_since[cid] = d
                 if cid in rows:
                     rows[cid].append(fs)
+                    if kind == 'short':
+                        n_short_wanted += 1
                 return
             quarantined += 1
+            if kind == 'overlong':
+                n_overlong += 1
             raw = b'\n'.join(span)
             for wb, w in zip(wanted_bytes, wanted):
                 if wb in raw:
@@ -214,7 +288,9 @@ def reassembly_parse(bulk_path, wanted_ids):
     if clearance_hits:
         raise SystemExit('FATAL: 3c quarantine clearance assert failed -- requested committee id in a '
                          'non-reassembling record: %s' % clearance_hits[:10])
-    return rows, {'total_physical': total_physical, 'emitted': emitted, 'quarantined': quarantined}
+    return rows, {'total_physical': total_physical, 'emitted': emitted, 'quarantined': quarantined,
+                  'short': n_short, 'short_wanted': n_short_wanted, 'overlong': n_overlong,
+                  'active_since': active_since}
 
 
 # ---------------------------------------------------------------------------
@@ -294,6 +370,13 @@ def emit_export26(row, cname, docmeta):
         'VendorState': row[RX['VendorState']],
         'VendorZip': row[RX['VendorZip']],
         'DocName': md.get('DocName', ''),
+        # FiledDocs.ElectionType -> the output column named 'Election'. The carriage is kept,
+        # but the source field is mostly empty and effectively dead: measured on the sealed
+        # 2026-08-20 vintage, 198,883 of 953,044 FiledDocs rows carry a value (20.9%), and the
+        # latest row that carries one was received 2020-10-28 -- population collapses after
+        # 2011 (734 rows that year, then a trickle of 197/68/167/83/5/4 through 2017 and a
+        # single 2020 row). NO CONSUMER MAY CONDITION ON IT: an absent value here means the
+        # filing predates or skipped the field, never that the filing has no election.
         'Election': md.get('ElectionType', ''),
         'RptPdBegDate': to_mdy(md.get('RptPdBegDate', '')),
         'RptPdEndDate': to_mdy(md.get('RptPdEndDate', '')),
@@ -396,6 +479,52 @@ def verify_against(export_path, bulk, fileddocs, committees):
     sys.exit(0)
 
 
+def build_review_queue(committees_path, active_since, selected_ids, since):
+    """The D3 standing review queue, activity-keyed.
+
+    Ratified shape: committees with City == Chicago, ANY type, at least one receipt dated in
+    the window since the stated last-run date, and NOT on the selection list. There is
+    deliberately no creation-date clause -- the earlier queue carried one, and the miss-trace
+    showed exactly what that costs: 39590 (Laura Yepez) was created in 2023, so a
+    creation-2026 clause could never have surfaced her however active she was. Activity is
+    the signal that generalizes; creation date is not.
+
+    Returns a list of dicts sorted by last receipt date descending, then committee id.
+    """
+    out = []
+    for idx, row in rc._read_tsv(committees_path):
+        if len(row) <= idx['Purpose']:
+            continue
+        cid = row[idx['ID']]
+        if cid in selected_ids or cid not in active_since:
+            continue
+        if row[idx['City']].strip() != 'Chicago':
+            continue
+        out.append({'committee_id': cid,
+                    'name': _tsv_safe(row[idx['Name']]),
+                    'type': row[idx['TypeOfCommittee']].strip(),
+                    'status': row[idx['Status']].strip(),
+                    'creation_date': row[idx['CreationDate']].strip()[:10],
+                    'last_receipt_date': active_since[cid],
+                    'window_since': since})
+    out.sort(key=lambda r: (r['last_receipt_date'], r['committee_id']), reverse=True)
+    return out
+
+
+QUEUE_COLUMNS = ['committee_id', 'name', 'type', 'status', 'creation_date',
+                 'last_receipt_date', 'window_since']
+
+
+def _tsv_safe(v):
+    """Collapse any tab/CR/LF in a bulk field to a space so the row stays one TSV line.
+
+    The queue is written QUOTE_NONE, matching the selection artifact: a committee name
+    legitimately carrying a double quote (SBE has several -- Che "Rhymefest" Smith) must
+    not make the writer quote the whole field and change the file's shape mid-file.
+    """
+    return ' '.join((v or '').split('\t'))[:300].replace('\r', ' ').replace('\n', ' ').strip()
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -404,6 +533,13 @@ def main():
     ap.add_argument('--format', choices=['ingest13', 'export26'], default='ingest13',
                     help='output column format (default ingest13 = council lane)')
     ap.add_argument('--committee-map', help='council-data.json (sbe -> name/ward); ingest13/council')
+    ap.add_argument('--council-list', help='COUNCIL MODE: the tracked selection artifact '
+                    'campaign-finance/ingestion/council-2027-committees.tsv (ids + wards). '
+                    'Replaces the --committee-map derivation and states the selection identity')
+    ap.add_argument('--queue-since', metavar='YYYY-MM-DD',
+                    help='D3 review queue: report Chicago committees of ANY type with a receipt '
+                    'dated on/after this (the last-run date) that are NOT on the selection list; '
+                    'requires --committees')
     ap.add_argument('--committee-ids', help='explicit committee-id list, one per line; export26/elections')
     ap.add_argument('--committees', help='SBE committees bulk .txt for the export26 name join')
     ap.add_argument('--out-dir', default='raw/receipts-council',
@@ -427,8 +563,19 @@ def main():
 
     # Committee set + names.
     cmap = {}
-    if args.committee_map:
+    selection = None
+    if args.council_list:
+        if args.committee_map:
+            raise SystemExit('--council-list and --committee-map are two derivations of the same '
+                             'council set; pass one, not both')
+        cmap, selection = build_council_selection(args.council_list)
+        print('selection: %s' % selection['path'])
+        print('  sha256 %s' % selection['sha256'])
+        print('  %d committees on the list' % selection['rows'])
+    elif args.committee_map:
         cmap = build_committee_map(args.committee_map)
+        print('selection: derived from %s (no stated identity -- see --council-list)'
+              % args.committee_map)
     ids = set(cmap)
     if args.committee_ids:
         with open(args.committee_ids) as f:
@@ -444,13 +591,21 @@ def main():
             if cn.get(c):
                 name_map[c] = cn[c]
 
+    if args.queue_since and not args.committees:
+        raise SystemExit('--queue-since requires --committees (the committees bulk) for City/type')
+
     # Registry metadata (cross-check trip-wire + export26 FiledDocs join).
     final_docids, last_end, a1, docmeta = registry_meta(args.fileddocs, ids)
 
     # Parse (reassembly-first).
-    rows_by_c, stats = reassembly_parse(args.bulk, ids)
+    rows_by_c, stats = reassembly_parse(args.bulk, ids, queue_since=args.queue_since)
     print('reassembly parse: total_physical=%d emitted=%d quarantined=%d (clearance CLEAR)'
           % (stats['total_physical'], stats['emitted'], stats['quarantined']))
+    print('  row admission: a span parsing to ONE csv row is admitted whatever its field count; '
+          'short rows are right-padded to %d fields (%d admitted, %d of them on a requested '
+          'committee); rows LONGER than %d are quarantined unemitted because an extra tab shifts '
+          'their tail (%d such)'
+          % (NFIELDS, stats['short'], stats['short_wanted'], NFIELDS, stats['overlong']))
 
     # Select (Archived == 'False'), compute registry cross-check, emit.
     os.makedirs(args.out_dir, exist_ok=True)
@@ -511,6 +666,20 @@ def main():
     print('=== convert_bulk_receipts (%s): %d committees, %d CSVs -> %s ==='
           % (args.format, len(ids), written, args.out_dir))
     print('  FIELD TOTAL: $%s' % format(field, ',.2f'))
+
+    # D3 standing review queue (activity-keyed; no creation-date clause).
+    if args.queue_since:
+        q = build_review_queue(args.committees, stats['active_since'], ids, args.queue_since)
+        qpath = os.path.join(args.out_dir, 'review-queue.tsv')
+        with open(qpath, 'w', newline='', encoding='utf-8') as fo:
+            w = csv.DictWriter(fo, fieldnames=QUEUE_COLUMNS, delimiter='\t',
+                               lineterminator='\n', extrasaction='ignore',
+                               quoting=csv.QUOTE_NONE, quotechar='')
+            w.writeheader()
+            w.writerows(q)
+        print('review queue (since %s): %d Chicago committee(s) of any type took a receipt in '
+              'the window and are NOT on the selection list -> %s'
+              % (args.queue_since, len(q), qpath))
 
 
 if __name__ == '__main__':
