@@ -1552,6 +1552,26 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: HYG-B2 commit F dispatch (`hyg-b2-h6-dispatch.md`), sha256 `376fb6cfb7115d57dd619c87ce4466835c8892d021779eb1f81e4061c5de385e`, 5,271 B / 99 L, the ratified ruled text at §"Edit 2", transcribed verbatim from the marked text; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan 2026-08-20 as drafted. Id allocated at this transcription. The invariant is standing rather than new — it has governed since the alder arcs and is transcribed here so a repo-only reader can find the rule the work has been running on, which is the gap PS-87 names.*
 
+### PS-131 — the known-gaps ledger's third entry class: itemized rows exceed the sworn cover total
+
+> Third entry class (ratified 2026-08-30): a period in which the committee's itemized Schedule A
+> rows, as carried by the SBE bulk export, sum to more than the sworn D-2 cover total for the
+> same period and filing. The entry states the two figures and the filing; per PS-104 it
+> attributes nothing to SBE. Amount recorded as ours - d2, positive.
+
+*Provenance: PS-103 third-class ruling artifact `p14_y2_ratified_entries.json`, sha256 `8eddd1df496eea7aaa8aed41a6382809b9d244b9abed34cd37c3cf471d488ada`, 9,351 B / 114 L, field `third_class_text`, transcribed verbatim under the JSON-to-block transform stated at §PS-131's dispatch (`cncl-data-1-p2-0-dispatch.md`, sha256 `f9e20f6fad94f09f3fb49db096eaed8ce757897f33838d5cc4adaf310b92260e`) as constrained by the P2.0 re-wrap relay (`cncl-data-1-p2-0-rewrap-relay.md`, sha256 `ed21bb8872549c890e7454b04b396b2d341a4dedb0cefd04f6554ece49f3e0ad`, ruled by Ishan 2026-08-31 on HALT Finding 2): string value unaltered, hard-wrapped at spaces only and never at a point that leaves a line beginning with a Markdown list, heading, quote or table marker; join-with-spaces reproduces the field, sha256-equal. Ratified by Ishan 2026-08-30 (handover rev Y `c2daae95…`, open ledger 42; state-table row "two class rulings await transcription with ids"). Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-130`; `PS-131` occurring 0 times), never carried. The class is carried in the ledger's `reason` prose only — `known-gaps.json` has no `class` field (P2 G0 report `2e71065e…`, divergence e; open ledger 12).*
+
+### PS-132 — the known-gaps ledger's fourth entry class: the comparison-window artifact
+
+> Fourth entry class (ratified 2026-08-30) - comparison-window artifact: a period whose
+> divergence arises from our reconciliation method - rows are bucketed to a filing period by
+> date, so a Pre-election cover total is compared against rows the committee reported on a
+> covering filing. The entry states the two figures and names the covering filing; the
+> divergence is a property of our comparison, not of the source filings. Amount recorded as
+> ours - d2.
+
+*Provenance: PS-103 fourth-class ruling artifact `p14_z2_ratified_entry.json`, sha256 `64c8e7b110b04b06f1d8fd4754157d4ac3e924623a9e57530413ada5d5abea6b`, 1,704 B / 15 L, field `fourth_class_text`, transcribed verbatim under the JSON-to-block transform stated at §PS-131. Ratified by Ishan 2026-08-30 (handover rev Y `c2daae95…`, open ledger 42). Id allocated at this transcription against the id measured free at the moment of writing (`PS-132` occurring 0 times after PS-131's allocation), never carried. Same ledger note as PS-131.*
+
 ---
 
 ## Rulings ratified without an id
@@ -2208,7 +2228,18 @@ The council methodology strings ratified with the ELEC-METH-1 ratification packa
 > if and when a donor-grain keyed figure ships on this tool; none renders today
 > [G0 report, G0.5], so no residual string is authored ahead of its figure.
 
+> **Amendment (CNCL-DATA-1 P2, 2026-08-30) — C5 extends the set.** The council methodology set
+> gains a fifth string, ratified as the brief's R4:
+>
+> **C5, data currency:** `Contribution data is current through {DATA_THROUGH}, from the
+> Illinois State Board of Elections bulk export of {PULL_DATE}.` — where `{DATA_THROUGH}`
+> renders the artifact's stated receipts edge (2026-08-01 on this vintage) and
+> `{PULL_DATE}` the sealed vintage's pull date (2026-08-20), both from the artifact the
+> surface serves; if either field is absent the sentence does not render.
+
 *Provenance: ELEC-METH-1 ratification package, revision 1 (`ELEC-METH-1-ratification-package-rev1.md`), sha256 `97423e822fbf148d4c689fc72355429430e95895b34abdaefce6dc3edb582845`, 11,481 B / 180 L, region R1, lines 19–47, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan in relay 2026-08-19 as drafted — the package states nothing was amended. Id-less per PS-88; no numbered id is allocated for it and the next free numbered id is untouched.*
+
+*Provenance, amendment (C5 extends the set): CNCL-DATA-1 P2 brief, revision 1 (`cncl-data-1-p2-brief-rev1.md`), sha256 `6fb7308145741c6e0b1f6d16f3318fb150a52928a27f44bdbe10b582000e2534`, 6,471 B / 102 L, region R4, lines 73–77, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan in chat 2026-08-30 as drafted (R4 "C5 as drafted"), recorded at P2.0. Recorded under the PS-93 pattern: no id is allocated and C1–C4 stand unaltered above; the set's own "extend only by ratification" clause is what this amendment exercises. `{DATA_THROUGH}` had no field on any served artifact at the P2 G0 measurement (report `2e71065e…`, §G0.3); its materialization is ruled at the P2 R8-as-applied entry below.*
 
 ### ELEC-METH-1 — mayoral methodology strings M1–M4
 
@@ -2258,3 +2289,105 @@ The methodology figure posture and the member-branch subject invariant, ratified
 > non-member branch and evaporated for exactly the office a future key enlists.
 
 *Provenance: ELEC-METH-1 ratification package, revision 1 (`ELEC-METH-1-ratification-package-rev1.md`), sha256 `97423e822fbf148d4c689fc72355429430e95895b34abdaefce6dc3edb582845`, 11,481 B / 180 L, region R4, lines 105–119, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan in relay 2026-08-19 as drafted — the package states nothing was amended. Id-less per PS-88; no numbered id is allocated for it and the next free numbered id is untouched.*
+
+### CNCL-DATA-1 P2 — the verify sentence (R11)
+
+The elections tool's verification sentence, ratified with the P2.1 ratification package, transcribed verbatim; it replaces the incumbent whole and renders tool-wide:
+
+> Every data update, we reconcile the itemized contributions we hold against each committee’s
+> sworn quarterly totals — the figures the committee itself filed under oath — period by period.
+> As of {PULLED}, across all elections this tool covers, our itemized data matches
+> {MATCH_RATE}% of sworn direct-contribution dollars across {N_COMMITTEES} candidate committees,
+> and every divergence is individually accounted for: {N_GAPS} known gaps, netting to
+> {NET_TOTAL} ({GROSS_TOTAL} across both directions). In {N_UNDER} of them a committee’s sworn
+> cover total exceeds what its own itemized schedules account for — a divergence in the source
+> filings themselves, which we disclose rather than reconstruct; {N_OVER} run the other way,
+> where itemized rows exceed the sworn total or the divergence arises from our own comparison
+> window rather than from the filing, and are disclosed on the same terms.
+>
+> **Bindings**, all from the two runtime verification artifacts through `loadVerify`:
+> `{PULLED}`, `{MATCH_RATE}`, `{N_COMMITTEES}`, `{N_GAPS}` as today. `{NET_TOTAL}` is the signed
+> sum of `gaps[].amount`, rendered by a signed money form: `−$N` (U+2212 minus) when negative,
+> `$N` when positive, `$0` when zero, rounded as `money()` rounds. `{GROSS_TOTAL}` is the sum of
+> `|amount|`, rendered by `money()`. `{N_UNDER}` counts entries with `amount < 0`; `{N_OVER}`
+> counts entries with `amount > 0`. The paragraph renders only when `N_UNDER + N_OVER == N_GAPS`;
+> otherwise it does not render (figure posture (i)). Apostrophes are the incumbent's (U+2019).
+> Expectation at HEAD: 16 gaps, netting to −$84,542 ($89,941 across both directions), 12 / 4.
+> Expectation at commit A: 3 gaps, netting to −$8,400 ($8,400 across both directions), 3 / 0.
+
+*Provenance: CNCL-DATA-1 P2.1 ratification package, revision 1 (`cncl-data-1-p2-1-ratification-package-rev1.md`), sha256 `7b0ff7101886a59d4c4e5487db8850d2b2a8a3ef1e70e695130be3e5cdc7326c`, 9,488 B / 136 L, region R11, lines 60–79, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan in chat 2026-08-31 as drafted (R11 (a)). Id-less per PS-88. Carries R6 (a)'s ratified phrase verbatim and describes PS-131 and PS-132's classes jointly by direction; the incumbent it replaces is captured byte-exact in the P2 G0 report `2e71065e…`, §G0.2.*
+
+### CNCL-DATA-1 P2 — R8 and R9 as applied
+
+The mechanism that materializes C5's `{DATA_THROUGH}` and the exact composition of the council methodology branch, ratified with the P2.1 ratification package, transcribed verbatim:
+
+> **(i)** `reconcile.py` writes `run.data_through` as the ISO date of the maximum `date`
+> across every contribution row in the `election-data.json` it reads — the artifact the surface
+> serves. Expectation on this vintage: `2026-08-01`. Independent control at the HALT: the
+> maximum receipt date in the sealed vintage's receipts files, read once, reported beside it.
+> **(ii)** In the same re-run, `run.d2totals_file` and `run.fileddocs_file` reduce to basenames
+> — the `run.inputs` shas already carry identity — so no local absolute path ships on a
+> CDN-served artifact. **(iii)** In the same re-run, `run.scope` is re-stamped from measured
+> coverage; the planner drafts the string at the HALT from the report's own `committees` map and
+> Ishan ratifies it before commit — no string is authored ahead of the measurement.
+> **(iv)** `validate_reconcile` gains an assertion: `run.data_through` present, ISO-formatted,
+> and not later than `run.pulled`; declared PS-128 mode at authoring; bite at birth.
+> **(v)** The report is regenerated by re-run, never hand-edited; twin-run hash equality proves
+> determinism before the re-stamped artifact is staged; provenance stamped last.
+
+> `methodologyView(verify, office)` for `office === 'city_council'` emits, in order and nothing
+> else: **(1)** the same outer wrapper and the same top-level heading the school-board branch
+> emits before its first `<h3>` — byte-identical, measured at the HALT; **(2)** five `<p>`
+> elements carrying, in this order, **C1, C2, C5, C3, C4**, each string exactly as the register
+> entry `### ELEC-METH-1 — council methodology strings C1–C4` and R4 carry it, with these
+> bindings: C5's `{DATA_THROUGH}` ← `verify.dataThrough` (from `run.data_through`, formatted by
+> the same formatter as `verify.pulled`), `{PULL_DATE}` ← `verify.pulled`; C4's
+> `{DUES_AMOUNT}` ← `index.duesExcluded.amount` rendered as currency **to the cent** (a new
+> formatter — `money()` rounds to the dollar and does not satisfy C4), `{DUES_COUNT}` ←
+> `index.duesExcluded.count`; C5 and C4 each render whole or not at all (figure posture (i));
+> **(3)** the verification section — its `<h3>` and `verifyPara` — byte-identical to what the
+> school-board branch emits for the same `verify` object. No `<h3>` precedes any C-string. No
+> school-board section is carried across. `school_board` takes the existing branch, unchanged
+> except the verify sentence (R11).
+
+*Provenance: CNCL-DATA-1 P2.1 ratification package, revision 1 (`cncl-data-1-p2-1-ratification-package-rev1.md`), sha256 `7b0ff7101886a59d4c4e5487db8850d2b2a8a3ef1e70e695130be3e5cdc7326c`, 9,488 B / 136 L, regions R8 as applied (lines 27–39) and R9 as applied (lines 43–56), each transcribed verbatim from its marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan in chat 2026-08-31 as recommended. Id-less per PS-88. R8's item (iii) — the `run.scope` string — is drafted at P2.1's HALT from measurement and ratified before commit; no string is recorded here.*
+
+### CNCL-DATA-1 P2 — display decisions
+
+The P2 display decisions ratified as a set, transcribed verbatim from addendum A1:
+
+> **CNCL-DATA-1 P2 — display decisions, ratified as a set.**
+>
+> **(R3)** `city_council` enters the methodology allowlist at P2.1; the by-race listing and
+> the methodology tab go live together on the deploy.
+>
+> **(R5)** A tool-4 Squarespace page is created at the deploy, mounting
+> `elections-embed.city-council.inlined.html` — `data-office="city_council"` baked at build,
+> nothing edited by the paster — per PS-106/D-16; ROADMAP's tool-4 status moves to live at the
+> arc boundary.
+>
+> **(R6)** The verification figures remain tool-wide, rendering from the two runtime
+> verification artifacts through the existing verify path; the verify sentence states its
+> scope with the phrase "across all elections this tool covers". Per-election scoping is
+> banked.
+>
+> **(R7)** No mayor page exists. P2.2's paste set is two: tool 3's re-paste and tool 4's first
+> paste. The rebuilt mayor bundle commits and sits unpasted.
+>
+> **(R10)** C4 binds the tool-wide `dues_excluded` object, as its own text says ("In this
+> dataset"). Per-office dues and per-election reconcile scoping are one banked lane.
+>
+> **(R12)** P2.2 ordering: paste tool 3, verify the paste, push, then create tool 4 and paste.
+> The P2.1 HALT proves the verify sentence and the council methodology against commit A's
+> artifacts as well as HEAD's, so the paste-first window on tool 3 is measured to show no
+> defect before the ordering is exercised.
+>
+> **(R13)** `DEPLOY.md`'s state table and its CDN URL form are corrected in the P2.1 commit, and
+> the gate's URL sweep widens to cover `DEPLOY.md`, the widening stated in the commit message,
+> with a presence assertion and a bite at birth.
+>
+> **(R14)** Ratified copy enters the register before it ships: a register commit, P2.0, one
+> HALT, precedes P2.1 and carries the transcriptions of C5, the verify sentence, the third and
+> fourth known-gaps entry classes, R8 and R9 as applied, and this set.
+
+*Provenance: CNCL-DATA-1 P2 ratification addendum A1 (`cncl-data-1-p2-ratification-addendum-A1.md`), sha256 `69a143330e47001f9c0d91a043128fcc297b01dfcd758b357952272b80f3bee1`, 2,819 B / 48 L, region A1, lines 13–45, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan in relay 2026-08-31 as drafted; the underlying choices were ruled in chat 2026-08-30 (R3, R5, R6 against the P2 brief rev 1 `6fb73081…`) and 2026-08-31 (R7, R10, R12, R13, R14 against the P2 G0 report `2e71065e…` and the P2.1 ratification package `7b0ff710…`). Id-less per PS-88.*
