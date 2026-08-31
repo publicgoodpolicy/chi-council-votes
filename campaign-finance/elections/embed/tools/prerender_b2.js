@@ -501,9 +501,16 @@ var muniCands = json.candidates.filter(function (c) {
 // S1 (ii) — presence where the derivation IS defined. R1 is alderperson-scoped.
 var alderCands = muniCands.filter(function (c) { return raceOfficeById[c.race_id] === 'alderperson'; });
 var alderWithId = alderCands.filter(function (c) { return c.committee_id != null; }).length;
+// CNCL-DATA-1 P1.4 ruling B (2026-08-30). The population was pinned at 50 because a ward
+// held exactly one candidacy — its incumbent, whose committee is DERIVED from the ward map.
+// Challengers author their own committees, so the ceiling had to be freed. The SUBSTANCE is
+// kept at full strength and is in fact stronger than before: coverage is now asserted
+// ABSOLUTELY (every alder candidacy carries an id, whatever the population), with 50 kept as
+// a FLOOR so a ward losing its incumbent linkage still fires. This accommodates a population,
+// never the money — S1(i) below is untouched.
 ok('S1(ii): every alderperson candidacy carries a derived committee id (' +
-   alderWithId + ' of ' + alderCands.length + ', expected 50 of 50)',
-  alderCands.length === 50 && alderWithId === 50);
+   alderWithId + ' of ' + alderCands.length + ', full coverage absolute; floor 50)',
+  alderWithId === alderCands.length && alderCands.length >= 50);
 
 // S1 (ii) — absence where it is NOT defined. Vacuously true while those offices carry no
 // candidacies at all; the assertion exists for the day one lands, so a mayoral row
@@ -522,18 +529,38 @@ ok('S1(ii): no municipal candidacy outside alderperson carries a committee id ('
 var MUNI_WIN = { start: '2023-05-15', end: '2027-12-31' };
 var muniCmteIds = {};
 muniCands.forEach(function (c) { if (c.committee_id != null) muniCmteIds[c.committee_id] = 1; });
+// CNCL-DATA-1 P1.4 F-2 — THE JOIN WAS REPAIRED, NOT RELAXED. candidate.committee_id holds SBE
+// ids; contribution.committee_id holds committee RECORD KEYS. The two key spaces are disjoint
+// (measured: 139 vs 133 distinct values, intersection ZERO), so this tripwire summed nothing and
+// reported a structural zero on every run it had ever made — including runs where municipal
+// money existed. It now joins through committees[key].sbe_committee_id, and counts DIRECT money
+// only: funder-edge rows ('IE Committee …') are the same SBE receipts read a second time and
+// would double the figure (F-1).
+var sbeOf = {};
+Object.keys(json.committees || {}).forEach(function (k) {
+  var rec = json.committees[k];
+  if (rec && rec.sbe_committee_id) sbeOf[k] = String(rec.sbe_committee_id);
+});
 var muniMoney = { rows: 0, total: 0 };
 (json.contributions || []).forEach(function (c) {
-  if (!muniCmteIds[c.committee_id]) return;
+  if (!muniCmteIds[sbeOf[c.committee_id]]) return;
+  if (String(c.contribution_type || '').indexOf('IE Committee') === 0) return;
   if (!c.date || c.date < MUNI_WIN.start || c.date > MUNI_WIN.end) return;
   muniMoney.rows++; muniMoney.total += c.amount || 0;
 });
-ok('S1(i) TRIPWIRE: zero windowed municipal contribution money at this vintage (' +
-   muniMoney.rows + ' rows, ' + muniMoney.total + ', by DATE ' + MUNI_WIN.start + '..' +
-   MUNI_WIN.end + ') — WHEN THIS FAILS, municipal money exists and the reader-facing ' +
-   'display decision (coming-soon vs pending-cards vs otherwise) is due to Ishan from the ' +
-   'lane that lands it; do not edit this assertion to accommodate the money',
-  muniMoney.rows === 0 && muniMoney.total === 0);
+// CNCL-DATA-1 P1.4 ruling 6 — INVERTED TO A FLOOR. Municipal money now exists ($23,769,132.31
+// windowed, 20,458 rows, window 2023-05-15..2027-12-31 per PS-110, coverage 86 of 87 with 41217
+// deferred by ruling), so the zero-assertion has served its purpose and fired. What must not
+// happen now is the money going BACKWARDS unnoticed, so the guard becomes a floor. The join was
+// repaired, not relaxed (see above); this inversion accommodates a measured arrival, never the
+// money's size.
+// Rounded to cents before comparing: the running sum lands at 23769132.30999995 in IEEE-754,
+// which is below the literal by 5e-8 and would fail a bare >=. The money is the same money.
+var muniRounded = Math.round(muniMoney.total * 100) / 100;
+ok('S1(i) FLOOR: windowed municipal direct money >= $23,769,132.31 (' +
+   muniMoney.rows + ' rows, ' + muniRounded + ', by DATE ' + MUNI_WIN.start + '..' +
+   MUNI_WIN.end + '; coverage 86 of 87 council committees, 41217 deferred by ruling)',
+  muniRounded >= 23769132.31);
 
 // S1 (i) — the pinned present, city_council: readiness TRUE, by-race listing rendered.
 (function () {
@@ -544,14 +571,23 @@ ok('S1(i) TRIPWIRE: zero windowed municipal contribution money at this vintage (
   ok('S1(i): city_council readiness is TRUE and the by-race listing renders, not coming-soon ' +
      '— pinned as the measured present; no display outcome is ratified by this assertion',
     ready === true && !/coming soon/i.test(pg) && pg.indexOf('<div class="wrap">') >= 0 && pg.length > 600);
-  var worst = 0;
+  // CNCL-DATA-1 P1.4 ruling 5 — FIELD PATH REPAIRED. This read `c.figures.total`, which does not
+  // exist: the shape is `figures.contributions.total` (l.420 already uses it). `undefined || 0`
+  // kept `worst` at 0, so the assertion could only ever pass — it passed while the surfaces it
+  // describes carried up to $10.9M. Ruling 6 also turns it from ZERO-valued to live-shaped AND
+  // VALUED, now that the money has landed.
+  var worst = 0, resolved = 0, seen = 0;
   om.groups.forEach(function (g) { g.races.forEach(function (r) {
     var rv = D.viewModels.raceView(oi, oi.raceBySlug[r.slug], null);
     (rv && rv.candidates || []).forEach(function (c) {
-      var t = (c.figures && c.figures.total) || 0; if (t > worst) worst = t; });
+      seen++;
+      if (c.figures && c.figures.contributions) resolved++;
+      var t = (c.figures && c.figures.contributions && c.figures.contributions.total) || 0;
+      if (t > worst) worst = t; });
   }); });
-  ok('S1(i): every city_council candidate surface is live-shaped and ZERO-valued (largest ' +
-     'candidate total ' + worst + ') — the state the tripwire above guards', worst === 0);
+  ok('S1(i): every city_council candidate surface is live-shaped AND VALUED (' + resolved +
+   ' of ' + seen + ' resolve; largest candidate total ' + worst + ')',
+  seen > 0 && resolved === seen && worst > 0);
 })();
 
 // S1 (i) — mayor: readiness FALSE, coming-soon still rendered. The absence side of (ii),
@@ -592,6 +628,29 @@ ok('S1(i) TRIPWIRE: zero windowed municipal contribution money at this vintage (
     sb.slice().sort(function (a, b) { return D._ordering.raceOrderKey(a) - D._ordering.raceOrderKey(b); })[0].id === 'sb-president');
 })();
 
+// CNCL-DATA-1 P1.4 ruling 5 — the INDEPENDENT recomputation D-25 compares against. Different
+// writer, different path: it never touches the view model. It sums the owning committee's DIRECT
+// rows straight out of the artifact, joined on sbe_committee_id (candidate.committee_id holds the
+// SBE id; contribution.committee_id holds the record key — the same two key spaces the S1(i)
+// tripwire once confused), excluding the funder edge and dues, windowed on the municipal window.
+function d25Independent(cand) {
+  var sbe = String(cand.committee_id || '');
+  var keys = {};
+  Object.keys(json.committees || {}).forEach(function (k) {
+    var rec = json.committees[k];
+    if (rec && String(rec.sbe_committee_id || '') === sbe) keys[k] = 1;
+  });
+  var total = 0;
+  (json.contributions || []).forEach(function (c) {
+    if (!keys[c.committee_id]) return;
+    var ct = String(c.contribution_type || '');
+    if (ct.indexOf('IE Committee') === 0) return;
+    if (!c.date || c.date < MUNI_WIN.start || c.date > MUNI_WIN.end) return;
+    total += c.amount || 0;
+  });
+  return Math.round(total * 100) / 100;
+}
+
 // D-25 (PS-115): NO municipal carve-out on the person surface. This is a no-code decision — its
 // implementation is the ABSENCE of an exception at resolvePersonRef — so the fixture is the only
 // thing that can hold it. A future edit re-adding a municipal exception would make a municipal
@@ -605,7 +664,12 @@ ok('S1(i) TRIPWIRE: zero windowed municipal contribution money at this vintage (
   var vm = D.personView(idx, muni.id);
   ok('D-25: a municipal candidacy RESOLVES on the person surface (no carve-out)', !!vm);
   ok('D-25: it renders one member section with honest zeros, not a fabricated total',
-    !!vm && vm.sections.length === 1 && vm.careerTotal === 0 && vm.sections[0].contributions.total === 0);
+    // CNCL-DATA-1 P1.4 ruling 5 — INDEPENDENT RECOMPUTATION. The first amendment asserted
+    // careerTotal === Σ sections, which `data.js` makes true by construction (`career` accumulates
+    // in the very loop that pushes `sections`), so it could not bite — its own bite proved that.
+    // The total is now recomputed from the ARTIFACT by a different writer and a different path:
+    // the owning committee's direct rows, joined by sbe_committee_id, windowed the same way.
+    !!vm && vm.sections.length === 1 && vm.careerTotal === d25Independent(muni));
   ok('D-25: its section carries the municipal office type, so the ratified noun applies',
     !!vm && vm.sections[0].officeType === 'municipal');
   ok('D-25: PS-90 holds — no IE value enters the municipal person view-model',

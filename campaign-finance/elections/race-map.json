@@ -2396,6 +2396,402 @@
       },
       "ballot_status": "challenged",
       "ballot_status_as_of": "2026-07-14"
+    },
+    "cand-flores-ward-25": {
+      "candidate_id": "cand-flores-ward-25",
+      "name": "Aida Flores",
+      "race_id": "ward-25",
+      "committee_id": "34777",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-yepez-ward-01": {
+      "candidate_id": "cand-yepez-ward-01",
+      "name": "Laura Yepez",
+      "race_id": "ward-01",
+      "committee_id": "39590",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-tobon-ward-01": {
+      "candidate_id": "cand-tobon-ward-01",
+      "name": "Daniel Tobon",
+      "race_id": "ward-01",
+      "committee_id": "40637",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-omoniyishoyoola-ward-02": {
+      "candidate_id": "cand-omoniyishoyoola-ward-02",
+      "name": "Richard Omoniyi-Shoyoola",
+      "race_id": "ward-02",
+      "committee_id": "40933",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-lofton-ward-37": {
+      "candidate_id": "cand-lofton-ward-37",
+      "name": "Kobey Lofton",
+      "race_id": "ward-37",
+      "committee_id": "41039",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-thanoukos-ward-01": {
+      "candidate_id": "cand-thanoukos-ward-01",
+      "name": "Bill Thanoukos",
+      "race_id": "ward-01",
+      "committee_id": "41043",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-olas-ward-27": {
+      "candidate_id": "cand-olas-ward-27",
+      "name": "Dan Olas",
+      "race_id": "ward-27",
+      "committee_id": "41065",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-zuno-ward-12": {
+      "candidate_id": "cand-zuno-ward-12",
+      "name": "Claudia Zuno",
+      "race_id": "ward-12",
+      "committee_id": "41126",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-pouw-ward-45": {
+      "candidate_id": "cand-pouw-ward-45",
+      "name": "Leah Pouw",
+      "race_id": "ward-45",
+      "committee_id": "41149",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-gronkiewicz-ward-45": {
+      "candidate_id": "cand-gronkiewicz-ward-45",
+      "name": "S Gronkiewicz",
+      "race_id": "ward-45",
+      "committee_id": "41157",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-carmien-ward-48": {
+      "candidate_id": "cand-carmien-ward-48",
+      "name": "Justin Carmien",
+      "race_id": "ward-48",
+      "committee_id": "41170",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-watkins-ward-25": {
+      "candidate_id": "cand-watkins-ward-25",
+      "name": "Ian Watkins",
+      "race_id": "ward-25",
+      "committee_id": "41174",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-dawson-ward-09": {
+      "candidate_id": "cand-dawson-ward-09",
+      "name": "Ernest Dawson",
+      "race_id": "ward-09",
+      "committee_id": "41179",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-mcmillian-ward-48": {
+      "candidate_id": "cand-mcmillian-ward-48",
+      "name": "Troy McMillian",
+      "race_id": "ward-48",
+      "committee_id": "41188",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-doran-ward-44": {
+      "candidate_id": "cand-doran-ward-44",
+      "name": "DJ Doran",
+      "race_id": "ward-44",
+      "committee_id": "41191",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-willman-ward-25": {
+      "candidate_id": "cand-willman-ward-25",
+      "name": "Nubia Willman",
+      "race_id": "ward-25",
+      "committee_id": "41208",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-gebre-ward-20": {
+      "candidate_id": "cand-gebre-ward-20",
+      "name": "Tshey Gebre",
+      "race_id": "ward-20",
+      "committee_id": "41212",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-gunnward-ward-07": {
+      "candidate_id": "cand-gunnward-ward-07",
+      "name": "Sheila Gunn-Ward",
+      "race_id": "ward-07",
+      "committee_id": "41219",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-sparks-ward-07": {
+      "candidate_id": "cand-sparks-ward-07",
+      "name": "Samuel C. Sparks",
+      "race_id": "ward-07",
+      "committee_id": "41234",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-pendleton-ward-07": {
+      "candidate_id": "cand-pendleton-ward-07",
+      "name": "Nathaniel Pendleton",
+      "race_id": "ward-07",
+      "committee_id": "41236",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-velez-ward-30": {
+      "candidate_id": "cand-velez-ward-30",
+      "name": "Judy Velez",
+      "race_id": "ward-30",
+      "committee_id": "41241",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-gilsenan-ward-32": {
+      "candidate_id": "cand-gilsenan-ward-32",
+      "name": "Patrick Gilsenan",
+      "race_id": "ward-32",
+      "committee_id": "41244",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-harris-ward-03": {
+      "candidate_id": "cand-harris-ward-03",
+      "name": "QuShona Molly Harris",
+      "race_id": "ward-03",
+      "committee_id": "41249",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-bektemba-ward-35": {
+      "candidate_id": "cand-bektemba-ward-35",
+      "name": "Omari Bektemba",
+      "race_id": "ward-35",
+      "committee_id": "41254",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-luciano-ward-44": {
+      "candidate_id": "cand-luciano-ward-44",
+      "name": "Kalen Luciano",
+      "race_id": "ward-44",
+      "committee_id": "41257",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-cornell-ward-27": {
+      "candidate_id": "cand-cornell-ward-27",
+      "name": "Nathan F. Cornell",
+      "race_id": "ward-27",
+      "committee_id": "41269",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-mcfarland-ward-06": {
+      "candidate_id": "cand-mcfarland-ward-06",
+      "name": "Adrienne McFarland",
+      "race_id": "ward-06",
+      "committee_id": "41271",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-phillips-ward-07": {
+      "candidate_id": "cand-phillips-ward-07",
+      "name": "Cher Phillips",
+      "race_id": "ward-07",
+      "committee_id": "41280",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-quintero-ward-25": {
+      "candidate_id": "cand-quintero-ward-25",
+      "name": "Leonardo Quintero",
+      "race_id": "ward-25",
+      "committee_id": "41282",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-muhammad-ward-03": {
+      "candidate_id": "cand-muhammad-ward-03",
+      "name": "James E Muhammad",
+      "race_id": "ward-03",
+      "committee_id": "41286",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-gordils-ward-33": {
+      "candidate_id": "cand-gordils-ward-33",
+      "name": "Maria Gordils",
+      "race_id": "ward-33",
+      "committee_id": "41291",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-chacon-ward-25": {
+      "candidate_id": "cand-chacon-ward-25",
+      "name": "Miguel Chacon",
+      "race_id": "ward-25",
+      "committee_id": "41298",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-zaragoza-ward-31": {
+      "candidate_id": "cand-zaragoza-ward-31",
+      "name": "Alonso Zaragoza",
+      "race_id": "ward-31",
+      "committee_id": "41304",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-cacciottolo-ward-13": {
+      "candidate_id": "cand-cacciottolo-ward-13",
+      "name": "Al Cacciottolo",
+      "race_id": "ward-13",
+      "committee_id": "41309",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-jones-ward-08": {
+      "candidate_id": "cand-jones-ward-08",
+      "name": "JD Jones",
+      "race_id": "ward-08",
+      "committee_id": "41311",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "cand-uqdah-ward-03": {
+      "candidate_id": "cand-uqdah-ward-03",
+      "name": "Raheem Uqdah",
+      "race_id": "ward-03",
+      "committee_id": "41316",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
     }
   }
 }

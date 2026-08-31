@@ -93,9 +93,10 @@ crosswalk and surface succession edge cases.
 1. **A fresh, same-pull set of four SBE bulk files**: Receipts, Expenditures, `D2Totals`,
    `FiledDocs`. Pull them after the quarterly deadlines — the 16th–20th of Jan / Apr / Jul /
    Oct. **Never mix files across pulls in one rebuild** (see the archival rule at the end).
-2. **`raw/` is expected to be ABSENT between refreshes.** It is gitignored and holds only the
-   staged pull. `build_all.sh` skips the finance ingest when it is empty — that is the safe
-   default, not a failure.
+2. **`raw/` is expected to be present and empty between refreshes.** It is gitignored and holds
+   only the staged pull. `build_all.sh` skips the finance ingest when it is empty — that is the
+   safe default, not a failure. The directories themselves stay in place: `check_docs` rule 3
+   resolves every documented path, so removing `raw/receipts-council/` reddens the gate.
 3. Staged council CSVs go in **`raw/receipts-council/`**, not `raw/receipts/` — the latter
    holds the bulk `.txt` that `ingest_ie` needs, and globbing both breaks `ingest`'s column
    check.
@@ -284,7 +285,7 @@ Archive them together, dated, in gitignored `raw/` — they are the migration's
 source-of-record and the only way to reproduce a given build's vintage. Never
 mix files across pulls in one rebuild.
 
-**`raw/` is expected ABSENT between refreshes** — it holds only the staged pull, and
+**`raw/` is expected present and empty between refreshes** — it holds only the staged pull, and
 `build_all.sh` skips the finance ingest when it is empty. Archive the pull-set somewhere
 durable *outside* `raw/` once a rebuild lands, because the next refresh's staging will not
 preserve it. **Known gap, stated rather than discovered later:** the sealed archives on the

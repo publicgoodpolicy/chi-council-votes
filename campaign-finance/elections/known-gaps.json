@@ -28,6 +28,123 @@
       "reason": "SBE-side: the per-committee export no longer carries the 7 itemized contribution rows it previously carried for this period. The rows are present in the archived export and absent from the current one; both bulk receipt vintages contain no row for this period of any status, and no superseding filing, amended report, archived predecessor, or changed committee id accounts for the difference. The committee's D-2 cover total continues to swear $7,650.00 in itemized receipts. The full row loss is $10,150.00 — $1,300.00 individual plus $6,350.00 loans, totalling the $7,650.00 itemized figure above, plus $2,500.00 in-kind carried separately as inkind_delta. Our figures reproduce the current export exactly. Unrecoverable by ingest.",
       "evidence": "VILLALOBOS-1 (2026-08-12); ARCHIVE-SWEEP-1 (2026-08-12), one committee of 53. Archived export: raw/receipts-elections-archive-2026-08-09/39840 | Villalobos Receipts.csv sha256 b2fc4e38e848c3b37f3a591ba565f159a07963773e430faff2df1160398603d5; archive manifest sha256 994a3a661f4473ff7d32ca59974e579927ab1a86c19ac7e3f9c04776e4de4a4e",
       "annotated": "2026-08-12"
+    },
+    {
+      "committee": "cand-inc-ward-09",
+      "period_beg": "1999-01-01",
+      "period_end": "1999-06-30",
+      "amount": -58175.00,
+      "reason": "SBE-side: the committee's sworn D-2 cover total for 1/1/1999-6/30/1999 reports $58,175.00 itemized; no itemized Schedule A row for that period appears in the SBE bulk receipts export. Our itemized total for the period is $0.00.",
+      "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
+      "annotated": "2026-08-30"
+    },
+    {
+      "committee": "cand-flores-ward-25",
+      "period_beg": "2018-07-01",
+      "period_end": "2018-09-30",
+      "amount": -6850.00,
+      "reason": "SBE-side: the committee's sworn D-2 cover total for 7/1/2018-9/30/2018 reports $6,850.00 itemized; no itemized Schedule A row for that period appears in the SBE bulk receipts export. Our itemized total for the period is $0.00.",
+      "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
+      "annotated": "2026-08-30"
+    },
+    {
+      "committee": "cand-inc-ward-17",
+      "period_beg": "2010-07-01",
+      "period_end": "2010-12-31",
+      "amount": -6405.00,
+      "reason": "SBE-side: the committee's sworn D-2 cover total for 7/1/2010-12/31/2010 reports $6,405.00 itemized; no itemized Schedule A row for that period appears in the SBE bulk receipts export. Our itemized total for the period is $0.00.",
+      "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
+      "annotated": "2026-08-30"
+    },
+    {
+      "committee": "cand-inc-ward-49",
+      "period_beg": "2017-10-01",
+      "period_end": "2017-12-31",
+      "amount": -1951.00,
+      "reason": "SBE-side: the committee's sworn D-2 cover total for 10/1/2017-12/31/2017 reports $1,951.00 itemized; no itemized Schedule A row for that period appears in the SBE bulk receipts export. Our itemized total for the period is $0.00.",
+      "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
+      "annotated": "2026-08-30"
+    },
+    {
+      "committee": "cand-inc-ward-25",
+      "period_beg": "2014-07-01",
+      "period_end": "2014-09-30",
+      "amount": -1400.00,
+      "reason": "SBE-side: the committee's sworn D-2 cover total for 7/1/2014-9/30/2014 reports $1,400.00 itemized; no itemized Schedule A row for that period appears in the SBE bulk receipts export. Our itemized total for the period is $0.00.",
+      "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
+      "annotated": "2026-08-30"
+    },
+    {
+      "committee": "cand-inc-ward-25",
+      "period_beg": "2014-04-01",
+      "period_end": "2014-06-30",
+      "amount": -600.00,
+      "reason": "SBE-side: the committee's sworn D-2 cover total for 4/1/2014-6/30/2014 reports $600.00 itemized; no itemized Schedule A row for that period appears in the SBE bulk receipts export. Our itemized total for the period is $0.00.",
+      "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
+      "annotated": "2026-08-30"
+    },
+    {
+      "committee": "cand-inc-ward-36",
+      "period_beg": "2020-01-01",
+      "period_end": "2020-03-31",
+      "amount": -1500.00,
+      "reason": "SBE-side: the committee's sworn D-2 cover total for 1/1/2020-3/31/2020 reports $163,250.00 itemized; the itemized Schedule A rows the SBE bulk receipts export carries for that period total $161,750.00, a shortfall of $1,500.00.",
+      "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
+      "annotated": "2026-08-30"
+    },
+    {
+      "committee": "cand-inc-ward-36",
+      "period_beg": "2015-04-01",
+      "period_end": "2015-06-30",
+      "amount": -960.50,
+      "reason": "SBE-side: the committee's sworn D-2 cover total for 4/1/2015-6/30/2015 reports $57,980.87 itemized; the itemized Schedule A rows the SBE bulk receipts export carries for that period total $57,020.37, a shortfall of $960.50.",
+      "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
+      "annotated": "2026-08-30"
+    },
+    {
+      "committee": "cand-inc-ward-09",
+      "period_beg": "2017-10-01",
+      "period_end": "2017-12-31",
+      "amount": -1000.00,
+      "reason": "SBE-side: the committee's sworn D-2 cover total for 10/1/2017-12/31/2017 reports $105,250.00 itemized; the itemized Schedule A rows the SBE bulk receipts export carries for that period total $104,250.00, a shortfall of $1,000.00.",
+      "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
+      "annotated": "2026-08-30"
+    },
+    {
+      "committee": "cand-inc-ward-09",
+      "period_beg": "2007-01-01",
+      "period_end": "2007-06-30",
+      "amount": 200.00,
+      "reason": "SBE-side, third entry class (ratified 2026-08-30): the itemized Schedule A rows the SBE bulk receipts export carries for 1/1/2007-6/30/2007 (Semiannual received 7/19/2007) total $98,490.00; the committee's sworn D-2 cover total for the same period and filing reports $98,290.00 itemized, $200.00 less than the rows it carries.",
+      "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
+      "annotated": "2026-08-30"
+    },
+    {
+      "committee": "cand-inc-ward-09",
+      "period_beg": "2008-01-01",
+      "period_end": "2008-06-30",
+      "amount": 500.00,
+      "reason": "SBE-side, third entry class (ratified 2026-08-30): the itemized Schedule A rows the SBE bulk receipts export carries for 1/1/2008-6/30/2008 (Semiannual received 7/21/2008) total $34,660.00; the committee's sworn D-2 cover total for the same period and filing reports $34,160.00 itemized, $500.00 less than the rows it carries.",
+      "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
+      "annotated": "2026-08-30"
+    },
+    {
+      "committee": "cand-inc-ward-09",
+      "period_beg": "2010-07-01",
+      "period_end": "2010-12-31",
+      "amount": 500.00,
+      "reason": "SBE-side, third entry class (ratified 2026-08-30): the itemized Schedule A rows the SBE bulk receipts export carries for 7/1/2010-12/31/2010 (Semiannual received 1/20/2011) total $48,450.00; the committee's sworn D-2 cover total for the same period and filing reports $47,950.00 itemized, $500.00 less than the rows it carries.",
+      "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
+      "annotated": "2026-08-30"
+    },
+    {
+      "committee": "cand-inc-ward-37",
+      "period_beg": "2003-01-27",
+      "period_end": "2003-03-02",
+      "amount": 1499.25,
+      "reason": "Comparison-window artifact, fourth entry class (ratified 2026-08-30): the committee's sworn D-2 cover total for the Pre-election period 1/27/2003-3/2/2003 reports $6,500.75 itemized; the rows dated within that window in the SBE bulk receipts export total $8,000.00, carried by the Semiannual received 7/14/2004 covering 1/1/2003-6/30/2003. Our reconciliation buckets rows to a period by date, so this cover total is compared against rows the committee reported on the covering filing. The divergence is a property of our comparison, not of the source filings.",
+      "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
+      "annotated": "2026-08-30"
     }
   ]
 }

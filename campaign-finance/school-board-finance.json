@@ -1,15 +1,15 @@
 {
   "schema_version": 1.4,
-  "generated_at": "2026-08-19T03:11:29Z",
+  "generated_at": "2026-08-31T03:39:09Z",
   "source": "derived: school-board-data.json (bridge) x election-data.json (rollups)",
   "_sync": {
-    "generated_at": "2026-08-19T03:11:29Z",
+    "generated_at": "2026-08-31T03:39:09Z",
     "inputs": {
       "school-board-data.json": {
         "sha256": "677391372f1e98bb65c6626077068b33eb49a9212d7303efab83e62b8adfc540"
       },
       "election-data.json": {
-        "sha256": "9809f0da01f864c4b08e8e85ff4e5808721cc09c1c30828692edef955510a824"
+        "sha256": "4e6f2b9e34692652f09de57509d586e09e93e3858c6d9e1375fddf64159daaa7"
       }
     },
     "convention": "figures are election-labeled and sourced from rollups.by_candidate_election; by_candidate is resolution-only; the four streams are never summed in this artifact"
@@ -75,6 +75,23 @@
     }
   },
   "donor_clusters": {
+    "rollup-154": {
+      "name": "Friends of Ann Williams",
+      "relationship": "affiliated entities",
+      "canonical_id": "friends-of-ann-williams",
+      "members": [
+        {
+          "donor_id": "friends-of-ann-williams",
+          "name": "Friends of Ann Williams",
+          "role": "parent"
+        },
+        {
+          "donor_id": "friends-of-ann-m-williams",
+          "name": "Friends of Ann M Williams",
+          "role": "alt-name"
+        }
+      ]
+    },
     "rollup-160": {
       "name": "Citizens for Bridget Gainer",
       "relationship": "affiliated entities",
@@ -86,9 +103,26 @@
           "role": "parent"
         },
         {
-          "donor_id": "bridget-gainer",
-          "name": "Bridget Gainer",
-          "role": "related"
+          "donor_id": "gainer-bridget",
+          "name": "Gainer, Bridget",
+          "role": "alt-name"
+        }
+      ]
+    },
+    "rollup-176": {
+      "name": "Strategic Partnership Alliance LTD",
+      "relationship": "affiliated entities",
+      "canonical_id": "strategic-partnership-alliance-ltd",
+      "members": [
+        {
+          "donor_id": "strategic-partnership-alliance-ltd",
+          "name": "Strategic Partnership Alliance Ltd",
+          "role": "parent"
+        },
+        {
+          "donor_id": "strategic-partnership-alliance",
+          "name": "Strategic Partnership Alliance",
+          "role": "alt-name"
         }
       ]
     },
@@ -110,6 +144,152 @@
         {
           "donor_id": "sacks-cari-b",
           "name": "Sacks, Cari B",
+          "role": "alt-name"
+        }
+      ]
+    },
+    "rollup-224": {
+      "name": "47th Ward Regular Democratic Organization",
+      "relationship": "affiliated entities",
+      "canonical_id": "47th-ward-regular-democratic-organization",
+      "members": [
+        {
+          "donor_id": "47th-ward-regular-democratic-organization",
+          "name": "47th Ward Regular Democratic Organization",
+          "role": "parent"
+        },
+        {
+          "donor_id": "47th-ward-democratic-organization",
+          "name": "47th Ward Democratic Organization",
+          "role": "alt-name"
+        }
+      ]
+    },
+    "rollup-234": {
+      "name": "Citizens To Elect Felix Cardona Jr.",
+      "relationship": "affiliated entities",
+      "canonical_id": "citizens-to-elect-felix-cardona-jr",
+      "members": [
+        {
+          "donor_id": "citizens-to-elect-felix-cardona-jr",
+          "name": "Citizens to Elect Felix Cardona Jr.",
+          "role": "parent"
+        },
+        {
+          "donor_id": "citizen-to-elect-felix-cardona-jr",
+          "name": "Citizen to Elect Felix Cardona Jr",
+          "role": "alt-name"
+        }
+      ]
+    },
+    "rollup-256": {
+      "name": "Friends of Alma Anaya",
+      "relationship": "affiliated entities",
+      "canonical_id": "friends-of-alma-anaya",
+      "members": [
+        {
+          "donor_id": "friends-of-alma-anaya",
+          "name": "Friends of Alma Anaya",
+          "role": "parent"
+        },
+        {
+          "donor_id": "anaya-alma",
+          "name": "Anaya, Alma",
+          "role": "alt-name"
+        }
+      ]
+    },
+    "rollup-271": {
+      "name": "Nugent, Samantha",
+      "relationship": "affiliated entities",
+      "canonical_id": "nugent-samantha",
+      "members": [
+        {
+          "donor_id": "nugent-samantha",
+          "name": "Nugent, Samantha",
+          "role": "parent"
+        },
+        {
+          "donor_id": "friends-of-samantha-nugent",
+          "name": "Friends of Samantha Nugent",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "friends-for-samantha-nugent",
+          "name": "Friends for Samantha Nugent",
+          "role": "alt-name"
+        }
+      ]
+    },
+    "rollup-283": {
+      "name": "Friends of Bennett Lawson",
+      "relationship": "affiliated entities",
+      "canonical_id": "friends-of-bennett-lawson",
+      "members": [
+        {
+          "donor_id": "friends-of-bennett-lawson",
+          "name": "Friends of Bennett Lawson",
+          "role": "parent"
+        },
+        {
+          "donor_id": "lawson-bennett",
+          "name": "Lawson, Bennett",
+          "role": "alt-name"
+        }
+      ]
+    },
+    "rollup-293": {
+      "name": "Faegre Drinker Biddle & Reath LLP",
+      "relationship": "affiliated entities",
+      "canonical_id": "faegre-drinker-biddle-reath-llp",
+      "members": [
+        {
+          "donor_id": "faegre-drinker-biddle-reath-llp",
+          "name": "Faegre Drinker Biddle & Reath LLP",
+          "role": "parent"
+        },
+        {
+          "donor_id": "faegre-drinker-biddle-and-reath-llp",
+          "name": "Faegre Drinker Biddle and Reath LLP",
+          "role": "alt-name"
+        }
+      ]
+    },
+    "rollup-298": {
+      "name": "Breaker Press Co.",
+      "relationship": "affiliated entities",
+      "canonical_id": "breaker-press-co",
+      "members": [
+        {
+          "donor_id": "breaker-press-co",
+          "name": "Breaker Press Co",
+          "role": "parent"
+        },
+        {
+          "donor_id": "breaker-press-company-inc",
+          "name": "Breaker Press Company Inc",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "breaker-press-co-inc",
+          "name": "Breaker Press Co, Inc",
+          "role": "alt-name"
+        }
+      ]
+    },
+    "rollup-326": {
+      "name": "Friends for Celina Villanueva",
+      "relationship": "affiliated entities",
+      "canonical_id": "friends-for-celina-villanueva",
+      "members": [
+        {
+          "donor_id": "friends-for-celina-villanueva",
+          "name": "Friends for Celina Villanueva",
+          "role": "parent"
+        },
+        {
+          "donor_id": "friends-of-celina-villanueva",
+          "name": "Friends of Celina Villanueva",
           "role": "alt-name"
         }
       ]
@@ -165,12 +345,32 @@
       "members": [
         {
           "donor_id": "cozen-o-connor",
-          "name": "Cozen O'Connor",
+          "name": "Cozen O' Connor",
           "role": "parent"
         },
         {
           "donor_id": "cozen-o-connor-public-strategies",
           "name": "Cozen O'Connor Public Strategies",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "cozen-o-conner",
+          "name": "Cozen O'Conner",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "citizens-for-o-connor",
+          "name": "Citizens for O'Connor",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "o-connor-cozen",
+          "name": "O'Connor, Cozen",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "oconnor-cozen",
+          "name": "oconnor, cozen",
           "role": "alt-name"
         }
       ]
@@ -201,9 +401,29 @@
           "role": "affiliated-pac"
         },
         {
+          "donor_id": "local-seiu-illinois-counc-pac-fund",
+          "name": "LOCAL SEIU ILLINOIS COUNC PAC FUND",
+          "role": "affiliated-pac"
+        },
+        {
           "donor_id": "seiu-illinois-council-pac-fund",
           "name": "SEIU Illinois Council PAC Fund",
           "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "seiu-cope-pac",
+          "name": "SEIU COPE PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "seiu",
+          "name": "SEIU",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "seiu-illinois-council",
+          "name": "SEIU Illinois Council",
+          "role": "alt-name"
         },
         {
           "donor_id": "s-e-i-u-illinois-state-council",
@@ -232,6 +452,40 @@
         }
       ]
     },
+    "rollup-381": {
+      "name": "Cruz, Ruth",
+      "relationship": "affiliated entities",
+      "canonical_id": "cruz-ruth",
+      "members": [
+        {
+          "donor_id": "cruz-ruth",
+          "name": "Cruz, Ruth",
+          "role": "parent"
+        },
+        {
+          "donor_id": "friends-of-ruth-cruz",
+          "name": "Friends of Ruth Cruz",
+          "role": "alt-name"
+        }
+      ]
+    },
+    "rollup-402": {
+      "name": "Nicolay & Dart, LLC",
+      "relationship": "affiliated entities",
+      "canonical_id": "nicolay-dart-llc",
+      "members": [
+        {
+          "donor_id": "nicolay-dart-llc",
+          "name": "Nicolay & Dart LLC",
+          "role": "parent"
+        },
+        {
+          "donor_id": "law-offices-of-nicolay-dart-llc",
+          "name": "Law Offices of Nicolay & Dart LLC",
+          "role": "alt-name"
+        }
+      ]
+    },
     "rollup-414": {
       "name": "Sposato, Nicholas",
       "relationship": "affiliated entities",
@@ -254,15 +508,64 @@
         }
       ]
     },
+    "rollup-427": {
+      "name": "Friends of Raja For Congress",
+      "relationship": "affiliated entities",
+      "canonical_id": "friends-of-raja-for-congress",
+      "members": [
+        {
+          "donor_id": "friends-of-raja-for-congress",
+          "name": "Friends of Raja for Congress",
+          "role": "parent"
+        },
+        {
+          "donor_id": "raja-for-illinois",
+          "name": "Raja For Illinois",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "raja-for-congress",
+          "name": "Raja for  Congress",
+          "role": "alt-name"
+        }
+      ]
+    },
+    "rollup-431": {
+      "name": "ONE Peoples' Campaign",
+      "relationship": "affiliated entities",
+      "canonical_id": "one-peoples-campaign",
+      "members": [
+        {
+          "donor_id": "one-peoples-campaign",
+          "name": "ONE Peoples' Campaign",
+          "role": "parent"
+        },
+        {
+          "donor_id": "one-people-s-campaign",
+          "name": "ONE People's Campaign",
+          "role": "alt-name"
+        }
+      ]
+    },
     "rollup-432": {
       "name": "International Brotherhood of Teamsters Local 705 PAC",
       "relationship": "affiliated entities",
-      "canonical_id": "international-brotherhood-of-teamsters-local-705",
+      "canonical_id": "international-brotherhood-of-teamsters-local-705-pac",
       "members": [
+        {
+          "donor_id": "international-brotherhood-of-teamsters-local-705-pac",
+          "name": "International Brotherhood of Teamsters Local 705 PAC",
+          "role": "parent"
+        },
         {
           "donor_id": "international-brotherhood-of-teamsters-local-705",
           "name": "International Brotherhood of Teamsters Local 705",
-          "role": "parent"
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "teamsters-local-705-pac",
+          "name": "Teamsters Local 705 PAC",
+          "role": "affiliated-pac"
         },
         {
           "donor_id": "teamsters-local-705",
@@ -278,7 +581,7 @@
       "members": [
         {
           "donor_id": "teamsters-local-union-700",
-          "name": "Teamsters Local Union 700",
+          "name": "Teamsters Local Union #700",
           "role": "parent"
         },
         {
@@ -290,22 +593,102 @@
           "donor_id": "teamsters-local-union-no-700-pac",
           "name": "Teamsters Local Union No. 700 PAC",
           "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "teamsters-local-700",
+          "name": "Teamsters Local 700",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "teamsters-local-700-political-action-committee",
+          "name": "Teamsters Local 700 Political Action Committee",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "teamsters-local-700-pac",
+          "name": "Teamsters Local 700 PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "teamsters-local-union-700-political-action-committee",
+          "name": "Teamsters Local Union #700 Political Action Committee",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "teamsters-local-union-no-700-political-action-committee-account",
+          "name": "Teamsters Local Union No. 700 Political Action Committee Account",
+          "role": "affiliated-pac"
         }
       ]
     },
     "rollup-444": {
       "name": "Administrative District Council 1 of Illinois, Bricklayers and Allied",
       "relationship": "affiliated entities",
-      "canonical_id": "administrative-district-council-1-of-illinois",
+      "canonical_id": "administrative-district-council-1-of-illinois-bricklayers-and-allied",
       "members": [
+        {
+          "donor_id": "administrative-district-council-1-of-illinois-bricklayers-and-allied",
+          "name": "Administrative District Council 1 of Illinois, Bricklayers and Allied",
+          "role": "parent"
+        },
+        {
+          "donor_id": "administrative-district-council-1-of-illinois-bricklayers",
+          "name": "Administrative District Council 1 of Illinois (Bricklayers)",
+          "role": "alt-name"
+        },
         {
           "donor_id": "administrative-district-council-1-of-illinois",
           "name": "Administrative District Council 1 of Illinois",
-          "role": "parent"
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "bricklayers-allied-craftworkers-district-council-1-of-illinois",
+          "name": "Bricklayers & Allied Craftworkers District Council 1 of Illinois",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "bac-administrative-district-council-1-of-illinois",
+          "name": "BAC Administrative District Council 1 of Illinois",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "administrative-district-council-1",
+          "name": "Administrative District Council 1",
+          "role": "alt-name"
         },
         {
           "donor_id": "administrative-district-council-1-of-il",
           "name": "Administrative District Council 1 of IL",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "adminstrative-district-council-1-of-illinois",
+          "name": "Adminstrative District Council 1 of Illinois",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "adminstrative-district-council-1-of-il",
+          "name": "Adminstrative District Council 1 of IL",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "international-union-of-bricklayers-and-allied-craftworkers",
+          "name": "International Union of Bricklayers and Allied Craftworkers",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "intl-union-of-bricklayers-allied",
+          "name": "Intl. Union of Bricklayers & Allied",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "international-union-of-bricklayers-allied-craftworkers",
+          "name": "International Union of Bricklayers & Allied Craftworkers",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "bricklayers-admin-council-1",
+          "name": "Bricklayers Admin Council 1",
           "role": "alt-name"
         }
       ]
@@ -321,8 +704,38 @@
           "role": "parent"
         },
         {
+          "donor_id": "architectural-ornamental-iron-workers-union-local-63-ipal-fund",
+          "name": "Architectural & Ornamental Iron Workers Union, Local 63, IPAL Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "architectural-ornamental-iron-workers-union-local-63-ipal-pac-fund",
+          "name": "Architectural & Ornamental Iron Workers Union Local 63 IPAL PAC Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "architectural-and-ornamental-iron-workers-local-63-ipal-fund",
+          "name": "Architectural and Ornamental Iron Workers Local 63, IPAL Fund",
+          "role": "affiliated-pac"
+        },
+        {
           "donor_id": "architectural-ornamental-iron-workers-local-63",
           "name": "Architectural & Ornamental Iron Workers Local 63",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "architectural-ornamental-iron-workers-union-local-63",
+          "name": "Architectural & Ornamental Iron workers Union, Local 63",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "architechtural-ornamental-iron-workers-local-63-ipal-fund",
+          "name": "Architechtural & Ornamental Iron Workers Local 63 IPAL Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "architectural-ornamental-iron-workers-u-l-63-ipal",
+          "name": "ARCHITECTURAL & ORNAMENTAL IRON WORKERS U.L 63 IPAL",
           "role": "alt-name"
         },
         {
@@ -336,8 +749,78 @@
           "role": "affiliated-pac"
         },
         {
+          "donor_id": "architectural-ornamental-iron-wokers-local-63-pac",
+          "name": "Architectural & Ornamental Iron Wokers Local 63 PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "architectural-and-ornamental-ironworkers-local-63-ipal-fund",
+          "name": "Architectural and Ornamental Ironworkers Local 63 IPAL Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "iron-workers-local-63-ipal-fund",
+          "name": "Iron Workers Local 63, IPAL Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "architectural-ornamental-iron-workers-union",
+          "name": "Architectural & Ornamental Iron Workers Union",
+          "role": "alt-name"
+        },
+        {
           "donor_id": "iron-workers-local-63",
           "name": "Iron Workers Local 63",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "architectural-ornamental-ironworkers-union-local-63",
+          "name": "Architectural & Ornamental Ironworkers Union Local 63",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "iron-workers-63-ipal-fund",
+          "name": "Iron Workers 63, IPAL Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "architectural-ornamental-iron-workers",
+          "name": "Architectural & Ornamental Iron Workers",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "iron-workers-local-63-pac",
+          "name": "Iron Workers Local 63 PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "architectural-ornamental-ironworkers-63-ipal",
+          "name": "Architectural & Ornamental Ironworkers #63, IPAL",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "iron-workers-63",
+          "name": "Iron Workers 63",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "iw-local-63",
+          "name": "IW Local 63",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "architectural-and-ornamental",
+          "name": "ARCHITECTURAL AND ORNAMENTAL",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "able-ornamental-iron-inc",
+          "name": "ABLE ORNAMENTAL IRON INC",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "ironworkers-local-63",
+          "name": "Ironworkers Local 63",
           "role": "alt-name"
         }
       ]
@@ -345,16 +828,51 @@
     "rollup-452": {
       "name": "Local 134 International Brotherhood of Electrical Workers",
       "relationship": "affiliated entities",
-      "canonical_id": "international-brotherhood-of-electrical-workers-local-134",
+      "canonical_id": "local-134-international-brotherhood-of-electrical-workers",
       "members": [
         {
-          "donor_id": "international-brotherhood-of-electrical-workers-local-134",
-          "name": "International Brotherhood of Electrical Workers Local 134",
+          "donor_id": "local-134-international-brotherhood-of-electrical-workers",
+          "name": "Local 134 International Brotherhood of Electrical Workers",
           "role": "parent"
         },
         {
+          "donor_id": "local-134-international-brotherhood-of-electrical-workers-pac",
+          "name": "Local 134, International Brotherhood of Electrical Workers PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "international-brotherhood-of-electrical-workers-local-134",
+          "name": "International Brotherhood of Electrical Workers Local 134",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "international-brotherhood-of-electrical-workers-local-134-pac",
+          "name": "International Brotherhood of Electrical Workers Local 134 PAC",
+          "role": "affiliated-pac"
+        },
+        {
           "donor_id": "local-134-pac-intl-brotherhood-of-electrical-workers",
-          "name": "Local 134 PAC Intl Brotherhood of Electrical Workers",
+          "name": "Local 134 - PAC Intl Brotherhood of Electrical Workers",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "int-l-brotherhood-of-electrical-workers-local-134",
+          "name": "Int'l Brotherhood of Electrical Workers-Local 134",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "local-134-state-mun-pac-intl-brotherhood-of-electrical-workers",
+          "name": "Local 134 State & Mun PAC, Intl Brotherhood of Electrical Workers",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "local-134-state-municipal-international-brotherhood-of-electrical-wo",
+          "name": "Local 134 State & Municipal International Brotherhood of Electrical Wo",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "local-134-state-municipal-pac-international-brotherhood-of-electric",
+          "name": "Local 134 State & Municipal Pac/ International Brotherhood of Electric",
           "role": "affiliated-pac"
         }
       ]
@@ -370,8 +888,35 @@
           "role": "parent"
         },
         {
+          "donor_id": "chicago-latin-public-affairs",
+          "name": "Chicago Latin Public Affairs",
+          "role": "alt-name"
+        },
+        {
           "donor_id": "chicago-latino-pac",
           "name": "Chicago Latino PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-latino-100-pac",
+          "name": "Chicago Latino 100 PAC",
+          "role": "affiliated-pac"
+        }
+      ]
+    },
+    "rollup-458": {
+      "name": "INCS Action PAC",
+      "relationship": "affiliated entities",
+      "canonical_id": "incs-action-pac",
+      "members": [
+        {
+          "donor_id": "incs-action-pac",
+          "name": "INCS Action PAC",
+          "role": "parent"
+        },
+        {
+          "donor_id": "incs-actions-pac",
+          "name": "INCS Actions PAC",
           "role": "affiliated-pac"
         }
       ]
@@ -385,6 +930,16 @@
           "donor_id": "gilbert-villegas-for-congress",
           "name": "Gilbert Villegas for Congress",
           "role": "parent"
+        },
+        {
+          "donor_id": "friends-of-gilbert-villegas-for-alderman",
+          "name": "Friends of Gilbert Villegas for Alderman",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "friends-of-gilbert-villegas",
+          "name": "Friends of Gilbert Villegas",
+          "role": "alt-name"
         },
         {
           "donor_id": "villegas-gilbert",
@@ -404,8 +959,33 @@
           "role": "parent"
         },
         {
+          "donor_id": "const-gen-laborers-dist-co-of-chi-vic-lab-pa-el",
+          "name": "Const. & Gen. Laborers' Dist. Co. of Chi & Vic. Lab. PA & EL",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "construction-and-general-laborers-district-council-of-chicago-vicin",
+          "name": "Construction and General Laborers' District Council of Chicago & Vicin",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "construction-and-general-laborers-district-council-of-chicago",
+          "name": "Construction and General Laborers' District Council of Chicago",
+          "role": "alt-name"
+        },
+        {
           "donor_id": "local-1001-construction-and-general-laborers-district-council-of-chic",
           "name": "Local 1001, Construction and general laborers district council of Chic",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "construction-and-general-laborer-s-dist-co-of-chi-vic-lab-pa-e",
+          "name": "Construction and General Laborer's Dist. Co. of Chi & Vic. Lab. PA & E",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "construction-gen-lab-dis-con-of-chgo-ed-lg",
+          "name": "CONSTRUCTION & GEN LAB DIS CON OF CHGO -ED LG",
           "role": "alt-name"
         },
         {
@@ -414,14 +994,96 @@
           "role": "alt-name"
         },
         {
+          "donor_id": "chicago-cook-county-bldg-construction-council-political-committee",
+          "name": "Chicago & Cook County Bldg & Construction Council Political Committee",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "chicago-cook-county-bldg-construction-trades-council-state-local",
+          "name": "Chicago & Cook County Bldg & Construction Trades Council State & Local",
+          "role": "alt-name"
+        },
+        {
           "donor_id": "chicago-cook-county-building-construction-trades-council",
           "name": "Chicago & Cook County Building & Construction Trades Council",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "chicago-and-cook-county-building-trades-council",
+          "name": "Chicago and Cook County Building Trades Council",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "chicago-cook-county-building-trades-pac",
+          "name": "Chicago & Cook County Building Trades PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-building-trades-pac",
+          "name": "Chicago Building Trades PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-and-cook-county-building-trades-pac-michael",
+          "name": "Chicago and Cook County Building Trades PAC, Michael",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-and-cook-county-building-and-construction-trades-council",
+          "name": "Chicago and Cook County Building and Construction Trades Council",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "chicago-cook-county-building-and-const-trades-council",
+          "name": "Chicago & Cook County Building and Const. Trades Council",
           "role": "alt-name"
         },
         {
           "donor_id": "chicago-cook-county-building-and-construction-trades-council",
           "name": "Chicago & Cook County Building And Construction Trades Council",
           "role": "alt-name"
+        },
+        {
+          "donor_id": "chicago-cook-county-bldg-construction-trades-council-pac",
+          "name": "Chicago & Cook County Bldg & Construction Trades Council PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-cook-county-building-construction-trades",
+          "name": "Chicago & Cook County Building & Construction Trades",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "chicago-cook-co-bldg-const-trades-council",
+          "name": "Chicago & Cook Co. Bldg. & Const. Trades Council",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "chicago-cook-county-bldg-const-trades-council",
+          "name": "Chicago & Cook County Bldg. & Const. Trades Council",
+          "role": "alt-name"
+        }
+      ]
+    },
+    "rollup-469": {
+      "name": "United Working Families PAC",
+      "relationship": "affiliated entities",
+      "canonical_id": "united-working-families-pac",
+      "members": [
+        {
+          "donor_id": "united-working-families-pac",
+          "name": "United Working Families PAC",
+          "role": "parent"
+        },
+        {
+          "donor_id": "united-working-families",
+          "name": "United Working Families",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "united-working-family-pac",
+          "name": "United Working Family PAC",
+          "role": "affiliated-pac"
         }
       ]
     },
@@ -436,8 +1098,33 @@
           "role": "parent"
         },
         {
+          "donor_id": "teamster-volunteers-in-politics",
+          "name": "Teamster Volunteers In Politics",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "teamsters-volunteers-in-politics-pac",
+          "name": "Teamsters Volunteers In Politics PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "teamsters-volunteers-in-politics-affiliated-with-the-international-bro",
+          "name": "Teamsters Volunteers in Politics Affiliated with the International Bro",
+          "role": "alt-name"
+        },
+        {
           "donor_id": "volunteers-in-politics",
           "name": "Volunteers in Politics",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "teamsters-volunteers-in-politics-local-union-no-25",
+          "name": "Teamsters Volunteers in Politics, Local Union No 25",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "teamsters-volunteers-inpolitics",
+          "name": "Teamsters Volunteers inPolitics",
           "role": "alt-name"
         },
         {
@@ -464,7 +1151,7 @@
         },
         {
           "donor_id": "michael-sacks",
-          "name": "Michael Sacks",
+          "name": "Michael, Sacks",
           "role": "alt-name"
         },
         {
@@ -485,6 +1172,11 @@
           "role": "parent"
         },
         {
+          "donor_id": "chicago-land-operators-joint-labor-mgt-pac",
+          "name": "Chicago Land Operators Joint Labor-Mgt PAC",
+          "role": "affiliated-pac"
+        },
+        {
           "donor_id": "chicago-land-operators",
           "name": "Chicago Land Operators",
           "role": "alt-name"
@@ -495,9 +1187,54 @@
           "role": "affiliated-pac"
         },
         {
+          "donor_id": "chicago-land-operators-joint-labor-mngt-pac",
+          "name": "Chicago Land Operators Joint Labor Mngt Pac",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicagoland-operators-joint-labor-mgmt-pac",
+          "name": "Chicagoland Operators Joint Labor Mgmt PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-land-operators-jt-labor-mgmt-pac",
+          "name": "Chicago Land Operators Jt Labor Mgmt PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-land-operators-joimt-labor-management-pac",
+          "name": "Chicago Land Operators Joimt Labor-Management PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "joint-labor-management-pac",
+          "name": "Joint Labor Management-PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-land-operations-joint-labor-management-pac",
+          "name": "Chicago Land Operations Joint Labor-Management PAC",
+          "role": "affiliated-pac"
+        },
+        {
           "donor_id": "chicagoland-operators-joint-labor-management-pac",
           "name": "Chicagoland Operators Joint Labor-Management PAC",
           "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicagoland-operators",
+          "name": "Chicagoland Operators",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "chicago-land-operators-joint-mangmnt",
+          "name": "Chicago Land Operators Joint Mangmnt",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "chicago-land-operator",
+          "name": "Chicago Land Operator",
+          "role": "alt-name"
         }
       ]
     },
@@ -522,13 +1259,38 @@
           "role": "affiliated-pac"
         },
         {
+          "donor_id": "ctu-pac-local-1",
+          "name": "CTU PAC Local 1",
+          "role": "affiliated-pac"
+        },
+        {
           "donor_id": "chicago-teachers-union-pac-illinois-federation-of-teachers",
           "name": "Chicago Teachers Union PAC (Illinois Federation of Teachers)",
           "role": "affiliated-pac"
         },
         {
+          "donor_id": "chicago-teachers-union-local-1",
+          "name": "Chicago Teachers Union Local 1",
+          "role": "alt-name"
+        },
+        {
           "donor_id": "chicago-teachers-union-local-1-pac",
           "name": "Chicago Teachers Union Local 1 PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "ctu-local-1-pac",
+          "name": "CTU Local 1 PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-teachhers-union-pac",
+          "name": "Chicago Teachhers Union-PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-teacher-s-union-pac",
+          "name": "Chicago Teacher's Union PAC",
           "role": "affiliated-pac"
         },
         {
@@ -559,8 +1321,83 @@
           "role": "alt-name"
         },
         {
+          "donor_id": "liuna-chicago-laborers-dist-council-pac",
+          "name": "LIUNA Chicago Laborers Dist. Council PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "liuna-construction-and-laborers-pac",
+          "name": "LIUNA Construction and Laborers PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "construction-and-laborers-pac",
+          "name": "Construction and Laborers PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "construction-and-general-laborers",
+          "name": "Construction and General Laborers",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "liuna-chicago-area-laborers-political-league",
+          "name": "LiUNA Chicago Area Laborers Political League",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "construction-general-laborers",
+          "name": "CONSTRUCTION & GENERAL LABORERS",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "construction-general-laborers-ed-league",
+          "name": "CONSTRUCTION & GENERAL LABORERS-ED LEAGUE",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "luna-chicago-laborers-district-council",
+          "name": "Luna Chicago Laborers District Council",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "liuna-chicago-laborers-dist-council",
+          "name": "Liuna Chicago Laborers Dist Council",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "construction-genl-laborers-dist-council-vicinity-laborers-politi",
+          "name": "Construction & Genl Laborers' Dist Council & Vicinity Laborers' Politi",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "liuna-chgo-laborers-district-council-pac",
+          "name": "LIUNA Chgo Laborers' District Council PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "laborers-political-league-great-lakes-region",
+          "name": "Laborers' Political League Great Lakes Region",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "illinois-laborers-legislative-committee",
+          "name": "Illinois Laborers' Legislative Committee",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "laborers-international-union-of-north-america-local-751",
+          "name": "Laborers International Union of North America, Local 751",
+          "role": "alt-name"
+        },
+        {
           "donor_id": "construction-general-laborers-district-council",
           "name": "Construction & General Laborers District Council",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "construction-and-general-laborers-district-council-of-chgo-vicinity",
+          "name": "Construction and General Laborers' District Council of Chgo & Vicinity",
           "role": "alt-name"
         },
         {
@@ -572,6 +1409,41 @@
           "donor_id": "construction-and-general-laborers-pac",
           "name": "Construction and General Laborers PAC",
           "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-laborers-district-counsel-pac",
+          "name": "Chicago Laborers District Counsel PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "constuction-and-general-laborers-district-council",
+          "name": "Constuction and General Laborers District Council",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "luna-chicago-laborers-district-council-pac",
+          "name": "Luna Chicago Laborers District Council PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "construction-and-general-laborers-dc-of-chicago-vicinity-laborers-pa",
+          "name": "Construction and General Laborers DC of Chicago & Vicinity Laborers PA",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "liuna",
+          "name": "LiUNA!",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "liuna-chicago-labors-district-counil-pac",
+          "name": "Liuna Chicago Labors' District Counil PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "liuna-chicago-labors-district-counil",
+          "name": "LIUNA Chicago Labors District Counil",
+          "role": "alt-name"
         }
       ]
     },
@@ -582,13 +1454,33 @@
       "members": [
         {
           "donor_id": "mid-america-carpenters-regional-council-pac",
-          "name": "Mid-America Carpenters Regional Council PAC",
+          "name": "Mid-America Carpenters Regional Council - PAC",
           "role": "parent"
         },
         {
           "donor_id": "mid-america-carpenters-regional-council-political-action-committee",
           "name": "Mid-America Carpenters Regional Council Political Action Committee",
           "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "mid-america-carpenters-reg-coun-pac",
+          "name": "MID-AMERICA CARPENTERS REG COUN PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "mid-american-carpenters-regional-council-pac",
+          "name": "Mid American Carpenters Regional Council PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "mid-america-carpentersregional-council-pac",
+          "name": "Mid-America CarpentersRegional Council PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "mid-america-carpenter-regional",
+          "name": "mid america carpenter regional",
+          "role": "alt-name"
         }
       ]
     },
@@ -622,6 +1514,16 @@
         {
           "donor_id": "cook-county-college-teachers-union-cope",
           "name": "Cook County College Teachers Union-COPE",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "cook-county-college-teacher-union-cope",
+          "name": "Cook County College Teacher Union - COPE",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "cook-county-college-teacher-s-union-cope",
+          "name": "Cook County College Teacher's Union-COPE",
           "role": "alt-name"
         },
         {
@@ -674,9 +1576,49 @@
           "role": "alt-name"
         },
         {
-          "donor_id": "united-union-of-roofers-local-11",
-          "name": "United Union of Roofers, Local 11",
+          "donor_id": "roofers-waterprofers-local-11-pac",
+          "name": "Roofers & Waterprofers Local 11 PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "roofers-waterproofers-pac-11",
+          "name": "Roofers & Waterproofers PAC #11",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "united-union-of-roofers-waterproffers",
+          "name": "United Union of Roofers, Waterproffers",
           "role": "alt-name"
+        },
+        {
+          "donor_id": "united-union-of-roofers-waterproofers-and-allied-workers",
+          "name": "United Union of Roofers, Waterproofers and Allied Workers",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "united-union-of-roofers-waterproofers-and-allied-workers-pe-lf",
+          "name": "United Union of Roofers, Waterproofers and Allied Workers PE & LF",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "united-union-of-roofers-local-11",
+          "name": "United Union of Roofers Local 11",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "united-union-of-roofers-waterproofers-allied-workers-pe-lf",
+          "name": "United Union of Roofers, Waterproofers & Allied Workers PE &LF",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "united-union-of-roofers-local-11-political-fund",
+          "name": "United Union of Roofers Local 11 Political Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "roofers-and-waterproofers-pac",
+          "name": "Roofers and Waterproofers PAC",
+          "role": "affiliated-pac"
         },
         {
           "donor_id": "roofers-and-waterproofers-local-11pac",
@@ -687,6 +1629,41 @@
           "donor_id": "united-union-of-roofers-waterproofers-and-allied-workers-local-11",
           "name": "United Union of Roofers, Waterproofers and Allied Workers Local 11",
           "role": "alt-name"
+        },
+        {
+          "donor_id": "united-union-of-roofers-waterproofers",
+          "name": "United Union of Roofers, Waterproofers",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "roofers-water-proofers-local-11-pac",
+          "name": "Roofers & Water Proofers Local 11 PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "roofers-waterproofers",
+          "name": "Roofers & Waterproofers",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "roofers-lu-11-political-fund-of-chicago-illinois-and-vicinity",
+          "name": "Roofers LU 11 Political Fund of Chicago, Illinois and Vicinity",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "roofers-and-water-proofers-local-11-pac",
+          "name": "Roofers and Water Proofers Local 11 PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "united-union-of-roofers-waterproofers-allied-workers",
+          "name": "United Union of Roofers, Waterproofers & Allied Workers",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "united-union-of-roofers-waterproofers-and-allied-workers-pac",
+          "name": "United Union of Roofers, Waterproofers, and Allied Workers PAC",
+          "role": "affiliated-pac"
         }
       ]
     },
@@ -703,6 +1680,21 @@
         {
           "donor_id": "ufcw-local-881-pac",
           "name": "UFCW Local 881 PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "ufcw-local-881-political-action-committee",
+          "name": "UFCW Local 881 - Political Action Committee",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "ufcw-local",
+          "name": "UFCW Local",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "united-food-and-commercial-workers-local-881-pac",
+          "name": "United Food and Commercial Workers Local 881 PAC",
           "role": "affiliated-pac"
         }
       ]
@@ -723,9 +1715,69 @@
           "role": "affiliated-pac"
         },
         {
+          "donor_id": "chicago-federation-of-labor-union-council-pac",
+          "name": "Chicago Federation of Labor & Union Council PAC",
+          "role": "affiliated-pac"
+        },
+        {
           "donor_id": "chicago-federation-of-labor",
           "name": "Chicago Federation of Labor",
           "role": "alt-name"
+        },
+        {
+          "donor_id": "chicago-federation-of-labor-and-iuc",
+          "name": "Chicago Federation of Labor and IUC",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "chicago-federation-of-labor-and-industrial-union-pac",
+          "name": "Chicago Federation of Labor and Industrial Union PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-federation-of-labor-iuc-pol-fund",
+          "name": "CHICAGO FEDERATION OF LABOR &IUC POL FUND",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-federation-of-labor-pac",
+          "name": "Chicago Federation of Labor PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-federation-of-labor-iuc-political-fund",
+          "name": "Chicago Federation of Labor & IUC Political Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-federation-of-labor-and-industrial-workers-pac",
+          "name": "Chicago Federation of Labor and Industrial Workers PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-federation-of-laborand-industrial-union-council-pac",
+          "name": "Chicago Federation of LaborAnd Industrial Union Council PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-federation-of-labor-iuc",
+          "name": "Chicago Federation of Labor & IUC",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "cfl-pac",
+          "name": "CFL PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "cfl-iuc-cook-county-labor-pac",
+          "name": "CFL & IUC Cook County Labor PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "cfl-iuc-county-labor-pac",
+          "name": "CFL & IUC county labor PAC",
+          "role": "affiliated-pac"
         }
       ]
     },
@@ -740,9 +1792,39 @@
           "role": "parent"
         },
         {
+          "donor_id": "unite-here-tip-state-local-fund",
+          "name": "Unite Here TIP State & Local Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "unite-here-chicago-and-midwest-regional-joint-board-pec",
+          "name": "UNITE HERE Chicago and Midwest Regional Joint Board PEC",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "local-1-unite-here",
+          "name": "Local 1 Unite Here",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "unite-here",
+          "name": "Unite Here",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "unite-here-tip-state-and-local-fund",
+          "name": "Unite Here TIP State and Local Fund",
+          "role": "affiliated-pac"
+        },
+        {
           "donor_id": "unitehere-local-1",
           "name": "UniteHere! - Local 1",
           "role": "alt-name"
+        },
+        {
+          "donor_id": "unitehere-pac",
+          "name": "Unitehere! PAC",
+          "role": "affiliated-pac"
         }
       ]
     },
@@ -757,6 +1839,11 @@
           "role": "parent"
         },
         {
+          "donor_id": "ironworkers-district-council-of-chicago-vicinity-pac",
+          "name": "Ironworkers District Council of Chicago & Vicinity PAC",
+          "role": "affiliated-pac"
+        },
+        {
           "donor_id": "ironworkers-district-council-of-chicago-pac",
           "name": "Ironworkers District Council of Chicago PAC",
           "role": "affiliated-pac"
@@ -765,6 +1852,41 @@
           "donor_id": "ironworkers-district-council-of-chicago",
           "name": "Ironworkers District Council of Chicago",
           "role": "alt-name"
+        },
+        {
+          "donor_id": "ironworkers-district-council-of-chicago-vicinity-p-a-c",
+          "name": "Ironworkers District Council of Chicago & Vicinity- P.A.C.",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "ironworkers-district-council-of-chicago-and-vicinity-pac",
+          "name": "Ironworkers District Council of Chicago and Vicinity PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "ironworkers-district-council-of-chicago-vincinity-pac",
+          "name": "Ironworkers District Council of Chicago & Vincinity PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "ironworkers-district-council-of-chicago-vic-pac",
+          "name": "Ironworkers District Council of  Chicago & Vic. PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "ironworkers-district-council",
+          "name": "ironworkers district council",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "ironworkers-dist-council-pac",
+          "name": "Ironworkers Dist. Council PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "iron-workers-district-council-of-chicago-vicinity-pac",
+          "name": "Iron Workers District Council of Chicago Vicinity PAC",
+          "role": "affiliated-pac"
         }
       ]
     },
@@ -784,13 +1906,73 @@
           "role": "affiliated-pac"
         },
         {
+          "donor_id": "illinois-restaurateur-s",
+          "name": "Illinois Restaurateur's",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "illinois-restaurateur-pac",
+          "name": "Illinois Restaurateur PAC",
+          "role": "affiliated-pac"
+        },
+        {
           "donor_id": "illinois-restaurateur-s-political-action-committee",
           "name": "Illinois Restaurateur's Political Action Committee",
           "role": "affiliated-pac"
         },
         {
+          "donor_id": "il-restaurant-association-pac",
+          "name": "IL Restaurant Association PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "il-restauranteurs-pac",
+          "name": "IL Restauranteurs PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "illinois-restauranteurs-pac",
+          "name": "ILLINOIS RESTAURANTEURS PAC",
+          "role": "affiliated-pac"
+        },
+        {
           "donor_id": "illinois-restaurant-assn",
           "name": "Illinois Restaurant Assn",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "illinois-restaurant-assoc",
+          "name": "Illinois restaurant assoc.",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "illinois-restauranteur-s-pac",
+          "name": "Illinois Restauranteur's PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "illinois-restaurant-association-general-account",
+          "name": "Illinois Restaurant Association General Account",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "illinois-restauranteurs-political-action-committee",
+          "name": "Illinois Restauranteurs Political Action Committee",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "illinois-restauranteur-pac",
+          "name": "Illinois Restauranteur Pac",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "illinois-restauranteur-s",
+          "name": "Illinois Restauranteur's",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "il-restaurant-association",
+          "name": "IL Restaurant Association",
           "role": "alt-name"
         },
         {
@@ -806,6 +1988,16 @@
         {
           "donor_id": "illinois-restaurateurs-pac",
           "name": "Illinois Restaurateurs PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "illinois-restauranter-s-political-action-committee",
+          "name": "Illinois Restauranter's Political Action Committee",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "illinois-resturauteur-s-pac",
+          "name": "Illinois Resturauteur's PAC",
           "role": "affiliated-pac"
         }
       ]
@@ -831,8 +2023,33 @@
           "role": "alt-name"
         },
         {
+          "donor_id": "iuoe-local-399-pef",
+          "name": "IUOE Local 399 PEF",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "i-u-o-e-local-399-political-ed-fund",
+          "name": "I.U.O.E Local 399 Political Ed Fund",
+          "role": "affiliated-pac"
+        },
+        {
           "donor_id": "iuoe-local-399-political-education-fund",
           "name": "IUOE Local 399 Political Education Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "i-u-o-e-local-399-political-education-fund",
+          "name": "I.U.O.E. Local 399 Political Education Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "iuou-local-no-399-educational-pac",
+          "name": "IUOU Local No 399 Educational PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "local-399-political-education-fund",
+          "name": "Local #399 Political Education Fund",
           "role": "affiliated-pac"
         }
       ]
@@ -840,21 +2057,101 @@
     "rollup-514": {
       "name": "Ironworkers Local Union #1",
       "relationship": "affiliated entities",
-      "canonical_id": "bridge-structural-and-reinforcing-ironworkers-local-1",
+      "canonical_id": "ironworkers-local-union-1",
       "members": [
         {
-          "donor_id": "bridge-structural-and-reinforcing-ironworkers-local-1",
-          "name": "Bridge Structural and Reinforcing Ironworkers Local 1",
+          "donor_id": "ironworkers-local-union-1",
+          "name": "Ironworkers Local Union 1",
           "role": "parent"
         },
         {
-          "donor_id": "bridge-structural-and-reinforcing-ironworkers-local-union-1",
-          "name": "Bridge Structural and Reinforcing Ironworkers Local Union #1",
+          "donor_id": "ironworkers-local-1",
+          "name": "Ironworkers Local 1",
           "role": "alt-name"
+        },
+        {
+          "donor_id": "ironworkers-local-union-1-ipal-fund",
+          "name": "Ironworkers Local Union #1 IPAL Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "ironworkers-local",
+          "name": "Ironworkers Local",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "ironworkers-local-union-1-ipef-fund",
+          "name": "Ironworkers Local Union #1 IPEF Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "bridge-structural-reinforcing-ironworkers-local-union-1-ipal-fund",
+          "name": "Bridge Structural & Reinforcing Ironworkers Local Union #1 IPAL Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "architectural-ornamentral-iron-workers-union-local-63",
+          "name": "Architectural & Ornamentral Iron Workers Union, Local 63",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "iron-workers-local-1",
+          "name": "Iron Workers Local 1",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "bridge-struc-reinforc-iron-workers-lu-1-ipal-fund",
+          "name": "Bridge Struc & Reinforc Iron Workers LU # 1 IPAL Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "bridge-structural-and-reinforcing-iron-workers-local-1",
+          "name": "Bridge Structural and Reinforcing Iron Workers Local 1",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "iron-workers-local-1-political-organization-fund",
+          "name": "Iron Workers Local 1 Political Organization Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "bridge-structural-and-reinforcing-ironworkers-local-1",
+          "name": "Bridge Structural and Reinforcing Ironworkers Local 1",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "bridge-structural-and-reinforcing-iron-wrks-union-1",
+          "name": "BRIDGE STRUCTURAL AND REINFORCING IRON WRKS UNION 1",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "bridge-structural-and-reinforcing-ironworkers-local-union-1",
+          "name": "Bridge Structural and Reinforcing Ironworkers Local Union 1",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "bridge-structural-and-reinforcing-ironworkers-local-union-1-ipal-fund",
+          "name": "Bridge Structural and Reinforcing Ironworkers Local Union #1 IPAL Fund",
+          "role": "affiliated-pac"
         },
         {
           "donor_id": "bridge-structural-reinforcing",
           "name": "Bridge Structural & Reinforcing",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "bridge-structural-and-reinforcing-ironworkers-local-e1",
+          "name": "Bridge Structural and Reinforcing Ironworkers Local E1",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "bridge-structural-reinforcing-local-1",
+          "name": "Bridge Structural & Reinforcing Local #1",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "bridge-structural-and-reinforcing",
+          "name": "Bridge Structural and Reinforcing",
           "role": "alt-name"
         }
       ]
@@ -862,16 +2159,115 @@
     "rollup-518": {
       "name": "Neighborhood Building Owners Alliance Political Action Committee",
       "relationship": "affiliated entities",
-      "canonical_id": "neighborhood-building-owners-alliance-pac",
+      "canonical_id": "neighborhood-building-owners-alliance-political-action-committee",
       "members": [
         {
-          "donor_id": "neighborhood-building-owners-alliance-pac",
-          "name": "Neighborhood Building Owners Alliance PAC",
+          "donor_id": "neighborhood-building-owners-alliance-political-action-committee",
+          "name": "Neighborhood Building Owners Alliance Political Action Committee",
           "role": "parent"
         },
         {
+          "donor_id": "neighborhood-building-owners-alliance-pac",
+          "name": "Neighborhood Building Owners Alliance PAC",
+          "role": "affiliated-pac"
+        },
+        {
           "donor_id": "neighborhood-building-owners-alliance",
-          "name": "Neighborhood Building Owners alliance",
+          "name": "Neighborhood Building Owners Alliance",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "neighborhood-building-owners-alliance-action-committee",
+          "name": "Neighborhood Building Owners Alliance Action Committee",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "neighborhood-building-owners-allianace-pac",
+          "name": "Neighborhood Building Owners Allianace PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "neighborhood-buildng-owners",
+          "name": "Neighborhood Buildng Owners",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "neighborhood-bldg-owners-alliance-pac",
+          "name": "Neighborhood Bldg Owners Alliance PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "neighborhood-bldg-owners-alliance",
+          "name": "Neighborhood Bldg Owners Alliance",
+          "role": "alt-name"
+        }
+      ]
+    },
+    "rollup-524": {
+      "name": "La Ciudad de los Vientos",
+      "relationship": "affiliated entities",
+      "canonical_id": "la-ciudad-de-los-vientos",
+      "members": [
+        {
+          "donor_id": "la-ciudad-de-los-vientos",
+          "name": "La Ciudad de los Vientos",
+          "role": "parent"
+        },
+        {
+          "donor_id": "la-ciudad-de-los-vientos-pac",
+          "name": "La Ciudad de los Vientos PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "la-cuidaded-de-los-vientos-pac",
+          "name": "La Cuidaded de los vientos PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "la-ciud-de-los-vientos-pac",
+          "name": "La Ciud de Los Vientos PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "la-cludad-de-los-vientos-pac",
+          "name": "La Cludad de los Vientos PAC",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "la-cuidad-de-los-vientos-pac",
+          "name": "La Cuidad de los Vientos PAC",
+          "role": "affiliated-pac"
+        }
+      ]
+    },
+    "rollup-528": {
+      "name": "Citizens for Antonio Munoz",
+      "relationship": "affiliated entities",
+      "canonical_id": "citizens-for-antonio-munoz",
+      "members": [
+        {
+          "donor_id": "citizens-for-antonio-munoz",
+          "name": "Citizens for Antonio Munoz",
+          "role": "parent"
+        },
+        {
+          "donor_id": "citizens-for-antonio-tony-munoz",
+          "name": "Citizens for Antonio (Tony) Munoz",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "citizens-of-antonio-munoz",
+          "name": "Citizens of Antonio Munoz",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "citizens-for-tony-munoz",
+          "name": "Citizens for Tony Munoz",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "citizens-for-munoz",
+          "name": "Citizens for Munoz",
           "role": "alt-name"
         }
       ]
@@ -879,17 +2275,138 @@
     "rollup-530": {
       "name": "Painters District Council No.14",
       "relationship": "affiliated entities",
-      "canonical_id": "painters-district-council-14",
+      "canonical_id": "painters-district-council-no-14",
       "members": [
         {
-          "donor_id": "painters-district-council-14",
-          "name": "Painters District Council #14",
+          "donor_id": "painters-district-council-no-14",
+          "name": "Painters District Council No.14",
           "role": "parent"
         },
         {
-          "donor_id": "painters-district-council-14-political-action-fund",
-          "name": "Painters District Council #14 Political Action Fund",
+          "donor_id": "painters-district-council-14",
+          "name": "Painters District Council #14",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "painters-district-council-14-pac",
+          "name": "Painters District Council #14 PAC",
           "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "painters-district-council",
+          "name": "PAINTERS DISTRICT COUNCIL",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "painters-district-council-14-paf",
+          "name": "Painters District Council #14 PAF",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "painters-district-council-14-political-action-fund",
+          "name": "Painters District Council #14 - Political Action Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "painters-district-council-14-pol-action-fund",
+          "name": "Painters District Council #14 Pol Action Fund",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "painter-s-district-council-14-political-action-fund",
+          "name": "Painter's District Council #14  Political Action Fund",
+          "role": "affiliated-pac"
+        }
+      ]
+    },
+    "rollup-531": {
+      "name": "Friends of Josina Morita",
+      "relationship": "affiliated entities",
+      "canonical_id": "friends-of-josina-morita",
+      "members": [
+        {
+          "donor_id": "friends-of-josina-morita",
+          "name": "Friends of Josina Morita",
+          "role": "parent"
+        },
+        {
+          "donor_id": "morita-josina",
+          "name": "Morita, Josina",
+          "role": "alt-name"
+        }
+      ]
+    },
+    "rollup-534": {
+      "name": "Citizens for Gene Schulter",
+      "relationship": "affiliated entities",
+      "canonical_id": "citizens-for-gene-schulter",
+      "members": [
+        {
+          "donor_id": "citizens-for-gene-schulter",
+          "name": "Citizens for Gene Schulter",
+          "role": "parent"
+        },
+        {
+          "donor_id": "schulter-citizens-for-gene",
+          "name": "Schulter, Citizens for Gene",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "citizen-for-gene-schulter",
+          "name": "Citizen for Gene Schulter",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "citizens-for-eugene-schulter",
+          "name": "Citizens for Eugene Schulter",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "schulter-gene",
+          "name": "Schulter, Gene",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "schulter-eugene",
+          "name": "Schulter, Eugene",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "citizens-for-schulter",
+          "name": "Citizens for Schulter",
+          "role": "alt-name"
+        }
+      ]
+    },
+    "rollup-537": {
+      "name": "United with Delia Election Committee",
+      "relationship": "affiliated entities",
+      "canonical_id": "united-with-delia-election-committee",
+      "members": [
+        {
+          "donor_id": "united-with-delia-election-committee",
+          "name": "United with Delia Election Committee",
+          "role": "parent"
+        },
+        {
+          "donor_id": "united-with-delia-election-committee-campaign-account",
+          "name": "United With Delia Election Committee Campaign Account",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "ramirez-delia",
+          "name": "Ramirez, Delia",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "united-with-delia-for-congress",
+          "name": "United with Delia for Congress",
+          "role": "alt-name"
+        },
+        {
+          "donor_id": "united-with-delia",
+          "name": "United with Delia",
+          "role": "alt-name"
         }
       ]
     }
@@ -1704,7 +3221,7 @@
           "name": "Friends of Ed Bannon",
           "sbe_committee_id": "38810",
           "data_quality": "REAL",
-          "last_updated": "2026-08-09"
+          "last_updated": "2026-08-30"
         }
       ],
       "finance_state": "totals_only",
@@ -2193,7 +3710,8 @@
                 "amount": 2000.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-234"
           },
           {
             "donor_id": "friends-of-lapointe",
@@ -2599,7 +4117,8 @@
                 "amount": 500.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-381"
           },
           {
             "donor_id": "international-brotherhood-of-electrical-workers-local-134",
@@ -2854,7 +4373,8 @@
                 "amount": 250.0,
                 "contribution_type": "Individual Contribution"
               }
-            ]
+            ],
+            "cluster_id": "rollup-298"
           },
           {
             "donor_id": "catalano-giovanni",
@@ -3440,7 +4960,8 @@
                 "amount": 200.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-271"
           },
           {
             "donor_id": "gonzalez-nancy",
@@ -3978,7 +5499,8 @@
                 "amount": 1000.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-234"
           },
           {
             "donor_id": "friends-of-cheri-bustos",
@@ -4014,7 +5536,8 @@
                 "amount": 1000.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-458"
           },
           {
             "donor_id": "kelly-mike",
@@ -4434,7 +5957,8 @@
                 "amount": 500.0,
                 "contribution_type": "Individual Contribution"
               }
-            ]
+            ],
+            "cluster_id": "rollup-402"
           },
           {
             "donor_id": "seman-david",
@@ -4668,7 +6192,8 @@
                 "amount": 250.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-283"
           },
           {
             "donor_id": "gannon-tom",
@@ -5006,7 +6531,7 @@
           "name": "Friends of Jennifer Custer",
           "sbe_committee_id": "39805",
           "data_quality": "REAL",
-          "last_updated": "2026-08-09"
+          "last_updated": "2026-08-30"
         }
       ],
       "finance_state": "full",
@@ -5838,7 +7363,8 @@
                 "is_in_kind": true,
                 "in_kind_description": "VAN Administration"
               }
-            ]
+            ],
+            "cluster_id": "rollup-469"
           },
           {
             "donor_id": "seiu-local-73-b-pac",
@@ -5932,7 +7458,8 @@
                 "is_in_kind": true,
                 "in_kind_description": "Prepping canvass & communication materials, canvassing, volunteer recruitment & training,"
               }
-            ]
+            ],
+            "cluster_id": "rollup-431"
           },
           {
             "donor_id": "jcua-votes",
@@ -6209,7 +7736,8 @@
                 "amount": 1000.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-537"
           },
           {
             "donor_id": "laws-amber",
@@ -7055,7 +8583,8 @@
                 "is_in_kind": true,
                 "in_kind_description": "Staff salaries"
               }
-            ]
+            ],
+            "cluster_id": "rollup-431"
           },
           {
             "donor_id": "mangahas-anna",
@@ -7229,7 +8758,7 @@
           "name": "Ebony DeBerry for School Board",
           "sbe_committee_id": "39821",
           "data_quality": "REAL",
-          "last_updated": "2026-08-09"
+          "last_updated": "2026-08-30"
         }
       ],
       "finance_state": "full",
@@ -7301,7 +8830,7 @@
           "name": "Debby For District 2B",
           "sbe_committee_id": "39834",
           "data_quality": "REAL",
-          "last_updated": "2026-08-09"
+          "last_updated": "2026-08-30"
         }
       ],
       "finance_state": "totals_only",
@@ -7351,7 +8880,7 @@
           "name": "Friends of Norma Rios Sierra",
           "sbe_committee_id": "41082",
           "data_quality": "REAL",
-          "last_updated": "2026-08-09"
+          "last_updated": "2026-08-30"
         }
       ],
       "finance_state": "totals_only",
@@ -7461,7 +8990,8 @@
                 "amount": 10000.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-458"
           },
           {
             "donor_id": "rock-arthur",
@@ -8325,7 +9855,8 @@
                 "amount": 1000.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-458"
           },
           {
             "donor_id": "36th-ward-dems",
@@ -8427,9 +9958,9 @@
             "amount": 1480.54,
             "count": 2,
             "industries": [
-              "unclassified"
+              "individual"
             ],
-            "industry_class": "unclassified",
+            "industry_class": "individual_only",
             "items": [
               {
                 "date": "2025-04-15",
@@ -8443,7 +9974,8 @@
                 "is_in_kind": true,
                 "in_kind_description": "Event space rental, staffing and beverages for reception"
               }
-            ]
+            ],
+            "cluster_id": "rollup-293"
           },
           {
             "donor_id": "common-ground-collective-pac",
@@ -8595,7 +10127,7 @@
           },
           {
             "donor_id": "urban-center-pac",
-            "name": "Urban Center/PAC",
+            "name": "Urban Center PAC",
             "type": "PAC",
             "amount": 1000.0,
             "count": 1,
@@ -8840,7 +10372,8 @@
                 "amount": 250.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-224"
           },
           {
             "donor_id": "anichini-heather",
@@ -9245,13 +10778,13 @@
           "donor_count": 56,
           "dollars": {
             "substantive": 21020.24,
-            "individual_only": 66953.34,
-            "unclassified": 7355.54
+            "individual_only": 68433.88,
+            "unclassified": 5875.0
           },
           "shares": {
             "substantive": 0.220502,
-            "individual_only": 0.702339,
-            "unclassified": 0.077159
+            "individual_only": 0.71787,
+            "unclassified": 0.061628
           },
           "substantive_share": 0.220502,
           "meets_industry_threshold": false
@@ -9267,7 +10800,7 @@
           "name": "Community for Carlos Rivas",
           "sbe_committee_id": "39786",
           "data_quality": "REAL",
-          "last_updated": "2026-08-09"
+          "last_updated": "2026-08-30"
         }
       ],
       "finance_state": "full",
@@ -9878,7 +11411,8 @@
                 "is_in_kind": true,
                 "in_kind_description": "Van Administration"
               }
-            ]
+            ],
+            "cluster_id": "rollup-469"
           },
           {
             "donor_id": "asian-american-midwest-progressives",
@@ -11950,7 +13484,7 @@
           "name": "Neighbors for Karen Zaccor for ERSB",
           "sbe_committee_id": "39866",
           "data_quality": "REAL",
-          "last_updated": "2026-08-09"
+          "last_updated": "2026-08-30"
         }
       ],
       "finance_state": "full",
@@ -12154,7 +13688,8 @@
                 "is_in_kind": true,
                 "in_kind_description": "Paid staff (all under 150 each)"
               }
-            ]
+            ],
+            "cluster_id": "rollup-224"
           },
           {
             "donor_id": "electric-movement-llc",
@@ -12777,7 +14312,8 @@
                 "amount": 1000.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-154"
           },
           {
             "donor_id": "friends-of-matt-martin",
@@ -13371,7 +14907,8 @@
                 "amount": 500.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-534"
           },
           {
             "donor_id": "coffman-james",
@@ -13948,9 +15485,9 @@
             "amount": 500.0,
             "count": 1,
             "industries": [
-              "unclassified"
+              "individual"
             ],
-            "industry_class": "unclassified",
+            "industry_class": "individual_only",
             "items": [
               {
                 "date": "2024-09-27",
@@ -14318,9 +15855,9 @@
             "amount": 250.0,
             "count": 1,
             "industries": [
-              "unclassified"
+              "individual"
             ],
-            "industry_class": "unclassified",
+            "industry_class": "individual_only",
             "items": [
               {
                 "date": "2024-09-27",
@@ -15362,7 +16899,8 @@
                 "amount": 1000.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-224"
           },
           {
             "donor_id": "gutman-brian",
@@ -15403,7 +16941,8 @@
                 "amount": 1000.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-458"
           },
           {
             "donor_id": "nellis-mike",
@@ -15582,7 +17121,8 @@
                 "amount": 1001.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-427"
           },
           {
             "donor_id": "bobins-norman",
@@ -15691,7 +17231,8 @@
                 "amount": 1000.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-154"
           },
           {
             "donor_id": "gamrath-robert",
@@ -15881,7 +17422,8 @@
                 "amount": 1000.0,
                 "contribution_type": "Individual Contribution"
               }
-            ]
+            ],
+            "cluster_id": "rollup-176"
           },
           {
             "donor_id": "teamsters-volunteers-in-politics",
@@ -16145,14 +17687,14 @@
           },
           {
             "donor_id": "cozen-o-connor",
-            "name": "Cozen O'Connor",
+            "name": "Cozen O' Connor",
             "type": "Individual",
             "amount": 500.0,
             "count": 1,
             "industries": [
-              "unclassified"
+              "individual"
             ],
-            "industry_class": "unclassified",
+            "industry_class": "individual_only",
             "items": [
               {
                 "date": "2026-06-30",
@@ -16233,7 +17775,8 @@
                 "amount": 500.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-524"
           },
           {
             "donor_id": "leon-michael",
@@ -16495,7 +18038,8 @@
                 "amount": 250.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-283"
           },
           {
             "donor_id": "grumman-cornelia",
@@ -16744,13 +18288,13 @@
           "donor_count": 162,
           "dollars": {
             "substantive": 25550.0,
-            "individual_only": 123410.0,
-            "unclassified": 79750.8
+            "individual_only": 124160.0,
+            "unclassified": 79000.8
           },
           "shares": {
             "substantive": 0.111713,
-            "individual_only": 0.53959,
-            "unclassified": 0.348697
+            "individual_only": 0.542869,
+            "unclassified": 0.345418
           },
           "substantive_share": 0.111713,
           "meets_industry_threshold": false
@@ -16760,13 +18304,13 @@
           "donor_count": 86,
           "dollars": {
             "substantive": 20396.32,
-            "individual_only": 91788.0,
-            "unclassified": 17184.93
+            "individual_only": 92288.0,
+            "unclassified": 16684.93
           },
           "shares": {
             "substantive": 0.15766,
-            "individual_only": 0.709504,
-            "unclassified": 0.132836
+            "individual_only": 0.713369,
+            "unclassified": 0.128971
           },
           "substantive_share": 0.15766,
           "meets_industry_threshold": false
@@ -16782,7 +18326,7 @@
           "name": "Ellen for Education",
           "sbe_committee_id": "39858",
           "data_quality": "REAL",
-          "last_updated": "2026-08-09"
+          "last_updated": "2026-08-30"
         }
       ],
       "finance_state": "full",
@@ -17130,7 +18674,8 @@
                 "is_in_kind": true,
                 "in_kind_description": "VAN Administration"
               }
-            ]
+            ],
+            "cluster_id": "rollup-469"
           },
           {
             "donor_id": "people-united-for-action",
@@ -18441,7 +19986,7 @@
           "name": "Friends of Jitu Brown",
           "sbe_committee_id": "39853",
           "data_quality": "REAL",
-          "last_updated": "2026-08-09"
+          "last_updated": "2026-08-30"
         }
       ],
       "finance_state": "full",
@@ -19266,7 +20811,7 @@
           },
           {
             "donor_id": "the-custom-companies-inc",
-            "name": "The Custom Companies, Inc.",
+            "name": "The Custom Companies INC.",
             "type": "Individual",
             "amount": 1000.0,
             "count": 1,
@@ -19631,7 +21176,7 @@
           "name": "Committee to Elect Michilla Blaise",
           "sbe_committee_id": "37001",
           "data_quality": "REAL",
-          "last_updated": "2026-08-09"
+          "last_updated": "2026-08-30"
         }
       ],
       "finance_state": "full",
@@ -20267,7 +21812,8 @@
                 "is_in_kind": true,
                 "in_kind_description": "Phone bank"
               }
-            ]
+            ],
+            "cluster_id": "rollup-469"
           },
           {
             "donor_id": "seiu-local-73-b-pac",
@@ -20534,7 +22080,7 @@
           },
           {
             "donor_id": "painters-district-council-14-political-action-fund",
-            "name": "Painters District Council #14 Political Action Fund",
+            "name": "Painters District Council #14 - Political Action Fund",
             "type": "PAC",
             "amount": 1500.0,
             "count": 1,
@@ -21293,7 +22839,8 @@
                 "amount": 250.0,
                 "contribution_type": "Individual Contribution"
               }
-            ]
+            ],
+            "cluster_id": "rollup-531"
           },
           {
             "donor_id": "patel-dipal",
@@ -21721,7 +23268,7 @@
           "name": "Neighbors for Anusha",
           "sbe_committee_id": "39855",
           "data_quality": "REAL",
-          "last_updated": "2026-08-09"
+          "last_updated": "2026-08-30"
         }
       ],
       "finance_state": "full",
@@ -22784,9 +24331,9 @@
             "amount": 250.0,
             "count": 1,
             "industries": [
-              "unclassified"
+              "self-funding"
             ],
-            "industry_class": "unclassified",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2024-10-23",
@@ -23204,7 +24751,7 @@
           },
           {
             "donor_id": "d-escoto-rodrigo",
-            "name": "d'Escoto, Rodrigo",
+            "name": "D'Escoto, Rodrigo",
             "type": "Individual",
             "amount": 2500.0,
             "count": 1,
@@ -23479,14 +25026,14 @@
           },
           {
             "donor_id": "cozen-o-connor",
-            "name": "Cozen O'Connor",
+            "name": "Cozen O' Connor",
             "type": "Individual",
             "amount": 1000.0,
             "count": 1,
             "industries": [
-              "unclassified"
+              "individual"
             ],
-            "industry_class": "unclassified",
+            "industry_class": "individual_only",
             "items": [
               {
                 "date": "2026-04-30",
@@ -25200,16 +26747,16 @@
           "donor_total": 74348.5,
           "donor_count": 56,
           "dollars": {
-            "substantive": 5000.0,
+            "substantive": 5250.0,
             "individual_only": 50650.0,
-            "unclassified": 18698.5
+            "unclassified": 18448.5
           },
           "shares": {
-            "substantive": 0.067251,
+            "substantive": 0.070613,
             "individual_only": 0.681251,
-            "unclassified": 0.251498
+            "unclassified": 0.248136
           },
-          "substantive_share": 0.067251,
+          "substantive_share": 0.070613,
           "meets_industry_threshold": false
         },
         "2026": {
@@ -25217,13 +26764,13 @@
           "donor_count": 121,
           "dollars": {
             "substantive": 13000.0,
-            "individual_only": 142509.34,
-            "unclassified": 7250.0
+            "individual_only": 143509.34,
+            "unclassified": 6250.0
           },
           "shares": {
             "substantive": 0.079873,
-            "individual_only": 0.875583,
-            "unclassified": 0.044544
+            "individual_only": 0.881727,
+            "unclassified": 0.0384
           },
           "substantive_share": 0.079873,
           "meets_industry_threshold": false
@@ -25237,7 +26784,7 @@
           "name": "Citizens for Biggs",
           "sbe_committee_id": "39881",
           "data_quality": "REAL",
-          "last_updated": "2026-08-09"
+          "last_updated": "2026-08-30"
         }
       ],
       "finance_state": "full",
@@ -25638,7 +27185,8 @@
                 "amount": 2600.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-256"
           },
           {
             "donor_id": "friends-of-theresa-mah",
@@ -25683,7 +27231,8 @@
                 "is_in_kind": true,
                 "in_kind_description": "Phone Bank and Texting Program"
               }
-            ]
+            ],
+            "cluster_id": "rollup-469"
           },
           {
             "donor_id": "friends-for-celina-villanueva",
@@ -25701,7 +27250,8 @@
                 "amount": 5000.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-326"
           },
           {
             "donor_id": "friends-of-edgar-gonzalez",
@@ -26116,7 +27666,8 @@
                 "amount": 1000.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-537"
           },
           {
             "donor_id": "guerrero-martha",
@@ -26807,7 +28358,7 @@
           "name": "Friends of Yesenia Lopez",
           "sbe_committee_id": "39844",
           "data_quality": "REAL",
-          "last_updated": "2026-08-09"
+          "last_updated": "2026-08-30"
         }
       ],
       "finance_state": "full",
@@ -26990,7 +28541,8 @@
                 "amount": 5000.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-458"
           },
           {
             "donor_id": "king-stephen",
@@ -27177,7 +28729,8 @@
                 "amount": 1000.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-528"
           },
           {
             "donor_id": "friends-for-tabares-political-action-commitee",
@@ -27366,9 +28919,9 @@
             "amount": 500.0,
             "count": 1,
             "industries": [
-              "unclassified"
+              "individual"
             ],
-            "industry_class": "unclassified",
+            "industry_class": "individual_only",
             "items": [
               {
                 "date": "2024-10-29",
@@ -27988,7 +29541,7 @@
           },
           {
             "donor_id": "mid-america-carpenters-regional-council-pac",
-            "name": "Mid-America Carpenters Regional Council PAC",
+            "name": "Mid-America Carpenters Regional Council - PAC",
             "type": "PAC",
             "amount": 1000.0,
             "count": 1,
@@ -28061,14 +29614,14 @@
           },
           {
             "donor_id": "cozen-o-connor",
-            "name": "Cozen O'Connor",
+            "name": "Cozen O' Connor",
             "type": "Individual",
             "amount": 500.0,
             "count": 1,
             "industries": [
-              "unclassified"
+              "individual"
             ],
-            "industry_class": "unclassified",
+            "industry_class": "individual_only",
             "items": [
               {
                 "date": "2026-06-06",
@@ -28094,7 +29647,8 @@
                 "amount": 500.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-458"
           },
           {
             "donor_id": "romero-peter",
@@ -28253,13 +29807,13 @@
           "donor_count": 52,
           "dollars": {
             "substantive": 8789.0,
-            "individual_only": 54900.0,
-            "unclassified": 20029.32
+            "individual_only": 55400.0,
+            "unclassified": 19529.32
           },
           "shares": {
             "substantive": 0.104983,
-            "individual_only": 0.65577,
-            "unclassified": 0.239247
+            "individual_only": 0.661743,
+            "unclassified": 0.233274
           },
           "substantive_share": 0.104983,
           "meets_industry_threshold": false
@@ -28269,13 +29823,13 @@
           "donor_count": 22,
           "dollars": {
             "substantive": 4000.0,
-            "individual_only": 48600.0,
-            "unclassified": 1500.0
+            "individual_only": 49100.0,
+            "unclassified": 1000.0
           },
           "shares": {
             "substantive": 0.073937,
-            "individual_only": 0.898336,
-            "unclassified": 0.027727
+            "individual_only": 0.907579,
+            "unclassified": 0.018484
           },
           "substantive_share": 0.073937,
           "meets_industry_threshold": false
@@ -28291,7 +29845,7 @@
           "name": "Friends for Angel Gutierrez",
           "sbe_committee_id": "39873",
           "data_quality": "REAL",
-          "last_updated": "2026-08-09"
+          "last_updated": "2026-08-30"
         }
       ],
       "finance_state": "full",
@@ -29196,9 +30750,9 @@
             "amount": 480.53,
             "count": 1,
             "industries": [
-              "unclassified"
+              "individual"
             ],
-            "industry_class": "unclassified",
+            "industry_class": "individual_only",
             "items": [
               {
                 "date": "2025-09-22",
@@ -29207,7 +30761,8 @@
                 "is_in_kind": true,
                 "in_kind_description": "Event space rental, staffing, and beverages for reception on 09/22/25"
               }
-            ]
+            ],
+            "cluster_id": "rollup-293"
           },
           {
             "donor_id": "tremblay-jay",
@@ -29287,13 +30842,13 @@
           "donor_count": 17,
           "dollars": {
             "substantive": 16740.17,
-            "individual_only": 46883.32,
-            "unclassified": 480.53
+            "individual_only": 47363.85,
+            "unclassified": 0.0
           },
           "shares": {
             "substantive": 0.261141,
-            "individual_only": 0.731363,
-            "unclassified": 0.007496
+            "individual_only": 0.738859,
+            "unclassified": 0.0
           },
           "substantive_share": 0.261141,
           "meets_industry_threshold": false
@@ -29309,7 +30864,7 @@
           "name": "Therese Boyle for District 9 CPS BOE",
           "sbe_committee_id": "39843",
           "data_quality": "REAL",
-          "last_updated": "2026-08-09"
+          "last_updated": "2026-08-30"
         }
       ],
       "finance_state": "full",
@@ -30890,14 +32445,14 @@
           },
           {
             "donor_id": "cozen-o-connor",
-            "name": "Cozen O'Connor",
+            "name": "Cozen O' Connor",
             "type": "Individual",
             "amount": 750.0,
             "count": 2,
             "industries": [
-              "unclassified"
+              "individual"
             ],
-            "industry_class": "unclassified",
+            "industry_class": "individual_only",
             "items": [
               {
                 "date": "2025-12-26",
@@ -30946,7 +32501,8 @@
                 "amount": 500.0,
                 "contribution_type": "Transfer In"
               }
-            ]
+            ],
+            "cluster_id": "rollup-224"
           },
           {
             "donor_id": "atieh-mohamad",
@@ -31374,13 +32930,13 @@
           "donor_count": 49,
           "dollars": {
             "substantive": 19000.0,
-            "individual_only": 68624.3,
-            "unclassified": 3000.0
+            "individual_only": 69374.3,
+            "unclassified": 2250.0
           },
           "shares": {
             "substantive": 0.209657,
-            "individual_only": 0.757239,
-            "unclassified": 0.033104
+            "individual_only": 0.765515,
+            "unclassified": 0.024828
           },
           "substantive_share": 0.209657,
           "meets_industry_threshold": false
@@ -31396,7 +32952,7 @@
           "name": "Citizens for Che \"Rhymefest\" Smith",
           "sbe_committee_id": "39788",
           "data_quality": "REAL",
-          "last_updated": "2026-08-09"
+          "last_updated": "2026-08-30"
         }
       ],
       "finance_state": "full",

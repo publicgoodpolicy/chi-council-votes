@@ -87,7 +87,10 @@ def validate(d):
     errors.extend(validate_votes(d))
     errors.extend(validate_members(d))
     errors.extend(validate_dues_excluded(d))
-    errors.extend(validate_alder_linkage(d))
+    errors.extend(validate_stream_fusion(d))
+    _alder_errs, _alder_warns = validate_alder_linkage(d)
+    errors.extend(_alder_errs)
+    warnings.extend(_alder_warns)
     return errors, warnings
 
 
@@ -830,51 +833,145 @@ def _invert_ward_map_check(raw):
     return by_ward
 
 
+FUNDER_EDGE_PREFIX = 'IE Committee'
+
+
+def validate_stream_fusion(d):
+    """CNCL-DATA-1 P1.4 F-1 — no committee record may carry both money streams.
+
+    PS-128 declaration: MODE B — live-derived, premise asserted by the check itself.
+
+    A committee that plays both roles — a candidate committee that is also an IE committee —
+    used to be represented by ONE record, because `ingest.py` joined on `sbe_committee_id` and
+    found the IE record first. Its direct receipts and its funder-edge rows are the SAME SBE
+    rows, so every receipt landed twice: measured at 2 records and $889,050.50 of windowed
+    money, and it reached `rollups.by_candidate` and the embed's own index, not just the raw
+    array. F-1 separates the records at ingest; this assert is what keeps them separated.
+
+    WHY ARTIFACT-ONLY. The tempting check is "the direct total equals what the CSVs carry", but
+    the CSVs live in `raw/`, which is gitignored and expected present-and-empty between
+    refreshes — a gate assert reading them would be green only by accident of staging. The
+    invariant that IS checkable from the artifact alone is the structural one: a record carries
+    direct rows or funder-edge rows, never both.
+    """
+    errors = []
+    if 'contributions' not in d:
+        return errors                      # not a contributions-bearing artifact
+    streams = {}
+    for c in d['contributions']:
+        cid = c.get('committee_id')
+        if cid is None:
+            continue
+        edge = str(c.get('contribution_type') or '').startswith(FUNDER_EDGE_PREFIX)
+        seen = streams.setdefault(cid, [0, 0])
+        seen[1 if edge else 0] += 1
+    for cid, (direct, edge) in sorted(streams.items()):
+        if direct and edge:
+            errors.append(
+                f"stream fusion: committee record {cid!r} carries BOTH {direct} direct row(s) "
+                f"and {edge} funder-edge row(s) — one record, one stream (F-1)")
+    return errors
+
+
 def validate_alder_linkage(d, ward_map_raw=None):
-    """ELEC-IDENTITY-1 R1's pin: each alderperson candidacy's derived committee_id.
+    """ELEC-IDENTITY-1 R1's pin, RESCOPED (CNCL-DATA-1 P1.4, ruling 2 of 2026-08-30).
 
     PS-128 declaration: MODE B — live-derived, premise asserted by the check itself. The
     premise (the artifact carries races and candidates, and a ward map is available to
     invert) is asserted before any value is compared, so a missing input fails loudly
     instead of passing vacuously over an empty population.
 
-    POPULATION, stated as the code's rather than as the concept's: the candidacies the
-    derivation reaches — those whose race is `alderperson` AND carries a ward. A ward with
-    no mapping row derives null and is asserted to BE null; that is the derivation's own
-    zero, not an exemption.
+    WHY THE RESCOPE. The original rule asserted that EVERY alderperson candidacy carries
+    the ward's mapped committee. That was written when an alder race held exactly one
+    candidacy — the incumbent stub, whose committee is DERIVED from the ward map. Once
+    challengers exist, each carrying its own authored committee, the rule is broken by
+    construction: P1.4 measured 36 errors from 36 legitimate challenger stubs. The
+    invariant is real but belongs only to the derived population.
+
+    THREE PARTS, three populations, stated as the code's:
+
+      1. INCUMBENT EQUALITY (error) — candidacies on an `alderperson` race that carries a
+         ward AND whose `incumbent` is True. That is the derivation's own population: the
+         seed derives a committee only where none is authored, and only incumbent stubs
+         leave it unauthored. A ward with no mapping row derives null and is asserted to
+         BE null; that is the derivation's zero, not an exemption. (Measured on the live
+         artifact: `incumbent is True` and `status == 'incumbent-pending'` select the same
+         50 rows, so the flag alone is an exact binding.)
+
+      2. EXISTENCE (warning) — every candidacy's non-null `committee_id` should resolve to
+         a committees record, joined on `sbe_committee_id` (the committees dict is keyed by
+         candidate slug, not by SBE id). A WARNING and not an error because a candidacy
+         legitimately precedes its committee: committees are minted by `ingest.py` when a
+         receipts CSV exists, so every candidacy declared before its first ingest dangles
+         by design — 48 of 103 do so on the artifact this rule was written against. The
+         ruling's words are "may not dangle SILENTLY"; a warning printed on every run is
+         not silent, while an error here would redden the gate on legitimate state.
+
+      3. UNIQUENESS (error) — no two candidacies may share a `committee_id`. One committee
+         funds one candidacy; two candidacies sharing one means a duplicate record, which
+         is exactly how P1.4's `cand-harris-ward-08` duplicated `inc-ward-08` after the
+         ward-8 repoint. This assert catches that class structurally rather than by review.
     """
-    errors = []
+    errors, warnings = [], []
     if 'races' not in d or 'candidates' not in d:
-        return errors                      # not an elections-shaped artifact
+        return errors, warnings            # not an elections-shaped artifact
     if ward_map_raw is None:
         # ward-map.json sits beside this validator, in campaign-finance/ingestion/.
         p = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ward-map.json')
         if not os.path.exists(p):
-            return errors                  # no map on disk: nothing to pin against
+            return errors, warnings        # no map on disk: nothing to pin against
         with open(p, encoding='utf-8') as f:
             ward_map_raw = json.load(f)
     try:
         by_ward = _invert_ward_map_check(ward_map_raw)
     except ValueError as e:
         errors.append(f"alder linkage: {e} — the derivation's source is unusable")
-        return errors
+        return errors, warnings
 
+    candidates = d.get('candidates', [])
+
+    # --- part 3: uniqueness, over every candidacy in the artifact ---
+    seen_cmte = {}
+    for c in candidates:
+        cm = c.get('committee_id')
+        if not cm:
+            continue
+        if cm in seen_cmte:
+            errors.append(
+                f"alder linkage: committee_id {cm!r} is shared by candidacies "
+                f"{seen_cmte[cm]!r} and {c.get('id')!r} — one committee funds one candidacy")
+        else:
+            seen_cmte[cm] = c.get('id')
+
+    # --- part 2: existence, over every candidacy; a warning, see the docstring ---
+    if 'committees' in d:
+        known = {v.get('sbe_committee_id') for v in d['committees'].values()
+                 if isinstance(v, dict) and v.get('sbe_committee_id')}
+        for c in candidates:
+            cm = c.get('committee_id')
+            if cm and cm not in known:
+                warnings.append(
+                    f"alder linkage: candidacy {c.get('id')} carries committee_id {cm!r}, "
+                    f"which resolves to no committees record (expected before its first "
+                    f"ingest; a typo looks the same)")
+
+    # --- part 1: incumbent equality, over the derivation's own population ---
     rid_to_ward = {r['id']: r.get('ward') for r in d.get('races', [])
                    if r.get('office') == 'alderperson' and r.get('ward') is not None}
     if not rid_to_ward:
-        return errors                      # no alder races in this artifact
-    for c in d.get('candidates', []):
+        return errors, warnings            # no alder races in this artifact
+    for c in candidates:
         rid = c.get('race_id')
-        if rid not in rid_to_ward:
+        if rid not in rid_to_ward or c.get('incumbent') is not True:
             continue
         expected = by_ward.get(str(rid_to_ward[rid]))
         actual = c.get('committee_id')
         if actual != expected:
             errors.append(
-                f"alder linkage: candidacy {c.get('id')} on race {rid} (ward "
+                f"alder linkage: incumbent candidacy {c.get('id')} on race {rid} (ward "
                 f"{rid_to_ward[rid]}) carries committee_id {actual!r}, expected "
                 f"{expected!r} from the inverted ward map")
-    return errors
+    return errors, warnings
 
 
 def validate_dues_excluded(d):
@@ -1187,7 +1284,7 @@ def self_test():
     # PS-128 declaration: MODE A — pinned independently of live repo state. No artifact
     # and no ward map on disk is read; every fixture and every map is a literal.
     def acase(name, artifact, ward_map, expect):
-        errs = validate_alder_linkage(artifact, ward_map)
+        errs, _warns = validate_alder_linkage(artifact, ward_map)
         ok = (not errs) if expect is None else any(expect in e for e in errs)
         results.append((name, ok))
         print(f"SELF-TEST {'PASS' if ok else 'FAIL'}  {name}")
@@ -1201,18 +1298,18 @@ def self_test():
 
     acase("[ALDER/LINK] a correctly derived committee id passes",
           {'races': _races, 'candidates': [{'id': 'inc-ward-01', 'race_id': 'ward-01',
-                                            'committee_id': '11111'}]}, _wm, None)
+                                            'incumbent': True, 'committee_id': '11111'}]}, _wm, None)
     acase("[ALDER/LINK] a WRONG committee id errors",
           {'races': _races, 'candidates': [{'id': 'inc-ward-01', 'race_id': 'ward-01',
-                                            'committee_id': '99999'}]}, _wm,
+                                            'incumbent': True, 'committee_id': '99999'}]}, _wm,
           "expected '11111'")
     acase("[ALDER/LINK] a ward with NO mapping row derives null, and null passes",
           {'races': _races, 'candidates': [{'id': 'inc-ward-02', 'race_id': 'ward-02',
-                                            'committee_id': None}]}, _wm, None)
+                                            'incumbent': True, 'committee_id': None}]}, _wm, None)
     acase("[ALDER/LINK] an unmapped ward carrying a committee id errors "
           "(the derivation's zero is asserted, not exempted)",
           {'races': _races, 'candidates': [{'id': 'inc-ward-02', 'race_id': 'ward-02',
-                                            'committee_id': '11111'}]}, _wm, "expected None")
+                                            'incumbent': True, 'committee_id': '11111'}]}, _wm, "expected None")
     acase("[ALDER/LINK] a NON-1:1 inversion (two committees claiming one ward) errors",
           {'races': _races, 'candidates': []}, {'11111': 1, '22222': 1}, "not 1:1")
     # The committee-side duplicate (one committee mapped to two wards) is UNREACHABLE from
@@ -1227,6 +1324,69 @@ def self_test():
                                             'committee_id': '77777'}]}, _wm, None)
     acase("[ALDER/LINK] an artifact with no races SKIPS cleanly",
           {'candidates': []}, _wm, None)
+
+    # CNCL-DATA-1 P1.4 F-1 — the stream-fusion assert, proven by its own bite.
+    def fcase(name, artifact, expect):
+        errs = validate_stream_fusion(artifact)
+        ok = (not errs) if expect is None else any(expect in e for e in errs)
+        results.append((name, ok))
+        print(f"SELF-TEST {'PASS' if ok else 'FAIL'}  {name}")
+        if not ok:
+            print(f"          expected {expect!r}, got: {errs}")
+
+    fcase("[STREAM/FUSE] a record carrying only direct rows passes",
+          {'contributions': [{'committee_id': 'cand-x', 'contribution_type': 'Individual Contribution'},
+                             {'committee_id': 'cand-x', 'contribution_type': 'Transfer In'}]}, None)
+    fcase("[STREAM/FUSE] a record carrying only funder-edge rows passes",
+          {'contributions': [{'committee_id': 'ie-committee-x', 'contribution_type': 'IE Committee Receipt'},
+                             {'committee_id': 'ie-committee-x', 'contribution_type': 'IE Committee Dues Transfer'}]}, None)
+    fcase("[STREAM/FUSE] a FUSED record (both streams on one id) errors",
+          {'contributions': [{'committee_id': 'ie-committee-26023', 'contribution_type': 'Individual Contribution'},
+                             {'committee_id': 'ie-committee-26023', 'contribution_type': 'IE Committee Receipt'}]},
+          "carries BOTH")
+    fcase("[STREAM/FUSE] an artifact with no contributions SKIPS cleanly", {'candidates': []}, None)
+
+    # CNCL-DATA-1 P1.4 ruling 2 — the rescope's three parts, each proven by its own bite.
+    def wcase(name, artifact, ward_map, expect):
+        _errs, warns = validate_alder_linkage(artifact, ward_map)
+        ok = (not warns) if expect is None else any(expect in w for w in warns)
+        results.append((name, ok))
+        print(f"SELF-TEST {'PASS' if ok else 'FAIL'}  {name}")
+        if not ok:
+            print(f"          expected {expect!r}, got: {warns}")
+
+    # Part 1 — the rescope's own boundary: a CHALLENGER carrying its own committee is
+    # outside the equality population and must NOT error. This is the bite that proves the
+    # rescope did what it was for; without it the 36-error regression could silently return.
+    acase("[ALDER/LINK] a non-incumbent candidacy with its own committee does not error",
+          {'races': _races, 'candidates': [{'id': 'cand-x-ward-01', 'race_id': 'ward-01',
+                                            'incumbent': False, 'committee_id': '99999'}]},
+          _wm, None)
+    acase("[ALDER/LINK] an INCUMBENT still errors on a wrong committee (part 1 bites)",
+          {'races': _races, 'candidates': [{'id': 'inc-ward-01', 'race_id': 'ward-01',
+                                            'incumbent': True, 'committee_id': '99999'}]},
+          _wm, "expected '11111'")
+
+    # Part 2 — existence, as a WARNING (a candidacy legitimately precedes its committee).
+    wcase("[ALDER/LINK] a committee_id resolving to no committees record warns",
+          {'races': _races, 'committees': {'slug-a': {'sbe_committee_id': '11111'}},
+           'candidates': [{'id': 'cand-y-ward-01', 'race_id': 'ward-01',
+                           'incumbent': False, 'committee_id': '54321'}]},
+          _wm, "resolves to no committees record")
+    wcase("[ALDER/LINK] a committee_id that DOES resolve raises no warning",
+          {'races': _races, 'committees': {'slug-a': {'sbe_committee_id': '54321'}},
+           'candidates': [{'id': 'cand-y-ward-01', 'race_id': 'ward-01',
+                           'incumbent': False, 'committee_id': '54321'}]},
+          _wm, None)
+
+    # Part 3 — uniqueness. The class that produced cand-harris-ward-08.
+    acase("[ALDER/LINK] two candidacies sharing one committee_id errors",
+          {'races': _races, 'candidates': [
+              {'id': 'inc-ward-01', 'race_id': 'ward-01', 'incumbent': True,
+               'committee_id': '11111'},
+              {'id': 'cand-dup-ward-01', 'race_id': 'ward-01', 'incumbent': False,
+               'committee_id': '11111'}]},
+          _wm, "is shared by candidacies")
 
     bad = [n for n, ok in results if not ok]
     print(f"self-test: {len(results)} checks · "

@@ -981,10 +981,29 @@ async function assertExclusionUniformity(T, ctx, fx) {
   //     $0.00. The exclusion machinery is intact; only in-subject money moved.
   // The identity half of the assertion never moved: top funder stayed SEIU Healthcare
   // IL IN PAC at $34,000. Funders 33 -> 43.
+  // CNCL-DATA-1 P1.4 ruling 4 (revised 2026-08-30). The identity half used to read the funder's
+  // donor `name` — the RAW FILED STRING off whichever receipts row created the donor. The SBE
+  // export carries BOTH spellings of this filer: 'SEIU HealthCare IL IN PAC' 121 rows and
+  // 'SEIU Healthcare IL IN PAC' 120, and `resolve_donor` slugs them to one id, so `ingest.py:318`
+  // records whichever it reached first. That ordering changed when the committee set grew 68 -> 135
+  // and the assertion flipped — with no curated file and no Sheet cell having moved. The pin was
+  // right; the read was wrong. It now resolves the funder's parent_id to its Donor Clusters
+  // CANONICAL name, which is editor-owned and stable. The dollar half is untouched.
   var seiu = ED.spenderFunders(idx, 'ie-committee-18574');
+  var seiuTop = seiu.funders[0];
+  var seiuCanonical = (function (pid) {
+    var cl = (RAW.donor_clusters) || {};
+    for (var k in cl) {
+      if (!cl[k]) continue;
+      if (cl[k].canonical_id === pid) return cl[k].name;
+      if ((cl[k].members || []).indexOf(pid) >= 0) return cl[k].name;
+    }
+    return null;
+  })(seiuTop && seiuTop.parent_id);
   T.ok('[EXCL/SEIU] SEIU PAC funder total == 215075.25 in-subject (was 11513949.64 pre-exclusion; ' +
-    're-pinned from 121825.25, ratified 2026-08-09) and top funder is SEIU Healthcare IL IN PAC',
-    seiu.total === 215075.25 && seiu.funders[0] && seiu.funders[0].name === 'SEIU Healthcare IL IN PAC');
+    're-pinned from 121825.25, ratified 2026-08-09) and top funder resolves to the cluster ' +
+    'canonical name SEIU Healthcare IL IN PAC (read: ' + seiuCanonical + ')',
+    seiu.total === 215075.25 && seiuCanonical === 'SEIU Healthcare IL IN PAC');
 
   // 3. [EXCL/WMT] Welcome Wal-Mart: 100% pre-2011 receipts -> empty funder set, the
   // ratified string 2 renders, and NO identity claim appears (E3, structural).

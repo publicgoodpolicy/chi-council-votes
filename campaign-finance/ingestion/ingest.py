@@ -432,9 +432,21 @@ def merge_into_data(data: dict, parsed: dict, ward, linkage: dict = None) -> dic
     existing_cmt_id = None
     if linkage is not None:
         for cid, cm in data['committees'].items():
-            if cm.get('sbe_committee_id') == parsed['committee_id']:
-                existing_cmt_id = cid
-                break
+            if cm.get('sbe_committee_id') != parsed['committee_id']:
+                continue
+            # CNCL-DATA-1 P1.4 F-1 (STREAM SEPARATION). The sbe_committee_id join was chosen
+            # to avoid colliding with ward=None IE committees — and it collided in the one case
+            # it did not anticipate: a committee that plays BOTH roles, whose IE record carries
+            # the same SBE id. Extending that record fused the two streams onto it, and because
+            # a candidate committee's "funder edge" and its direct receipts are the SAME SBE
+            # rows, every receipt landed twice (measured: 2 committees, $889,050.50 windowed,
+            # reaching by_candidate and the embed's own index). A candidate ingest therefore
+            # NEVER extends an IE-committee record: the direct rows get their own cand- record
+            # and the IE record keeps its funder edge and industry_tags untouched.
+            if str(cid).startswith('ie-committee-') or cm.get('type') == 'independent_expenditure':
+                continue
+            existing_cmt_id = cid
+            break
     else:
         for cid, cm in data['committees'].items():
             if cm.get('ward') == ward:

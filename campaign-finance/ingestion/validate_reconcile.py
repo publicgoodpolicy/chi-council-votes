@@ -182,9 +182,21 @@ def claim_verdict(report, gaps, tol=0.005):
     its triggers: a future refresh could move the residual without tripping any of them and
     leave the published sentence stale.
 
-    The left side is computed exactly as the embed computes it —
-    `sum(Math.abs(g.amount || 0))`, elections-embed.inlined.html:2666 — so the check and the
-    page cannot disagree about what "the disclosed total" means.
+    PARITY WITH THE EMBED — BROKEN DELIBERATELY, CNCL-DATA-1 P1.4 Z-1 (2026-08-30). The left
+    side used to be computed exactly as the embed computes it, `sum(Math.abs(g.amount || 0))`
+    (`app.js:51`, inlined at elections-embed.inlined.html:2779), so that the check and the page
+    could not disagree about what "the disclosed total" means. That parity was sound while every
+    ledger entry carried the same sign. The third and fourth entry classes introduce POSITIVE
+    amounts — periods where our itemized rows exceed the sworn cover — and `abs()` then ADDS
+    what the arithmetic must SUBTRACT: 8,400.00 + 78,841.50 + 1,200.00 + 1,499.25 sums to
+    89,940.75 under `abs()`, where the signed sum is -84,542.25, the residual exactly.
+
+    So this check now sums SIGNED amounts and compares them to the SIGNED residual. The identity
+    it asserts is the true one. The consequence is stated rather than hidden: **the page's own
+    figure at `app.js:51` is still an absolute sum and now overstates the disclosed total.** The
+    page-side correction, and the methodology sentence's clauses for the two new classes, ride
+    P2 with the single paste. Until then the check is right and the page is not, which is the
+    safer direction for the two to disagree in.
 
     What this does NOT assert: that any individual annotation is correct, or that a
     divergence deserves disclosure. It asserts only that the published arithmetic closes.
@@ -197,15 +209,16 @@ def claim_verdict(report, gaps, tol=0.005):
     entries = (gaps or {}).get('gaps')
     if not isinstance(entries, list):
         return False, ['RECON/CLAIM: known-gaps carries no `gaps` list']
-    disclosed = round(sum(abs(float(g.get('amount') or 0)) for g in entries), 2)
-    residual = abs(float(h['residual']))
+    disclosed = round(sum(float(g.get('amount') or 0) for g in entries), 2)
+    residual = round(float(h['residual']), 2)
     if abs(disclosed - residual) > tol:
-        return False, [f'RECON/CLAIM: disclosed total ${disclosed:,.2f} across {len(entries)} '
-                       f'gap(s) does NOT equal |residual| ${residual:,.2f} — the methodology '
-                       f'tab\'s "every divergence is individually accounted for" is FALSE by '
+        return False, [f'RECON/CLAIM: disclosed total (signed) ${disclosed:,.2f} across '
+                       f'{len(entries)} gap(s) does NOT equal the signed residual '
+                       f'${residual:,.2f} — the methodology tab\'s "every divergence is '
+                       f'individually accounted for" is FALSE by '
                        f'${abs(residual - disclosed):,.2f}']
-    return True, [f'RECON/CLAIM: disclosed ${disclosed:,.2f} across {len(entries)} gap(s) '
-                  f'== |residual| ${residual:,.2f}']
+    return True, [f'RECON/CLAIM: disclosed (signed) ${disclosed:,.2f} across {len(entries)} '
+                  f'gap(s) == signed residual ${residual:,.2f}']
 
 
 def shape_verdict(report):
@@ -326,12 +339,23 @@ def _self_test():
     # ---- [RECON/CLAIM] ----
     R={'headline':{'residual':-8400.0}}
     G={'gaps':[{'amount':-500.0},{'amount':-250.0},{'amount':-7650.0}]}
-    ok('claim: disclosed total equals |residual|', claim_verdict(R,G)[0])
+    ok('claim: disclosed total equals the signed residual', claim_verdict(R,G)[0])
     ok('claim: a changed gap amount fails', not claim_verdict(R,{'gaps':[{'amount':-500.0},{'amount':-250.0},{'amount':-7000.0}]})[0])
     ok('claim: a removed gap fails', not claim_verdict(R,{'gaps':[{'amount':-500.0},{'amount':-250.0}]})[0])
     ok('claim: a moved residual fails', not claim_verdict({'headline':{'residual':-9000.0}},G)[0])
-    ok('claim: sign is ignored — |amount| is summed as the embed does',
-       claim_verdict(R,{'gaps':[{'amount':500.0},{'amount':250.0},{'amount':7650.0}]})[0])
+    # CNCL-DATA-1 P1.4 Z-1. This case asserted the OPPOSITE until 2026-08-30 — that sign was
+    # ignored, |amount| summed "as the embed does". The third and fourth entry classes introduced
+    # positive amounts, and under abs() a positive entry ADDS where it must SUBTRACT. Sign is now
+    # honoured, and the inverted case is kept as the bite: all-positive gaps against a negative
+    # residual must FAIL.
+    ok('claim: sign is HONOURED — all-positive gaps against a negative residual now fail',
+       not claim_verdict(R,{'gaps':[{'amount':500.0},{'amount':250.0},{'amount':7650.0}]})[0])
+    ok('claim: a MIXED-sign ledger summing to the residual passes (the ratified shape)',
+       claim_verdict({'headline':{'residual':-6400.0}},
+                     {'gaps':[{'amount':-8400.0},{'amount':1200.0},{'amount':800.0}]})[0])
+    ok('claim: BITE — one positive entry\'s sign flipped breaks the identity',
+       not claim_verdict({'headline':{'residual':-6400.0}},
+                         {'gaps':[{'amount':-8400.0},{'amount':-1200.0},{'amount':800.0}]})[0])
     ok('claim: absent residual fails', not claim_verdict({'headline':{}},G)[0])
     ok('claim: absent gaps list fails', not claim_verdict(R,{})[0])
     ok('claim: the failure names the shortfall',
