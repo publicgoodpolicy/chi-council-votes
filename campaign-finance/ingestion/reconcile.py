@@ -31,6 +31,7 @@ import csv
 import hashlib
 import json
 import os
+import re
 import sys
 from collections import defaultdict
 from datetime import datetime
@@ -318,6 +319,31 @@ def build_inputs_map(data_path, d2totals_path, fileddocs_path, known_gaps_path=N
     return {name: {'sha256': sha(path), 'path': path} for name, path in named}
 
 
+def data_through_of(contributions):
+    """R8 (i) as applied (CNCL-DATA-1 P2, register §"CNCL-DATA-1 P2 — R8 and R9 as applied").
+
+    The ISO date of the maximum `date` across every contribution row in the artifact this
+    report is built from — the receipts edge, which is what C5's `{DATA_THROUGH}` renders.
+    Deliberately the ARTIFACT's edge and not the bulk export's: C5 says "current through",
+    and the honest answer to that is the last dated row a reader can actually reach on this
+    surface. The sealed vintage's own maximum receipt date is the independent control, read
+    once at the HALT and reported beside this — the two are expected equal and a divergence
+    is a finding, not something this function reconciles.
+
+    Rows with no date, or a date that is not ISO-shaped, are skipped rather than coerced:
+    a malformed date must not silently become the edge. Returns None when nothing qualifies,
+    and an absent field is what makes C5 not render at all (figure posture (i)).
+    """
+    best = None
+    for c in contributions:
+        d = c.get('date')
+        if not isinstance(d, str) or not re.fullmatch(r'\d{4}-\d{2}-\d{2}', d):
+            continue
+        if best is None or d > best:
+            best = d
+    return best
+
+
 def run(data_path, d2totals_path, fileddocs_path, pulled, threshold, known_gaps_path=None):
     data = json.load(open(data_path))
     committees = data.get('committees', {})
@@ -432,11 +458,25 @@ def run(data_path, d2totals_path, fileddocs_path, pulled, threshold, known_gaps_
     report = {
         'run': {
             'data_file': data_path,
-            'd2totals_file': d2totals_path,
-            'fileddocs_file': fileddocs_path,
+            # R8 (ii) as applied: BASENAMES, not the invocation's paths. Two of the three
+            # inputs live outside the repo under an operator's home directory, and this
+            # report is CDN-served — a reader of the live methodology page can fetch it. The
+            # identity of each input is carried by `inputs[].sha256`, which is what a
+            # reproduction actually needs; the absolute path only leaked a local filesystem.
+            'd2totals_file': os.path.basename(d2totals_path),
+            'fileddocs_file': os.path.basename(fileddocs_path),
             'pulled': pulled,
+            # R8 (i) as applied: the receipts edge C5's {DATA_THROUGH} renders. Distinct from
+            # `pulled`, which is when the export was taken — conflating the two is exactly
+            # what C5 exists to stop.
+            'data_through': data_through_of(contributions),
             'threshold': threshold,
-            'scope': 'elections candidate committees (v1); IE and council lanes deferred',
+            # R8 (iii) as applied, ratified 2026-08-31 (D4): re-stamped FROM MEASURED COVERAGE,
+            # never authored ahead of it. The v1 string said the council lane was deferred while
+            # 67 of the map's 120 committees were already council — true when written, false at
+            # the data commit, and stamped on an artifact the methodology page links readers to.
+            'scope': 'elections candidate committees (v2): school_board and city_council; '
+                     'IE committees out of reconciliation scope; mayoral lane deferred',
             'inputs': build_inputs_map(data_path, d2totals_path, fileddocs_path,
                                        known_gaps_path),
         },

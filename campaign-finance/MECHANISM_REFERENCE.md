@@ -683,6 +683,23 @@ refuses to emit a bundle for an office outside its enumerated map, and the gate'
 `[BUNDLE/VINTAGE:bite]` line asserts that refusal — a build-time guard on neither embed's
 render path.
 
+**The elections embed's methodology view branches on office, and the branch it takes for
+`city_council` is composed from register text** [C5.13, SOURCED]: `methodologyView()` on the
+elections embed took no office until CNCL-DATA-1 P2.1 — the D-22 / PS-112 gate chose between
+rendering it and rendering coming-soon, and the body behind the gate was a single school-board
+composition. It now takes an office and emits, for `city_council`, the shared frame, five `<p>`
+carrying the ratified strings C1, C2, C5, C3, C4 in that order with no `<h3>` before any of them,
+then the verification section. The frame and that section are single expressions used by both
+branches, so their byte-identity across offices holds by construction rather than by a copy kept
+in step; no school-board section is carried across, which `[MUNI/SUBJ]` enforces by requiring each
+member office's rendered methodology to name its own subject and neither other office's. Three
+gate lines guard the arrangement and they are not interchangeable: `[MUNI/METH]` asserts that only
+an office with a ratified methodology renders one at all, `[MUNI/SUBJ]` that a member office's
+copy is its own, and `[METH/REGISTER]` that the copy IS the register's text — extracted from
+`RULINGS.md` by heading at run time and compared character for character after the register's
+quoting and line wrapping are normalized away. The first two can both pass while the rendered
+words have drifted from the ratified words; only the third closes that.
+
 **The school-board funding methodology renders unconditionally within the methodology
 view** [C5.12, SOURCED]: the SFM fold sits inside `methodologyView()`, reached as the
 router's terminal else, rendering the SFM strings in their ratified order with the
@@ -864,11 +881,12 @@ that catch defect classes the existing gates structurally cannot see.
 | S-cemb | `campaign-finance/elections/reference/council-embed.html` | `69e107cb4ad3caf1ed87d1a0b6e31b87608f811ea479f3ca9bcbabb59da8c7de` |
 | S-sbemb | `campaign-finance/school-board/school-board-embed.html` | `e3bb4d40abef7cd5335150257c493eb9a913ad1d29b2353fdc37f11fd94e7956` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
-| S-edat | `campaign-finance/elections/embed/data.js` | `7ae3cfc313d1e409a7506b942f83cf914e5754bc329ff7013b8de2a34d8d6502` |
-| S-eren | `campaign-finance/elections/embed/render.js` | `c661c5de123781199df623b90b8e5a481be0910ca415065a59ddeb42e4481a7b` |
-| S-eapp | `campaign-finance/elections/embed/app.js` | `4c4df660ffa73510b53f632576cfb38035bc037b30047c828a6b8cd1f1771f25` |
+| S-edat | `campaign-finance/elections/embed/data.js` | `9e3ee70f5d2b140033b923f42358965a25b919823e87281d5da2974344afca77` |
+| S-eren | `campaign-finance/elections/embed/render.js` | `420ef877818fa4506ddabfab06dfb3b5ca1808961f49dbac3d9119dc8f1ba354` |
+| S-eapp | `campaign-finance/elections/embed/app.js` | `33c896e8c8924e143da40d63c69a66e01f9c9e8801af0017e7dea8c77366c71d` |
 | S-srv | `campaign-finance/editor/serve.py` | `f430f67b2d2367893ab4cb37a1c25ff84d71bb93b53a23b78f253ec17dccaa3a` |
-| S-rec | `campaign-finance/ingestion/reconcile.py` | `7d7b9a62cdbcf18bef5c23e55bb439a8d9f88786323ae3ec4990ee50b66efa6f` |
+| S-rec | `campaign-finance/ingestion/reconcile.py` | `aaa8381c37b66f58cfe433b50960ee1b9e69c803abbf7741f19a7779ee491ca5` |
+| S-egate | `campaign-finance/elections/embed/tools/gate_bundle.js` | `191f273ed15ace0d4108e741cb2c54bd70d62fb1cbe924e6eab751933007ca4d` |
 | S-chk | `campaign-finance/tools/check_sheet_scopes.py` | `e45c063d5b19ad0c25695257a5e0a71bdbd7fcf618789ac18d36da9bc065b191` |
 | S-sbf | `campaign-finance/ingestion/build_sb_finance.py` | `566e15999c29359d66c7e6c87b5f44c982e8df0fe5cd9c309ecb644bf6769553` |
 | A-probe | `~/probe-sync-2026-07-24/probe-report.md` | `4c678cf0c14dd370f8b52744bf473000340ce16449a5365841b6ac92d8e5f9bb` |
@@ -957,17 +975,19 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.1 | A-fw1 | 7-16 (fix sites exist only in the elections path; artifact layer separate) |
 | C5.2 | S-cemb | 47 (dataUrl at the `refs/heads/main/` form), 48-52 (sharded mode, present-but-commented), 68 (feedback endpoint), 3425+3443 (subject prefix) |
 | C5.2 | S-sbemb | 66-70 (the `refs/heads/main/` rationale in situ, then `dataUrl` and `financeUrl` — TWO artifacts since SBFIN-1, where this row previously named one), 2979+2989 (the two artifact fetches), 81+83 (feedback endpoint + subject prefix), 2959 (the POST) |
-| C5.2 | S-eapp | 21 (DEFAULT_SRC at the ratified refs/heads/main/ form), 25-27 (ART_BASE + the two verification artifacts), 301 (src resolution: data-src → window.IPG_DATA_URL → baked default) |
+| C5.13 | S-eren | 140 (METHODOLOGY_OFFICES — the D-22 allowlist, city_council enlisted), 1033-1049 (the three shared expressions — the frame, the verification section and the artifact-links paragraph — as single expressions used by both branches), 1051-1087 (methodologyView's council branch: C1/C2/C5/C3/C4 with no `<h3>` before any of them, then the verification section and the links paragraph), 1402 (the call site passing office and the dues figures) |
+| C5.13 | S-egate | 1777-1824 ([MUNI/METH]), 1825-1903 ([MUNI/SUBJ]), 2140-2301 ([METH/REGISTER] — register-derived for the C-strings and R11, sibling-branch-pinned for the links paragraph; normalization stated in situ), 1976-2062 ([COUNCIL/CAND]), 2063-2139 ([COUNCIL/DONOR]) |
+| C5.2 | S-eapp | 21 (DEFAULT_SRC at the ratified refs/heads/main/ form), 25-27 (ART_BASE + the two verification artifacts), 328 (src resolution: data-src → window.IPG_DATA_URL → baked default) |
 | C5.2 | S-eemb | 17-18 (data-src override documented), 19-24 (artifact + the code-only inlining: data.js/render.js/app.js + styles into one Code Block) |
 | C5.2 | A-ba1g2 | 49 (Rider 2: neither embed renders entity-type / last-editor — a TWO-embed sweep, predating the school-board path; the third was measured at REF-C52 and agrees) |
-| C5.5 | S-edat | 146-150 (selectorOptions — the {year} {body} pattern), 855-866 (officeRaces election scoping via the year-prefix join), 802-804 (the race's window rides the VM), 819-821 (priorElection re-homed to the base VM) |
-| C5.5 | S-eren | 899-907 (selectorNav), 784-791 (the verbatim prior-note; the formerly-cited on_current_record string is DELETED — its retirement is C5.7's affordance clause) |
-| C5.5 | S-eapp | 143-158 (selector state + read-only ?election= boot), 213-222 (scope switch resets the active race — the ruled B6 resolution) |
-| C5.7 | S-edat | 915-1000 (resolvePersonRef 919 — id-only resolution + durable link; personView 950 — member sections, window-scoped figures, career total, boolean out-of-window condition, no IE key), 1363 (exports) |
-| C5.7 | S-eren | 668-704 (renderPersonModal — per-member sections + ratified strings), 706-712 (renderPersonMissing — string 7), 737-747 (facet map with on_current_record retired), 752-757 (personAffordance — string 13 label), 793-795 (card affordance), 811-822 (pendingCard explicit on_current_record branch) |
-| C5.7 | S-eapp | 81-85 (openPerson — no window parameter), 97-98 (data-person dispatch, no winFromEl), 282-291 (read-only ?person= boot — the deep-link path) |
-| C5.8 | S-edat | 454-458 (spenderFunders exclusion — the funder-rollup gap closed), 504-508 (donorFootprint exclusion — load-bearing for the windowless opener) |
-| C5.8 | S-eren | 484-485 (iePanel basis label + string-2 empty state), 646-651 (committee-profile basis label, string-2 empty state, structural no-identity-claim) |
+| C5.5 | S-edat | 146-150 (selectorOptions — the {year} {body} pattern), 864-875 (officeRaces election scoping via the year-prefix join), 811-813 (the race's window rides the VM), 828-830 (priorElection re-homed to the base VM) |
+| C5.5 | S-eren | 928-936 (selectorNav), 813-820 (the verbatim prior-note; the formerly-cited on_current_record string is DELETED — its retirement is C5.7's affordance clause) |
+| C5.5 | S-eapp | 164-184 (selector state + read-only ?election= boot), 240-249 (scope switch resets the active race — the ruled B6 resolution) |
+| C5.7 | S-edat | 924-1009 (resolvePersonRef 928 — id-only resolution + durable link; personView 959 — member sections, window-scoped figures, career total, boolean out-of-window condition, no IE key), 1372 (exports) |
+| C5.7 | S-eren | 697-733 (renderPersonModal — per-member sections + ratified strings), 735-741 (renderPersonMissing — string 7), 766-776 (facet map with on_current_record retired), 781-786 (personAffordance — string 13 label), 822-824 (card affordance), 840-851 (pendingCard explicit on_current_record branch) |
+| C5.7 | S-eapp | 102-106 (openPerson — no window parameter), 118-119 (data-person dispatch, no winFromEl), 309-318 (read-only ?person= boot — the deep-link path) |
+| C5.8 | S-edat | 463-467 (spenderFunders exclusion — the funder-rollup gap closed), 513-517 (donorFootprint exclusion — load-bearing for the windowless opener) |
+| C5.8 | S-eren | 513-514 (iePanel basis label + string-2 empty state), 675-680 (committee-profile basis label, string-2 empty state, structural no-identity-claim) |
 | C5.8 | S-cemb | 1019-1026 (cfInSubject + cfDuesRow + cfCountable — the shared full-set predicates), 1316-1321 (donor-index split: dues out first, then in-subject totals + separate before-May-2011 accumulator), 1440/1460/1567/1636/1905/3123 (full-set call sites: industry, per-alder industry, flags, IE funders, industry-detail, correlation index; IE spender sums filtered in situ), 1557-1565 (flag rows seeded from flagged donors — a fully-excluded flag renders zero, never vanishes), 2067-2076 (string 7 on the structural zero), 2602 (string 8, methodology), 1115-1133 (alder-profile in-subject views + curated option + string 4), 1675-1698 (pre2011SubView — strings 3/4, display-only rows), 1758-1760 (strings 5/6 on the ranked list), 3048-3052 (view bindings) |
 | C5.3 | A-fw1 | 14-16 (artifact not fused), 60-62 (gates check values, not structure) |
 | C5.4 | A-probe | 152 (banked sizing item: multiple surfaces, per-path render compliance) |
@@ -990,9 +1010,9 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.12 | S-sbemb | 2601-2652 (`methodologyView` — the view the terminal else reaches), 2634-2643 (the SFM fold: heading through f6, with `SF.allElectionsDisclosure` re-emitted at 2636 and the `duesFigure` loading fallback at 2638-2641) |
 | C5.12 | S-sbemb | 672-679 (the SFM string declarations) |
 | C5.9 | S-srv | 471-508 (cluster-preview totals mirror the rollup exclusion set exactly) |
-| C5.9 | S-rec | 39, 207-208 (contribution-type set-aside, excluded from the itemized compare) |
-| C5.9 | S-edat | 415-441 (contributor rollup counts every row; the broader render marking incl. small-dollar), 534 (row-flag carriage into the footprint VM) |
-| C5.9 | S-eren | 413-422 (the labeled, non-clickable pinned aggregate line; rows sum to the headline), 512 (the aggregate-of-N row chip) |
+| C5.9 | S-rec | 40, 208-209 (contribution-type set-aside, excluded from the itemized compare) |
+| C5.9 | S-edat | 424-450 (contributor rollup counts every row; the broader render marking incl. small-dollar), 543 (row-flag carriage into the footprint VM) |
+| C5.9 | S-eren | 442-451 (the labeled, non-clickable pinned aggregate line; rows sum to the headline), 541 (the aggregate-of-N row chip) |
 | C5.9 | S-cemb | 1145-1153 (alder-profile headline counts the tail into totals and stats), 1192-1212 (the restored disclosure line and its superseded HALT-MIG-1 comment of record), 3125 (correlation-index donor-type skip) |
 | P1 | A-fw1 | 60-62 (proposed fused-per-candidate detector, not built) |
 

@@ -48,7 +48,28 @@
       base.matchRate = h.dollar_weighted_match_pct;
       base.nCommittees = h.committees_with_sbe_id;
       base.nGaps = glist.length;
-      base.disclosedTotal = glist.reduce(function (s, g) { return s + Math.abs(g.amount || 0); }, 0);
+      // CNCL-DATA-1 P2.1 W3 — the signed correction (Z-1, discharged here). This line summed
+      // `Math.abs(g.amount)`, which was right while every ledger entry carried the same sign and
+      // wrong the moment PS-131's and PS-132's classes introduced positive amounts: abs() ADDS
+      // what the arithmetic must SUBTRACT, so the page rendered $89,941 against a ledger whose
+      // signed identity is -84,542.25. `validate_reconcile`'s [RECON/CLAIM] moved to signed
+      // arithmetic at P1.4 and this side stayed behind on purpose, the two disagreeing in the
+      // safe direction until the paste that carries the fix. This is that paste.
+      //
+      // Both figures are kept, because R11's sentence states both: the NET is the ledger's
+      // identity and the GROSS is the magnitude a reader is being told was investigated. Losing
+      // the gross would understate the disclosure work; losing the net would misstate the books.
+      base.gapsNet = glist.reduce(function (s, g) { return s + (g.amount || 0); }, 0);
+      base.gapsGross = glist.reduce(function (s, g) { return s + Math.abs(g.amount || 0); }, 0);
+      // Counted by DIRECTION, not by class: the ledger has no `class` field (open ledger 12), so
+      // sign is the only structured proxy for the four ratified classes, which is exactly why
+      // R11 describes them jointly by direction rather than naming them. Entries at exactly zero
+      // fall in neither count, which is what makes the render guard below meaningful.
+      base.gapsUnder = glist.filter(function (g) { return (g.amount || 0) < 0; }).length;
+      base.gapsOver = glist.filter(function (g) { return (g.amount || 0) > 0; }).length;
+      // C5's {DATA_THROUGH}. Undefined when the artifact does not state its receipts edge, so
+      // C5 does not render at all rather than rendering a half-sentence (figure posture (i)).
+      base.dataThrough = fmtPulled(run.data_through) || undefined;
       cb(base);
     }).catch(function () { cb(base); });
   }
@@ -151,7 +172,12 @@
         if (q && selOpts.some(function (o) { return o.id === q; })) urlSel = q;
       }
     } catch (e0) {}
-    var state = { office: office, topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors',
+    // W7: C4's two figures ride the RENDER STATE, not `verify`. They are a field of the DATA
+    // artifact this index was built from, so they cannot go missing independently of it —
+    // putting them on `verify` would say otherwise. undefined/null flows through to C4 not
+    // rendering at all (figure posture (i)).
+    var state = { office: office, duesExcluded: (index && index.duesExcluded) || null,
+      topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors',
       election: urlSel || (selOpts[0] && selOpts[0].id) || null,
       donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, raceFilter: 'all',
       expandedCandidateId: null,   // X-2: the ONE grouped row expanded to its inline funder card (accordion-of-one)
@@ -166,7 +192,8 @@
       var rv = raceId ? ElectData.viewModels.raceView(index, raceId, state.cycle) : null;
       var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.election, state.donorFilters, state.raceFilter, state.expandedCandidateId) : null;
       root.innerHTML = ElectRender.renderPage({
-        office: state.office, topView: state.topView, cycles: cycles, cycle: state.cycle,
+        office: state.office, duesExcluded: state.duesExcluded,
+        topView: state.topView, cycles: cycles, cycle: state.cycle,
         officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend,
         selector: { options: selOpts, active: state.election }, verify: state.verify
       });

@@ -14,6 +14,7 @@ by care. Deliberately narrow:
   [RECON/SHAPE]  the report parses and carries the expected top-level key inventory.
   [RECON/SYNC]   every input named in `run.inputs` still hashes to the recorded sha256.
   [RECON/CLAIM]  the known-gaps claim resolves through that same stamped input.
+  [RECON/THROUGH] `run.data_through` is present, ISO, and not later than `run.pulled`.
 
 This paragraph read "Two checks" over three for as long as [RECON/CLAIM] has existed: the
 count was a literal in three places and the docstring a fourth statement of it, so nothing
@@ -48,12 +49,12 @@ import sys
 # docstring is asserted against it by `--self-test`, so the count cannot drift from the code
 # and the prose cannot drift from either. Adding a check means adding its name here and its
 # verdict in main() — nothing else states the number.
-CHECKS = ('RECON/SHAPE', 'RECON/SYNC', 'RECON/CLAIM')
+CHECKS = ('RECON/SHAPE', 'RECON/SYNC', 'RECON/CLAIM', 'RECON/THROUGH')
 
 EXPECTED_TOP = {'run', 'headline', 'no_sbe_id_committees', 'join_failures',
                 'filings_missing_totals', 'disclosed', 'stale_annotations', 'committees'}
 EXPECTED_RUN = {'data_file', 'd2totals_file', 'fileddocs_file', 'pulled', 'threshold',
-                'scope', 'inputs'}
+                'scope', 'inputs', 'data_through'}
 
 
 def _sha256_file(path, _chunk=1 << 20):
@@ -167,6 +168,49 @@ def apply_known(failed_inputs, known):
         e = [x for x in entries if x.get('input') == p][0]
         lines.append(f'RECON/KNOWN: {p!r} failing as pinned — {e.get("owner")}')
     return unknown, stale, lines
+
+
+def through_verdict(report):
+    """[RECON/THROUGH] — `run.data_through` is present, ISO-formatted, and not after `run.pulled`.
+
+    CNCL-DATA-1 P2.1, R8 (iv) as applied (register §"CNCL-DATA-1 P2 — R8 and R9 as applied").
+
+    PS-128 DERIVATION MODE: **A (live-only)**. Both sides of every comparison are read from the
+    artifact under test — the field's presence, its shape, and its ordering against a sibling
+    field. Nothing is stated here that a constructed oracle would have to be kept in step with,
+    because there is nothing to pin: the correct value changes with every vintage. Not mode B
+    (no oracle), not C/D (no sibling asserts these premises), not E (no constructed axis).
+
+    WHY IT EXISTS, and why the ordering half is the load-bearing half. C5 renders
+    `{DATA_THROUGH}` from this field and `{PULL_DATE}` from `run.pulled`, and the whole point of
+    C5 is that those are DIFFERENT dates — the receipts edge versus the day the export was
+    taken. The failure that motivated the string was the page rendering the pull date as if it
+    were the data edge. A `data_through` LATER than `pulled` would be that failure inverted and
+    worse: it would claim coverage past the export the figures were built from. So the check
+    refuses it rather than reporting it.
+
+    Equality is permitted, not flagged: a pull taken the same day as the last receipt is
+    ordinary. Absence fails — under figure posture (i) an absent field means C5 does not render
+    at all, which is safe on the page but silent in the artifact, and a field this report is
+    contracted to carry must not go missing without a line saying so.
+    """
+    run = report.get('run')
+    if not isinstance(run, dict):
+        return False, ['RECON/THROUGH: `run` is not an object']
+    dt, pulled = run.get('data_through'), run.get('pulled')
+    if dt is None:
+        return False, ['RECON/THROUGH: `run.data_through` absent — C5 cannot render and the '
+                       'artifact no longer states its own receipts edge']
+    if not isinstance(dt, str) or not re.fullmatch(r'\d{4}-\d{2}-\d{2}', dt):
+        return False, [f'RECON/THROUGH: `run.data_through` is not an ISO date: {dt!r}']
+    if not isinstance(pulled, str) or not re.fullmatch(r'\d{4}-\d{2}-\d{2}', pulled):
+        return False, [f'RECON/THROUGH: `run.pulled` is not an ISO date: {pulled!r} — '
+                       f'data_through cannot be ordered against it']
+    if dt > pulled:
+        return False, [f'RECON/THROUGH: `run.data_through` {dt} is LATER than `run.pulled` '
+                       f'{pulled} — the report would claim coverage past the export it was '
+                       f'built from']
+    return True, [f'RECON/THROUGH: data_through {dt} <= pulled {pulled}, both ISO']
 
 
 def claim_verdict(report, gaps, tol=0.005):
@@ -361,6 +405,31 @@ def _self_test():
     ok('claim: the failure names the shortfall',
        'FALSE by' in ' '.join(claim_verdict(R,{'gaps':[{'amount':-500.0}]})[1]))
 
+    # [RECON/THROUGH] — CNCL-DATA-1 P2.1, R8 (iv). The BITE is the ordering case: the check
+    # exists because C5 renders data_through and pull_date as different dates, so the state it
+    # must refuse is data_through running past the export the figures came from.
+    _thru = lambda dt, pl: {'run': dict({k: 'x' for k in EXPECTED_RUN},
+                                        data_through=dt, pulled=pl)}
+    ok('through: data_through before pulled passes',
+       through_verdict(_thru('2026-08-01', '2026-08-20'))[0])
+    ok('through: data_through EQUAL to pulled passes (a same-day pull is ordinary)',
+       through_verdict(_thru('2026-08-20', '2026-08-20'))[0])
+    ok('through: BITE — data_through one day AFTER pulled fails',
+       not through_verdict(_thru('2026-08-21', '2026-08-20'))[0])
+    ok('through: the ordering failure names both dates',
+       all(x in ' '.join(through_verdict(_thru('2026-08-21', '2026-08-20'))[1])
+           for x in ('2026-08-21', '2026-08-20', 'LATER')))
+    ok('through: BITE — an absent data_through fails rather than passing silently',
+       not through_verdict({'run': {'pulled': '2026-08-20'}})[0])
+    ok('through: a non-ISO data_through fails',
+       not through_verdict(_thru('8/1/2026', '2026-08-20'))[0])
+    ok('through: a non-ISO pulled fails (nothing to order against)',
+       not through_verdict(_thru('2026-08-01', 'x'))[0])
+    ok('through: `run` not an object fails',
+       not through_verdict({'run': []})[0])
+    ok('through: shape accepts data_through as an expected run key',
+       'data_through' in EXPECTED_RUN)
+
     # HYG-B2 commit D — the docstring is pinned to CHECKS, in BOTH directions. The prose read
     # "Two checks" over three because nothing tied it to the code; a one-way check would let
     # the reverse rot return (a name lingering here after its check is deleted).
@@ -427,10 +496,11 @@ def main():
     # hand-edits and missing one would misreport silently — the drift class a recount exists
     # to catch, surviving only because the literal happened to be right. Both the total and
     # the pass count now derive from this one pairing of CHECKS to its verdicts.
-    verdicts = dict(zip(CHECKS, (sok, yok, cok)))
+    tok, tlines = through_verdict(report)
+    verdicts = dict(zip(CHECKS, (sok, yok, cok, tok)))
     n_checks, n_ok = len(CHECKS), sum(1 for v in verdicts.values() if v)
     bad = n_ok != n_checks
-    for ln in slines + ylines + klines + clines:
+    for ln in slines + ylines + klines + clines + tlines:
         print('[validate_reconcile] ' + ln, file=(sys.stderr if bad else sys.stdout))
     for u in unknown:
         print(f'[validate_reconcile] RECON/KNOWN: {u!r} is failing and is NOT pinned — '

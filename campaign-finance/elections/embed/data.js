@@ -346,6 +346,15 @@
       donorClusters: donorClusters, clusterByParent: clusterByParent,
       industryTags: json.industry_tags || {}, flagTypes: json.flag_types || {},
       rollups: json.rollups || {},
+      // CNCL-DATA-1 P2.1 W7 — C4's two figures, carried on the index rather than on `verify`.
+      // `verify` is the two RUNTIME VERIFICATION artifacts (reconciliation-report.json,
+      // known-gaps.json), fetched separately and allowed to fail without taking the page with
+      // them; `dues_excluded` is a field of the DATA artifact this index was built from. Putting
+      // it on `verify` would say it can go missing independently of the data, which is false,
+      // and would make C4's "from the artifact the surface serves" a lie about which artifact.
+      // Passed through unnormalized: an absent or malformed field must arrive as undefined so
+      // C4 does not render at all (figure posture (i)), never as a zeroed default.
+      duesExcluded: json.dues_excluded || null,
       raceById: raceById, candidateById: candidateById, candidatesByRace: candidatesByRace,
       candByCommittee: candByCommittee, committeeKeyByCandidate: committeeKeyByCandidate,
       directByCandidate: directByCandidate, ieByCandidate: ieByCandidate, iesBySpender: iesBySpender,

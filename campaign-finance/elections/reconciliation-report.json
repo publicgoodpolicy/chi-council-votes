@@ -1,11 +1,12 @@
 {
   "run": {
     "data_file": "campaign-finance/election-data.json",
-    "d2totals_file": "/Users/ishandaya/bulk-2026-08-20/d2totals_639228621387645432.txt",
-    "fileddocs_file": "/Users/ishandaya/bulk-2026-08-20/fileddocs_639228630553139457.txt",
+    "d2totals_file": "d2totals_639228621387645432.txt",
+    "fileddocs_file": "fileddocs_639228630553139457.txt",
     "pulled": "2026-08-20",
+    "data_through": "2026-08-01",
     "threshold": 500.0,
-    "scope": "elections candidate committees (v1); IE and council lanes deferred",
+    "scope": "elections candidate committees (v2): school_board and city_council; IE committees out of reconciliation scope; mayoral lane deferred",
     "inputs": {
       "election-data.json": {
         "sha256": "4e6f2b9e34692652f09de57509d586e09e93e3858c6d9e1375fddf64159daaa7",

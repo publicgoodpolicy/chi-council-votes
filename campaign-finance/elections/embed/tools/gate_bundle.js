@@ -272,7 +272,7 @@ var RATIFIED_COPY_ORACLE = {
     mayor: 'All mayoral races'
   },
   personElectionNoun: { school_board: 'school board election', municipal: 'municipal election' },
-  methodologyOffices: { school_board: 1 }
+  methodologyOffices: { school_board: 1, city_council: 1 }
 };
 
 // [MUNI/SUBJ] oracle (ELEC-METH-1 G2, ruling: "### ELEC-METH-1 — methodology figure posture
@@ -1690,9 +1690,27 @@ async function assertPersonSurface(T, ctx, fx) {
       });
       if (BARE.test(html)) bad.push(office + ': still carries the bare main/ fragment somewhere');
     });
-    T.ok('[ELECT/URL] every emission fetches on the ratified refs/heads/main/ form and none ' +
-      'carries the bare main/ fragment — ' +
-      (bad.length ? bad.join('; ') : Object.keys(BUNDLE_MOD.OFFICES).length + ' emissions clean'),
+    // CNCL-DATA-1 P2.1 W10, R13 (a) — WIDENED, and the widening is stated rather than slipped in.
+    // The permitted set is exactly ONE further file, DEPLOY.md, enumerated here by name and not by
+    // glob: it is the deploy instruction a human follows, so a bare-form URL in it is a bare-form
+    // URL a paster will copy. G0 measured both of its URLs on the retired form precisely because
+    // this check's scope was emissions and nothing swept the prose. A PRESENCE ASSERTION comes
+    // with the widening so the new branch cannot go hollow — the file must exist and must carry
+    // at least one refs/heads/main/ URL, so deleting the URLs (or the file) fails rather than
+    // passing an empty sweep.
+    var DEPLOY = path.join(__dirname, '..', 'DEPLOY.md');
+    if (!fs.existsSync(DEPLOY)) {
+      bad.push('DEPLOY.md: absent — the widened branch has nothing to sweep');
+    } else {
+      var dtext = fs.readFileSync(DEPLOY, 'utf8');
+      var dgood = (dtext.match(GOOD) || []).length;
+      if (dgood === 0) bad.push('DEPLOY.md: no refs/heads/main/ URL present (sweep went hollow)');
+      if (BARE.test(dtext)) bad.push('DEPLOY.md: carries the bare main/ fragment');
+    }
+    T.ok('[ELECT/URL] every emission AND DEPLOY.md fetch on the ratified refs/heads/main/ form ' +
+      'and none carries the bare main/ fragment — ' +
+      (bad.length ? bad.join('; ') : Object.keys(BUNDLE_MOD.OFFICES).length +
+        ' emissions + DEPLOY.md clean'),
       bad.length === 0);
   })();
 
@@ -1773,7 +1791,9 @@ async function assertPersonSurface(T, ctx, fx) {
       var html = R.renderPage({ office: off, topView: 'methodology', cycles: D.availableCycles(idx),
         cycle: null, officeRaces: D.viewModels.officeRaces(idx, off, null), activeSlug: null,
         raceView: null, spend: null, selector: { options: D.selectorOptions(off), active: null },
-        verify: { reconUrl: 'x', gapsUrl: 'y' } });
+        // CNCL-DATA-1 P2.1 W8: duesExcluded threaded so these checks exercise the page the app
+        // actually renders (C4 included), not a four-paragraph shadow of it.
+        duesExcluded: idx.duesExcluded, verify: { reconUrl: 'x', gapsUrl: 'y' } });
       var isMeth = html.indexOf('How this tool is built') >= 0;
       var soon = /— coming soon<\/h2>/.test(html);
       var saysSB = /school board/i.test(html);
@@ -1785,9 +1805,20 @@ async function assertPersonSurface(T, ctx, fx) {
         if (saysSB) bad.push(off + ' methodology tab still carries school-board copy');
       }
     });
+    // The summary is DERIVED from the oracle, not written as prose. It used to name the offices
+    // by hand — "city_council and mayor render coming-soon" — and P2.1's flip made that sentence
+    // false while the check itself stayed correct: a green line describing the wrong world. A pass
+    // message that cannot follow the thing it reports on is a small instance of the same class the
+    // register's own pin-and-coordinate rule exists to prevent.
+    var members = ['school_board', 'city_council', 'mayor'].filter(function (o) {
+      return !!RATIFIED_COPY_ORACLE.methodologyOffices[o]; });
+    var nonmembers = ['school_board', 'city_council', 'mayor'].filter(function (o) {
+      return !RATIFIED_COPY_ORACLE.methodologyOffices[o]; });
     T.ok('[MUNI/METH] the methodology tab renders only for an office with a ratified ' +
       'methodology — ' + (bad.length ? bad.join('; ')
-        : 'school_board renders it; city_council and mayor render coming-soon carrying no school-board copy'),
+        : members.join(', ') + ' render it; ' +
+          (nonmembers.length ? nonmembers.join(', ') + ' render coming-soon carrying no ' +
+            'school-board copy' : 'no office is outside the allowlist')),
       bad.length === 0);
   })();
 
@@ -1843,7 +1874,9 @@ async function assertPersonSurface(T, ctx, fx) {
       var html = R.renderPage({ office: off, topView: 'methodology', cycles: D.availableCycles(idx),
         cycle: null, officeRaces: D.viewModels.officeRaces(idx, off, null), activeSlug: null,
         raceView: null, spend: null, selector: { options: D.selectorOptions(off), active: null },
-        verify: { reconUrl: 'x', gapsUrl: 'y' } });
+        // CNCL-DATA-1 P2.1 W8: duesExcluded threaded so these checks exercise the page the app
+        // actually renders (C4 included), not a four-paragraph shadow of it.
+        duesExcluded: idx.duesExcluded, verify: { reconUrl: 'x', gapsUrl: 'y' } });
       // --- premise 4: this page rendered something
       if (!html || html.length === 0) { bad.push(off + ' rendered an empty methodology page'); return; }
       checked++;
@@ -1937,6 +1970,334 @@ async function assertPersonSurface(T, ctx, fx) {
     var st = require('child_process').spawnSync('node', [chk, '--self-test'], { encoding: 'utf8' });
     var stail = ((st.stdout || '') + (st.stderr || '')).trim().split('\n').pop();
     T.ok('[MUNI/SELF] muni-guard self-test green — ' + stail, st.status === 0);
+  })();
+
+  // ---- CNCL-DATA-1 P2.1 ----
+  // [COUNCIL/CAND] the council candidate surface resolves and reconciles.
+  //
+  // PS-128 DERIVATION MODE: **E (hybrid), both axes named.** CONSTRUCTED axis — the floor figure
+  // and the window, stated here independently of data.js's tables (they mirror PS-110's window and
+  // the S1(i) FLOOR that [RENDER/B2] pins). LIVE axis — the view models, built by data.js from
+  // election-data.json, and the per-candidate figures render.js reads.
+  //
+  // WHY IT EXISTS: G0 measured that council candidate surfaces had SHAPE coverage (S1(i) asserts
+  // readiness and that figures resolve) and no coverage of the VALUES a reader sees. D-25's rule
+  // is that an independent recomputation must be able to disagree somewhere, so this walks the
+  // view models the page walks and re-sums the windowed money by a DIFFERENT path — straight from
+  // the artifact's contribution rows through the committee join — and requires the two to agree.
+  // The bite mutates one candidacy's committee linkage, which moves the view-model side and not
+  // the artifact side, so agreement is a real constraint rather than a restatement.
+  (function () {
+    var R = require(path.join(__dirname, '..', 'render.js'));
+    var D = require(path.join(__dirname, '..', 'data.js'));
+    var raw = fs.readFileSync(path.join(__dirname, '..', '..', '..', 'election-data.json'), 'utf8');
+    var FLOOR = 23769132.31, WIN = { start: '2023-05-15', end: '2027-12-31' };
+
+    function walk(json) {
+      var idx = D.loadData(json, { office: 'city_council' });
+      var om = D.viewModels.officeRaces(idx, 'city_council', null);
+      var seen = 0, resolved = 0, largest = 0;
+      om.groups.forEach(function (g) { g.races.forEach(function (r) {
+        var rv = D.viewModels.raceView(idx, idx.raceBySlug[r.slug], null);
+        (rv && rv.candidates || []).forEach(function (c) {
+          seen++;
+          if (c.figures && c.figures.contributions) resolved++;
+          var t = (c.figures && c.figures.contributions && c.figures.contributions.total) || 0;
+          if (t > largest) largest = t;
+        });
+      }); });
+      // The independent path: SBE-id join, direct rows only, windowed by DATE — never the cycle
+      // label, which spans 2023 onward and would sweep four years of other elections in.
+      var muniCmte = {};
+      var raceOffice = {};
+      (json.races || []).forEach(function (r) { raceOffice[r.id] = r.office; });
+      (json.candidates || []).forEach(function (c) {
+        if (raceOffice[c.race_id] === 'alderperson' && c.committee_id != null) muniCmte[c.committee_id] = 1;
+      });
+      var sbeOf = {};
+      Object.keys(json.committees || {}).forEach(function (k) {
+        var rec = json.committees[k];
+        if (rec && rec.sbe_committee_id) sbeOf[k] = String(rec.sbe_committee_id);
+      });
+      var sum = 0, rows = 0;
+      (json.contributions || []).forEach(function (c) {
+        if (!muniCmte[sbeOf[c.committee_id]]) return;
+        if (String(c.contribution_type || '').indexOf('IE Committee') === 0) return;
+        if (!c.date || c.date < WIN.start || c.date > WIN.end) return;
+        rows++; sum += c.amount || 0;
+      });
+      return { seen: seen, resolved: resolved, largest: largest,
+               sum: Math.round(sum * 100) / 100, rows: rows };
+    }
+
+    var m = walk(JSON.parse(raw));
+    var ok = m.seen > 0 && m.resolved === m.seen && m.largest > 0 && m.sum >= FLOOR;
+    T.ok('[COUNCIL/CAND] every council candidacy resolves a figure and the windowed sum holds the ' +
+      'floor — ' + m.resolved + ' of ' + m.seen + ' resolve, largest ' + m.largest + ', ' +
+      m.rows + ' rows summing ' + m.sum + ' >= ' + FLOOR, ok);
+
+    // BITE AT BIRTH — apply and restore inside ONE command boundary, on an in-memory copy so no
+    // file is touched at all. Breaking one candidacy's committee linkage drops that committee's
+    // money from the independent sum while the view models still list the candidacy: the two
+    // paths then disagree, which is the disagreement D-25 requires a real check to be capable of.
+    var bit = JSON.parse(raw);
+    var victim = null;
+    for (var i = 0; i < bit.candidates.length && !victim; i++) {
+      var rc = bit.races.filter(function (r) { return r.id === bit.candidates[i].race_id; })[0];
+      if (rc && rc.office === 'alderperson' && bit.candidates[i].committee_id != null) victim = bit.candidates[i];
+    }
+    var before = walk(JSON.parse(raw));
+    victim.committee_id = null;
+    var after = walk(bit);
+    T.ok('[COUNCIL/CAND:bite] breaking one candidacy\'s committee linkage makes the check fire — ' +
+      'resolved ' + before.resolved + '/' + before.seen + ' -> ' + after.resolved + '/' + after.seen +
+      ', sum ' + before.sum + ' -> ' + after.sum,
+      !(after.seen > 0 && after.resolved === after.seen && after.largest > 0 && after.sum >= FLOOR));
+    // restore verified against the pin: the untouched parse must still pass
+    var restored = walk(JSON.parse(raw));
+    T.ok('[COUNCIL/CAND:bite] restore verified — the unmutated artifact passes again (' +
+      restored.resolved + '/' + restored.seen + ', ' + restored.sum + ')',
+      restored.seen > 0 && restored.resolved === restored.seen && restored.sum >= FLOOR);
+  })();
+
+  // [COUNCIL/DONOR] the council donor surface excludes what the exclusions say it excludes.
+  //
+  // PS-128 DERIVATION MODE: **A (live-only).** Both sides are read from the artifact and the view
+  // models built from it: the check asserts a property of the rendered donor rows (no dues-typed
+  // money, no excluded-cycle money, no out-of-office IE committee), not a pinned figure. There is
+  // no constructed oracle because the correct row count changes with every refresh.
+  //
+  // WHY IT EXISTS: G0 measured ZERO harness coverage of the council donor surfaces while they are
+  // large and live in code — 8,923 rows in the 2027 donors tab, 21,498 browse rows. The three
+  // properties asserted are the ones the code enforces in three different places (the DUES_TYPE
+  // skip, EXCLUDED_CYCLES, and the office-scope filter on IE committees), so a regression in any
+  // of them shows up here rather than on a reader's screen.
+  (function () {
+    var R = require(path.join(__dirname, '..', 'render.js'));
+    var D = require(path.join(__dirname, '..', 'data.js'));
+    var raw = fs.readFileSync(path.join(__dirname, '..', '..', '..', 'election-data.json'), 'utf8');
+    var DUES_TYPE = 'Member Dues';
+
+    function measure(json) {
+      var idx = D.loadData(json, { office: 'city_council' });
+      var vm = D.spendSubtab(idx, 'city_council', 'donors', null, '2027');
+      var rows = (vm && vm.rows) || [];
+      var total = rows.reduce(function (s, r) { return s + (r.total || 0); }, 0);
+      var ieOutOfScope = rows.filter(function (r) {
+        var cm = idx.committees[r.parent_id] || {};
+        return cm.type === 'independent_expenditure' && !idx.inScopeIE[r.parent_id];
+      }).length;
+      var html = R.renderSpend(vm, 'city_council');
+      return { n: rows.length, total: Math.round(total * 100) / 100,
+               ieOutOfScope: ieOutOfScope, bytes: html.length };
+    }
+
+    var base = measure(JSON.parse(raw));
+    // PREMISE FIRST (PS-128 (i)): a surface that measured nothing would satisfy every assertion
+    // below vacuously, so its non-emptiness is asserted before anything is asserted about it.
+    var premise = base.n > 0 && base.total > 0 && base.bytes > 0;
+    T.ok('[COUNCIL/DONOR] the council donor surface is non-empty and carries no out-of-scope IE ' +
+      'committee — ' + base.n + ' rows, ' + base.total + ', ' + base.ieOutOfScope + ' out-of-scope IE',
+      premise && base.ieOutOfScope === 0);
+
+    // BITE AT BIRTH, in memory: a dues-typed row and an out-of-scope IE committee injected on the
+    // council surface must each move something. The dues row must NOT change the total (it is
+    // excluded by type); the IE committee, given a kept council row, must appear and be caught.
+    var bit = JSON.parse(raw);
+    var anyCouncilCmte = null;
+    var raceOffice = {}; bit.races.forEach(function (r) { raceOffice[r.id] = r.office; });
+    var alderCmteIds = {};
+    bit.candidates.forEach(function (c) {
+      if (raceOffice[c.race_id] === 'alderperson' && c.committee_id != null) alderCmteIds[c.committee_id] = 1;
+    });
+    Object.keys(bit.committees).forEach(function (k) {
+      var rec = bit.committees[k];
+      if (!anyCouncilCmte && rec && rec.sbe_committee_id && alderCmteIds[String(rec.sbe_committee_id)]) anyCouncilCmte = k;
+    });
+    var donorId = Object.keys(bit.donors)[0];
+    bit.contributions.push({ committee_id: anyCouncilCmte, donor_id: donorId, parent_id: donorId,
+      amount: 999999.99, date: '2026-01-15', cycle: '2027', contribution_type: DUES_TYPE });
+    var withDues = measure(bit);
+    T.ok('[COUNCIL/DONOR:bite] a dues-typed council row is excluded from the surface total — ' +
+      base.total + ' -> ' + withDues.total + ' (unmoved)', withDues.total === base.total);
+
+    var bit2 = JSON.parse(raw);
+    bit2.committees['ie-committee-99999'] = { id: 'ie-committee-99999', type: 'independent_expenditure',
+      committee_name: 'BITE IE', sbe_committee_id: '99999' };
+    bit2.contributions.push({ committee_id: 'ie-committee-99999', donor_id: donorId, parent_id: donorId,
+      amount: 12345.67, date: '2026-01-15', cycle: '2027', contribution_type: 'Individual Contribution' });
+    var withIE = measure(bit2);
+    T.ok('[COUNCIL/DONOR:bite] an out-of-scope IE committee injected on the council surface is ' +
+      'filtered out — total ' + base.total + ' -> ' + withIE.total + ' (unmoved), out-of-scope count ' +
+      withIE.ieOutOfScope, withIE.total === base.total && withIE.ieOutOfScope === 0);
+
+    var restored = measure(JSON.parse(raw));
+    T.ok('[COUNCIL/DONOR:bite] restore verified — the unmutated artifact measures as before (' +
+      restored.n + ' rows, ' + restored.total + ')',
+      restored.n === base.n && restored.total === base.total);
+  })();
+
+  // [METH/REGISTER] the rendered methodology copy IS the register's text.
+  //
+  // PS-128 DERIVATION MODE: **register-derived** (a mode D sibling: the oracle is neither
+  // constructed in this file nor read from the subject under test, but extracted from a THIRD
+  // artifact — `campaign-finance/RULINGS.md`, the authority of record). Declared as its own mode
+  // because it is not A (the oracle is not live repo state under test), not B (nothing is stated
+  // here), and not E (there is no constructed axis at all).
+  //
+  // WHY IT EXISTS: R14 ruled that ratified copy enters the register BEFORE it ships, so that
+  // P2.1's oracle cites register text. That is a claim about a relationship, and until something
+  // asserts it the relationship is a convention — render.js could drift from the register by one
+  // character and every other check would stay green, which is precisely the class of defect the
+  // register exists to prevent.
+  //
+  // NORMALIZATION, stated because a comparison is only as honest as its normalization. The
+  // register carries each C-string inside a `>`-quoted block, inside backticks, wrapped across
+  // lines at the register's own width, and C4/C5 carry `{PLACEHOLDER}` tokens. So: strip the `> `
+  // quote marker; take the backticked span following the `**Cn, …:**` label; collapse the
+  // register's line-wrap whitespace to single spaces. NOTHING ELSE is altered — in particular the
+  // ASCII apostrophes in C1 and C3 are the register's own bytes and are compared as such, and the
+  // rendered side is compared with its tags stripped but its characters untouched (no entity
+  // decoding, because the council branch deliberately does not run these strings through esc()).
+  // R11's sentence is compared the same way, with its placeholders bound to the same `verify` the
+  // page used.
+  //
+  // THE LINKS PARAGRAPH IS PINNED TO THE SIBLING BRANCH, NOT TO THE REGISTER (D3, 2026-08-31).
+  // It is not ratified copy — it predates this lane and lives only in render.js — so there is no
+  // register text to compare it against. What the ruling requires is that the council branch's
+  // copy of it be the school-board branch's copy, which is asserted here by rendering both for
+  // the SAME state and requiring byte-identity. Saying so explicitly matters: a reader of this
+  // check must not conclude that everything it guards is register-derived.
+  (function () {
+    var R = require(path.join(__dirname, '..', 'render.js'));
+    var D = require(path.join(__dirname, '..', 'data.js'));
+    var REG = path.join(__dirname, '..', '..', '..', 'RULINGS.md');
+    var reg = fs.readFileSync(REG, 'utf8').split('\n');
+
+    function entry(heading) {
+      var i = reg.indexOf(heading);
+      if (i < 0) return null;
+      var j = i + 1;
+      while (j < reg.length && reg[j].indexOf('### ') !== 0) j++;
+      return reg.slice(i, j).map(function (l) {
+        return l.indexOf('> ') === 0 ? l.slice(2) : (l === '>' ? '' : l);
+      }).join('\n');
+    }
+    var cEntry = entry('### ELEC-METH-1 — council methodology strings C1–C4');
+    var rEntry = entry('### CNCL-DATA-1 P2 — the verify sentence (R11)');
+
+    var bad = [];
+    // --- premise 1: both entries resolve by heading, and neither is empty
+    if (!cEntry) bad.push('the C1–C4 entry does not resolve by heading in the register');
+    if (!rEntry) bad.push('the R11 entry does not resolve by heading in the register');
+    var C = {};
+    if (cEntry) {
+      [1, 2, 3, 4, 5].forEach(function (n) {
+        var m = new RegExp('\\*\\*C' + n + '[^*]*\\*\\*\\s*`([^`]*)`').exec(cEntry);
+        if (!m) { bad.push('C' + n + ' not found in the register entry'); return; }
+        C[n] = m[1].replace(/\s+/g, ' ').trim();
+      });
+    }
+    // --- premise 2: five strings extracted, none empty (an empty oracle passes vacuously)
+    if (Object.keys(C).length !== 5) bad.push('extracted ' + Object.keys(C).length + ' C-strings, expected 5');
+    Object.keys(C).forEach(function (k) { if (!C[k]) bad.push('C' + k + ' extracted empty'); });
+
+    var json = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', '..', 'election-data.json'), 'utf8'));
+    var recon = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'reconciliation-report.json'), 'utf8'));
+    var gaps = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'known-gaps.json'), 'utf8'));
+    var MON = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+      'September', 'October', 'November', 'December'];
+    function fmtPulled(iso) {
+      var p = String(iso || '').split('-');
+      return (p.length === 3 && MON[+p[1] - 1]) ? (MON[+p[1] - 1] + ' ' + (+p[2]) + ', ' + p[0]) : null;
+    }
+    var g = gaps.gaps, h = recon.headline, run = recon.run;
+    var verify = { reconUrl: 'x', gapsUrl: 'y', pulled: fmtPulled(run.pulled),
+      matchRate: h.dollar_weighted_match_pct, nCommittees: h.committees_with_sbe_id, nGaps: g.length,
+      gapsNet: g.reduce(function (s, x) { return s + (x.amount || 0); }, 0),
+      gapsGross: g.reduce(function (s, x) { return s + Math.abs(x.amount || 0); }, 0),
+      gapsUnder: g.filter(function (x) { return (x.amount || 0) < 0; }).length,
+      gapsOver: g.filter(function (x) { return (x.amount || 0) > 0; }).length,
+      dataThrough: fmtPulled(run.data_through) };
+    var idx = D.loadData(json, { office: 'city_council' });
+
+    // Bind the register's placeholders exactly as R9 and R11's Bindings paragraphs state.
+    function bind(s) {
+      return s.replace('{DUES_AMOUNT}', R._moneyCents(idx.duesExcluded.amount))
+              .replace('{DUES_COUNT}', idx.duesExcluded.count.toLocaleString('en-US'))
+              .replace('{DATA_THROUGH}', verify.dataThrough)
+              .replace('{PULL_DATE}', verify.pulled);
+    }
+    function bindR11(s) {
+      return s.replace('{PULLED}', verify.pulled)
+              .replace('{MATCH_RATE}', String(verify.matchRate))
+              .replace('{N_COMMITTEES}', String(verify.nCommittees))
+              .replace('{N_GAPS}', String(verify.nGaps))
+              .replace('{NET_TOTAL}', R._moneySigned(verify.gapsNet))
+              .replace('{GROSS_TOTAL}', R._money(verify.gapsGross))
+              .replace('{N_UNDER}', String(verify.gapsUnder))
+              .replace('{N_OVER}', String(verify.gapsOver));
+    }
+
+    function paras(html) {
+      var out = [], re = /<p>([\s\S]*?)<\/p>/g, m;
+      while ((m = re.exec(html))) out.push(m[1].replace(/<[^>]+>/g, ''));
+      return out;
+    }
+    function check(html) {
+      var p = paras(html), fails = [];
+      var want = [bind(C[1]), bind(C[2]), bind(C[5]), bind(C[3]), bind(C[4])];
+      // --- premise 3: the page rendered the five C-paragraphs, the verification paragraph, and
+      // the artifact-links paragraph (D3). The count is asserted, not assumed, because every
+      // comparison below is positional: a page one paragraph short would otherwise compare C4
+      // against the verification text and report a difference that is really a shape change.
+      if (p.length !== 7) { fails.push('rendered ' + p.length + ' <p>, expected 7'); return fails; }
+      want.forEach(function (w, i) {
+        if (p[i] !== w) fails.push('C-paragraph ' + (i + 1) + ' differs from the register');
+      });
+      var r11 = rEntry.split('\n').filter(function (l) { return l.indexOf('Every data update') === 0; })[0];
+      // R11's ruling text wraps; rebuild it from the block up to the Bindings paragraph.
+      var block = rEntry.split('\n**Bindings**')[0].split('\n');
+      var start = block.findIndex(function (l) { return l.indexOf('Every data update') === 0; });
+      var sentence = block.slice(start).join(' ').replace(/\s+/g, ' ').trim();
+      if (p[5] !== bindR11(sentence)) fails.push('the verify paragraph differs from the register');
+      return fails;
+    }
+
+    var html = R.methodologyView(verify, 'city_council', idx.duesExcluded);
+    bad = bad.concat(check(html));
+
+    // D3: the council branch's artifact-links paragraph is the school-board branch's, byte for
+    // byte, for the same state. Premise first — both branches must actually emit one, or the
+    // comparison is two absences agreeing.
+    var LINKS = /<p>Both verification artifacts are public:[\s\S]*?<\/p>/;
+    var sbHtml = R.methodologyView(verify, 'school_board', null);
+    var cLinks = LINKS.exec(html), sLinks = LINKS.exec(sbHtml);
+    if (!cLinks) bad.push('the council branch renders no artifact-links paragraph');
+    if (!sLinks) bad.push('the school-board branch renders no artifact-links paragraph');
+    if (cLinks && sLinks && cLinks[0] !== sLinks[0]) {
+      bad.push('the council artifact-links paragraph differs from the school-board branch\'s');
+    }
+    T.ok('[METH/REGISTER] every rendered council methodology paragraph equals the register\'s ' +
+      'ratified text — ' + (bad.length ? bad.join('; ')
+        : '5 C-strings + R11, extracted by heading from RULINGS.md, character-identical; the ' +
+          'artifact-links paragraph byte-identical to the school-board branch\'s'),
+      bad.length === 0);
+
+    // BITE AT BIRTH: a one-character edit to a C-string in the RENDER OUTPUT must fire. Applied to
+    // an in-memory copy of the html only — no file is touched, so there is nothing to restore.
+    var mutated = html.replace('city council elections.', 'city council election.');
+    T.ok('[METH/REGISTER:bite] a one-character edit to a rendered C-string makes the check fire',
+      mutated !== html && check(mutated).length > 0);
+
+    // D3's bite, on the half the register cannot pin: a one-character edit to the council links
+    // paragraph must break the sibling-branch comparison.
+    var mutLinks = html.replace('Both verification artifacts are public',
+                                'Both verification artifacts are publi');
+    var mc = LINKS.exec(mutLinks);
+    T.ok('[METH/REGISTER:bite] a one-character edit to the council artifact-links paragraph makes ' +
+      'the sibling-branch comparison fire',
+      mutLinks !== html && (!mc || (sLinks && mc[0] !== sLinks[0])));
   })();
 
   console.log('\n' + T.n + ' checks · ' + (T.fail ? ('FAILED ' + T.fail) : 'ALL PASS'));

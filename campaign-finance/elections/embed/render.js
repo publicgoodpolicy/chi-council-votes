@@ -21,6 +21,30 @@
     });
   }
   function money(n) { return (n == null) ? '—' : ('$' + Math.round(n).toLocaleString('en-US')); }
+  // CNCL-DATA-1 P2.1 W4 — two formatters BESIDE money(), never replacing it. money() rounds to
+  // the dollar and has no negative form, which is correct for the ~38 call sites that render
+  // magnitudes and wrong for exactly two new figures. Adding cases to money() would have changed
+  // every one of those sites; adding functions changes none.
+  //
+  // moneySigned: R11's {NET_TOTAL}. The ledger's identity is a SIGNED number and rendering it
+  // through money() produced `$-84,542` — a malformed currency string with the minus stranded
+  // inside the amount. The register fixes the form: U+2212 MINUS SIGN outside the dollar sign,
+  // typographically a minus rather than a hyphen. Rounds as money() rounds, so net and gross in
+  // the same sentence are rounded the same way and a reader can compare them.
+  function moneySigned(n) {
+    if (n == null || typeof n !== 'number' || !isFinite(n)) return null;
+    var r = Math.round(n);
+    if (r < 0) return '\u2212$' + Math.abs(r).toLocaleString('en-US');
+    return '$' + r.toLocaleString('en-US');
+  }
+  // moneyCents: C4's {DUES_AMOUNT}. The register requires currency TO THE CENT — "at every
+  // magnitude including $0.00" (PS-101) — and money() cannot express that at all. Returns null
+  // rather than a partial rendering when the input is not a finite number, because C4 renders
+  // whole or not at all (figure posture (i)) and the caller needs to be able to tell.
+  function moneyCents(n) {
+    if (n == null || typeof n !== 'number' || !isFinite(n)) return null;
+    return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
   function prettyTag(s) { return String(s).replace(/-/g, ' '); }
 
   // A real IE name shows as the primary label with "funded primarily by …" as a
@@ -108,7 +132,12 @@
   // wrong-methodology state reappear the moment municipal money lands; gating on ratification
   // makes it impossible. Each data arc ships a ratified methodology for its office before that
   // office goes live, and adds the office here in the same commit.
-  var METHODOLOGY_OFFICES = { school_board: 1 };
+  // CNCL-DATA-1 P2.1 W1 (R3, register §"CNCL-DATA-1 P2 — display decisions"): city_council
+  // enters the allowlist. The protocol above is satisfied in the same commit — the ratified
+  // council methodology (C1-C5) is register text before this line moves, and the council
+  // branch that renders it lands with it. `mayor` stays out: its methodology (M1-M4) is
+  // ratified but its data arc has not run, and D-22 gates on ratification AND its own arc.
+  var METHODOLOGY_OFFICES = { school_board: 1, city_council: 1 };
 
   function styles() {
     return '<style>' +
@@ -939,7 +968,15 @@
   // numbers are absent (either fetch failed), the prose stays intact and the numeric claims
   // degrade to a neutral "see the reconciliation report" construction — NEVER a stale or
   // default number. The two artifact URLs are always rendered as links.
-  function methodologyView(verify) {
+  // W6/W7 SEAM, DISCLOSED. R9 renders the signature as `methodologyView(verify, office)` and
+  // binds C4 from `index.duesExcluded`; W7 requires that value to travel on the RENDER STATE and
+  // explicitly NOT on `verify` (verify is the two runtime verification artifacts, which may fail
+  // independently of the data). With two parameters and no access to the index, those cannot all
+  // hold: the only two-arg carrier is `verify`, which W7 forbids. A third parameter keeps W7's
+  // transport rule and R9's named source intact and departs only from R9's incidental rendering
+  // of the signature, so that is what this does — and it is flagged at the HALT rather than
+  // quietly chosen.
+  function methodologyView(verify, office, duesExcluded) {
     verify = verify || {};
     var reconUrl = verify.reconUrl || '', gapsUrl = verify.gapsUrl || '';
     var reconLink = reconUrl
@@ -949,29 +986,107 @@
       ? '<a href="' + esc(gapsUrl) + '" target="_blank" rel="noopener">the known-gaps ledger</a>'
       : 'the known-gaps ledger';
     var hasNums = verify.pulled != null && verify.matchRate != null && verify.nCommittees != null &&
-      verify.nGaps != null && verify.disclosedTotal != null;
+      verify.nGaps != null && verify.gapsNet != null && verify.gapsGross != null &&
+      verify.gapsUnder != null && verify.gapsOver != null;
     var mf = function (v) { return '<span class="mfield">' + esc(String(v)) + '</span>'; };
     var asOf = hasNums
       ? 'Data current as of ' + mf(verify.pulled) + '.'
       : 'Data current as of our most recent quarterly pull; see ' + reconLink + ' for the exact date.';
-    var verifyPara;
-    if (hasNums) {
-      var gapWord = (verify.nGaps === 1) ? 'known gap' : 'known gaps';
-      verifyPara = 'As of ' + mf(verify.pulled) + ', our itemized data matches ' + mf(verify.matchRate + '%') +
-        ' of sworn direct-contribution dollars across ' + mf(verify.nCommittees) +
-        ' candidate committees, and every divergence is individually accounted for: ' +
-        mf(verify.nGaps + ' ' + gapWord) + ', totaling ' + mf(money(verify.disclosedTotal)) +
-        ', where a committee’s sworn cover total exceeds what its own itemized schedules account for ' +
-        '— a divergence in the source filings themselves, which we disclose rather than reconstruct.';
-    } else {
+    // CNCL-DATA-1 P2.1 W5 — R11 as ratified (register §"CNCL-DATA-1 P2 — the verify sentence
+    // (R11)"), replacing the incumbent WHOLE. The ratified text OPENS with the lead sentence that
+    // used to be hardcoded at the render site below, so this string is now the entire paragraph
+    // and the render site carries no copy of its own — which is the point of R14: the sentence a
+    // reader sees is register text, checkable against the register by [METH/REGISTER].
+    //
+    // R11's RENDER GUARD: the two direction counts must account for every gap. They do not when an
+    // entry sits at exactly zero — neither over nor under — and the sentence would then claim a
+    // partition of the ledger it does not have. Figure posture (i): the paragraph does not render
+    // at all rather than rendering a false partition. Not reachable on today's ledger (12 + 4 =
+    // 16) and deliberately not conditioned on that.
+    var gapsPartitioned = hasNums && (verify.gapsUnder + verify.gapsOver === verify.nGaps);
+    var netFig = hasNums ? moneySigned(verify.gapsNet) : null;
+    var grossFig = hasNums ? money(verify.gapsGross) : null;
+    var verifyPara = null;
+    if (gapsPartitioned && netFig != null && grossFig != null) {
+      verifyPara = 'Every data update, we reconcile the itemized contributions we hold against each committee’s ' +
+        'sworn quarterly totals — the figures the committee itself filed under oath — period by period. ' +
+        'As of ' + mf(verify.pulled) + ', across all elections this tool covers, our itemized data matches ' +
+        mf(verify.matchRate + '%') + ' of sworn direct-contribution dollars across ' + mf(verify.nCommittees) +
+        ' candidate committees, and every divergence is individually accounted for: ' + mf(verify.nGaps) +
+        ' known gaps, netting to ' + mf(netFig) + ' (' + mf(grossFig) + ' across both directions). In ' +
+        mf(verify.gapsUnder) + ' of them a committee’s sworn cover total exceeds what its own itemized ' +
+        'schedules account for — a divergence in the source filings themselves, which we disclose rather ' +
+        'than reconstruct; ' + mf(verify.gapsOver) + ' run the other way, where itemized rows exceed the sworn ' +
+        'total or the divergence arises from our own comparison window rather than from the filing, and are ' +
+        'disclosed on the same terms.';
+    } else if (!hasNums) {
       verifyPara = 'Every update, our itemized data is reconciled against each committee’s sworn ' +
         'direct-contribution totals, period by period, and every divergence is individually accounted for and ' +
         'disclosed — where a committee’s sworn cover total exceeds what its own itemized schedules account ' +
         'for, a divergence in the source filings themselves, which we disclose rather than reconstruct. See ' +
         reconLink + ' for the current match rate and ' + gapsLink + ' for each disclosed divergence.';
     }
-    return '<div class="methodology">' +
-      '<h2>How this tool is built</h2>' +
+    // CNCL-DATA-1 P2.1 W6 — R9 as applied (register §"CNCL-DATA-1 P2 — R8 and R9 as applied").
+    // The two pieces the council branch must emit BYTE-IDENTICALLY to the school-board branch are
+    // named here once and used by both, so identity holds by construction rather than by a copy
+    // someone has to keep in step. That is the whole reason they are variables.
+    var METH_FRAME_OPEN = '<div class="methodology">' + '<h2>How this tool is built</h2>';
+    var VERIFICATION_SECTION =
+      '<h3>We check our numbers against the committees’ own sworn totals</h3>' +
+      // W5: the lead sentence moved INTO verifyPara, because R11's ratified text begins with it.
+      // A null paragraph is figure posture (i) — the heading still stands and no half-sentence
+      // ships.
+      (verifyPara ? '<p>' + verifyPara + '</p>' : '');
+    // D3 (ratified 2026-08-31): the artifact-links paragraph is shared too, on the same ground as
+    // the frame and the verification section — one expression, both branches, so byte-identity
+    // holds by construction. R9's "in order and nothing else" is amended by that ruling to admit
+    // it. Without it the council methodology cited its figures while linking neither artifact the
+    // figures come from, which is the one asymmetry the two branches had.
+    var ARTIFACT_LINKS =
+      '<p>Both verification artifacts are public: ' + reconLink + ' and ' + gapsLink + ', which records each ' +
+      'disclosed divergence with its evidence. This verification covers direct contributions to candidate ' +
+      'committees; independent-expenditure filings are ingested from SBE but not yet independently reconciled ' +
+      'the same way.</p>';
+
+    if (office === 'city_council') {
+      // R9's composition, in order and nothing else: the frame, five <p> carrying C1, C2, C5, C3,
+      // C4, then the verification section. NO <h3> precedes any C-string, and no school-board
+      // section is carried across — [MUNI/SUBJ] is the guard that makes the second of those
+      // structural rather than careful, since the school-board body names its own subject.
+      //
+      // The five strings are the register's, character for character, including their ASCII
+      // apostrophes in C1 and C3 (the register's own bytes; R11's sentence beside them carries
+      // U+2019, which is the incumbent's — the two differ because their sources differ, and
+      // [METH/REGISTER] pins each to its own source rather than harmonising them).
+      // They are NOT run through esc(): esc() maps ' to &#39;, which would make the rendered page
+      // disagree with the register on a character the register chose.
+      var C1 = 'This page covers campaign finance for Chicago\'s city council elections.';
+      var C2 = 'Contribution data comes from committee filings with the Illinois State Board of Elections.';
+      var C3 = 'Contributions are counted by date within each election\'s window, not by the cycle label a filing carries.';
+      // C5 and C4 render WHOLE OR NOT AT ALL (figure posture (i)). Each is built only when every
+      // field it binds is present and well-formed; a missing field drops the whole <p>, never a
+      // sentence with a hole in it.
+      var duesX = duesExcluded || null;
+      var duesAmt = duesX ? moneyCents(duesX.amount) : null;
+      var duesCnt = (duesX && typeof duesX.count === 'number' && isFinite(duesX.count))
+        ? duesX.count.toLocaleString('en-US') : null;
+      var C4 = (duesAmt != null && duesCnt != null)
+        ? ('Transfers of member dues between political committees are excluded from all totals. ' +
+           'In this dataset they account for ' + duesAmt + ' across ' + duesCnt + ' transactions.')
+        : null;
+      var C5 = (verify && verify.dataThrough != null && verify.pulled != null)
+        ? ('Contribution data is current through ' + verify.dataThrough + ', from the Illinois ' +
+           'State Board of Elections bulk export of ' + verify.pulled + '.')
+        : null;
+      var paras = [C1, C2, C5, C3, C4];
+      return METH_FRAME_OPEN +
+        paras.map(function (t) { return t == null ? '' : '<p>' + t + '</p>'; }).join('') +
+        VERIFICATION_SECTION +
+        ARTIFACT_LINKS +
+        '</div>';
+    }
+
+    return METH_FRAME_OPEN +
       '<h3>What it covers</h3>' +
       '<p>This tool tracks campaign finance for Chicago’s school board elections. It includes every candidate ' +
       'who formed a fundraising committee with the Illinois State Board of Elections (SBE) — including ' +
@@ -1019,14 +1134,8 @@
       'supersedes earlier filings covering the same or overlapping periods. Contributions reported on interim ' +
       'A-1 filings after a committee’s most recent quarterly report are included and marked as pending that ' +
       'committee’s next quarterly disclosure.</p>' +
-      '<h3>We check our numbers against the committees’ own sworn totals</h3>' +
-      '<p>Every data update, we reconcile the itemized contributions we hold against each committee’s sworn ' +
-      'quarterly totals — the figures the committee itself filed under oath — period by period. ' + verifyPara +
-      '</p>' +
-      '<p>Both verification artifacts are public: ' + reconLink + ' and ' + gapsLink + ', which records each ' +
-      'disclosed divergence with its evidence. This verification covers direct contributions to candidate ' +
-      'committees; independent-expenditure filings are ingested from SBE but not yet independently reconciled ' +
-      'the same way.</p>' +
+      VERIFICATION_SECTION +
+      ARTIFACT_LINKS +
       '<h3>Industry tags and donor groupings are editorial</h3>' +
       '<p>SBE filings identify donors; they don’t categorize them. Industry tags, donor groupings (for example, ' +
       'connecting a person’s individual giving with their business’s), and related-donor rollups are editorial ' +
@@ -1290,7 +1399,8 @@
       // subject and sources, so an office with no ratified methodology renders coming-soon
       // on this tab like every other tab, rather than shipping another office's copy.
       inner = METHODOLOGY_OFFICES[state.office]
-        ? methodologyView(state.verify) : officeComingSoon(state.office);
+        ? methodologyView(state.verify, state.office, state.duesExcluded)
+        : officeComingSoon(state.office);
       return '<div class="wrap">' + masthead(state.office, state.topView) +
         '<section>' + inner + '</section>' + footer() + '</div>';
     }
@@ -1331,6 +1441,9 @@
     tagsHtml: tagsHtml, readableText: readableText,
     donorRow: donorRow, contributorPanel: contributorPanel, iePanel: iePanel,
     renderPage: renderPage, pageLabel: pageLabel,
-    _money: money, _esc: esc
+    // W4/W9: the two new formatters are exported for [METH/REGISTER] to bind the register's
+    // placeholders through the SAME functions the page binds them through. Binding the check
+    // with its own copy would let the two drift and still agree with each other.
+    _money: money, _moneySigned: moneySigned, _moneyCents: moneyCents, _esc: esc
   };
 });

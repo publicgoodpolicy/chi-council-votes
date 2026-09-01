@@ -33,8 +33,8 @@ add a **Code Block** containing that page's file from the table above.
 | Page          | `data-office`  | State now                                  |
 |---------------|----------------|--------------------------------------------|
 | /school-board | `school_board` | **Live** — 9 committees, IE layer, spend   |
-| /city-council | `city_council` | Coming-soon (committees not yet mapped)    |
-| /mayor        | `mayor`        | Coming-soon (committees not yet mapped)    |
+| /city-council | `city_council` | live — first paste at CNCL-DATA-1 P2.2      |
+| /mayor        | `mayor`        | Coming-soon; page not created (R7, 2026-08-31) |
 
 `data-office` is **already baked into each file** (D-16 / PS-106, MUNI-ENABLE-1 G7)
 — nothing in the pasted block is edited by hand. It used to be one file whose mount
@@ -49,7 +49,7 @@ in `race-map.json`.
 The embed fetches `election-data.json` at runtime from the GitHub raw CDN:
 
 ```
-https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/main/campaign-finance/election-data.json
+https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/refs/heads/main/campaign-finance/election-data.json
 ```
 
 That file **must be committed and pushed** (it is, as of the "publish" commit) for
@@ -66,5 +66,5 @@ Override the source for testing with `data-src="..."` on the mount div, or
 cd campaign-finance/elections/embed
 node tools/prerender_b2.js                       # data+render assertions (pure layers)
 # live data reachable:
-curl -sI https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/main/campaign-finance/election-data.json | head -1
+curl -sI https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/refs/heads/main/campaign-finance/election-data.json | head -1
 ```
