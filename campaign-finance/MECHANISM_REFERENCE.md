@@ -885,7 +885,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-eren | `campaign-finance/elections/embed/render.js` | `420ef877818fa4506ddabfab06dfb3b5ca1808961f49dbac3d9119dc8f1ba354` |
 | S-eapp | `campaign-finance/elections/embed/app.js` | `33c896e8c8924e143da40d63c69a66e01f9c9e8801af0017e7dea8c77366c71d` |
 | S-srv | `campaign-finance/editor/serve.py` | `f430f67b2d2367893ab4cb37a1c25ff84d71bb93b53a23b78f253ec17dccaa3a` |
-| S-rec | `campaign-finance/ingestion/reconcile.py` | `aaa8381c37b66f58cfe433b50960ee1b9e69c803abbf7741f19a7779ee491ca5` |
+| S-rec | `campaign-finance/ingestion/reconcile.py` | `363c3c19341508463d6f5563e2fe2defa3fb59e7626b48b3e31b13e0180acb50` |
 | S-egate | `campaign-finance/elections/embed/tools/gate_bundle.js` | `191f273ed15ace0d4108e741cb2c54bd70d62fb1cbe924e6eab751933007ca4d` |
 | S-chk | `campaign-finance/tools/check_sheet_scopes.py` | `e45c063d5b19ad0c25695257a5e0a71bdbd7fcf618789ac18d36da9bc065b191` |
 | S-sbf | `campaign-finance/ingestion/build_sb_finance.py` | `566e15999c29359d66c7e6c87b5f44c982e8df0fe5cd9c309ecb644bf6769553` |

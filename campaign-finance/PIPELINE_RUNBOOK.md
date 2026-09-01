@@ -291,3 +291,30 @@ durable *outside* `raw/` once a rebuild lands, because the next refresh's stagin
 preserve it. **Known gap, stated rather than discovered later:** the sealed archives on the
 operator's machine today are split across two pull dates, so no single same-pull four-file
 set exists locally — a reproduction from local material would violate this rule.
+
+### Where sealed vintages live: `CHI_VINTAGE_ROOT`
+
+`reconciliation-report.json` is **CDN-served** — the elections methodology page links a reader
+straight to it — so it records the two sealed inputs by a **vintage-relative** path
+(`bulk-2026-08-20/d2totals_<id>.txt`), never an absolute one. PATHS-1 (open ledger 54) made that
+change because the absolute form published an operator's home directory to every reader of the
+artifact.
+
+`validate_reconcile.py` resolves those paths under **`CHI_VINTAGE_ROOT`**, defaulting to the
+operator's home directory (`~`). Set it only if the seals live somewhere else:
+
+```
+CHI_VINTAGE_ROOT=/mnt/vintages python3 campaign-finance/ingestion/validate_reconcile.py \
+    campaign-finance/elections/reconciliation-report.json
+```
+
+**Identity is checked before the name is used.** Each stamped entry also carries
+`vintage_manifest_sha256`, and before any file in the vintage directory is read,
+`<root>/<vintage>/MANIFEST.md` is hashed and must equal it. A directory with the right name but
+different bytes is reported **ABSENT-BY-IDENTITY** and the check fails closed — it is never read
+and never trusted. There is deliberately **no second root and no search**: one place is tried, and
+it must prove it is the right place first. A resolver that tries one location and then another can
+bind silently to the wrong file.
+
+Entries without a vintage stamp — `election-data.json`, `known-gaps.json` — are repo-relative and
+resolve against the repo root exactly as before, unaffected by this variable.

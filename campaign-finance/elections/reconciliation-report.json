@@ -14,11 +14,13 @@
       },
       "d2totals": {
         "sha256": "8419861f5e7b9cf021b0838913ef7a2a3d6345929f746252f0ab0fe6be543b3d",
-        "path": "/Users/ishandaya/bulk-2026-08-20/d2totals_639228621387645432.txt"
+        "path": "bulk-2026-08-20/d2totals_639228621387645432.txt",
+        "vintage_manifest_sha256": "7b6d89653dde15a46de38b75b711f66398dd6494ee7fad60840e3909d9281f89"
       },
       "fileddocs": {
         "sha256": "85c7ea3c6eab4b142881b18220c4b272db2b60a937f4740f2d3cf5504778eeb3",
-        "path": "/Users/ishandaya/bulk-2026-08-20/fileddocs_639228630553139457.txt"
+        "path": "bulk-2026-08-20/fileddocs_639228630553139457.txt",
+        "vintage_manifest_sha256": "7b6d89653dde15a46de38b75b711f66398dd6494ee7fad60840e3909d9281f89"
       },
       "known-gaps.json": {
         "sha256": "68124bbc5f03ed4999cd42573a8dc3dee806467ab6ef212c15733bc3e6785a3f",

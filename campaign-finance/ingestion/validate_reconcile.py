@@ -15,6 +15,7 @@ by care. Deliberately narrow:
   [RECON/SYNC]   every input named in `run.inputs` still hashes to the recorded sha256.
   [RECON/CLAIM]  the known-gaps claim resolves through that same stamped input.
   [RECON/THROUGH] `run.data_through` is present, ISO, and not later than `run.pulled`.
+  [RECON/PATHS]  no string under `run` is an absolute or home-directory path.
 
 This paragraph read "Two checks" over three for as long as [RECON/CLAIM] has existed: the
 count was a literal in three places and the docstring a fourth statement of it, so nothing
@@ -49,7 +50,7 @@ import sys
 # docstring is asserted against it by `--self-test`, so the count cannot drift from the code
 # and the prose cannot drift from either. Adding a check means adding its name here and its
 # verdict in main() — nothing else states the number.
-CHECKS = ('RECON/SHAPE', 'RECON/SYNC', 'RECON/CLAIM', 'RECON/THROUGH')
+CHECKS = ('RECON/SHAPE', 'RECON/SYNC', 'RECON/CLAIM', 'RECON/THROUGH', 'RECON/PATHS')
 
 EXPECTED_TOP = {'run', 'headline', 'no_sbe_id_committees', 'join_failures',
                 'filings_missing_totals', 'disclosed', 'stale_annotations', 'committees'}
@@ -73,9 +74,50 @@ def _sha256_file(path, _chunk=1 << 20):
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
 
 
-def _resolve(path, root=None):
-    """Absolute paths as given; relative paths against the repo root, never the CWD."""
-    return path if os.path.isabs(path) else os.path.join(root or REPO_ROOT, path)
+VINTAGE_ROOT_ENV = 'CHI_VINTAGE_ROOT'
+
+
+def _vintage_root():
+    """Where sealed bulk vintages live on THIS machine. Never published anywhere."""
+    return os.path.expanduser(os.environ.get(VINTAGE_ROOT_ENV) or '~')
+
+
+def _resolve(path, root=None, vintage_sha=None, sha=_sha256_file, exists=os.path.exists):
+    """Absolute paths as given; relative paths against the repo root, never the CWD.
+
+    PATHS-1 (open ledger 54), option 1 as ruled 2026-09-01, adds ONE branch, taken only when the
+    caller supplies `vintage_sha` — that is, only for an input whose stamp carries
+    `vintage_manifest_sha256`. Everything without one resolves exactly as the sentence above says,
+    and that sentence is unchanged.
+
+    IDENTITY IS CHECKED BEFORE NAME IS USED. The vintage root comes from `CHI_VINTAGE_ROOT`,
+    defaulting to the operator's home; the entry's `<vintage>/<basename>` is joined under it; and
+    before any file under that vintage directory is read, `<root>/<vintage>/MANIFEST.md` is hashed
+    and must equal `vintage_sha`. A wrong directory is therefore **unreachable, not merely
+    unlikely**: a same-named vintage holding different bytes fails on identity rather than being
+    read and trusted. Returns None on any identity failure, and the caller reports
+    ABSENT-BY-IDENTITY and fails closed, exactly as it fails today on plain absence.
+
+    There is NO second root and NO search. This is deliberate and is the reason the branch is
+    keyed on identity rather than written as a fallback: a resolver that tries one place and then
+    another can bind silently to the wrong file, which is the open, unguarded class the
+    `check_docs` rule-3 direct-branch shadowing note describes. One place is tried, and it must
+    prove it is the right place before it is read.
+
+    `sha` and `exists` are injected on the `[SBF/SYNC]` precedent so the self-test drives every
+    branch, including the identity-mismatch branch, without a filesystem.
+    """
+    if os.path.isabs(path):
+        return path
+    if vintage_sha:
+        base = os.path.join(_vintage_root(), path)
+        manifest = os.path.join(os.path.dirname(base), 'MANIFEST.md')
+        if not exists(manifest):
+            return None
+        if sha(manifest) != vintage_sha:
+            return None
+        return base
+    return os.path.join(root or REPO_ROOT, path)
 
 
 def sync_verdict(report, sha=_sha256_file, exists=os.path.exists, root=None):
@@ -111,7 +153,18 @@ def sync_verdict(report, sha=_sha256_file, exists=os.path.exists, root=None):
             lines.append(f'RECON/SYNC: `{name}` entry is malformed — needs both `sha256` and `path`')
             ok = False; failed.add(name)
             continue
-        want, path = rec['sha256'], _resolve(rec['path'], root)
+        want = rec['sha256']
+        # PATHS-1: the vintage stamp, when present, is what makes the relative path resolvable —
+        # and it is checked before the vintage directory is read. `sha`/`exists` are the injected
+        # ones, so the identity branch is drivable from the self-test.
+        path = _resolve(rec['path'], root, rec.get('vintage_manifest_sha256'), sha, exists)
+        if path is None:
+            lines.append(f'RECON/SYNC: `{name}` is ABSENT-BY-IDENTITY — no vintage under '
+                         f'${VINTAGE_ROOT_ENV} carries a MANIFEST.md hashing '
+                         f'{rec["vintage_manifest_sha256"][:12]}…, so {rec["path"]} was never '
+                         f'read; cannot verify sha256 {want[:12]}…')
+            ok = False; failed.add(name)
+            continue
         if not exists(path):
             lines.append(f'RECON/SYNC: `{name}` recorded at {path} is ABSENT on this machine — '
                          f'cannot verify sha256 {want[:12]}…')
@@ -168,6 +221,62 @@ def apply_known(failed_inputs, known):
         e = [x for x in entries if x.get('input') == p][0]
         lines.append(f'RECON/KNOWN: {p!r} failing as pinned — {e.get("owner")}')
     return unknown, stale, lines
+
+
+def paths_verdict(report):
+    """[RECON/PATHS] — no string anywhere under `run` is an absolute or home-directory path.
+
+    PATHS-1, open ledger 54, ruled 2026-09-01.
+
+    PS-128 DERIVATION MODE: **A (live-only)**. The property is read entirely off the artifact
+    under test; there is no oracle because there is nothing to pin — the correct paths change
+    with every vintage, and what is being asserted is their SHAPE.
+
+    WHY IT EXISTS. This report is the one artifact this project publishes that reaches readers
+    with no paste in the way: the elections methodology page links it, and a push is a
+    publication. It shipped `/Users/ishandaya/bulk-2026-08-20/…` in two fields for as long as the
+    provenance stamp has existed. That was never a secret worth much, but it was an operator's
+    home directory published to anyone who opened the artifact, and nothing in the tree said it
+    should not be. R8 (ii) basenamed the two `run.*_file` keys and left `run.inputs[].path`
+    alone — the fix was narrower than its own stated purpose, which is exactly the shape of
+    defect that comes back.
+
+    The rule is written against ABSOLUTENESS, not against `/Users/`. A check for one platform's
+    home prefix would pass unchanged on Linux and be no rule at all; `/home/` is named too, but
+    the leading-slash test is the one doing the work. The walk is recursive over the whole `run`
+    subtree rather than over the two fields known to have offended, because the next one will be
+    a field nobody is watching.
+    """
+    run = report.get('run')
+    if not isinstance(run, dict):
+        return False, ['RECON/PATHS: `run` is not an object']
+
+    def strings(o, path='run'):
+        if isinstance(o, dict):
+            for k, v in o.items():
+                for x in strings(v, path + '.' + k):
+                    yield x
+        elif isinstance(o, list):
+            for i, v in enumerate(o):
+                for x in strings(v, path + '[%d]' % i):
+                    yield x
+        elif isinstance(o, str):
+            yield path, o
+
+    found = list(strings(run))
+    # PREMISE FIRST (PS-128 (i), (v)): a `run` block carrying no strings at all would satisfy
+    # every assertion below by having nothing to test. Say so rather than pass.
+    if not found:
+        return False, ['RECON/PATHS: `run` carries no string values — nothing was measured']
+    bad = []
+    for path, v in found:
+        if v.startswith('/'):
+            bad.append('%s is an absolute path: %s' % (path, v))
+        elif '/Users/' in v or '/home/' in v:
+            bad.append('%s embeds a home directory: %s' % (path, v))
+    if bad:
+        return False, ['RECON/PATHS: ' + b for b in bad]
+    return True, ['RECON/PATHS: %d string(s) under `run`, none absolute or home-rooted' % len(found)]
 
 
 def through_verdict(report):
@@ -430,6 +539,53 @@ def _self_test():
     ok('through: shape accepts data_through as an expected run key',
        'data_through' in EXPECTED_RUN)
 
+    # PATHS-1 option 1 — the identity-keyed vintage branch, driven with injected sha/exists so
+    # every case runs without a filesystem. The four mirror the artifact-level bites exactly.
+    _VS = '7b6d8965' + '0' * 56          # a stand-in vintage manifest identity
+    _vin = {'run': {'inputs': {'d2totals': {'sha256': 'DATA', 'path': 'bulk-X/d2.txt',
+                                           'vintage_manifest_sha256': _VS}}}}
+    def _drive(man_exists, man_sha, data_exists=True):
+        E = lambda q: (man_exists if q.endswith('MANIFEST.md') else data_exists)
+        H = lambda q: (man_sha if q.endswith('MANIFEST.md') else 'DATA')
+        return sync_verdict(_vin, sha=H, exists=E)
+    ok('vintage: correct manifest identity resolves and the input verifies',
+       _drive(True, _VS)[0])
+    ok('vintage: BITE — no manifest under the root is ABSENT-BY-IDENTITY',
+       (not _drive(False, _VS)[0]) and 'ABSENT-BY-IDENTITY' in ' '.join(_drive(False, _VS)[1]))
+    ok('vintage: BITE — a manifest with ANY other sha is refused, though the data file is there '
+       'and correct (identity, not name, decides)',
+       (not _drive(True, 'f' * 64)[0]) and 'ABSENT-BY-IDENTITY' in ' '.join(_drive(True, 'f' * 64)[1]))
+    ok('vintage: BITE — correct manifest but an absent data file fails on plain absence, '
+       'not on identity',
+       (not _drive(True, _VS, data_exists=False)[0]) and
+       'ABSENT-BY-IDENTITY' not in ' '.join(_drive(True, _VS, data_exists=False)[1]))
+    ok('vintage: an entry WITHOUT a vintage stamp still resolves against the repo root',
+       _resolve('a/b.json', root='/R') == os.path.join('/R', 'a/b.json'))
+    ok('vintage: an absolute path is still returned as given',
+       _resolve('/abs/x.txt') == '/abs/x.txt')
+
+    # [RECON/PATHS] — PATHS-1. The BITE restores one absolute path, which is the exact state
+    # the check exists to refuse and the state the artifact was in before this lane.
+    _mk = lambda inputs: {'run': dict({k: 'x' for k in EXPECTED_RUN}, inputs=inputs)}
+    _ok = {'d2totals': {'sha256': 'abc', 'path': 'bulk-2026-08-20/d2totals_1.txt'}}
+    ok('paths: vintage-relative paths pass', paths_verdict(_mk(_ok))[0])
+    ok('paths: BITE — one restored absolute path fails',
+       not paths_verdict(_mk({'d2totals': {'sha256': 'abc',
+            'path': '/Users/someone/bulk-2026-08-20/d2totals_1.txt'}}))[0])
+    ok('paths: the failure names the offending key and the value',
+       all(x in ' '.join(paths_verdict(_mk({'d2totals': {'sha256': 'a',
+            'path': '/Users/someone/x.txt'}}))[1])
+           for x in ('run.inputs.d2totals.path', '/Users/someone/x.txt')))
+    ok('paths: a home directory without a leading slash still fails',
+       not paths_verdict(_mk({'d2totals': {'sha256': 'a', 'path': 'x/home/y/z.txt'}}))[0])
+    ok('paths: the rule is absoluteness, not a platform — a bare / path fails',
+       not paths_verdict(_mk({'d2totals': {'sha256': 'a', 'path': '/srv/data/z.txt'}}))[0])
+    ok('paths: nested lists are walked, not skipped',
+       not paths_verdict({'run': {'inputs': {}, 'extra': [{'p': '/Users/x'}]}})[0])
+    ok('paths: a `run` with no strings fails as VACUOUS, not passes',
+       not paths_verdict({'run': {'n': 1}})[0])
+    ok('paths: `run` not an object fails', not paths_verdict({'run': []})[0])
+
     # HYG-B2 commit D — the docstring is pinned to CHECKS, in BOTH directions. The prose read
     # "Two checks" over three because nothing tied it to the code; a one-way check would let
     # the reverse rot return (a name lingering here after its check is deleted).
@@ -497,10 +653,11 @@ def main():
     # to catch, surviving only because the literal happened to be right. Both the total and
     # the pass count now derive from this one pairing of CHECKS to its verdicts.
     tok, tlines = through_verdict(report)
-    verdicts = dict(zip(CHECKS, (sok, yok, cok, tok)))
+    pok, plines = paths_verdict(report)
+    verdicts = dict(zip(CHECKS, (sok, yok, cok, tok, pok)))
     n_checks, n_ok = len(CHECKS), sum(1 for v in verdicts.values() if v)
     bad = n_ok != n_checks
-    for ln in slines + ylines + klines + clines + tlines:
+    for ln in slines + ylines + klines + clines + tlines + plines:
         print('[validate_reconcile] ' + ln, file=(sys.stderr if bad else sys.stdout))
     for u in unknown:
         print(f'[validate_reconcile] RECON/KNOWN: {u!r} is failing and is NOT pinned — '

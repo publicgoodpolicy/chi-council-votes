@@ -306,6 +306,18 @@ def build_inputs_map(data_path, d2totals_path, fileddocs_path, known_gaps_path=N
         also carried in `run`'s sibling keys; the duplication is deliberate, so the map reads
         on its own rather than by cross-reference.
 
+        PATHS-1 (open ledger 54, ruled 2026-09-01) narrows WHICH path, and the sentence above
+        is why it narrows rather than deletes. This report is CDN-served — the elections
+        methodology page links a reader straight to it — so an absolute path here published an
+        operator's home directory to anyone who opened the artifact. It now carries the
+        VINTAGE-RELATIVE path: the sealed directory's basename joined to the file's basename.
+        A reader holding the seal can still resolve hash -> file, which is the whole purchase
+        of the field; a reader not holding it learns nothing about the machine that built it.
+        Each out-of-repo entry also gains `vintage_manifest_sha256`, the seal's own MANIFEST
+        identity, so the vintage is named by content and not merely by a directory name that
+        anyone could reproduce. Repo-relative inputs are untouched: they are already resolvable
+        from the repository and disclose nothing.
+
     `known_gaps` is included when passed. It is an input that changes the output — a matched
     gap becomes DISCLOSED and leaves the exit triggers — so omitting it would leave the stamp
     claiming completeness it does not have. `sha` is injected so a test can drive every path
@@ -316,7 +328,27 @@ def build_inputs_map(data_path, d2totals_path, fileddocs_path, known_gaps_path=N
              ('fileddocs', fileddocs_path)]
     if known_gaps_path:
         named.append(('known-gaps.json', known_gaps_path))
-    return {name: {'sha256': sha(path), 'path': path} for name, path in named}
+    # PATHS-1: out-of-repo inputs are published vintage-relative, never absolute. The test is
+    # `os.path.isabs`, not a check for a particular home directory — a rule written against
+    # `/Users/` would pass on Linux and be no rule at all. Repo-relative paths fall through
+    # unchanged, so `election-data.json` and `known-gaps.json` keep the form they already had.
+    out = {}
+    for name, path in named:
+        entry = {'sha256': sha(path)}
+        if os.path.isabs(path):
+            d = os.path.dirname(path)
+            entry['path'] = os.path.join(os.path.basename(d), os.path.basename(path))
+            # The seal's MANIFEST names the vintage by content. Stamped only when it is there
+            # to be read: an absent manifest must leave the field off rather than record a
+            # hash of nothing (`e3b0c442…` is the sha256 of empty input, and it has reached
+            # artifacts before).
+            man = os.path.join(d, 'MANIFEST.md')
+            if os.path.exists(man):
+                entry['vintage_manifest_sha256'] = sha(man)
+        else:
+            entry['path'] = path
+        out[name] = entry
+    return out
 
 
 def data_through_of(contributions):
