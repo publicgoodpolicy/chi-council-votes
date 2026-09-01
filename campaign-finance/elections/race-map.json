@@ -2422,7 +2422,7 @@
     "cand-tobon-ward-01": {
       "candidate_id": "cand-tobon-ward-01",
       "name": "Daniel Tobon",
-      "race_id": "ward-01",
+      "race_id": "ward-35",
       "committee_id": "40637",
       "incumbent": false,
       "status": "declared",

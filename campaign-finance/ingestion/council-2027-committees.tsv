@@ -1,7 +1,7 @@
 committee_id	name	type	office_scope	status	provenance	evidence	added
 34616	Neighbors for Daniel La Spata	Candidate	ward-1	A	incumbent-roster	To elect Daniel La Spata to public office.	2026-08-24
 39590	Friends of Laura Yepez	Candidate	ward-1	A	ishan-attested	ishan-attested: add ward 1; To support the political activities of Laura Yepez	2026-08-24
-40637	People for Daniel Tobon	Candidate	ward-1	A	ishan-attested	ishan-attested: add ward 1; Support candidacy for office.	2026-08-29
+40637	People for Daniel Tobon	Candidate	ward-35	A	ishan-attested	ishan-attested: add ward 1; Support candidacy for office. | corrected 2026-09-01 (ishan-attested): ward 35	2026-08-29
 41043	Neighbors for Bill	Candidate	ward-1	A	r2-table	To support the candidacy and political activites of Bill Thanoukos	2026-08-24
 25653	Hopkins for Chicago	Candidate	ward-2	A	text-pass+incumbent-roster	elect Brian hopkins for Alderman, City of Chicago	2026-08-24
 40933	Friends Of Richard Omoniyi-Shoyoola	Candidate	ward-2	A	text-pass	To support the election of Richard Omoniyi-Shoyoola to the office of Alderperson, 2nd Wartd, City of Chicago, in the 2027 municipal election.	2026-08-24
