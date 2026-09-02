@@ -2352,6 +2352,23 @@ The mechanism that materializes C5's `{DATA_THROUGH}` and the exact composition 
 
 *Provenance: CNCL-DATA-1 P2.1 ratification package, revision 1 (`cncl-data-1-p2-1-ratification-package-rev1.md`), sha256 `7b0ff7101886a59d4c4e5487db8850d2b2a8a3ef1e70e695130be3e5cdc7326c`, 9,488 B / 136 L, regions R8 as applied (lines 27–39) and R9 as applied (lines 43–56), each transcribed verbatim from its marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan in chat 2026-08-31 as recommended. Id-less per PS-88. R8's item (iii) — the `run.scope` string — is drafted at P2.1's HALT from measurement and ratified before commit; no string is recorded here.*
 
+> **Amendment (ARC-BOUNDARY-3, 2026-09-01) — the seam and the third element.** As applied at
+> CNCL-DATA-1 P2.1 and ratified there (D2, D3), the council branch is implemented as
+> `methodologyView(verify, office, duesExcluded)`: a third parameter carries the dues figures on
+> the render state, which keeps W7's transport rule (the value travels on the render state and
+> not on `verify`) and R9's named source (`index.duesExcluded`) both intact, and departs only
+> from R9's incidental rendering of the two-parameter signature. The seam is disclosed in the
+> code at its definition. The composition clause "emits, in order and nothing else" is amended:
+> the branch emits, after element **(3)** the verification section, a fourth element **(4)** the
+> artifact-links paragraph, defined once as a shared expression and emitted by both the
+> school-board and council branches for the same state, byte for byte; the gate pins it to the
+> sibling branch and not to this register, as its own comment states. Elements (1), (2) and (3)
+> stand as ratified above, in that order, followed by (4); no `<h3>` precedes any C-string.
+> Measured at G0 of ARC-BOUNDARY-3: definition line 979, shared expressions 1033–1049, council
+> branch 1051–1087, call site 1402 of `render.js` at `420ef877818fa4506ddabfab06dfb3b5ca1808961f49dbac3d9119dc8f1ba354`.
+
+*Provenance, amendment (the seam and the third element): ARC-BOUNDARY-3 ratification package, revision 1 (`arc-boundary-3-ratification-package-rev1.md`), sha256 `a4977582acb3dd42319f243975e984c59f866b6a294b796ad80d412d68d0ab29`, 18,258 B / 147 L, Region 1, lines 22–35, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan 2026-09-01 as drafted. Recorded under the PS-93 pattern: no id is allocated, the next free numbered id is untouched, and the R9 block stands unaltered above with its two-parameter signature and its "nothing else" clause, because transcription is never harmonization and an amendment says what now governs rather than editing the superseded reading away. The seam it records was built and ratified at CNCL-DATA-1 P2.1 (D2, D3, HALT-edits relay `7da6bd87…`) and disclosed in `render.js` at its definition; the coordinates it cites were measured at this boundary's G0 (`cb97b0b0450c4fe56543939abf87d4863ca607a19566fd8c5419db6ee809a48b` §E2). The paired pointer was checked at the moment of use under PS-129: the heading `### CNCL-DATA-1 P2 — R8 and R9 as applied` measured exactly once, and the R9 block it governs was compared byte for byte against `a92f7835c5e6f67ef9c8dc38001cda163a2b3d57dcf48a6471a41c457013eff1` before and after the insertion, both sides asserted non-empty. The entry is read by no gate check.*
+
 ### CNCL-DATA-1 P2 — display decisions
 
 The P2 display decisions ratified as a set, transcribed verbatim from addendum A1:
