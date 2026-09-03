@@ -237,7 +237,8 @@ amendment dedupe then overlap-supersede (`reconcile.build_filing_registry`) —
 (the pending tail). There are **no** row-level `(date, amount, name)` keys; that
 naive method over-counts amendments by ~$1.43M.
 
-**Output goes to `raw/receipts-council/`**, NOT `raw/receipts/` — the latter holds
+**The staged files go in `raw/receipts-council/`** (the converter writes to a scratch
+directory first — see the staging rule below), NOT `raw/receipts/` — the latter holds
 the bulk `.txt` that `ingest_ie` still needs, and globbing both would fail
 `ingest`'s `REQUIRED_COLUMNS`. `ingest` then runs with `--raw-dir raw/receipts-council/`.
 
@@ -256,12 +257,15 @@ the same commit as whatever change caused it (discipline 33).
 
 ```
 convert_bulk_receipts.py  --bulk <receipts.txt> --fileddocs <FiledDocs.txt> \
-                          --committee-map council-data.json --out-dir raw/receipts-council
+                          --council-list council-2027-committees.tsv --out-dir <scratch dir>
+                          # then stage into raw/receipts-council/ per the staging rule below
 ingest.py                 --raw-dir raw/receipts-council --ward-map ward-map.json --data-file council-data.json
 repair_clusters.py        council-data.json      # absent-member churn from re-ingest
 transform_slice1.py       council-data.json      # parent_id on ALL donors — MUST precede ingest_ie
 transform_slice2.py       council-data.json
-ingest_ie.py              --council … (re-applies the IE layer, which the direct re-ingest strips)
+ingest_ie.py              --council … --expenditures <seal>/expenditures_*.txt --receipts <seal>/receipts_*.txt
+                          # re-applies the IE layer: it clears only its own prior IE rows and reassigns
+                          # independent_expenditures; a direct re-ingest does NOT strip it (see above)
 enrich_committee_names.py --council …
 sync_overrides.py         --data-file council-data.json …   # clusters re-apply from the Sheet
 build_rollups.py          council-data.json      # rollups LAST — after overrides
@@ -277,6 +281,23 @@ unmapped committee hits an interactive prompt. `build_rollups` / `build_shards`
 run last because cluster membership feeds parent attribution and the shards are
 the embed's deploy surface.
 
+**The selection, and the staging rule (HARRIS-1, 2026-09).** `--council-list` is COUNCIL
+MODE: it reads the tracked, ruled selection `council-2027-committees.tsv` and prints the
+selection's sha256 and row count, so every rebuild names the set it ran against. The older
+`--committee-map council-data.json` derivation is retired for council rebuilds — it derives
+the set from the very artifact being rebuilt, states no identity, and was measured to
+reproduce a struck committee. The two flags are mutually exclusive in the converter. The
+selection carries incumbents **and** challengers, while the tool-1 artifact keys one
+committee per ward and council-mode `ingest` maps each staged file's `CommitteeID` through
+`ward-map.json` — an id absent from the map reaches an **interactive prompt**, and there is
+no fail-closed mode. So: write the converter's output to a scratch directory, and stage into
+`raw/receipts-council/` **only the files whose `CommitteeID` is a key of `ward-map.json`**;
+assert that subset before running `ingest`, and record the excluded ids in the lane record.
+The converter emits byte-identical files for a committee whichever derivation selected it,
+so the filter changes which committees are staged, never what is staged for them. The IE
+step reads the sealed vintage's bulk files in place (`--expenditures`, `--receipts`), so a
+rebuild is one vintage end to end; `raw/receipts/` is not the source of record for that step.
+
 ### Pull-set archival rule
 
 A council rebuild is pinned to **one dated pull-set of four SBE bulk files**
@@ -288,9 +309,11 @@ mix files across pulls in one rebuild.
 **`raw/` is expected present and empty between refreshes** — it holds only the staged pull, and
 `build_all.sh` skips the finance ingest when it is empty. Archive the pull-set somewhere
 durable *outside* `raw/` once a rebuild lands, because the next refresh's staging will not
-preserve it. **Known gap, stated rather than discovered later:** the sealed archives on the
-operator's machine today are split across two pull dates, so no single same-pull four-file
-set exists locally — a reproduction from local material would violate this rule.
+preserve it. Since VINTAGE-SEAL (2026-08-20) a sealed, read-only, same-pull four-file set —
+Receipts, Expenditures, `D2Totals`, `FiledDocs`, plus the Committees export — exists locally;
+the current handover's state table names the vintage of record with its manifest sha. An
+earlier statement here that the local archives were split across two pull dates predates
+that seal and is retired.
 
 ### Where sealed vintages live: `CHI_VINTAGE_ROOT`
 
