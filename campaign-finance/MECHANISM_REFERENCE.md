@@ -270,6 +270,15 @@ is a property of the two sides, not of the data, and it is why a non-zero figure
 be a finding about the slice rather than about dues. Built at SBV-BOARD-1, on the data port
 SBV-PORT-1 landed.
 
+### Feasibility floor for material operations [C1.18, RULED — see PS-133]
+
+**A dispatch directing material operations premises resource feasibility against measured
+inputs — sum of sizes against free space — before the first byte moves, and measured free
+space on the working volume at ≥ 5 GiB is a hard stop on the dispatch's enumerated stop
+conditions.** Below the floor the executor holds and reports both the reading and the
+operation's derived need; it does not proceed on re-derived headroom. PS-133 is the ruling
+of record; cite it rather than restating a number here or in any dispatch.
+
 ---
 
 ## §2 — Donor field ownership map
@@ -1053,6 +1062,7 @@ that catch defect classes the existing gates structurally cannot see.
 | P3 | PS-32 | `RULINGS.md` §PS-32 |
 | P4 | PS-49 | `RULINGS.md` §PS-49 |
 | C3.4 display ruling | PS-12 | `RULINGS.md` §PS-12 |
+| C1.18 | PS-133 | `RULINGS.md` §PS-133 |
 
 **Conformance record:** `build_all.sh` (S-bld, sha above) conforms to the §1 chain block as
 of this commit. ~~Its executable content is byte-identical (comment-stripped comparison) to

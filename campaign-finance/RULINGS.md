@@ -1572,6 +1572,21 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: PS-103 fourth-class ruling artifact `p14_z2_ratified_entry.json`, sha256 `64c8e7b110b04b06f1d8fd4754157d4ac3e924623a9e57530413ada5d5abea6b`, 1,704 B / 15 L, field `fourth_class_text`, transcribed verbatim under the JSON-to-block transform stated at §PS-131. Ratified by Ishan 2026-08-30 (handover rev Y `c2daae95…`, open ledger 42). Id allocated at this transcription against the id measured free at the moment of writing (`PS-132` occurring 0 times after PS-131's allocation), never carried. Same ledger note as PS-131.*
 
+### PS-133 — feasibility floor for material operations
+
+> A dispatch directing material operations (copy, seal, chain re-run, artifact
+> regeneration) premises measured free space on the working volume at ≥ 5 GiB, and
+> that premise is a hard stop on the dispatch's enumerated stop conditions: below the
+> floor the executor holds and reports both the reading and the operation's derived
+> need, and does not proceed on re-derived headroom. Above the floor, feasibility is
+> still premised against measured inputs — sum of sizes against free space — before
+> the first byte moves. The ≥ 20 Gi advisory authored at the HARRIS-1 commit-B
+> dispatch rev 1 and carried forward by copy is retired; no other floor survives this
+> ruling. The floor's operational home is MECHANISM_REFERENCE.md; dispatches cite
+> this ruling rather than restating a number.
+
+*Provenance: ruled by Ishan 2026-09-08 (chat); recorded in handover rev AB rev 2 (sha256 67fe9608825fc3a07c2ce4a18f0a9b5b420ab5e40b7acbd1fc7efa023707c646, attested). Measured basis: the 20 Gi figure exists in no tracked file and was authored once at dispatch rev 1, byte-identical across all four dispatch revisions (line sha 899aa10cb1643eb24d284cd94ffd397f0ee7ecbe950cd44ff08a8af5e4bc9719); the standing feasibility convention names the method and no floor; CNCL-DATA-1's G0 dispatch used ≥ 5 GiB and measured 33 GiB against it; HARRIS-1's run recorded 18 Gi at first measure with 288 MB peak need (67× headroom) and 41 Gi re-measured (HALT rev 4, sha256 736e7e5aa184e0dd9f31febf0755a47fa2be4100c0c3c4378b44d7b8107d29d1, §A5).*
+
 ---
 
 ## Rulings ratified without an id
@@ -2408,3 +2423,18 @@ The P2 display decisions ratified as a set, transcribed verbatim from addendum A
 > fourth known-gaps entry classes, R8 and R9 as applied, and this set.
 
 *Provenance: CNCL-DATA-1 P2 ratification addendum A1 (`cncl-data-1-p2-ratification-addendum-A1.md`), sha256 `69a143330e47001f9c0d91a043128fcc297b01dfcd758b357952272b80f3bee1`, 2,819 B / 48 L, region A1, lines 13–45, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan in relay 2026-08-31 as drafted; the underlying choices were ruled in chat 2026-08-30 (R3, R5, R6 against the P2 brief rev 1 `6fb73081…`) and 2026-08-31 (R7, R10, R12, R13, R14 against the P2 G0 report `2e71065e…` and the P2.1 ratification package `7b0ff710…`). Id-less per PS-88.*
+
+### ENRICH-1 — the _load_map fix, as ruled
+
+Ruled 2026-09-08, four clauses: (i) the fix is scoped to
+enrich_committee_names.py's _load_map, which gains a skip of leading '#' comment
+lines before the header row; read_tsv and every other reader are untouched. (ii)
+_load_map gains a presence assertion — the parsed map size equals the expected
+entry count — proven by its own firing at authoring (bite at birth), so a future
+format no-op halts the chain instead of passing. (iii) Before any staging, a
+diagnostic run (run, measure, restore sha-verified) states exactly which IE
+committee_name values change; the name diff alters shipped copy, is a display
+decision, and ships only on Ishan's review. (iv) The landing is a regeneration
+commit through the chain, never a hand edit of the artifact.
+
+*Provenance: measured at HARRIS-1 HALT rev 4 (sha256 736e7e5aa184e0dd9f31febf0755a47fa2be4100c0c3c4378b44d7b8107d29d1, §G5): parsed map size 0 from the 20-line TSV; four comment lines precede the ID<TAB>Name header, so DictReader takes line 1 as the header; all 12 IE committee_name values identical HEAD to run, nothing regressed; the curated spellings (the SBE-RERUN-1 double-space lesson) never applied. Ruled by Ishan 2026-09-08 (chat); recorded in handover rev AB rev 2 (sha256 67fe9608825fc3a07c2ce4a18f0a9b5b420ab5e40b7acbd1fc7efa023707c646, attested).*

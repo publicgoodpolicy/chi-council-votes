@@ -70,6 +70,47 @@ Entries **1–114** are ratified and live in the handover chain, each pointing t
 
 [Drafted fresh at ARC-BOUNDARY-3. Measured: G0 report `cb97b0b0450c4fe56543939abf87d4863ca607a19566fd8c5419db6ee809a48b` §D4 (0 and 0, control fires) and §D5 (four spans land at one occurrence each; ledger section disjoint). Owned: `6d10ae9d8731db4cd87656a959ccb11822fa4483e929f1c9378a97dd13e35b95` §"On F2". Offered as candidate 15 and ratified by Ishan 2026-09-01. Numbered at the same transcription.]
 
+### 124
+
+**Review from a summary while the primary bytes were held** (pointer class). At
+ARC-BOUNDARY-3 the planner framed `stash@{1}`'s `probe_donor_dupes.py` as a file existing
+nowhere else — in open ledger 61's original wording, the inspection dispatch
+(`985cd0dd0a7c15455e38e5d8f0cbf0950bc4be87134dc58d0f3c88c1459ef780`, drafted, never
+executed), and chat — drafting from a context-transfer summary while holding the G0 HELD
+report whose own table showed the path tracked at HEAD (git blob
+`1bbaf756f187a4f4114227c7bb801b4c6feaaccb`), the stash carrying only uncommitted edits to
+it. Defense: **primary-held-means-primary-read** — a claim about held bytes is drafted from
+the bytes, never from a summary of them; summaries are testimony, sources of expectations
+and never of values.
+
+[Drafted fresh at HOUSEKEEPING-1 from handover rev AA rev 3 (`480c056fd600342d68cdd83db0a50a301bd087a090ec00c346af084393d4dffb`, its state-table candidate-19 row) and handover rev AB rev 2 (`67fe9608825fc3a07c2ce4a18f0a9b5b420ab5e40b7acbd1fc7efa023707c646`, its error-ledger section). Offered 2026-09-02 at ARC-BOUNDARY-3; ratified by Ishan 2026-09-08. Numbered 2026-09-09 at HOUSEKEEPING-1.]
+
+### 125
+
+**Placeholder in a relay prompt's identity slot** (planner-relay class). The suggested
+executor prompt for the HARRIS-1 commit-B approval relay carried the literal string
+`<your measured value>` where the planner-computed sha belonged; sent unfilled, it degraded
+the relay's identity leg to content-corroboration, silently, on the template's first use.
+The relay was in fact the ratified text
+(`d6db10f3a16ce9fe2630bf7bd902dca8ee86b92106799e916a6fd2951c86e0fd`, measured equal by
+planner and executor after the fact). Defense: **the planner states the computed sha in the
+suggested prompt; the sender's re-measurement is a comparison, never a substitution**; a
+mismatch is transit damage, remedied by re-obtaining the carrier at its stated identity.
+
+[Drafted fresh at HOUSEKEEPING-1 from handover rev AB rev 2 (`67fe9608…`, its custody note and error-ledger section). Offered and ratified by Ishan 2026-09-08. Numbered 2026-09-09 at HOUSEKEEPING-1.]
+
+### 126
+
+**An owed register act carried against planner and memory state** (pointer class). The
+PS-103 third- and fourth-class transcription was carried into the HARRIS-1 post-push
+housekeeping scope as owed after the register had discharged it — PS-131 and PS-132 landed
+at P2.0, and rev AA's own NS-1 discharge line records item 42 closed. The executor's
+premise measurement stopped the false scope before a duplicate transcription landed.
+Defense: **an owed register act is measured against the register, by id and by content, at
+the moment a scope is drafted**; planner session state and memory indexes are not sources.
+
+[Drafted fresh at HOUSEKEEPING-1 from handover rev AB rev 2 (`67fe9608…`, its custody note and error-ledger section). Offered and ratified by Ishan 2026-09-08. Numbered 2026-09-09 at HOUSEKEEPING-1.]
+
 ## Dispositions without a number
 
 Recorded so the findings are not lost; none consumes a number.
@@ -86,5 +127,9 @@ Recorded so the findings are not lost; none consumes a number.
 | 14 | declined by Ishan 2026-09-01 ("decline for now"); recorded as a lane note | handover rev Z rev 3, error-ledger section (the PATHS-1 read-path finding: a published field changed without tracing its other reader) |
 | 16 | declined by Ishan 2026-09-01 | the ARC-BOUNDARY-3 G0 dispatch's premise that `[RECON/THROUGH]`/`[RECON/PATHS]` are gate lines; they are validator checks (G0 report §B) |
 | D6 apostrophe candidate | held untranscribed by ruling 2026-09-01 (open ledger 53) | handover rev Z rev 3, open ledger item 53 |
+| 17 | declined by Ishan 2026-09-02 | handover rev AA rev 3 `480c056fd600342d68cdd83db0a50a301bd087a090ec00c346af084393d4dffb`, its candidates paragraph — the R1 dispatch's `check_docs`-before-staging premise |
+| 18 | declined by Ishan 2026-09-02 | same document — the R1 approval relay's `main...origin/main` operand order, carried from the handover's figure |
+| 22 | declined by Ishan 2026-09-08 | handover rev AB rev 2 `67fe9608825fc3a07c2ce4a18f0a9b5b420ab5e40b7acbd1fc7efa023707c646`, its error-ledger section — verify-after-read on the commit-B uploads; existing convention, disclosed, cured |
+| 23 | declined by Ishan 2026-09-08, as covered by entry 126 | handover rev AB rev 2 `67fe9608825fc3a07c2ce4a18f0a9b5b420ab5e40b7acbd1fc7efa023707c646` carries the errant phrase ("allocated at ratification"); the ledger's own conventions block rules allocation at transcription and wins; erratum closes at rev AC |
 
-Next free number: **124**.
+Next free number: **127**.
