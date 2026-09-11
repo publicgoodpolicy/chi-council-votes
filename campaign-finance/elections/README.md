@@ -93,13 +93,13 @@ governing rule below). Export `$REPO`; paths are relative to the repo root.
         --expenditures <SBE Expenditures> --receipts <SBE Receipts> \
         --out campaign-finance/election-data.json            # IE layer; internal build_rollups now safe
 5b. enrich_committee_names.py --council campaign-finance/election-data.json \
-        --committees reference/ie-committee-names.tsv --out campaign-finance/election-data.json
+        --committees campaign-finance/elections/reference/ie-committee-names.tsv --out campaign-finance/election-data.json
                                                             # resolve IE spender ids -> real names
                                                             #   (ingest_ie only knows the id). Same step
-                                                            #   council runs. reference/ie-committee-names.tsv
-                                                            #   holds all 15 (12 from council-data.json + 3
-                                                            #   pulled from Illinois Sunshine); or pass the
-                                                            #   full SBE Committees.txt when refreshing.
+                                                            #   council runs. The curated map holds all 17
+                                                            #   (12 from council-data.json + 3 from Illinois
+                                                            #   Sunshine + 2 added at ENRICH-1). NEVER pass the
+                                                            #   SBE Committees bulk here (SBE-RERUN-1's defect).
 6.  sync_overrides.py    --data-file campaign-finance/election-data.json \
         --sheet-id <ID> --creds-file <path>                  # shared classification + clusters
                                                             #   + IE-committee industry tags

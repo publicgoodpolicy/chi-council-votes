@@ -2438,3 +2438,29 @@ decision, and ships only on Ishan's review. (iv) The landing is a regeneration
 commit through the chain, never a hand edit of the artifact.
 
 *Provenance: measured at HARRIS-1 HALT rev 4 (sha256 736e7e5aa184e0dd9f31febf0755a47fa2be4100c0c3c4378b44d7b8107d29d1, §G5): parsed map size 0 from the 20-line TSV; four comment lines precede the ID<TAB>Name header, so DictReader takes line 1 as the header; all 12 IE committee_name values identical HEAD to run, nothing regressed; the curated spellings (the SBE-RERUN-1 double-space lesson) never applied. Ruled by Ishan 2026-09-08 (chat); recorded in handover rev AB rev 2 (sha256 67fe9608825fc3a07c2ce4a18f0a9b5b420ab5e40b7acbd1fc7efa023707c646, attested).*
+
+> **Amendment (ENRICH-1, 2026-09-11) — the lane as measured.** Ruled on the ENRICH-1 G0
+> (sha256 813adf94945e7807899d85d180b85c149e47ee76b3bef6a3289ed05510a9801d), which measured the
+> ruled premises against the repository: (a) The curated map of record is
+> `campaign-finance/elections/reference/ie-committee-names.tsv`; the duplicate at
+> `reference/ie-committee-names.tsv` (same fifteen ids and spellings, no comment block — the
+> file the script's bare-path prose and the elections README's documented step 5b both resolved
+> to from the repo root) is deleted at this lane; the runbook's step-6 line names `--committees`
+> explicitly, the README's step 5b names the canonical path and no longer offers the SBE bulk as
+> an alternative, and the script's and `check_names.py`'s prose name the canonical path. (b) Clause
+> (iii)'s diff is empty on this vintage — ten of the artifact's twelve IE names already equal the
+> map's spelling, two are absent from the map, and no committee re-bridges — so no display
+> decision arises; the diagnostic of record is a step-6 run in scratch against the HEAD artifact
+> with the fixed reader, its output measured equal and discarded. On an empty diff clause (iv) is
+> satisfied by a code-only commit: the artifact and shards are untouched, and the next
+> regeneration through the chain is the fix's first live run. (c) The presence assertion asserts
+> against the file's own count — the non-blank lines after the header, once leading `#` lines are
+> skipped — on the primary call only; the fallback call, whose empty map is the legitimate
+> no-fallback case, is exempt. (d) The curated map gains rows for 530 and 38670 with the
+> artifact's current spellings, display-neutral by measurement, so every IE committee's spelling
+> is owned. (e) `build_all.sh`'s by-hand template and `build_election_seed.py`'s documented
+> step 5b name the curated map, never the SBE Committees bulk (the SBE-RERUN-1 substitution).
+> The script's `--smoke` fixture (`council-data.v5.json`) is absent from the repository at
+> HEAD and always was; the fix neither repairs nor regresses it (open ledger 70).
+
+*Provenance, amendment (the lane as measured): ENRICH-1 ratification package as ratified (`enrich-1-ratification-package-rev4.md`), sha256 `5a20a7fa836bebe334c7ce143a0733f87ee3ebce8060bcd11fae2a6ed9086575`, 16,949 B / 108 L, Region 1; ruled by Ishan 2026-09-11 (chat) on the ENRICH-1 G0 report (`enrich-1-g0-report.md`, sha256 `813adf94945e7807899d85d180b85c149e47ee76b3bef6a3289ed05510a9801d`, 37,352 B / 677 L, §C2, §D3, §D3b, §F) and the ENRICH-1 hold reports (`enrich-1-hold-report.md`, sha256 `d2c293c2fc31a4b9fadc90abbfd3032a944a6ad4b06c57f6032f3015e2bcb6ea`, 12,870 B / 218 L, P4; `enrich-1-hold-report-rev2.md`, sha256 `31f16e64aad822a088fcaf6ad319fa49f5e3219c7f2363c322903e09692c4a5c`, 18,344 B / 322 L, §D and W6). Clauses (i)–(iv) above stand as ruled 2026-09-08; this amendment fixes their referents and their landing on the vintage measured.*

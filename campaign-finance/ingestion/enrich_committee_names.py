@@ -30,17 +30,37 @@ def read_tsv(path):
         for row in csv.DictReader((ln.replace('\r\n','\n') for ln in f),delimiter='\t'):
             yield row
 
-def _load_map(path):
+def _load_map(path, assert_present=True):
+    # ENRICH-1 (ruled 2026-09-08, amended 2026-09-11): the curated map may open with '#'
+    # comment lines before its ID<TAB>Name header. Leading comment lines are skipped in THIS
+    # reader only; read_tsv and every other reader are untouched. The presence assertion below
+    # compares the parsed map to the file's own data-row count (non-blank lines after the
+    # header), so a header/format no-op halts the chain instead of passing silently. The
+    # fallback call is exempt: an empty fallback map is the legitimate no-fallback case.
     F=FIELD_MAP
+    bad = ie_prescan(path)
+    if bad:
+        raise SystemExit(
+            f"FATAL: {len(bad)} cp1252-unmapped byte(s) in {path} -- first 10: {bad[:10]}")
+    with open(path,encoding='cp1252',newline='') as f:
+        lines=[ln.replace('\r\n','\n') for ln in f]
+    i=0
+    while i<len(lines) and lines[i].startswith('#'): i+=1
+    body=lines[i:]
+    data_rows=sum(1 for ln in body[1:] if ln.strip())
     out={}
-    for row in read_tsv(path):
+    for row in csv.DictReader(body,delimiter='\t'):
         cid=str(row.get(F['id']) or '').strip(); nm=(row.get(F['name']) or '').strip()
         if cid and nm: out[cid]=nm
+    if assert_present and len(out)!=data_rows:
+        raise SystemExit(
+            f"FATAL: {path}: parsed {len(out)} committee(s) from {data_rows} data row(s) -- "
+            "the curated map did not load (ENRICH-1 presence assertion)")
     return out
 
 
 def enrich(d, committees_path, fallback_path=None):
-    """PRIMARY = the curated reference/ie-committee-names.tsv; FALLBACK = the SBE
+    """PRIMARY = the curated campaign-finance/elections/reference/ie-committee-names.tsv; FALLBACK = the SBE
     Committees bulk, consulted only for ids the primary does not carry.
 
     SBE-RERUN-1 (planner error 55). Brief §4 recommended passing the SBE Committees bulk
@@ -63,7 +83,7 @@ def enrich(d, committees_path, fallback_path=None):
     could see. The assertion belongs in a checker; the fix belongs in the curated file.
     """
     id2name=_load_map(committees_path)
-    fb=_load_map(fallback_path) if fallback_path else {}
+    fb=_load_map(fallback_path, assert_present=False) if fallback_path else {}
     comms=d['committees']; donors=d['donors']
     dname_idx={norm(v.get('name') or ''):vid for vid,v in donors.items()}
     renamed=0; rebridged=0; unmatched=[]; from_fallback=[]
@@ -105,7 +125,7 @@ if __name__=='__main__':
     ap=argparse.ArgumentParser()
     ap.add_argument('--council',required=True)
     ap.add_argument('--committees',required=True,
-                    help='PRIMARY name map — normally reference/ie-committee-names.tsv '
+                    help='PRIMARY name map — normally campaign-finance/elections/reference/ie-committee-names.tsv '
                          '(curated, Illinois Sunshine provenance and spellings)')
     ap.add_argument('--fallback-committees',
                     help='the SBE Committees bulk, consulted ONLY for ids the primary '
@@ -117,7 +137,7 @@ if __name__=='__main__':
     print('[enrich]',json.dumps(s,indent=2))
     if s['ie_from_fallback']:
         print('[enrich] NOTE: %d committee(s) resolved from the FALLBACK bulk, not the '
-              'curated TSV — add them to reference/ie-committee-names.tsv so their '
+              'curated TSV — add them to campaign-finance/elections/reference/ie-committee-names.tsv so their '
               'spelling is owned:' % len(s['ie_from_fallback']))
         for e in s['ie_from_fallback']:
             print('           %s  %r' % (e['sbe_committee_id'], e['name']))

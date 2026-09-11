@@ -266,7 +266,8 @@ transform_slice2.py       council-data.json
 ingest_ie.py              --council … --expenditures <seal>/expenditures_*.txt --receipts <seal>/receipts_*.txt
                           # re-applies the IE layer: it clears only its own prior IE rows and reassigns
                           # independent_expenditures; a direct re-ingest does NOT strip it (see above)
-enrich_committee_names.py --council …
+enrich_committee_names.py --council … --committees campaign-finance/elections/reference/ie-committee-names.tsv
+                          # the curated map of record (ENRICH-1); NEVER the SBE Committees bulk — that substitution is SBE-RERUN-1's live defect
 sync_overrides.py         --data-file council-data.json …   # clusters re-apply from the Sheet
 build_rollups.py          council-data.json      # rollups LAST — after overrides
 build_shards.py           council-data.json campaign-finance/shards

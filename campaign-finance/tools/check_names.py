@@ -1,7 +1,8 @@
 # check_names.py — SBE-RERUN-1 E. Presentation hygiene on the names WE own.
 #
 # WHAT THIS EXISTS TO CATCH. At SBE-RERUN-1 the refresh passed the SBE Committees bulk to
-# enrich_committee_names instead of the curated reference/ie-committee-names.tsv. The bulk
+# enrich_committee_names instead of the curated
+# campaign-finance/elections/reference/ie-committee-names.tsv. The bulk
 # spells one committee 'Illinois Farm Bureau  ACTIVATOR' — DOUBLE SPACE — and that shipped
 # to the deployed elections tool in 85f71c6. It was the only one of the 15 IE names that
 # moved, and NO GATE LINE ASSERTED COMMITTEE NAMES AT ALL. The only thing that caught it

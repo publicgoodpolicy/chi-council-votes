@@ -72,7 +72,7 @@ fi
 #   python3 "$INGEST/ingest_ie.py" --council "$DATA" \
 #       --expenditures /path/Expenditures.txt --receipts /path/Receipts.txt --out "$DATA"
 #   python3 "$INGEST/enrich_committee_names.py" --council "$DATA" \
-#       --committees /path/Committees.txt --out "$DATA"
+#       --committees "$REPO/campaign-finance/elections/reference/ie-committee-names.tsv" --out "$DATA"   # the curated map (ENRICH-1); NEVER the SBE Committees bulk
 
 # ---- 5. Derived layers — recomputed every build (idempotent, in place) ------
 say "Rebuild derived layers: parent_id/cycles -> committee registry -> overrides -> rollups -> shards"
