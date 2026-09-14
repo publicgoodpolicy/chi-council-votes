@@ -75,6 +75,7 @@ ROLES = {
     "campaign-finance/sheets-sync/sync_bios.py":      "pipeline-reader",
     "campaign-finance/sync_allvotes.py":              "pipeline-writer",
     "campaign-finance/ingest_sb_votes.py":            "pipeline-reader",
+    "campaign-finance/sheets-sync/a7_precheck.py":    "pipeline-reader",
     "campaign-finance/editor/write_overrides.py":     "editor-app",
     "campaign-finance/editor/serve.py":               "editor-app",
     "campaign-finance/editor/compose.py":             "no-sheet-access",

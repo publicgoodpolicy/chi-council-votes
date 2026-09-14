@@ -111,6 +111,48 @@ the moment a scope is drafted**; planner session state and memory indexes are no
 
 [Drafted fresh at HOUSEKEEPING-1 from handover rev AB rev 2 (`67fe9608…`, its custody note and error-ledger section). Offered and ratified by Ishan 2026-09-08. Numbered 2026-09-09 at HOUSEKEEPING-1.]
 
+### 127
+
+**127 (pointer class, kin to 126)** — ratified text drafted from a partial measurement of the lane's blast radius, twice: the deletion's description (the README's documented command also resolved to the file; P4 held) and the `[REF/PINS]` assertion (both edited scripts were §8-pinned; X2 held). Defense: **every path a lane touches is measured, repo-wide, for references and for pins before ratified text is drafted**; the gates are the backstop, not the measurement.
+
+[Byte-copied from the DATA-UPDATE-1 HALT (i) dispatch rev 1 (`f687f01d1747821286681707244adab7a44643c96911647ab684b866c2de7a68`, 17,451 B / 91 L), its line 61, span sha256 `3eb0c39966a2669a974aa1a741527cd832a1eab3d3fea227971ece8147480557` (the line's bytes, no trailing newline). The dispatch carries the candidate with the allocated number already substituted for "Candidate 24", so the leading `**127 …**` inside the copied text is the source's own and is carried because the copy is byte for byte; the entry's number is this heading's. Arose at ENRICH-1 (handover rev AD rev 1 `e3de00cf0b9696c40c7813f4a74b26ad1a77483cf6670cf240091a259bb68b31`, its error-ledger section, as candidate 24). Ratified by Ishan 2026-09-13 (relay ruling 4; HALT (i) R11). Numbered 2026-09-13 at DATA-UPDATE-1 HALT (i).]
+
+### 128
+
+**128 (planner-relay class, kin to 125)** — a derived package revision carried its predecessor's literal self-citation beside tokens rendering to its own identity; the executor held at W6 under PS-129(iii). Defense: **a ratified text's self-citation is rendered entirely from the carrier check — file name, sha, size — and carries no literal**; every derived revision is grepped for its predecessor's revision string before it is measured.
+
+[Byte-copied from the DATA-UPDATE-1 HALT (i) dispatch rev 1 (`f687f01d1747821286681707244adab7a44643c96911647ab684b866c2de7a68`, 17,451 B / 91 L), its line 63, span sha256 `a16b754b72accb3f7d21b66abbd8d095173601b0ad92b6959258c3c8096cacb6` (the line's bytes, no trailing newline). The leading `**128 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at ENRICH-1 (handover rev AD rev 1 `e3de00cf0b9696c40c7813f4a74b26ad1a77483cf6670cf240091a259bb68b31`, its error-ledger section, as candidate 25). Ratified by Ishan 2026-09-13 (relay ruling 4; HALT (i) R11). Numbered 2026-09-13 at DATA-UPDATE-1 HALT (i).]
+
+### 129
+
+**129 (PS-117 class)** — three stated counts in a ratified placement statement not measured by the issuing command (a line count from a mis-escaped expression; pre-image byte counts beside post-image shas); the shas were correct and the executor read the defects as manifest defects, not grounds to distrust the shas. Defense: **every count in ratified text is produced by the same command that produces the sha it sits beside**, never computed separately or copied from a prior state.
+
+[Byte-copied from the DATA-UPDATE-1 HALT (i) dispatch rev 1 (`f687f01d1747821286681707244adab7a44643c96911647ab684b866c2de7a68`, 17,451 B / 91 L), its line 65, span sha256 `16c8ba1ee1bfd8e8fcdcfdc339eb4a3fb70d9c189fae3c4a1ea28b8c72759f86` (the line's bytes, no trailing newline). The leading `**129 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at ENRICH-1 (handover rev AD rev 1 `e3de00cf0b9696c40c7813f4a74b26ad1a77483cf6670cf240091a259bb68b31`, its error-ledger section, as candidate 26). Ratified by Ishan 2026-09-13 (relay ruling 4; HALT (i) R11). Numbered 2026-09-13 at DATA-UPDATE-1 HALT (i).]
+
+### 130
+
+**130 (pointer class, kin to 127)** — a session-open relay stated `cand-tobon-ward-35` as a grep control expected ≥ 1 in the artifact, when the handover recorded `cand-daniel-tobon-ward-35` as the *rendered* slug — a display composition, not a stored token; the control could not fire, and the executor reported rather than reconciled (BR-0 §3.7). Defense: **a control token is taken from a measured artifact value, never from a rendered or display value.**
+
+[Byte-copied from the DATA-UPDATE-1 HALT (i) dispatch rev 1 (`f687f01d1747821286681707244adab7a44643c96911647ab684b866c2de7a68`, 17,451 B / 91 L), its line 67, span sha256 `1be0d4d5659955a63bd5289348f16ee9fb3089d7558a5d15a5a30538138b304a` (the line's bytes, no trailing newline). The leading `**130 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1's session-open relay (`ef73ffff247923cce6950f9ea028ee80427dda2d3144c55d02646a215e0b3ea3`, 91,146 B / 592 L, its §3.7 control); offered at the G0 dispatch rev 1 (`2ca9a8b51858e15ff79da68e3b02b1c6571b2a0bda735fca7c6fd1615351b222`) as R7's candidate 27. Ratified by Ishan 2026-09-13 (HALT (i) R11). Numbered 2026-09-13 at DATA-UPDATE-1 HALT (i).]
+
+### 131
+
+**131 (pointer class, kin to 127)** — a HALT dispatch authored a new Sheet-touching script and cited `check_sheet_scopes.py` by name for what it checks, without measuring how it discovers — a by-name `ROLES` map — so the staged tree reddened the gate at the HALT and the remedy was a fifth path the carrier did not authorize; the executor held. Defense: **for any new tracked file, every gate checker's discovery rule is read, or the gate is run on a staged draft, before the dispatch is drafted**; a checker cited in ratified text is a checker measured.
+
+[Byte-copied from the DATA-UPDATE-1 HALT (i) addendum A1 rev 1 (`48379d2d113f07cdcba646c193e3ba3c3f435f860cb28aadc5644a99a72f30fc`, 8,277 B / 65 L), its line 43, span sha256 `c8fcc4e657dc429845ad3d8224cea3a17f2afda1100046e8a67eddeaccbee3a3` (the line's bytes, no trailing newline). The leading `**131 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 HALT (i): the staged tree reddened the gate at `[SHEET/SCOPE]` and `[SHEET/SELF]`, reported in the HALT report (`123d84400a777da60b74981c1ea5269d24baf489049e72bdec70e4bf4a5b813c`, 66,149 B / 1,266 L). Offered as candidate 28 and ratified by Ishan 2026-09-13 (addendum A1, R14). Numbered 2026-09-13 at DATA-UPDATE-1 HALT (i) addendum A1.]
+
+### 132
+
+**132 (pointer class, kin to 131)** — an addendum remedied the one `check_sheet_scopes.py` rule that had fired and stated `fails=0` for the whole checker without reading rules 2–6 against the instrument's source; two rules that could not fire while the file was unclassified fired on classification (a `hashlib` `.update()` call read as a Sheet write verb beside the self-test's editorial tab names), and the executor held again. The defense of 131 was transcribed by that carrier and not applied by it. Defense: **a remedy to a checker failure is checked against the whole checker — every table it matches against, read against the file — before any green is asserted, not against the rule that fired.**
+
+[Byte-copied from the DATA-UPDATE-1 HALT (i) addendum A2 rev 1 (`012d5fa0c5feabcd20fca194b8c1287ec3d3f34e3d8c25ab3a7f3b1217e41991`, 10,203 B / 68 L), its line 42, span sha256 `142bc84dcf3b05a7043159737f90ec74b5b60d8a74fbd89ab0986a9d8c531754` (the line's bytes, no trailing newline). The leading `**132 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 HALT (i) addendum A1: the ROLES line discharged rule 1 and rules 4 and 5 then fired on the instrument, reported in the A1 report (`333cf3d3cccfdff2f0c3f3e8bdb44fabed5164643601141ae282337fe5b93d31`, 32,686 B / 579 L). Offered as candidate 29 and ratified by Ishan 2026-09-14 (addendum A2, R19). Numbered 2026-09-14 at DATA-UPDATE-1 HALT (i) addendum A2.]
+
+### 133
+
+**133 (PS-117 class, kin to 129)** — an addendum stated a dict's entry count ("seven") in ratified text, carried from a prior report's prose rather than from a command; the measurement said eight, and the addendum's own downstream expectation was consistent with eight. Defense: **every count in ratified text is produced by a command on the current state**; a count in a report's prose is a reading to re-take, not a value to carry.
+
+[Byte-copied from the DATA-UPDATE-1 HALT (i) addendum A2 rev 1 (`012d5fa0c5feabcd20fca194b8c1287ec3d3f34e3d8c25ab3a7f3b1217e41991`, 10,203 B / 68 L), its line 44, span sha256 `00531cb8dd29095651b7043deaa0b4ed7fc2e4026c8f589188c5eb908a6c6041` (the line's bytes, no trailing newline). The leading `**133 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 HALT (i) addendum A1, whose P4 stated seven ROLES entries against a measured eight; the miscount originated in the HALT report's prose (`123d84400a777da60b74981c1ea5269d24baf489049e72bdec70e4bf4a5b813c`, 66,149 B / 1,266 L) and the addendum carried it. Offered as candidate 30 and ratified by Ishan 2026-09-14 (addendum A2, R19). Numbered 2026-09-14 at DATA-UPDATE-1 HALT (i) addendum A2.]
+
 ## Dispositions without a number
 
 Recorded so the findings are not lost; none consumes a number.
@@ -132,4 +174,4 @@ Recorded so the findings are not lost; none consumes a number.
 | 22 | declined by Ishan 2026-09-08 | handover rev AB rev 2 `67fe9608825fc3a07c2ce4a18f0a9b5b420ab5e40b7acbd1fc7efa023707c646`, its error-ledger section — verify-after-read on the commit-B uploads; existing convention, disclosed, cured |
 | 23 | declined by Ishan 2026-09-08, as covered by entry 126 | handover rev AB rev 2 `67fe9608825fc3a07c2ce4a18f0a9b5b420ab5e40b7acbd1fc7efa023707c646` carries the errant phrase ("allocated at ratification"); the ledger's own conventions block rules allocation at transcription and wins; erratum closes at rev AC |
 
-Next free number: **127**.
+Next free number: **134**.
