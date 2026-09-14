@@ -27537,6 +27537,26 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-14556-02747",
+      "donor_id": "raja-for-illinois",
+      "committee_id": "ward-9",
+      "amount": 2000.0,
+      "date": "2026-08-11",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-14556-02748",
+      "donor_id": "accel-entertainment-gaming-llc",
+      "committee_id": "ward-9",
+      "amount": 10000.0,
+      "date": "2026-08-29",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-15622-00002",
       "donor_id": "solidarity-food",
       "committee_id": "ward-37",
@@ -43723,6 +43743,56 @@
       "date": "2026-07-29",
       "cycle": "2027",
       "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-15622-01620",
+      "donor_id": "pizer-howard-c",
+      "committee_id": "ward-37",
+      "amount": 1000.0,
+      "date": "2026-07-31",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-15622-01621",
+      "donor_id": "teamsters-volunteers-in-politics",
+      "committee_id": "ward-37",
+      "amount": 1000.0,
+      "date": "2026-08-05",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-15622-01622",
+      "donor_id": "hoffman-steve",
+      "committee_id": "ward-37",
+      "amount": 1000.0,
+      "date": "2026-08-03",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-15622-01623",
+      "donor_id": "liuna-chgo-laborers-district-council-pac",
+      "committee_id": "ward-37",
+      "amount": 10000.0,
+      "date": "2026-09-04",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-15622-01624",
+      "donor_id": "alexander-mac-a",
+      "committee_id": "ward-37",
+      "amount": 1000.0,
+      "date": "2026-09-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
       "source_filing": "A-1"
     },
     {
@@ -95655,6 +95725,176 @@
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-16892-05155",
+      "donor_id": "burns-william",
+      "committee_id": "ward-3",
+      "amount": 1000.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05156",
+      "donor_id": "the-prime-group-inc",
+      "committee_id": "ward-3",
+      "amount": 1500.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05157",
+      "donor_id": "norfolk-southern-corporation",
+      "committee_id": "ward-3",
+      "amount": 1500.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05158",
+      "donor_id": "local-134-pac",
+      "committee_id": "ward-3",
+      "amount": 5000.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05159",
+      "donor_id": "liuna-chicago-laborers-district-council",
+      "committee_id": "ward-3",
+      "amount": 5000.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05160",
+      "donor_id": "raja-for-illinois",
+      "committee_id": "ward-3",
+      "amount": 2500.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05161",
+      "donor_id": "taylor-nicholas",
+      "committee_id": "ward-3",
+      "amount": 1000.0,
+      "date": "2026-08-18",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05162",
+      "donor_id": "citywide-disposal-inc",
+      "committee_id": "ward-3",
+      "amount": 1000.0,
+      "date": "2026-08-24",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05163",
+      "donor_id": "karry-l-young-development-llc",
+      "committee_id": "ward-3",
+      "amount": 2000.0,
+      "date": "2026-08-24",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05164",
+      "donor_id": "unison-consulting-inc",
+      "committee_id": "ward-3",
+      "amount": 1500.0,
+      "date": "2026-08-24",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05165",
+      "donor_id": "reddivari-sainath",
+      "committee_id": "ward-3",
+      "amount": 1000.0,
+      "date": "2026-08-24",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05166",
+      "donor_id": "ml-management-llc",
+      "committee_id": "ward-3",
+      "amount": 1000.0,
+      "date": "2026-08-24",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05167",
+      "donor_id": "aristotle-international-inc",
+      "committee_id": "ward-3",
+      "amount": 1000.0,
+      "date": "2026-08-24",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05168",
+      "donor_id": "pmi-us-corporate-services",
+      "committee_id": "ward-3",
+      "amount": 1500.0,
+      "date": "2026-08-24",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05169",
+      "donor_id": "connie-pizza",
+      "committee_id": "ward-3",
+      "amount": 1000.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05170",
+      "donor_id": "sklyarova-natalia",
+      "committee_id": "ward-3",
+      "amount": 5000.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05171",
+      "donor_id": "goodman-scott",
+      "committee_id": "ward-3",
+      "amount": 1000.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
     },
     {
       "id": "c-19263-00002",
@@ -165110,6 +165350,106 @@
       "is_loan": true
     },
     {
+      "id": "c-19263-06918",
+      "donor_id": "chicago-association-of-realtors-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 1500.0,
+      "date": "2026-08-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19263-06919",
+      "donor_id": "fred-b-barbara-investments",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 1500.0,
+      "date": "2026-08-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19263-06920",
+      "donor_id": "mid-america-carpenters-regional-council-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 1000.0,
+      "date": "2026-08-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19263-06921",
+      "donor_id": "mwr-holdings-operating",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 14600.0,
+      "date": "2026-08-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19263-06922",
+      "donor_id": "peoples-gas-light-coke-c-o-wec-energy",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 1500.0,
+      "date": "2026-08-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19263-06923",
+      "donor_id": "sprinkler-fitters-local-281-u-a",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 1000.0,
+      "date": "2026-08-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19263-06924",
+      "donor_id": "us-national-title-service-llc",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 1500.0,
+      "date": "2026-08-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19263-06925",
+      "donor_id": "disney-worldwide-services-inc",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 66130.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19263-06926",
+      "donor_id": "jp-morgan-chase-co-pac",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 1000.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19263-06927",
+      "donor_id": "metropolis-investment-holdings-inc",
+      "committee_id": "ward-42-brendan-reilly",
+      "amount": 7300.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-19830-00002",
       "donor_id": "gahagan-robert-leafy",
       "committee_id": "ward-38",
@@ -182300,6 +182640,26 @@
       "contribution_type": "Loan Received",
       "source_filing": "Quarterly",
       "is_loan": true
+    },
+    {
+      "id": "c-19830-01676",
+      "donor_id": "brad-stephens-for-state-representative",
+      "committee_id": "ward-38",
+      "amount": 5000.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19830-01677",
+      "donor_id": "liuna-chicago-laborers-district-council-pac",
+      "committee_id": "ward-38",
+      "amount": 2500.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
     },
     {
       "id": "c-19898-00002",
@@ -208635,6 +208995,206 @@
       "source_filing": "Quarterly"
     },
     {
+      "id": "c-19898-02618",
+      "donor_id": "grzesinski-bill",
+      "committee_id": "ward-32",
+      "amount": 1000.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02619",
+      "donor_id": "lawrence-tanya",
+      "committee_id": "ward-32",
+      "amount": 2500.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02620",
+      "donor_id": "schwarzbach-peter",
+      "committee_id": "ward-32",
+      "amount": 1000.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02621",
+      "donor_id": "kernan-ian",
+      "committee_id": "ward-32",
+      "amount": 2500.0,
+      "date": "2026-08-12",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02622",
+      "donor_id": "denigris-rosanne-michael",
+      "committee_id": "ward-32",
+      "amount": 1000.0,
+      "date": "2026-08-12",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02623",
+      "donor_id": "baker-development-corporation",
+      "committee_id": "ward-32",
+      "amount": 5000.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02624",
+      "donor_id": "remedy",
+      "committee_id": "ward-32",
+      "amount": 1000.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02625",
+      "donor_id": "aristotle-international-inc",
+      "committee_id": "ward-32",
+      "amount": 1000.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02626",
+      "donor_id": "cozen-o-connor",
+      "committee_id": "ward-32",
+      "amount": 1000.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02627",
+      "donor_id": "tjd-member-llc",
+      "committee_id": "ward-32",
+      "amount": 1000.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02628",
+      "donor_id": "chicago-land-operators-joint-labor-management-pac",
+      "committee_id": "ward-32",
+      "amount": 2500.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02629",
+      "donor_id": "neighborhood-building-owners-alliance",
+      "committee_id": "ward-32",
+      "amount": 1000.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02630",
+      "donor_id": "peoples-gas-light-coke",
+      "committee_id": "ward-32",
+      "amount": 1000.0,
+      "date": "2026-08-15",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02631",
+      "donor_id": "belgravia-group-ltd",
+      "committee_id": "ward-32",
+      "amount": 1000.0,
+      "date": "2026-08-15",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02632",
+      "donor_id": "harris-theodore",
+      "committee_id": "ward-32",
+      "amount": 1000.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02633",
+      "donor_id": "perritt-jr-henry",
+      "committee_id": "ward-32",
+      "amount": 1000.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02634",
+      "donor_id": "elden-gary",
+      "committee_id": "ward-32",
+      "amount": 1000.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02635",
+      "donor_id": "olson-bob",
+      "committee_id": "ward-32",
+      "amount": 1000.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02636",
+      "donor_id": "descoto-rodrigo",
+      "committee_id": "ward-32",
+      "amount": 2500.0,
+      "date": "2026-08-25",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-19898-02637",
+      "donor_id": "rooney-john",
+      "committee_id": "ward-32",
+      "amount": 1500.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-20016-00002",
       "donor_id": "falls-james",
       "committee_id": "ward-8",
@@ -221230,156 +221790,166 @@
     },
     {
       "id": "c-20016-01260",
-      "donor_id": "lightfoot-lori",
+      "donor_id": "mauldin-louis",
       "committee_id": "ward-8",
-      "amount": 6900.0,
-      "date": "2024-05-09",
+      "amount": 1000.0,
+      "date": "2026-07-21",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
+      "source_filing": "A-1"
     },
     {
       "id": "c-20016-01261",
-      "donor_id": "new-life-covenant-church",
+      "donor_id": "ibew-local-134-state-municipal-pac",
       "committee_id": "ward-8",
-      "amount": 5000.0,
-      "date": "2024-05-09",
+      "amount": 2500.0,
+      "date": "2026-07-21",
       "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
     },
     {
       "id": "c-20016-01262",
-      "donor_id": "spm-properties-development-llc",
+      "donor_id": "king-robert-c",
       "committee_id": "ward-8",
-      "amount": 5000.0,
-      "date": "2024-05-09",
+      "amount": 1000.0,
+      "date": "2026-08-03",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
+      "source_filing": "A-1"
     },
     {
       "id": "c-20016-01263",
-      "donor_id": "ironworkers-district-council-of-chicago-vicinity-pac",
+      "donor_id": "neal-langdon",
       "committee_id": "ward-8",
-      "amount": 2500.0,
-      "date": "2024-05-09",
+      "amount": 1000.0,
+      "date": "2026-08-03",
       "cycle": "2027",
-      "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
     },
     {
       "id": "c-20016-01264",
-      "donor_id": "brown-momen-inc",
+      "donor_id": "chicago-journeymen-plumbers",
       "committee_id": "ward-8",
       "amount": 2500.0,
-      "date": "2024-05-09",
+      "date": "2026-08-07",
       "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
     },
     {
       "id": "c-20016-01265",
-      "donor_id": "seven-w-division-inc",
+      "donor_id": "scarabaeus-llc",
       "committee_id": "ward-8",
       "amount": 1500.0,
-      "date": "2024-05-09",
+      "date": "2026-08-07",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
+      "source_filing": "A-1"
     },
     {
       "id": "c-20016-01266",
-      "donor_id": "aberdeen-construction-services-inc",
+      "donor_id": "johnson-lee-ltd",
       "committee_id": "ward-8",
-      "amount": 1500.0,
-      "date": "2024-05-09",
+      "amount": 1000.0,
+      "date": "2026-08-07",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
+      "source_filing": "A-1"
     },
     {
       "id": "c-20016-01267",
-      "donor_id": "f-h-paschen-s-n-neilsen-assocs-llc",
+      "donor_id": "shawn-brown-enterprises-inc",
       "committee_id": "ward-8",
-      "amount": 1500.0,
-      "date": "2024-05-09",
+      "amount": 2500.0,
+      "date": "2026-08-07",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
+      "source_filing": "A-1"
     },
     {
       "id": "c-20016-01268",
-      "donor_id": "weis-builders-inc",
+      "donor_id": "reemys-food-market-tobacco",
       "committee_id": "ward-8",
-      "amount": 1500.0,
-      "date": "2024-05-09",
+      "amount": 1000.0,
+      "date": "2026-08-07",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
+      "source_filing": "A-1"
     },
     {
       "id": "c-20016-01269",
-      "donor_id": "ultra-built-development-llc",
+      "donor_id": "architectural-ornamental-iron-workers-local-63-ipal-fund",
       "committee_id": "ward-8",
-      "amount": 1250.0,
-      "date": "2024-05-09",
+      "amount": 2500.0,
+      "date": "2026-08-07",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
+      "source_filing": "A-1"
     },
     {
       "id": "c-20016-01270",
-      "donor_id": "mohsin-ahmed",
+      "donor_id": "chicago-association-of-realtors-pac",
       "committee_id": "ward-8",
-      "amount": 1200.0,
-      "date": "2024-05-09",
+      "amount": 1500.0,
+      "date": "2026-08-07",
       "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
     },
     {
       "id": "c-20016-01271",
-      "donor_id": "rose-beauty-supply",
+      "donor_id": "kasper-holmes-dring-ltd",
       "committee_id": "ward-8",
       "amount": 1000.0,
-      "date": "2024-05-09",
+      "date": "2026-08-07",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
+      "source_filing": "A-1"
     },
     {
       "id": "c-20016-01272",
-      "donor_id": "ashlaur-construction-co-inc",
+      "donor_id": "aristotle-international-inc-fbo-amazon-com-services-llc",
       "committee_id": "ward-8",
       "amount": 1000.0,
-      "date": "2024-05-09",
+      "date": "2026-08-07",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
+      "source_filing": "A-1"
     },
     {
       "id": "c-20016-01273",
-      "donor_id": "ashlaur-construction-joint-venture",
+      "donor_id": "daley-risk-llc",
       "committee_id": "ward-8",
-      "amount": 1000.0,
-      "date": "2024-05-09",
+      "amount": 1500.0,
+      "date": "2026-08-07",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
+      "source_filing": "A-1"
     },
     {
       "id": "c-20016-01274",
-      "donor_id": "parlor-management-group-llc",
+      "donor_id": "best-diamond-plastics-llc",
       "committee_id": "ward-8",
-      "amount": 1000.0,
-      "date": "2024-05-09",
+      "amount": 2500.0,
+      "date": "2026-08-07",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
+      "source_filing": "A-1"
     },
     {
       "id": "c-20016-01275",
+      "donor_id": "cozen-o-connor",
+      "committee_id": "ward-8",
+      "amount": 1000.0,
+      "date": "2026-08-07",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-20016-01276",
       "donor_id": "the-rink-fitness-factory",
       "committee_id": "ward-8",
       "amount": 1000.0,
@@ -221389,8 +221959,28 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01276",
-      "donor_id": "thomas-timothy",
+      "id": "c-20016-01277",
+      "donor_id": "ultra-built-development-llc",
+      "committee_id": "ward-8",
+      "amount": 1250.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01278",
+      "donor_id": "berglund-construction",
+      "committee_id": "ward-8",
+      "amount": 250.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01279",
+      "donor_id": "rose-beauty-supply",
       "committee_id": "ward-8",
       "amount": 1000.0,
       "date": "2024-05-09",
@@ -221399,47 +221989,7 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01277",
-      "donor_id": "atm-express",
-      "committee_id": "ward-8",
-      "amount": 500.0,
-      "date": "2024-05-09",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01278",
-      "donor_id": "c-g-construction-supply-company",
-      "committee_id": "ward-8",
-      "amount": 500.0,
-      "date": "2024-05-09",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01279",
-      "donor_id": "mcshane-ashlaur-joint-venture",
-      "committee_id": "ward-8",
-      "amount": 500.0,
-      "date": "2024-05-09",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
       "id": "c-20016-01280",
-      "donor_id": "7742-48-stony-island-llc",
-      "committee_id": "ward-8",
-      "amount": 500.0,
-      "date": "2024-05-09",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01281",
       "donor_id": "illinois-restaurateur-s-pac",
       "committee_id": "ward-8",
       "amount": 500.0,
@@ -221449,20 +221999,30 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01282",
-      "donor_id": "friends-of-samantha-nugent",
+      "id": "c-20016-01281",
+      "donor_id": "sacks-cari",
       "committee_id": "ward-8",
-      "amount": 500.0,
-      "date": "2024-05-09",
+      "amount": 6900.0,
+      "date": "2024-04-26",
       "cycle": "2027",
-      "contribution_type": "Transfer In",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01282",
+      "donor_id": "sacks-michael",
+      "committee_id": "ward-8",
+      "amount": 6900.0,
+      "date": "2024-04-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
       "source_filing": "Quarterly"
     },
     {
       "id": "c-20016-01283",
-      "donor_id": "mobile-on-cottage-inc",
+      "donor_id": "brown-momen-inc",
       "committee_id": "ward-8",
-      "amount": 500.0,
+      "amount": 2500.0,
       "date": "2024-05-09",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
@@ -221470,19 +222030,19 @@
     },
     {
       "id": "c-20016-01284",
-      "donor_id": "mid-city-food-fuel-inc",
+      "donor_id": "london-theodore",
       "committee_id": "ward-8",
-      "amount": 300.0,
-      "date": "2024-05-09",
+      "amount": 1000.0,
+      "date": "2024-06-11",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "Quarterly"
     },
     {
       "id": "c-20016-01285",
-      "donor_id": "fulton-food-fuel-inc",
+      "donor_id": "ashlaur-construction-co-inc",
       "committee_id": "ward-8",
-      "amount": 300.0,
+      "amount": 1000.0,
       "date": "2024-05-09",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
@@ -221490,9 +222050,9 @@
     },
     {
       "id": "c-20016-01286",
-      "donor_id": "stroger-todd",
+      "donor_id": "new-life-covenant-church",
       "committee_id": "ward-8",
-      "amount": 250.0,
+      "amount": 5000.0,
       "date": "2024-05-09",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
@@ -221500,9 +222060,9 @@
     },
     {
       "id": "c-20016-01287",
-      "donor_id": "berglund-construction",
+      "donor_id": "c-g-construction-supply-company",
       "committee_id": "ward-8",
-      "amount": 250.0,
+      "amount": 500.0,
       "date": "2024-05-09",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
@@ -221520,6 +222080,186 @@
     },
     {
       "id": "c-20016-01289",
+      "donor_id": "lightfoot-lori",
+      "committee_id": "ward-8",
+      "amount": 6900.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01290",
+      "donor_id": "spm-properties-development-llc",
+      "committee_id": "ward-8",
+      "amount": 5000.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01291",
+      "donor_id": "ironworkers-district-council-of-chicago-vicinity-pac",
+      "committee_id": "ward-8",
+      "amount": 2500.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01292",
+      "donor_id": "seven-w-division-inc",
+      "committee_id": "ward-8",
+      "amount": 1500.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01293",
+      "donor_id": "aberdeen-construction-services-inc",
+      "committee_id": "ward-8",
+      "amount": 1500.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01294",
+      "donor_id": "f-h-paschen-s-n-neilsen-assocs-llc",
+      "committee_id": "ward-8",
+      "amount": 1500.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01295",
+      "donor_id": "weis-builders-inc",
+      "committee_id": "ward-8",
+      "amount": 1500.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01296",
+      "donor_id": "mohsin-ahmed",
+      "committee_id": "ward-8",
+      "amount": 1200.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01297",
+      "donor_id": "ashlaur-construction-joint-venture",
+      "committee_id": "ward-8",
+      "amount": 1000.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01298",
+      "donor_id": "parlor-management-group-llc",
+      "committee_id": "ward-8",
+      "amount": 1000.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01299",
+      "donor_id": "atm-express",
+      "committee_id": "ward-8",
+      "amount": 500.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01300",
+      "donor_id": "mcshane-ashlaur-joint-venture",
+      "committee_id": "ward-8",
+      "amount": 500.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01301",
+      "donor_id": "7742-48-stony-island-llc",
+      "committee_id": "ward-8",
+      "amount": 500.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01302",
+      "donor_id": "friends-of-samantha-nugent",
+      "committee_id": "ward-8",
+      "amount": 500.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01303",
+      "donor_id": "mobile-on-cottage-inc",
+      "committee_id": "ward-8",
+      "amount": 500.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01304",
+      "donor_id": "mid-city-food-fuel-inc",
+      "committee_id": "ward-8",
+      "amount": 300.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01305",
+      "donor_id": "fulton-food-fuel-inc",
+      "committee_id": "ward-8",
+      "amount": 300.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01306",
+      "donor_id": "stroger-todd",
+      "committee_id": "ward-8",
+      "amount": 250.0,
+      "date": "2024-05-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01307",
       "donor_id": "leaders-for-tomorrow",
       "committee_id": "ward-8",
       "amount": 2500.0,
@@ -221529,37 +222269,7 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01290",
-      "donor_id": "london-theodore",
-      "committee_id": "ward-8",
-      "amount": 1000.0,
-      "date": "2024-06-11",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01291",
-      "donor_id": "kasper-nottage-pc",
-      "committee_id": "ward-8",
-      "amount": 1000.0,
-      "date": "2024-06-11",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01292",
-      "donor_id": "porter-joseph",
-      "committee_id": "ward-8",
-      "amount": 500.0,
-      "date": "2024-06-11",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01293",
+      "id": "c-20016-01308",
       "donor_id": "james-steve",
       "committee_id": "ward-8",
       "amount": 250.0,
@@ -221569,77 +222279,37 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01294",
-      "donor_id": "sacks-michael",
-      "committee_id": "ward-8",
-      "amount": 6900.0,
-      "date": "2024-04-26",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01295",
-      "donor_id": "sacks-cari",
-      "committee_id": "ward-8",
-      "amount": 6900.0,
-      "date": "2024-04-26",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01296",
-      "donor_id": "degeratto-phil",
-      "committee_id": "ward-8",
-      "amount": 500.0,
-      "date": "2024-07-05",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01297",
-      "donor_id": "alexander-lane",
-      "committee_id": "ward-8",
-      "amount": 500.0,
-      "date": "2024-07-05",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01298",
-      "donor_id": "skender-corp",
+      "id": "c-20016-01309",
+      "donor_id": "kasper-nottage-pc",
       "committee_id": "ward-8",
       "amount": 1000.0,
-      "date": "2024-07-05",
+      "date": "2024-06-11",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01299",
-      "donor_id": "steadman-gregory",
+      "id": "c-20016-01310",
+      "donor_id": "porter-joseph",
       "committee_id": "ward-8",
-      "amount": 250.0,
-      "date": "2024-07-05",
+      "amount": 500.0,
+      "date": "2024-06-11",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01300",
-      "donor_id": "gattuso-thomas",
+      "id": "c-20016-01311",
+      "donor_id": "thomas-timothy",
       "committee_id": "ward-8",
-      "amount": 250.0,
-      "date": "2024-07-05",
+      "amount": 1000.0,
+      "date": "2024-05-09",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01301",
+      "id": "c-20016-01312",
       "donor_id": "daley-john",
       "committee_id": "ward-8",
       "amount": 1500.0,
@@ -221649,18 +222319,8 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01302",
-      "donor_id": "mraibie-hanna",
-      "committee_id": "ward-8",
-      "amount": 2500.0,
-      "date": "2024-07-05",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01303",
-      "donor_id": "minaghan-mary-kay",
+      "id": "c-20016-01313",
+      "donor_id": "degeratto-phil",
       "committee_id": "ward-8",
       "amount": 500.0,
       "date": "2024-07-05",
@@ -221669,87 +222329,7 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01304",
-      "donor_id": "brooks-tiffany",
-      "committee_id": "ward-8",
-      "amount": 250.0,
-      "date": "2024-07-05",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01305",
-      "donor_id": "tadros-alex",
-      "committee_id": "ward-8",
-      "amount": 500.0,
-      "date": "2024-07-05",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01306",
-      "donor_id": "atwater-apartments",
-      "committee_id": "ward-8",
-      "amount": 500.0,
-      "date": "2024-07-05",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01307",
-      "donor_id": "lasky-jim",
-      "committee_id": "ward-8",
-      "amount": 1000.0,
-      "date": "2024-07-05",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01308",
-      "donor_id": "morris-jonathan",
-      "committee_id": "ward-8",
-      "amount": 500.0,
-      "date": "2024-07-05",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01309",
-      "donor_id": "payne-michael",
-      "committee_id": "ward-8",
-      "amount": 250.0,
-      "date": "2024-07-05",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01310",
-      "donor_id": "druss-lisa",
-      "committee_id": "ward-8",
-      "amount": 250.0,
-      "date": "2024-07-05",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01311",
-      "donor_id": "majed-youssef",
-      "committee_id": "ward-8",
-      "amount": 2500.0,
-      "date": "2024-07-05",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01312",
+      "id": "c-20016-01314",
       "donor_id": "ehimwenman-nosa",
       "committee_id": "ward-8",
       "amount": 500.0,
@@ -221759,7 +222339,7 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01313",
+      "id": "c-20016-01315",
       "donor_id": "el-taco-express",
       "committee_id": "ward-8",
       "amount": 400.0,
@@ -221769,7 +222349,157 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01314",
+      "id": "c-20016-01316",
+      "donor_id": "minaghan-mary-kay",
+      "committee_id": "ward-8",
+      "amount": 500.0,
+      "date": "2024-07-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01317",
+      "donor_id": "brooks-tiffany",
+      "committee_id": "ward-8",
+      "amount": 250.0,
+      "date": "2024-07-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01318",
+      "donor_id": "tadros-alex",
+      "committee_id": "ward-8",
+      "amount": 500.0,
+      "date": "2024-07-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01319",
+      "donor_id": "atwater-apartments",
+      "committee_id": "ward-8",
+      "amount": 500.0,
+      "date": "2024-07-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01320",
+      "donor_id": "lasky-jim",
+      "committee_id": "ward-8",
+      "amount": 1000.0,
+      "date": "2024-07-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01321",
+      "donor_id": "morris-jonathan",
+      "committee_id": "ward-8",
+      "amount": 500.0,
+      "date": "2024-07-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01322",
+      "donor_id": "jackson-jackie",
+      "committee_id": "ward-8",
+      "amount": 500.0,
+      "date": "2024-07-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01323",
+      "donor_id": "payne-michael",
+      "committee_id": "ward-8",
+      "amount": 250.0,
+      "date": "2024-07-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01324",
+      "donor_id": "druss-lisa",
+      "committee_id": "ward-8",
+      "amount": 250.0,
+      "date": "2024-07-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01325",
+      "donor_id": "majed-youssef",
+      "committee_id": "ward-8",
+      "amount": 2500.0,
+      "date": "2024-07-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01326",
+      "donor_id": "alexander-lane",
+      "committee_id": "ward-8",
+      "amount": 500.0,
+      "date": "2024-07-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01327",
+      "donor_id": "skender-corp",
+      "committee_id": "ward-8",
+      "amount": 1000.0,
+      "date": "2024-07-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01328",
+      "donor_id": "steadman-gregory",
+      "committee_id": "ward-8",
+      "amount": 250.0,
+      "date": "2024-07-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01329",
+      "donor_id": "gattuso-thomas",
+      "committee_id": "ward-8",
+      "amount": 250.0,
+      "date": "2024-07-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01330",
+      "donor_id": "mraibie-hanna",
+      "committee_id": "ward-8",
+      "amount": 2500.0,
+      "date": "2024-07-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01331",
       "donor_id": "we-lit-smoke-shop",
       "committee_id": "ward-8",
       "amount": 500.0,
@@ -221779,7 +222509,7 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01315",
+      "id": "c-20016-01332",
       "donor_id": "grubhub-inc",
       "committee_id": "ward-8",
       "amount": 1000.0,
@@ -221789,7 +222519,7 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01316",
+      "id": "c-20016-01333",
       "donor_id": "building-owners-and-managers-association-of-chicago-pac",
       "committee_id": "ward-8",
       "amount": 1000.0,
@@ -221799,7 +222529,7 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01317",
+      "id": "c-20016-01334",
       "donor_id": "amazon-com-services-llc",
       "committee_id": "ward-8",
       "amount": 1000.0,
@@ -221809,127 +222539,7 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01318",
-      "donor_id": "chicago-association-of-realtors-pac",
-      "committee_id": "ward-8",
-      "amount": 1000.0,
-      "date": "2025-07-11",
-      "cycle": "2027",
-      "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01319",
-      "donor_id": "carradine-zollie",
-      "committee_id": "ward-8",
-      "amount": 5000.0,
-      "date": "2025-07-30",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01320",
-      "donor_id": "chicago-land-operators-joint-labor-management-pac",
-      "committee_id": "ward-8",
-      "amount": 2500.0,
-      "date": "2025-07-30",
-      "cycle": "2027",
-      "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01321",
-      "donor_id": "johnson-lee-ltd",
-      "committee_id": "ward-8",
-      "amount": 2500.0,
-      "date": "2025-07-30",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01322",
-      "donor_id": "jenkins-margaret",
-      "committee_id": "ward-8",
-      "amount": 1500.0,
-      "date": "2025-07-30",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01323",
-      "donor_id": "smokey-s-tobacco-shop-inc",
-      "committee_id": "ward-8",
-      "amount": 1000.0,
-      "date": "2025-07-30",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01324",
-      "donor_id": "brown-rami",
-      "committee_id": "ward-8",
-      "amount": 1000.0,
-      "date": "2025-07-30",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01325",
-      "donor_id": "reemys-food-market-tobacco",
-      "committee_id": "ward-8",
-      "amount": 1000.0,
-      "date": "2025-07-30",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01326",
-      "donor_id": "the-rink-fitness-factory",
-      "committee_id": "ward-8",
-      "amount": 1000.0,
-      "date": "2025-07-30",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01327",
-      "donor_id": "gas-plus-corporation",
-      "committee_id": "ward-8",
-      "amount": 1000.0,
-      "date": "2025-07-30",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01328",
-      "donor_id": "shawn-brown-enterprises-inc",
-      "committee_id": "ward-8",
-      "amount": 1000.0,
-      "date": "2025-07-30",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01329",
-      "donor_id": "j-t-barrier-llc",
-      "committee_id": "ward-8",
-      "amount": 1000.0,
-      "date": "2025-07-30",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01330",
+      "id": "c-20016-01335",
       "donor_id": "project-org-design-studio",
       "committee_id": "ward-8",
       "amount": 1000.0,
@@ -221939,17 +222549,97 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01331",
-      "donor_id": "chicago-association-of-realtors-pac",
+      "id": "c-20016-01336",
+      "donor_id": "the-rink-fitness-factory",
       "committee_id": "ward-8",
       "amount": 1000.0,
-      "date": "2025-09-10",
+      "date": "2025-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01337",
+      "donor_id": "chicago-land-operators-joint-labor-management-pac",
+      "committee_id": "ward-8",
+      "amount": 2500.0,
+      "date": "2025-07-30",
       "cycle": "2027",
       "contribution_type": "Transfer In",
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01332",
+      "id": "c-20016-01338",
+      "donor_id": "johnson-lee-ltd",
+      "committee_id": "ward-8",
+      "amount": 2500.0,
+      "date": "2025-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01339",
+      "donor_id": "shawn-brown-enterprises-inc",
+      "committee_id": "ward-8",
+      "amount": 1000.0,
+      "date": "2025-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01340",
+      "donor_id": "carradine-zollie",
+      "committee_id": "ward-8",
+      "amount": 5000.0,
+      "date": "2025-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01341",
+      "donor_id": "jenkins-margaret",
+      "committee_id": "ward-8",
+      "amount": 1500.0,
+      "date": "2025-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01342",
+      "donor_id": "smokey-s-tobacco-shop-inc",
+      "committee_id": "ward-8",
+      "amount": 1000.0,
+      "date": "2025-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01343",
+      "donor_id": "brown-rami",
+      "committee_id": "ward-8",
+      "amount": 1000.0,
+      "date": "2025-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01344",
+      "donor_id": "reemys-food-market-tobacco",
+      "committee_id": "ward-8",
+      "amount": 1000.0,
+      "date": "2025-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01345",
       "donor_id": "architectural-ornamental-iron-workers-local-63-ipal-fund",
       "committee_id": "ward-8",
       "amount": 2500.0,
@@ -221959,7 +222649,7 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01333",
+      "id": "c-20016-01346",
       "donor_id": "boyson-stanley",
       "committee_id": "ward-8",
       "amount": 500.0,
@@ -221969,17 +222659,47 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01334",
-      "donor_id": "sacks-michael",
+      "id": "c-20016-01347",
+      "donor_id": "gas-plus-corporation",
       "committee_id": "ward-8",
-      "amount": 400.0,
-      "date": "2025-10-03",
+      "amount": 1000.0,
+      "date": "2025-07-30",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01335",
+      "id": "c-20016-01348",
+      "donor_id": "chicago-association-of-realtors-pac",
+      "committee_id": "ward-8",
+      "amount": 1000.0,
+      "date": "2025-07-11",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01349",
+      "donor_id": "chicago-association-of-realtors-pac",
+      "committee_id": "ward-8",
+      "amount": 1000.0,
+      "date": "2025-09-10",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01350",
+      "donor_id": "j-t-barrier-llc",
+      "committee_id": "ward-8",
+      "amount": 1000.0,
+      "date": "2025-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01351",
       "donor_id": "sacks-cari",
       "committee_id": "ward-8",
       "amount": 400.0,
@@ -221989,27 +222709,17 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01336",
-      "donor_id": "liuna-chicago-laborers-district-council-pac",
+      "id": "c-20016-01352",
+      "donor_id": "sacks-michael",
       "committee_id": "ward-8",
-      "amount": 5000.0,
+      "amount": 400.0,
       "date": "2025-10-03",
       "cycle": "2027",
-      "contribution_type": "Transfer In",
+      "contribution_type": "Individual Contribution",
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01337",
-      "donor_id": "chicago-association-of-realtors-pac",
-      "committee_id": "ward-8",
-      "amount": 1500.0,
-      "date": "2025-10-03",
-      "cycle": "2027",
-      "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-20016-01338",
+      "id": "c-20016-01353",
       "donor_id": "save-our-local-businesses-illinois-pac",
       "committee_id": "ward-8",
       "amount": 1000.0,
@@ -222019,7 +222729,27 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01339",
+      "id": "c-20016-01354",
+      "donor_id": "chicago-association-of-realtors-pac",
+      "committee_id": "ward-8",
+      "amount": 1500.0,
+      "date": "2025-10-03",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01355",
+      "donor_id": "liuna-chicago-laborers-district-council-pac",
+      "committee_id": "ward-8",
+      "amount": 5000.0,
+      "date": "2025-10-03",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-20016-01356",
       "donor_id": "building-owners-and-managers-association-of-chicago-pac",
       "committee_id": "ward-8",
       "amount": 1000.0,
@@ -222029,21 +222759,131 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-20016-01340",
-      "donor_id": "mauldin-louis",
+      "id": "c-20016-01357",
+      "donor_id": "mappa-philip",
       "committee_id": "ward-8",
-      "amount": 1000.0,
-      "date": "2026-07-21",
+      "amount": 7300.0,
+      "date": "2026-08-21",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "A-1"
     },
     {
-      "id": "c-20016-01341",
-      "donor_id": "ibew-local-134-state-municipal-pac",
+      "id": "c-20016-01358",
+      "donor_id": "lukose-steev",
       "committee_id": "ward-8",
-      "amount": 2500.0,
-      "date": "2026-07-21",
+      "amount": 1500.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-20016-01359",
+      "donor_id": "hindo-nader",
+      "committee_id": "ward-8",
+      "amount": 1500.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-20016-01360",
+      "donor_id": "london-theodore",
+      "committee_id": "ward-8",
+      "amount": 5000.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-20016-01361",
+      "donor_id": "mckenzie-tess",
+      "committee_id": "ward-8",
+      "amount": 1500.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-20016-01362",
+      "donor_id": "raines-thomas",
+      "committee_id": "ward-8",
+      "amount": 1500.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-20016-01363",
+      "donor_id": "hurmeydan-mert",
+      "committee_id": "ward-8",
+      "amount": 1500.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-20016-01364",
+      "donor_id": "auris-presents",
+      "committee_id": "ward-8",
+      "amount": 1500.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-20016-01365",
+      "donor_id": "burns-will",
+      "committee_id": "ward-8",
+      "amount": 1000.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-20016-01366",
+      "donor_id": "thomas-timothy",
+      "committee_id": "ward-8",
+      "amount": 1000.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-20016-01367",
+      "donor_id": "alonso-daniel",
+      "committee_id": "ward-8",
+      "amount": 1500.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-20016-01368",
+      "donor_id": "illinois-restaurateur-s-pac",
+      "committee_id": "ward-8",
+      "amount": 1500.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-20016-01369",
+      "donor_id": "liuna-chicago-laborers-district-council-pac",
+      "committee_id": "ward-8",
+      "amount": 10000.0,
+      "date": "2026-08-21",
       "cycle": "2027",
       "contribution_type": "Transfer In",
       "source_filing": "A-1"
@@ -284581,6 +285421,66 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-22982-02119",
+      "donor_id": "silverstein-karyn",
+      "committee_id": "ward-50",
+      "amount": 5000.0,
+      "date": "2026-08-24",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-22982-02120",
+      "donor_id": "peltz-jason",
+      "committee_id": "ward-50",
+      "amount": 1000.0,
+      "date": "2026-08-24",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-22982-02121",
+      "donor_id": "mid-america-carpenters-regional-council-pac",
+      "committee_id": "ward-50",
+      "amount": 1000.0,
+      "date": "2026-08-31",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-22982-02122",
+      "donor_id": "roofers-waterproofers-local-11-pac",
+      "committee_id": "ward-50",
+      "amount": 1000.0,
+      "date": "2026-08-31",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-22982-02123",
+      "donor_id": "good-susan",
+      "committee_id": "ward-50",
+      "amount": 1000.0,
+      "date": "2026-08-31",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-22982-02124",
+      "donor_id": "greenbaum-steven",
+      "committee_id": "ward-50",
+      "amount": 2500.0,
+      "date": "2026-09-08",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-23079-00002",
       "donor_id": "lona-lucille",
       "committee_id": "ward-15",
@@ -302910,6 +303810,16 @@
       "committee_id": "ward-15",
       "amount": 1000.0,
       "date": "2026-07-27",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-23079-01815",
+      "donor_id": "fraternal-order-of-police-chicago-lodge-7",
+      "committee_id": "ward-15",
+      "amount": 3500.0,
+      "date": "2026-08-04",
       "cycle": "2027",
       "contribution_type": "Transfer In",
       "source_filing": "A-1"
@@ -321724,6 +322634,86 @@
       "source_filing": "Quarterly"
     },
     {
+      "id": "c-23112-01879",
+      "donor_id": "fidelity",
+      "committee_id": "ward-28",
+      "amount": 257000.0,
+      "date": "2026-08-11",
+      "cycle": "2027",
+      "contribution_type": "Other Receipt",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-23112-01880",
+      "donor_id": "fidelity",
+      "committee_id": "ward-28",
+      "amount": 39972.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Other Receipt",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-23112-01881",
+      "donor_id": "sanders-freddie-l",
+      "committee_id": "ward-28",
+      "amount": 1500.0,
+      "date": "2026-08-14",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-23112-01882",
+      "donor_id": "schain-banks-kenny-schwartz",
+      "committee_id": "ward-28",
+      "amount": 1500.0,
+      "date": "2026-08-14",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-23112-01883",
+      "donor_id": "kasper-nottage",
+      "committee_id": "ward-28",
+      "amount": 1000.0,
+      "date": "2026-08-14",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-23112-01884",
+      "donor_id": "mid-america-carpenters-reginal-council-pac",
+      "committee_id": "ward-28",
+      "amount": 2000.0,
+      "date": "2026-08-14",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-23112-01885",
+      "donor_id": "american-airlines-pac",
+      "committee_id": "ward-28",
+      "amount": 1500.0,
+      "date": "2026-08-14",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-23112-01886",
+      "donor_id": "southern-glazers-wine-and-spirits-llc",
+      "committee_id": "ward-28",
+      "amount": 1000.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-23127-00002",
       "donor_id": "wallace-marion",
       "committee_id": "ward-17",
@@ -330412,6 +331402,56 @@
       "committee_id": "ward-17",
       "amount": 1500.0,
       "date": "2026-07-28",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-23127-00869",
+      "donor_id": "raja-for-illinois",
+      "committee_id": "ward-17",
+      "amount": 2000.0,
+      "date": "2026-08-07",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-23127-00870",
+      "donor_id": "clark-john",
+      "committee_id": "ward-17",
+      "amount": 1000.0,
+      "date": "2026-08-06",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-23127-00871",
+      "donor_id": "ashland-west",
+      "committee_id": "ward-17",
+      "amount": 1000.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-23127-00872",
+      "donor_id": "abdallah-mohammed-l",
+      "committee_id": "ward-17",
+      "amount": 2500.0,
+      "date": "2026-08-14",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-23127-00873",
+      "donor_id": "chicago-innovation-group",
+      "committee_id": "ward-17",
+      "amount": 1000.0,
+      "date": "2026-08-14",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "A-1"
@@ -342927,6 +343967,17 @@
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "A-1"
+    },
+    {
+      "id": "c-23775-01067",
+      "donor_id": "tabares-raquel",
+      "committee_id": "ward-23",
+      "amount": 100001.0,
+      "date": "2026-09-08",
+      "cycle": "2027",
+      "contribution_type": "Loan Received",
+      "source_filing": "A-1",
+      "is_loan": true
     },
     {
       "id": "c-25653-00002",
@@ -406438,6 +407489,86 @@
       "source_filing": "Quarterly"
     },
     {
+      "id": "c-25956-01317",
+      "donor_id": "2107-s-western-inc",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 2500.0,
+      "date": "2026-08-06",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-25956-01318",
+      "donor_id": "1602-cermak-inc",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 2500.0,
+      "date": "2026-08-06",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-25956-01319",
+      "donor_id": "casas-nolberto",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 2000.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-25956-01320",
+      "donor_id": "bader-malik",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 1000.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-25956-01321",
+      "donor_id": "romo-mattresses-and-furniture-inc",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 3000.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-25956-01322",
+      "donor_id": "morales-julia",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 1100.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-25956-01323",
+      "donor_id": "maali-chereen",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 2000.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-25956-01324",
+      "donor_id": "mohdi-ahmad",
+      "committee_id": "ward-25-byron-sigcho-lopez",
+      "amount": 2000.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-26023-00002",
       "donor_id": "gutierrez-robert",
       "committee_id": "ward-36",
@@ -426501,6 +427632,166 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-26023-02003",
+      "donor_id": "reliable-asphalt-corporation",
+      "committee_id": "ward-36",
+      "amount": 1000.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-26023-02004",
+      "donor_id": "seiu-healthcare-il-in-pac",
+      "committee_id": "ward-36",
+      "amount": 1000.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-26023-02005",
+      "donor_id": "underground-contractors-association-state-pac",
+      "committee_id": "ward-36",
+      "amount": 2500.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-26023-02006",
+      "donor_id": "butler-liz",
+      "committee_id": "ward-36",
+      "amount": 1000.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-26023-02007",
+      "donor_id": "mid-america-carpenters-regional-council-political-action-committee",
+      "committee_id": "ward-36",
+      "amount": 1000.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-26023-02008",
+      "donor_id": "georges-synowiecki",
+      "committee_id": "ward-36",
+      "amount": 1500.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-26023-02009",
+      "donor_id": "iuoe-local-399",
+      "committee_id": "ward-36",
+      "amount": 5000.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-26023-02010",
+      "donor_id": "chedid-anthony",
+      "committee_id": "ward-36",
+      "amount": 1500.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-26023-02011",
+      "donor_id": "tang-ta-juana",
+      "committee_id": "ward-36",
+      "amount": 1000.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-26023-02012",
+      "donor_id": "mannion-elda",
+      "committee_id": "ward-36",
+      "amount": 1000.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-26023-02013",
+      "donor_id": "berger-kyle",
+      "committee_id": "ward-36",
+      "amount": 1000.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-26023-02014",
+      "donor_id": "pence-diana",
+      "committee_id": "ward-36",
+      "amount": 2500.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-26023-02015",
+      "donor_id": "lagioia-vito",
+      "committee_id": "ward-36",
+      "amount": 5000.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-26023-02016",
+      "donor_id": "citizens-for-tully",
+      "committee_id": "ward-36",
+      "amount": 1500.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-26023-02017",
+      "donor_id": "advanced-water-solutions",
+      "committee_id": "ward-36",
+      "amount": 1500.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-26023-02018",
+      "donor_id": "wolk-william",
+      "committee_id": "ward-36",
+      "amount": 1000.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-26028-00002",
       "donor_id": "mega-development-inc",
       "committee_id": "ward-41",
@@ -437342,6 +438633,16 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-26028-01082",
+      "donor_id": "chicago-firefighters-union-local-2-political-commitee-fund",
+      "committee_id": "ward-41",
+      "amount": 5000.0,
+      "date": "2026-09-08",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-26217-00002",
       "donor_id": "cobb-judge-cynthia",
       "committee_id": "ward-18",
@@ -439185,6 +440486,18 @@
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-26217-00184",
+      "donor_id": "chicago-land-operators-joint-labor-mgmt-pac",
+      "committee_id": "ward-18",
+      "amount": 1180.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "A-1",
+      "is_in_kind": true,
+      "in_kind_description": "Campaign work"
     },
     {
       "id": "c-31905-00002",
@@ -457795,146 +459108,6 @@
     },
     {
       "id": "c-31905-01859",
-      "donor_id": "descoto-fred",
-      "committee_id": "ward-22",
-      "amount": 500.0,
-      "date": "2026-06-12",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-31905-01860",
-      "donor_id": "velez-jessica",
-      "committee_id": "ward-22",
-      "amount": 250.0,
-      "date": "2026-06-12",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-31905-01861",
-      "donor_id": "crozier-julian",
-      "committee_id": "ward-22",
-      "amount": 250.0,
-      "date": "2026-06-12",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-31905-01862",
-      "donor_id": "denigris-michael",
-      "committee_id": "ward-22",
-      "amount": 750.0,
-      "date": "2026-06-12",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-31905-01863",
-      "donor_id": "van-time-rena",
-      "committee_id": "ward-22",
-      "amount": 250.0,
-      "date": "2026-06-12",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-31905-01864",
-      "donor_id": "smith-leo",
-      "committee_id": "ward-22",
-      "amount": 2500.0,
-      "date": "2026-06-12",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-31905-01865",
-      "donor_id": "boyle-michael",
-      "committee_id": "ward-22",
-      "amount": 1500.0,
-      "date": "2026-06-12",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-31905-01866",
-      "donor_id": "garcia-angel",
-      "committee_id": "ward-22",
-      "amount": 250.0,
-      "date": "2026-06-12",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-31905-01867",
-      "donor_id": "illinois-nurses-association-political-action-committee",
-      "committee_id": "ward-22",
-      "amount": 250.0,
-      "date": "2026-06-12",
-      "cycle": "2027",
-      "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-31905-01868",
-      "donor_id": "malvaes-solutions-inc",
-      "committee_id": "ward-22",
-      "amount": 500.0,
-      "date": "2026-06-12",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-31905-01869",
-      "donor_id": "mid-america-carpenters-regional-council-political-action-committee",
-      "committee_id": "ward-22",
-      "amount": 1000.0,
-      "date": "2026-06-12",
-      "cycle": "2027",
-      "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-31905-01870",
-      "donor_id": "maragos-and-maragos-i-chartered",
-      "committee_id": "ward-22",
-      "amount": 500.0,
-      "date": "2026-06-12",
-      "cycle": "2027",
-      "contribution_type": "Individual Contribution",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-31905-01871",
-      "donor_id": "ironworkers-district-council-of-chicago-vicinity",
-      "committee_id": "ward-22",
-      "amount": 3000.0,
-      "date": "2026-06-12",
-      "cycle": "2027",
-      "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-31905-01872",
-      "donor_id": "intl-union-of-bricklayers-allied",
-      "committee_id": "ward-22",
-      "amount": 1000.0,
-      "date": "2026-06-12",
-      "cycle": "2027",
-      "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
-    },
-    {
-      "id": "c-31905-01873",
       "donor_id": "ironworkers-local-union-1",
       "committee_id": "ward-22",
       "amount": 3000.0,
@@ -457944,7 +459117,7 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-31905-01874",
+      "id": "c-31905-01860",
       "donor_id": "chicago-association-of-realtors",
       "committee_id": "ward-22",
       "amount": 1000.0,
@@ -457954,7 +459127,7 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-31905-01875",
+      "id": "c-31905-01861",
       "donor_id": "a-c-law-group-ltd",
       "committee_id": "ward-22",
       "amount": 500.0,
@@ -457964,7 +459137,7 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-31905-01876",
+      "id": "c-31905-01862",
       "donor_id": "bnsf-railway-corporation",
       "committee_id": "ward-22",
       "amount": 500.0,
@@ -457974,7 +459147,7 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-31905-01877",
+      "id": "c-31905-01863",
       "donor_id": "4g-industrial-inc",
       "committee_id": "ward-22",
       "amount": 2500.0,
@@ -457984,7 +459157,7 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-31905-01878",
+      "id": "c-31905-01864",
       "donor_id": "chicago-teachers-union",
       "committee_id": "ward-22",
       "amount": 2500.0,
@@ -457994,7 +459167,7 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-31905-01879",
+      "id": "c-31905-01865",
       "donor_id": "friends-for-fritz",
       "committee_id": "ward-22",
       "amount": 15000.0,
@@ -458004,11 +459177,151 @@
       "source_filing": "Quarterly"
     },
     {
-      "id": "c-31905-01880",
+      "id": "c-31905-01866",
       "donor_id": "22nd-ward-ipo",
       "committee_id": "ward-22",
       "amount": 1120.0,
       "date": "2026-04-14",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-31905-01867",
+      "donor_id": "descoto-fred",
+      "committee_id": "ward-22",
+      "amount": 500.0,
+      "date": "2026-06-12",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-31905-01868",
+      "donor_id": "velez-jessica",
+      "committee_id": "ward-22",
+      "amount": 250.0,
+      "date": "2026-06-12",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-31905-01869",
+      "donor_id": "crozier-julian",
+      "committee_id": "ward-22",
+      "amount": 250.0,
+      "date": "2026-06-12",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-31905-01870",
+      "donor_id": "denigris-michael",
+      "committee_id": "ward-22",
+      "amount": 750.0,
+      "date": "2026-06-12",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-31905-01871",
+      "donor_id": "van-time-rena",
+      "committee_id": "ward-22",
+      "amount": 250.0,
+      "date": "2026-06-12",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-31905-01872",
+      "donor_id": "smith-leo",
+      "committee_id": "ward-22",
+      "amount": 2500.0,
+      "date": "2026-06-12",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-31905-01873",
+      "donor_id": "boyle-michael",
+      "committee_id": "ward-22",
+      "amount": 1500.0,
+      "date": "2026-06-12",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-31905-01874",
+      "donor_id": "garcia-angel",
+      "committee_id": "ward-22",
+      "amount": 250.0,
+      "date": "2026-06-12",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-31905-01875",
+      "donor_id": "illinois-nurses-association-political-action-committee",
+      "committee_id": "ward-22",
+      "amount": 250.0,
+      "date": "2026-06-12",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-31905-01876",
+      "donor_id": "malvaes-solutions-inc",
+      "committee_id": "ward-22",
+      "amount": 500.0,
+      "date": "2026-06-12",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-31905-01877",
+      "donor_id": "mid-america-carpenters-regional-council-political-action-committee",
+      "committee_id": "ward-22",
+      "amount": 1000.0,
+      "date": "2026-06-12",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-31905-01878",
+      "donor_id": "maragos-and-maragos-i-chartered",
+      "committee_id": "ward-22",
+      "amount": 500.0,
+      "date": "2026-06-12",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-31905-01879",
+      "donor_id": "ironworkers-district-council-of-chicago-vicinity",
+      "committee_id": "ward-22",
+      "amount": 3000.0,
+      "date": "2026-06-12",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-31905-01880",
+      "donor_id": "intl-union-of-bricklayers-allied",
+      "committee_id": "ward-22",
+      "amount": 1000.0,
+      "date": "2026-06-12",
       "cycle": "2027",
       "contribution_type": "Transfer In",
       "source_filing": "Quarterly"
@@ -478362,6 +479675,66 @@
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-34336-00540",
+      "donor_id": "nu-wave-fish-and-chicken",
+      "committee_id": "ward-20",
+      "amount": 1275.0,
+      "date": "2026-08-08",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34336-00541",
+      "donor_id": "mohidi-ahmad",
+      "committee_id": "ward-20",
+      "amount": 2500.0,
+      "date": "2026-08-08",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34336-00542",
+      "donor_id": "sean-masters",
+      "committee_id": "ward-20",
+      "amount": 2500.0,
+      "date": "2026-08-07",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34336-00543",
+      "donor_id": "carpenters-local-union",
+      "committee_id": "ward-20",
+      "amount": 1000.0,
+      "date": "2026-08-12",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34336-00544",
+      "donor_id": "wuest-jack",
+      "committee_id": "ward-20",
+      "amount": 2000.0,
+      "date": "2026-08-22",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34336-00545",
+      "donor_id": "friend-family-health-center",
+      "committee_id": "ward-20",
+      "amount": 3000.0,
+      "date": "2026-08-28",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
     },
     {
       "id": "c-34345-00002",
@@ -500922,6 +502295,86 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-34345-02245",
+      "donor_id": "kamis-john",
+      "committee_id": "ward-47",
+      "amount": 1000.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34345-02246",
+      "donor_id": "siegel-moses-p-c",
+      "committee_id": "ward-47",
+      "amount": 1000.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34345-02247",
+      "donor_id": "bridge-structural-and-reinforcing-ironworkers-local-1",
+      "committee_id": "ward-47",
+      "amount": 1500.0,
+      "date": "2026-08-24",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34345-02248",
+      "donor_id": "committee-to-expand-the-middle-class-candidate-committee",
+      "committee_id": "ward-47",
+      "amount": 1000.0,
+      "date": "2026-09-02",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34345-02249",
+      "donor_id": "painters-district-council-14",
+      "committee_id": "ward-47",
+      "amount": 1000.0,
+      "date": "2026-09-02",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34345-02250",
+      "donor_id": "teamsters-local-700-pac",
+      "committee_id": "ward-47",
+      "amount": 1500.0,
+      "date": "2026-09-02",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34345-02251",
+      "donor_id": "ogles-david",
+      "committee_id": "ward-47",
+      "amount": 1032.7,
+      "date": "2026-09-08",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34345-02252",
+      "donor_id": "peters-for-illinois",
+      "committee_id": "ward-47",
+      "amount": 1000.0,
+      "date": "2026-09-07",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-34374-00002",
       "donor_id": "jb-for-governor-exploratory-committee",
       "committee_id": "ward-16",
@@ -511822,6 +513275,156 @@
       "date": "2026-07-13",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34374-01091",
+      "donor_id": "cargle-kurt",
+      "committee_id": "ward-16",
+      "amount": 1000.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34374-01092",
+      "donor_id": "windy-city-smokes",
+      "committee_id": "ward-16",
+      "amount": 1000.0,
+      "date": "2026-08-17",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34374-01093",
+      "donor_id": "kiswani-ameer",
+      "committee_id": "ward-16",
+      "amount": 2500.0,
+      "date": "2026-08-17",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34374-01094",
+      "donor_id": "patel-purviben",
+      "committee_id": "ward-16",
+      "amount": 2500.0,
+      "date": "2026-08-17",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34374-01095",
+      "donor_id": "huggins-larry",
+      "committee_id": "ward-16",
+      "amount": 1500.0,
+      "date": "2026-08-17",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34374-01096",
+      "donor_id": "dee-fuel-inc",
+      "committee_id": "ward-16",
+      "amount": 1000.0,
+      "date": "2026-08-17",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34374-01097",
+      "donor_id": "sc-oak-forest-inc",
+      "committee_id": "ward-16",
+      "amount": 1000.0,
+      "date": "2026-08-17",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34374-01098",
+      "donor_id": "garfield-petroleum-inc",
+      "committee_id": "ward-16",
+      "amount": 1000.0,
+      "date": "2026-08-17",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34374-01099",
+      "donor_id": "1601-garfield-llc",
+      "committee_id": "ward-16",
+      "amount": 1000.0,
+      "date": "2026-08-17",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34374-01100",
+      "donor_id": "183-crawford-inc",
+      "committee_id": "ward-16",
+      "amount": 1000.0,
+      "date": "2026-08-17",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34374-01101",
+      "donor_id": "reemy-s-food-market",
+      "committee_id": "ward-16",
+      "amount": 1000.0,
+      "date": "2026-08-17",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34374-01102",
+      "donor_id": "community-united-development-group-llc",
+      "committee_id": "ward-16",
+      "amount": 1000.0,
+      "date": "2026-08-17",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34374-01103",
+      "donor_id": "51st-street-damen-inc",
+      "committee_id": "ward-16",
+      "amount": 1000.0,
+      "date": "2026-08-17",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34374-01104",
+      "donor_id": "71st-liquor-food",
+      "committee_id": "ward-16",
+      "amount": 1000.0,
+      "date": "2026-08-17",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34374-01105",
+      "donor_id": "i-u-o-e-local-399",
+      "committee_id": "ward-16",
+      "amount": 1500.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
       "source_filing": "A-1"
     },
     {
@@ -531974,6 +533577,96 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-34524-02002",
+      "donor_id": "wuest-jack",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 2500.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34524-02003",
+      "donor_id": "toben-paul",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 1000.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34524-02004",
+      "donor_id": "shah-sanjit",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 1000.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34524-02005",
+      "donor_id": "khan-wes",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 1500.0,
+      "date": "2026-08-11",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34524-02006",
+      "donor_id": "bousis-dimitris",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 1000.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34524-02007",
+      "donor_id": "hntb-holdings-ltd",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 1000.0,
+      "date": "2026-08-14",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34524-02008",
+      "donor_id": "villegas-jimmy",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 1000.0,
+      "date": "2026-08-28",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34524-02009",
+      "donor_id": "tenner-sean",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 1000.0,
+      "date": "2026-09-11",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34524-02010",
+      "donor_id": "curtis-jay",
+      "committee_id": "ward-40-andre-vasquez",
+      "amount": 1000.0,
+      "date": "2026-09-11",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-34569-00002",
       "donor_id": "hauser-lynn",
       "committee_id": "ward-39",
@@ -548627,6 +550320,86 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-34569-01663",
+      "donor_id": "new-world-van-lines",
+      "committee_id": "ward-39",
+      "amount": 2500.0,
+      "date": "2026-08-24",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34569-01664",
+      "donor_id": "capitol-consulting-group-illinois-llc",
+      "committee_id": "ward-39",
+      "amount": 1000.0,
+      "date": "2026-08-24",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34569-01665",
+      "donor_id": "caushi-valentino",
+      "committee_id": "ward-39",
+      "amount": 1500.0,
+      "date": "2026-08-24",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34569-01666",
+      "donor_id": "motion-picture-studio-mechanics",
+      "committee_id": "ward-39",
+      "amount": 1000.0,
+      "date": "2026-08-24",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34569-01667",
+      "donor_id": "frieswyk-bradley",
+      "committee_id": "ward-39",
+      "amount": 1000.0,
+      "date": "2026-09-03",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34569-01668",
+      "donor_id": "jump-r-howard",
+      "committee_id": "ward-39",
+      "amount": 2500.0,
+      "date": "2026-09-03",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34569-01669",
+      "donor_id": "ross-neil",
+      "committee_id": "ward-39",
+      "amount": 1000.0,
+      "date": "2026-09-03",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34569-01670",
+      "donor_id": "guthman-jack",
+      "committee_id": "ward-39",
+      "amount": 1000.0,
+      "date": "2026-09-03",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-34611-00002",
       "donor_id": "burt-william-nicholas",
       "committee_id": "ward-33-rossana-rodriguez-sanchez",
@@ -560731,6 +562504,26 @@
       "source_filing": "Quarterly"
     },
     {
+      "id": "c-34611-01197",
+      "donor_id": "swartzman-simon",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 4000.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34611-01198",
+      "donor_id": "burt-william-nicholas",
+      "committee_id": "ward-33-rossana-rodriguez-sanchez",
+      "amount": 1000.0,
+      "date": "2026-09-06",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-34616-00002",
       "donor_id": "williams-mary",
       "committee_id": "ward-1-daniel-la-spata",
@@ -572031,6 +573824,36 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-34616-01121",
+      "donor_id": "merchant-wahib",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 1000.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34616-01122",
+      "donor_id": "fresh-market-place",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 2000.0,
+      "date": "2026-09-11",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34616-01123",
+      "donor_id": "la-ciudad-de-los-vientos",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 1000.0,
+      "date": "2026-09-11",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-34692-00002",
       "donor_id": "mayas-carol",
       "committee_id": "ward-31",
@@ -582339,6 +584162,96 @@
       "cycle": "2027",
       "contribution_type": "Transfer In",
       "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-34692-01033",
+      "donor_id": "aristotle-international-inc",
+      "committee_id": "ward-31",
+      "amount": 1000.0,
+      "date": "2026-08-07",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34692-01034",
+      "donor_id": "comcast",
+      "committee_id": "ward-31",
+      "amount": 1500.0,
+      "date": "2026-08-07",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34692-01035",
+      "donor_id": "sudz-express-car-wash",
+      "committee_id": "ward-31",
+      "amount": 1000.0,
+      "date": "2026-08-07",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34692-01036",
+      "donor_id": "chicago-association-of-realtors-political-action-committee",
+      "committee_id": "ward-31",
+      "amount": 1500.0,
+      "date": "2026-08-07",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34692-01037",
+      "donor_id": "chicago-land-operators-joint-labor-management-pac",
+      "committee_id": "ward-31",
+      "amount": 2500.0,
+      "date": "2026-08-07",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34692-01038",
+      "donor_id": "committee-to-expand-the-middle-class-candidate-committee",
+      "committee_id": "ward-31",
+      "amount": 1500.0,
+      "date": "2026-08-07",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34692-01039",
+      "donor_id": "iuoe-local-399-political-education-fund",
+      "committee_id": "ward-31",
+      "amount": 1500.0,
+      "date": "2026-08-07",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34692-01040",
+      "donor_id": "liuna-chicago-laborers-district-council-pac",
+      "committee_id": "ward-31",
+      "amount": 2500.0,
+      "date": "2026-08-07",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34692-01041",
+      "donor_id": "mid-america-carpenters-regional-council",
+      "committee_id": "ward-31",
+      "amount": 1000.0,
+      "date": "2026-08-07",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
     },
     {
       "id": "c-34894-00002",
@@ -593822,6 +595735,46 @@
       "cycle": "2027",
       "contribution_type": "Other Receipt",
       "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-34894-01149",
+      "donor_id": "brad-stephens-for-state-representative",
+      "committee_id": "ward-45",
+      "amount": 5000.0,
+      "date": "2026-08-03",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34894-01150",
+      "donor_id": "3d-bread-bakers-llc",
+      "committee_id": "ward-45",
+      "amount": 1000.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34894-01151",
+      "donor_id": "peoples-gas-light-coke",
+      "committee_id": "ward-45",
+      "amount": 1000.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34894-01152",
+      "donor_id": "aetna-development",
+      "committee_id": "ward-45",
+      "amount": 1000.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
     },
     {
       "id": "c-35096-00002",
@@ -606187,6 +608140,36 @@
       "committee_id": "ward-35-anthony-quezada",
       "amount": 1000.0,
       "date": "2026-07-29",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37143-00449",
+      "donor_id": "kurowski-sausage-shop-rich-s-bakery-inc",
+      "committee_id": "ward-35-anthony-quezada",
+      "amount": 1000.0,
+      "date": "2026-08-11",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37143-00450",
+      "donor_id": "predki-marek-j",
+      "committee_id": "ward-35-anthony-quezada",
+      "amount": 1000.0,
+      "date": "2026-08-11",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37143-00451",
+      "donor_id": "yaqoob-nasir",
+      "committee_id": "ward-35-anthony-quezada",
+      "amount": 1000.0,
+      "date": "2026-09-09",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "A-1"
@@ -620378,6 +622361,226 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-37399-01413",
+      "donor_id": "npl-construction",
+      "committee_id": "ward-11",
+      "amount": 1500.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01414",
+      "donor_id": "seliga-joseph",
+      "committee_id": "ward-11",
+      "amount": 1000.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01415",
+      "donor_id": "cha-dennis",
+      "committee_id": "ward-11",
+      "amount": 1000.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01416",
+      "donor_id": "vitale-david",
+      "committee_id": "ward-11",
+      "amount": 2000.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01417",
+      "donor_id": "austriaco-aurora",
+      "committee_id": "ward-11",
+      "amount": 2500.0,
+      "date": "2026-08-12",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01418",
+      "donor_id": "kates-william",
+      "committee_id": "ward-11",
+      "amount": 1500.0,
+      "date": "2026-08-14",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01419",
+      "donor_id": "wuest-jack",
+      "committee_id": "ward-11",
+      "amount": 1500.0,
+      "date": "2026-08-14",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01420",
+      "donor_id": "soto-juan",
+      "committee_id": "ward-11",
+      "amount": 1500.0,
+      "date": "2026-08-14",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01421",
+      "donor_id": "verne-ken",
+      "committee_id": "ward-11",
+      "amount": 1500.0,
+      "date": "2026-08-15",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01422",
+      "donor_id": "chan-wlliam",
+      "committee_id": "ward-11",
+      "amount": 2500.0,
+      "date": "2026-08-24",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01423",
+      "donor_id": "lakeside-bank",
+      "committee_id": "ward-11",
+      "amount": 2500.0,
+      "date": "2026-08-31",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01424",
+      "donor_id": "ewing-trucking-inc",
+      "committee_id": "ward-11",
+      "amount": 1500.0,
+      "date": "2026-08-31",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01425",
+      "donor_id": "friends-of-ram",
+      "committee_id": "ward-11",
+      "amount": 1000.0,
+      "date": "2026-08-31",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01426",
+      "donor_id": "comcast",
+      "committee_id": "ward-11",
+      "amount": 1500.0,
+      "date": "2026-08-31",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01427",
+      "donor_id": "chicagoland-operators-joint-labor-management-pac",
+      "committee_id": "ward-11",
+      "amount": 2500.0,
+      "date": "2026-09-11",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01428",
+      "donor_id": "schulze-burch-biscuit-co",
+      "committee_id": "ward-11",
+      "amount": 2500.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01429",
+      "donor_id": "athena-design-group",
+      "committee_id": "ward-11",
+      "amount": 1500.0,
+      "date": "2026-09-11",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01430",
+      "donor_id": "triple-crown-restaurant",
+      "committee_id": "ward-11",
+      "amount": 1500.0,
+      "date": "2026-09-11",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01431",
+      "donor_id": "scott-brian",
+      "committee_id": "ward-11",
+      "amount": 1400.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01432",
+      "donor_id": "horizonworkers-group",
+      "committee_id": "ward-11",
+      "amount": 1500.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01433",
+      "donor_id": "chicago-voice-and-data-authority-corp",
+      "committee_id": "ward-11",
+      "amount": 5000.0,
+      "date": "2026-09-11",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01434",
+      "donor_id": "botavi-wellness-inc",
+      "committee_id": "ward-11",
+      "amount": 2500.0,
+      "date": "2026-09-11",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-38561-00002",
       "donor_id": "lebed-fred-g",
       "committee_id": "ward-24",
@@ -625353,6 +627556,106 @@
       "committee_id": "ward-24",
       "amount": 1044.23,
       "date": "2026-07-28",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38561-00499",
+      "donor_id": "chicago-land-operators-joint-labor-management-pac",
+      "committee_id": "ward-24",
+      "amount": 2500.0,
+      "date": "2026-07-29",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38561-00500",
+      "donor_id": "mid-america-carpenters-regional-council-pac",
+      "committee_id": "ward-24",
+      "amount": 1000.0,
+      "date": "2026-07-29",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38561-00501",
+      "donor_id": "liuna-chicago-laborers-district-council-pac",
+      "committee_id": "ward-24",
+      "amount": 2500.0,
+      "date": "2026-07-29",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38561-00502",
+      "donor_id": "i-u-o-e-local-399-political-education-fund",
+      "committee_id": "ward-24",
+      "amount": 1500.0,
+      "date": "2026-07-29",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38561-00503",
+      "donor_id": "chgo-assoc-of-realtors-pac",
+      "committee_id": "ward-24",
+      "amount": 1500.0,
+      "date": "2026-07-29",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38561-00504",
+      "donor_id": "mado-healthcare-douglas-park",
+      "committee_id": "ward-24",
+      "amount": 2500.0,
+      "date": "2026-07-29",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38561-00505",
+      "donor_id": "development-solutions-inc",
+      "committee_id": "ward-24",
+      "amount": 1000.0,
+      "date": "2026-08-07",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38561-00506",
+      "donor_id": "new-covenant-cdc",
+      "committee_id": "ward-24",
+      "amount": 5000.0,
+      "date": "2026-08-12",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38561-00507",
+      "donor_id": "scott-jr-michael",
+      "committee_id": "ward-24",
+      "amount": 2000.0,
+      "date": "2026-08-12",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38561-00508",
+      "donor_id": "ironworkers-district-council-of-chicago-vicinity-pac",
+      "committee_id": "ward-24",
+      "amount": 1000.0,
+      "date": "2026-08-28",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "A-1"
@@ -636799,6 +639102,276 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-38596-01139",
+      "donor_id": "antunovich-associates",
+      "committee_id": "ward-43",
+      "amount": 2500.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01140",
+      "donor_id": "tetzlaff-ted",
+      "committee_id": "ward-43",
+      "amount": 1000.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01141",
+      "donor_id": "silverstein-william",
+      "committee_id": "ward-43",
+      "amount": 5000.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01142",
+      "donor_id": "zucker-mike",
+      "committee_id": "ward-43",
+      "amount": 1018.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01143",
+      "donor_id": "paris-martin",
+      "committee_id": "ward-43",
+      "amount": 1000.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01144",
+      "donor_id": "rooney-trisha",
+      "committee_id": "ward-43",
+      "amount": 1500.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01145",
+      "donor_id": "painters-district-council-14-pac",
+      "committee_id": "ward-43",
+      "amount": 1000.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01146",
+      "donor_id": "stoykov-alex",
+      "committee_id": "ward-43",
+      "amount": 1000.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01147",
+      "donor_id": "rushin-bonnie",
+      "committee_id": "ward-43",
+      "amount": 7300.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01148",
+      "donor_id": "flanagan-declan",
+      "committee_id": "ward-43",
+      "amount": 1000.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01149",
+      "donor_id": "illinois-restauranteurs-pac",
+      "committee_id": "ward-43",
+      "amount": 1500.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01150",
+      "donor_id": "cocagne-david",
+      "committee_id": "ward-43",
+      "amount": 1500.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01151",
+      "donor_id": "karris-nicholas",
+      "committee_id": "ward-43",
+      "amount": 1000.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01152",
+      "donor_id": "nash-patrick",
+      "committee_id": "ward-43",
+      "amount": 5000.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01153",
+      "donor_id": "chicago-association-of-realtors-pac",
+      "committee_id": "ward-43",
+      "amount": 1500.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01154",
+      "donor_id": "polsky-michael",
+      "committee_id": "ward-43",
+      "amount": 2500.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01155",
+      "donor_id": "paris-arthur",
+      "committee_id": "ward-43",
+      "amount": 1700.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01156",
+      "donor_id": "paris-arthur",
+      "committee_id": "ward-43",
+      "amount": 1500.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01157",
+      "donor_id": "tully-matthew",
+      "committee_id": "ward-43",
+      "amount": 1500.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01158",
+      "donor_id": "o-kane-william",
+      "committee_id": "ward-43",
+      "amount": 5000.0,
+      "date": "2026-07-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01159",
+      "donor_id": "levy-ari",
+      "committee_id": "ward-43",
+      "amount": 1500.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01160",
+      "donor_id": "huzenis-harry",
+      "committee_id": "ward-43",
+      "amount": 1500.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01161",
+      "donor_id": "michael-jeff",
+      "committee_id": "ward-43",
+      "amount": 1000.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01162",
+      "donor_id": "higginbottom-elzie",
+      "committee_id": "ward-43",
+      "amount": 2500.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01163",
+      "donor_id": "traubert-bryan",
+      "committee_id": "ward-43",
+      "amount": 2500.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01164",
+      "donor_id": "zupancic-alex",
+      "committee_id": "ward-43",
+      "amount": 2500.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38596-01165",
+      "donor_id": "avraham-jacob",
+      "committee_id": "ward-43",
+      "amount": 2500.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-38605-00002",
       "donor_id": "debner-jennifer",
       "committee_id": "ward-48",
@@ -643560,6 +646133,46 @@
       "committee_id": "ward-48",
       "amount": 2000.0,
       "date": "2026-07-29",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38605-00669",
+      "donor_id": "singh-balvinder",
+      "committee_id": "ward-48",
+      "amount": 1500.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38605-00670",
+      "donor_id": "stanford-david",
+      "committee_id": "ward-48",
+      "amount": 1000.0,
+      "date": "2026-09-02",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38605-00671",
+      "donor_id": "wuest-jack",
+      "committee_id": "ward-48",
+      "amount": 1500.0,
+      "date": "2026-09-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38605-00672",
+      "donor_id": "williams-grant",
+      "committee_id": "ward-48",
+      "amount": 1000.0,
+      "date": "2026-09-09",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "A-1"
@@ -660584,6 +663197,56 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-38699-00849",
+      "donor_id": "schain-banks-kenny-schwartz",
+      "committee_id": "ward-44",
+      "amount": 1000.0,
+      "date": "2026-08-06",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38699-00850",
+      "donor_id": "comcast",
+      "committee_id": "ward-44",
+      "amount": 1500.0,
+      "date": "2026-08-06",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38699-00851",
+      "donor_id": "gold-william",
+      "committee_id": "ward-44",
+      "amount": 1000.0,
+      "date": "2026-09-08",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38699-00852",
+      "donor_id": "miller-patrick",
+      "committee_id": "ward-44",
+      "amount": 1000.0,
+      "date": "2026-09-08",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38699-00853",
+      "donor_id": "berkowitz-greg",
+      "committee_id": "ward-44",
+      "amount": 5000.0,
+      "date": "2026-09-08",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-38706-00002",
       "donor_id": "citizens-for-ariel-e-reboyras",
       "committee_id": "ward-30",
@@ -666100,6 +668763,86 @@
       "committee_id": "ward-30",
       "amount": 1500.0,
       "date": "2026-07-24",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38706-00551",
+      "donor_id": "liu-bin",
+      "committee_id": "ward-30",
+      "amount": 1000.0,
+      "date": "2026-08-03",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38706-00552",
+      "donor_id": "fernandez-minerva",
+      "committee_id": "ward-30",
+      "amount": 1000.0,
+      "date": "2026-08-03",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38706-00553",
+      "donor_id": "roth-robert",
+      "committee_id": "ward-30",
+      "amount": 1000.0,
+      "date": "2026-08-03",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38706-00554",
+      "donor_id": "nicolay-dart-llc",
+      "committee_id": "ward-30",
+      "amount": 1000.0,
+      "date": "2026-08-03",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38706-00555",
+      "donor_id": "khan-wes",
+      "committee_id": "ward-30",
+      "amount": 1500.0,
+      "date": "2026-08-03",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38706-00556",
+      "donor_id": "gaj-mitch-j",
+      "committee_id": "ward-30",
+      "amount": 2000.0,
+      "date": "2026-08-11",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38706-00557",
+      "donor_id": "i-g-capital-llc",
+      "committee_id": "ward-30",
+      "amount": 1000.0,
+      "date": "2026-09-03",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38706-00558",
+      "donor_id": "avondale-collision-repair",
+      "committee_id": "ward-30",
+      "amount": 1000.0,
+      "date": "2026-09-09",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "A-1"
@@ -675045,6 +677788,146 @@
       "source_filing": "Quarterly"
     },
     {
+      "id": "c-38748-00401",
+      "donor_id": "friends-of-robert-bob-rita",
+      "committee_id": "ward-21",
+      "amount": 5000.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38748-00402",
+      "donor_id": "omprem-halsted-llc",
+      "committee_id": "ward-21",
+      "amount": 7300.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38748-00403",
+      "donor_id": "raines-thomas",
+      "committee_id": "ward-21",
+      "amount": 1000.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38748-00404",
+      "donor_id": "racine-marathon",
+      "committee_id": "ward-21",
+      "amount": 1000.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38748-00405",
+      "donor_id": "kates-william",
+      "committee_id": "ward-21",
+      "amount": 1000.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38748-00406",
+      "donor_id": "mid-city-food-fuel-inc",
+      "committee_id": "ward-21",
+      "amount": 1000.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38748-00407",
+      "donor_id": "gas-plus-inc-dba-buddy-bear-car-wash",
+      "committee_id": "ward-21",
+      "amount": 5000.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38748-00408",
+      "donor_id": "new-day-bill-conway",
+      "committee_id": "ward-21",
+      "amount": 1000.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38748-00409",
+      "donor_id": "halsted9900-business-inc",
+      "committee_id": "ward-21",
+      "amount": 1000.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38748-00410",
+      "donor_id": "buddy-s-wine-spirits-inc",
+      "committee_id": "ward-21",
+      "amount": 1000.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38748-00411",
+      "donor_id": "genesis-construction-management-corp",
+      "committee_id": "ward-21",
+      "amount": 1000.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38748-00412",
+      "donor_id": "m-m-fast-food-inc",
+      "committee_id": "ward-21",
+      "amount": 1000.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38748-00413",
+      "donor_id": "10640-property-llc",
+      "committee_id": "ward-21",
+      "amount": 1000.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38748-00414",
+      "donor_id": "lebed-fred",
+      "committee_id": "ward-21",
+      "amount": 1000.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-38809-00002",
       "donor_id": "ramirez-dalia",
       "committee_id": "ward-12",
@@ -678931,6 +681814,126 @@
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-38809-00389",
+      "donor_id": "fox-michael",
+      "committee_id": "ward-12",
+      "amount": 1000.0,
+      "date": "2026-08-18",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38809-00390",
+      "donor_id": "joseph-justin",
+      "committee_id": "ward-12",
+      "amount": 2500.0,
+      "date": "2026-08-18",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38809-00391",
+      "donor_id": "degerrato-phil",
+      "committee_id": "ward-12",
+      "amount": 1000.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38809-00392",
+      "donor_id": "derly-valadez",
+      "committee_id": "ward-12",
+      "amount": 1500.0,
+      "date": "2026-08-20",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38809-00393",
+      "donor_id": "all-in-with-lilian",
+      "committee_id": "ward-12",
+      "amount": 1500.0,
+      "date": "2026-08-28",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38809-00394",
+      "donor_id": "gsg-consultants-inc",
+      "committee_id": "ward-12",
+      "amount": 1000.0,
+      "date": "2026-08-28",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38809-00395",
+      "donor_id": "teamsters-local-union-no-700",
+      "committee_id": "ward-12",
+      "amount": 1500.0,
+      "date": "2026-08-28",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38809-00396",
+      "donor_id": "friends-of-michael-d-rodriguez",
+      "committee_id": "ward-12",
+      "amount": 1500.0,
+      "date": "2026-08-28",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38809-00397",
+      "donor_id": "maya-abdi",
+      "committee_id": "ward-12",
+      "amount": 1000.0,
+      "date": "2026-09-03",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38809-00398",
+      "donor_id": "wuest-jack",
+      "committee_id": "ward-12",
+      "amount": 1000.0,
+      "date": "2026-09-09",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38809-00399",
+      "donor_id": "patel-bhupendrakumar",
+      "committee_id": "ward-12",
+      "amount": 1000.0,
+      "date": "2026-09-03",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38809-00400",
+      "donor_id": "hernandez-renato",
+      "committee_id": "ward-12",
+      "amount": 1000.0,
+      "date": "2026-09-07",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
     },
     {
       "id": "c-38819-00002",
@@ -687731,6 +690734,256 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-38819-00867",
+      "donor_id": "ozinga-bros",
+      "committee_id": "ward-10",
+      "amount": 1500.0,
+      "date": "2026-08-14",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00868",
+      "donor_id": "security-logistics-group-inc",
+      "committee_id": "ward-10",
+      "amount": 1500.0,
+      "date": "2026-08-20",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00869",
+      "donor_id": "birrieria-ocotlan-inc",
+      "committee_id": "ward-10",
+      "amount": 1500.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00870",
+      "donor_id": "enriquez-1-construction-corporation",
+      "committee_id": "ward-10",
+      "amount": 1500.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00871",
+      "donor_id": "elmwood-chapel-ltd",
+      "committee_id": "ward-10",
+      "amount": 1500.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00872",
+      "donor_id": "local-motion",
+      "committee_id": "ward-10",
+      "amount": 1100.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00873",
+      "donor_id": "lr-management-company-llc",
+      "committee_id": "ward-10",
+      "amount": 1500.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00874",
+      "donor_id": "kate-s-detective-security-inc",
+      "committee_id": "ward-10",
+      "amount": 1500.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00875",
+      "donor_id": "bloom-sanchez-realty",
+      "committee_id": "ward-10",
+      "amount": 1500.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00876",
+      "donor_id": "prendergast-john",
+      "committee_id": "ward-10",
+      "amount": 1500.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00877",
+      "donor_id": "hd-mechanical-inc",
+      "committee_id": "ward-10",
+      "amount": 3500.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00878",
+      "donor_id": "teamsters-local-union-no-700-pac",
+      "committee_id": "ward-10",
+      "amount": 1500.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00879",
+      "donor_id": "global-consulting-solutions-llc",
+      "committee_id": "ward-10",
+      "amount": 1500.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00880",
+      "donor_id": "ls41-cafe-inc",
+      "committee_id": "ward-10",
+      "amount": 1000.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00881",
+      "donor_id": "kavanaugh-consulting-llc",
+      "committee_id": "ward-10",
+      "amount": 3500.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00882",
+      "donor_id": "ibuilders-corporation",
+      "committee_id": "ward-10",
+      "amount": 3000.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00883",
+      "donor_id": "i-u-o-e-local-399-political-ed-fund",
+      "committee_id": "ward-10",
+      "amount": 2500.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00884",
+      "donor_id": "chicago-land-operators-joint-labor-management-pac",
+      "committee_id": "ward-10",
+      "amount": 2500.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00885",
+      "donor_id": "crow-bar-inc",
+      "committee_id": "ward-10",
+      "amount": 1500.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00886",
+      "donor_id": "peoples-gas-light-coke-c-o-wec-group",
+      "committee_id": "ward-10",
+      "amount": 1000.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00887",
+      "donor_id": "sun-optics",
+      "committee_id": "ward-10",
+      "amount": 2500.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00888",
+      "donor_id": "chicago-j-dineen-lodge-7-pac",
+      "committee_id": "ward-10",
+      "amount": 10000.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00889",
+      "donor_id": "deering-services-inc",
+      "committee_id": "ward-10",
+      "amount": 5000.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00890",
+      "donor_id": "schneider-donna",
+      "committee_id": "ward-10",
+      "amount": 5000.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38819-00891",
+      "donor_id": "charles-j-schneider-ltd",
+      "committee_id": "ward-10",
+      "amount": 5000.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-38831-00002",
       "donor_id": "medina-peter",
       "committee_id": "ward-26",
@@ -695092,6 +698345,46 @@
       "committee_id": "ward-26",
       "amount": 1000.0,
       "date": "2026-08-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38831-00733",
+      "donor_id": "stanford-david",
+      "committee_id": "ward-26",
+      "amount": 1000.0,
+      "date": "2026-08-16",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38831-00734",
+      "donor_id": "aquino-william",
+      "committee_id": "ward-26",
+      "amount": 1000.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38831-00735",
+      "donor_id": "beran-cristina",
+      "committee_id": "ward-26",
+      "amount": 1500.0,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38831-00736",
+      "donor_id": "calderon-juan",
+      "committee_id": "ward-26",
+      "amount": 1500.0,
+      "date": "2026-09-08",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "A-1"
@@ -703008,6 +706301,190 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-38916-00789",
+      "donor_id": "teamsters-local-union-no-743",
+      "committee_id": "ward-4",
+      "amount": 1000.0,
+      "date": "2026-08-04",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38916-00790",
+      "donor_id": "local-134-state-and-municipal-pac-ibew",
+      "committee_id": "ward-4",
+      "amount": 5000.0,
+      "date": "2026-08-04",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38916-00791",
+      "donor_id": "aberdeen-construction-services-inc",
+      "committee_id": "ward-4",
+      "amount": 2500.0,
+      "date": "2026-08-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38916-00792",
+      "donor_id": "capitol-consulting-group-illinois-llc",
+      "committee_id": "ward-4",
+      "amount": 1000.0,
+      "date": "2026-08-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38916-00793",
+      "donor_id": "raines-thomas",
+      "committee_id": "ward-4",
+      "amount": 1500.0,
+      "date": "2026-08-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38916-00794",
+      "donor_id": "mid-america-carpenters-regional-council-political-action-committee",
+      "committee_id": "ward-4",
+      "amount": 2000.0,
+      "date": "2026-08-04",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38916-00795",
+      "donor_id": "point-of-difference",
+      "committee_id": "ward-4",
+      "amount": 1000.0,
+      "date": "2026-08-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38916-00796",
+      "donor_id": "bala-ram-kamala-pod-vishal-kushal-ghimire",
+      "committee_id": "ward-4",
+      "amount": 5000.0,
+      "date": "2026-08-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38916-00797",
+      "donor_id": "bernstien-louis-d",
+      "committee_id": "ward-4",
+      "amount": 1500.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38916-00798",
+      "donor_id": "bp-amoco-gas-station",
+      "committee_id": "ward-4",
+      "amount": 1000.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38916-00799",
+      "donor_id": "whispers-at-mariano-inc",
+      "committee_id": "ward-4",
+      "amount": 5000.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38916-00800",
+      "donor_id": "ghimire-bala",
+      "committee_id": "ward-4",
+      "amount": 1000.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38916-00801",
+      "donor_id": "weems-malcom",
+      "committee_id": "ward-4",
+      "amount": 1000.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38916-00802",
+      "donor_id": "cq-strategies-and-consulting-llc",
+      "committee_id": "ward-4",
+      "amount": 1000.0,
+      "date": "2026-08-22",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38916-00803",
+      "donor_id": "iha-political-action-committee",
+      "committee_id": "ward-4",
+      "amount": 1500.0,
+      "date": "2026-08-22",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38916-00804",
+      "donor_id": "higginbottom-elzie",
+      "committee_id": "ward-4",
+      "amount": 1500.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38916-00805",
+      "donor_id": "migos-fine-foods-bronzeville",
+      "committee_id": "ward-4",
+      "amount": 1229.05,
+      "date": "2026-09-08",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "A-1",
+      "is_in_kind": true,
+      "in_kind_description": "Fund raising - food"
+    },
+    {
+      "id": "c-38916-00806",
+      "donor_id": "nicolay-dart-llc",
+      "committee_id": "ward-4",
+      "amount": 1229.05,
+      "date": "2026-09-09",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "A-1",
+      "is_in_kind": true,
+      "in_kind_description": "Fund raising - food"
+    },
+    {
       "id": "c-38925-00002",
       "donor_id": "seiu-healthcare-il-in-pac",
       "committee_id": "ward-5",
@@ -708562,6 +712039,16 @@
       "source_filing": "Quarterly"
     },
     {
+      "id": "c-38925-00552",
+      "donor_id": "mac-property-management",
+      "committee_id": "ward-5",
+      "amount": 1500.0,
+      "date": "2026-08-14",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-38991-00002",
       "donor_id": "seiu-health-care-il-in-pac",
       "committee_id": "ward-6",
@@ -711672,6 +715159,16 @@
       "source_filing": "Quarterly"
     },
     {
+      "id": "c-38991-00306",
+      "donor_id": "alvarez-michael",
+      "committee_id": "ward-6",
+      "amount": 1500.0,
+      "date": "2026-08-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-40747-00002",
       "donor_id": "friends-of-walter-burnett-jr",
       "committee_id": "ward-27",
@@ -713707,6 +717204,156 @@
       "committee_id": "ward-27",
       "amount": 1000.0,
       "date": "2026-07-27",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-40747-00206",
+      "donor_id": "horvath-steve",
+      "committee_id": "ward-27",
+      "amount": 1000.0,
+      "date": "2026-08-14",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-40747-00207",
+      "donor_id": "soto-juan",
+      "committee_id": "ward-27",
+      "amount": 1500.0,
+      "date": "2026-08-14",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-40747-00208",
+      "donor_id": "ascend-lake-llc",
+      "committee_id": "ward-27",
+      "amount": 1000.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-40747-00209",
+      "donor_id": "casey-robert",
+      "committee_id": "ward-27",
+      "amount": 2500.0,
+      "date": "2026-08-27",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-40747-00210",
+      "donor_id": "mado-healthcare",
+      "committee_id": "ward-27",
+      "amount": 2500.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-40747-00211",
+      "donor_id": "lettuce-entertain-you-enterprises",
+      "committee_id": "ward-27",
+      "amount": 1250.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-40747-00212",
+      "donor_id": "lettuce-entertain-you-enterprises",
+      "committee_id": "ward-27",
+      "amount": 1250.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-40747-00213",
+      "donor_id": "lettuce-entertain-you-enterprises",
+      "committee_id": "ward-27",
+      "amount": 2500.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-40747-00214",
+      "donor_id": "chicago-investments-ii-lp",
+      "committee_id": "ward-27",
+      "amount": 2500.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-40747-00215",
+      "donor_id": "dineamic-management",
+      "committee_id": "ward-27",
+      "amount": 5000.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-40747-00216",
+      "donor_id": "grg-fulton-market-llc",
+      "committee_id": "ward-27",
+      "amount": 5000.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-40747-00217",
+      "donor_id": "illinois-restraurants-pac",
+      "committee_id": "ward-27",
+      "amount": 1500.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-40747-00218",
+      "donor_id": "lawless-clodagh",
+      "committee_id": "ward-27",
+      "amount": 1000.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-40747-00219",
+      "donor_id": "weiner-scott",
+      "committee_id": "ward-27",
+      "amount": 1000.0,
+      "date": "2026-09-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-40747-00220",
+      "donor_id": "ck-1209-llc",
+      "committee_id": "ward-27",
+      "amount": 2500.0,
+      "date": "2026-09-01",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "A-1"
@@ -728787,6 +732434,96 @@
       "committee_id": "ie-committee-26066",
       "amount": 1750000.0,
       "date": "2026-07-14",
+      "cycle": "2027",
+      "contribution_type": "IE Committee Receipt",
+      "source_filing": "Receipts"
+    },
+    {
+      "id": "ie-rec-18574-1508",
+      "donor_id": "seiu-il-council-dues",
+      "committee_id": "ie-committee-18574",
+      "amount": 165000.0,
+      "date": "2026-08-05",
+      "cycle": "2027",
+      "contribution_type": "IE Committee Dues Transfer",
+      "source_filing": "Receipts"
+    },
+    {
+      "id": "ie-rec-18574-1509",
+      "donor_id": "seiu-il-council-dues",
+      "committee_id": "ie-committee-18574",
+      "amount": 150000.0,
+      "date": "2026-08-06",
+      "cycle": "2027",
+      "contribution_type": "IE Committee Dues Transfer",
+      "source_filing": "Receipts"
+    },
+    {
+      "id": "ie-rec-530-1510",
+      "donor_id": "afscme-illinois-political-account-membership-dues",
+      "committee_id": "ie-committee-530",
+      "amount": 200000.0,
+      "date": "2026-08-10",
+      "cycle": "2027",
+      "contribution_type": "IE Committee Dues Transfer",
+      "source_filing": "Receipts"
+    },
+    {
+      "id": "ie-rec-26066-1511",
+      "donor_id": "leonard-gail",
+      "committee_id": "ie-committee-26066",
+      "amount": 50000.0,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "IE Committee Receipt",
+      "source_filing": "Receipts"
+    },
+    {
+      "id": "ie-rec-26066-1512",
+      "donor_id": "helen-zell",
+      "committee_id": "ie-committee-26066",
+      "amount": 250000.0,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "IE Committee Receipt",
+      "source_filing": "Receipts"
+    },
+    {
+      "id": "ie-rec-530-1513",
+      "donor_id": "afscme-illinois-political-account-membership-dues",
+      "committee_id": "ie-committee-530",
+      "amount": 565000.0,
+      "date": "2026-08-31",
+      "cycle": "2027",
+      "contribution_type": "IE Committee Dues Transfer",
+      "source_filing": "Receipts"
+    },
+    {
+      "id": "ie-rec-25109-1514",
+      "donor_id": "solis-construction-inc",
+      "committee_id": "ie-committee-25109",
+      "amount": 2500.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "IE Committee Receipt",
+      "source_filing": "Receipts"
+    },
+    {
+      "id": "ie-rec-25109-1515",
+      "donor_id": "dch-construction-hauling-llc",
+      "committee_id": "ie-committee-25109",
+      "amount": 1500.0,
+      "date": "2026-09-10",
+      "cycle": "2027",
+      "contribution_type": "IE Committee Receipt",
+      "source_filing": "Receipts"
+    },
+    {
+      "id": "ie-rec-25109-1516",
+      "donor_id": "swatware-llc",
+      "committee_id": "ie-committee-25109",
+      "amount": 2045.98,
+      "date": "2026-09-10",
       "cycle": "2027",
       "contribution_type": "IE Committee Receipt",
       "source_filing": "Receipts"
