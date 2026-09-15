@@ -332,7 +332,11 @@ var FIXTURES = {
     // ownRace anchor made specific (HALT-Q2R): after Q2, the bare 'Leon' substring also
     // matches a donor card in the President race, so cardByName('Leon') resolved there first.
     // 'Bruce Leon' anchors to his own race uniquely. (substring-anchor fragility -> P1-R runbook.)
-    selfLeak: { funder: 'Leon', leakRace: 'Rosenfeld', ownRace: 'Bruce Leon' },
+    // R40: the [self] group resolves by ID, never by name substring — a donor named
+    // 'Rosenfeld' filing into the President race captured the old cardByName walk
+    // (A2 1.4). leakRaceSlug/leakCardId are measured, not assumed.
+    selfLeak: { funder: 'Leon', leakRace: 'Rosenfeld', ownRace: 'Bruce Leon',
+                leakRaceSlug: 'district-4b', leakCardId: 'cand-ellen-rosenfeld-district-4b' },
     // Browse-Donors filters (E-1): a search term that hits a known rollup, and a donor type.
     browseFilters: { search: 'frank', searchHit: 'Frank', type: 'Individual' },
     // Industry-tag color + curated label (E-5): canonical color + curated label, not the slug.
@@ -354,7 +358,7 @@ var FIXTURES = {
       directIndustry: 'labor-teachers' },
     // Grouped spend-by-candidate (E-7): President first, district order, within-race ranking, race filter.
     candidateGroups: { firstRaceText: 'President', raceCount: 21, raceCount2024Scope: 21,
-      presidentOrder: ['Victor Henderson', 'Sendhil Revuluri', 'Jessica Biggs', 'Jennifer Custer'], singleRace: 'sb-d06' },
+      presidentOrder: ['Sendhil Revuluri', 'Victor Henderson', 'Jessica Biggs', 'Jennifer Custer'], singleRace: 'sb-d06' },
     // Fold-in ordering ruling (PS-86 frame/contents): the WITHIN-group sequences pinned
     // verbatim from the pre-amend run (fe3fd1c-content preview, captured 2026-08-04).
     // The comparator may only change group PRECEDENCE; these sequences must not move.
@@ -540,13 +544,13 @@ async function assertSelector(T, ctx, fx) {
 async function assertSelfFundingNoLeak(T, ctx, fx) {
   await ctx.closeModal();
   ctx.selectElection('2026'); await ctx.wait(60);
-  var leakSlug = await ctx.findRaceWith(fx.selfLeak.leakRace);
-  T.ok('[self] found ' + fx.selfLeak.leakRace + ' race (' + leakSlug + ')', !!leakSlug);
+  var leakSlug = fx.selfLeak.leakRaceSlug;                       // R40: pinned, not name-walked
+  T.ok('[self] found ' + fx.selfLeak.leakRace + ' race (' + leakSlug + ')', ctx.slugs().indexOf(leakSlug) >= 0);
   ctx.nav(leakSlug); await ctx.wait(60);
-  var card = ctx.cardByName(fx.selfLeak.leakRace) || { innerHTML: '' };
+  var card = ctx.root().querySelector('article.card[id="' + fx.selfLeak.leakCardId + '"]') || { innerHTML: '' };
   T.ok('[self] ' + fx.selfLeak.leakRace + ' self-funding renders separately (own money / loans)',
     /own money|tagchip self|candidate\u2019s own money/.test(card.innerHTML));
-  var leak = [].slice.call((ctx.cardByName(fx.selfLeak.leakRace) || ctx.doc.createElement('div')).querySelectorAll('.crow,.selfline'))
+  var leak = [].slice.call((ctx.root().querySelector('article.card[id="' + fx.selfLeak.leakCardId + '"]') || ctx.doc.createElement('div')).querySelectorAll('.crow,.selfline'))
     .filter(function (r) { return new RegExp(fx.selfLeak.funder).test(r.textContent) && /own money|tagchip self/.test(r.innerHTML); });
   T.ok('[self] NO LEAK: no ' + fx.selfLeak.funder + ' row in ' + fx.selfLeak.leakRace + ' marked self (relational is_self)', leak.length === 0);
   // The own-money leg moved with the money (F-2 ruled semantics): Leon's self-funding is
@@ -576,8 +580,8 @@ async function assertSpendTabFeatures(T, ctx, fx) {
   fx.subtabs.forEach(function (t) { T.ok('[spend.A] subtab present: ' + t, R.indexOf('data-spendtab="' + t + '"') >= 0); });
   T.ok('[spend.A] browse list renders donor rows under the default (2026) scope', /data-funder/.test(R));
   // (the 'IE PAC' STRING legitimately remains in the stable facet dropdown; the assert is on ROWS)
-  T.ok('[spend.A] zero IE-committee ROWS under 2026 (all school-board IE is 2024-window)',
-    ctx.root().querySelectorAll('.spend-body [data-committee]').length === 0);
+  T.ok('[spend.A] IE-committee ROWS under 2026 equal the spenders with 2026 school-board IE (3; 09-13 vintage)',
+    ctx.root().querySelectorAll('.spend-body [data-committee]').length === 3);
   // B — the GLOBAL selector governs the spend window and reslices
   ctx.click(ctx.root().querySelector('[data-spendtab="industries"]')); await ctx.wait(60);
   var ind26 = ctx.root().querySelector('.spend-body').textContent;

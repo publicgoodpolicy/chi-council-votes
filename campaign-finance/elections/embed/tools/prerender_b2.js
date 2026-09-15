@@ -181,12 +181,12 @@ ok('candidate committee Sunshine link present in card', /Illinois Sunshine ↗/.
 console.log('\n=== B3-REVISE assertions (three tiers + footprint + tags) ===');
 var sp0 = debOpp.spenders[0];
 // Tier 1: committee, amount, stance, Sunshine — NOT the funders yet
-// F-2 FULL EXTENT, PINNED: no race page renders an IE panel at this vintage — every
-// school-board IE row is 2024-window and targets a 2026 candidacy id (P1-B matching),
-// so in-window IE is zero on every reachable race card in BOTH scopes. The Tier-1/2/3
-// IE-panel DOM returns to race pages when P1-E re-routes 2024 targets; until then the
-// IE surfaces are the 2024-scope spend tab + committee profiles (gate_bundle-covered).
-ok('F-2 PINNED: no IE-panel DOM (ie-cmte-toggle) on either scoped page', page.indexOf('ie-cmte-toggle') < 0 && page1.indexOf('ie-cmte-toggle') < 0);
+// F-2 REPINNED (R39, DATA-UPDATE-1, 09-13 vintage): the 2026 school-board IE bucket is
+// non-empty for the first time, so the IE-panel DOM (ie-cmte-toggle) renders on a race
+// page wherever its card has in-window IE — measured per page: district-1a present,
+// district-2a absent. Tier-1/2/3 IE-panel DOM returns to a race page whenever it has
+// in-window IE.
+ok('F-2 REPINNED (R39): IE-panel DOM (ie-cmte-toggle) present on district-1a (sb-d01 carries 2026 school-board IE, 09-13 vintage) and absent on district-2a (sb-d03 carries none)', page1.indexOf('ie-cmte-toggle') >= 0 && page.indexOf('ie-cmte-toggle') < 0);
 ok('Tier-2 invariants intact at the data layer (spender + second-hop funders + receipt-vs-spend)',
   sp0.topFunders.length >= 1 && sp0.funderTotal > 0);
 ok('Tier 2 funder rows are clickable (data-funder) -> Tier 3', /class="crow funder-row" type="button" data-funder="/.test(page));
@@ -318,7 +318,7 @@ ok('genuinely-unnamed IE (39901) falls back to framed identity, never a bare id'
 console.log('\n=== B3-REVISE-5 assertions (school-board scope + spender guard + Bannon) ===');
 function ieCount(idx) { var n = 0; for (var c in idx.ieByCandidate) n += idx.ieByCandidate[c].support.length + idx.ieByCandidate[c].oppose.length; return n; }
 ok('unscoped index keeps all IEs incl. council (' + ieCount(indexAll) + ' = ' + json.independent_expenditures.length + ')', ieCount(indexAll) === json.independent_expenditures.length);
-ok('school-board scope keeps ONLY school-board IEs (110), drops council (218)', ieCount(index) === 110);
+ok('school-board scope keeps ONLY school-board IEs (145), drops council (219)', ieCount(index) === 145);
 var councilTarget = false;
 for (var cc in index.ieByCandidate) { var r5 = index.raceById[(index.candidateById[cc] || {}).race_id] || {}; if (r5.office === 'alderperson' || r5.office === 'mayor') councilTarget = true; }
 ok('no council/municipal IE target survives school-board scope', !councilTarget);

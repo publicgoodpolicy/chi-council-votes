@@ -442,7 +442,9 @@ def validate(art, ed=None):
     # SBE id so a slug rename does not silently disarm it.
     RATIFIED_IE = {
         "26066": {"support": 444453.78, "oppose": 366064.00, "rows": 28},
-        "39901": {"support": 375117.96, "oppose": 0.00, "rows": 49},
+        "39901": {"support": 377284.32, "oppose": 0.00, "rows": 50},
+        "41012": {"support": 22500.00, "oppose": 73337.50, "rows": 6},
+        "41327": {"support": 26460.00, "oppose": 0.00, "rows": 1},
     }
     if ie:
         seen_ie = {}
@@ -453,7 +455,7 @@ def validate(art, ed=None):
                 e["support"] = round(e["support"] + float(sp["support"]["amount"]), 2)
                 e["oppose"] = round(e["oppose"] + float(sp["oppose"]["amount"]), 2)
                 e["rows"] += sum(len(t.get("rows") or []) for t in (sp.get("targets") or []))
-        r.ok("SBF-17e the ratified spender set is exactly the two measured committees",
+        r.ok("SBF-17e the ratified spender set is exactly the four measured committees",
              set(seen_ie) == set(RATIFIED_IE), f"got {sorted(seen_ie)}")
         for k, want in RATIFIED_IE.items():
             got = seen_ie.get(k)
@@ -466,8 +468,8 @@ def validate(art, ed=None):
                  got["rows"] == want["rows"], f"got={got['rows']} ratified={want['rows']}")
         grand = round(sum(v["support"] + v["oppose"] for v in seen_ie.values()), 2)
         grows = sum(v["rows"] for v in seen_ie.values())
-        r.ok("SBF-17e the whole IE slice equals the ratified $1,185,635.74 over 77 rows",
-             abs(grand - 1185635.74) < CENT and grows == 77,
+        r.ok("SBF-17e the whole IE slice equals the ratified $1,310,099.60 over 85 rows",
+             abs(grand - 1310099.60) < CENT and grows == 85,
              f"got ${grand} over {grows} rows")
 
     # SBF-18 — the election-wide label (A.3) and the bug it fixes.

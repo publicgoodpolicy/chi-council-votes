@@ -501,10 +501,12 @@ function around(tpl, marker) { return String(tpl).split(marker); }
      pVac.html.indexOf('ipg-sb-fin') < 0 && pVac.text.indexOf('Vacant') >= 0);
 
   // ---- both threshold branches ------------------------------------------
-  // 4A is measured above threshold and 6B below, on the REAL artifact — so both
-  // branches are exercised by real data. The synthetic boot below then flips one
-  // member, proving the branch follows the artifact's precomputed flag and is not
-  // keyed to a member id or to a recomputation in the embed.
+  // 4A is measured above threshold and 2A below, on the REAL artifact — so both
+  // branches are exercised by real data. The below case re-seated 6B -> 2A at the
+  // 09-13 vintage (R42): 6B's 2026 substantive share crossed 0.5 (8.0% -> 55.6%) on
+  // $200,000 of filed labor-PAC receipts, so 6B now renders the bar. The synthetic
+  // boot below then flips one member, proving the branch follows the artifact's
+  // precomputed flag and is not keyed to a member id or to a recomputation in the embed.
   ok('[SBF/BAR] above threshold: the bar renders with the disclosure line',
      pFull.html.indexOf('ipg-sb-bar-seg') >= 0
        && !!F3 && pFull.text.indexOf(around(F3, '{N}')[1]) >= 0);
@@ -513,13 +515,13 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   // state.finElection persists across seat changes (pre-existing behaviour, and now
   // load-bearing because coverage is per-election), so the scope is set EXPLICITLY here
   // rather than inherited from whichever selector a previous check happened to drive.
-  var pBelow = setSel(pick(mv, '6B'), 'ipg-sb-fin-el', defaultElection(finBy('6B')));
+  var pBelow = setSel(pick(mv, '2A'), 'ipg-sb-fin-el', defaultElection(finBy('2A')));
   ok('[SBF/BAR] below threshold: NO bar, and string 4 renders as the primary state',
      pBelow.html.indexOf('ipg-sb-bar-seg') < 0
        && !!F4 && pBelow.text.indexOf(around(F4, '{N}')[0]) >= 0);
   ok('[SBF/BAR] below-threshold copy carries the member’s own measured share',
      pBelow.text.indexOf(String(Math.round(
-       finBy('6B').coverage_by_election[defaultElection(finBy('6B'))].substantive_share * 1000) / 10)
+       finBy('2A').coverage_by_election[defaultElection(finBy('2A'))].substantive_share * 1000) / 10)
        + '% of donor dollars') >= 0);
 
   // ======================================================================
@@ -858,7 +860,11 @@ function around(tpl, marker) { return String(tpl).split(marker); }
     var fams = {}, singles = {};
     boardRows.forEach(function (x) {
       if (x.d.cluster_id) fams[x.d.cluster_id] = 1; else singles[x.d.donor_id] = 1; });
-    var expected = Object.keys(fams).length + Object.keys(singles).length;
+    // R43: the page pushes ONE row per IE spender into this same list (SBFIN-3 B,
+    // school-board-embed.html B.1), so the expected count carries them too. This read
+    // agreed with the page only while ie_spenders had no bucket for spendEK.
+    var ieRows = ((REALFIN.ie_spenders || {})[spendEK] || []).length;
+    var expected = Object.keys(fams).length + Object.keys(singles).length + ieRows;
     // The rendered page shows the top 25; the count line reports the whole set.
     return pBd.text.indexOf(expected + ' results matched.') >= 0;
   })());
@@ -920,8 +926,15 @@ function around(tpl, marker) { return String(tpl).split(marker); }
     var directSum = REALFIN.members.reduce(function (a, m) {
       var has = ((m.donors_by_election || {})[spendEK] || []).length;
       return a + (has ? Number(((m.elections || {})[spendEK] || {}).direct.amount || 0) : 0); }, 0);
+    // R44: Industry Totals is carve (a) — election-wide, direct + support + oppose
+    // (school-board-embed.html spendIndustryTotals: e.amount = direct + support +
+    // oppose, and the view's grand total sums those). The rendered total is therefore
+    // rowSum PLUS each spender's own deployment, which this sought only while
+    // ie_spenders had no bucket for spendEK. Conjuncts 1 and 2 are unchanged.
+    var ieCarve = ((REALFIN.ie_spenders || {})[spendEK] || []).reduce(function (a, sp) {
+      return a + Number(sp.support.amount || 0) + Number(sp.oppose.amount || 0); }, 0);
     return multi === 0 && Math.abs(rowSum - directSum) < 0.005
-        && pInd.text.indexOf(money(rowSum)) >= 0;
+        && pInd.text.indexOf(money(rowSum + ieCarve)) >= 0;
   })());
   ok('[SBF2/INDUSTRY] every label comes from the artifact vocabulary, never a raw key',
      (function () {

@@ -85,6 +85,13 @@ governing rule below). Export `$REPO`; paths are relative to the repo root.
 0b. seed_incumbents.py ../ipg-rep-finder/index.html   # one-time / on roster refresh: 70 incumbent stubs
 1.  build_election_seed.py                                   # seed: races/candidates + dict-shaped
                                                             #   finance keys + a cycles block
+1b. convert_bulk_receipts.py --format export26 --bulk <SBE Receipts> --fileddocs <SBE FiledDocs> \
+        --committee-ids campaign-finance/elections/reference/elections-committee-ids.txt --out-dir <scratch dir>
+                                                            # elections selection of record: bare id per line;
+                                                            #   state the list's sha256 in the run report. Then
+                                                            #   stage EVERY CSV written into raw/receipts-elections/
+                                                            #   (no ward filter). A list id with no receipts is
+                                                            #   skipped silently by the converter.
 2.  ingest.py    --data-file campaign-finance/election-data.json --raw-dir raw/receipts-elections
                                                             # direct contributions; donors have no parent_id yet
 3.  transform_slice1.py  campaign-finance/election-data.json # parent_id on ALL donors
@@ -105,7 +112,20 @@ governing rule below). Export `$REPO`; paths are relative to the repo root.
                                                             #   + IE-committee industry tags
 7.  build_rollups.py     campaign-finance/election-data.json # LAST: rollups reflect the synced
                                                             #   tags/classifications (see below)
+7b. build_sb_finance.py --school-board campaign-finance/school-board-data.json \
+        --elections campaign-finance/election-data.json --out campaign-finance/school-board-finance.json
+                                                            # canonical (MECHANISM_REFERENCE §1): rebuilds the
+                                                            #   school-board finance artifact from the finished
+                                                            #   election-data.json; requires ingest_sb_votes' data.
 8.  validate_council_data.py  campaign-finance/election-data.json   # shared gate (positional arg)
+9.  reconcile.py --data campaign-finance/election-data.json \
+        --d2totals <SBE D2Totals> --fileddocs <SBE FiledDocs> --pulled <pull date, YYYY-MM-DD> \
+        --known-gaps campaign-finance/elections/known-gaps.json \
+        --out campaign-finance/elections/reconciliation-report.json
+                                                            # LAST: reads the finished artifact; stamps
+                                                            #   vintage_manifest_sha256 from the seal's MANIFEST.md.
+                                                            #   --pulled is operator-typed and unchecked (open ledger 72).
+10. validate_reconcile.py campaign-finance/elections/reconciliation-report.json
 ```
 
 **Governing rule — why slice1/slice2 come before `ingest_ie`.** `build_rollups`,
