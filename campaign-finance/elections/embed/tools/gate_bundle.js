@@ -2189,11 +2189,15 @@ async function assertPersonSurface(T, ctx, fx) {
     }
     var cEntry = entry('### ELEC-METH-1 — council methodology strings C1–C4');
     var rEntry = entry('### CNCL-DATA-1 P2 — the verify sentence (R11)');
+    // R47: the school-board branch's one ratified string is its OWN register entry, not a sixth
+    // item in the council set — so it is a second extraction target, extracted by the same form.
+    var sEntry = entry('### SB-METH-1 — school-board methodology string C5');
 
     var bad = [];
     // --- premise 1: both entries resolve by heading, and neither is empty
     if (!cEntry) bad.push('the C1–C4 entry does not resolve by heading in the register');
     if (!rEntry) bad.push('the R11 entry does not resolve by heading in the register');
+    if (!sEntry) bad.push('the SB-METH-1 entry does not resolve by heading in the register');
     var C = {};
     if (cEntry) {
       [1, 2, 3, 4, 5].forEach(function (n) {
@@ -2203,6 +2207,13 @@ async function assertPersonSurface(T, ctx, fx) {
       });
     }
     // --- premise 2: five strings extracted, none empty (an empty oracle passes vacuously)
+    var SBC5 = null;
+    if (sEntry) {
+      var sm = /\*\*C5[^*]*\*\*\s*`([^`]*)`/.exec(sEntry);
+      if (!sm) bad.push('SB C5 not found in the SB-METH-1 entry');
+      else SBC5 = sm[1].replace(/\s+/g, ' ').trim();
+      if (SBC5 === '') bad.push('SB C5 extracted empty');
+    }
     if (Object.keys(C).length !== 5) bad.push('extracted ' + Object.keys(C).length + ' C-strings, expected 5');
     Object.keys(C).forEach(function (k) { if (!C[k]) bad.push('C' + k + ' extracted empty'); });
 
@@ -2276,6 +2287,17 @@ async function assertPersonSurface(T, ctx, fx) {
     // comparison is two absences agreeing.
     var LINKS = /<p>Both verification artifacts are public:[\s\S]*?<\/p>/;
     var sbHtml = R.methodologyView(verify, 'school_board', null);
+    // R47: the school-board branch carries SB-METH-1's C5 as its own paragraph. Positional,
+    // like the council side: the count is asserted before the index is read, so a page one
+    // paragraph short reports a shape change and not a text difference.
+    var sp = paras(sbHtml);
+    if (sp.length !== 13) {
+      bad.push('the school-board branch rendered ' + sp.length + ' <p>, expected 13');
+    } else if (SBC5 == null) {
+      bad.push('SB C5 was not extracted, so the school-board paragraph cannot be compared');
+    } else if (sp[3] !== bind(SBC5)) {
+      bad.push('the school-board C5 paragraph differs from the register');
+    }
     var cLinks = LINKS.exec(html), sLinks = LINKS.exec(sbHtml);
     if (!cLinks) bad.push('the council branch renders no artifact-links paragraph');
     if (!sLinks) bad.push('the school-board branch renders no artifact-links paragraph');
@@ -2284,8 +2306,9 @@ async function assertPersonSurface(T, ctx, fx) {
     }
     T.ok('[METH/REGISTER] every rendered council methodology paragraph equals the register\'s ' +
       'ratified text — ' + (bad.length ? bad.join('; ')
-        : '5 C-strings + R11, extracted by heading from RULINGS.md, character-identical; the ' +
-          'artifact-links paragraph byte-identical to the school-board branch\'s'),
+        : '5 C-strings + R11 on the council branch and SB-METH-1\'s C5 on the school-board ' +
+          'branch, extracted by heading from RULINGS.md, character-identical; the ' +
+          'artifact-links paragraph byte-identical across the two branches'),
       bad.length === 0);
 
     // BITE AT BIRTH: a one-character edit to a C-string in the RENDER OUTPUT must fire. Applied to

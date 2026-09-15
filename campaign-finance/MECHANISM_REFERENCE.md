@@ -891,11 +891,11 @@ that catch defect classes the existing gates structurally cannot see.
 | S-sbemb | `campaign-finance/school-board/school-board-embed.html` | `e3bb4d40abef7cd5335150257c493eb9a913ad1d29b2353fdc37f11fd94e7956` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
 | S-edat | `campaign-finance/elections/embed/data.js` | `9e3ee70f5d2b140033b923f42358965a25b919823e87281d5da2974344afca77` |
-| S-eren | `campaign-finance/elections/embed/render.js` | `420ef877818fa4506ddabfab06dfb3b5ca1808961f49dbac3d9119dc8f1ba354` |
+| S-eren | `campaign-finance/elections/embed/render.js` | `c906f60d32f6ce3c7a4cb68f7e27dc7acd4885e60f68350bf8fdfca38392e1b7` |
 | S-eapp | `campaign-finance/elections/embed/app.js` | `33c896e8c8924e143da40d63c69a66e01f9c9e8801af0017e7dea8c77366c71d` |
 | S-srv | `campaign-finance/editor/serve.py` | `f430f67b2d2367893ab4cb37a1c25ff84d71bb93b53a23b78f253ec17dccaa3a` |
 | S-rec | `campaign-finance/ingestion/reconcile.py` | `363c3c19341508463d6f5563e2fe2defa3fb59e7626b48b3e31b13e0180acb50` |
-| S-egate | `campaign-finance/elections/embed/tools/gate_bundle.js` | `5051c0fb6cdb65bddef438f5c8ee61049c47c5f909936d986de1a64fec0f0dcc` |
+| S-egate | `campaign-finance/elections/embed/tools/gate_bundle.js` | `5aab7c2b9a556e4848a911285d6f9ebc5a3e18cbdb4c332cde3f4c0abfdf57b3` |
 | S-chk | `campaign-finance/tools/check_sheet_scopes.py` | `9c980fd7362351a7df8a889ba60dc1a38d4fcee397200903a4f7d1b7bc620e94` |
 | S-sbf | `campaign-finance/ingestion/build_sb_finance.py` | `566e15999c29359d66c7e6c87b5f44c982e8df0fe5cd9c309ecb644bf6769553` |
 | S-a7 | `campaign-finance/sheets-sync/a7_precheck.py` | `a9d7e4669a4dc7b614d5d85939432a3317e3718d9a91cc9a9f0d50ca9ef73374` |
@@ -985,7 +985,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.1 | A-fw1 | 7-16 (fix sites exist only in the elections path; artifact layer separate) |
 | C5.2 | S-cemb | 47 (dataUrl at the `refs/heads/main/` form), 48-52 (sharded mode, present-but-commented), 68 (feedback endpoint), 3425+3443 (subject prefix) |
 | C5.2 | S-sbemb | 66-70 (the `refs/heads/main/` rationale in situ, then `dataUrl` and `financeUrl` — TWO artifacts since SBFIN-1, where this row previously named one), 2979+2989 (the two artifact fetches), 81+83 (feedback endpoint + subject prefix), 2959 (the POST) |
-| C5.13 | S-eren | 140 (METHODOLOGY_OFFICES — the D-22 allowlist, city_council enlisted), 1033-1049 (the three shared expressions — the frame, the verification section and the artifact-links paragraph — as single expressions used by both branches), 1051-1087 (methodologyView's council branch: C1/C2/C5/C3/C4 with no `<h3>` before any of them, then the verification section and the links paragraph), 1402 (the call site passing office and the dues figures) |
+| C5.13 | S-eren | 140 (METHODOLOGY_OFFICES — the D-22 allowlist, city_council enlisted), 1033-1049 (the three shared expressions — the frame, the verification section and the artifact-links paragraph — as single expressions used by both branches), 1051-1087 (methodologyView's council branch: C1/C2/C5/C3/C4 with no `<h3>` before any of them, then the verification section and the links paragraph), 1103-1110 (methodologyView's school-board branch: SB-METH-1's C5 as its own paragraph, bare values, whole or not at all, following the filing-deadline paragraph), 1402 (the call site passing office and the dues figures) |
 | C5.13 | S-egate | 1777-1824 ([MUNI/METH]), 1825-1903 ([MUNI/SUBJ]), 2140-2301 ([METH/REGISTER] — register-derived for the C-strings and R11, sibling-branch-pinned for the links paragraph; normalization stated in situ), 1976-2062 ([COUNCIL/CAND]), 2063-2139 ([COUNCIL/DONOR]) |
 | C5.2 | S-eapp | 21 (DEFAULT_SRC at the ratified refs/heads/main/ form), 25-27 (ART_BASE + the two verification artifacts), 328 (src resolution: data-src → window.IPG_DATA_URL → baked default) |
 | C5.2 | S-eemb | 17-18 (data-src override documented), 19-24 (artifact + the code-only inlining: data.js/render.js/app.js + styles into one Code Block) |

@@ -2464,3 +2464,25 @@ commit through the chain, never a hand edit of the artifact.
 > HEAD and always was; the fix neither repairs nor regresses it (open ledger 70).
 
 *Provenance, amendment (the lane as measured): ENRICH-1 ratification package as ratified (`enrich-1-ratification-package-rev4.md`), sha256 `5a20a7fa836bebe334c7ce143a0733f87ee3ebce8060bcd11fae2a6ed9086575`, 16,949 B / 108 L, Region 1; ruled by Ishan 2026-09-11 (chat) on the ENRICH-1 G0 report (`enrich-1-g0-report.md`, sha256 `813adf94945e7807899d85d180b85c149e47ee76b3bef6a3289ed05510a9801d`, 37,352 B / 677 L, §C2, §D3, §D3b, §F) and the ENRICH-1 hold reports (`enrich-1-hold-report.md`, sha256 `d2c293c2fc31a4b9fadc90abbfd3032a944a6ad4b06c57f6032f3015e2bcb6ea`, 12,870 B / 218 L, P4; `enrich-1-hold-report-rev2.md`, sha256 `31f16e64aad822a088fcaf6ad319fa49f5e3219c7f2363c322903e09692c4a5c`, 18,344 B / 322 L, §D and W6). Clauses (i)–(iv) above stand as ruled 2026-09-08; this amendment fixes their referents and their landing on the vintage measured.*
+
+### SB-METH-1 — school-board methodology string C5
+
+The school-board methodology view carries one ratified string, bound at render from the
+reconciliation report the surface serves (DATA-UPDATE-1 HALT (iv), 2026-09-15). It replaces
+the runtime-composed "Data current as of {pulled}." clause, which was in no file and bound
+only the pull date.
+
+> **C5, data currency:** `Contribution data is current through {DATA_THROUGH}, from the
+> Illinois State Board of Elections bulk export of {PULL_DATE}.` — where `{DATA_THROUGH}`
+> renders the artifact's stated receipts edge (2026-09-11 on this vintage) and
+> `{PULL_DATE}` the sealed vintage's pull date (2026-09-13), both from the reconciliation
+> report the surface serves; if either field is absent the sentence does not render. The
+> text is identical to the council set's C5 (ELEC-METH-1, amendment CNCL-DATA-1 P2) and
+> renders as its own paragraph, bare values, following the school-board view's
+> filing-deadline paragraph.
+>
+> **Scope of the set:** one string. C1–C4 of the council set are not rendered on the
+> school-board view; the artifact-links paragraph remains shared with the council branch
+> and is checked as such.
+
+*Provenance (SB-METH-1): DATA-UPDATE-1 register ratification package, revision 1 (`data-update-1-register-package-sb-meth-1-rev1.md`), sha256 `d568796b7bb3b28938c121bdf42f68139d7c624d1354282be3838e50353c7336`, 2,724 B / 35 L, region §1, transcribed verbatim from the package's fenced block, text unaltered character for character. Ratified by Ishan in chat 2026-09-15 as drafted. Recorded under the PS-93 pattern: no id is allocated and the council set stands unaltered.*

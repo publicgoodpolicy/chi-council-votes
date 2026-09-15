@@ -2387,9 +2387,6 @@
       verify.nGaps != null && verify.gapsNet != null && verify.gapsGross != null &&
       verify.gapsUnder != null && verify.gapsOver != null;
     var mf = function (v) { return '<span class="mfield">' + esc(String(v)) + '</span>'; };
-    var asOf = hasNums
-      ? 'Data current as of ' + mf(verify.pulled) + '.'
-      : 'Data current as of our most recent quarterly pull; see ' + reconLink + ' for the exact date.';
     // CNCL-DATA-1 P2.1 W5 — R11 as ratified (register §"CNCL-DATA-1 P2 — the verify sentence
     // (R11)"), replacing the incumbent WHOLE. The ratified text OPENS with the lead sentence that
     // used to be hardcoded at the render site below, so this string is now the entire paragraph
@@ -2500,7 +2497,15 @@
       '<p>Everything here derives from committees’ own filings with the Illinois State Board of Elections: ' +
       'itemized receipts (Schedule A), quarterly disclosure reports (D-2), interim large-contribution reports ' +
       '(A-1), and independent-expenditure filings. We pull SBE’s published data after each quarterly filing ' +
-      'deadline. ' + asOf + '</p>' +
+      'deadline.</p>' +
+      // SB-METH-1 (R46): the school-board view's one ratified string, composed exactly as the
+      // council branch composes C5 — same literal, bare values, whole or not at all. It replaces
+      // the runtime pull-date clause this branch used to carry, which was in no register and
+      // bound only the pull date. [METH/REGISTER] compares this paragraph to RULINGS.md §SB-METH-1.
+      ((verify && verify.dataThrough != null && verify.pulled != null)
+        ? ('<p>Contribution data is current through ' + verify.dataThrough + ', from the Illinois ' +
+           'State Board of Elections bulk export of ' + verify.pulled + '.</p>')
+        : '') +
       '<h3>Itemization follows the filings</h3>' +
       '<p>Contribution data is pulled directly from Illinois State Board of Elections filings; itemization and ' +
       'disclosure boundaries follow the filings themselves. Every contribution a committee itemizes on its ' +

@@ -153,6 +153,90 @@ the moment a scope is drafted**; planner session state and memory indexes are no
 
 [Byte-copied from the DATA-UPDATE-1 HALT (i) addendum A2 rev 1 (`012d5fa0c5feabcd20fca194b8c1287ec3d3f34e3d8c25ab3a7f3b1217e41991`, 10,203 B / 68 L), its line 44, span sha256 `00531cb8dd29095651b7043deaa0b4ed7fc2e4026c8f589188c5eb908a6c6041` (the line's bytes, no trailing newline). The leading `**133 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 HALT (i) addendum A1, whose P4 stated seven ROLES entries against a measured eight; the miscount originated in the HALT report's prose (`123d84400a777da60b74981c1ea5269d24baf489049e72bdec70e4bf4a5b813c`, 66,149 B / 1,266 L) and the addendum carried it. Offered as candidate 30 and ratified by Ishan 2026-09-14 (addendum A2, R19). Numbered 2026-09-14 at DATA-UPDATE-1 HALT (i) addendum A2.]
 
+### 134
+
+**134 (pointer class, kin to 130)** — a HALT dispatch named `council-data.json` as holding the Tobon committee record and expected a council-mode ingest to re-key it, when BR-0 §3.7 had measured `40637` at zero on the council side and G0 §C2's table was headed by `election-data.json`; the executor held at the premise and measured the record in `election-data.json` and the linkage path gated off by `ingest.py` L595. Defense: **the artifact a dispatch names for a record is read off the citation at drafting, never from memory; a mechanism expectation cites the line that gates it.** (2026-09-14, HALT (ii) rev 1.)
+
+[Byte-copied from the DATA-UPDATE-1 error-ledger ratification package, entries 134–147, revision 1 (`5ea721b8e853413bf4d4fc9dc29935df81e249aee92801be816c701b7e1d9c47`, 7,363 B / 33 L), its line 5, span sha256 `9181fab3bcc017cd6e2458bc62c55e620de3278c05adc28d5c0c8157b259d0d9` (the line's bytes, no trailing newline). The leading `**134 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 as the package's entry states. Offered in chat as candidates 32–45 and ratified by Ishan 2026-09-15. Numbered 2026-09-15 at DATA-UPDATE-1 HALT (iv).]
+
+### 135
+
+**135 (pointer class)** — a dispatch adopted the runbook as the chain of record and then instructed "file count equal" for the converter's output, contradicting the runbook's own staging rule (ward-mapped subset only); the executor read `ingest.py:649` and followed the runbook. Defense: **a dispatch that adopts a documented rule quotes that rule's operative clause into the instruction, never a paraphrase of it.** (2026-09-14, HALT (ii) rev 2.)
+
+[Byte-copied from the DATA-UPDATE-1 error-ledger ratification package, entries 134–147, revision 1 (`5ea721b8e853413bf4d4fc9dc29935df81e249aee92801be816c701b7e1d9c47`, 7,363 B / 33 L), its line 7, span sha256 `f4770600d4ffa957cb9942d641e19164ea6f98f936d0d72ebefa1a08f2da77fd` (the line's bytes, no trailing newline). The leading `**135 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 as the package's entry states. Offered in chat as candidates 32–45 and ratified by Ishan 2026-09-15. Numbered 2026-09-15 at DATA-UPDATE-1 HALT (iv).]
+
+### 136
+
+**136 (pointer class, kin to 132)** — a dispatch expected a `check_docs` rule-3 delta of +2 from a fenced runbook block without reading `tokens_of`, which extracts backticked spans only; the measured delta was 0. Defense: **a checker whose delta is asserted is a checker whose extraction rule is read.** (2026-09-14, HALT (ii) rev 2.)
+
+[Byte-copied from the DATA-UPDATE-1 error-ledger ratification package, entries 134–147, revision 1 (`5ea721b8e853413bf4d4fc9dc29935df81e249aee92801be816c701b7e1d9c47`, 7,363 B / 33 L), its line 9, span sha256 `a7002f3a59da7966b182d60c21d65a38a414fd080177a326a4c775bd8f63c529` (the line's bytes, no trailing newline). The leading `**136 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 as the package's entry states. Offered in chat as candidates 32–45 and ratified by Ishan 2026-09-15. Numbered 2026-09-15 at DATA-UPDATE-1 HALT (iv).]
+
+### 137
+
+**137 (pointer class, kin to 132 and 134)** — a dispatch's `reconcile.py` command line omitted two `required=True` flags (`--data`, `--pulled`), drafted without reading the script's argparse; surfaced by the executor's §A measurement before the line ran. Defense: **every command line in ratified text is drafted from the script's argparse as read, never from a documented example.** (2026-09-14, HALT (iii) rev 1.)
+
+[Byte-copied from the DATA-UPDATE-1 error-ledger ratification package, entries 134–147, revision 1 (`5ea721b8e853413bf4d4fc9dc29935df81e249aee92801be816c701b7e1d9c47`, 7,363 B / 33 L), its line 11, span sha256 `5f87b22265f3e37faa00e2f84e6955e200f06c4c5976fb1c562a0e72730cbf89` (the line's bytes, no trailing newline). The leading `**137 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 as the package's entry states. Offered in chat as candidates 32–45 and ratified by Ishan 2026-09-15. Numbered 2026-09-15 at DATA-UPDATE-1 HALT (iv).]
+
+### 138
+
+**138 (pointer class, kin to 133 and 137)** — a read-only dispatch asserted that the council selection file was "the council-side instance of the same format" as the elections list reader, when `--council-list` takes a headed TSV and `--committee-ids` bare ids; a headed file passed to the wrong flag reads as garbage ids. Defense: **a file format asserted in ratified text is a format read from the reader that consumes it.** (2026-09-14, E0.)
+
+[Byte-copied from the DATA-UPDATE-1 error-ledger ratification package, entries 134–147, revision 1 (`5ea721b8e853413bf4d4fc9dc29935df81e249aee92801be816c701b7e1d9c47`, 7,363 B / 33 L), its line 13, span sha256 `b43a71e122763c96b18ad0ef431e221453a255ee992febf484638c3500b78130` (the line's bytes, no trailing newline). The leading `**138 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 as the package's entry states. Offered in chat as candidates 32–45 and ratified by Ishan 2026-09-15. Numbered 2026-09-15 at DATA-UPDATE-1 HALT (iv).]
+
+### 139
+
+**139 (pointer class, kin to 134)** — a dispatch premised that `ingest.py` L495–497 would re-key contribution rows already in the artifact, when the line iterates `parsed['contributions']` — the CSV's rows — and the ingest's replacement is per-committee against a record the dispatch had deleted; six rows were duplicated in the working tree, $28,720.00, and no check between the ingest and the stop would have seen it. Defense: **a claim about what a script does to rows already in an artifact is verified against the variable it iterates, never from a summary.** (2026-09-14, HALT (iii) rev 2.)
+
+[Byte-copied from the DATA-UPDATE-1 error-ledger ratification package, entries 134–147, revision 1 (`5ea721b8e853413bf4d4fc9dc29935df81e249aee92801be816c701b7e1d9c47`, 7,363 B / 33 L), its line 15, span sha256 `78d18789c50b52c5538a3c44f7eb96b8ad49807ef0810425e2d6e4fc460981b7` (the line's bytes, no trailing newline). The leading `**139 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 as the package's entry states. Offered in chat as candidates 32–45 and ratified by Ishan 2026-09-15. Numbered 2026-09-15 at DATA-UPDATE-1 HALT (iv).]
+
+### 140
+
+**140 (pointer class, kin to 137)** — a dispatch's converter command line omitted `--committees`, which `--format export26` hard-requires; the executor read what the flag feeds before supplying it, to confirm it was not SBE-RERUN-1's shape. Defense: **as 137; a flag's presence is read from argparse, and a same-named flag on a different script is checked against the ledger before it is supplied.** (2026-09-14, HALT (iii) rev 2.)
+
+[Byte-copied from the DATA-UPDATE-1 error-ledger ratification package, entries 134–147, revision 1 (`5ea721b8e853413bf4d4fc9dc29935df81e249aee92801be816c701b7e1d9c47`, 7,363 B / 33 L), its line 17, span sha256 `871ef913ed9db716672101dab8f4bc599606ad0fd8d04f90c5f7e564ef5587b7` (the line's bytes, no trailing newline). The leading `**140 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 as the package's entry states. Offered in chat as candidates 32–45 and ratified by Ishan 2026-09-15. Numbered 2026-09-15 at DATA-UPDATE-1 HALT (iv).]
+
+### 141
+
+**141 (pointer class, kin to 132)** — a ruling and its delete list scoped a Sheet remedy to `Donor Overrides` when the guard's union spans `Donor Clusters` too and D2 had listed the seven cluster rows; the executor held at the union with seven unresolved. Defense: **a remedy to a check's failure is scoped to every input the check reads, enumerated from the check's own code.** (2026-09-14, HALT (iii) rev 5.)
+
+[Byte-copied from the DATA-UPDATE-1 error-ledger ratification package, entries 134–147, revision 1 (`5ea721b8e853413bf4d4fc9dc29935df81e249aee92801be816c701b7e1d9c47`, 7,363 B / 33 L), its line 19, span sha256 `3e413647ecb7f04ded74e5bd8136e2bfb2e69258c5dd58548706d6e5f78192ef` (the line's bytes, no trailing newline). The leading `**141 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 as the package's entry states. Offered in chat as candidates 32–45 and ratified by Ishan 2026-09-15. Numbered 2026-09-15 at DATA-UPDATE-1 HALT (iv).]
+
+### 142
+
+**142 (pointer class, kin to 137)** — a dispatch stated `reconcile.py`'s path as `campaign-finance/elections/` when BR-0 §2.3 had recorded `campaign-finance/ingestion/`; the executor found the file by its sha. Defense: **a path in ratified text is copied from the measured table that records it, never typed.** (2026-09-14, HALT (iii) rev 5.)
+
+[Byte-copied from the DATA-UPDATE-1 error-ledger ratification package, entries 134–147, revision 1 (`5ea721b8e853413bf4d4fc9dc29935df81e249aee92801be816c701b7e1d9c47`, 7,363 B / 33 L), its line 21, span sha256 `aeb35c5501c02334ac541e25125f4935485730d527f44ce36bd2d15ae24474e4` (the line's bytes, no trailing newline). The leading `**142 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 as the package's entry states. Offered in chat as candidates 32–45 and ratified by Ishan 2026-09-15. Numbered 2026-09-15 at DATA-UPDATE-1 HALT (iv).]
+
+### 143
+
+**143 (pointer class, kin to 131)** — a dispatch authorized a rewrite of `election-data.json` without reading `[PREVIEW/VINTAGE]`, a gate check that fires on any such rewrite and whose remedy is one gitignored file; the gate held on it at the HALT. Defense: **before a dispatch rewrites an artifact, every gate check that reads that artifact is read; the remedy each names is authorized in the same carrier.** (2026-09-14, HALT (iii) rev 6.)
+
+[Byte-copied from the DATA-UPDATE-1 error-ledger ratification package, entries 134–147, revision 1 (`5ea721b8e853413bf4d4fc9dc29935df81e249aee92801be816c701b7e1d9c47`, 7,363 B / 33 L), its line 23, span sha256 `e19db83b8cc704011561ee8b157acdbf64dc4be0c556afe8edc081e01c8cfb94` (the line's bytes, no trailing newline). The leading `**143 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 as the package's entry states. Offered in chat as candidates 32–45 and ratified by Ishan 2026-09-15. Numbered 2026-09-15 at DATA-UPDATE-1 HALT (iv).]
+
+### 144
+
+**144 (PS-117 class, kin to 129 and 133)** — a dispatch expected `validate_council_data` to report zero warnings on `election-data.json`, an expectation copied from the council leg without measuring the elections pre-image (19, all the no-CSV committee class). Defense: **an expectation stated for one artifact is measured on that artifact's pre-image, never carried from another.** (2026-09-14, HALT (iii) rev 6.)
+
+[Byte-copied from the DATA-UPDATE-1 error-ledger ratification package, entries 134–147, revision 1 (`5ea721b8e853413bf4d4fc9dc29935df81e249aee92801be816c701b7e1d9c47`, 7,363 B / 33 L), its line 25, span sha256 `c41f762277112052edd7df8ac28371b640c49073246a71cb50e6696bbd53def6` (the line's bytes, no trailing newline). The leading `**144 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 as the package's entry states. Offered in chat as candidates 32–45 and ratified by Ishan 2026-09-15. Numbered 2026-09-15 at DATA-UPDATE-1 HALT (iv).]
+
+### 145
+
+**145 (pointer class, kin to 131 and 143)** — a dispatch had the executor read the ordering authority (`MECHANISM_REFERENCE.md` §1) for one step's placement and not for the chain, and followed the elections README's run order, which omitted `build_sb_finance`; the derived artifact went unrebuilt until the gate named it. Defense: **when a document is named as the ordering authority, the whole chain is read from it, and every run order that differs is reconciled to it before the run.** (2026-09-15, HALT (iii) A2/A3.)
+
+[Byte-copied from the DATA-UPDATE-1 error-ledger ratification package, entries 134–147, revision 1 (`5ea721b8e853413bf4d4fc9dc29935df81e249aee92801be816c701b7e1d9c47`, 7,363 B / 33 L), its line 27, span sha256 `f5c04fd0cf73d580f9384192f9186892e7735cdfe4c6f2974e689f5b90159a95` (the line's bytes, no trailing newline). The leading `**145 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 as the package's entry states. Offered in chat as candidates 32–45 and ratified by Ishan 2026-09-15. Numbered 2026-09-15 at DATA-UPDATE-1 HALT (iv).]
+
+### 146
+
+**146 (pointer class, kin to 143)** — an addendum authorized a derived-artifact rebuild without reading the validator that guards it, whose ratified figures (SBF-17e, PS-85) are pinned to the vintage and built to fail on a refresh; the tripwire fired correctly and the addendum held. Defense: **a validator whose figures are ratified is read before the artifact it guards is rebuilt; the re-pin travels with the rebuild.** (2026-09-15, HALT (iii) A3.)
+
+[Byte-copied from the DATA-UPDATE-1 error-ledger ratification package, entries 134–147, revision 1 (`5ea721b8e853413bf4d4fc9dc29935df81e249aee92801be816c701b7e1d9c47`, 7,363 B / 33 L), its line 29, span sha256 `63b2379499ad90fb4dfe3438de9d2c5fe8c3fdd0a88c84e2727db5d367965975` (the line's bytes, no trailing newline). The leading `**146 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 as the package's entry states. Offered in chat as candidates 32–45 and ratified by Ishan 2026-09-15. Numbered 2026-09-15 at DATA-UPDATE-1 HALT (iv).]
+
+### 147
+
+**147 (pointer class, kin to 143 and 146)** — an addendum authorized the same rebuild without reading the render fixture that consumes the artifact (`[SBV/RENDER]`), which pinned pre-refresh values and carried two assertions latent since SBFIN-3 B; the gate held on it after every other line had gone green. Defense: **as 143: every check that reads an artifact is enumerated from the gate before the artifact is changed, and the gate is run on the staged draft before the dispatch is ratified.** (2026-09-15, HALT (iii) A4.)
+
+[Byte-copied from the DATA-UPDATE-1 error-ledger ratification package, entries 134–147, revision 1 (`5ea721b8e853413bf4d4fc9dc29935df81e249aee92801be816c701b7e1d9c47`, 7,363 B / 33 L), its line 31, span sha256 `c7913f9b72fcddcb68ac5c93a250d40058ac8d89cb4c97f81d709002e8ad05f2` (the line's bytes, no trailing newline). The leading `**147 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 as the package's entry states. Offered in chat as candidates 32–45 and ratified by Ishan 2026-09-15. Numbered 2026-09-15 at DATA-UPDATE-1 HALT (iv).]
+
 ## Dispositions without a number
 
 Recorded so the findings are not lost; none consumes a number.
