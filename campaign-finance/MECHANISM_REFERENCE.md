@@ -878,7 +878,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-syn | `campaign-finance/sheets-sync/sync_overrides.py` | `0bac13ab7c15a02197822b77b7c1144ad3b12655b37322208476a3b0d3d73913` |
 | S-bld | `campaign-finance/build_all.sh` | `a7b1675cdf0cb34130bd0df6d865d5575ab596d8cff4f816722b12ab55edefe6` |
 | S-t1 | `campaign-finance/ingestion/transform_slice1.py` | `5f807b26245ee22173d3903b9b8a3825f224c47c4f2d7ad11042ee87a6ccb68d` |
-| S-ie | `campaign-finance/ingestion/ingest_ie.py` | `d7ee840225cb805bc6b9a83e01ac157efbbd80f2a2bc857406d078cc8e1fdb9d` |
+| S-ie | `campaign-finance/ingestion/ingest_ie.py` | `c3a1d8326d370d90bbf1bdb6809b7205ab6bd8e29234b1136faf5adfdbcc8898` |
 | S-rep | `campaign-finance/ingestion/repair_clusters.py` | `90cc6912647479510d10d505debb84d18fbd28557bf5996b01a992eb1ddf283c` |
 | S-rol | `campaign-finance/ingestion/build_rollups.py` | `3497822e951cd6257aa55a50440b25a976f3059316f0f29be03cbba7ce941df9` |
 | S-seed | `campaign-finance/elections/build_election_seed.py` | `b4e079602f10625b67cd1df74cc2457bd27d329628939d35a178f122888686ed` |

@@ -1,15 +1,15 @@
 {
   "schema_version": 1.4,
-  "generated_at": "2026-09-15T00:39:14Z",
+  "generated_at": "2026-09-22T03:00:47Z",
   "source": "derived: school-board-data.json (bridge) x election-data.json (rollups)",
   "_sync": {
-    "generated_at": "2026-09-15T00:39:14Z",
+    "generated_at": "2026-09-22T03:00:47Z",
     "inputs": {
       "school-board-data.json": {
         "sha256": "677391372f1e98bb65c6626077068b33eb49a9212d7303efab83e62b8adfc540"
       },
       "election-data.json": {
-        "sha256": "7265d5c9f10f1a982e21132ede64e97b694e5876b62ce6ddb965868b6d1996d0"
+        "sha256": "b8833e42921139418e735480c6cf4690e034bf3bb20cef7cf6cadb042c2cc4f7"
       }
     },
     "convention": "figures are election-labeled and sourced from rollups.by_candidate_election; by_candidate is resolution-only; the four streams are never summed in this artifact"
@@ -32,6 +32,10 @@
     "establishment-pol": {
       "label": "Establishment Political Org",
       "color": "#7a6a4e"
+    },
+    "finance": {
+      "label": "Finance / Banking",
+      "color": "#4a6080"
     },
     "individual": {
       "label": "Individual Donor",
@@ -129,17 +133,12 @@
     "rollup-191": {
       "name": "Cari Sacks",
       "relationship": "affiliated entities",
-      "canonical_id": "cari-sacks",
+      "canonical_id": "sacks-cari",
       "members": [
-        {
-          "donor_id": "cari-sacks",
-          "name": "Cari Sacks",
-          "role": "parent"
-        },
         {
           "donor_id": "sacks-cari",
           "name": "Sacks, Cari",
-          "role": "alt-name"
+          "role": "parent"
         },
         {
           "donor_id": "sacks-cari-b",
@@ -314,11 +313,11 @@
     "rollup-367": {
       "name": "James S. Frank",
       "relationship": "affiliated entities",
-      "canonical_id": "james-s-frank",
+      "canonical_id": "frank-james-s",
       "members": [
         {
-          "donor_id": "james-s-frank",
-          "name": "James S. Frank",
+          "donor_id": "frank-james-s",
+          "name": "Frank, James S.",
           "role": "parent"
         },
         {
@@ -327,8 +326,8 @@
           "role": "alt-name"
         },
         {
-          "donor_id": "jim-s-frank",
-          "name": "JIM S. FRANK",
+          "donor_id": "frank-jim-s",
+          "name": "Frank, Jim S.",
           "role": "alt-name"
         }
       ]
@@ -1142,11 +1141,6 @@
         {
           "donor_id": "michael-sacks",
           "name": "Michael, Sacks",
-          "role": "alt-name"
-        },
-        {
-          "donor_id": "michael-j-sacks",
-          "name": "Michael J. Sacks",
           "role": "alt-name"
         }
       ]
@@ -5520,9 +5514,9 @@
             "amount": 7300.0,
             "count": 1,
             "industries": [
-              "individual"
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2025-09-26",
@@ -6884,16 +6878,16 @@
           "donor_total": 135131.3,
           "donor_count": 78,
           "dollars": {
-            "substantive": 52571.3,
-            "individual_only": 71660.0,
+            "substantive": 59871.3,
+            "individual_only": 64360.0,
             "unclassified": 10900.0
           },
           "shares": {
-            "substantive": 0.389039,
-            "individual_only": 0.530299,
+            "substantive": 0.44306,
+            "individual_only": 0.476278,
             "unclassified": 0.080662
           },
-          "substantive_share": 0.389039,
+          "substantive_share": 0.44306,
           "meets_industry_threshold": false
         }
       },
@@ -14001,9 +13995,9 @@
             "amount": 31900.0,
             "count": 2,
             "industries": [
-              "individual"
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2024-10-18",
@@ -14179,9 +14173,10 @@
             "amount": 6900.0,
             "count": 1,
             "industries": [
-              "individual"
+              "individual",
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2024-10-18",
@@ -17150,9 +17145,9 @@
             "amount": 7300.0,
             "count": 1,
             "industries": [
-              "individual"
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2025-09-29",
@@ -18786,32 +18781,32 @@
           "donor_total": 228710.8,
           "donor_count": 162,
           "dollars": {
-            "substantive": 25550.0,
-            "individual_only": 124160.0,
+            "substantive": 64350.0,
+            "individual_only": 85360.0,
             "unclassified": 79000.8
           },
           "shares": {
-            "substantive": 0.111713,
-            "individual_only": 0.542869,
+            "substantive": 0.28136,
+            "individual_only": 0.373222,
             "unclassified": 0.345418
           },
-          "substantive_share": 0.111713,
+          "substantive_share": 0.28136,
           "meets_industry_threshold": false
         },
         "2026": {
           "donor_total": 136369.25,
           "donor_count": 89,
           "dollars": {
-            "substantive": 25396.32,
-            "individual_only": 94288.0,
+            "substantive": 32696.32,
+            "individual_only": 86988.0,
             "unclassified": 16684.93
           },
           "shares": {
-            "substantive": 0.186232,
-            "individual_only": 0.691417,
+            "substantive": 0.239763,
+            "individual_only": 0.637886,
             "unclassified": 0.122351
           },
-          "substantive_share": 0.186232,
+          "substantive_share": 0.239763,
           "meets_industry_threshold": false
         }
       },
@@ -23954,9 +23949,9 @@
             "amount": 10000.0,
             "count": 2,
             "industries": [
-              "individual"
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2024-11-04",
@@ -25221,9 +25216,9 @@
             "amount": 7300.0,
             "count": 1,
             "industries": [
-              "individual"
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2025-09-26",
@@ -25496,9 +25491,9 @@
             "amount": 2500.0,
             "count": 1,
             "industries": [
-              "individual"
+              "unclassified"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "unclassified",
             "items": [
               {
                 "date": "2026-06-17",
@@ -25772,9 +25767,9 @@
             "amount": 1000.0,
             "count": 1,
             "industries": [
-              "individual"
+              "unclassified"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "unclassified",
             "items": [
               {
                 "date": "2026-06-08",
@@ -27559,32 +27554,32 @@
           "donor_total": 74348.5,
           "donor_count": 56,
           "dollars": {
-            "substantive": 5250.0,
-            "individual_only": 50650.0,
+            "substantive": 15250.0,
+            "individual_only": 40650.0,
             "unclassified": 18448.5
           },
           "shares": {
-            "substantive": 0.070613,
-            "individual_only": 0.681251,
+            "substantive": 0.205115,
+            "individual_only": 0.546749,
             "unclassified": 0.248136
           },
-          "substantive_share": 0.070613,
+          "substantive_share": 0.205115,
           "meets_industry_threshold": false
         },
         "2026": {
           "donor_total": 383259.34,
           "donor_count": 132,
           "dollars": {
-            "substantive": 213000.0,
-            "individual_only": 163009.34,
-            "unclassified": 7250.0
+            "substantive": 220300.0,
+            "individual_only": 152209.34,
+            "unclassified": 10750.0
           },
           "shares": {
-            "substantive": 0.555759,
-            "individual_only": 0.425324,
-            "unclassified": 0.018917
+            "substantive": 0.574807,
+            "individual_only": 0.397144,
+            "unclassified": 0.028049
           },
-          "substantive_share": 0.555759,
+          "substantive_share": 0.574807,
           "meets_industry_threshold": true
         }
       },
@@ -29293,9 +29288,10 @@
             "amount": 6900.0,
             "count": 1,
             "industries": [
-              "individual"
+              "individual",
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2024-10-23",
@@ -29312,9 +29308,9 @@
             "amount": 6900.0,
             "count": 1,
             "industries": [
-              "individual"
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2024-10-23",
@@ -30289,9 +30285,9 @@
             "amount": 7300.0,
             "count": 1,
             "industries": [
-              "individual"
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2025-09-27",
@@ -30623,32 +30619,32 @@
           "donor_total": 83718.32,
           "donor_count": 52,
           "dollars": {
-            "substantive": 8789.0,
-            "individual_only": 55400.0,
+            "substantive": 22589.0,
+            "individual_only": 41600.0,
             "unclassified": 19529.32
           },
           "shares": {
-            "substantive": 0.104983,
-            "individual_only": 0.661743,
+            "substantive": 0.269822,
+            "individual_only": 0.496904,
             "unclassified": 0.233274
           },
-          "substantive_share": 0.104983,
+          "substantive_share": 0.269822,
           "meets_industry_threshold": false
         },
         "2026": {
           "donor_total": 54100.0,
           "donor_count": 22,
           "dollars": {
-            "substantive": 4000.0,
-            "individual_only": 49100.0,
+            "substantive": 11300.0,
+            "individual_only": 41800.0,
             "unclassified": 1000.0
           },
           "shares": {
-            "substantive": 0.073937,
-            "individual_only": 0.907579,
+            "substantive": 0.208873,
+            "individual_only": 0.772643,
             "unclassified": 0.018484
           },
-          "substantive_share": 0.073937,
+          "substantive_share": 0.208873,
           "meets_industry_threshold": false
         }
       },
@@ -32939,9 +32935,9 @@
             "amount": 7300.0,
             "count": 1,
             "industries": [
-              "individual"
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2025-10-09",
@@ -33793,16 +33789,16 @@
           "donor_total": 100624.3,
           "donor_count": 49,
           "dollars": {
-            "substantive": 29000.0,
-            "individual_only": 69374.3,
+            "substantive": 36300.0,
+            "individual_only": 62074.3,
             "unclassified": 2250.0
           },
           "shares": {
-            "substantive": 0.288201,
-            "individual_only": 0.689439,
+            "substantive": 0.360748,
+            "individual_only": 0.616892,
             "unclassified": 0.02236
           },
-          "substantive_share": 0.288201,
+          "substantive_share": 0.360748,
           "meets_industry_threshold": false
         }
       },

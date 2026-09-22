@@ -3843,10 +3843,10 @@
       "count": 1
     },
     "2019": {
-      "direct": 800.0,
+      "direct": 1050.0,
       "independent": 0.0,
-      "total": 800.0,
-      "count": 3
+      "total": 1050.0,
+      "count": 4
     }
   },
   "whitley-douglas": {
@@ -5033,10 +5033,10 @@
   },
   "perez-jorge": {
     "2019": {
-      "direct": 3500.0,
+      "direct": 4000.0,
       "independent": 0.0,
-      "total": 3500.0,
-      "count": 4
+      "total": 4000.0,
+      "count": 5
     },
     "2023": {
       "direct": 1000.0,
@@ -7471,7 +7471,7 @@
       "count": 11
     }
   },
-  "cari-sacks": {
+  "sacks-cari": {
     "2023": {
       "direct": 156300.0,
       "independent": 0.0,
@@ -11263,12 +11263,30 @@
       "count": 4
     }
   },
-  "frank-jim-s": {
+  "frank-james-s": {
     "2019": {
-      "direct": 7800.0,
+      "direct": 1906850.0,
       "independent": 0.0,
-      "total": 7800.0,
-      "count": 3
+      "total": 1906850.0,
+      "count": 15
+    },
+    "2023": {
+      "direct": 2615866.0,
+      "independent": 0.0,
+      "total": 2615866.0,
+      "count": 16
+    },
+    "2027": {
+      "direct": 4824800.81,
+      "independent": 0.0,
+      "total": 4824800.81,
+      "count": 8
+    },
+    "2015": {
+      "direct": 160000.0,
+      "independent": 0.0,
+      "total": 160000.0,
+      "count": 2
     }
   },
   "urso-robert-j": {
@@ -11501,10 +11519,28 @@
   },
   "weinberg-david-a": {
     "2019": {
-      "direct": 3000.0,
+      "direct": 400100.0,
       "independent": 0.0,
-      "total": 3000.0,
+      "total": 400100.0,
+      "count": 7
+    },
+    "2015": {
+      "direct": 40000.0,
+      "independent": 0.0,
+      "total": 40000.0,
       "count": 1
+    },
+    "2023": {
+      "direct": 459600.0,
+      "independent": 0.0,
+      "total": 459600.0,
+      "count": 4
+    },
+    "2027": {
+      "direct": 675200.0,
+      "independent": 0.0,
+      "total": 675200.0,
+      "count": 3
     }
   },
   "muchin-allan-b": {
@@ -11593,10 +11629,22 @@
   },
   "rowe-john-w": {
     "2019": {
-      "direct": 5000.0,
+      "direct": 317800.0,
       "independent": 0.0,
-      "total": 5000.0,
-      "count": 2
+      "total": 317800.0,
+      "count": 7
+    },
+    "2015": {
+      "direct": 10000.0,
+      "independent": 0.0,
+      "total": 10000.0,
+      "count": 1
+    },
+    "2023": {
+      "direct": 25000.0,
+      "independent": 0.0,
+      "total": 25000.0,
+      "count": 1
     }
   },
   "illinois-risk-management-services-inc": {
@@ -18515,10 +18563,10 @@
       "count": 1
     },
     "2015": {
-      "direct": 1500.0,
+      "direct": 19000.0,
       "independent": 0.0,
-      "total": 1500.0,
-      "count": 1
+      "total": 19000.0,
+      "count": 3
     }
   },
   "kates-detective-security-inc": {
@@ -27171,10 +27219,10 @@
   },
   "murphy-thomas": {
     "2023": {
-      "direct": 14716.64,
+      "direct": 15216.64,
       "independent": 0.0,
-      "total": 14716.64,
-      "count": 26
+      "total": 15216.64,
+      "count": 27
     },
     "2027": {
       "direct": 11024.96,
@@ -34286,6 +34334,12 @@
       "direct": 1500.0,
       "independent": 0.0,
       "total": 1500.0,
+      "count": 1
+    },
+    "2023": {
+      "direct": 2500.0,
+      "independent": 0.0,
+      "total": 2500.0,
       "count": 1
     }
   },
@@ -46731,32 +46785,6 @@
       "count": 1
     }
   },
-  "james-s-frank": {
-    "2019": {
-      "direct": 1899050.0,
-      "independent": 0.0,
-      "total": 1899050.0,
-      "count": 12
-    },
-    "2023": {
-      "direct": 2615866.0,
-      "independent": 0.0,
-      "total": 2615866.0,
-      "count": 16
-    },
-    "2027": {
-      "direct": 4824800.81,
-      "independent": 0.0,
-      "total": 4824800.81,
-      "count": 8
-    },
-    "2015": {
-      "direct": 160000.0,
-      "independent": 0.0,
-      "total": 160000.0,
-      "count": 2
-    }
-  },
   "freiman-samuel-f": {
     "2019": {
       "direct": 200.0,
@@ -49109,10 +49137,10 @@
   },
   "kallas-jim": {
     "2023": {
-      "direct": 2000.0,
+      "direct": 3000.0,
       "independent": 0.0,
-      "total": 2000.0,
-      "count": 2
+      "total": 3000.0,
+      "count": 3
     },
     "2027": {
       "direct": 500.0,
@@ -49681,10 +49709,10 @@
       "count": 4
     },
     "2023": {
-      "direct": 700.0,
+      "direct": 2450.0,
       "independent": 0.0,
-      "total": 700.0,
-      "count": 3
+      "total": 2450.0,
+      "count": 5
     }
   },
   "glumac-dan": {
@@ -50543,6 +50571,12 @@
       "independent": 0.0,
       "total": 17500.0,
       "count": 12
+    },
+    "2023": {
+      "direct": 25000.0,
+      "independent": 0.0,
+      "total": 25000.0,
+      "count": 1
     }
   },
   "distelheim-family-limited-partnership": {
@@ -50579,7 +50613,7 @@
       "count": 3
     }
   },
-  "craig-duchossois": {
+  "duchossois-craig": {
     "2027": {
       "direct": 112500.0,
       "independent": 0.0,
@@ -51651,10 +51685,10 @@
   },
   "krehbiel-liam": {
     "2027": {
-      "direct": 46500.0,
+      "direct": 56500.0,
       "independent": 0.0,
-      "total": 46500.0,
-      "count": 7
+      "total": 56500.0,
+      "count": 8
     },
     "2023": {
       "direct": 6000.0,
@@ -52450,6 +52484,12 @@
       "direct": 15000.0,
       "independent": 0.0,
       "total": 15000.0,
+      "count": 1
+    },
+    "2015": {
+      "direct": 50000.0,
+      "independent": 0.0,
+      "total": 50000.0,
       "count": 1
     }
   },
@@ -55225,12 +55265,18 @@
       "count": 1
     }
   },
-  "cooke-richard": {
+  "committee-to-elect-richard-c-cooke": {
     "2015": {
       "direct": 1200.0,
       "independent": 0.0,
       "total": 1200.0,
       "count": 4
+    },
+    "2019": {
+      "direct": 5500.0,
+      "independent": 0.0,
+      "total": 5500.0,
+      "count": 5
     }
   },
   "law-offices-of-rascia-decastro": {
@@ -55507,14 +55553,6 @@
       "independent": 0.0,
       "total": 250.0,
       "count": 1
-    }
-  },
-  "committee-to-elect-richard-c-cooke": {
-    "2019": {
-      "direct": 5500.0,
-      "independent": 0.0,
-      "total": 5500.0,
-      "count": 5
     }
   },
   "engine-117": {
@@ -55929,10 +55967,10 @@
       "count": 3
     },
     "2023": {
-      "direct": 250.0,
+      "direct": 500.0,
       "independent": 0.0,
-      "total": 250.0,
-      "count": 1
+      "total": 500.0,
+      "count": 2
     }
   },
   "morrison-brian": {
@@ -57459,14 +57497,6 @@
       "count": 3
     }
   },
-  "rosas-jr-jesse": {
-    "2023": {
-      "direct": 250.0,
-      "independent": 0.0,
-      "total": 250.0,
-      "count": 1
-    }
-  },
   "mike-davis-assoc": {
     "2023": {
       "direct": 500.0,
@@ -57607,10 +57637,10 @@
   },
   "melman-rich": {
     "2023": {
-      "direct": 1000.0,
+      "direct": 11000.0,
       "independent": 0.0,
-      "total": 1000.0,
-      "count": 1
+      "total": 11000.0,
+      "count": 2
     }
   },
   "phase-iii": {
@@ -58359,12 +58389,18 @@
       "count": 1
     }
   },
-  "reboyras-ariel": {
+  "citizens-for-ariel-e-reboyras": {
     "2027": {
       "direct": 200.0,
       "independent": 0.0,
       "total": 200.0,
       "count": 1
+    },
+    "2023": {
+      "direct": 10484.62,
+      "independent": 0.0,
+      "total": 10484.62,
+      "count": 4
     }
   },
   "levar-michael": {
@@ -78875,6 +78911,12 @@
       "independent": 0.0,
       "total": 250.0,
       "count": 1
+    },
+    "2015": {
+      "direct": 1000.0,
+      "independent": 0.0,
+      "total": 1000.0,
+      "count": 1
     }
   },
   "filpovich-matthew": {
@@ -85337,10 +85379,10 @@
   },
   "meister-paul": {
     "2023": {
-      "direct": 1000.0,
+      "direct": 11000.0,
       "independent": 0.0,
-      "total": 1000.0,
-      "count": 1
+      "total": 11000.0,
+      "count": 2
     },
     "2027": {
       "direct": 4500.0,
@@ -85349,10 +85391,10 @@
       "count": 4
     },
     "2015": {
-      "direct": 5000.0,
+      "direct": 55000.0,
       "independent": 0.0,
-      "total": 5000.0,
-      "count": 1
+      "total": 55000.0,
+      "count": 2
     },
     "2019": {
       "direct": 5600.0,
@@ -85932,6 +85974,12 @@
       "direct": 500.0,
       "independent": 0.0,
       "total": 500.0,
+      "count": 1
+    },
+    "2015": {
+      "direct": 50000.0,
+      "independent": 0.0,
+      "total": 50000.0,
       "count": 1
     }
   },
@@ -87059,7 +87107,7 @@
       "count": 1
     }
   },
-  "william-silverstein": {
+  "silverstein-william": {
     "2027": {
       "direct": 17300.0,
       "independent": 0.0,
@@ -103365,6 +103413,12 @@
       "independent": 0.0,
       "total": 5000.0,
       "count": 1
+    },
+    "2023": {
+      "direct": 100000.0,
+      "independent": 0.0,
+      "total": 100000.0,
+      "count": 1
     }
   },
   "burns-mary-patricia": {
@@ -107949,17 +108003,23 @@
   },
   "malkin-barry": {
     "2015": {
-      "direct": 5000.0,
+      "direct": 155000.0,
       "independent": 0.0,
-      "total": 5000.0,
-      "count": 1
+      "total": 155000.0,
+      "count": 2
     }
   },
   "malkin-stephen": {
     "2015": {
-      "direct": 5000.0,
+      "direct": 105000.0,
       "independent": 0.0,
-      "total": 5000.0,
+      "total": 105000.0,
+      "count": 2
+    },
+    "2023": {
+      "direct": 25000.0,
+      "independent": 0.0,
+      "total": 25000.0,
       "count": 1
     }
   },
@@ -107985,9 +108045,15 @@
   },
   "gutman-joseph": {
     "2015": {
-      "direct": 5000.0,
+      "direct": 30000.0,
       "independent": 0.0,
-      "total": 5000.0,
+      "total": 30000.0,
+      "count": 2
+    },
+    "2023": {
+      "direct": 10000.0,
+      "independent": 0.0,
+      "total": 10000.0,
       "count": 1
     }
   },
@@ -112997,10 +113063,10 @@
       "count": 1
     },
     "2023": {
-      "direct": 3000.0,
+      "direct": 5500.0,
       "independent": 0.0,
-      "total": 3000.0,
-      "count": 3
+      "total": 5500.0,
+      "count": 4
     },
     "2027": {
       "direct": 6750.0,
@@ -117883,14 +117949,6 @@
       "independent": 0.0,
       "total": 250.0,
       "count": 1
-    }
-  },
-  "citizens-for-ariel-e-reboyras": {
-    "2023": {
-      "direct": 10484.62,
-      "independent": 0.0,
-      "total": 10484.62,
-      "count": 4
     }
   },
   "higginbotton-elzie": {
@@ -141195,10 +141253,10 @@
   },
   "faklaris-prudence": {
     "2023": {
-      "direct": 200.0,
+      "direct": 700.0,
       "independent": 0.0,
-      "total": 200.0,
-      "count": 1
+      "total": 700.0,
+      "count": 2
     }
   },
   "bell-elena": {
@@ -157567,10 +157625,10 @@
   },
   "abrams-ron": {
     "2023": {
-      "direct": 500.0,
+      "direct": 1000.0,
       "independent": 0.0,
-      "total": 500.0,
-      "count": 1
+      "total": 1000.0,
+      "count": 2
     },
     "2027": {
       "direct": 1700.0,
@@ -159992,6 +160050,12 @@
       "direct": 250.0,
       "independent": 0.0,
       "total": 250.0,
+      "count": 1
+    },
+    "2023": {
+      "direct": 500.0,
+      "independent": 0.0,
+      "total": 500.0,
       "count": 1
     }
   },
@@ -182327,10 +182391,10 @@
   },
   "gail-leonard": {
     "2027": {
-      "direct": 1500.0,
+      "direct": 51500.0,
       "independent": 0.0,
-      "total": 1500.0,
-      "count": 1
+      "total": 51500.0,
+      "count": 2
     }
   },
   "steans-jennifer": {
@@ -184253,10 +184317,10 @@
   },
   "gassman-david": {
     "2023": {
-      "direct": 8500.0,
+      "direct": 11000.0,
       "independent": 0.0,
-      "total": 8500.0,
-      "count": 2
+      "total": 11000.0,
+      "count": 3
     },
     "2027": {
       "direct": 7500.0,
@@ -188333,6 +188397,12 @@
       "independent": 0.0,
       "total": 750.0,
       "count": 2
+    },
+    "2015": {
+      "direct": 25000.0,
+      "independent": 0.0,
+      "total": 25000.0,
+      "count": 1
     }
   },
   "conway-james": {
@@ -188741,10 +188811,16 @@
       "count": 1
     },
     "2027": {
-      "direct": 20000.0,
+      "direct": 439700.0,
       "independent": 0.0,
-      "total": 20000.0,
-      "count": 2
+      "total": 439700.0,
+      "count": 3
+    },
+    "2015": {
+      "direct": 100000.0,
+      "independent": 0.0,
+      "total": 100000.0,
+      "count": 1
     }
   },
   "fulton-catering-corp": {
@@ -207337,7 +207413,7 @@
       "count": 1
     }
   },
-  "martin-artega": {
+  "artega-martin": {
     "2015": {
       "direct": 500.0,
       "independent": 0.0,
@@ -207405,7 +207481,7 @@
       "count": 1
     }
   },
-  "eric-lefkofsky": {
+  "lefkofsky-eric": {
     "2015": {
       "direct": 150000.0,
       "independent": 0.0,
@@ -207413,15 +207489,7 @@
       "count": 2
     }
   },
-  "barry-malkin": {
-    "2015": {
-      "direct": 150000.0,
-      "independent": 0.0,
-      "total": 150000.0,
-      "count": 1
-    }
-  },
-  "john-canning": {
+  "canning-john": {
     "2015": {
       "direct": 100000.0,
       "independent": 0.0,
@@ -207429,21 +207497,7 @@
       "count": 1
     }
   },
-  "paul-finnegan": {
-    "2015": {
-      "direct": 100000.0,
-      "independent": 0.0,
-      "total": 100000.0,
-      "count": 1
-    },
-    "2027": {
-      "direct": 419700.0,
-      "independent": 0.0,
-      "total": 419700.0,
-      "count": 1
-    }
-  },
-  "kenneth-c-griffin": {
+  "griffin-kenneth-c": {
     "2015": {
       "direct": 850000.0,
       "independent": 0.0,
@@ -207451,7 +207505,7 @@
       "count": 3
     }
   },
-  "samuel-mencoff": {
+  "mencoff-samuel": {
     "2015": {
       "direct": 150000.0,
       "independent": 0.0,
@@ -207459,47 +207513,7 @@
       "count": 1
     }
   },
-  "paul-meister": {
-    "2015": {
-      "direct": 50000.0,
-      "independent": 0.0,
-      "total": 50000.0,
-      "count": 1
-    },
-    "2023": {
-      "direct": 10000.0,
-      "independent": 0.0,
-      "total": 10000.0,
-      "count": 1
-    }
-  },
-  "david-a-weinberg": {
-    "2015": {
-      "direct": 40000.0,
-      "independent": 0.0,
-      "total": 40000.0,
-      "count": 1
-    },
-    "2019": {
-      "direct": 397100.0,
-      "independent": 0.0,
-      "total": 397100.0,
-      "count": 6
-    },
-    "2023": {
-      "direct": 459600.0,
-      "independent": 0.0,
-      "total": 459600.0,
-      "count": 4
-    },
-    "2027": {
-      "direct": 675200.0,
-      "independent": 0.0,
-      "total": 675200.0,
-      "count": 3
-    }
-  },
-  "ellen-benson": {
+  "benson-ellen": {
     "2015": {
       "direct": 2000.0,
       "independent": 0.0,
@@ -207515,7 +207529,7 @@
       "count": 1
     }
   },
-  "david-bunning": {
+  "bunning-david": {
     "2015": {
       "direct": 25000.0,
       "independent": 0.0,
@@ -207523,31 +207537,11 @@
       "count": 1
     }
   },
-  "mark-lampert": {
+  "lampert-mark": {
     "2015": {
       "direct": 100000.0,
       "independent": 0.0,
       "total": 100000.0,
-      "count": 1
-    }
-  },
-  "john-w-rowe": {
-    "2015": {
-      "direct": 10000.0,
-      "independent": 0.0,
-      "total": 10000.0,
-      "count": 1
-    },
-    "2019": {
-      "direct": 312800.0,
-      "independent": 0.0,
-      "total": 312800.0,
-      "count": 5
-    },
-    "2023": {
-      "direct": 25000.0,
-      "independent": 0.0,
-      "total": 25000.0,
       "count": 1
     }
   },
@@ -207559,7 +207553,7 @@
       "count": 1
     }
   },
-  "samuel-zell": {
+  "zell-samuel": {
     "2015": {
       "direct": 50000.0,
       "independent": 0.0,
@@ -207567,7 +207561,7 @@
       "count": 1
     }
   },
-  "joseph-mansueto": {
+  "mansueto-joseph": {
     "2015": {
       "direct": 100000.0,
       "independent": 0.0,
@@ -207575,7 +207569,7 @@
       "count": 1
     }
   },
-  "berle-blitstein": {
+  "blitstein-berle": {
     "2015": {
       "direct": 25000.0,
       "independent": 0.0,
@@ -207583,7 +207577,7 @@
       "count": 1
     }
   },
-  "robert-repel": {
+  "repel-robert": {
     "2015": {
       "direct": 250.0,
       "independent": 0.0,
@@ -207591,21 +207585,7 @@
       "count": 1
     }
   },
-  "joseph-gutman": {
-    "2015": {
-      "direct": 25000.0,
-      "independent": 0.0,
-      "total": 25000.0,
-      "count": 1
-    },
-    "2023": {
-      "direct": 10000.0,
-      "independent": 0.0,
-      "total": 10000.0,
-      "count": 1
-    }
-  },
-  "sheila-gutman": {
+  "gutman-sheila": {
     "2015": {
       "direct": 25000.0,
       "independent": 0.0,
@@ -207613,15 +207593,7 @@
       "count": 1
     }
   },
-  "david-helfand": {
-    "2015": {
-      "direct": 50000.0,
-      "independent": 0.0,
-      "total": 50000.0,
-      "count": 1
-    }
-  },
-  "david-herro": {
+  "herro-david": {
     "2015": {
       "direct": 150000.0,
       "independent": 0.0,
@@ -207629,7 +207601,7 @@
       "count": 1
     }
   },
-  "timothy-mullen": {
+  "mullen-timothy": {
     "2015": {
       "direct": 50000.0,
       "independent": 0.0,
@@ -207637,7 +207609,7 @@
       "count": 1
     }
   },
-  "robert-levy": {
+  "levy-robert": {
     "2015": {
       "direct": 25000.0,
       "independent": 0.0,
@@ -207645,7 +207617,7 @@
       "count": 1
     }
   },
-  "laura-arnold": {
+  "arnold-laura": {
     "2015": {
       "direct": 100000.0,
       "independent": 0.0,
@@ -207653,7 +207625,7 @@
       "count": 1
     }
   },
-  "muneer-satter": {
+  "satter-muneer": {
     "2015": {
       "direct": 100000.0,
       "independent": 0.0,
@@ -207661,7 +207633,7 @@
       "count": 1
     }
   },
-  "james-gray": {
+  "gray-james": {
     "2015": {
       "direct": 5000.0,
       "independent": 0.0,
@@ -207669,30 +207641,8 @@
       "count": 1
     }
   },
-  "john-simpson": {
+  "phillips-gregory": {
     "2015": {
-      "direct": 25000.0,
-      "independent": 0.0,
-      "total": 25000.0,
-      "count": 1
-    }
-  },
-  "gregory-phillips": {
-    "2015": {
-      "direct": 25000.0,
-      "independent": 0.0,
-      "total": 25000.0,
-      "count": 1
-    }
-  },
-  "stephen-malkin": {
-    "2015": {
-      "direct": 100000.0,
-      "independent": 0.0,
-      "total": 100000.0,
-      "count": 1
-    },
-    "2023": {
       "direct": 25000.0,
       "independent": 0.0,
       "total": 25000.0,
@@ -207707,7 +207657,7 @@
       "count": 1
     }
   },
-  "sara-star": {
+  "star-sara": {
     "2015": {
       "direct": 50000.0,
       "independent": 0.0,
@@ -207715,7 +207665,7 @@
       "count": 1
     }
   },
-  "mark-gallogly": {
+  "gallogly-mark": {
     "2015": {
       "direct": 100000.0,
       "independent": 0.0,
@@ -207723,7 +207673,7 @@
       "count": 1
     }
   },
-  "james-litinsky": {
+  "litinsky-james": {
     "2015": {
       "direct": 50000.0,
       "independent": 0.0,
@@ -207843,7 +207793,7 @@
       "count": 1
     }
   },
-  "kenneth-tuchman": {
+  "tuchman-kenneth": {
     "2015": {
       "direct": 5000.0,
       "independent": 0.0,
@@ -207851,7 +207801,7 @@
       "count": 1
     }
   },
-  "sean-j-conlon": {
+  "conlon-sean-j": {
     "2015": {
       "direct": 5000.0,
       "independent": 0.0,
@@ -207859,7 +207809,7 @@
       "count": 1
     }
   },
-  "anna-szydzik": {
+  "szydzik-anna": {
     "2015": {
       "direct": 500.0,
       "independent": 0.0,
@@ -207951,7 +207901,7 @@
       "count": 1
     }
   },
-  "james-abrams": {
+  "abrams-wendy": {
     "2015": {
       "direct": 50000.0,
       "independent": 0.0,
@@ -207959,15 +207909,7 @@
       "count": 1
     }
   },
-  "wendy-abrams": {
-    "2015": {
-      "direct": 50000.0,
-      "independent": 0.0,
-      "total": 50000.0,
-      "count": 1
-    }
-  },
-  "michael-a-cahan": {
+  "cahan-michael-a": {
     "2015": {
       "direct": 1000.0,
       "independent": 0.0,
@@ -207975,23 +207917,7 @@
       "count": 1
     }
   },
-  "gerald-w-fogelson": {
-    "2015": {
-      "direct": 17500.0,
-      "independent": 0.0,
-      "total": 17500.0,
-      "count": 2
-    }
-  },
-  "graham-c-grady": {
-    "2015": {
-      "direct": 1000.0,
-      "independent": 0.0,
-      "total": 1000.0,
-      "count": 1
-    }
-  },
-  "jay-lecoque": {
+  "lecoque-jay": {
     "2015": {
       "direct": 2500.0,
       "independent": 0.0,
@@ -207999,7 +207925,7 @@
       "count": 1
     }
   },
-  "daniel-loeb": {
+  "loeb-daniel": {
     "2015": {
       "direct": 50000.0,
       "independent": 0.0,
@@ -208055,7 +207981,7 @@
       "count": 1
     }
   },
-  "jose-a-duarte": {
+  "duarte-jose-a": {
     "2019": {
       "direct": 500.0,
       "independent": 0.0,
@@ -208079,15 +208005,7 @@
       "count": 1
     }
   },
-  "jorge-perez": {
-    "2019": {
-      "direct": 500.0,
-      "independent": 0.0,
-      "total": 500.0,
-      "count": 1
-    }
-  },
-  "gabriel-i-dziekiewicz": {
+  "dziekiewicz-gabriel-i": {
     "2019": {
       "direct": 250.0,
       "independent": 0.0,
@@ -208095,7 +208013,7 @@
       "count": 1
     }
   },
-  "mary-ann-vanhook": {
+  "vanhook-mary-ann": {
     "2019": {
       "direct": 250.0,
       "independent": 0.0,
@@ -208139,7 +208057,7 @@
       "count": 1
     }
   },
-  "michael-l-keiser": {
+  "keiser-michael-l": {
     "2019": {
       "direct": 151200.0,
       "independent": 0.0,
@@ -208148,14 +208066,6 @@
     }
   },
   "dama-consultants-inc": {
-    "2019": {
-      "direct": 250.0,
-      "independent": 0.0,
-      "total": 250.0,
-      "count": 1
-    }
-  },
-  "timothy-martin": {
     "2019": {
       "direct": 250.0,
       "independent": 0.0,
@@ -208211,7 +208121,7 @@
       "count": 1
     }
   },
-  "alice-l-walton": {
+  "walton-alice-l": {
     "2019": {
       "direct": 1200000.0,
       "independent": 0.0,
@@ -208273,7 +208183,7 @@
       "count": 1
     }
   },
-  "jim-c-walton": {
+  "walton-jim-c": {
     "2019": {
       "direct": 500000.0,
       "independent": 0.0,
@@ -208293,7 +208203,7 @@
       "count": 2
     }
   },
-  "katie-wise": {
+  "wise-katie": {
     "2019": {
       "direct": 935.0,
       "independent": 0.0,
@@ -208575,7 +208485,7 @@
       "count": 1
     }
   },
-  "lisa-m-gasperec": {
+  "gasperec-lisa-m": {
     "2023": {
       "direct": 300.0,
       "independent": 0.0,
@@ -208607,7 +208517,7 @@
       "count": 1
     }
   },
-  "james-k-murphy": {
+  "murphy-james-k": {
     "2019": {
       "direct": 25000.0,
       "independent": 0.0,
@@ -208703,7 +208613,7 @@
       "count": 1
     }
   },
-  "john-e-butler": {
+  "butler-john-e": {
     "2023": {
       "direct": 13000.0,
       "independent": 0.0,
@@ -208711,7 +208621,7 @@
       "count": 1
     }
   },
-  "dorothy-gregory": {
+  "gregory-dorothy": {
     "2023": {
       "direct": 3100.0,
       "independent": 0.0,
@@ -208719,15 +208629,7 @@
       "count": 2
     }
   },
-  "david-gassman": {
-    "2023": {
-      "direct": 2500.0,
-      "independent": 0.0,
-      "total": 2500.0,
-      "count": 1
-    }
-  },
-  "robert-maihofer-ii": {
+  "maihofer-ii-robert": {
     "2023": {
       "direct": 200.0,
       "independent": 0.0,
@@ -208743,7 +208645,7 @@
       "count": 1
     }
   },
-  "steve-shah": {
+  "shah-steve": {
     "2023": {
       "direct": 500.0,
       "independent": 0.0,
@@ -208751,7 +208653,7 @@
       "count": 1
     }
   },
-  "mary-bao": {
+  "bao-mary": {
     "2023": {
       "direct": 500.0,
       "independent": 0.0,
@@ -208759,7 +208661,7 @@
       "count": 1
     }
   },
-  "steve-cain": {
+  "cain-steve": {
     "2023": {
       "direct": 250.0,
       "independent": 0.0,
@@ -208767,7 +208669,7 @@
       "count": 1
     }
   },
-  "jay-johnson": {
+  "johnson-jay": {
     "2023": {
       "direct": 1000.0,
       "independent": 0.0,
@@ -208775,7 +208677,7 @@
       "count": 1
     }
   },
-  "jill-liska": {
+  "liska-jill": {
     "2023": {
       "direct": 800.0,
       "independent": 0.0,
@@ -208783,7 +208685,7 @@
       "count": 1
     }
   },
-  "jerome-ettinger": {
+  "ettinger-jerome": {
     "2023": {
       "direct": 500.0,
       "independent": 0.0,
@@ -208791,7 +208693,7 @@
       "count": 1
     }
   },
-  "thomas-heineman": {
+  "heineman-thomas": {
     "2023": {
       "direct": 500.0,
       "independent": 0.0,
@@ -208799,7 +208701,7 @@
       "count": 1
     }
   },
-  "steven-weinberg": {
+  "weinberg-steven": {
     "2023": {
       "direct": 1250.0,
       "independent": 0.0,
@@ -208807,7 +208709,7 @@
       "count": 3
     }
   },
-  "hava-muldoon": {
+  "muldoon-hava": {
     "2023": {
       "direct": 800.0,
       "independent": 0.0,
@@ -208815,7 +208717,7 @@
       "count": 2
     }
   },
-  "helen-carlock": {
+  "carlock-helen": {
     "2023": {
       "direct": 500.0,
       "independent": 0.0,
@@ -208847,7 +208749,7 @@
       "count": 1
     }
   },
-  "claude-smith": {
+  "smith-claude": {
     "2023": {
       "direct": 250.0,
       "independent": 0.0,
@@ -208855,7 +208757,7 @@
       "count": 1
     }
   },
-  "denis-detzel": {
+  "detzel-denis": {
     "2023": {
       "direct": 250.0,
       "independent": 0.0,
@@ -208863,7 +208765,7 @@
       "count": 1
     }
   },
-  "nathan-jarvinen": {
+  "jarvinen-nathan": {
     "2023": {
       "direct": 500.0,
       "independent": 0.0,
@@ -208879,7 +208781,7 @@
       "count": 1
     }
   },
-  "jennifer-kleiman": {
+  "kleiman-jennifer": {
     "2023": {
       "direct": 250.0,
       "independent": 0.0,
@@ -208887,7 +208789,7 @@
       "count": 1
     }
   },
-  "david-crawford": {
+  "crawford-david": {
     "2023": {
       "direct": 500.0,
       "independent": 0.0,
@@ -208895,7 +208797,7 @@
       "count": 1
     }
   },
-  "marty-max": {
+  "max-marty": {
     "2023": {
       "direct": 1000.0,
       "independent": 0.0,
@@ -208903,15 +208805,7 @@
       "count": 1
     }
   },
-  "prudence-faklaris": {
-    "2023": {
-      "direct": 500.0,
-      "independent": 0.0,
-      "total": 500.0,
-      "count": 1
-    }
-  },
-  "dan-lustig": {
+  "lustig-dan": {
     "2023": {
       "direct": 250.0,
       "independent": 0.0,
@@ -208919,15 +208813,7 @@
       "count": 1
     }
   },
-  "ron-abrams": {
-    "2023": {
-      "direct": 500.0,
-      "independent": 0.0,
-      "total": 500.0,
-      "count": 1
-    }
-  },
-  "kris-aune": {
+  "aune-kris": {
     "2023": {
       "direct": 750.0,
       "independent": 0.0,
@@ -208935,7 +208821,7 @@
       "count": 2
     }
   },
-  "andrew-levin": {
+  "levin-andrew": {
     "2023": {
       "direct": 200.0,
       "independent": 0.0,
@@ -208943,15 +208829,7 @@
       "count": 1
     }
   },
-  "thomas-murphy": {
-    "2023": {
-      "direct": 500.0,
-      "independent": 0.0,
-      "total": 500.0,
-      "count": 1
-    }
-  },
-  "margaret-meiser": {
+  "meiser-margaret": {
     "2023": {
       "direct": 250.0,
       "independent": 0.0,
@@ -208959,15 +208837,7 @@
       "count": 1
     }
   },
-  "laszlo-simovic": {
-    "2023": {
-      "direct": 500.0,
-      "independent": 0.0,
-      "total": 500.0,
-      "count": 1
-    }
-  },
-  "alan-goldberg": {
+  "goldberg-alan": {
     "2023": {
       "direct": 250.0,
       "independent": 0.0,
@@ -208975,7 +208845,7 @@
       "count": 1
     }
   },
-  "rafael-ruiz-ayala": {
+  "ruiz-ayala-rafael": {
     "2023": {
       "direct": 3350.0,
       "independent": 0.0,
@@ -208983,7 +208853,7 @@
       "count": 3
     }
   },
-  "ross-landman": {
+  "landman-ross": {
     "2023": {
       "direct": 250.0,
       "independent": 0.0,
@@ -208999,7 +208869,7 @@
       "count": 1
     }
   },
-  "jeanette-scalise": {
+  "scalise-jeanette": {
     "2023": {
       "direct": 500.0,
       "independent": 0.0,
@@ -209007,15 +208877,7 @@
       "count": 1
     }
   },
-  "michael-glasser": {
-    "2023": {
-      "direct": 1750.0,
-      "independent": 0.0,
-      "total": 1750.0,
-      "count": 2
-    }
-  },
-  "rene-parungao": {
+  "parungao-rene": {
     "2023": {
       "direct": 1500.0,
       "independent": 0.0,
@@ -209029,7 +208891,7 @@
       "count": 1
     }
   },
-  "timothy-long": {
+  "long-timothy": {
     "2023": {
       "direct": 250.0,
       "independent": 0.0,
@@ -209037,7 +208899,7 @@
       "count": 1
     }
   },
-  "matthew-kleiman": {
+  "kleiman-matthew": {
     "2023": {
       "direct": 1000.0,
       "independent": 0.0,
@@ -209045,7 +208907,7 @@
       "count": 1
     }
   },
-  "michael-wallk": {
+  "wallk-michael": {
     "2023": {
       "direct": 500.0,
       "independent": 0.0,
@@ -209053,7 +208915,7 @@
       "count": 1
     }
   },
-  "richard-aronson": {
+  "aronson-richard": {
     "2023": {
       "direct": 500.0,
       "independent": 0.0,
@@ -209061,7 +208923,7 @@
       "count": 1
     }
   },
-  "jon-levin": {
+  "levin-jon": {
     "2023": {
       "direct": 25000.0,
       "independent": 0.0,
@@ -209069,15 +208931,7 @@
       "count": 1
     }
   },
-  "norm-bobins": {
-    "2023": {
-      "direct": 2500.0,
-      "independent": 0.0,
-      "total": 2500.0,
-      "count": 1
-    }
-  },
-  "miles-berger": {
+  "berger-miles": {
     "2023": {
       "direct": 10000.0,
       "independent": 0.0,
@@ -209093,7 +208947,7 @@
       "count": 1
     }
   },
-  "colm-treacy": {
+  "treacy-colm": {
     "2023": {
       "direct": 500.0,
       "independent": 0.0,
@@ -209101,7 +208955,7 @@
       "count": 1
     }
   },
-  "connie-abels": {
+  "abels-connie": {
     "2023": {
       "direct": 200.0,
       "independent": 0.0,
@@ -209109,7 +208963,7 @@
       "count": 1
     }
   },
-  "jeffrey-cagan": {
+  "cagan-jeffrey": {
     "2023": {
       "direct": 1000.0,
       "independent": 0.0,
@@ -209117,7 +208971,7 @@
       "count": 1
     }
   },
-  "sarah-lisy": {
+  "lisy-sarah": {
     "2023": {
       "direct": 500.0,
       "independent": 0.0,
@@ -209125,7 +208979,7 @@
       "count": 1
     }
   },
-  "denise-karlin": {
+  "karlin-denise": {
     "2023": {
       "direct": 250.0,
       "independent": 0.0,
@@ -209133,7 +208987,7 @@
       "count": 1
     }
   },
-  "paul-go": {
+  "go-paul": {
     "2023": {
       "direct": 250.0,
       "independent": 0.0,
@@ -209141,7 +208995,7 @@
       "count": 1
     }
   },
-  "belia-rodriguez": {
+  "rodriguez-belia": {
     "2023": {
       "direct": 1395.34,
       "independent": 0.0,
@@ -209179,31 +209033,7 @@
       "count": 1
     }
   },
-  "rich-melman": {
-    "2023": {
-      "direct": 10000.0,
-      "independent": 0.0,
-      "total": 10000.0,
-      "count": 1
-    }
-  },
-  "jim-kallas": {
-    "2023": {
-      "direct": 1000.0,
-      "independent": 0.0,
-      "total": 1000.0,
-      "count": 1
-    }
-  },
-  "john-mclinden": {
-    "2023": {
-      "direct": 2500.0,
-      "independent": 0.0,
-      "total": 2500.0,
-      "count": 1
-    }
-  },
-  "marion-cameron": {
+  "cameron-marion": {
     "2023": {
       "direct": 1030.26,
       "independent": 0.0,
@@ -209219,23 +209049,7 @@
       "count": 1
     }
   },
-  "keating-crown": {
-    "2023": {
-      "direct": 25000.0,
-      "independent": 0.0,
-      "total": 25000.0,
-      "count": 1
-    }
-  },
-  "james-s-crown": {
-    "2023": {
-      "direct": 100000.0,
-      "independent": 0.0,
-      "total": 100000.0,
-      "count": 1
-    }
-  },
-  "lester-crown": {
+  "crown-lester": {
     "2023": {
       "direct": 100000.0,
       "independent": 0.0,
@@ -209251,7 +209065,7 @@
       "count": 1
     }
   },
-  "robert-stein": {
+  "stein-robert": {
     "2023": {
       "direct": 500.0,
       "independent": 0.0,
@@ -209259,7 +209073,7 @@
       "count": 1
     }
   },
-  "joanne-desanctis": {
+  "desanctis-joanne": {
     "2023": {
       "direct": 357.64,
       "independent": 0.0,
@@ -209267,7 +209081,7 @@
       "count": 5
     }
   },
-  "graham-palmer": {
+  "palmer-graham": {
     "2023": {
       "direct": 1000.0,
       "independent": 0.0,
@@ -209275,7 +209089,7 @@
       "count": 1
     }
   },
-  "jaime-javors": {
+  "javors-jaime": {
     "2023": {
       "direct": 2000.0,
       "independent": 0.0,
@@ -209283,7 +209097,7 @@
       "count": 1
     }
   },
-  "jh-lasky": {
+  "lasky-jh": {
     "2023": {
       "direct": 1000.0,
       "independent": 0.0,
@@ -209291,7 +209105,7 @@
       "count": 1
     }
   },
-  "susan-starrett": {
+  "starrett-susan": {
     "2023": {
       "direct": 500.0,
       "independent": 0.0,
@@ -209299,7 +209113,7 @@
       "count": 1
     }
   },
-  "don-wilson": {
+  "wilson-don": {
     "2023": {
       "direct": 25000.0,
       "independent": 0.0,
@@ -209307,7 +209121,7 @@
       "count": 1
     }
   },
-  "katherine-bradley": {
+  "bradley-katherine": {
     "2023": {
       "direct": 5000.0,
       "independent": 0.0,
@@ -209379,7 +209193,7 @@
       "count": 1
     }
   },
-  "eduardo-valadez": {
+  "valadez-eduardo": {
     "2027": {
       "direct": 152.0,
       "independent": 0.0,
@@ -209387,7 +209201,7 @@
       "count": 1
     }
   },
-  "jasmine-valadez": {
+  "valadez-jasmine": {
     "2027": {
       "direct": 760.0,
       "independent": 0.0,
@@ -209395,7 +209209,7 @@
       "count": 1
     }
   },
-  "robert-escalante": {
+  "escalante-robert": {
     "2027": {
       "direct": 500.0,
       "independent": 0.0,
@@ -209403,7 +209217,7 @@
       "count": 1
     }
   },
-  "valeria-carbajal": {
+  "carbajal-valeria": {
     "2027": {
       "direct": 180.0,
       "independent": 0.0,
@@ -209411,7 +209225,7 @@
       "count": 1
     }
   },
-  "reed-hastings": {
+  "hastings-reed": {
     "2027": {
       "direct": 100000.0,
       "independent": 0.0,
@@ -209419,7 +209233,7 @@
       "count": 1
     }
   },
-  "helen-zell": {
+  "zell-helen": {
     "2027": {
       "direct": 1000000.0,
       "independent": 0.0,
@@ -209659,14 +209473,6 @@
       "count": 1
     }
   },
-  "liam-krehbiel": {
-    "2027": {
-      "direct": 10000.0,
-      "independent": 0.0,
-      "total": 10000.0,
-      "count": 1
-    }
-  },
   "illinois-democratic-county-chairs-assoc": {
     "2027": {
       "direct": 10000.0,
@@ -209696,14 +209502,6 @@
       "direct": 30000.0,
       "independent": 0.0,
       "total": 30000.0,
-      "count": 1
-    }
-  },
-  "leonard-gail": {
-    "2027": {
-      "direct": 50000.0,
-      "independent": 0.0,
-      "total": 50000.0,
       "count": 1
     }
   },

@@ -15,6 +15,10 @@ from collections import defaultdict
 import build_rollups
 from ingest import slug  # shared donor-id slug ([:80] cap) — keeps election donor_ids
                          # identical to council so one Sheet classification feeds both.
+from convert_bulk_receipts import _contributed_by  # the receipts path's OWN name
+                         # builder (LastOnlyName, FirstName) -> 'Last, First'; imported
+                         # ABOVE the csv.field_size_limit line below, which re-raises
+                         # the limit that module's import lowers. Order is load-bearing.
 csv.field_size_limit(min(sys.maxsize, 2**31-1))
 
 FIELD_MAP={
@@ -350,7 +354,11 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
         sbe=row.get(G['committee_id'])
         if sbe not in want: continue
         if truthy(row.get(G['archived'])): continue
-        nm=((row.get(G['first']) or '')+' '+(row.get(G['last']) or '')).strip()
+        # IE-NAMES-1 (open ledger 73): build the funder name in the receipts ingest's
+        # form -- convert_bulk_receipts._contributed_by (convert_bulk_receipts.py:323)
+        # is the SAME function that builds 'ContributedBy', which ingest.py:292 hands
+        # to the shared slug. One function, so the two paths cannot diverge again.
+        nm=_contributed_by(row.get(G['last']) or '', row.get(G['first']) or '')
         is_dues=bool(DUES_RE.search(nm))
         did=resolve_donor(nm,'Other'); date=(row.get(G['date']) or '')[:10]
         if is_dues:
@@ -367,6 +375,20 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
         added+=1
     stats['funder_receipts_added']=added; stats['dues_transfer_rows']=dues_rows
     build_rollups.build(d)
+    # IE-NAMES-1 (open ledger 73), ruling 4: prune donors THIS RUN orphaned.
+    # ingest_ie clears and re-adds its own rows above; a donor whose only rows were
+    # IE rows under a retired id is left with none, and nothing downstream removes
+    # donor records -- ingest.py's orphan prune (ingest.py:530-538) runs UPSTREAM of
+    # this step. Referenced is over ALL contributions, so a receipts-side donor can
+    # never be pruned. Placed AFTER build_rollups.build(d) deliberately: that call
+    # indexes donors[dv['parent_id']] directly (build_rollups.py:171), and donors
+    # carried over from a prior sync can name a retired id as their cluster parent,
+    # so pruning before it would KeyError. Its rollups are intermediate and the
+    # chain's own build_rollups (step 7) overwrites them after sync_overrides.
+    _referenced={c.get('donor_id') for c in d['contributions']}
+    _orphans=[did for did in d['donors'] if did not in _referenced]
+    for did in _orphans: del d['donors'][did]
+    stats['donors_pruned_rowless']=len(_orphans)
     return stats
 
 if __name__=='__main__':

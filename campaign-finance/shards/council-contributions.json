@@ -720420,7 +720420,7 @@
     },
     {
       "id": "ie-rec-22729-306",
-      "donor_id": "young-pate",
+      "donor_id": "pate-young",
       "committee_id": "ie-committee-22729",
       "amount": 500.0,
       "date": "2011-01-11",
@@ -721290,7 +721290,7 @@
     },
     {
       "id": "ie-rec-25109-393",
-      "donor_id": "martin-artega",
+      "donor_id": "artega-martin",
       "committee_id": "ie-committee-25109",
       "amount": 500.0,
       "date": "2012-10-30",
@@ -721660,7 +721660,7 @@
     },
     {
       "id": "ie-rec-25960-430",
-      "donor_id": "michael-sacks",
+      "donor_id": "sacks-michael",
       "committee_id": "ie-committee-25960",
       "amount": 150000.0,
       "date": "2014-06-24",
@@ -721670,7 +721670,7 @@
     },
     {
       "id": "ie-rec-25960-431",
-      "donor_id": "eric-lefkofsky",
+      "donor_id": "lefkofsky-eric",
       "committee_id": "ie-committee-25960",
       "amount": 25000.0,
       "date": "2014-06-24",
@@ -721680,7 +721680,7 @@
     },
     {
       "id": "ie-rec-25960-432",
-      "donor_id": "eric-lefkofsky",
+      "donor_id": "lefkofsky-eric",
       "committee_id": "ie-committee-25960",
       "amount": 125000.0,
       "date": "2014-06-24",
@@ -721690,7 +721690,7 @@
     },
     {
       "id": "ie-rec-25960-433",
-      "donor_id": "barry-malkin",
+      "donor_id": "malkin-barry",
       "committee_id": "ie-committee-25960",
       "amount": 150000.0,
       "date": "2014-06-24",
@@ -721700,7 +721700,7 @@
     },
     {
       "id": "ie-rec-25960-434",
-      "donor_id": "john-canning",
+      "donor_id": "canning-john",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2014-06-24",
@@ -721710,7 +721710,7 @@
     },
     {
       "id": "ie-rec-25960-435",
-      "donor_id": "paul-finnegan",
+      "donor_id": "finnegan-paul",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2014-06-24",
@@ -721720,7 +721720,7 @@
     },
     {
       "id": "ie-rec-25960-436",
-      "donor_id": "kenneth-griffin",
+      "donor_id": "griffin-kenneth",
       "committee_id": "ie-committee-25960",
       "amount": 150000.0,
       "date": "2014-06-24",
@@ -721730,7 +721730,7 @@
     },
     {
       "id": "ie-rec-25960-437",
-      "donor_id": "samuel-mencoff",
+      "donor_id": "mencoff-samuel",
       "committee_id": "ie-committee-25960",
       "amount": 150000.0,
       "date": "2014-06-24",
@@ -721740,7 +721740,7 @@
     },
     {
       "id": "ie-rec-25960-438",
-      "donor_id": "paul-meister",
+      "donor_id": "meister-paul",
       "committee_id": "ie-committee-25960",
       "amount": 50000.0,
       "date": "2014-06-30",
@@ -721760,7 +721760,7 @@
     },
     {
       "id": "ie-rec-26066-440",
-      "donor_id": "jim-s-frank",
+      "donor_id": "frank-jim-s",
       "committee_id": "ie-committee-26066",
       "amount": 100000.0,
       "date": "2014-09-17",
@@ -721770,7 +721770,7 @@
     },
     {
       "id": "ie-rec-26066-441",
-      "donor_id": "david-a-weinberg",
+      "donor_id": "weinberg-david-a",
       "committee_id": "ie-committee-26066",
       "amount": 40000.0,
       "date": "2014-08-26",
@@ -721830,7 +721830,7 @@
     },
     {
       "id": "ie-rec-25960-447",
-      "donor_id": "ellen-benson",
+      "donor_id": "benson-ellen",
       "committee_id": "ie-committee-25960",
       "amount": 1000.0,
       "date": "2014-09-29",
@@ -721860,7 +721860,7 @@
     },
     {
       "id": "ie-rec-25960-450",
-      "donor_id": "craig-duchossois",
+      "donor_id": "duchossois-craig",
       "committee_id": "ie-committee-25960",
       "amount": 10000.0,
       "date": "2014-09-29",
@@ -721870,7 +721870,7 @@
     },
     {
       "id": "ie-rec-25960-451",
-      "donor_id": "cari-sacks",
+      "donor_id": "sacks-cari",
       "committee_id": "ie-committee-25960",
       "amount": 50000.0,
       "date": "2014-09-29",
@@ -721880,7 +721880,7 @@
     },
     {
       "id": "ie-rec-25960-452",
-      "donor_id": "david-bunning",
+      "donor_id": "bunning-david",
       "committee_id": "ie-committee-25960",
       "amount": 25000.0,
       "date": "2014-09-29",
@@ -721890,7 +721890,7 @@
     },
     {
       "id": "ie-rec-25960-453",
-      "donor_id": "mark-lampert",
+      "donor_id": "lampert-mark",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2014-09-29",
@@ -721900,7 +721900,7 @@
     },
     {
       "id": "ie-rec-25960-454",
-      "donor_id": "john-rowe",
+      "donor_id": "rowe-john",
       "committee_id": "ie-committee-25960",
       "amount": 10000.0,
       "date": "2014-09-29",
@@ -721920,7 +721920,7 @@
     },
     {
       "id": "ie-rec-25960-456",
-      "donor_id": "michael-sacks",
+      "donor_id": "sacks-michael",
       "committee_id": "ie-committee-25960",
       "amount": 50000.0,
       "date": "2014-09-29",
@@ -721930,7 +721930,7 @@
     },
     {
       "id": "ie-rec-25960-457",
-      "donor_id": "samuel-zell",
+      "donor_id": "zell-samuel",
       "committee_id": "ie-committee-25960",
       "amount": 50000.0,
       "date": "2014-09-29",
@@ -721940,7 +721940,7 @@
     },
     {
       "id": "ie-rec-25960-458",
-      "donor_id": "joseph-mansueto",
+      "donor_id": "mansueto-joseph",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2014-09-29",
@@ -721950,7 +721950,7 @@
     },
     {
       "id": "ie-rec-25960-459",
-      "donor_id": "berle-blitstein",
+      "donor_id": "blitstein-berle",
       "committee_id": "ie-committee-25960",
       "amount": 25000.0,
       "date": "2014-09-30",
@@ -721960,7 +721960,7 @@
     },
     {
       "id": "ie-rec-25960-460",
-      "donor_id": "robert-repel",
+      "donor_id": "repel-robert",
       "committee_id": "ie-committee-25960",
       "amount": 250.0,
       "date": "2014-09-29",
@@ -721990,7 +721990,7 @@
     },
     {
       "id": "ie-rec-25960-463",
-      "donor_id": "joseph-gutman",
+      "donor_id": "gutman-joseph",
       "committee_id": "ie-committee-25960",
       "amount": 25000.0,
       "date": "2014-07-10",
@@ -722000,7 +722000,7 @@
     },
     {
       "id": "ie-rec-25960-464",
-      "donor_id": "sheila-gutman",
+      "donor_id": "gutman-sheila",
       "committee_id": "ie-committee-25960",
       "amount": 25000.0,
       "date": "2014-07-10",
@@ -722010,7 +722010,7 @@
     },
     {
       "id": "ie-rec-25960-465",
-      "donor_id": "david-helfand",
+      "donor_id": "helfand-david",
       "committee_id": "ie-committee-25960",
       "amount": 50000.0,
       "date": "2014-07-10",
@@ -722020,7 +722020,7 @@
     },
     {
       "id": "ie-rec-25960-466",
-      "donor_id": "david-herro",
+      "donor_id": "herro-david",
       "committee_id": "ie-committee-25960",
       "amount": 150000.0,
       "date": "2014-07-10",
@@ -722030,7 +722030,7 @@
     },
     {
       "id": "ie-rec-25960-467",
-      "donor_id": "timothy-mullen",
+      "donor_id": "mullen-timothy",
       "committee_id": "ie-committee-25960",
       "amount": 50000.0,
       "date": "2014-07-10",
@@ -722040,7 +722040,7 @@
     },
     {
       "id": "ie-rec-25960-468",
-      "donor_id": "robert-levy",
+      "donor_id": "levy-robert",
       "committee_id": "ie-committee-25960",
       "amount": 25000.0,
       "date": "2014-07-10",
@@ -722050,7 +722050,7 @@
     },
     {
       "id": "ie-rec-25960-469",
-      "donor_id": "laura-arnold",
+      "donor_id": "arnold-laura",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2014-09-29",
@@ -722060,7 +722060,7 @@
     },
     {
       "id": "ie-rec-25960-470",
-      "donor_id": "muneer-satter",
+      "donor_id": "satter-muneer",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2014-09-29",
@@ -722070,7 +722070,7 @@
     },
     {
       "id": "ie-rec-25960-471",
-      "donor_id": "james-gray",
+      "donor_id": "gray-james",
       "committee_id": "ie-committee-25960",
       "amount": 5000.0,
       "date": "2014-09-29",
@@ -722080,7 +722080,7 @@
     },
     {
       "id": "ie-rec-25960-472",
-      "donor_id": "john-simpson",
+      "donor_id": "simpson-john",
       "committee_id": "ie-committee-25960",
       "amount": 25000.0,
       "date": "2014-09-29",
@@ -722090,7 +722090,7 @@
     },
     {
       "id": "ie-rec-25960-473",
-      "donor_id": "gregory-phillips",
+      "donor_id": "phillips-gregory",
       "committee_id": "ie-committee-25960",
       "amount": 25000.0,
       "date": "2014-09-29",
@@ -722100,7 +722100,7 @@
     },
     {
       "id": "ie-rec-25960-474",
-      "donor_id": "stephen-malkin",
+      "donor_id": "malkin-stephen",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2014-09-29",
@@ -722120,7 +722120,7 @@
     },
     {
       "id": "ie-rec-25960-476",
-      "donor_id": "sara-star",
+      "donor_id": "star-sara",
       "committee_id": "ie-committee-25960",
       "amount": 50000.0,
       "date": "2014-09-29",
@@ -722130,7 +722130,7 @@
     },
     {
       "id": "ie-rec-25960-477",
-      "donor_id": "mark-gallogly",
+      "donor_id": "gallogly-mark",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2014-09-29",
@@ -722140,7 +722140,7 @@
     },
     {
       "id": "ie-rec-25960-478",
-      "donor_id": "james-litinsky",
+      "donor_id": "litinsky-james",
       "committee_id": "ie-committee-25960",
       "amount": 50000.0,
       "date": "2014-09-29",
@@ -722360,7 +722360,7 @@
     },
     {
       "id": "ie-rec-25960-500",
-      "donor_id": "kenneth-tuchman",
+      "donor_id": "tuchman-kenneth",
       "committee_id": "ie-committee-25960",
       "amount": 5000.0,
       "date": "2014-10-10",
@@ -722390,7 +722390,7 @@
     },
     {
       "id": "ie-rec-25960-503",
-      "donor_id": "sean-j-conlon",
+      "donor_id": "conlon-sean-j",
       "committee_id": "ie-committee-25960",
       "amount": 5000.0,
       "date": "2014-11-26",
@@ -722400,7 +722400,7 @@
     },
     {
       "id": "ie-rec-25960-504",
-      "donor_id": "anna-szydzik",
+      "donor_id": "szydzik-anna",
       "committee_id": "ie-committee-25960",
       "amount": 500.0,
       "date": "2014-10-20",
@@ -722730,7 +722730,7 @@
     },
     {
       "id": "ie-rec-26066-537",
-      "donor_id": "jim-s-frank",
+      "donor_id": "frank-jim-s",
       "committee_id": "ie-committee-26066",
       "amount": 60000.0,
       "date": "2015-03-09",
@@ -722750,7 +722750,7 @@
     },
     {
       "id": "ie-rec-25960-539",
-      "donor_id": "cari-sacks",
+      "donor_id": "sacks-cari",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2015-03-20",
@@ -722760,7 +722760,7 @@
     },
     {
       "id": "ie-rec-25960-540",
-      "donor_id": "cari-sacks",
+      "donor_id": "sacks-cari",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2015-03-27",
@@ -722770,7 +722770,7 @@
     },
     {
       "id": "ie-rec-25960-541",
-      "donor_id": "cari-sacks",
+      "donor_id": "sacks-cari",
       "committee_id": "ie-committee-25960",
       "amount": 150000.0,
       "date": "2015-03-31",
@@ -722780,7 +722780,7 @@
     },
     {
       "id": "ie-rec-25960-542",
-      "donor_id": "michael-j-sacks",
+      "donor_id": "sacks-michael-j",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2015-02-27",
@@ -722790,7 +722790,7 @@
     },
     {
       "id": "ie-rec-25960-543",
-      "donor_id": "michael-j-sacks",
+      "donor_id": "sacks-michael-j",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2015-03-17",
@@ -722800,7 +722800,7 @@
     },
     {
       "id": "ie-rec-25960-544",
-      "donor_id": "michael-j-sacks",
+      "donor_id": "sacks-michael-j",
       "committee_id": "ie-committee-25960",
       "amount": 200000.0,
       "date": "2015-03-20",
@@ -722810,7 +722810,7 @@
     },
     {
       "id": "ie-rec-25960-545",
-      "donor_id": "michael-j-sacks",
+      "donor_id": "sacks-michael-j",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2015-03-27",
@@ -722820,7 +722820,7 @@
     },
     {
       "id": "ie-rec-25960-546",
-      "donor_id": "michael-j-sacks",
+      "donor_id": "sacks-michael-j",
       "committee_id": "ie-committee-25960",
       "amount": 150000.0,
       "date": "2015-03-31",
@@ -722860,7 +722860,7 @@
     },
     {
       "id": "ie-rec-25960-550",
-      "donor_id": "james-abrams",
+      "donor_id": "abrams-james",
       "committee_id": "ie-committee-25960",
       "amount": 50000.0,
       "date": "2015-03-13",
@@ -722870,7 +722870,7 @@
     },
     {
       "id": "ie-rec-25960-551",
-      "donor_id": "wendy-abrams",
+      "donor_id": "abrams-wendy",
       "committee_id": "ie-committee-25960",
       "amount": 50000.0,
       "date": "2015-03-13",
@@ -722880,7 +722880,7 @@
     },
     {
       "id": "ie-rec-25960-552",
-      "donor_id": "ellen-benson",
+      "donor_id": "benson-ellen",
       "committee_id": "ie-committee-25960",
       "amount": 1000.0,
       "date": "2015-03-06",
@@ -722890,7 +722890,7 @@
     },
     {
       "id": "ie-rec-25960-553",
-      "donor_id": "michael-a-cahan",
+      "donor_id": "cahan-michael-a",
       "committee_id": "ie-committee-25960",
       "amount": 1000.0,
       "date": "2015-02-20",
@@ -722910,7 +722910,7 @@
     },
     {
       "id": "ie-rec-25960-555",
-      "donor_id": "gerald-w-fogelson",
+      "donor_id": "fogelson-gerald-w",
       "committee_id": "ie-committee-25960",
       "amount": 12500.0,
       "date": "2015-02-06",
@@ -722920,7 +722920,7 @@
     },
     {
       "id": "ie-rec-25960-556",
-      "donor_id": "gerald-w-fogelson",
+      "donor_id": "fogelson-gerald-w",
       "committee_id": "ie-committee-25960",
       "amount": 5000.0,
       "date": "2015-03-25",
@@ -722930,7 +722930,7 @@
     },
     {
       "id": "ie-rec-25960-557",
-      "donor_id": "graham-c-grady",
+      "donor_id": "grady-graham-c",
       "committee_id": "ie-committee-25960",
       "amount": 1000.0,
       "date": "2015-02-06",
@@ -722940,7 +722940,7 @@
     },
     {
       "id": "ie-rec-25960-558",
-      "donor_id": "kenneth-c-griffin",
+      "donor_id": "griffin-kenneth-c",
       "committee_id": "ie-committee-25960",
       "amount": 500000.0,
       "date": "2015-03-06",
@@ -722950,7 +722950,7 @@
     },
     {
       "id": "ie-rec-25960-559",
-      "donor_id": "kenneth-c-griffin",
+      "donor_id": "griffin-kenneth-c",
       "committee_id": "ie-committee-25960",
       "amount": 200000.0,
       "date": "2015-03-25",
@@ -722960,7 +722960,7 @@
     },
     {
       "id": "ie-rec-25960-560",
-      "donor_id": "jay-lecoque",
+      "donor_id": "lecoque-jay",
       "committee_id": "ie-committee-25960",
       "amount": 2500.0,
       "date": "2015-03-11",
@@ -722970,7 +722970,7 @@
     },
     {
       "id": "ie-rec-25960-561",
-      "donor_id": "daniel-loeb",
+      "donor_id": "loeb-daniel",
       "committee_id": "ie-committee-25960",
       "amount": 50000.0,
       "date": "2015-03-20",
@@ -723020,7 +723020,7 @@
     },
     {
       "id": "ie-rec-25960-566",
-      "donor_id": "cari-sacks",
+      "donor_id": "sacks-cari",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2015-02-27",
@@ -723030,7 +723030,7 @@
     },
     {
       "id": "ie-rec-25960-567",
-      "donor_id": "cari-sacks",
+      "donor_id": "sacks-cari",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2015-03-17",
@@ -723100,7 +723100,7 @@
     },
     {
       "id": "ie-rec-25960-574",
-      "donor_id": "cari-sacks",
+      "donor_id": "sacks-cari",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2015-04-03",
@@ -723110,7 +723110,7 @@
     },
     {
       "id": "ie-rec-25960-575",
-      "donor_id": "michael-j-sacks",
+      "donor_id": "sacks-michael-j",
       "committee_id": "ie-committee-25960",
       "amount": 125000.0,
       "date": "2015-04-01",
@@ -723120,7 +723120,7 @@
     },
     {
       "id": "ie-rec-25960-576",
-      "donor_id": "michael-j-sacks",
+      "donor_id": "sacks-michael-j",
       "committee_id": "ie-committee-25960",
       "amount": 100000.0,
       "date": "2015-04-03",
@@ -723250,7 +723250,7 @@
     },
     {
       "id": "ie-rec-25960-589",
-      "donor_id": "cari-sacks",
+      "donor_id": "sacks-cari",
       "committee_id": "ie-committee-25960",
       "amount": 125000.0,
       "date": "2015-04-01",
@@ -723460,7 +723460,7 @@
     },
     {
       "id": "ie-rec-25109-610",
-      "donor_id": "jose-a-duarte",
+      "donor_id": "duarte-jose-a",
       "committee_id": "ie-committee-25109",
       "amount": 500.0,
       "date": "2015-09-19",
@@ -723560,7 +723560,7 @@
     },
     {
       "id": "ie-rec-26066-620",
-      "donor_id": "david-a-weinberg",
+      "donor_id": "weinberg-david-a",
       "committee_id": "ie-committee-26066",
       "amount": 38600.0,
       "date": "2015-10-12",
@@ -723570,7 +723570,7 @@
     },
     {
       "id": "ie-rec-26066-621",
-      "donor_id": "jim-s-frank",
+      "donor_id": "frank-jim-s",
       "committee_id": "ie-committee-26066",
       "amount": 52400.0,
       "date": "2015-12-01",
@@ -723740,7 +723740,7 @@
     },
     {
       "id": "ie-rec-25109-638",
-      "donor_id": "jorge-perez",
+      "donor_id": "perez-jorge",
       "committee_id": "ie-committee-25109",
       "amount": 500.0,
       "date": "2016-03-30",
@@ -723750,7 +723750,7 @@
     },
     {
       "id": "ie-rec-25109-639",
-      "donor_id": "gabriel-i-dziekiewicz",
+      "donor_id": "dziekiewicz-gabriel-i",
       "committee_id": "ie-committee-25109",
       "amount": 250.0,
       "date": "2016-03-30",
@@ -723760,7 +723760,7 @@
     },
     {
       "id": "ie-rec-25109-640",
-      "donor_id": "mary-ann-vanhook",
+      "donor_id": "vanhook-mary-ann",
       "committee_id": "ie-committee-25109",
       "amount": 250.0,
       "date": "2016-03-30",
@@ -723820,7 +723820,7 @@
     },
     {
       "id": "ie-rec-26066-646",
-      "donor_id": "david-a-weinberg",
+      "donor_id": "weinberg-david-a",
       "committee_id": "ie-committee-26066",
       "amount": 46000.0,
       "date": "2016-03-03",
@@ -723830,7 +723830,7 @@
     },
     {
       "id": "ie-rec-26066-647",
-      "donor_id": "john-w-rowe",
+      "donor_id": "rowe-john-w",
       "committee_id": "ie-committee-26066",
       "amount": 15000.0,
       "date": "2016-03-07",
@@ -724000,7 +724000,7 @@
     },
     {
       "id": "ie-rec-26066-664",
-      "donor_id": "john-w-rowe",
+      "donor_id": "rowe-john-w",
       "committee_id": "ie-committee-26066",
       "amount": 50000.0,
       "date": "2016-07-25",
@@ -724010,7 +724010,7 @@
     },
     {
       "id": "ie-rec-26066-665",
-      "donor_id": "jim-s-frank",
+      "donor_id": "frank-jim-s",
       "committee_id": "ie-committee-26066",
       "amount": 139200.0,
       "date": "2016-07-27",
@@ -724020,7 +724020,7 @@
     },
     {
       "id": "ie-rec-26066-666",
-      "donor_id": "michael-l-keiser",
+      "donor_id": "keiser-michael-l",
       "committee_id": "ie-committee-26066",
       "amount": 89200.0,
       "date": "2016-07-27",
@@ -724030,7 +724030,7 @@
     },
     {
       "id": "ie-rec-26066-667",
-      "donor_id": "david-a-weinberg",
+      "donor_id": "weinberg-david-a",
       "committee_id": "ie-committee-26066",
       "amount": 46000.0,
       "date": "2016-09-08",
@@ -724040,7 +724040,7 @@
     },
     {
       "id": "ie-rec-26066-668",
-      "donor_id": "john-w-rowe",
+      "donor_id": "rowe-john-w",
       "committee_id": "ie-committee-26066",
       "amount": 50000.0,
       "date": "2016-09-15",
@@ -724240,7 +724240,7 @@
     },
     {
       "id": "ie-rec-25109-688",
-      "donor_id": "timothy-martin",
+      "donor_id": "martin-timothy",
       "committee_id": "ie-committee-25109",
       "amount": 250.0,
       "date": "2016-10-06",
@@ -724450,7 +724450,7 @@
     },
     {
       "id": "ie-rec-26066-709",
-      "donor_id": "alice-l-walton",
+      "donor_id": "walton-alice-l",
       "committee_id": "ie-committee-26066",
       "amount": 50000.0,
       "date": "2016-10-19",
@@ -724540,7 +724540,7 @@
     },
     {
       "id": "ie-rec-26066-718",
-      "donor_id": "john-w-rowe",
+      "donor_id": "rowe-john-w",
       "committee_id": "ie-committee-26066",
       "amount": 88900.0,
       "date": "2017-01-31",
@@ -724570,7 +724570,7 @@
     },
     {
       "id": "ie-rec-26066-721",
-      "donor_id": "jim-s-frank",
+      "donor_id": "frank-jim-s",
       "committee_id": "ie-committee-26066",
       "amount": 138900.0,
       "date": "2017-04-20",
@@ -724750,7 +724750,7 @@
     },
     {
       "id": "ie-rec-26066-739",
-      "donor_id": "michael-l-keiser",
+      "donor_id": "keiser-michael-l",
       "committee_id": "ie-committee-26066",
       "amount": 62000.0,
       "date": "2017-10-13",
@@ -724760,7 +724760,7 @@
     },
     {
       "id": "ie-rec-26066-740",
-      "donor_id": "alice-l-walton",
+      "donor_id": "walton-alice-l",
       "committee_id": "ie-committee-26066",
       "amount": 250000.0,
       "date": "2017-10-18",
@@ -724770,7 +724770,7 @@
     },
     {
       "id": "ie-rec-26066-741",
-      "donor_id": "jim-s-frank",
+      "donor_id": "frank-jim-s",
       "committee_id": "ie-committee-26066",
       "amount": 525000.0,
       "date": "2017-11-07",
@@ -724780,7 +724780,7 @@
     },
     {
       "id": "ie-rec-26066-742",
-      "donor_id": "david-a-weinberg",
+      "donor_id": "weinberg-david-a",
       "committee_id": "ie-committee-26066",
       "amount": 73000.0,
       "date": "2017-12-22",
@@ -724790,7 +724790,7 @@
     },
     {
       "id": "ie-rec-26066-743",
-      "donor_id": "alice-l-walton",
+      "donor_id": "walton-alice-l",
       "committee_id": "ie-committee-26066",
       "amount": 400000.0,
       "date": "2017-12-27",
@@ -725330,7 +725330,7 @@
     },
     {
       "id": "ie-rec-26066-797",
-      "donor_id": "john-w-rowe",
+      "donor_id": "rowe-john-w",
       "committee_id": "ie-committee-26066",
       "amount": 108900.0,
       "date": "2018-09-27",
@@ -725560,7 +725560,7 @@
     },
     {
       "id": "ie-rec-26066-820",
-      "donor_id": "alice-l-walton",
+      "donor_id": "walton-alice-l",
       "committee_id": "ie-committee-26066",
       "amount": 250000.0,
       "date": "2018-10-11",
@@ -725570,7 +725570,7 @@
     },
     {
       "id": "ie-rec-26066-821",
-      "donor_id": "jim-c-walton",
+      "donor_id": "walton-jim-c",
       "committee_id": "ie-committee-26066",
       "amount": 250000.0,
       "date": "2018-10-12",
@@ -725580,7 +725580,7 @@
     },
     {
       "id": "ie-rec-26066-822",
-      "donor_id": "jim-s-frank",
+      "donor_id": "frank-jim-s",
       "committee_id": "ie-committee-26066",
       "amount": 300000.0,
       "date": "2018-12-03",
@@ -725590,7 +725590,7 @@
     },
     {
       "id": "ie-rec-26066-823",
-      "donor_id": "david-a-weinberg",
+      "donor_id": "weinberg-david-a",
       "committee_id": "ie-committee-26066",
       "amount": 116700.0,
       "date": "2018-12-10",
@@ -725600,7 +725600,7 @@
     },
     {
       "id": "ie-rec-26066-824",
-      "donor_id": "jim-s-frank",
+      "donor_id": "frank-jim-s",
       "committee_id": "ie-committee-26066",
       "amount": 138900.0,
       "date": "2018-12-17",
@@ -725610,7 +725610,7 @@
     },
     {
       "id": "ie-rec-26066-825",
-      "donor_id": "jim-c-walton",
+      "donor_id": "walton-jim-c",
       "committee_id": "ie-committee-26066",
       "amount": 250000.0,
       "date": "2018-12-19",
@@ -725620,7 +725620,7 @@
     },
     {
       "id": "ie-rec-26066-826",
-      "donor_id": "alice-l-walton",
+      "donor_id": "walton-alice-l",
       "committee_id": "ie-committee-26066",
       "amount": 250000.0,
       "date": "2018-12-19",
@@ -725630,7 +725630,7 @@
     },
     {
       "id": "ie-rec-26066-827",
-      "donor_id": "katie-wise",
+      "donor_id": "wise-katie",
       "committee_id": "ie-committee-26066",
       "amount": 935.0,
       "date": "2018-12-31",
@@ -726740,7 +726740,7 @@
     },
     {
       "id": "ie-rec-25109-938",
-      "donor_id": "lisa-m-gasperec",
+      "donor_id": "gasperec-lisa-m",
       "committee_id": "ie-committee-25109",
       "amount": 300.0,
       "date": "2019-07-24",
@@ -726950,7 +726950,7 @@
     },
     {
       "id": "ie-rec-26066-959",
-      "donor_id": "james-k-murphy",
+      "donor_id": "murphy-james-k",
       "committee_id": "ie-committee-26066",
       "amount": 25000.0,
       "date": "2019-02-06",
@@ -726960,7 +726960,7 @@
     },
     {
       "id": "ie-rec-26066-960",
-      "donor_id": "david-a-weinberg",
+      "donor_id": "weinberg-david-a",
       "committee_id": "ie-committee-26066",
       "amount": 76800.0,
       "date": "2019-03-18",
@@ -726970,7 +726970,7 @@
     },
     {
       "id": "ie-rec-26066-961",
-      "donor_id": "jim-s-frank",
+      "donor_id": "frank-jim-s",
       "committee_id": "ie-committee-26066",
       "amount": 573400.0,
       "date": "2019-03-22",
@@ -726990,7 +726990,7 @@
     },
     {
       "id": "ie-rec-26066-963",
-      "donor_id": "david-a-weinberg",
+      "donor_id": "weinberg-david-a",
       "committee_id": "ie-committee-26066",
       "amount": 50000.0,
       "date": "2019-11-12",
@@ -727000,7 +727000,7 @@
     },
     {
       "id": "ie-rec-26066-964",
-      "donor_id": "alice-l-walton",
+      "donor_id": "walton-alice-l",
       "committee_id": "ie-committee-26066",
       "amount": 350000.0,
       "date": "2019-12-27",
@@ -727180,7 +727180,7 @@
     },
     {
       "id": "ie-rec-26066-982",
-      "donor_id": "jim-s-frank",
+      "donor_id": "frank-jim-s",
       "committee_id": "ie-committee-26066",
       "amount": 70000.0,
       "date": "2020-03-19",
@@ -727440,7 +727440,7 @@
     },
     {
       "id": "ie-rec-26066-1008",
-      "donor_id": "jim-s-frank",
+      "donor_id": "frank-jim-s",
       "committee_id": "ie-committee-26066",
       "amount": 83333.0,
       "date": "2020-10-20",
@@ -727450,7 +727450,7 @@
     },
     {
       "id": "ie-rec-26066-1009",
-      "donor_id": "alice-l-walton",
+      "donor_id": "walton-alice-l",
       "committee_id": "ie-committee-26066",
       "amount": 200000.0,
       "date": "2020-10-20",
@@ -727460,7 +727460,7 @@
     },
     {
       "id": "ie-rec-26066-1010",
-      "donor_id": "jim-c-walton",
+      "donor_id": "walton-jim-c",
       "committee_id": "ie-committee-26066",
       "amount": 200000.0,
       "date": "2020-10-20",
@@ -727760,7 +727760,7 @@
     },
     {
       "id": "ie-rec-26066-1040",
-      "donor_id": "jim-s-frank",
+      "donor_id": "frank-jim-s",
       "committee_id": "ie-committee-26066",
       "amount": 71333.0,
       "date": "2021-06-22",
@@ -727830,7 +727830,7 @@
     },
     {
       "id": "ie-rec-26066-1047",
-      "donor_id": "david-a-weinberg",
+      "donor_id": "weinberg-david-a",
       "committee_id": "ie-committee-26066",
       "amount": 136000.0,
       "date": "2021-09-27",
@@ -727990,7 +727990,7 @@
     },
     {
       "id": "ie-rec-26066-1063",
-      "donor_id": "jim-s-frank",
+      "donor_id": "frank-jim-s",
       "committee_id": "ie-committee-26066",
       "amount": 200000.0,
       "date": "2021-11-11",
@@ -728000,7 +728000,7 @@
     },
     {
       "id": "ie-rec-26066-1064",
-      "donor_id": "jim-s-frank",
+      "donor_id": "frank-jim-s",
       "committee_id": "ie-committee-26066",
       "amount": 150000.0,
       "date": "2021-11-11",
@@ -728010,7 +728010,7 @@
     },
     {
       "id": "ie-rec-26066-1065",
-      "donor_id": "john-w-rowe",
+      "donor_id": "rowe-john-w",
       "committee_id": "ie-committee-26066",
       "amount": 25000.0,
       "date": "2021-10-13",
@@ -728060,7 +728060,7 @@
     },
     {
       "id": "ie-rec-26066-1070",
-      "donor_id": "david-a-weinberg",
+      "donor_id": "weinberg-david-a",
       "committee_id": "ie-committee-26066",
       "amount": 136000.0,
       "date": "2022-03-30",
@@ -728290,7 +728290,7 @@
     },
     {
       "id": "ie-rec-26066-1093",
-      "donor_id": "jim-c-walton",
+      "donor_id": "walton-jim-c",
       "committee_id": "ie-committee-26066",
       "amount": 300000.0,
       "date": "2022-04-05",
@@ -728300,7 +728300,7 @@
     },
     {
       "id": "ie-rec-26066-1094",
-      "donor_id": "john-e-butler",
+      "donor_id": "butler-john-e",
       "committee_id": "ie-committee-26066",
       "amount": 13000.0,
       "date": "2022-04-27",
@@ -728390,7 +728390,7 @@
     },
     {
       "id": "ie-rec-26066-1103",
-      "donor_id": "jim-s-frank",
+      "donor_id": "frank-jim-s",
       "committee_id": "ie-committee-26066",
       "amount": 250000.0,
       "date": "2022-07-01",
@@ -728400,7 +728400,7 @@
     },
     {
       "id": "ie-rec-26066-1104",
-      "donor_id": "jim-s-frank",
+      "donor_id": "frank-jim-s",
       "committee_id": "ie-committee-26066",
       "amount": 238000.0,
       "date": "2022-07-14",
@@ -728410,7 +728410,7 @@
     },
     {
       "id": "ie-rec-26066-1105",
-      "donor_id": "jim-c-walton",
+      "donor_id": "walton-jim-c",
       "committee_id": "ie-committee-26066",
       "amount": 400000.0,
       "date": "2022-09-21",
@@ -728430,7 +728430,7 @@
     },
     {
       "id": "ie-rec-38670-1107",
-      "donor_id": "dorothy-gregory",
+      "donor_id": "gregory-dorothy",
       "committee_id": "ie-committee-38670",
       "amount": 100.0,
       "date": "2022-08-23",
@@ -728440,7 +728440,7 @@
     },
     {
       "id": "ie-rec-38670-1108",
-      "donor_id": "david-gassman",
+      "donor_id": "gassman-david",
       "committee_id": "ie-committee-38670",
       "amount": 2500.0,
       "date": "2022-09-01",
@@ -728450,7 +728450,7 @@
     },
     {
       "id": "ie-rec-38670-1109",
-      "donor_id": "robert-maihofer-ii",
+      "donor_id": "maihofer-ii-robert",
       "committee_id": "ie-committee-38670",
       "amount": 200.0,
       "date": "2022-09-01",
@@ -728480,7 +728480,7 @@
     },
     {
       "id": "ie-rec-38670-1112",
-      "donor_id": "steve-shah",
+      "donor_id": "shah-steve",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-02",
@@ -728490,7 +728490,7 @@
     },
     {
       "id": "ie-rec-38670-1113",
-      "donor_id": "mary-bao",
+      "donor_id": "bao-mary",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-02",
@@ -728500,7 +728500,7 @@
     },
     {
       "id": "ie-rec-38670-1114",
-      "donor_id": "steve-cain",
+      "donor_id": "cain-steve",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2022-09-02",
@@ -728510,7 +728510,7 @@
     },
     {
       "id": "ie-rec-38670-1115",
-      "donor_id": "jay-johnson",
+      "donor_id": "johnson-jay",
       "committee_id": "ie-committee-38670",
       "amount": 1000.0,
       "date": "2022-09-02",
@@ -728520,7 +728520,7 @@
     },
     {
       "id": "ie-rec-38670-1116",
-      "donor_id": "jill-liska",
+      "donor_id": "liska-jill",
       "committee_id": "ie-committee-38670",
       "amount": 800.0,
       "date": "2022-09-16",
@@ -728530,7 +728530,7 @@
     },
     {
       "id": "ie-rec-38670-1117",
-      "donor_id": "jerome-ettinger",
+      "donor_id": "ettinger-jerome",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-16",
@@ -728540,7 +728540,7 @@
     },
     {
       "id": "ie-rec-38670-1118",
-      "donor_id": "thomas-heineman",
+      "donor_id": "heineman-thomas",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-16",
@@ -728550,7 +728550,7 @@
     },
     {
       "id": "ie-rec-38670-1119",
-      "donor_id": "steven-weinberg",
+      "donor_id": "weinberg-steven",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-01",
@@ -728560,7 +728560,7 @@
     },
     {
       "id": "ie-rec-38670-1120",
-      "donor_id": "steven-weinberg",
+      "donor_id": "weinberg-steven",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-01",
@@ -728570,7 +728570,7 @@
     },
     {
       "id": "ie-rec-38670-1121",
-      "donor_id": "hava-muldoon",
+      "donor_id": "muldoon-hava",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-01",
@@ -728580,7 +728580,7 @@
     },
     {
       "id": "ie-rec-38670-1122",
-      "donor_id": "helen-carlock",
+      "donor_id": "carlock-helen",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-01",
@@ -728620,7 +728620,7 @@
     },
     {
       "id": "ie-rec-38670-1126",
-      "donor_id": "claude-smith",
+      "donor_id": "smith-claude",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2022-09-01",
@@ -728630,7 +728630,7 @@
     },
     {
       "id": "ie-rec-38670-1127",
-      "donor_id": "denis-detzel",
+      "donor_id": "detzel-denis",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2022-09-01",
@@ -728640,7 +728640,7 @@
     },
     {
       "id": "ie-rec-38670-1128",
-      "donor_id": "nathan-jarvinen",
+      "donor_id": "jarvinen-nathan",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-01",
@@ -728660,7 +728660,7 @@
     },
     {
       "id": "ie-rec-38670-1130",
-      "donor_id": "jennifer-kleiman",
+      "donor_id": "kleiman-jennifer",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2022-09-16",
@@ -728670,7 +728670,7 @@
     },
     {
       "id": "ie-rec-38670-1131",
-      "donor_id": "david-crawford",
+      "donor_id": "crawford-david",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-16",
@@ -728680,7 +728680,7 @@
     },
     {
       "id": "ie-rec-38670-1132",
-      "donor_id": "marty-max",
+      "donor_id": "max-marty",
       "committee_id": "ie-committee-38670",
       "amount": 1000.0,
       "date": "2022-09-16",
@@ -728690,7 +728690,7 @@
     },
     {
       "id": "ie-rec-38670-1133",
-      "donor_id": "prudence-faklaris",
+      "donor_id": "faklaris-prudence",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-16",
@@ -728700,7 +728700,7 @@
     },
     {
       "id": "ie-rec-38670-1134",
-      "donor_id": "dan-lustig",
+      "donor_id": "lustig-dan",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2022-09-16",
@@ -728710,7 +728710,7 @@
     },
     {
       "id": "ie-rec-38670-1135",
-      "donor_id": "ron-abrams",
+      "donor_id": "abrams-ron",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-16",
@@ -728720,7 +728720,7 @@
     },
     {
       "id": "ie-rec-38670-1136",
-      "donor_id": "kris-aune",
+      "donor_id": "aune-kris",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2022-09-16",
@@ -728730,7 +728730,7 @@
     },
     {
       "id": "ie-rec-38670-1137",
-      "donor_id": "andrew-levin",
+      "donor_id": "levin-andrew",
       "committee_id": "ie-committee-38670",
       "amount": 200.0,
       "date": "2022-09-16",
@@ -728740,7 +728740,7 @@
     },
     {
       "id": "ie-rec-38670-1138",
-      "donor_id": "thomas-murphy",
+      "donor_id": "murphy-thomas",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-16",
@@ -728750,7 +728750,7 @@
     },
     {
       "id": "ie-rec-38670-1139",
-      "donor_id": "margaret-meiser",
+      "donor_id": "meiser-margaret",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2022-09-16",
@@ -728770,7 +728770,7 @@
     },
     {
       "id": "ie-rec-38670-1141",
-      "donor_id": "laszlo-simovic",
+      "donor_id": "simovic-laszlo",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-16",
@@ -728780,7 +728780,7 @@
     },
     {
       "id": "ie-rec-38670-1142",
-      "donor_id": "alan-goldberg",
+      "donor_id": "goldberg-alan",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2022-09-16",
@@ -728800,7 +728800,7 @@
     },
     {
       "id": "ie-rec-38670-1144",
-      "donor_id": "rafael-ruiz-ayala",
+      "donor_id": "ruiz-ayala-rafael",
       "committee_id": "ie-committee-38670",
       "amount": 1100.0,
       "date": "2022-09-16",
@@ -728810,7 +728810,7 @@
     },
     {
       "id": "ie-rec-38670-1145",
-      "donor_id": "ross-landman",
+      "donor_id": "landman-ross",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2022-09-16",
@@ -728830,7 +728830,7 @@
     },
     {
       "id": "ie-rec-38670-1147",
-      "donor_id": "jeanette-scalise",
+      "donor_id": "scalise-jeanette",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-16",
@@ -728840,7 +728840,7 @@
     },
     {
       "id": "ie-rec-38670-1148",
-      "donor_id": "michael-glasser",
+      "donor_id": "glasser-michael",
       "committee_id": "ie-committee-38670",
       "amount": 1500.0,
       "date": "2022-09-06",
@@ -728850,7 +728850,7 @@
     },
     {
       "id": "ie-rec-38670-1149",
-      "donor_id": "rene-parungao",
+      "donor_id": "parungao-rene",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2022-09-16",
@@ -728860,7 +728860,7 @@
     },
     {
       "id": "ie-rec-38670-1150",
-      "donor_id": "timothy-long",
+      "donor_id": "long-timothy",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2022-09-20",
@@ -728870,7 +728870,7 @@
     },
     {
       "id": "ie-rec-38670-1151",
-      "donor_id": "matthew-kleiman",
+      "donor_id": "kleiman-matthew",
       "committee_id": "ie-committee-38670",
       "amount": 1000.0,
       "date": "2022-09-20",
@@ -728880,7 +728880,7 @@
     },
     {
       "id": "ie-rec-38670-1152",
-      "donor_id": "michael-wallk",
+      "donor_id": "wallk-michael",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-16",
@@ -728890,7 +728890,7 @@
     },
     {
       "id": "ie-rec-38670-1153",
-      "donor_id": "dorothy-gregory",
+      "donor_id": "gregory-dorothy",
       "committee_id": "ie-committee-38670",
       "amount": 3000.0,
       "date": "2022-09-16",
@@ -728900,7 +728900,7 @@
     },
     {
       "id": "ie-rec-38670-1154",
-      "donor_id": "richard-aronson",
+      "donor_id": "aronson-richard",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-09-20",
@@ -729010,7 +729010,7 @@
     },
     {
       "id": "ie-rec-38979-1165",
-      "donor_id": "jon-levin",
+      "donor_id": "levin-jon",
       "committee_id": "ie-committee-38979",
       "amount": 25000.0,
       "date": "2022-12-21",
@@ -729020,7 +729020,7 @@
     },
     {
       "id": "ie-rec-38979-1166",
-      "donor_id": "paul-meister",
+      "donor_id": "meister-paul",
       "committee_id": "ie-committee-38979",
       "amount": 10000.0,
       "date": "2022-12-21",
@@ -729030,7 +729030,7 @@
     },
     {
       "id": "ie-rec-38979-1167",
-      "donor_id": "michael-sacks",
+      "donor_id": "sacks-michael",
       "committee_id": "ie-committee-38979",
       "amount": 250000.0,
       "date": "2022-12-20",
@@ -729050,7 +729050,7 @@
     },
     {
       "id": "ie-rec-38979-1169",
-      "donor_id": "norm-bobins",
+      "donor_id": "bobins-norm",
       "committee_id": "ie-committee-38979",
       "amount": 2500.0,
       "date": "2022-12-22",
@@ -729060,7 +729060,7 @@
     },
     {
       "id": "ie-rec-38979-1170",
-      "donor_id": "craig-duchossois",
+      "donor_id": "duchossois-craig",
       "committee_id": "ie-committee-38979",
       "amount": 50000.0,
       "date": "2022-12-22",
@@ -729070,7 +729070,7 @@
     },
     {
       "id": "ie-rec-38979-1171",
-      "donor_id": "miles-berger",
+      "donor_id": "berger-miles",
       "committee_id": "ie-committee-38979",
       "amount": 10000.0,
       "date": "2022-12-27",
@@ -729080,7 +729080,7 @@
     },
     {
       "id": "ie-rec-38979-1172",
-      "donor_id": "stephen-malkin",
+      "donor_id": "malkin-stephen",
       "committee_id": "ie-committee-38979",
       "amount": 25000.0,
       "date": "2022-12-27",
@@ -729100,7 +729100,7 @@
     },
     {
       "id": "ie-rec-38670-1174",
-      "donor_id": "colm-treacy",
+      "donor_id": "treacy-colm",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-10-05",
@@ -729110,7 +729110,7 @@
     },
     {
       "id": "ie-rec-38670-1175",
-      "donor_id": "connie-abels",
+      "donor_id": "abels-connie",
       "committee_id": "ie-committee-38670",
       "amount": 200.0,
       "date": "2022-10-05",
@@ -729120,7 +729120,7 @@
     },
     {
       "id": "ie-rec-38670-1176",
-      "donor_id": "jeffrey-cagan",
+      "donor_id": "cagan-jeffrey",
       "committee_id": "ie-committee-38670",
       "amount": 1000.0,
       "date": "2022-10-05",
@@ -729130,7 +729130,7 @@
     },
     {
       "id": "ie-rec-38670-1177",
-      "donor_id": "sarah-lisy",
+      "donor_id": "lisy-sarah",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2022-10-05",
@@ -729140,7 +729140,7 @@
     },
     {
       "id": "ie-rec-38670-1178",
-      "donor_id": "rene-parungao",
+      "donor_id": "parungao-rene",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2022-10-31",
@@ -729150,7 +729150,7 @@
     },
     {
       "id": "ie-rec-38670-1179",
-      "donor_id": "denise-karlin",
+      "donor_id": "karlin-denise",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2022-10-31",
@@ -729160,7 +729160,7 @@
     },
     {
       "id": "ie-rec-38670-1180",
-      "donor_id": "paul-go",
+      "donor_id": "go-paul",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2022-10-31",
@@ -729170,7 +729170,7 @@
     },
     {
       "id": "ie-rec-38670-1181",
-      "donor_id": "rene-parungao",
+      "donor_id": "parungao-rene",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2022-11-19",
@@ -729180,7 +729180,7 @@
     },
     {
       "id": "ie-rec-38670-1182",
-      "donor_id": "rene-parungao",
+      "donor_id": "parungao-rene",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2022-12-31",
@@ -729190,7 +729190,7 @@
     },
     {
       "id": "ie-rec-38670-1183",
-      "donor_id": "belia-rodriguez",
+      "donor_id": "rodriguez-belia",
       "committee_id": "ie-committee-38670",
       "amount": 900.0,
       "date": "2022-10-05",
@@ -729200,7 +729200,7 @@
     },
     {
       "id": "ie-rec-38670-1184",
-      "donor_id": "belia-rodriguez",
+      "donor_id": "rodriguez-belia",
       "committee_id": "ie-committee-38670",
       "amount": 50.0,
       "date": "2022-10-03",
@@ -729210,7 +729210,7 @@
     },
     {
       "id": "ie-rec-38670-1185",
-      "donor_id": "belia-rodriguez",
+      "donor_id": "rodriguez-belia",
       "committee_id": "ie-committee-38670",
       "amount": 66.47,
       "date": "2022-11-01",
@@ -729220,7 +729220,7 @@
     },
     {
       "id": "ie-rec-38670-1186",
-      "donor_id": "belia-rodriguez",
+      "donor_id": "rodriguez-belia",
       "committee_id": "ie-committee-38670",
       "amount": 69.17,
       "date": "2022-12-01",
@@ -729440,7 +729440,7 @@
     },
     {
       "id": "ie-rec-38979-1208",
-      "donor_id": "rich-melman",
+      "donor_id": "melman-rich",
       "committee_id": "ie-committee-38979",
       "amount": 10000.0,
       "date": "2023-01-03",
@@ -729450,7 +729450,7 @@
     },
     {
       "id": "ie-rec-38979-1209",
-      "donor_id": "jim-kallas",
+      "donor_id": "kallas-jim",
       "committee_id": "ie-committee-38979",
       "amount": 1000.0,
       "date": "2023-01-04",
@@ -729460,7 +729460,7 @@
     },
     {
       "id": "ie-rec-38979-1210",
-      "donor_id": "william-silverstein",
+      "donor_id": "silverstein-william",
       "committee_id": "ie-committee-38979",
       "amount": 25000.0,
       "date": "2023-01-04",
@@ -729480,7 +729480,7 @@
     },
     {
       "id": "ie-rec-38979-1212",
-      "donor_id": "john-mclinden",
+      "donor_id": "mclinden-john",
       "committee_id": "ie-committee-38979",
       "amount": 2500.0,
       "date": "2023-01-13",
@@ -729500,7 +729500,7 @@
     },
     {
       "id": "ie-rec-38979-1214",
-      "donor_id": "marion-cameron",
+      "donor_id": "cameron-marion",
       "committee_id": "ie-committee-38979",
       "amount": 1030.26,
       "date": "2023-01-13",
@@ -729520,7 +729520,7 @@
     },
     {
       "id": "ie-rec-38979-1216",
-      "donor_id": "michael-sacks",
+      "donor_id": "sacks-michael",
       "committee_id": "ie-committee-38979",
       "amount": 250000.0,
       "date": "2023-01-20",
@@ -729530,7 +729530,7 @@
     },
     {
       "id": "ie-rec-38979-1217",
-      "donor_id": "keating-crown",
+      "donor_id": "crown-keating",
       "committee_id": "ie-committee-38979",
       "amount": 25000.0,
       "date": "2023-01-20",
@@ -729540,7 +729540,7 @@
     },
     {
       "id": "ie-rec-38979-1218",
-      "donor_id": "joseph-gutman",
+      "donor_id": "gutman-joseph",
       "committee_id": "ie-committee-38979",
       "amount": 10000.0,
       "date": "2023-01-20",
@@ -729550,7 +729550,7 @@
     },
     {
       "id": "ie-rec-38979-1219",
-      "donor_id": "james-s-crown",
+      "donor_id": "crown-james-s",
       "committee_id": "ie-committee-38979",
       "amount": 100000.0,
       "date": "2023-01-26",
@@ -729560,7 +729560,7 @@
     },
     {
       "id": "ie-rec-38979-1220",
-      "donor_id": "lester-crown",
+      "donor_id": "crown-lester",
       "committee_id": "ie-committee-38979",
       "amount": 100000.0,
       "date": "2023-01-26",
@@ -729590,7 +729590,7 @@
     },
     {
       "id": "ie-rec-38979-1223",
-      "donor_id": "michael-sacks",
+      "donor_id": "sacks-michael",
       "committee_id": "ie-committee-38979",
       "amount": 250000.0,
       "date": "2023-02-09",
@@ -729600,7 +729600,7 @@
     },
     {
       "id": "ie-rec-38979-1224",
-      "donor_id": "michael-sacks",
+      "donor_id": "sacks-michael",
       "committee_id": "ie-committee-38979",
       "amount": 250000.0,
       "date": "2023-02-13",
@@ -729630,7 +729630,7 @@
     },
     {
       "id": "ie-rec-38979-1227",
-      "donor_id": "robert-stein",
+      "donor_id": "stein-robert",
       "committee_id": "ie-committee-38979",
       "amount": 500.0,
       "date": "2023-02-14",
@@ -729640,7 +729640,7 @@
     },
     {
       "id": "ie-rec-38979-1228",
-      "donor_id": "joanne-desanctis",
+      "donor_id": "desanctis-joanne",
       "committee_id": "ie-committee-38979",
       "amount": 100.0,
       "date": "2023-02-15",
@@ -729650,7 +729650,7 @@
     },
     {
       "id": "ie-rec-38979-1229",
-      "donor_id": "graham-palmer",
+      "donor_id": "palmer-graham",
       "committee_id": "ie-committee-38979",
       "amount": 1000.0,
       "date": "2023-02-15",
@@ -729660,7 +729660,7 @@
     },
     {
       "id": "ie-rec-38979-1230",
-      "donor_id": "jaime-javors",
+      "donor_id": "javors-jaime",
       "committee_id": "ie-committee-38979",
       "amount": 2000.0,
       "date": "2023-02-28",
@@ -729670,7 +729670,7 @@
     },
     {
       "id": "ie-rec-38979-1231",
-      "donor_id": "jh-lasky",
+      "donor_id": "lasky-jh",
       "committee_id": "ie-committee-38979",
       "amount": 1000.0,
       "date": "2023-02-28",
@@ -729700,7 +729700,7 @@
     },
     {
       "id": "ie-rec-38979-1234",
-      "donor_id": "joanne-desanctis",
+      "donor_id": "desanctis-joanne",
       "committee_id": "ie-committee-38979",
       "amount": 5.65,
       "date": "2023-02-28",
@@ -729710,7 +729710,7 @@
     },
     {
       "id": "ie-rec-38979-1235",
-      "donor_id": "joanne-desanctis",
+      "donor_id": "desanctis-joanne",
       "committee_id": "ie-committee-38979",
       "amount": 51.99,
       "date": "2023-02-28",
@@ -729720,7 +729720,7 @@
     },
     {
       "id": "ie-rec-38670-1236",
-      "donor_id": "rene-parungao",
+      "donor_id": "parungao-rene",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2023-01-27",
@@ -729730,7 +729730,7 @@
     },
     {
       "id": "ie-rec-38670-1237",
-      "donor_id": "rene-parungao",
+      "donor_id": "parungao-rene",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2023-02-21",
@@ -729740,7 +729740,7 @@
     },
     {
       "id": "ie-rec-38670-1238",
-      "donor_id": "michael-glasser",
+      "donor_id": "glasser-michael",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2023-02-21",
@@ -729750,7 +729750,7 @@
     },
     {
       "id": "ie-rec-38670-1239",
-      "donor_id": "susan-starrett",
+      "donor_id": "starrett-susan",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2023-03-01",
@@ -729760,7 +729760,7 @@
     },
     {
       "id": "ie-rec-38670-1240",
-      "donor_id": "steven-weinberg",
+      "donor_id": "weinberg-steven",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2023-03-01",
@@ -729770,7 +729770,7 @@
     },
     {
       "id": "ie-rec-38670-1241",
-      "donor_id": "hava-muldoon",
+      "donor_id": "muldoon-hava",
       "committee_id": "ie-committee-38670",
       "amount": 300.0,
       "date": "2023-03-01",
@@ -729780,7 +729780,7 @@
     },
     {
       "id": "ie-rec-38670-1242",
-      "donor_id": "kris-aune",
+      "donor_id": "aune-kris",
       "committee_id": "ie-committee-38670",
       "amount": 500.0,
       "date": "2023-03-01",
@@ -729790,7 +729790,7 @@
     },
     {
       "id": "ie-rec-38670-1243",
-      "donor_id": "rafael-ruiz-ayala",
+      "donor_id": "ruiz-ayala-rafael",
       "committee_id": "ie-committee-38670",
       "amount": 1250.0,
       "date": "2023-02-18",
@@ -729800,7 +729800,7 @@
     },
     {
       "id": "ie-rec-38670-1244",
-      "donor_id": "rafael-ruiz-ayala",
+      "donor_id": "ruiz-ayala-rafael",
       "committee_id": "ie-committee-38670",
       "amount": 1000.0,
       "date": "2023-02-18",
@@ -729810,7 +729810,7 @@
     },
     {
       "id": "ie-rec-38670-1245",
-      "donor_id": "belia-rodriguez",
+      "donor_id": "rodriguez-belia",
       "committee_id": "ie-committee-38670",
       "amount": 56.87,
       "date": "2023-01-03",
@@ -729820,7 +729820,7 @@
     },
     {
       "id": "ie-rec-38670-1246",
-      "donor_id": "belia-rodriguez",
+      "donor_id": "rodriguez-belia",
       "committee_id": "ie-committee-38670",
       "amount": 70.11,
       "date": "2023-02-01",
@@ -729830,7 +729830,7 @@
     },
     {
       "id": "ie-rec-38670-1247",
-      "donor_id": "belia-rodriguez",
+      "donor_id": "rodriguez-belia",
       "committee_id": "ie-committee-38670",
       "amount": 56.87,
       "date": "2023-03-01",
@@ -729840,7 +729840,7 @@
     },
     {
       "id": "ie-rec-26066-1248",
-      "donor_id": "james-s-frank",
+      "donor_id": "frank-james-s",
       "committee_id": "ie-committee-26066",
       "amount": 400000.0,
       "date": "2022-11-17",
@@ -729850,7 +729850,7 @@
     },
     {
       "id": "ie-rec-26066-1249",
-      "donor_id": "james-s-frank",
+      "donor_id": "frank-james-s",
       "committee_id": "ie-committee-26066",
       "amount": 100000.0,
       "date": "2023-01-19",
@@ -729860,7 +729860,7 @@
     },
     {
       "id": "ie-rec-26066-1250",
-      "donor_id": "james-s-frank",
+      "donor_id": "frank-james-s",
       "committee_id": "ie-committee-26066",
       "amount": 245200.0,
       "date": "2023-02-21",
@@ -729870,7 +729870,7 @@
     },
     {
       "id": "ie-rec-26066-1251",
-      "donor_id": "david-a-weinberg",
+      "donor_id": "weinberg-david-a",
       "committee_id": "ie-committee-26066",
       "amount": 137600.0,
       "date": "2023-02-22",
@@ -729880,7 +729880,7 @@
     },
     {
       "id": "ie-rec-26066-1252",
-      "donor_id": "don-wilson",
+      "donor_id": "wilson-don",
       "committee_id": "ie-committee-26066",
       "amount": 25000.0,
       "date": "2023-02-22",
@@ -729890,7 +729890,7 @@
     },
     {
       "id": "ie-rec-26066-1253",
-      "donor_id": "katherine-bradley",
+      "donor_id": "bradley-katherine",
       "committee_id": "ie-committee-26066",
       "amount": 5000.0,
       "date": "2023-03-14",
@@ -729900,7 +729900,7 @@
     },
     {
       "id": "ie-rec-26066-1254",
-      "donor_id": "james-s-frank",
+      "donor_id": "frank-james-s",
       "committee_id": "ie-committee-26066",
       "amount": 800000.0,
       "date": "2023-03-16",
@@ -730040,7 +730040,7 @@
     },
     {
       "id": "ie-rec-38979-1268",
-      "donor_id": "joanne-desanctis",
+      "donor_id": "desanctis-joanne",
       "committee_id": "ie-committee-38979",
       "amount": 100.0,
       "date": "2023-04-04",
@@ -730050,7 +730050,7 @@
     },
     {
       "id": "ie-rec-38979-1269",
-      "donor_id": "joanne-desanctis",
+      "donor_id": "desanctis-joanne",
       "committee_id": "ie-committee-38979",
       "amount": 100.0,
       "date": "2023-04-04",
@@ -730060,7 +730060,7 @@
     },
     {
       "id": "ie-rec-38670-1270",
-      "donor_id": "belia-rodriguez",
+      "donor_id": "rodriguez-belia",
       "committee_id": "ie-committee-38670",
       "amount": 61.87,
       "date": "2023-04-03",
@@ -730070,7 +730070,7 @@
     },
     {
       "id": "ie-rec-38670-1271",
-      "donor_id": "belia-rodriguez",
+      "donor_id": "rodriguez-belia",
       "committee_id": "ie-committee-38670",
       "amount": 63.98,
       "date": "2023-05-01",
@@ -730080,7 +730080,7 @@
     },
     {
       "id": "ie-rec-38670-1272",
-      "donor_id": "belia-rodriguez",
+      "donor_id": "rodriguez-belia",
       "committee_id": "ie-committee-38670",
       "amount": 58.09,
       "date": "2023-06-02",
@@ -730090,7 +730090,7 @@
     },
     {
       "id": "ie-rec-38670-1273",
-      "donor_id": "belia-rodriguez",
+      "donor_id": "rodriguez-belia",
       "committee_id": "ie-committee-38670",
       "amount": 131.09,
       "date": "2023-06-16",
@@ -730100,7 +730100,7 @@
     },
     {
       "id": "ie-rec-38670-1274",
-      "donor_id": "rene-parungao",
+      "donor_id": "parungao-rene",
       "committee_id": "ie-committee-38670",
       "amount": 250.0,
       "date": "2023-08-25",
@@ -730370,7 +730370,7 @@
     },
     {
       "id": "ie-rec-26066-1301",
-      "donor_id": "eduardo-valadez",
+      "donor_id": "valadez-eduardo",
       "committee_id": "ie-committee-26066",
       "amount": 152.0,
       "date": "2023-07-13",
@@ -730380,7 +730380,7 @@
     },
     {
       "id": "ie-rec-26066-1302",
-      "donor_id": "jasmine-valadez",
+      "donor_id": "valadez-jasmine",
       "committee_id": "ie-committee-26066",
       "amount": 760.0,
       "date": "2023-07-13",
@@ -730400,7 +730400,7 @@
     },
     {
       "id": "ie-rec-25109-1304",
-      "donor_id": "robert-escalante",
+      "donor_id": "escalante-robert",
       "committee_id": "ie-committee-25109",
       "amount": 500.0,
       "date": "2023-10-17",
@@ -730570,7 +730570,7 @@
     },
     {
       "id": "ie-rec-26066-1321",
-      "donor_id": "valeria-carbajal",
+      "donor_id": "carbajal-valeria",
       "committee_id": "ie-committee-26066",
       "amount": 180.0,
       "date": "2023-12-31",
@@ -730720,7 +730720,7 @@
     },
     {
       "id": "ie-rec-26066-1336",
-      "donor_id": "jim-c-walton",
+      "donor_id": "walton-jim-c",
       "committee_id": "ie-committee-26066",
       "amount": 338000.0,
       "date": "2024-01-09",
@@ -730730,7 +730730,7 @@
     },
     {
       "id": "ie-rec-26066-1337",
-      "donor_id": "david-a-weinberg",
+      "donor_id": "weinberg-david-a",
       "committee_id": "ie-committee-26066",
       "amount": 172600.0,
       "date": "2024-03-15",
@@ -730830,7 +730830,7 @@
     },
     {
       "id": "ie-rec-26066-1347",
-      "donor_id": "james-s-frank",
+      "donor_id": "frank-james-s",
       "committee_id": "ie-committee-26066",
       "amount": 986300.0,
       "date": "2024-06-17",
@@ -730950,7 +730950,7 @@
     },
     {
       "id": "ie-rec-26066-1359",
-      "donor_id": "reed-hastings",
+      "donor_id": "hastings-reed",
       "committee_id": "ie-committee-26066",
       "amount": 100000.0,
       "date": "2024-07-29",
@@ -730960,7 +730960,7 @@
     },
     {
       "id": "ie-rec-26066-1360",
-      "donor_id": "helen-zell",
+      "donor_id": "zell-helen",
       "committee_id": "ie-committee-26066",
       "amount": 500000.0,
       "date": "2024-09-09",
@@ -730970,7 +730970,7 @@
     },
     {
       "id": "ie-rec-26066-1361",
-      "donor_id": "craig-duchossois",
+      "donor_id": "duchossois-craig",
       "committee_id": "ie-committee-26066",
       "amount": 100000.0,
       "date": "2024-09-12",
@@ -731190,7 +731190,7 @@
     },
     {
       "id": "ie-rec-26066-1383",
-      "donor_id": "jim-c-walton",
+      "donor_id": "walton-jim-c",
       "committee_id": "ie-committee-26066",
       "amount": 400000.0,
       "date": "2024-10-03",
@@ -731570,7 +731570,7 @@
     },
     {
       "id": "ie-rec-26066-1421",
-      "donor_id": "helen-zell",
+      "donor_id": "zell-helen",
       "committee_id": "ie-committee-26066",
       "amount": 250000.0,
       "date": "2025-09-04",
@@ -731580,7 +731580,7 @@
     },
     {
       "id": "ie-rec-26066-1422",
-      "donor_id": "david-a-weinberg",
+      "donor_id": "weinberg-david-a",
       "committee_id": "ie-committee-26066",
       "amount": 222600.0,
       "date": "2025-09-25",
@@ -731710,7 +731710,7 @@
     },
     {
       "id": "ie-rec-26066-1435",
-      "donor_id": "james-s-frank",
+      "donor_id": "frank-james-s",
       "committee_id": "ie-committee-26066",
       "amount": 1986000.0,
       "date": "2025-12-19",
@@ -731720,7 +731720,7 @@
     },
     {
       "id": "ie-rec-26066-1436",
-      "donor_id": "james-s-frank",
+      "donor_id": "frank-james-s",
       "committee_id": "ie-committee-26066",
       "amount": 500.81,
       "date": "2025-12-23",
@@ -732240,7 +732240,7 @@
     },
     {
       "id": "ie-rec-26066-1488",
-      "donor_id": "paul-finnegan",
+      "donor_id": "finnegan-paul",
       "committee_id": "ie-committee-26066",
       "amount": 419700.0,
       "date": "2026-05-05",
@@ -732260,7 +732260,7 @@
     },
     {
       "id": "ie-rec-26066-1490",
-      "donor_id": "liam-krehbiel",
+      "donor_id": "krehbiel-liam",
       "committee_id": "ie-committee-26066",
       "amount": 10000.0,
       "date": "2026-06-01",
@@ -732300,7 +732300,7 @@
     },
     {
       "id": "ie-rec-26066-1494",
-      "donor_id": "david-a-weinberg",
+      "donor_id": "weinberg-david-a",
       "committee_id": "ie-committee-26066",
       "amount": 280000.0,
       "date": "2026-07-10",
@@ -732430,7 +732430,7 @@
     },
     {
       "id": "ie-rec-26066-1507",
-      "donor_id": "james-s-frank",
+      "donor_id": "frank-james-s",
       "committee_id": "ie-committee-26066",
       "amount": 1750000.0,
       "date": "2026-07-14",
@@ -732470,7 +732470,7 @@
     },
     {
       "id": "ie-rec-26066-1511",
-      "donor_id": "leonard-gail",
+      "donor_id": "gail-leonard",
       "committee_id": "ie-committee-26066",
       "amount": 50000.0,
       "date": "2026-08-21",
@@ -732480,7 +732480,7 @@
     },
     {
       "id": "ie-rec-26066-1512",
-      "donor_id": "helen-zell",
+      "donor_id": "zell-helen",
       "committee_id": "ie-committee-26066",
       "amount": 250000.0,
       "date": "2026-08-26",

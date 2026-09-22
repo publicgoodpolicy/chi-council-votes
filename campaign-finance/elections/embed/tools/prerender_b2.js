@@ -294,7 +294,7 @@ var prof26066Html = R.renderCommitteeProfile(prof26066);
 ok('committee-profile shows real name primary + "Funded primarily by" + no bare id',
   /INCS Action Independent Committee/.test(prof26066Html) && /Funded primarily by /.test(prof26066Html) && prof26066Html.indexOf('IE committee 26066') < 0);
 // Footprint modal IE row: name primary + subtitle, never the bare placeholder.
-var frankId = (function () { for (var p in index.parentRollup) if (/James S\. Frank/.test((index.donors[p] || {}).name)) return p; })();
+var frankId = (function () { for (var p in index.parentRollup) if (/James S\. Frank/.test((index.donors[p] || {}).cluster_name)) return p; })();
 var frankHtml = R.renderFunderModal(D.donorFootprint(index, frankId));
 ok('footprint IE row shows resolved name + "Funded primarily by" subtitle',
   /INCS Action Independent Committee/.test(frankHtml) && /class="sub">Funded primarily by/.test(frankHtml));
@@ -331,7 +331,7 @@ var candKeys = {}; Object.keys(indexAll.committeeKeyByCandidate).forEach(functio
 ok('guard: no election candidate committee appears as an IE spender',
   Object.keys(indexAll.iesBySpender).every(function (k) { return !candKeys[k]; }));
 // scoped footprint excludes council-only IE committees, keeps in-scope + direct
-var frankId5 = (function () { for (var p5 in index.parentRollup) if (/James S\. Frank/.test((index.donors[p5] || {}).name)) return p5; })();
+var frankId5 = (function () { for (var p5 in index.parentRollup) if (/James S\. Frank/.test((index.donors[p5] || {}).cluster_name)) return p5; })();
 var frankScoped = D.donorFootprint(index, frankId5);
 ok('scoped footprint drops council-only IE committee (26023)',
   frankScoped.committees.every(function (x) { return x.committee_id !== 'ie-committee-26023'; }));

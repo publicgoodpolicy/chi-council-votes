@@ -1,6 +1,6 @@
 {
   "schema_version": "2.1",
-  "generated_at": "2026-09-14T13:52:07Z",
+  "generated_at": "2026-09-22T03:00:39Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "itemization_threshold": 150,
   "cycles": {
@@ -4711,7 +4711,7 @@
       "name": "Murphy, Thomas",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -12692,19 +12692,16 @@
       "name": "Duchossois, Craig",
       "type": "Individual",
       "industries": [
-        "individual"
+        "individual",
+        "finance"
       ],
       "flags": [],
       "notes": null,
       "occupation": "Executive Chair",
       "employer": "The Duchossois Group",
       "city": "Chicago, IL",
-      "parent_id": "craig-duchossois",
-      "committee_id": null,
-      "cluster_id": "rollup-368",
-      "cluster_name": "Craig Duchossois",
-      "cluster_role": "alt-name",
-      "cluster_is_parent": false
+      "parent_id": "duchossois-craig",
+      "committee_id": null
     },
     "duff-tom": {
       "id": "duff-tom",
@@ -14469,7 +14466,7 @@
       "name": "Glasser, Michael",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -15170,7 +15167,7 @@
       "name": "Gutman, Joseph",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -19195,7 +19192,8 @@
       "name": "Malkin, Barry",
       "type": "Individual",
       "industries": [
-        "individual"
+        "individual",
+        "real-estate"
       ],
       "flags": [],
       "notes": null,
@@ -19210,7 +19208,8 @@
       "name": "Malkin, Stephen",
       "type": "Individual",
       "industries": [
-        "individual"
+        "individual",
+        "finance"
       ],
       "flags": [],
       "notes": null,
@@ -19838,7 +19837,7 @@
       "name": "McLinden, John",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -19925,7 +19924,8 @@
       "name": "Meister, Paul",
       "type": "Individual",
       "industries": [
-        "individual"
+        "individual",
+        "finance"
       ],
       "flags": [],
       "notes": null,
@@ -21668,7 +21668,7 @@
       "name": "Perez, Jorge",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -23190,19 +23190,20 @@
       "name": "Sacks, Cari",
       "type": "Individual",
       "industries": [
-        "individual"
+        "individual",
+        "finance"
       ],
       "flags": [],
       "notes": null,
       "occupation": "Unemployed",
       "employer": "Unemployed",
       "city": "Chicago, IL",
-      "parent_id": "cari-sacks",
+      "parent_id": "sacks-cari",
       "committee_id": null,
       "cluster_id": "rollup-191",
       "cluster_name": "Cari Sacks",
-      "cluster_role": "alt-name",
-      "cluster_is_parent": false
+      "cluster_role": "parent",
+      "cluster_is_parent": true
     },
     "sacks-elise": {
       "id": "sacks-elise",
@@ -23252,7 +23253,7 @@
       "name": "Sacks, Michael",
       "type": "Individual",
       "industries": [
-        "individual"
+        "finance"
       ],
       "flags": [],
       "notes": null,
@@ -23261,6 +23262,8 @@
       "city": "Chicago, IL",
       "parent_id": "sacks-michael",
       "committee_id": null,
+      "entity_type": "individual",
+      "_last_edited_by": "editor-ui",
       "cluster_id": "rollup-472",
       "cluster_name": "Sacks, Michael",
       "cluster_role": "parent",
@@ -38375,7 +38378,7 @@
       "name": "Fogelson, Gerald W",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -54188,7 +54191,7 @@
       "occupation": "Investment Firm",
       "employer": "Grosvenor Capital Management, L.P.",
       "city": "Chicago, IL",
-      "parent_id": "cari-sacks",
+      "parent_id": "sacks-cari",
       "committee_id": null,
       "cluster_id": "rollup-191",
       "cluster_name": "Cari Sacks",
@@ -66577,12 +66580,13 @@
         "individual"
       ],
       "flags": [],
-      "notes": null,
+      "notes": "auto: real-estate word",
       "occupation": "CEO",
       "employer": "Grosvenor Capital Management",
       "city": "Chicago, IL",
       "parent_id": "sacks-michael",
       "committee_id": null,
+      "_last_edited_by": "auto-suggest",
       "cluster_id": "rollup-472",
       "cluster_name": "Sacks, Michael",
       "cluster_role": "alt-name",
@@ -77950,7 +77954,8 @@
       "name": "Herro,, David",
       "type": "Individual",
       "industries": [
-        "individual"
+        "individual",
+        "finance"
       ],
       "flags": [],
       "notes": null,
@@ -80272,7 +80277,7 @@
       "name": "Martin, Timothy",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -95827,7 +95832,7 @@
       "name": "Crown, Keating",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -96588,7 +96593,7 @@
       "name": "Gassman, David",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -97815,7 +97820,7 @@
       "name": "Krehbiel, Liam",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -105550,7 +105555,7 @@
       "occupation": "Executive",
       "employer": "Fill2C",
       "city": "Winnetka, IL",
-      "parent_id": "james-s-frank",
+      "parent_id": "frank-james-s",
       "committee_id": null,
       "cluster_id": "rollup-367",
       "cluster_name": "James S. Frank",
@@ -110550,8 +110555,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "cooke-richard",
-      "committee_id": null
+      "parent_id": "committee-to-elect-richard-c-cooke",
+      "committee_id": null,
+      "cluster_id": "rollup-254",
+      "cluster_name": "Committee to Elect Richard C Cooke",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "cooley-joshua": {
       "id": "cooley-joshua",
@@ -122916,15 +122925,20 @@
       "name": "Frank, Jim S.",
       "type": "Individual",
       "industries": [
-        "individual"
+        "individual",
+        "corporate"
       ],
       "flags": [],
       "notes": null,
       "occupation": "CEO",
       "employer": "Wheels, Inc.",
       "city": "Des Plaines, IL",
-      "parent_id": "frank-jim-s",
-      "committee_id": null
+      "parent_id": "frank-james-s",
+      "committee_id": null,
+      "cluster_id": "rollup-367",
+      "cluster_name": "James S. Frank",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "frankie-s-place-inc": {
       "id": "frankie-s-place-inc",
@@ -126629,7 +126643,8 @@
       "name": "Rowe, John W.",
       "type": "Individual",
       "industries": [
-        "individual"
+        "individual",
+        "finance"
       ],
       "flags": [],
       "notes": null,
@@ -126637,7 +126652,11 @@
       "employer": "Exelon Corporation",
       "city": "Chicago, IL",
       "parent_id": "rowe-john-w",
-      "committee_id": null
+      "committee_id": null,
+      "cluster_id": "rollup-413",
+      "cluster_name": "JOHN W. ROWE",
+      "cluster_role": "parent",
+      "cluster_is_parent": true
     },
     "s-m-auto-brokers-inc": {
       "id": "s-m-auto-brokers-inc",
@@ -138291,7 +138310,7 @@
       "name": "Grady, Graham C.",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -175679,7 +175698,8 @@
       "name": "Crown, James S.",
       "type": "Individual",
       "industries": [
-        "individual"
+        "individual",
+        "finance"
       ],
       "flags": [],
       "notes": null,
@@ -189444,12 +189464,13 @@
         "individual"
       ],
       "flags": [],
-      "notes": null,
+      "notes": "auto: Paul Vallas \u2014 establishment/conservative Democrat",
       "occupation": "Co-CEO",
       "employer": "Madison Dearborn Partners",
       "city": "Evanston, IL",
       "parent_id": "finnegan-paul",
-      "committee_id": null
+      "committee_id": null,
+      "_last_edited_by": "auto-suggest"
     },
     "first-venture-home-healthcare": {
       "id": "first-venture-home-healthcare",
@@ -192282,15 +192303,16 @@
       "name": "Simpson, John",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
-      "notes": null,
+      "notes": "auto: Democratic ward / party regular organization (machine)",
       "occupation": "Manager",
       "employer": "Broadhaven",
       "city": "Chicago, IL",
       "parent_id": "simpson-john",
-      "committee_id": null
+      "committee_id": null,
+      "_last_edited_by": "auto-suggest"
     },
     "smith-jason": {
       "id": "smith-jason",
@@ -201309,7 +201331,7 @@
       "name": "Weinberg, David A",
       "type": "Individual",
       "industries": [
-        "individual"
+        "charter-schools"
       ],
       "flags": [],
       "notes": null,
@@ -201317,7 +201339,9 @@
       "employer": "Weinberg/Newton Gallery",
       "city": "Chicago, IL",
       "parent_id": "weinberg-david-a",
-      "committee_id": null
+      "committee_id": null,
+      "entity_type": "individual",
+      "_last_edited_by": "editor-ui"
     },
     "welch-marybeth": {
       "id": "welch-marybeth",
@@ -215392,7 +215416,7 @@
       "name": "Melman, Rich",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -216406,8 +216430,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "reboyras-ariel",
-      "committee_id": null
+      "parent_id": "citizens-for-ariel-e-reboyras",
+      "committee_id": null,
+      "cluster_id": "rollup-289",
+      "cluster_name": "Citizens for Ariel E Reboyras",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "regal-garages": {
       "id": "regal-garages",
@@ -216598,8 +216626,12 @@
       "flags": [],
       "notes": null,
       "city": "Huntley, IL",
-      "parent_id": "rosas-jr-jesse",
-      "committee_id": null
+      "parent_id": "rosas-jesse",
+      "committee_id": null,
+      "cluster_id": "rollup-044",
+      "cluster_name": "Jesse Rosas",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "rosas-jesse": {
       "id": "rosas-jesse",
@@ -216612,7 +216644,11 @@
       "notes": null,
       "city": "Chicago, IL",
       "parent_id": "rosas-jesse",
-      "committee_id": null
+      "committee_id": null,
+      "cluster_id": "rollup-044",
+      "cluster_name": "Jesse Rosas",
+      "cluster_role": "parent",
+      "cluster_is_parent": true
     },
     "rouse-joseph": {
       "id": "rouse-joseph",
@@ -217085,7 +217121,7 @@
       "name": "Sposato, Nicholas",
       "type": "Candidate",
       "industries": [
-        "self-funding"
+        "candidate-account"
       ],
       "flags": [],
       "notes": null,
@@ -218021,7 +218057,7 @@
       "name": "Abrams, Ron",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -223260,7 +223296,7 @@
       "name": "Simovic, Laszlo",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -246244,7 +246280,8 @@
       "name": "Abrams, James",
       "type": "Individual",
       "industries": [
-        "individual"
+        "individual",
+        "healthcare"
       ],
       "flags": [],
       "notes": null,
@@ -253567,19 +253604,15 @@
       "name": "Silverstein, William",
       "type": "Individual",
       "industries": [
-        "self-funding"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
       "occupation": "Real Estate Investor",
       "employer": "Beal Properties",
       "city": "Highland Park, IL",
-      "parent_id": "william-silverstein",
-      "committee_id": null,
-      "cluster_id": "rollup-379",
-      "cluster_name": "William Silverstein",
-      "cluster_role": "alt-name",
-      "cluster_is_parent": false
+      "parent_id": "silverstein-william",
+      "committee_id": null
     },
     "singer-aaron": {
       "id": "singer-aaron",
@@ -261765,7 +261798,7 @@
       "name": "Faklaris, Prudence",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -286557,7 +286590,7 @@
       "name": "Bobins, Norm",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -295464,7 +295497,8 @@
       "name": "Helfand, David",
       "type": "Individual",
       "industries": [
-        "individual"
+        "individual",
+        "real-estate"
       ],
       "flags": [],
       "notes": null,
@@ -297430,7 +297464,7 @@
       "name": "Kallas, Jim",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -313408,19 +313442,6 @@
       "parent_id": "life-storage-centers-of-humboldt-park",
       "committee_id": null
     },
-    "young-pate": {
-      "id": "young-pate",
-      "name": "Young Pate",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "young-pate",
-      "committee_id": null
-    },
     "shashikant-bhasker-inc": {
       "id": "shashikant-bhasker-inc",
       "name": "Shashikant & Bhasker, Inc.",
@@ -313786,20 +313807,6 @@
       "parent_id": "alliance-co",
       "committee_id": null
     },
-    "martin-artega": {
-      "id": "martin-artega",
-      "name": "Martin Artega",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": "auto: building-trades union",
-      "city": null,
-      "parent_id": "martin-artega",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest"
-    },
     "brown-committee-to-elect-alonzo": {
       "id": "brown-committee-to-elect-alonzo",
       "name": "Brown, Committee to Elect Alonzo",
@@ -313913,169 +313920,6 @@
       "parent_id": "suarez-electric-inc",
       "committee_id": null
     },
-    "eric-lefkofsky": {
-      "id": "eric-lefkofsky",
-      "name": "Eric Lefkofsky",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "tech"
-      ],
-      "flags": [],
-      "notes": "auto: restaurant word",
-      "city": null,
-      "parent_id": "eric-lefkofsky",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest"
-    },
-    "barry-malkin": {
-      "id": "barry-malkin",
-      "name": "Barry Malkin",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "real-estate"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "barry-malkin",
-      "committee_id": null
-    },
-    "john-canning": {
-      "id": "john-canning",
-      "name": "John Canning",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "john-canning",
-      "committee_id": null
-    },
-    "paul-finnegan": {
-      "id": "paul-finnegan",
-      "name": "Paul Finnegan",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": "auto: Paul Vallas \u2014 establishment/conservative Democrat",
-      "city": null,
-      "parent_id": "paul-finnegan",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest"
-    },
-    "kenneth-griffin": {
-      "id": "kenneth-griffin",
-      "name": "Kenneth Griffin",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "kenneth-c-griffin",
-      "committee_id": null,
-      "cluster_id": "rollup-415",
-      "cluster_name": "Kenneth C. Griffin",
-      "cluster_role": "alt-name",
-      "cluster_is_parent": false
-    },
-    "samuel-mencoff": {
-      "id": "samuel-mencoff",
-      "name": "Samuel Mencoff",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "samuel-mencoff",
-      "committee_id": null
-    },
-    "paul-meister": {
-      "id": "paul-meister",
-      "name": "Paul Meister",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "paul-meister",
-      "committee_id": null
-    },
-    "jim-s-frank": {
-      "id": "jim-s-frank",
-      "name": "JIM S. FRANK",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "corporate"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "james-s-frank",
-      "committee_id": null,
-      "cluster_id": "rollup-367",
-      "cluster_name": "James S. Frank",
-      "cluster_role": "alt-name",
-      "cluster_is_parent": false
-    },
-    "david-a-weinberg": {
-      "id": "david-a-weinberg",
-      "name": "DAVID A. WEINBERG",
-      "type": "Other",
-      "industries": [
-        "charter-schools"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "david-a-weinberg",
-      "committee_id": null,
-      "entity_type": "individual",
-      "_last_edited_by": "editor-ui"
-    },
-    "jorge-perez": {
-      "id": "jorge-perez",
-      "name": "Jorge Perez",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "jorge-perez",
-      "committee_id": null
-    },
-    "ellen-benson": {
-      "id": "ellen-benson",
-      "name": "Ellen Benson",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "ellen-benson",
-      "committee_id": null
-    },
     "valor-management-corp": {
       "id": "valor-management-corp",
       "name": "Valor Management Corp.",
@@ -314088,87 +313932,6 @@
       "city": null,
       "parent_id": "valor-management-corp",
       "committee_id": null
-    },
-    "craig-duchossois": {
-      "id": "craig-duchossois",
-      "name": "Craig Duchossois",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "craig-duchossois",
-      "committee_id": null,
-      "cluster_id": "rollup-368",
-      "cluster_name": "Craig Duchossois",
-      "cluster_role": "parent",
-      "cluster_is_parent": true
-    },
-    "cari-sacks": {
-      "id": "cari-sacks",
-      "name": "Cari Sacks",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "cari-sacks",
-      "committee_id": null,
-      "cluster_id": "rollup-191",
-      "cluster_name": "Cari Sacks",
-      "cluster_role": "parent",
-      "cluster_is_parent": true
-    },
-    "david-bunning": {
-      "id": "david-bunning",
-      "name": "David Bunning",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "david-bunning",
-      "committee_id": null
-    },
-    "mark-lampert": {
-      "id": "mark-lampert",
-      "name": "Mark Lampert",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "healthcare"
-      ],
-      "flags": [],
-      "notes": "auto: Democratic ward / party regular organization (machine)",
-      "city": null,
-      "parent_id": "mark-lampert",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest"
-    },
-    "john-rowe": {
-      "id": "john-rowe",
-      "name": "John Rowe",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "john-w-rowe",
-      "committee_id": null,
-      "cluster_id": "rollup-413",
-      "cluster_name": "JOHN W. ROWE",
-      "cluster_role": "alt-name",
-      "cluster_is_parent": false
     },
     "illinois-state-conference-of-ibew-pac": {
       "id": "illinois-state-conference-of-ibew-pac",
@@ -314184,225 +313947,6 @@
       "committee_id": null,
       "_last_edited_by": "auto-suggest"
     },
-    "samuel-zell": {
-      "id": "samuel-zell",
-      "name": "Samuel Zell",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "real-estate"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "samuel-zell",
-      "committee_id": null
-    },
-    "joseph-mansueto": {
-      "id": "joseph-mansueto",
-      "name": "Joseph Mansueto",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "joseph-mansueto",
-      "committee_id": null
-    },
-    "berle-blitstein": {
-      "id": "berle-blitstein",
-      "name": "Berle Blitstein",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "berle-blitstein",
-      "committee_id": null
-    },
-    "robert-repel": {
-      "id": "robert-repel",
-      "name": "Robert Repel",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "robert-repel",
-      "committee_id": null
-    },
-    "joseph-gutman": {
-      "id": "joseph-gutman",
-      "name": "Joseph Gutman",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "joseph-gutman",
-      "committee_id": null
-    },
-    "sheila-gutman": {
-      "id": "sheila-gutman",
-      "name": "Sheila Gutman",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "sheila-gutman",
-      "committee_id": null
-    },
-    "david-helfand": {
-      "id": "david-helfand",
-      "name": "David Helfand",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "real-estate"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "david-helfand",
-      "committee_id": null
-    },
-    "david-herro": {
-      "id": "david-herro",
-      "name": "David Herro",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "david-herro",
-      "committee_id": null
-    },
-    "timothy-mullen": {
-      "id": "timothy-mullen",
-      "name": "Timothy Mullen",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": "auto: service-sector union",
-      "city": null,
-      "parent_id": "timothy-mullen",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest"
-    },
-    "robert-levy": {
-      "id": "robert-levy",
-      "name": "Robert Levy",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": "auto: Democratic ward / party regular organization (machine)",
-      "city": null,
-      "parent_id": "robert-levy",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest"
-    },
-    "laura-arnold": {
-      "id": "laura-arnold",
-      "name": "Laura Arnold",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "laura-arnold",
-      "committee_id": null
-    },
-    "muneer-satter": {
-      "id": "muneer-satter",
-      "name": "Muneer Satter",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "muneer-satter",
-      "committee_id": null
-    },
-    "james-gray": {
-      "id": "james-gray",
-      "name": "James Gray",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "james-gray",
-      "committee_id": null
-    },
-    "john-simpson": {
-      "id": "john-simpson",
-      "name": "John Simpson",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": "auto: Democratic ward / party regular organization (machine)",
-      "city": null,
-      "parent_id": "john-simpson",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest"
-    },
-    "gregory-phillips": {
-      "id": "gregory-phillips",
-      "name": "Gregory Phillips",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "gregory-phillips",
-      "committee_id": null
-    },
-    "stephen-malkin": {
-      "id": "stephen-malkin",
-      "name": "Stephen Malkin",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "stephen-malkin",
-      "committee_id": null
-    },
     "ezman-holdings-llc": {
       "id": "ezman-holdings-llc",
       "name": "Ezman Holdings LLC",
@@ -314414,49 +313958,6 @@
       "notes": null,
       "city": null,
       "parent_id": "ezman-holdings-llc",
-      "committee_id": null
-    },
-    "sara-star": {
-      "id": "sara-star",
-      "name": "Sara Star",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "sara-star",
-      "committee_id": null
-    },
-    "mark-gallogly": {
-      "id": "mark-gallogly",
-      "name": "Mark Gallogly",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": "auto: real-estate word",
-      "city": null,
-      "parent_id": "mark-gallogly",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest"
-    },
-    "james-litinsky": {
-      "id": "james-litinsky",
-      "name": "James Litinsky",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "corporate"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "james-litinsky",
       "committee_id": null
     },
     "abitua-sewer-water-plumbing-inc": {
@@ -314590,46 +314091,6 @@
       "entity_type": "political-organization",
       "_last_edited_by": "editor-ui"
     },
-    "kenneth-tuchman": {
-      "id": "kenneth-tuchman",
-      "name": "Kenneth Tuchman",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": "auto: real-estate word",
-      "city": null,
-      "parent_id": "kenneth-tuchman",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest"
-    },
-    "sean-j-conlon": {
-      "id": "sean-j-conlon",
-      "name": "Sean J. Conlon",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "sean-j-conlon",
-      "committee_id": null
-    },
-    "anna-szydzik": {
-      "id": "anna-szydzik",
-      "name": "Anna Szydzik",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "anna-szydzik",
-      "committee_id": null
-    },
     "surepayroll": {
       "id": "surepayroll",
       "name": "SurePayroll",
@@ -314729,25 +314190,6 @@
       "parent_id": "designbridge",
       "committee_id": null
     },
-    "michael-j-sacks": {
-      "id": "michael-j-sacks",
-      "name": "Michael J. Sacks",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": "auto: real-estate word",
-      "city": null,
-      "parent_id": "sacks-michael",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest",
-      "cluster_id": "rollup-472",
-      "cluster_name": "Sacks, Michael",
-      "cluster_role": "alt-name",
-      "cluster_is_parent": false
-    },
     "toc-enterprises-inc": {
       "id": "toc-enterprises-inc",
       "name": "TOC Enterprises, Inc.",
@@ -314787,47 +314229,6 @@
       "parent_id": "trilogy-interactive-llc",
       "committee_id": null
     },
-    "james-abrams": {
-      "id": "james-abrams",
-      "name": "James Abrams",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "healthcare"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "james-abrams",
-      "committee_id": null
-    },
-    "wendy-abrams": {
-      "id": "wendy-abrams",
-      "name": "Wendy Abrams",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "healthcare"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "wendy-abrams",
-      "committee_id": null
-    },
-    "michael-a-cahan": {
-      "id": "michael-a-cahan",
-      "name": "Michael A. Cahan",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "michael-a-cahan",
-      "committee_id": null
-    },
     "construction-general-laborers-district-council-of-chicago-vicinit": {
       "id": "construction-general-laborers-district-council-of-chicago-vicinit",
       "name": "Construction & General Laborers' District Council of Chicago & Vicinit",
@@ -314844,78 +314245,6 @@
       "cluster_name": "Chicago & Cook County Building Trades Council",
       "cluster_role": "alt-name",
       "cluster_is_parent": false
-    },
-    "gerald-w-fogelson": {
-      "id": "gerald-w-fogelson",
-      "name": "Gerald W. Fogelson",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "gerald-w-fogelson",
-      "committee_id": null
-    },
-    "graham-c-grady": {
-      "id": "graham-c-grady",
-      "name": "Graham C. Grady",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "graham-c-grady",
-      "committee_id": null
-    },
-    "kenneth-c-griffin": {
-      "id": "kenneth-c-griffin",
-      "name": "Kenneth C. Griffin",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "corporate"
-      ],
-      "flags": [],
-      "notes": "auto: Democratic ward / party regular organization (machine)",
-      "city": null,
-      "parent_id": "kenneth-c-griffin",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest",
-      "cluster_id": "rollup-415",
-      "cluster_name": "Kenneth C. Griffin",
-      "cluster_role": "parent",
-      "cluster_is_parent": true
-    },
-    "jay-lecoque": {
-      "id": "jay-lecoque",
-      "name": "Jay LeCoque",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "jay-lecoque",
-      "committee_id": null
-    },
-    "daniel-loeb": {
-      "id": "daniel-loeb",
-      "name": "Daniel Loeb",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "daniel-loeb",
-      "committee_id": null
     },
     "peck-bloom-llc": {
       "id": "peck-bloom-llc",
@@ -315098,19 +314427,6 @@
       "cluster_role": "parent",
       "cluster_is_parent": true
     },
-    "jose-a-duarte": {
-      "id": "jose-a-duarte",
-      "name": "Jose A Duarte",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "jose-a-duarte",
-      "committee_id": null
-    },
     "harmon-friends-of-don": {
       "id": "harmon-friends-of-don",
       "name": "Harmon, Friends of Don",
@@ -315171,32 +314487,6 @@
       "cluster_role": "alt-name",
       "cluster_is_parent": false
     },
-    "gabriel-i-dziekiewicz": {
-      "id": "gabriel-i-dziekiewicz",
-      "name": "Gabriel I. Dziekiewicz",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "gabriel-i-dziekiewicz",
-      "committee_id": null
-    },
-    "mary-ann-vanhook": {
-      "id": "mary-ann-vanhook",
-      "name": "Mary Ann Vanhook",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "mary-ann-vanhook",
-      "committee_id": null
-    },
     "garza-karhoff-engineering-inc": {
       "id": "garza-karhoff-engineering-inc",
       "name": "Garza Karhoff Engineering, Inc.",
@@ -315211,24 +314501,6 @@
       "committee_id": null,
       "cluster_id": "rollup-243",
       "cluster_name": "Garza Karhoff Engineering, Inc.",
-      "cluster_role": "parent",
-      "cluster_is_parent": true
-    },
-    "john-w-rowe": {
-      "id": "john-w-rowe",
-      "name": "JOHN W. ROWE",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "john-w-rowe",
-      "committee_id": null,
-      "cluster_id": "rollup-413",
-      "cluster_name": "JOHN W. ROWE",
       "cluster_role": "parent",
       "cluster_is_parent": true
     },
@@ -315273,33 +314545,6 @@
       "notes": null,
       "city": null,
       "parent_id": "senate-democratic-victory-fund",
-      "committee_id": null
-    },
-    "michael-l-keiser": {
-      "id": "michael-l-keiser",
-      "name": "MICHAEL L. KEISER",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "corporate"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "michael-l-keiser",
-      "committee_id": null
-    },
-    "timothy-martin": {
-      "id": "timothy-martin",
-      "name": "Timothy Martin",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "timothy-martin",
       "committee_id": null
     },
     "wight-construction-services-inc": {
@@ -315370,21 +314615,6 @@
       "city": null,
       "parent_id": "madison-county-democratic-central-committee",
       "committee_id": null
-    },
-    "alice-l-walton": {
-      "id": "alice-l-walton",
-      "name": "ALICE L. WALTON",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "corporate"
-      ],
-      "flags": [],
-      "notes": "auto: Michael Madigan, ex-IL House Speaker \u2014 Democratic machine",
-      "city": null,
-      "parent_id": "alice-l-walton",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest"
     },
     "the-balduzzi-group": {
       "id": "the-balduzzi-group",
@@ -315498,34 +314728,6 @@
       "notes": null,
       "city": null,
       "parent_id": "wasik-for-lake-county-board",
-      "committee_id": null
-    },
-    "jim-c-walton": {
-      "id": "jim-c-walton",
-      "name": "JIM C. WALTON",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "corporate"
-      ],
-      "flags": [],
-      "notes": "auto: Democratic ward / party regular organization (machine)",
-      "city": null,
-      "parent_id": "jim-c-walton",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest"
-    },
-    "katie-wise": {
-      "id": "katie-wise",
-      "name": "KATIE WISE",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "katie-wise",
       "committee_id": null
     },
     "garza-karhoff-engineering-llc": {
@@ -316031,19 +315233,6 @@
       "parent_id": "moreno-architects-ltd",
       "committee_id": null
     },
-    "lisa-m-gasperec": {
-      "id": "lisa-m-gasperec",
-      "name": "Lisa M. Gasperec",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "lisa-m-gasperec",
-      "committee_id": null
-    },
     "design-consulting-engineers-inc": {
       "id": "design-consulting-engineers-inc",
       "name": "Design Consulting Engineers, Inc.",
@@ -316098,19 +315287,6 @@
       "notes": null,
       "city": null,
       "parent_id": "newcastle-tuckpointing-inc",
-      "committee_id": null
-    },
-    "james-k-murphy": {
-      "id": "james-k-murphy",
-      "name": "JAMES K. MURPHY",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "james-k-murphy",
       "committee_id": null
     },
     "research-and-advocacy-services": {
@@ -316256,58 +315432,6 @@
       "parent_id": "clark-construction",
       "committee_id": null
     },
-    "john-e-butler": {
-      "id": "john-e-butler",
-      "name": "JOHN E. BUTLER",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "john-e-butler",
-      "committee_id": null
-    },
-    "dorothy-gregory": {
-      "id": "dorothy-gregory",
-      "name": "Dorothy Gregory",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "dorothy-gregory",
-      "committee_id": null
-    },
-    "david-gassman": {
-      "id": "david-gassman",
-      "name": "David Gassman",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "david-gassman",
-      "committee_id": null
-    },
-    "robert-maihofer-ii": {
-      "id": "robert-maihofer-ii",
-      "name": "Robert Maihofer II",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "robert-maihofer-ii",
-      "committee_id": null
-    },
     "core-logic-llc": {
       "id": "core-logic-llc",
       "name": "Core Logic, LLC",
@@ -316319,137 +315443,6 @@
       "notes": null,
       "city": null,
       "parent_id": "core-logic-llc",
-      "committee_id": null
-    },
-    "steve-shah": {
-      "id": "steve-shah",
-      "name": "Steve Shah",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "steve-shah",
-      "committee_id": null
-    },
-    "mary-bao": {
-      "id": "mary-bao",
-      "name": "Mary Bao",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "mary-bao",
-      "committee_id": null
-    },
-    "steve-cain": {
-      "id": "steve-cain",
-      "name": "Steve Cain",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "steve-cain",
-      "committee_id": null
-    },
-    "jay-johnson": {
-      "id": "jay-johnson",
-      "name": "Jay Johnson",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": "auto: healthcare word",
-      "city": null,
-      "parent_id": "jay-johnson",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest"
-    },
-    "jill-liska": {
-      "id": "jill-liska",
-      "name": "Jill Liska",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "jill-liska",
-      "committee_id": null
-    },
-    "jerome-ettinger": {
-      "id": "jerome-ettinger",
-      "name": "Jerome Ettinger",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "jerome-ettinger",
-      "committee_id": null
-    },
-    "thomas-heineman": {
-      "id": "thomas-heineman",
-      "name": "Thomas Heineman",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "thomas-heineman",
-      "committee_id": null
-    },
-    "steven-weinberg": {
-      "id": "steven-weinberg",
-      "name": "Steven Weinberg",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "steven-weinberg",
-      "committee_id": null
-    },
-    "hava-muldoon": {
-      "id": "hava-muldoon",
-      "name": "Hava Muldoon",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "hava-muldoon",
-      "committee_id": null
-    },
-    "helen-carlock": {
-      "id": "helen-carlock",
-      "name": "Helen Carlock",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "helen-carlock",
       "committee_id": null
     },
     "ma-keppy-realty-inc": {
@@ -316491,45 +315484,6 @@
       "parent_id": "ivan-d-management",
       "committee_id": null
     },
-    "claude-smith": {
-      "id": "claude-smith",
-      "name": "Claude Smith",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "claude-smith",
-      "committee_id": null
-    },
-    "denis-detzel": {
-      "id": "denis-detzel",
-      "name": "Denis Detzel",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "denis-detzel",
-      "committee_id": null
-    },
-    "nathan-jarvinen": {
-      "id": "nathan-jarvinen",
-      "name": "Nathan Jarvinen",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "nathan-jarvinen",
-      "committee_id": null
-    },
     "peregrine-flats-llc": {
       "id": "peregrine-flats-llc",
       "name": "Peregrine Flats, LLC",
@@ -316541,163 +315495,6 @@
       "notes": null,
       "city": null,
       "parent_id": "peregrine-flats-llc",
-      "committee_id": null
-    },
-    "jennifer-kleiman": {
-      "id": "jennifer-kleiman",
-      "name": "Jennifer Kleiman",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "jennifer-kleiman",
-      "committee_id": null
-    },
-    "david-crawford": {
-      "id": "david-crawford",
-      "name": "David Crawford",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "david-crawford",
-      "committee_id": null
-    },
-    "marty-max": {
-      "id": "marty-max",
-      "name": "Marty Max",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "marty-max",
-      "committee_id": null
-    },
-    "prudence-faklaris": {
-      "id": "prudence-faklaris",
-      "name": "Prudence Faklaris",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "prudence-faklaris",
-      "committee_id": null
-    },
-    "dan-lustig": {
-      "id": "dan-lustig",
-      "name": "Dan Lustig",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "dan-lustig",
-      "committee_id": null
-    },
-    "ron-abrams": {
-      "id": "ron-abrams",
-      "name": "Ron Abrams",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "ron-abrams",
-      "committee_id": null
-    },
-    "kris-aune": {
-      "id": "kris-aune",
-      "name": "Kris Aune",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "kris-aune",
-      "committee_id": null
-    },
-    "andrew-levin": {
-      "id": "andrew-levin",
-      "name": "Andrew Levin",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": "auto: fuel word",
-      "city": null,
-      "parent_id": "andrew-levin",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest"
-    },
-    "thomas-murphy": {
-      "id": "thomas-murphy",
-      "name": "Thomas Murphy",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "thomas-murphy",
-      "committee_id": null
-    },
-    "margaret-meiser": {
-      "id": "margaret-meiser",
-      "name": "Margaret Meiser",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "margaret-meiser",
-      "committee_id": null
-    },
-    "laszlo-simovic": {
-      "id": "laszlo-simovic",
-      "name": "Laszlo Simovic",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "laszlo-simovic",
-      "committee_id": null
-    },
-    "alan-goldberg": {
-      "id": "alan-goldberg",
-      "name": "Alan Goldberg",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "alan-goldberg",
       "committee_id": null
     },
     "alpha-adjusting-company": {
@@ -316713,32 +315510,6 @@
       "parent_id": "alpha-adjusting-company",
       "committee_id": null
     },
-    "rafael-ruiz-ayala": {
-      "id": "rafael-ruiz-ayala",
-      "name": "Rafael Ruiz-Ayala",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "rafael-ruiz-ayala",
-      "committee_id": null
-    },
-    "ross-landman": {
-      "id": "ross-landman",
-      "name": "Ross Landman",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "ross-landman",
-      "committee_id": null
-    },
     "the-lord-companies-llc": {
       "id": "the-lord-companies-llc",
       "name": "The Lord Companies, LLC",
@@ -316752,150 +315523,6 @@
       "parent_id": "the-lord-companies-llc",
       "committee_id": null
     },
-    "jeanette-scalise": {
-      "id": "jeanette-scalise",
-      "name": "Jeanette Scalise",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "jeanette-scalise",
-      "committee_id": null
-    },
-    "michael-glasser": {
-      "id": "michael-glasser",
-      "name": "Michael Glasser",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "michael-glasser",
-      "committee_id": null
-    },
-    "rene-parungao": {
-      "id": "rene-parungao",
-      "name": "Rene Parungao",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "rene-parungao",
-      "committee_id": null
-    },
-    "timothy-long": {
-      "id": "timothy-long",
-      "name": "Timothy Long",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "timothy-long",
-      "committee_id": null
-    },
-    "matthew-kleiman": {
-      "id": "matthew-kleiman",
-      "name": "Matthew Kleiman",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "matthew-kleiman",
-      "committee_id": null
-    },
-    "michael-wallk": {
-      "id": "michael-wallk",
-      "name": "Michael Wallk",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "michael-wallk",
-      "committee_id": null
-    },
-    "richard-aronson": {
-      "id": "richard-aronson",
-      "name": "Richard Aronson",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "richard-aronson",
-      "committee_id": null
-    },
-    "rich-melman": {
-      "id": "rich-melman",
-      "name": "Rich Melman",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "rich-melman",
-      "committee_id": null
-    },
-    "jon-levin": {
-      "id": "jon-levin",
-      "name": "Jon Levin",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": "auto: real-estate word",
-      "city": null,
-      "parent_id": "jon-levin",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest"
-    },
-    "norm-bobins": {
-      "id": "norm-bobins",
-      "name": "Norm Bobins",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "norm-bobins",
-      "committee_id": null
-    },
-    "miles-berger": {
-      "id": "miles-berger",
-      "name": "Miles Berger",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "miles-berger",
-      "committee_id": null
-    },
     "electric-knowlege-interchange-company": {
       "id": "electric-knowlege-interchange-company",
       "name": "Electric Knowlege Interchange Company",
@@ -316907,97 +315534,6 @@
       "notes": null,
       "city": null,
       "parent_id": "electric-knowlege-interchange-company",
-      "committee_id": null
-    },
-    "colm-treacy": {
-      "id": "colm-treacy",
-      "name": "Colm Treacy",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "colm-treacy",
-      "committee_id": null
-    },
-    "connie-abels": {
-      "id": "connie-abels",
-      "name": "Connie Abels",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "connie-abels",
-      "committee_id": null
-    },
-    "jeffrey-cagan": {
-      "id": "jeffrey-cagan",
-      "name": "Jeffrey Cagan",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "jeffrey-cagan",
-      "committee_id": null
-    },
-    "sarah-lisy": {
-      "id": "sarah-lisy",
-      "name": "Sarah Lisy",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "sarah-lisy",
-      "committee_id": null
-    },
-    "denise-karlin": {
-      "id": "denise-karlin",
-      "name": "Denise Karlin",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "denise-karlin",
-      "committee_id": null
-    },
-    "paul-go": {
-      "id": "paul-go",
-      "name": "Paul Go",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "paul-go",
-      "committee_id": null
-    },
-    "belia-rodriguez": {
-      "id": "belia-rodriguez",
-      "name": "Belia Rodriguez",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "belia-rodriguez",
       "committee_id": null
     },
     "7-d-construction-co": {
@@ -317039,62 +315575,6 @@
       "parent_id": "citizens-for-marcus-evans-jr",
       "committee_id": null
     },
-    "jim-kallas": {
-      "id": "jim-kallas",
-      "name": "Jim Kallas",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "jim-kallas",
-      "committee_id": null
-    },
-    "william-silverstein": {
-      "id": "william-silverstein",
-      "name": "William Silverstein",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "william-silverstein",
-      "committee_id": null,
-      "cluster_id": "rollup-379",
-      "cluster_name": "William Silverstein",
-      "cluster_role": "parent",
-      "cluster_is_parent": true
-    },
-    "john-mclinden": {
-      "id": "john-mclinden",
-      "name": "John McLinden",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "john-mclinden",
-      "committee_id": null
-    },
-    "marion-cameron": {
-      "id": "marion-cameron",
-      "name": "Marion Cameron",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "marion-cameron",
-      "committee_id": null
-    },
     "bl-management-one": {
       "id": "bl-management-one",
       "name": "BL Management One",
@@ -317106,47 +315586,6 @@
       "notes": null,
       "city": null,
       "parent_id": "bl-management-one",
-      "committee_id": null
-    },
-    "keating-crown": {
-      "id": "keating-crown",
-      "name": "Keating Crown",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "keating-crown",
-      "committee_id": null
-    },
-    "james-s-crown": {
-      "id": "james-s-crown",
-      "name": "James S Crown",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "james-s-crown",
-      "committee_id": null
-    },
-    "lester-crown": {
-      "id": "lester-crown",
-      "name": "Lester Crown",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "finance"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "lester-crown",
       "committee_id": null
     },
     "samco-enterprises-inc": {
@@ -317179,84 +315618,6 @@
       "parent_id": "roosevelt-associates-limited-partnership",
       "committee_id": null,
       "_last_edited_by": "auto-suggest"
-    },
-    "robert-stein": {
-      "id": "robert-stein",
-      "name": "Robert Stein",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "robert-stein",
-      "committee_id": null
-    },
-    "joanne-desanctis": {
-      "id": "joanne-desanctis",
-      "name": "Joanne DeSanctis",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "joanne-desanctis",
-      "committee_id": null
-    },
-    "graham-palmer": {
-      "id": "graham-palmer",
-      "name": "Graham Palmer",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "graham-palmer",
-      "committee_id": null
-    },
-    "jaime-javors": {
-      "id": "jaime-javors",
-      "name": "Jaime Javors",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "jaime-javors",
-      "committee_id": null
-    },
-    "jh-lasky": {
-      "id": "jh-lasky",
-      "name": "JH Lasky",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "jh-lasky",
-      "committee_id": null
-    },
-    "susan-starrett": {
-      "id": "susan-starrett",
-      "name": "Susan Starrett",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "susan-starrett",
-      "committee_id": null
     },
     "realtor-pac": {
       "id": "realtor-pac",
@@ -317291,51 +315652,6 @@
       "cluster_name": "DLA Piper LLP",
       "cluster_role": "parent",
       "cluster_is_parent": true
-    },
-    "james-s-frank": {
-      "id": "james-s-frank",
-      "name": "James S. Frank",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "corporate"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "james-s-frank",
-      "committee_id": null,
-      "cluster_id": "rollup-367",
-      "cluster_name": "James S. Frank",
-      "cluster_role": "parent",
-      "cluster_is_parent": true
-    },
-    "don-wilson": {
-      "id": "don-wilson",
-      "name": "Don Wilson",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": "auto: service-sector union",
-      "city": null,
-      "parent_id": "don-wilson",
-      "committee_id": null,
-      "_last_edited_by": "auto-suggest"
-    },
-    "katherine-bradley": {
-      "id": "katherine-bradley",
-      "name": "Katherine Bradley",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "katherine-bradley",
-      "committee_id": null
     },
     "seiu-state-council": {
       "id": "seiu-state-council",
@@ -317491,91 +315807,6 @@
       "notes": null,
       "city": null,
       "parent_id": "people-for-laura-faver-dias",
-      "committee_id": null
-    },
-    "eduardo-valadez": {
-      "id": "eduardo-valadez",
-      "name": "EDUARDO VALADEZ",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "eduardo-valadez",
-      "committee_id": null
-    },
-    "jasmine-valadez": {
-      "id": "jasmine-valadez",
-      "name": "JASMINE VALADEZ",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "jasmine-valadez",
-      "committee_id": null
-    },
-    "robert-escalante": {
-      "id": "robert-escalante",
-      "name": "Robert Escalante",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "robert-escalante",
-      "committee_id": null
-    },
-    "valeria-carbajal": {
-      "id": "valeria-carbajal",
-      "name": "VALERIA CARBAJAL",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "valeria-carbajal",
-      "committee_id": null
-    },
-    "reed-hastings": {
-      "id": "reed-hastings",
-      "name": "Reed Hastings",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "tech"
-      ],
-      "flags": [
-        {
-          "type": "funded-trump-ballroom",
-          "source": "override"
-        }
-      ],
-      "notes": null,
-      "city": null,
-      "parent_id": "reed-hastings",
-      "committee_id": null
-    },
-    "helen-zell": {
-      "id": "helen-zell",
-      "name": "Helen Zell",
-      "type": "Other",
-      "industries": [
-        "individual",
-        "real-estate"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "helen-zell",
       "committee_id": null
     },
     "friends-of-o-dekirk": {
@@ -317962,19 +316193,6 @@
       "notes": null,
       "city": null,
       "parent_id": "cbic",
-      "committee_id": null
-    },
-    "liam-krehbiel": {
-      "id": "liam-krehbiel",
-      "name": "Liam Krehbiel",
-      "type": "Other",
-      "industries": [
-        "unclassified"
-      ],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "liam-krehbiel",
       "committee_id": null
     },
     "worthington-earl": {
@@ -340298,7 +338516,7 @@
       "name": "Pate, Young",
       "type": "Individual",
       "industries": [
-        "individual"
+        "unclassified"
       ],
       "flags": [],
       "notes": null,
@@ -345331,17 +343549,6 @@
       "parent_id": "ck-1209-llc",
       "committee_id": null
     },
-    "leonard-gail": {
-      "id": "leonard-gail",
-      "name": "Leonard Gail",
-      "type": "Other",
-      "industries": [],
-      "flags": [],
-      "notes": null,
-      "city": null,
-      "parent_id": "leonard-gail",
-      "committee_id": null
-    },
     "swatware-llc": {
       "id": "swatware-llc",
       "name": "SWATware LLC",
@@ -345351,6 +343558,1338 @@
       "notes": null,
       "city": null,
       "parent_id": "swatware-llc",
+      "committee_id": null
+    },
+    "artega-martin": {
+      "id": "artega-martin",
+      "name": "Artega, Martin",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": "auto: building-trades union",
+      "city": null,
+      "parent_id": "artega-martin",
+      "committee_id": null,
+      "_last_edited_by": "auto-suggest"
+    },
+    "lefkofsky-eric": {
+      "id": "lefkofsky-eric",
+      "name": "Lefkofsky, Eric",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "tech"
+      ],
+      "flags": [],
+      "notes": "auto: restaurant word",
+      "city": null,
+      "parent_id": "lefkofsky-eric",
+      "committee_id": null,
+      "_last_edited_by": "auto-suggest"
+    },
+    "canning-john": {
+      "id": "canning-john",
+      "name": "Canning, John",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "finance"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "canning-john",
+      "committee_id": null
+    },
+    "griffin-kenneth": {
+      "id": "griffin-kenneth",
+      "name": "Griffin, Kenneth",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "finance"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "griffin-kenneth-c",
+      "committee_id": null,
+      "cluster_id": "rollup-415",
+      "cluster_name": "Kenneth C. Griffin",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
+    },
+    "mencoff-samuel": {
+      "id": "mencoff-samuel",
+      "name": "Mencoff, Samuel",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "finance"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "mencoff-samuel",
+      "committee_id": null
+    },
+    "benson-ellen": {
+      "id": "benson-ellen",
+      "name": "Benson, Ellen",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "benson-ellen",
+      "committee_id": null
+    },
+    "bunning-david": {
+      "id": "bunning-david",
+      "name": "Bunning, David",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "bunning-david",
+      "committee_id": null
+    },
+    "lampert-mark": {
+      "id": "lampert-mark",
+      "name": "Lampert, Mark",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "healthcare"
+      ],
+      "flags": [],
+      "notes": "auto: Democratic ward / party regular organization (machine)",
+      "city": null,
+      "parent_id": "lampert-mark",
+      "committee_id": null,
+      "_last_edited_by": "auto-suggest"
+    },
+    "rowe-john": {
+      "id": "rowe-john",
+      "name": "Rowe, John",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "rowe-john-w",
+      "committee_id": null,
+      "cluster_id": "rollup-413",
+      "cluster_name": "JOHN W. ROWE",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
+    },
+    "zell-samuel": {
+      "id": "zell-samuel",
+      "name": "Zell, Samuel",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "real-estate"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "zell-samuel",
+      "committee_id": null
+    },
+    "mansueto-joseph": {
+      "id": "mansueto-joseph",
+      "name": "Mansueto, Joseph",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "finance"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "mansueto-joseph",
+      "committee_id": null
+    },
+    "blitstein-berle": {
+      "id": "blitstein-berle",
+      "name": "Blitstein, Berle",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "blitstein-berle",
+      "committee_id": null
+    },
+    "repel-robert": {
+      "id": "repel-robert",
+      "name": "Repel, Robert",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "repel-robert",
+      "committee_id": null
+    },
+    "gutman-sheila": {
+      "id": "gutman-sheila",
+      "name": "Gutman, Sheila",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "gutman-sheila",
+      "committee_id": null
+    },
+    "mullen-timothy": {
+      "id": "mullen-timothy",
+      "name": "Mullen, Timothy",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "finance"
+      ],
+      "flags": [],
+      "notes": "auto: service-sector union",
+      "city": null,
+      "parent_id": "mullen-timothy",
+      "committee_id": null,
+      "_last_edited_by": "auto-suggest"
+    },
+    "levy-robert": {
+      "id": "levy-robert",
+      "name": "Levy, Robert",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": "auto: Democratic ward / party regular organization (machine)",
+      "city": null,
+      "parent_id": "levy-robert",
+      "committee_id": null,
+      "_last_edited_by": "auto-suggest"
+    },
+    "arnold-laura": {
+      "id": "arnold-laura",
+      "name": "Arnold, Laura",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "finance"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "arnold-laura",
+      "committee_id": null
+    },
+    "satter-muneer": {
+      "id": "satter-muneer",
+      "name": "Satter, Muneer",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "finance"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "satter-muneer",
+      "committee_id": null
+    },
+    "gray-james": {
+      "id": "gray-james",
+      "name": "Gray, James",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "gray-james",
+      "committee_id": null
+    },
+    "phillips-gregory": {
+      "id": "phillips-gregory",
+      "name": "Phillips, Gregory",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "phillips-gregory",
+      "committee_id": null
+    },
+    "star-sara": {
+      "id": "star-sara",
+      "name": "Star, Sara",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "finance"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "star-sara",
+      "committee_id": null
+    },
+    "gallogly-mark": {
+      "id": "gallogly-mark",
+      "name": "Gallogly, Mark",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "finance"
+      ],
+      "flags": [],
+      "notes": "auto: real-estate word",
+      "city": null,
+      "parent_id": "gallogly-mark",
+      "committee_id": null,
+      "_last_edited_by": "auto-suggest"
+    },
+    "litinsky-james": {
+      "id": "litinsky-james",
+      "name": "Litinsky, James",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "corporate"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "litinsky-james",
+      "committee_id": null
+    },
+    "tuchman-kenneth": {
+      "id": "tuchman-kenneth",
+      "name": "Tuchman, Kenneth",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": "auto: real-estate word",
+      "city": null,
+      "parent_id": "tuchman-kenneth",
+      "committee_id": null,
+      "_last_edited_by": "auto-suggest"
+    },
+    "conlon-sean-j": {
+      "id": "conlon-sean-j",
+      "name": "Conlon, Sean J.",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "conlon-sean-j",
+      "committee_id": null
+    },
+    "szydzik-anna": {
+      "id": "szydzik-anna",
+      "name": "Szydzik, Anna",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "szydzik-anna",
+      "committee_id": null
+    },
+    "abrams-wendy": {
+      "id": "abrams-wendy",
+      "name": "Abrams, Wendy",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "healthcare"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "abrams-wendy",
+      "committee_id": null
+    },
+    "cahan-michael-a": {
+      "id": "cahan-michael-a",
+      "name": "Cahan, Michael A.",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "cahan-michael-a",
+      "committee_id": null
+    },
+    "griffin-kenneth-c": {
+      "id": "griffin-kenneth-c",
+      "name": "Griffin, Kenneth C.",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "corporate"
+      ],
+      "flags": [],
+      "notes": "auto: Democratic ward / party regular organization (machine)",
+      "city": null,
+      "parent_id": "griffin-kenneth-c",
+      "committee_id": null,
+      "_last_edited_by": "auto-suggest",
+      "cluster_id": "rollup-415",
+      "cluster_name": "Kenneth C. Griffin",
+      "cluster_role": "parent",
+      "cluster_is_parent": true
+    },
+    "lecoque-jay": {
+      "id": "lecoque-jay",
+      "name": "LeCoque, Jay",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "lecoque-jay",
+      "committee_id": null
+    },
+    "loeb-daniel": {
+      "id": "loeb-daniel",
+      "name": "Loeb, Daniel",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "finance"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "loeb-daniel",
+      "committee_id": null
+    },
+    "duarte-jose-a": {
+      "id": "duarte-jose-a",
+      "name": "Duarte, Jose A",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "duarte-jose-a",
+      "committee_id": null
+    },
+    "dziekiewicz-gabriel-i": {
+      "id": "dziekiewicz-gabriel-i",
+      "name": "Dziekiewicz, Gabriel I.",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "dziekiewicz-gabriel-i",
+      "committee_id": null
+    },
+    "vanhook-mary-ann": {
+      "id": "vanhook-mary-ann",
+      "name": "Vanhook, Mary Ann",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "vanhook-mary-ann",
+      "committee_id": null
+    },
+    "keiser-michael-l": {
+      "id": "keiser-michael-l",
+      "name": "KEISER, MICHAEL L.",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "corporate"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "keiser-michael-l",
+      "committee_id": null
+    },
+    "walton-alice-l": {
+      "id": "walton-alice-l",
+      "name": "WALTON, ALICE L.",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "corporate"
+      ],
+      "flags": [],
+      "notes": "auto: Michael Madigan, ex-IL House Speaker \u2014 Democratic machine",
+      "city": null,
+      "parent_id": "walton-alice-l",
+      "committee_id": null,
+      "_last_edited_by": "auto-suggest"
+    },
+    "walton-jim-c": {
+      "id": "walton-jim-c",
+      "name": "WALTON, JIM C.",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "corporate"
+      ],
+      "flags": [],
+      "notes": "auto: Democratic ward / party regular organization (machine)",
+      "city": null,
+      "parent_id": "walton-jim-c",
+      "committee_id": null,
+      "_last_edited_by": "auto-suggest"
+    },
+    "wise-katie": {
+      "id": "wise-katie",
+      "name": "WISE, KATIE",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "wise-katie",
+      "committee_id": null
+    },
+    "gasperec-lisa-m": {
+      "id": "gasperec-lisa-m",
+      "name": "Gasperec, Lisa M.",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "gasperec-lisa-m",
+      "committee_id": null
+    },
+    "murphy-james-k": {
+      "id": "murphy-james-k",
+      "name": "MURPHY, JAMES K.",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "murphy-james-k",
+      "committee_id": null
+    },
+    "butler-john-e": {
+      "id": "butler-john-e",
+      "name": "BUTLER, JOHN E.",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "butler-john-e",
+      "committee_id": null
+    },
+    "gregory-dorothy": {
+      "id": "gregory-dorothy",
+      "name": "Gregory, Dorothy",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "gregory-dorothy",
+      "committee_id": null
+    },
+    "maihofer-ii-robert": {
+      "id": "maihofer-ii-robert",
+      "name": "Maihofer II, Robert",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "maihofer-ii-robert",
+      "committee_id": null
+    },
+    "shah-steve": {
+      "id": "shah-steve",
+      "name": "Shah, Steve",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "shah-steve",
+      "committee_id": null
+    },
+    "bao-mary": {
+      "id": "bao-mary",
+      "name": "Bao, Mary",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "bao-mary",
+      "committee_id": null
+    },
+    "cain-steve": {
+      "id": "cain-steve",
+      "name": "Cain, Steve",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "cain-steve",
+      "committee_id": null
+    },
+    "johnson-jay": {
+      "id": "johnson-jay",
+      "name": "Johnson, Jay",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": "auto: healthcare word",
+      "city": null,
+      "parent_id": "johnson-jay",
+      "committee_id": null,
+      "_last_edited_by": "auto-suggest"
+    },
+    "liska-jill": {
+      "id": "liska-jill",
+      "name": "Liska, Jill",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "liska-jill",
+      "committee_id": null
+    },
+    "ettinger-jerome": {
+      "id": "ettinger-jerome",
+      "name": "Ettinger, Jerome",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "ettinger-jerome",
+      "committee_id": null
+    },
+    "heineman-thomas": {
+      "id": "heineman-thomas",
+      "name": "Heineman, Thomas",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "heineman-thomas",
+      "committee_id": null
+    },
+    "weinberg-steven": {
+      "id": "weinberg-steven",
+      "name": "Weinberg, Steven",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "weinberg-steven",
+      "committee_id": null
+    },
+    "muldoon-hava": {
+      "id": "muldoon-hava",
+      "name": "Muldoon, Hava",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "muldoon-hava",
+      "committee_id": null
+    },
+    "carlock-helen": {
+      "id": "carlock-helen",
+      "name": "Carlock, Helen",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "carlock-helen",
+      "committee_id": null
+    },
+    "smith-claude": {
+      "id": "smith-claude",
+      "name": "Smith, Claude",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "smith-claude",
+      "committee_id": null
+    },
+    "detzel-denis": {
+      "id": "detzel-denis",
+      "name": "Detzel, Denis",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "detzel-denis",
+      "committee_id": null
+    },
+    "jarvinen-nathan": {
+      "id": "jarvinen-nathan",
+      "name": "Jarvinen, Nathan",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "jarvinen-nathan",
+      "committee_id": null
+    },
+    "kleiman-jennifer": {
+      "id": "kleiman-jennifer",
+      "name": "Kleiman, Jennifer",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "kleiman-jennifer",
+      "committee_id": null
+    },
+    "crawford-david": {
+      "id": "crawford-david",
+      "name": "Crawford, David",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "crawford-david",
+      "committee_id": null
+    },
+    "max-marty": {
+      "id": "max-marty",
+      "name": "Max, Marty",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "max-marty",
+      "committee_id": null
+    },
+    "lustig-dan": {
+      "id": "lustig-dan",
+      "name": "Lustig, Dan",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "lustig-dan",
+      "committee_id": null
+    },
+    "aune-kris": {
+      "id": "aune-kris",
+      "name": "Aune, Kris",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "aune-kris",
+      "committee_id": null
+    },
+    "levin-andrew": {
+      "id": "levin-andrew",
+      "name": "Levin, Andrew",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": "auto: fuel word",
+      "city": null,
+      "parent_id": "levin-andrew",
+      "committee_id": null,
+      "_last_edited_by": "auto-suggest"
+    },
+    "meiser-margaret": {
+      "id": "meiser-margaret",
+      "name": "Meiser, Margaret",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "meiser-margaret",
+      "committee_id": null
+    },
+    "goldberg-alan": {
+      "id": "goldberg-alan",
+      "name": "Goldberg, Alan",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "goldberg-alan",
+      "committee_id": null
+    },
+    "ruiz-ayala-rafael": {
+      "id": "ruiz-ayala-rafael",
+      "name": "Ruiz-Ayala, Rafael",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "ruiz-ayala-rafael",
+      "committee_id": null
+    },
+    "landman-ross": {
+      "id": "landman-ross",
+      "name": "Landman, Ross",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "landman-ross",
+      "committee_id": null
+    },
+    "scalise-jeanette": {
+      "id": "scalise-jeanette",
+      "name": "Scalise, Jeanette",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "scalise-jeanette",
+      "committee_id": null
+    },
+    "parungao-rene": {
+      "id": "parungao-rene",
+      "name": "Parungao, Rene",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "parungao-rene",
+      "committee_id": null
+    },
+    "long-timothy": {
+      "id": "long-timothy",
+      "name": "Long, Timothy",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "long-timothy",
+      "committee_id": null
+    },
+    "kleiman-matthew": {
+      "id": "kleiman-matthew",
+      "name": "Kleiman, Matthew",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "kleiman-matthew",
+      "committee_id": null
+    },
+    "wallk-michael": {
+      "id": "wallk-michael",
+      "name": "Wallk, Michael",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "wallk-michael",
+      "committee_id": null
+    },
+    "aronson-richard": {
+      "id": "aronson-richard",
+      "name": "Aronson, Richard",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "aronson-richard",
+      "committee_id": null
+    },
+    "levin-jon": {
+      "id": "levin-jon",
+      "name": "Levin, Jon",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": "auto: real-estate word",
+      "city": null,
+      "parent_id": "levin-jon",
+      "committee_id": null,
+      "_last_edited_by": "auto-suggest"
+    },
+    "berger-miles": {
+      "id": "berger-miles",
+      "name": "Berger, Miles",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "berger-miles",
+      "committee_id": null
+    },
+    "treacy-colm": {
+      "id": "treacy-colm",
+      "name": "Treacy, Colm",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "treacy-colm",
+      "committee_id": null
+    },
+    "abels-connie": {
+      "id": "abels-connie",
+      "name": "Abels, Connie",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "abels-connie",
+      "committee_id": null
+    },
+    "cagan-jeffrey": {
+      "id": "cagan-jeffrey",
+      "name": "Cagan, Jeffrey",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "cagan-jeffrey",
+      "committee_id": null
+    },
+    "lisy-sarah": {
+      "id": "lisy-sarah",
+      "name": "Lisy, Sarah",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "lisy-sarah",
+      "committee_id": null
+    },
+    "karlin-denise": {
+      "id": "karlin-denise",
+      "name": "Karlin, Denise",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "karlin-denise",
+      "committee_id": null
+    },
+    "go-paul": {
+      "id": "go-paul",
+      "name": "Go, Paul",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "go-paul",
+      "committee_id": null
+    },
+    "rodriguez-belia": {
+      "id": "rodriguez-belia",
+      "name": "Rodriguez, Belia",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "rodriguez-belia",
+      "committee_id": null
+    },
+    "cameron-marion": {
+      "id": "cameron-marion",
+      "name": "Cameron, Marion",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "cameron-marion",
+      "committee_id": null
+    },
+    "crown-lester": {
+      "id": "crown-lester",
+      "name": "Crown, Lester",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "finance"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "crown-lester",
+      "committee_id": null
+    },
+    "stein-robert": {
+      "id": "stein-robert",
+      "name": "Stein, Robert",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "stein-robert",
+      "committee_id": null
+    },
+    "desanctis-joanne": {
+      "id": "desanctis-joanne",
+      "name": "DeSanctis, Joanne",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "desanctis-joanne",
+      "committee_id": null
+    },
+    "palmer-graham": {
+      "id": "palmer-graham",
+      "name": "Palmer, Graham",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "palmer-graham",
+      "committee_id": null
+    },
+    "javors-jaime": {
+      "id": "javors-jaime",
+      "name": "Javors, Jaime",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "javors-jaime",
+      "committee_id": null
+    },
+    "lasky-jh": {
+      "id": "lasky-jh",
+      "name": "Lasky, JH",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "lasky-jh",
+      "committee_id": null
+    },
+    "starrett-susan": {
+      "id": "starrett-susan",
+      "name": "Starrett, Susan",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "starrett-susan",
+      "committee_id": null
+    },
+    "frank-james-s": {
+      "id": "frank-james-s",
+      "name": "Frank, James S.",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "corporate"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "frank-james-s",
+      "committee_id": null,
+      "cluster_id": "rollup-367",
+      "cluster_name": "James S. Frank",
+      "cluster_role": "parent",
+      "cluster_is_parent": true
+    },
+    "wilson-don": {
+      "id": "wilson-don",
+      "name": "Wilson, Don",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": "auto: service-sector union",
+      "city": null,
+      "parent_id": "wilson-don",
+      "committee_id": null,
+      "_last_edited_by": "auto-suggest"
+    },
+    "bradley-katherine": {
+      "id": "bradley-katherine",
+      "name": "Bradley, Katherine",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "bradley-katherine",
+      "committee_id": null
+    },
+    "valadez-eduardo": {
+      "id": "valadez-eduardo",
+      "name": "VALADEZ, EDUARDO",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "valadez-eduardo",
+      "committee_id": null
+    },
+    "valadez-jasmine": {
+      "id": "valadez-jasmine",
+      "name": "VALADEZ, JASMINE",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "valadez-jasmine",
+      "committee_id": null
+    },
+    "escalante-robert": {
+      "id": "escalante-robert",
+      "name": "Escalante, Robert",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "escalante-robert",
+      "committee_id": null
+    },
+    "carbajal-valeria": {
+      "id": "carbajal-valeria",
+      "name": "CARBAJAL, VALERIA",
+      "type": "Other",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "carbajal-valeria",
+      "committee_id": null
+    },
+    "hastings-reed": {
+      "id": "hastings-reed",
+      "name": "Hastings, Reed",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "tech"
+      ],
+      "flags": [
+        {
+          "type": "funded-trump-ballroom",
+          "source": "override"
+        }
+      ],
+      "notes": null,
+      "city": null,
+      "parent_id": "hastings-reed",
+      "committee_id": null
+    },
+    "zell-helen": {
+      "id": "zell-helen",
+      "name": "Zell, Helen",
+      "type": "Other",
+      "industries": [
+        "individual",
+        "real-estate"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": null,
+      "parent_id": "zell-helen",
       "committee_id": null
     }
   },
@@ -362361,6 +361900,24 @@
       },
       "total": 1200.0
     },
+    "rollup-044": {
+      "name": "Jesse Rosas",
+      "relationship": "affiliated entities",
+      "canonical_id": "rosas-jesse",
+      "members": [
+        "rosas-jesse",
+        "rosas-jr-jesse"
+      ],
+      "roles": {
+        "rosas-jesse": "parent",
+        "rosas-jr-jesse": "alt-name"
+      },
+      "member_totals": {
+        "rosas-jesse": 950.0,
+        "rosas-jr-jesse": 250.0
+      },
+      "total": 1200.0
+    },
     "rollup-045": {
       "name": "Citizens for Daniel McLaughlin",
       "relationship": "affiliated entities",
@@ -364959,20 +364516,17 @@
     "rollup-191": {
       "name": "Cari Sacks",
       "relationship": "affiliated entities",
-      "canonical_id": "cari-sacks",
+      "canonical_id": "sacks-cari",
       "members": [
-        "cari-sacks",
         "sacks-cari",
         "sacks-cari-b"
       ],
       "roles": {
-        "cari-sacks": "parent",
-        "sacks-cari": "alt-name",
+        "sacks-cari": "parent",
         "sacks-cari-b": "alt-name"
       },
       "member_totals": {
-        "cari-sacks": 825000.0,
-        "sacks-cari": 232600.0,
+        "sacks-cari": 1057600.0,
         "sacks-cari-b": 203100.0
       },
       "total": 1260700.0
@@ -366108,17 +365662,20 @@
       "canonical_id": "committee-to-elect-richard-c-cooke",
       "members": [
         "committee-to-elect-richard-c-cooke",
-        "committee-to-elect-richard-cooke"
+        "committee-to-elect-richard-cooke",
+        "cooke-richard"
       ],
       "roles": {
         "committee-to-elect-richard-c-cooke": "parent",
-        "committee-to-elect-richard-cooke": "affiliated-pac"
+        "committee-to-elect-richard-cooke": "affiliated-pac",
+        "cooke-richard": "alt-name"
       },
       "member_totals": {
         "committee-to-elect-richard-c-cooke": 5000.0,
-        "committee-to-elect-richard-cooke": 500.0
+        "committee-to-elect-richard-cooke": 500.0,
+        "cooke-richard": 1200.0
       },
-      "total": 5500.0
+      "total": 6700.0
     },
     "rollup-255": {
       "name": "Friends of Mike Zalewski",
@@ -366760,19 +366317,22 @@
       "members": [
         "citizens-for-ariel-e-reboyras",
         "citizens-for-ariel-reboyras",
-        "citizen-for-ariel-e-reboyras"
+        "citizen-for-ariel-e-reboyras",
+        "reboyras-ariel"
       ],
       "roles": {
         "citizens-for-ariel-e-reboyras": "parent",
         "citizens-for-ariel-reboyras": "alt-name",
-        "citizen-for-ariel-e-reboyras": "alt-name"
+        "citizen-for-ariel-e-reboyras": "alt-name",
+        "reboyras-ariel": "alt-name"
       },
       "member_totals": {
         "citizens-for-ariel-e-reboyras": 10000.0,
         "citizens-for-ariel-reboyras": 277.5,
-        "citizen-for-ariel-e-reboyras": 207.12
+        "citizen-for-ariel-e-reboyras": 207.12,
+        "reboyras-ariel": 200.0
       },
-      "total": 10484.62
+      "total": 10684.62
     },
     "rollup-290": {
       "name": "Wynndalco Enterprises, LLC",
@@ -368289,41 +367849,23 @@
     "rollup-367": {
       "name": "James S. Frank",
       "relationship": "affiliated entities",
-      "canonical_id": "james-s-frank",
+      "canonical_id": "frank-james-s",
       "members": [
-        "james-s-frank",
+        "frank-james-s",
         "frank-jim",
-        "jim-s-frank"
+        "frank-jim-s"
       ],
       "roles": {
-        "james-s-frank": "parent",
+        "frank-james-s": "parent",
         "frank-jim": "alt-name",
-        "jim-s-frank": "alt-name"
+        "frank-jim-s": "alt-name"
       },
       "member_totals": {
-        "james-s-frank": 6268000.81,
+        "frank-james-s": 6268000.81,
         "frank-jim": 141250.0,
-        "jim-s-frank": 3090466.0
+        "frank-jim-s": 3098266.0
       },
-      "total": 9499716.81
-    },
-    "rollup-368": {
-      "name": "Craig Duchossois",
-      "relationship": "affiliated entities",
-      "canonical_id": "craig-duchossois",
-      "members": [
-        "craig-duchossois",
-        "duchossois-craig"
-      ],
-      "roles": {
-        "craig-duchossois": "parent",
-        "duchossois-craig": "alt-name"
-      },
-      "member_totals": {
-        "craig-duchossois": 160000.0,
-        "duchossois-craig": 22500.0
-      },
-      "total": 182500.0
+      "total": 9507516.81
     },
     "rollup-369": {
       "name": "Cozen O'Connor",
@@ -368528,24 +368070,6 @@
         "dl3-realty-advisors": 500.0
       },
       "total": 38339.0
-    },
-    "rollup-379": {
-      "name": "William Silverstein",
-      "relationship": "affiliated entities",
-      "canonical_id": "william-silverstein",
-      "members": [
-        "william-silverstein",
-        "silverstein-william"
-      ],
-      "roles": {
-        "william-silverstein": "parent",
-        "silverstein-william": "alt-name"
-      },
-      "member_totals": {
-        "william-silverstein": 25000.0,
-        "silverstein-william": 17300.0
-      },
-      "total": 42300.0
     },
     "rollup-380": {
       "name": "Rany Management, LLC",
@@ -369216,20 +368740,20 @@
     "rollup-413": {
       "name": "JOHN W. ROWE",
       "relationship": "affiliated entities",
-      "canonical_id": "john-w-rowe",
+      "canonical_id": "rowe-john-w",
       "members": [
-        "john-w-rowe",
-        "john-rowe"
+        "rowe-john-w",
+        "rowe-john"
       ],
       "roles": {
-        "john-w-rowe": "parent",
-        "john-rowe": "alt-name"
+        "rowe-john-w": "parent",
+        "rowe-john": "alt-name"
       },
       "member_totals": {
-        "john-w-rowe": 337800.0,
-        "john-rowe": 10000.0
+        "rowe-john-w": 342800.0,
+        "rowe-john": 10000.0
       },
-      "total": 347800.0
+      "total": 352800.0
     },
     "rollup-414": {
       "name": "Sposato, Nicholas",
@@ -369252,18 +368776,18 @@
     "rollup-415": {
       "name": "Kenneth C. Griffin",
       "relationship": "affiliated entities",
-      "canonical_id": "kenneth-c-griffin",
+      "canonical_id": "griffin-kenneth-c",
       "members": [
-        "kenneth-c-griffin",
-        "kenneth-griffin"
+        "griffin-kenneth-c",
+        "griffin-kenneth"
       ],
       "roles": {
-        "kenneth-c-griffin": "parent",
-        "kenneth-griffin": "alt-name"
+        "griffin-kenneth-c": "parent",
+        "griffin-kenneth": "alt-name"
       },
       "member_totals": {
-        "kenneth-c-griffin": 700000.0,
-        "kenneth-griffin": 150000.0
+        "griffin-kenneth-c": 700000.0,
+        "griffin-kenneth": 150000.0
       },
       "total": 850000.0
     },
@@ -370849,20 +370373,17 @@
       "members": [
         "sacks-michael",
         "sacks-michael-j",
-        "michael-sacks",
-        "michael-j-sacks"
+        "michael-sacks"
       ],
       "roles": {
         "sacks-michael": "parent",
         "sacks-michael-j": "alt-name",
-        "michael-sacks": "alt-name",
-        "michael-j-sacks": "alt-name"
+        "michael-sacks": "alt-name"
       },
       "member_totals": {
-        "sacks-michael": 228000.0,
-        "sacks-michael-j": 200400.0,
-        "michael-sacks": 1205800.0,
-        "michael-j-sacks": 875000.0
+        "sacks-michael": 1428000.0,
+        "sacks-michael-j": 1075400.0,
+        "michael-sacks": 5800.0
       },
       "total": 2509200.0
     },
@@ -376959,13 +376480,13 @@
         "name": "Martin, Timothy",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 1300.0,
+        "direct": 1550.0,
         "independent": 0.0,
-        "total": 1300.0,
-        "count": 4,
-        "committees": 2,
+        "total": 1550.0,
+        "count": 5,
+        "committees": 3,
         "members": 1
       },
       "whitley-douglas": {
@@ -378142,13 +377663,13 @@
         "name": "Perez, Jorge",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 6480.25,
+        "direct": 6980.25,
         "independent": 0.0,
-        "total": 6480.25,
-        "count": 12,
-        "committees": 7,
+        "total": 6980.25,
+        "count": 13,
+        "committees": 8,
         "members": 1
       },
       "hennelly-tim": {
@@ -380378,18 +379899,18 @@
         "name": "Sacks, Michael",
         "type": "Individual",
         "industries": [
-          "individual"
+          "finance"
         ],
         "direct": 2509200.0,
         "independent": 0.0,
         "total": 2509200.0,
         "count": 102,
         "committees": 31,
-        "members": 4
+        "members": 3
       },
-      "cari-sacks": {
+      "sacks-cari": {
         "name": "Cari Sacks",
-        "type": "Other",
+        "type": "Individual",
         "industries": [
           "individual",
           "finance"
@@ -380399,7 +379920,7 @@
         "total": 1260700.0,
         "count": 96,
         "committees": 30,
-        "members": 3
+        "members": 2
       },
       "seiu-il-council": {
         "name": "SEIU Illinois State Council",
@@ -384366,18 +383887,19 @@
         "committees": 3,
         "members": 1
       },
-      "frank-jim-s": {
-        "name": "Frank, Jim S.",
-        "type": "Individual",
+      "frank-james-s": {
+        "name": "James S. Frank",
+        "type": "Other",
         "industries": [
-          "individual"
+          "individual",
+          "corporate"
         ],
-        "direct": 7800.0,
+        "direct": 9507516.81,
         "independent": 0.0,
-        "total": 7800.0,
-        "count": 3,
-        "committees": 2,
-        "members": 1
+        "total": 9507516.81,
+        "count": 41,
+        "committees": 9,
+        "members": 3
       },
       "urso-robert-j": {
         "name": "Urso, Robert J",
@@ -384617,13 +384139,13 @@
         "name": "Weinberg, David A",
         "type": "Individual",
         "industries": [
-          "individual"
+          "charter-schools"
         ],
-        "direct": 3000.0,
+        "direct": 1574900.0,
         "independent": 0.0,
-        "total": 3000.0,
-        "count": 1,
-        "committees": 1,
+        "total": 1574900.0,
+        "count": 15,
+        "committees": 2,
         "members": 1
       },
       "muchin-allan-b": {
@@ -384705,17 +384227,18 @@
         "members": 1
       },
       "rowe-john-w": {
-        "name": "Rowe, John W.",
+        "name": "JOHN W. ROWE",
         "type": "Individual",
         "industries": [
-          "individual"
+          "individual",
+          "finance"
         ],
-        "direct": 5000.0,
+        "direct": 352800.0,
         "independent": 0.0,
-        "total": 5000.0,
-        "count": 2,
-        "committees": 2,
-        "members": 1
+        "total": 352800.0,
+        "count": 9,
+        "committees": 4,
+        "members": 2
       },
       "illinois-risk-management-services-inc": {
         "name": "Illinois Risk Management Services, Inc",
@@ -391911,13 +391434,13 @@
         "name": "Fogelson, Gerald W",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 2000.0,
+        "direct": 19500.0,
         "independent": 0.0,
-        "total": 2000.0,
-        "count": 2,
-        "committees": 1,
+        "total": 19500.0,
+        "count": 4,
+        "committees": 2,
         "members": 1
       },
       "kates-detective-security-inc": {
@@ -402545,13 +402068,13 @@
         "name": "Murphy, Thomas",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 27441.6,
+        "direct": 27941.6,
         "independent": 0.0,
-        "total": 27441.6,
-        "count": 55,
-        "committees": 18,
+        "total": 27941.6,
+        "count": 56,
+        "committees": 19,
         "members": 1
       },
       "hart-stephanie": {
@@ -411333,13 +410856,13 @@
         "name": "Bobins, Norm",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 1500.0,
+        "direct": 4000.0,
         "independent": 0.0,
-        "total": 1500.0,
-        "count": 1,
-        "committees": 1,
+        "total": 4000.0,
+        "count": 2,
+        "committees": 2,
         "members": 1
       },
       "bock-edward-and-margie": {
@@ -424979,20 +424502,6 @@
         "committees": 1,
         "members": 1
       },
-      "james-s-frank": {
-        "name": "James S. Frank",
-        "type": "Other",
-        "industries": [
-          "individual",
-          "corporate"
-        ],
-        "direct": 9499716.81,
-        "independent": 0.0,
-        "total": 9499716.81,
-        "count": 38,
-        "committees": 7,
-        "members": 3
-      },
       "freiman-samuel-f": {
         "name": "Freiman,, Samuel F",
         "type": "Individual",
@@ -427987,13 +427496,13 @@
         "name": "Kallas, Jim",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 2500.0,
+        "direct": 3500.0,
         "independent": 0.0,
-        "total": 2500.0,
-        "count": 3,
-        "committees": 1,
+        "total": 3500.0,
+        "count": 4,
+        "committees": 2,
         "members": 1
       },
       "kornaros-aristotle": {
@@ -428624,13 +428133,13 @@
         "name": "Glasser, Michael",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 1850.0,
+        "direct": 3600.0,
         "independent": 0.0,
-        "total": 1850.0,
-        "count": 7,
-        "committees": 5,
+        "total": 3600.0,
+        "count": 9,
+        "committees": 6,
         "members": 1
       },
       "glumac-dan": {
@@ -429794,13 +429303,13 @@
         "name": "Crown, Keating",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 17500.0,
+        "direct": 42500.0,
         "independent": 0.0,
-        "total": 17500.0,
-        "count": 12,
-        "committees": 5,
+        "total": 42500.0,
+        "count": 13,
+        "committees": 6,
         "members": 1
       },
       "distelheim-family-limited-partnership": {
@@ -429829,9 +429338,9 @@
         "committees": 21,
         "members": 1
       },
-      "craig-duchossois": {
-        "name": "Craig Duchossois",
-        "type": "Other",
+      "duchossois-craig": {
+        "name": "Duchossois, Craig",
+        "type": "Individual",
         "industries": [
           "individual",
           "finance"
@@ -429841,7 +429350,7 @@
         "total": 182500.0,
         "count": 7,
         "committees": 6,
-        "members": 2
+        "members": 1
       },
       "eckenhoff-saunders-architects": {
         "name": "Eckenhoff saunders architects",
@@ -431329,13 +430838,13 @@
         "name": "Krehbiel, Liam",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 52500.0,
+        "direct": 62500.0,
         "independent": 0.0,
-        "total": 52500.0,
-        "count": 8,
-        "committees": 3,
+        "total": 62500.0,
+        "count": 9,
+        "committees": 4,
         "members": 1
       },
       "logan-square-aluminum-supply-inc": {
@@ -432447,13 +431956,14 @@
         "name": "Helfand, David",
         "type": "Individual",
         "industries": [
-          "individual"
+          "individual",
+          "real-estate"
         ],
-        "direct": 15000.0,
+        "direct": 65000.0,
         "independent": 0.0,
-        "total": 15000.0,
-        "count": 1,
-        "committees": 1,
+        "total": 65000.0,
+        "count": 2,
+        "committees": 2,
         "members": 1
       },
       "hill-roger": {
@@ -433955,7 +433465,7 @@
         "name": "Sposato, Nicholas",
         "type": "Candidate",
         "industries": [
-          "self-funding"
+          "candidate-account"
         ],
         "direct": 251286.42,
         "independent": 0.0,
@@ -435810,18 +435320,18 @@
         "committees": 1,
         "members": 1
       },
-      "cooke-richard": {
-        "name": "Cooke, Richard",
-        "type": "Individual",
+      "committee-to-elect-richard-c-cooke": {
+        "name": "Committee to Elect Richard C Cooke",
+        "type": "PAC",
         "industries": [
-          "individual"
+          "candidate-account"
         ],
-        "direct": 1200.0,
+        "direct": 6700.0,
         "independent": 0.0,
-        "total": 1200.0,
-        "count": 4,
-        "committees": 3,
-        "members": 1
+        "total": 6700.0,
+        "count": 9,
+        "committees": 5,
+        "members": 3
       },
       "law-offices-of-rascia-decastro": {
         "name": "Law Offices of Rascia & DeCastro",
@@ -436134,19 +435644,6 @@
         "count": 1,
         "committees": 1,
         "members": 1
-      },
-      "committee-to-elect-richard-c-cooke": {
-        "name": "Committee to Elect Richard C Cooke",
-        "type": "PAC",
-        "industries": [
-          "candidate-account"
-        ],
-        "direct": 5500.0,
-        "independent": 0.0,
-        "total": 5500.0,
-        "count": 5,
-        "committees": 4,
-        "members": 2
       },
       "engine-117": {
         "name": "Engine 117",
@@ -436747,17 +436244,17 @@
         "members": 1
       },
       "rosas-jesse": {
-        "name": "Rosas, Jesse",
+        "name": "Jesse Rosas",
         "type": "Individual",
         "industries": [
           "individual"
         ],
-        "direct": 950.0,
+        "direct": 1200.0,
         "independent": 0.0,
-        "total": 950.0,
-        "count": 4,
+        "total": 1200.0,
+        "count": 5,
         "committees": 1,
-        "members": 1
+        "members": 2
       },
       "morrison-brian": {
         "name": "Morrison, Brian",
@@ -438631,19 +438128,6 @@
         "committees": 2,
         "members": 1
       },
-      "rosas-jr-jesse": {
-        "name": "Rosas Jr., Jesse",
-        "type": "Individual",
-        "industries": [
-          "individual"
-        ],
-        "direct": 250.0,
-        "independent": 0.0,
-        "total": 250.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
       "mike-davis-assoc": {
         "name": "Mike Davis & Assoc.",
         "type": "Individual",
@@ -438843,13 +438327,13 @@
         "name": "Melman, Rich",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 1000.0,
+        "direct": 11000.0,
         "independent": 0.0,
-        "total": 1000.0,
-        "count": 1,
-        "committees": 1,
+        "total": 11000.0,
+        "count": 2,
+        "committees": 2,
         "members": 1
       },
       "phase-iii": {
@@ -439840,18 +439324,18 @@
         "committees": 1,
         "members": 1
       },
-      "reboyras-ariel": {
-        "name": "Reboyras, Ariel",
-        "type": "Individual",
+      "citizens-for-ariel-e-reboyras": {
+        "name": "Citizens for Ariel E Reboyras",
+        "type": "PAC",
         "industries": [
-          "individual"
+          "candidate-account"
         ],
-        "direct": 200.0,
+        "direct": 10684.62,
         "independent": 0.0,
-        "total": 200.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
+        "total": 10684.62,
+        "count": 5,
+        "committees": 4,
+        "members": 4
       },
       "levar-michael": {
         "name": "Levar, Michael",
@@ -449256,7 +448740,7 @@
         "name": "Pate, Young",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
         "direct": 2800.0,
         "independent": 0.0,
@@ -463569,13 +463053,13 @@
         "name": "Grady, Graham C.",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 250.0,
+        "direct": 1250.0,
         "independent": 0.0,
-        "total": 250.0,
-        "count": 1,
-        "committees": 1,
+        "total": 1250.0,
+        "count": 2,
+        "committees": 2,
         "members": 1
       },
       "filpovich-matthew": {
@@ -471278,13 +470762,14 @@
         "name": "Meister, Paul",
         "type": "Individual",
         "industries": [
-          "individual"
+          "individual",
+          "finance"
         ],
-        "direct": 16100.0,
+        "direct": 76100.0,
         "independent": 0.0,
-        "total": 16100.0,
-        "count": 7,
-        "committees": 2,
+        "total": 76100.0,
+        "count": 9,
+        "committees": 4,
         "members": 1
       },
       "katz-harold": {
@@ -471967,13 +471452,14 @@
         "name": "Abrams, James",
         "type": "Individual",
         "industries": [
-          "individual"
+          "individual",
+          "healthcare"
         ],
-        "direct": 500.0,
+        "direct": 50500.0,
         "independent": 0.0,
-        "total": 500.0,
-        "count": 1,
-        "committees": 1,
+        "total": 50500.0,
+        "count": 2,
+        "committees": 2,
         "members": 1
       },
       "morgenstern-faye": {
@@ -473510,9 +472996,9 @@
         "committees": 1,
         "members": 1
       },
-      "william-silverstein": {
-        "name": "William Silverstein",
-        "type": "Other",
+      "silverstein-william": {
+        "name": "Silverstein, William",
+        "type": "Individual",
         "industries": [
           "unclassified"
         ],
@@ -473521,7 +473007,7 @@
         "total": 42300.0,
         "count": 5,
         "committees": 4,
-        "members": 2
+        "members": 1
       },
       "herz-josh": {
         "name": "Herz, Josh",
@@ -494366,13 +493852,14 @@
         "name": "Crown, James S.",
         "type": "Individual",
         "industries": [
-          "individual"
+          "individual",
+          "finance"
         ],
-        "direct": 5000.0,
+        "direct": 105000.0,
         "independent": 0.0,
-        "total": 5000.0,
-        "count": 1,
-        "committees": 1,
+        "total": 105000.0,
+        "count": 2,
+        "committees": 2,
         "members": 1
       },
       "burns-mary-patricia": {
@@ -500008,26 +499495,28 @@
         "name": "Malkin, Barry",
         "type": "Individual",
         "industries": [
-          "individual"
+          "individual",
+          "real-estate"
         ],
-        "direct": 5000.0,
+        "direct": 155000.0,
         "independent": 0.0,
-        "total": 5000.0,
-        "count": 1,
-        "committees": 1,
+        "total": 155000.0,
+        "count": 2,
+        "committees": 2,
         "members": 1
       },
       "malkin-stephen": {
         "name": "Malkin, Stephen",
         "type": "Individual",
         "industries": [
-          "individual"
+          "individual",
+          "finance"
         ],
-        "direct": 5000.0,
+        "direct": 130000.0,
         "independent": 0.0,
-        "total": 5000.0,
-        "count": 1,
-        "committees": 1,
+        "total": 130000.0,
+        "count": 3,
+        "committees": 3,
         "members": 1
       },
       "brady-john": {
@@ -500047,13 +499536,13 @@
         "name": "Gutman, Joseph",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 5000.0,
+        "direct": 40000.0,
         "independent": 0.0,
-        "total": 5000.0,
-        "count": 1,
-        "committees": 1,
+        "total": 40000.0,
+        "count": 3,
+        "committees": 3,
         "members": 1
       },
       "levin-jonathan": {
@@ -506183,13 +505672,13 @@
         "name": "McLinden, John",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 10250.0,
+        "direct": 12750.0,
         "independent": 0.0,
-        "total": 10250.0,
-        "count": 11,
-        "committees": 4,
+        "total": 12750.0,
+        "count": 12,
+        "committees": 5,
         "members": 1
       },
       "lucien-lagrange-studio": {
@@ -512574,19 +512063,6 @@
         "count": 5,
         "committees": 4,
         "members": 2
-      },
-      "citizens-for-ariel-e-reboyras": {
-        "name": "Citizens for Ariel E Reboyras",
-        "type": "PAC",
-        "industries": [
-          "candidate-account"
-        ],
-        "direct": 10484.62,
-        "independent": 0.0,
-        "total": 10484.62,
-        "count": 4,
-        "committees": 3,
-        "members": 3
       },
       "higginbotton-elzie": {
         "name": "Higginbotton, Elzie",
@@ -542986,13 +542462,13 @@
         "name": "Faklaris, Prudence",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 200.0,
+        "direct": 700.0,
         "independent": 0.0,
-        "total": 200.0,
-        "count": 1,
-        "committees": 1,
+        "total": 700.0,
+        "count": 2,
+        "committees": 2,
         "members": 1
       },
       "bell-elena": {
@@ -564462,13 +563938,13 @@
         "name": "Abrams, Ron",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 2200.0,
+        "direct": 2700.0,
         "independent": 0.0,
-        "total": 2200.0,
-        "count": 4,
-        "committees": 2,
+        "total": 2700.0,
+        "count": 5,
+        "committees": 3,
         "members": 1
       },
       "henning-kathleen": {
@@ -567725,13 +567201,13 @@
         "name": "Simovic, Laszlo",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 250.0,
+        "direct": 750.0,
         "independent": 0.0,
-        "total": 250.0,
-        "count": 1,
-        "committees": 1,
+        "total": 750.0,
+        "count": 2,
+        "committees": 2,
         "members": 1
       },
       "serewicz-john": {
@@ -599239,11 +598715,11 @@
         "industries": [
           "individual"
         ],
-        "direct": 1500.0,
+        "direct": 51500.0,
         "independent": 0.0,
-        "total": 1500.0,
-        "count": 1,
-        "committees": 1,
+        "total": 51500.0,
+        "count": 2,
+        "committees": 2,
         "members": 1
       },
       "steans-jennifer": {
@@ -601928,13 +601404,13 @@
         "name": "Gassman, David",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 16000.0,
+        "direct": 18500.0,
         "independent": 0.0,
-        "total": 16000.0,
-        "count": 7,
-        "committees": 2,
+        "total": 18500.0,
+        "count": 8,
+        "committees": 3,
         "members": 1
       },
       "peryar-j-sidney": {
@@ -607869,13 +607345,13 @@
         "name": "Simpson, John",
         "type": "Individual",
         "industries": [
-          "individual"
+          "unclassified"
         ],
-        "direct": 750.0,
+        "direct": 25750.0,
         "independent": 0.0,
-        "total": 750.0,
-        "count": 2,
-        "committees": 1,
+        "total": 25750.0,
+        "count": 3,
+        "committees": 2,
         "members": 1
       },
       "conway-james": {
@@ -608404,11 +607880,11 @@
         "industries": [
           "individual"
         ],
-        "direct": 26000.0,
+        "direct": 545700.0,
         "independent": 0.0,
-        "total": 26000.0,
-        "count": 3,
-        "committees": 1,
+        "total": 545700.0,
+        "count": 5,
+        "committees": 3,
         "members": 1
       },
       "fulton-catering-corp": {
@@ -636465,8 +635941,8 @@
         "committees": 1,
         "members": 1
       },
-      "martin-artega": {
-        "name": "Martin Artega",
+      "artega-martin": {
+        "name": "Artega, Martin",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -636556,8 +636032,8 @@
         "committees": 1,
         "members": 1
       },
-      "eric-lefkofsky": {
-        "name": "Eric Lefkofsky",
+      "lefkofsky-eric": {
+        "name": "Lefkofsky, Eric",
         "type": "Other",
         "industries": [
           "individual",
@@ -636570,22 +636046,8 @@
         "committees": 1,
         "members": 1
       },
-      "barry-malkin": {
-        "name": "Barry Malkin",
-        "type": "Other",
-        "industries": [
-          "individual",
-          "real-estate"
-        ],
-        "direct": 150000.0,
-        "independent": 0.0,
-        "total": 150000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "john-canning": {
-        "name": "John Canning",
+      "canning-john": {
+        "name": "Canning, John",
         "type": "Other",
         "industries": [
           "individual",
@@ -636598,21 +636060,7 @@
         "committees": 1,
         "members": 1
       },
-      "paul-finnegan": {
-        "name": "Paul Finnegan",
-        "type": "Other",
-        "industries": [
-          "individual",
-          "finance"
-        ],
-        "direct": 519700.0,
-        "independent": 0.0,
-        "total": 519700.0,
-        "count": 2,
-        "committees": 2,
-        "members": 1
-      },
-      "kenneth-c-griffin": {
+      "griffin-kenneth-c": {
         "name": "Kenneth C. Griffin",
         "type": "Other",
         "industries": [
@@ -636626,8 +636074,8 @@
         "committees": 1,
         "members": 2
       },
-      "samuel-mencoff": {
-        "name": "Samuel Mencoff",
+      "mencoff-samuel": {
+        "name": "Mencoff, Samuel",
         "type": "Other",
         "industries": [
           "individual",
@@ -636640,35 +636088,8 @@
         "committees": 1,
         "members": 1
       },
-      "paul-meister": {
-        "name": "Paul Meister",
-        "type": "Other",
-        "industries": [
-          "individual",
-          "finance"
-        ],
-        "direct": 60000.0,
-        "independent": 0.0,
-        "total": 60000.0,
-        "count": 2,
-        "committees": 2,
-        "members": 1
-      },
-      "david-a-weinberg": {
-        "name": "DAVID A. WEINBERG",
-        "type": "Other",
-        "industries": [
-          "charter-schools"
-        ],
-        "direct": 1571900.0,
-        "independent": 0.0,
-        "total": 1571900.0,
-        "count": 14,
-        "committees": 1,
-        "members": 1
-      },
-      "ellen-benson": {
-        "name": "Ellen Benson",
+      "benson-ellen": {
+        "name": "Benson, Ellen",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -636693,8 +636114,8 @@
         "committees": 1,
         "members": 1
       },
-      "david-bunning": {
-        "name": "David Bunning",
+      "bunning-david": {
+        "name": "Bunning, David",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -636706,8 +636127,8 @@
         "committees": 1,
         "members": 1
       },
-      "mark-lampert": {
-        "name": "Mark Lampert",
+      "lampert-mark": {
+        "name": "Lampert, Mark",
         "type": "Other",
         "industries": [
           "individual",
@@ -636719,20 +636140,6 @@
         "count": 1,
         "committees": 1,
         "members": 1
-      },
-      "john-w-rowe": {
-        "name": "JOHN W. ROWE",
-        "type": "Other",
-        "industries": [
-          "individual",
-          "finance"
-        ],
-        "direct": 347800.0,
-        "independent": 0.0,
-        "total": 347800.0,
-        "count": 7,
-        "committees": 2,
-        "members": 2
       },
       "illinois-state-conference-of-ibew-pac": {
         "name": "Illinois State Conference of IBEW PAC",
@@ -636747,8 +636154,8 @@
         "committees": 1,
         "members": 1
       },
-      "samuel-zell": {
-        "name": "Samuel Zell",
+      "zell-samuel": {
+        "name": "Zell, Samuel",
         "type": "Other",
         "industries": [
           "individual",
@@ -636761,8 +636168,8 @@
         "committees": 1,
         "members": 1
       },
-      "joseph-mansueto": {
-        "name": "Joseph Mansueto",
+      "mansueto-joseph": {
+        "name": "Mansueto, Joseph",
         "type": "Other",
         "industries": [
           "individual",
@@ -636775,8 +636182,8 @@
         "committees": 1,
         "members": 1
       },
-      "berle-blitstein": {
-        "name": "Berle Blitstein",
+      "blitstein-berle": {
+        "name": "Blitstein, Berle",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -636788,8 +636195,8 @@
         "committees": 1,
         "members": 1
       },
-      "robert-repel": {
-        "name": "Robert Repel",
+      "repel-robert": {
+        "name": "Repel, Robert",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -636801,21 +636208,8 @@
         "committees": 1,
         "members": 1
       },
-      "joseph-gutman": {
-        "name": "Joseph Gutman",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 35000.0,
-        "independent": 0.0,
-        "total": 35000.0,
-        "count": 2,
-        "committees": 2,
-        "members": 1
-      },
-      "sheila-gutman": {
-        "name": "Sheila Gutman",
+      "gutman-sheila": {
+        "name": "Gutman, Sheila",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -636827,23 +636221,9 @@
         "committees": 1,
         "members": 1
       },
-      "david-helfand": {
-        "name": "David Helfand",
-        "type": "Other",
-        "industries": [
-          "individual",
-          "real-estate"
-        ],
-        "direct": 50000.0,
-        "independent": 0.0,
-        "total": 50000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "david-herro": {
-        "name": "David Herro",
-        "type": "Other",
+      "herro-david": {
+        "name": "Herro,, David",
+        "type": "Individual",
         "industries": [
           "individual",
           "finance"
@@ -636855,8 +636235,8 @@
         "committees": 1,
         "members": 1
       },
-      "timothy-mullen": {
-        "name": "Timothy Mullen",
+      "mullen-timothy": {
+        "name": "Mullen, Timothy",
         "type": "Other",
         "industries": [
           "individual",
@@ -636869,8 +636249,8 @@
         "committees": 1,
         "members": 1
       },
-      "robert-levy": {
-        "name": "Robert Levy",
+      "levy-robert": {
+        "name": "Levy, Robert",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -636882,8 +636262,8 @@
         "committees": 1,
         "members": 1
       },
-      "laura-arnold": {
-        "name": "Laura Arnold",
+      "arnold-laura": {
+        "name": "Arnold, Laura",
         "type": "Other",
         "industries": [
           "individual",
@@ -636896,8 +636276,8 @@
         "committees": 1,
         "members": 1
       },
-      "muneer-satter": {
-        "name": "Muneer Satter",
+      "satter-muneer": {
+        "name": "Satter, Muneer",
         "type": "Other",
         "industries": [
           "individual",
@@ -636910,8 +636290,8 @@
         "committees": 1,
         "members": 1
       },
-      "james-gray": {
-        "name": "James Gray",
+      "gray-james": {
+        "name": "Gray, James",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -636923,8 +636303,8 @@
         "committees": 1,
         "members": 1
       },
-      "john-simpson": {
-        "name": "John Simpson",
+      "phillips-gregory": {
+        "name": "Phillips, Gregory",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -636934,33 +636314,6 @@
         "total": 25000.0,
         "count": 1,
         "committees": 1,
-        "members": 1
-      },
-      "gregory-phillips": {
-        "name": "Gregory Phillips",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 25000.0,
-        "independent": 0.0,
-        "total": 25000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "stephen-malkin": {
-        "name": "Stephen Malkin",
-        "type": "Other",
-        "industries": [
-          "individual",
-          "finance"
-        ],
-        "direct": 125000.0,
-        "independent": 0.0,
-        "total": 125000.0,
-        "count": 2,
-        "committees": 2,
         "members": 1
       },
       "ezman-holdings-llc": {
@@ -636976,8 +636329,8 @@
         "committees": 1,
         "members": 1
       },
-      "sara-star": {
-        "name": "Sara Star",
+      "star-sara": {
+        "name": "Star, Sara",
         "type": "Other",
         "industries": [
           "individual",
@@ -636990,8 +636343,8 @@
         "committees": 1,
         "members": 1
       },
-      "mark-gallogly": {
-        "name": "Mark Gallogly",
+      "gallogly-mark": {
+        "name": "Gallogly, Mark",
         "type": "Other",
         "industries": [
           "individual",
@@ -637004,8 +636357,8 @@
         "committees": 1,
         "members": 1
       },
-      "james-litinsky": {
-        "name": "James Litinsky",
+      "litinsky-james": {
+        "name": "Litinsky, James",
         "type": "Other",
         "industries": [
           "individual",
@@ -637122,8 +636475,8 @@
         "committees": 1,
         "members": 1
       },
-      "kenneth-tuchman": {
-        "name": "Kenneth Tuchman",
+      "tuchman-kenneth": {
+        "name": "Tuchman, Kenneth",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -637135,8 +636488,8 @@
         "committees": 1,
         "members": 1
       },
-      "sean-j-conlon": {
-        "name": "Sean J. Conlon",
+      "conlon-sean-j": {
+        "name": "Conlon, Sean J.",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -637148,8 +636501,8 @@
         "committees": 1,
         "members": 1
       },
-      "anna-szydzik": {
-        "name": "Anna Szydzik",
+      "szydzik-anna": {
+        "name": "Szydzik, Anna",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -637278,8 +636631,8 @@
         "committees": 1,
         "members": 1
       },
-      "james-abrams": {
-        "name": "James Abrams",
+      "abrams-wendy": {
+        "name": "Abrams, Wendy",
         "type": "Other",
         "industries": [
           "individual",
@@ -637292,22 +636645,8 @@
         "committees": 1,
         "members": 1
       },
-      "wendy-abrams": {
-        "name": "Wendy Abrams",
-        "type": "Other",
-        "industries": [
-          "individual",
-          "healthcare"
-        ],
-        "direct": 50000.0,
-        "independent": 0.0,
-        "total": 50000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "michael-a-cahan": {
-        "name": "Michael A. Cahan",
+      "cahan-michael-a": {
+        "name": "Cahan, Michael A.",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -637319,34 +636658,8 @@
         "committees": 1,
         "members": 1
       },
-      "gerald-w-fogelson": {
-        "name": "Gerald W. Fogelson",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 17500.0,
-        "independent": 0.0,
-        "total": 17500.0,
-        "count": 2,
-        "committees": 1,
-        "members": 1
-      },
-      "graham-c-grady": {
-        "name": "Graham C. Grady",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 1000.0,
-        "independent": 0.0,
-        "total": 1000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "jay-lecoque": {
-        "name": "Jay LeCoque",
+      "lecoque-jay": {
+        "name": "LeCoque, Jay",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -637358,8 +636671,8 @@
         "committees": 1,
         "members": 1
       },
-      "daniel-loeb": {
-        "name": "Daniel Loeb",
+      "loeb-daniel": {
+        "name": "Loeb, Daniel",
         "type": "Other",
         "industries": [
           "individual",
@@ -637450,8 +636763,8 @@
         "committees": 1,
         "members": 1
       },
-      "jose-a-duarte": {
-        "name": "Jose A Duarte",
+      "duarte-jose-a": {
+        "name": "Duarte, Jose A",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -637489,21 +636802,8 @@
         "committees": 1,
         "members": 1
       },
-      "jorge-perez": {
-        "name": "Jorge Perez",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 500.0,
-        "independent": 0.0,
-        "total": 500.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "gabriel-i-dziekiewicz": {
-        "name": "Gabriel I. Dziekiewicz",
+      "dziekiewicz-gabriel-i": {
+        "name": "Dziekiewicz, Gabriel I.",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -637515,8 +636815,8 @@
         "committees": 1,
         "members": 1
       },
-      "mary-ann-vanhook": {
-        "name": "Mary Ann Vanhook",
+      "vanhook-mary-ann": {
+        "name": "Vanhook, Mary Ann",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -637567,8 +636867,8 @@
         "committees": 1,
         "members": 1
       },
-      "michael-l-keiser": {
-        "name": "MICHAEL L. KEISER",
+      "keiser-michael-l": {
+        "name": "KEISER, MICHAEL L.",
         "type": "Other",
         "industries": [
           "individual",
@@ -637583,19 +636883,6 @@
       },
       "dama-consultants-inc": {
         "name": "Dama Consultants Inc.",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 250.0,
-        "independent": 0.0,
-        "total": 250.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "timothy-martin": {
-        "name": "Timothy Martin",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -637646,8 +636933,8 @@
         "committees": 1,
         "members": 1
       },
-      "alice-l-walton": {
-        "name": "ALICE L. WALTON",
+      "walton-alice-l": {
+        "name": "WALTON, ALICE L.",
         "type": "Other",
         "industries": [
           "individual",
@@ -637738,8 +637025,8 @@
         "committees": 1,
         "members": 1
       },
-      "jim-c-walton": {
-        "name": "JIM C. WALTON",
+      "walton-jim-c": {
+        "name": "WALTON, JIM C.",
         "type": "Other",
         "industries": [
           "individual",
@@ -637752,8 +637039,8 @@
         "committees": 1,
         "members": 1
       },
-      "katie-wise": {
-        "name": "KATIE WISE",
+      "wise-katie": {
+        "name": "WISE, KATIE",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638182,8 +637469,8 @@
         "committees": 1,
         "members": 1
       },
-      "lisa-m-gasperec": {
-        "name": "Lisa M. Gasperec",
+      "gasperec-lisa-m": {
+        "name": "Gasperec, Lisa M.",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638234,8 +637521,8 @@
         "committees": 1,
         "members": 1
       },
-      "james-k-murphy": {
-        "name": "JAMES K. MURPHY",
+      "murphy-james-k": {
+        "name": "MURPHY, JAMES K.",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638390,8 +637677,8 @@
         "committees": 1,
         "members": 1
       },
-      "john-e-butler": {
-        "name": "JOHN E. BUTLER",
+      "butler-john-e": {
+        "name": "BUTLER, JOHN E.",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638403,8 +637690,8 @@
         "committees": 1,
         "members": 1
       },
-      "dorothy-gregory": {
-        "name": "Dorothy Gregory",
+      "gregory-dorothy": {
+        "name": "Gregory, Dorothy",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638416,21 +637703,8 @@
         "committees": 1,
         "members": 1
       },
-      "david-gassman": {
-        "name": "David Gassman",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 2500.0,
-        "independent": 0.0,
-        "total": 2500.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "robert-maihofer-ii": {
-        "name": "Robert Maihofer II",
+      "maihofer-ii-robert": {
+        "name": "Maihofer II, Robert",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638455,8 +637729,8 @@
         "committees": 1,
         "members": 1
       },
-      "steve-shah": {
-        "name": "Steve Shah",
+      "shah-steve": {
+        "name": "Shah, Steve",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638468,8 +637742,8 @@
         "committees": 1,
         "members": 1
       },
-      "mary-bao": {
-        "name": "Mary Bao",
+      "bao-mary": {
+        "name": "Bao, Mary",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638481,8 +637755,8 @@
         "committees": 1,
         "members": 1
       },
-      "steve-cain": {
-        "name": "Steve Cain",
+      "cain-steve": {
+        "name": "Cain, Steve",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638494,8 +637768,8 @@
         "committees": 1,
         "members": 1
       },
-      "jay-johnson": {
-        "name": "Jay Johnson",
+      "johnson-jay": {
+        "name": "Johnson, Jay",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638507,8 +637781,8 @@
         "committees": 1,
         "members": 1
       },
-      "jill-liska": {
-        "name": "Jill Liska",
+      "liska-jill": {
+        "name": "Liska, Jill",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638520,8 +637794,8 @@
         "committees": 1,
         "members": 1
       },
-      "jerome-ettinger": {
-        "name": "Jerome Ettinger",
+      "ettinger-jerome": {
+        "name": "Ettinger, Jerome",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638533,8 +637807,8 @@
         "committees": 1,
         "members": 1
       },
-      "thomas-heineman": {
-        "name": "Thomas Heineman",
+      "heineman-thomas": {
+        "name": "Heineman, Thomas",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638546,8 +637820,8 @@
         "committees": 1,
         "members": 1
       },
-      "steven-weinberg": {
-        "name": "Steven Weinberg",
+      "weinberg-steven": {
+        "name": "Weinberg, Steven",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638559,8 +637833,8 @@
         "committees": 1,
         "members": 1
       },
-      "hava-muldoon": {
-        "name": "Hava Muldoon",
+      "muldoon-hava": {
+        "name": "Muldoon, Hava",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638572,8 +637846,8 @@
         "committees": 1,
         "members": 1
       },
-      "helen-carlock": {
-        "name": "Helen Carlock",
+      "carlock-helen": {
+        "name": "Carlock, Helen",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638624,8 +637898,8 @@
         "committees": 1,
         "members": 1
       },
-      "claude-smith": {
-        "name": "Claude Smith",
+      "smith-claude": {
+        "name": "Smith, Claude",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638637,8 +637911,8 @@
         "committees": 1,
         "members": 1
       },
-      "denis-detzel": {
-        "name": "Denis Detzel",
+      "detzel-denis": {
+        "name": "Detzel, Denis",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638650,8 +637924,8 @@
         "committees": 1,
         "members": 1
       },
-      "nathan-jarvinen": {
-        "name": "Nathan Jarvinen",
+      "jarvinen-nathan": {
+        "name": "Jarvinen, Nathan",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638676,8 +637950,8 @@
         "committees": 1,
         "members": 1
       },
-      "jennifer-kleiman": {
-        "name": "Jennifer Kleiman",
+      "kleiman-jennifer": {
+        "name": "Kleiman, Jennifer",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638689,8 +637963,8 @@
         "committees": 1,
         "members": 1
       },
-      "david-crawford": {
-        "name": "David Crawford",
+      "crawford-david": {
+        "name": "Crawford, David",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638702,8 +637976,8 @@
         "committees": 1,
         "members": 1
       },
-      "marty-max": {
-        "name": "Marty Max",
+      "max-marty": {
+        "name": "Max, Marty",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638715,21 +637989,8 @@
         "committees": 1,
         "members": 1
       },
-      "prudence-faklaris": {
-        "name": "Prudence Faklaris",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 500.0,
-        "independent": 0.0,
-        "total": 500.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "dan-lustig": {
-        "name": "Dan Lustig",
+      "lustig-dan": {
+        "name": "Lustig, Dan",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638741,21 +638002,8 @@
         "committees": 1,
         "members": 1
       },
-      "ron-abrams": {
-        "name": "Ron Abrams",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 500.0,
-        "independent": 0.0,
-        "total": 500.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "kris-aune": {
-        "name": "Kris Aune",
+      "aune-kris": {
+        "name": "Aune, Kris",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638767,8 +638015,8 @@
         "committees": 1,
         "members": 1
       },
-      "andrew-levin": {
-        "name": "Andrew Levin",
+      "levin-andrew": {
+        "name": "Levin, Andrew",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638780,21 +638028,8 @@
         "committees": 1,
         "members": 1
       },
-      "thomas-murphy": {
-        "name": "Thomas Murphy",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 500.0,
-        "independent": 0.0,
-        "total": 500.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "margaret-meiser": {
-        "name": "Margaret Meiser",
+      "meiser-margaret": {
+        "name": "Meiser, Margaret",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638806,21 +638041,8 @@
         "committees": 1,
         "members": 1
       },
-      "laszlo-simovic": {
-        "name": "Laszlo Simovic",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 500.0,
-        "independent": 0.0,
-        "total": 500.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "alan-goldberg": {
-        "name": "Alan Goldberg",
+      "goldberg-alan": {
+        "name": "Goldberg, Alan",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638832,8 +638054,8 @@
         "committees": 1,
         "members": 1
       },
-      "rafael-ruiz-ayala": {
-        "name": "Rafael Ruiz-Ayala",
+      "ruiz-ayala-rafael": {
+        "name": "Ruiz-Ayala, Rafael",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638845,8 +638067,8 @@
         "committees": 1,
         "members": 1
       },
-      "ross-landman": {
-        "name": "Ross Landman",
+      "landman-ross": {
+        "name": "Landman, Ross",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638871,8 +638093,8 @@
         "committees": 1,
         "members": 1
       },
-      "jeanette-scalise": {
-        "name": "Jeanette Scalise",
+      "scalise-jeanette": {
+        "name": "Scalise, Jeanette",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638884,21 +638106,8 @@
         "committees": 1,
         "members": 1
       },
-      "michael-glasser": {
-        "name": "Michael Glasser",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 1750.0,
-        "independent": 0.0,
-        "total": 1750.0,
-        "count": 2,
-        "committees": 1,
-        "members": 1
-      },
-      "rene-parungao": {
-        "name": "Rene Parungao",
+      "parungao-rene": {
+        "name": "Parungao, Rene",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638910,8 +638119,8 @@
         "committees": 1,
         "members": 1
       },
-      "timothy-long": {
-        "name": "Timothy Long",
+      "long-timothy": {
+        "name": "Long, Timothy",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638923,8 +638132,8 @@
         "committees": 1,
         "members": 1
       },
-      "matthew-kleiman": {
-        "name": "Matthew Kleiman",
+      "kleiman-matthew": {
+        "name": "Kleiman, Matthew",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638936,8 +638145,8 @@
         "committees": 1,
         "members": 1
       },
-      "michael-wallk": {
-        "name": "Michael Wallk",
+      "wallk-michael": {
+        "name": "Wallk, Michael",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638949,8 +638158,8 @@
         "committees": 1,
         "members": 1
       },
-      "richard-aronson": {
-        "name": "Richard Aronson",
+      "aronson-richard": {
+        "name": "Aronson, Richard",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638962,8 +638171,8 @@
         "committees": 1,
         "members": 1
       },
-      "jon-levin": {
-        "name": "Jon Levin",
+      "levin-jon": {
+        "name": "Levin, Jon",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -638975,21 +638184,8 @@
         "committees": 1,
         "members": 1
       },
-      "norm-bobins": {
-        "name": "Norm Bobins",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 2500.0,
-        "independent": 0.0,
-        "total": 2500.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "miles-berger": {
-        "name": "Miles Berger",
+      "berger-miles": {
+        "name": "Berger, Miles",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639014,8 +638210,8 @@
         "committees": 1,
         "members": 1
       },
-      "colm-treacy": {
-        "name": "Colm Treacy",
+      "treacy-colm": {
+        "name": "Treacy, Colm",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639027,8 +638223,8 @@
         "committees": 1,
         "members": 1
       },
-      "connie-abels": {
-        "name": "Connie Abels",
+      "abels-connie": {
+        "name": "Abels, Connie",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639040,8 +638236,8 @@
         "committees": 1,
         "members": 1
       },
-      "jeffrey-cagan": {
-        "name": "Jeffrey Cagan",
+      "cagan-jeffrey": {
+        "name": "Cagan, Jeffrey",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639053,8 +638249,8 @@
         "committees": 1,
         "members": 1
       },
-      "sarah-lisy": {
-        "name": "Sarah Lisy",
+      "lisy-sarah": {
+        "name": "Lisy, Sarah",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639066,8 +638262,8 @@
         "committees": 1,
         "members": 1
       },
-      "denise-karlin": {
-        "name": "Denise Karlin",
+      "karlin-denise": {
+        "name": "Karlin, Denise",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639079,8 +638275,8 @@
         "committees": 1,
         "members": 1
       },
-      "paul-go": {
-        "name": "Paul Go",
+      "go-paul": {
+        "name": "Go, Paul",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639092,8 +638288,8 @@
         "committees": 1,
         "members": 1
       },
-      "belia-rodriguez": {
-        "name": "Belia Rodriguez",
+      "rodriguez-belia": {
+        "name": "Rodriguez, Belia",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639144,47 +638340,8 @@
         "committees": 1,
         "members": 1
       },
-      "rich-melman": {
-        "name": "Rich Melman",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 10000.0,
-        "independent": 0.0,
-        "total": 10000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "jim-kallas": {
-        "name": "Jim Kallas",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 1000.0,
-        "independent": 0.0,
-        "total": 1000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "john-mclinden": {
-        "name": "John McLinden",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 2500.0,
-        "independent": 0.0,
-        "total": 2500.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "marion-cameron": {
-        "name": "Marion Cameron",
+      "cameron-marion": {
+        "name": "Cameron, Marion",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639209,35 +638366,8 @@
         "committees": 1,
         "members": 1
       },
-      "keating-crown": {
-        "name": "Keating Crown",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 25000.0,
-        "independent": 0.0,
-        "total": 25000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "james-s-crown": {
-        "name": "James S Crown",
-        "type": "Other",
-        "industries": [
-          "individual",
-          "finance"
-        ],
-        "direct": 100000.0,
-        "independent": 0.0,
-        "total": 100000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
-      "lester-crown": {
-        "name": "Lester Crown",
+      "crown-lester": {
+        "name": "Crown, Lester",
         "type": "Other",
         "industries": [
           "individual",
@@ -639263,8 +638393,8 @@
         "committees": 1,
         "members": 1
       },
-      "robert-stein": {
-        "name": "Robert Stein",
+      "stein-robert": {
+        "name": "Stein, Robert",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639276,8 +638406,8 @@
         "committees": 1,
         "members": 1
       },
-      "joanne-desanctis": {
-        "name": "Joanne DeSanctis",
+      "desanctis-joanne": {
+        "name": "DeSanctis, Joanne",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639289,8 +638419,8 @@
         "committees": 1,
         "members": 1
       },
-      "graham-palmer": {
-        "name": "Graham Palmer",
+      "palmer-graham": {
+        "name": "Palmer, Graham",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639302,8 +638432,8 @@
         "committees": 1,
         "members": 1
       },
-      "jaime-javors": {
-        "name": "Jaime Javors",
+      "javors-jaime": {
+        "name": "Javors, Jaime",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639315,8 +638445,8 @@
         "committees": 1,
         "members": 1
       },
-      "jh-lasky": {
-        "name": "JH Lasky",
+      "lasky-jh": {
+        "name": "Lasky, JH",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639328,8 +638458,8 @@
         "committees": 1,
         "members": 1
       },
-      "susan-starrett": {
-        "name": "Susan Starrett",
+      "starrett-susan": {
+        "name": "Starrett, Susan",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639341,8 +638471,8 @@
         "committees": 1,
         "members": 1
       },
-      "don-wilson": {
-        "name": "Don Wilson",
+      "wilson-don": {
+        "name": "Wilson, Don",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639354,8 +638484,8 @@
         "committees": 1,
         "members": 1
       },
-      "katherine-bradley": {
-        "name": "Katherine Bradley",
+      "bradley-katherine": {
+        "name": "Bradley, Katherine",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639471,8 +638601,8 @@
         "committees": 1,
         "members": 1
       },
-      "eduardo-valadez": {
-        "name": "EDUARDO VALADEZ",
+      "valadez-eduardo": {
+        "name": "VALADEZ, EDUARDO",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639484,8 +638614,8 @@
         "committees": 1,
         "members": 1
       },
-      "jasmine-valadez": {
-        "name": "JASMINE VALADEZ",
+      "valadez-jasmine": {
+        "name": "VALADEZ, JASMINE",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639497,8 +638627,8 @@
         "committees": 1,
         "members": 1
       },
-      "robert-escalante": {
-        "name": "Robert Escalante",
+      "escalante-robert": {
+        "name": "Escalante, Robert",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639510,8 +638640,8 @@
         "committees": 1,
         "members": 1
       },
-      "valeria-carbajal": {
-        "name": "VALERIA CARBAJAL",
+      "carbajal-valeria": {
+        "name": "CARBAJAL, VALERIA",
         "type": "Other",
         "industries": [
           "unclassified"
@@ -639523,8 +638653,8 @@
         "committees": 1,
         "members": 1
       },
-      "reed-hastings": {
-        "name": "Reed Hastings",
+      "hastings-reed": {
+        "name": "Hastings, Reed",
         "type": "Other",
         "industries": [
           "individual",
@@ -639537,8 +638667,8 @@
         "committees": 1,
         "members": 1
       },
-      "helen-zell": {
-        "name": "Helen Zell",
+      "zell-helen": {
+        "name": "Zell, Helen",
         "type": "Other",
         "industries": [
           "individual",
@@ -639926,19 +639056,6 @@
         "committees": 1,
         "members": 1
       },
-      "liam-krehbiel": {
-        "name": "Liam Krehbiel",
-        "type": "Other",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 10000.0,
-        "independent": 0.0,
-        "total": 10000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
       "illinois-democratic-county-chairs-assoc": {
         "name": "Illinois Democratic County Chairs' Assoc.",
         "type": "Other",
@@ -639983,17 +639100,6 @@
         "committees": 1,
         "members": 1
       },
-      "leonard-gail": {
-        "name": "Leonard Gail",
-        "type": "Other",
-        "industries": [],
-        "direct": 50000.0,
-        "independent": 0.0,
-        "total": 50000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1
-      },
       "swatware-llc": {
         "name": "SWATware LLC",
         "type": "Other",
@@ -640009,31 +639115,31 @@
     "by_industry": {
       "candidate-account": {
         "all": {
-          "direct": 3161778.72
+          "direct": 3347127.14
         },
         "by_cycle": {
           "2015": {
-            "direct": 460536.19
+            "direct": 470115.14
           },
           "2019": {
-            "direct": 968807.85
+            "direct": 974749.51
           },
           "2023": {
-            "direct": 1243854.0
+            "direct": 1363681.81
           },
           "2027": {
-            "direct": 488580.68
+            "direct": 538580.68
           }
         }
       },
       "real-estate": {
         "all": {
-          "direct": 14160036.57,
+          "direct": 14180036.57,
           "independent": 644507.08
         },
         "by_cycle": {
           "2015": {
-            "direct": 1442490.62
+            "direct": 1447490.62
           },
           "2019": {
             "direct": 3609652.79,
@@ -640044,45 +639150,45 @@
             "independent": 500342.08
           },
           "2027": {
-            "direct": 3371894.73
+            "direct": 3386894.73
           }
         }
       },
       "self-funding": {
         "all": {
-          "direct": 1850194.11
+          "direct": 1647545.69
         },
         "by_cycle": {
           "2015": {
-            "direct": 170258.48
+            "direct": 160679.53
           },
           "2019": {
-            "direct": 194781.72
+            "direct": 188840.06
           },
           "2023": {
-            "direct": 338499.92
+            "direct": 218672.11
           },
           "2027": {
-            "direct": 1146653.99
+            "direct": 1079353.99
           }
         }
       },
       "unclassified": {
         "all": {
-          "direct": 14091094.63
+          "direct": 14260166.48
         },
         "by_cycle": {
           "2015": {
-            "direct": 2822978.86
+            "direct": 2836459.11
           },
           "2019": {
-            "direct": 3120989.15
+            "direct": 3126489.15
           },
           "2023": {
-            "direct": 3694317.1
+            "direct": 3733233.74
           },
           "2027": {
-            "direct": 4452809.52
+            "direct": 4563984.48
           }
         }
       },
@@ -640107,26 +639213,26 @@
       },
       "individual": {
         "all": {
-          "direct": 46237360.91
+          "direct": 45904589.06
         },
         "by_cycle": {
           "2015": {
-            "direct": 6679381.66
+            "direct": 6655501.41
           },
           "2019": {
-            "direct": 8363187.17
+            "direct": 8320887.17
           },
           "2023": {
-            "direct": 12129855.29
+            "direct": 12021938.65
           },
           "2027": {
-            "direct": 19064936.79
+            "direct": 18906261.83
           }
         }
       },
       "healthcare": {
         "all": {
-          "direct": 394185.0
+          "direct": 394685.0
         },
         "by_cycle": {
           "2015": {
@@ -640139,7 +639245,7 @@
             "direct": 72450.0
           },
           "2027": {
-            "direct": 62650.0
+            "direct": 63150.0
           }
         }
       },
@@ -640224,7 +639330,7 @@
       },
       "corporate": {
         "all": {
-          "direct": 15046121.23,
+          "direct": 15053921.23,
           "independent": 878073.49
         },
         "by_cycle": {
@@ -640232,7 +639338,7 @@
             "direct": 1041481.14
           },
           "2019": {
-            "direct": 3905350.6
+            "direct": 3913150.6
           },
           "2023": {
             "direct": 4353024.63,
@@ -640321,20 +639427,20 @@
       },
       "finance": {
         "all": {
-          "direct": 6064067.44
+          "direct": 5183567.44
         },
         "by_cycle": {
           "2015": {
-            "direct": 3347089.0
+            "direct": 2407889.0
           },
           "2019": {
-            "direct": 494752.07
+            "direct": 578352.07
           },
           "2023": {
-            "direct": 1458229.69
+            "direct": 1614129.69
           },
           "2027": {
-            "direct": 763996.68
+            "direct": 583196.68
           }
         }
       },
@@ -640514,6 +639620,29 @@
           }
         }
       },
+      "charter-schools": {
+        "all": {
+          "direct": 2015637.15,
+          "independent": 531433.97
+        },
+        "by_cycle": {
+          "2019": {
+            "direct": 815760.35,
+            "independent": 212367.11
+          },
+          "2023": {
+            "direct": 461176.8,
+            "independent": 288576.56
+          },
+          "2027": {
+            "direct": 676700.0
+          },
+          "2015": {
+            "direct": 62000.0,
+            "independent": 30490.3
+          }
+        }
+      },
       "construction": {
         "all": {
           "direct": 279935.0
@@ -640570,29 +639699,6 @@
           },
           "2027": {
             "direct": 7800.0
-          }
-        }
-      },
-      "charter-schools": {
-        "all": {
-          "direct": 2012637.15,
-          "independent": 531433.97
-        },
-        "by_cycle": {
-          "2023": {
-            "direct": 461176.8,
-            "independent": 288576.56
-          },
-          "2027": {
-            "direct": 676700.0
-          },
-          "2015": {
-            "direct": 62000.0,
-            "independent": 30490.3
-          },
-          "2019": {
-            "direct": 812760.35,
-            "independent": 212367.11
           }
         }
       },
