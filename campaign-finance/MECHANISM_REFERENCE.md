@@ -79,6 +79,8 @@ enrich_committee_names):
   -> build_shards -> validate
 ```
 
+**Where each chain's artifact comes from** [C1.19, SOURCED]: neither canonical chain rebuilds its artifact from the sealed vintage. `campaign-finance/ingestion/ingest.py` reads the artifact on disk and replaces each committee's own rows into it; `campaign-finance/elections/build_election_seed.py` reads the existing artifact and preserves its committees, donors, contributions and independent expenditures on a re-run. A change to how a donor id is minted therefore lands by regenerating the IE layer and everything downstream of it on the artifacts at the previous commit, and `campaign-finance/ingestion/ingest_ie.py` prunes the donor records its re-key orphans (§2, C2.11), because the only other donor prune, in `campaign-finance/ingestion/ingest.py`, runs upstream of it. Measured at IE-NAMES-1.
+
 This block is the ordering authority of record; `build_all.sh` and the runbook's operational
 sequence are implementations of it. Citing an implementation as the *source* of the order
 would re-invert the authority. The appendix records that `build_all.sh` **conforms to** this
@@ -327,6 +329,8 @@ field census requires a **writer sweep** — every assignment site in every writ
 populated-key census of the artifact. A populated-key census cannot see fields that are
 currently unpopulated or recomputed. Fixture: `aka` — populated on zero donors at census
 time, invisible to the key census, caught by the writer sweep, resolved as recomputed.
+
+**IE funder identity** [C2.11, SOURCED]: an IE funder's donor id is minted from a name built by the receipts ingest's own builder — the "Last, First" form assembled in `campaign-finance/ingestion/convert_bulk_receipts.py` from SBE's LastOnlyName and FirstName — handed to the shared slug, so a person filed on both the receipts side and the IE side resolves to one id; `campaign-finance/ingestion/ingest_ie.py` imports that builder rather than carrying a second rule. After re-adding its rows the IE ingest prunes every donor left with zero contribution rows, counted as donors_pruned_rowless; a receipts-side donor can never be pruned because the referenced set is over all contributions. Ruled at IE-NAMES-1 (the register entry of that name). The `ie-committee-*` suffix gap (C4.3) is a different mechanism and is not characterized by this row.
 
 ---
 
@@ -944,6 +948,8 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.17 | S-sbf | 70 (`DUES_TYPE`, the constant the predicate keys on), 274-279 (the single dues-exclusion site — a bare `continue`, with R4a's counter at that same predicate) |
 | C1.17 | S-sbf | 268-289 (the filter order, load-bearing for that counter: slug scope 268, aggregate 270, excluded cycles 272, dues 274, donor 281, self 283, window 287-289) |
 | C1.17 | S-sbf | 384 (`ie_slice` — the spend side, disjoint from the funding-side dues predicate, which is what makes the exclusion vacuous at $0.00) |
+| C1.19 | S-ing | 586 (reads the artifact on disk), 523-528 (replaces that committee's rows), 688-689 (writes it back) |
+| C1.19 | S-seed | 429-435, 447-451 (preserves committees, donors, contributions, independent_expenditures on re-run) |
 | C2.1 | S-ing | 86-127 (rules), 130-141 (classifier), 314-320 (assignment), 504-508 (partial preserve) |
 | C2.1 | S-syn | 520-526 (merge) |
 | C2.2 | S-ing | 509-512; S-syn 170-174, 528-531 |
@@ -955,6 +961,8 @@ that catch defect classes the existing gates structurally cannot see.
 | C2.8 | S-syn | 155-182 (tab reader: the writer-set columns) |
 | C2.9 | A-add | 141-160 (§A4: sweep method, aka fixture) |
 | C2.10 | A-add | 87-98 (§A2.3: the value-granularity qualifier — property shared, position not) |
+| C2.11 | S-ie | 18 (imports the receipts name builder above the csv field-size line; the order is load-bearing), 361 (funder name in the receipts form), 388-391 (row-less prune after the re-add) |
+| C2.11 | S-cbr | 323-325 (the "Last, First" name builder) |
 | C3.1 | S-ing | 130-141 (short-circuit before rules), 182-189 (name-format heuristic) |
 | C3.1 | A-probe | 96-118 (§P3: fallback characterization, w-r-weiss answered) |
 | C3.2 | S-ing | 141 (org no-match fallback) |

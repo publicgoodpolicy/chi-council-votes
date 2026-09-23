@@ -237,6 +237,60 @@ the moment a scope is drafted**; planner session state and memory indexes are no
 
 [Byte-copied from the DATA-UPDATE-1 error-ledger ratification package, entries 134–147, revision 1 (`5ea721b8e853413bf4d4fc9dc29935df81e249aee92801be816c701b7e1d9c47`, 7,363 B / 33 L), its line 31, span sha256 `c7913f9b72fcddcb68ac5c93a250d40058ac8d89cb4c97f81d709002e8ad05f2` (the line's bytes, no trailing newline). The leading `**147 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 as the package's entry states. Offered in chat as candidates 32–45 and ratified by Ishan 2026-09-15. Numbered 2026-09-15 at DATA-UPDATE-1 HALT (iv).]
 
+### 148
+
+**148 (PS-117 class, kin to 133 and 144)** — a dispatch's section heading and expectation said "nine" staged paths where its own enumeration listed eight; the ninth, the preview, is untracked and gitignored and cannot be staged; the executor staged the enumerated eight and reported the count. Defense: **a count in ratified text is derived from the enumeration beside it, never stated separately from it.** (2026-09-15, DATA-UPDATE-1 HALT (iv).)
+
+[Byte-copied from the IE-NAMES-1 HALT (iii) ratification package, revision 2 (`5dc931bf905d85fa2f090b9ee6b716c42d5d06354cf8e62ecb21bc7c2d0cbe71`, 14,207 B / 84 L), its line 26, span sha256 `9e239c1b926e2d7b7433d71f45983c09f6d74ab3f587d4c98e844eea9b259eb4` (the line's bytes, no trailing newline). The leading `**148 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at DATA-UPDATE-1 HALT (iv), carried as candidate 46 by handover rev AE, as the package's entry states. Offered in chat as candidates 46–54 and ratified by Ishan 2026-09-22. Numbered 2026-09-22 at IE-NAMES-1 HALT (iii).]
+
+### 149
+
+**149 (PS-117 class, kin to 148)** — the dispatch that transcribed entries 134–147 did not move the ledger's own closing line, which stayed at "Next free number: 134" for a week while the file carried entries through 147 and the commit message said 148; the file that wins on nothing but its own numbering contradicted itself. Defense: **a transcription carrier moves the ledger's next-free line in the same edit as the entries it lands, and its report compares that line to the last heading.** (2026-09-16, IE-NAMES-1 BR-2 F1.)
+
+[Byte-copied from the IE-NAMES-1 HALT (iii) ratification package, revision 2 (`5dc931bf905d85fa2f090b9ee6b716c42d5d06354cf8e62ecb21bc7c2d0cbe71`, 14,207 B / 84 L), its line 29, span sha256 `2f4450a230da11ab27593700011f71886bf00632626e282929eaef0f0f4e4577` (the line's bytes, no trailing newline). The leading `**149 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at IE-NAMES-1 as the package's entry states. Offered in chat as candidates 46–54 and ratified by Ishan 2026-09-22. Numbered 2026-09-22 at IE-NAMES-1 HALT (iii).]
+
+### 150
+
+**150 (pointer class, kin to 144)** — HALT (i)'s dispatch expected retired ids gone and row-less donors zero from a carrier bounded to `campaign-finance/ingestion/ingest_ie.py` alone, which purges its rows and never its donor records; the executor's own premise reading predicted the divergence before running, and the carrier held on 571 row-less records that masked the Sheet-continuity guard. Defense: **an expectation in a bounded carrier is one its own steps can produce; an expectation about the chain's end state waits for the carrier that runs the chain.** (2026-09-17, IE-NAMES-1 HALT (i).)
+
+[Byte-copied from the IE-NAMES-1 HALT (iii) ratification package, revision 2 (`5dc931bf905d85fa2f090b9ee6b716c42d5d06354cf8e62ecb21bc7c2d0cbe71`, 14,207 B / 84 L), its line 32, span sha256 `a6dc81724cded13e9e85a207f49e011167c6894e171f26d282f6a4d22ab73f86` (the line's bytes, no trailing newline). The leading `**150 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at IE-NAMES-1 as the package's entry states. Offered in chat as candidates 46–54 and ratified by Ishan 2026-09-22. Numbered 2026-09-22 at IE-NAMES-1 HALT (iii).]
+
+### 151
+
+**151 (pointer class, kin to 137 and 138)** — the same dispatch stated the IE ingest's selection inputs as the tracked committee lists, drafted from the handover's chain summary; the script's argparse takes no committee list, and its selection derives from the expenditures file against the artifact's own committee registry. Defense: **as 137 — every input named for a script is read from its argparse, never from a chain summary.** (2026-09-17, IE-NAMES-1 HALT (i).)
+
+[Byte-copied from the IE-NAMES-1 HALT (iii) ratification package, revision 2 (`5dc931bf905d85fa2f090b9ee6b716c42d5d06354cf8e62ecb21bc7c2d0cbe71`, 14,207 B / 84 L), its line 35, span sha256 `c1b5ffaf1deef43b3a8eba58e874ac8b1bf2dae8d489fb783aeea6a4da5ac561` (the line's bytes, no trailing newline). The leading `**151 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at IE-NAMES-1 as the package's entry states. Offered in chat as candidates 46–54 and ratified by Ishan 2026-09-22. Numbered 2026-09-22 at IE-NAMES-1 HALT (iii).]
+
+### 152
+
+**152 (pointer class, kin to 134)** — HALT (ii)'s first two revisions expected the canonical chains to re-mint donors from the vintage, asserted from the regeneration principle when the elections seed's merge block and the council ingest's in-place write were readable; neither chain rebuilds, and the orphan prune had to be added to the IE ingest instead. Defense: **a claim about where a chain's inputs come from is read from its first step's own reader, never from a principle.** (2026-09-21, IE-NAMES-1 HALT (ii) rev 2.)
+
+[Byte-copied from the IE-NAMES-1 HALT (iii) ratification package, revision 2 (`5dc931bf905d85fa2f090b9ee6b716c42d5d06354cf8e62ecb21bc7c2d0cbe71`, 14,207 B / 84 L), its line 38, span sha256 `09eceb61c42ebe4f3802da8223471a366cc1e889af10bc859c01b797fe3bc73c` (the line's bytes, no trailing newline). The leading `**152 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at IE-NAMES-1 as the package's entry states. Offered in chat as candidates 46–54 and ratified by Ishan 2026-09-22. Numbered 2026-09-22 at IE-NAMES-1 HALT (iii).]
+
+### 153
+
+**153 (pointer class, kin to 143 and 147)** — BR-2's check-to-line mapping was labelled a derivation by the executor and authorized as an enumeration by HALT (ii) rev 3; three checks the mapping missed held the gate — the encoding known-failure the fix cured, a fixture anchored on a rendered name, and the school-board industry premise. Defense: **a derived mapping is not an enumeration; every check that reads an artifact is bound to its opener by file and line before its remedy is authorized.** (2026-09-21, IE-NAMES-1 HALT (ii) rev 3.)
+
+[Byte-copied from the IE-NAMES-1 HALT (iii) ratification package, revision 2 (`5dc931bf905d85fa2f090b9ee6b716c42d5d06354cf8e62ecb21bc7c2d0cbe71`, 14,207 B / 84 L), its line 41, span sha256 `2fc687b3fdc216ca07d8910cc90b40404f5446bb2ac79d22fca513c65a2d2042` (the line's bytes, no trailing newline). The leading `**153 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at IE-NAMES-1 as the package's entry states. Offered in chat as candidates 46–54 and ratified by Ishan 2026-09-22. Numbered 2026-09-22 at IE-NAMES-1 HALT (iii).]
+
+### 154
+
+**154 (pointer class, kin to 129)** — HALT (ii) rev 1 named a scratchpad-only Sheet capture as a premise four days after it was made, requiring no durable location; the temporary directory was reaped, the carrier held at its premise table, and the pre-edit baseline had to be re-obtained from the Sheet's version history. Defense: **a load-bearing input is written to the downloads folder by the carrier that produces it, and a premise names a file only at a durable path.** (2026-09-21, IE-NAMES-1 HALT (ii) rev 1.)
+
+[Byte-copied from the IE-NAMES-1 HALT (iii) ratification package, revision 2 (`5dc931bf905d85fa2f090b9ee6b716c42d5d06354cf8e62ecb21bc7c2d0cbe71`, 14,207 B / 84 L), its line 44, span sha256 `08845bdfb0d73c15f0e9ccbc103c8ee6e332d500e754d1fb6da2613673dd3bf3` (the line's bytes, no trailing newline). The leading `**154 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at IE-NAMES-1 as the package's entry states. Offered in chat as candidates 46–54 and ratified by Ishan 2026-09-22. Numbered 2026-09-22 at IE-NAMES-1 HALT (iii).]
+
+### 155
+
+**155 (PS-117 class, kin to declined candidate 18)** — the HALT (ii) approval relay expected the ahead/behind count as "1 0" where the form ruled 2026-09-02 is origin/main...main → 0 N; the executor measured 0 1, disambiguated it three ways and reported the relay's literal as the thing that was wrong. Defense: **the ahead/behind form is quoted from the ruling that fixed it, never retyped.** (2026-09-21, IE-NAMES-1 HALT (ii) approval relay.)
+
+[Byte-copied from the IE-NAMES-1 HALT (iii) ratification package, revision 2 (`5dc931bf905d85fa2f090b9ee6b716c42d5d06354cf8e62ecb21bc7c2d0cbe71`, 14,207 B / 84 L), its line 47, span sha256 `5b404ba348098b4ec132539e6acb11ac07abd7f883b1b1a225a4d5e119a19e7a` (the line's bytes, no trailing newline). The leading `**155 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at IE-NAMES-1 as the package's entry states. Offered in chat as candidates 46–54 and ratified by Ishan 2026-09-22. Numbered 2026-09-22 at IE-NAMES-1 HALT (iii).]
+
+### 156
+
+**156 (pointer class, kin to 134)** — BR-3's dispatch directed the executor to quote R26 and R44 from the register; neither is register text — R26 is a handover convention label and R44 a code comment — and the executor reported both as not executable against measured absence. Defense: **as 134 — a rule cited in a dispatch is cited at its location as read; a label carried from a handover or a comment is named as such.** (2026-09-22, IE-NAMES-1 BR-3.)
+
+[Byte-copied from the IE-NAMES-1 HALT (iii) ratification package, revision 2 (`5dc931bf905d85fa2f090b9ee6b716c42d5d06354cf8e62ecb21bc7c2d0cbe71`, 14,207 B / 84 L), its line 50, span sha256 `ae3b67901f4bceb6a91d9903f35938af2040bf95021f2578050049f72328b7e0` (the line's bytes, no trailing newline). The leading `**156 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at IE-NAMES-1 as the package's entry states. Offered in chat as candidates 46–54 and ratified by Ishan 2026-09-22. Numbered 2026-09-22 at IE-NAMES-1 HALT (iii).]
+
 ## Dispositions without a number
 
 Recorded so the findings are not lost; none consumes a number.
@@ -258,4 +312,4 @@ Recorded so the findings are not lost; none consumes a number.
 | 22 | declined by Ishan 2026-09-08 | handover rev AB rev 2 `67fe9608825fc3a07c2ce4a18f0a9b5b420ab5e40b7acbd1fc7efa023707c646`, its error-ledger section — verify-after-read on the commit-B uploads; existing convention, disclosed, cured |
 | 23 | declined by Ishan 2026-09-08, as covered by entry 126 | handover rev AB rev 2 `67fe9608825fc3a07c2ce4a18f0a9b5b420ab5e40b7acbd1fc7efa023707c646` carries the errant phrase ("allocated at ratification"); the ledger's own conventions block rules allocation at transcription and wins; erratum closes at rev AC |
 
-Next free number: **134**.
+Next free number: **157**.
