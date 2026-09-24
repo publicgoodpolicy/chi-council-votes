@@ -1,4 +1,13 @@
 {
+  "Gambling Ban": {
+    "vote_id": "ocd-vote/070905df-c1ce-4cff-8a4a-69536e3f1c6e",
+    "bill": "SO2026-0024076",
+    "title": "Amendment of Municipal Code Chapter 4-156 by defining and prohibiting the installation or use of sweepstakes machines",
+    "date": "2026-06-17",
+    "divided": true,
+    "confirmed": "sheet",
+    "matched_on": "all-votes-tab"
+  },
   "1FW Repeal": {
     "vote_id": "ocd-vote/0b340de0-d77f-4f7d-b7bf-bf1fa821b3bc",
     "bill": "SO2025-0017549",

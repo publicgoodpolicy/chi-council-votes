@@ -1,6 +1,6 @@
 {
   "schema_version": "2.1",
-  "generated_at": "2026-09-24T02:34:24Z",
+  "generated_at": "2026-09-24T18:41:50Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "itemization_threshold": 150,
   "cycles": {
@@ -346021,7 +346021,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Oppositional",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346045,7 +346046,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "Affirmative"
       }
     },
     {
@@ -346069,7 +346071,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Neutral",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346093,7 +346096,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Neutral",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346117,7 +346121,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346141,7 +346146,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Oppositional",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346165,7 +346171,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346189,7 +346196,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346213,7 +346221,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "Affirmative"
       }
     },
     {
@@ -346237,7 +346246,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "Affirmative"
       }
     },
     {
@@ -346261,7 +346271,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346285,7 +346296,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Oppositional",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346309,7 +346321,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "Affirmative"
       }
     },
     {
@@ -346333,7 +346346,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346357,7 +346371,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "Affirmative"
       }
     },
     {
@@ -346381,7 +346396,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Neutral",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346405,7 +346421,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346429,7 +346446,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346453,7 +346471,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "Affirmative"
       }
     },
     {
@@ -346477,7 +346496,8 @@
         "2026 City Budget": "Neutral",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "-",
-        "Bring Chicago Home": "Neutral"
+        "Bring Chicago Home": "Neutral",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346501,7 +346521,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346525,7 +346546,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Oppositional",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346549,7 +346571,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "Affirmative"
       }
     },
     {
@@ -346573,7 +346596,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Affirmative"
       }
     },
     {
@@ -346597,7 +346621,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Oppositional",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346621,7 +346646,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Oppositional",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346668,7 +346694,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Oppositional",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346692,7 +346719,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346716,7 +346744,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346740,7 +346769,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "Affirmative"
       }
     },
     {
@@ -346764,7 +346794,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "Affirmative"
       }
     },
     {
@@ -346788,7 +346819,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Oppositional",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346812,7 +346844,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346836,7 +346869,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Oppositional",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346860,7 +346894,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "-"
       }
     },
     {
@@ -346884,7 +346919,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Neutral",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346908,7 +346944,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346932,7 +346969,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346956,7 +346994,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Oppositional",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -346980,7 +347019,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "Affirmative"
       }
     },
     {
@@ -347004,7 +347044,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "Affirmative"
       }
     },
     {
@@ -347028,7 +347069,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "Neutral"
       }
     },
     {
@@ -347052,7 +347094,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "Affirmative"
       }
     },
     {
@@ -347076,7 +347119,8 @@
         "2026 City Budget": "Affirmative",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Oppositional"
+        "Bring Chicago Home": "Oppositional",
+        "Gambling Ban": "Affirmative"
       }
     },
     {
@@ -347100,7 +347144,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Oppositional",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -347124,7 +347169,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Oppositional",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -347148,7 +347194,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Oppositional",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -347172,7 +347219,8 @@
         "2026 City Budget": "Oppositional",
         "Ceasefire Resolution": "Affirmative",
         "Extend Shotspotter Contract": "Oppositional",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional"
       }
     },
     {
@@ -347196,11 +347244,21 @@
         "2026 City Budget": "-",
         "Ceasefire Resolution": "Oppositional",
         "Extend Shotspotter Contract": "Affirmative",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Affirmative"
       }
     }
   ],
   "votemeta": [
+    {
+      "code": "Gambling Ban",
+      "full": "Banning VGT's (Virtual Gambling Terminals) from Bars & Restaurants",
+      "tag": "Gambling",
+      "year": "2026",
+      "source_url": "https://chicago.councilmatic.org/search/?q=SO2026-0024076",
+      "desc": "This was an effort to ban virtual gambling machines within bars and restaurants \u2013 a \"yes\" vote meant that they would be banned, and \"no\" vote meant that they would be allowed.",
+      "vote_id": "ocd-vote/070905df-c1ce-4cff-8a4a-69536e3f1c6e"
+    },
     {
       "code": "1FW Repeal",
       "full": "Repeal of Phase-Out of Subminimum Wage",
@@ -347216,7 +347274,7 @@
       "tag": "Budget",
       "year": "2025",
       "source_url": "https://chicago.councilmatic.org/search/?q=SO2025-0020516",
-      "desc": "",
+      "desc": "In its final state \u2013 there were two options present: Option A \u2013 selling ~$900M of resident debt to a third party for a revenue of ~$90M, or Option B \u2013 implementing a per person / per month tax on large companies with more than 500 employees working in Chicago, that was projected to raise at lease $90M. This was the vote for Option A \u2013 a \"yes\" vote meant accepting Option A, and \"no\" vote meant not accepting Option A.",
       "vote_id": "ocd-vote/ac598751-14f7-43fd-93af-e5a9f1ec8c0c"
     },
     {
@@ -347353,7 +347411,8 @@
           "35": "yes",
           "27": "yes",
           "43": "yes"
-        }
+        },
+        "tag": "Public Referendum"
       },
       {
         "id": "ocd-vote/7d0751a0-3424-42b7-a1f6-8b782c46e3cf",
@@ -347420,7 +347479,8 @@
           "35": "no",
           "27": "no",
           "43": "yes"
-        }
+        },
+        "tag": "Public Referendum"
       },
       {
         "id": "ocd-vote/7f1dc482-8e84-45f6-b454-30bde0bc75c6",
@@ -347487,7 +347547,8 @@
           "35": "no",
           "27": "no",
           "43": "yes"
-        }
+        },
+        "tag": "Public Referendum"
       },
       {
         "id": "ocd-vote/61ec38d9-6e58-48cc-8253-86676e935299",
@@ -347619,7 +347680,8 @@
           "24": "yes",
           "35": "yes",
           "43": "yes"
-        }
+        },
+        "tag": "Settlement"
       },
       {
         "id": "ocd-vote/070905df-c1ce-4cff-8a4a-69536e3f1c6e",
@@ -347685,7 +347747,8 @@
           "24": "yes",
           "35": "no",
           "43": "present"
-        }
+        },
+        "tag": "Gambling"
       },
       {
         "id": "ocd-vote/08b95f76-1748-4198-8011-3054d012ff66",
@@ -361352,6 +361415,7 @@
     "term": "2023",
     "source": "DataMade chicago-council-scrapers nightly release (chicago_council.db) \u2014 synced 2026-09-24",
     "featured_auto": [
+      "Gambling Ban",
       "1FW Repeal",
       "2026 City Budget",
       "Snap Curfew",
@@ -361363,6 +361427,16 @@
       "Bring Chicago Home"
     ],
     "featured_report": {
+      "Gambling Ban": {
+        "status": "populated",
+        "positions_written": 49,
+        "breakdown": {
+          "Oppositional": 32,
+          "Affirmative": 15,
+          "-": 1,
+          "Neutral": 1
+        }
+      },
       "1FW Repeal": {
         "status": "populated",
         "positions_written": 49,

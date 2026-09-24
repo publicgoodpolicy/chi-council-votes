@@ -1,9 +1,9 @@
 {
   "schema_version": 1.0,
-  "generated_at": "2026-08-16T18:21:37Z",
+  "generated_at": "2026-09-24T14:43:25Z",
   "source": "Chicago Board of Education roster and vote positions, entered from public Board records into the project Google Sheet (tabs 'SB Members' and 'SB Votes') and ingested by ingest_sb_votes.py. Single-source per PS-99.",
   "_sync": {
-    "generated_at": "2026-08-16T18:21:37Z",
+    "generated_at": "2026-09-24T14:43:25Z",
     "sheet_id": "1tUJNv7S611xM-VO7LcZlOStbJ8O7LQ5deYjsHeVAwQ8",
     "ingest": "ingest_sb_votes.py",
     "source_tabs": {
@@ -12,7 +12,7 @@
         "data_rows": 21
       },
       "SB Votes": {
-        "sha256": "b1254819e3187d290eabf3d602b977e19054aa4d882a92b1bf4eaea48120c6c5",
+        "sha256": "9a0bbaa69fb74982abf30a819d5a8dbdaa316f0aa2ecc50aa94b761e18a84d6c",
         "columns": 29,
         "data_rows": 273
       },
@@ -6025,7 +6025,7 @@
       "full": "Resolution Appointing Sean B. Harden as Commissioner of the Public Building Commission of Chicago",
       "date": "2025-01-30",
       "desc": "",
-      "tag": "Appointments",
+      "tag": "Appointment",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4399",
       "vote_id": "25-0130-RS1"
     },
@@ -6034,7 +6034,7 @@
       "full": "Ratify Resolution Regarding Acting Inspector General and Inspector General Philip Wagenknecht ; 25-0130-RS5 Resolution by the Board of Education to Support the District’s Application for the Magnet Schools Assistance Program ; 25-0130-RS6 Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies",
       "date": "2025-01-30",
       "desc": "",
-      "tag": "Consent Agenda- Resolutions",
+      "tag": "Consent Agenda: Resolutions",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4399",
       "vote_id": "25-0130-RS4"
     },
@@ -6043,7 +6043,7 @@
       "full": "Transfer of Funds ; 25-0130-PR1 Authorize the Third (Final) Renewal Agreement with B & L Distributors, Inc. for the Purchase of Furniture and Related Accessories and Services ; 25-0130-PR2 Authorize the Third (Final) Renewal Agreement with Hertz Furniture Systems, LLC for the Purchase of Furniture and Related Accessories and Services ; 25-0130-PR3 Authorize the Third (Final) Renewal Agreements with Various Vendors for the Purchase of Furniture and Related Accessories and Services ; 25-0130-PR4 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program ; 25-0130-PR5 Amend Board Report 23-1214-PR2 Authorize the First (Final) Renewal Agreement with Carahsoft Technology Corp. for Identity and Access Management Services ; 25-0130-PR6 Authorize a New Agreement with CDW Government LLC for the Purchase of Audio Visual and Interactive Whiteboard Equipment ; 25-0130-PR7 Authorize the First Renewal Agreement with QBS LLC for De-Escalation and Physical Restraint Training Services",
       "date": "2025-01-30",
       "desc": "",
-      "tag": "Consent Agenda-Procurement",
+      "tag": "Consent Agenda: Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4399",
       "vote_id": "25-0130-EX1"
     },
@@ -6052,7 +6052,7 @@
       "full": "Amend Board Report 24-1101-AR2 Amend Board Report 24-0829-AR3 Amend Board Report 24-0627-AR2 Authorize Continued Retention of Various Outside Counsel Law Firms",
       "date": "2025-01-30",
       "desc": "",
-      "tag": "Consent Agenda- General Counsel",
+      "tag": "Consent Agenda: General Counsel",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4399",
       "vote_id": "25-0130-AR2"
     },
@@ -6061,7 +6061,7 @@
       "full": "Amend Board Report 24-0425-AR5 Workers’ Compensation Payment for Lump Sum Settlement for Mary Casey - Case Nos.  07 WC 044753; 08 WC 019807; 14 WC 017919 and 14 WC 017980 ; 25-0130-AR4 Workers’ Compensation Payment for Lump Sum Settlement for Linda Spence, Case No. 23 WC 000477",
       "date": "2025-01-30",
       "desc": "",
-      "tag": "Consent Agenda- General Counsel",
+      "tag": "Consent Agenda: General Counsel",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4399",
       "vote_id": "25-0130-AR3"
     },
@@ -6124,7 +6124,7 @@
       "full": "Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies; 25-0227-EX1 Transfer of Funds",
       "date": "2025-02-27",
       "desc": "",
-      "tag": "Consent Agenda- Resolutions",
+      "tag": "Consent Agenda: Resolutions",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4400",
       "vote_id": "25-0227-RS5"
     },
@@ -6178,7 +6178,7 @@
       "full": "Transfer and Appoint Senior Assistant General Counsel Department of Law (Frank A. Johns); 25-0227-AR3  Transfer and Appoint Senior Assistant General Counsel Department of Law (Talia D. Shifron); 25-0227-AR4 Authorize Retention of the Law Firm Wagstaff & Cartmell, LLP; 25-0227-AR6 Approve Payment of Proposed Settlement Regarding Tamara Castaneda, Case No. 22 L 002807; 25-0227-AR7  Approve Payment of Proposed Settlement Regarding Jane Doe, Case No. 2024 L 001810; 25-0227-AR8        Approve Payment of Proposed Settlement Regarding C.B., Student by His Mother B.B., et al. v. Board of Education, et al., Case No. 20-cv-586; 25-0227-AR9        Approve Payment of Proposed Settlement Regarding Attorneys’ Fees for Asia Gaines, for Herself and As Next Friend of Minor Child, J.C. v. Board, et al., Case No. 19 CV 775",
       "date": "2025-02-27",
       "desc": "",
-      "tag": "Consent Agenda- General Counsel",
+      "tag": "Consent Agenda: General Counsel",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4400",
       "vote_id": "25-0227-AR2"
     },
@@ -6187,7 +6187,7 @@
       "full": "Amend Board Report 25-0130-AR2 Amend Board Report 24-1101-AR2 Amend Board Report 24-0829-AR3 Amend Board Report 24-0627-AR2 Authorize Continued Retention of Various Outside Counsel Law Firms",
       "date": "2025-02-27",
       "desc": "",
-      "tag": "Consent Agenda- General Counsel",
+      "tag": "Consent Agenda: General Counsel",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4400",
       "vote_id": "25-0227-AR5"
     },
@@ -6196,7 +6196,7 @@
       "full": "Amend Board Report 24-0627-AR7 Authorize Continued Retention of the Law Firm Himes, Petrarca & Fester, CHTD.",
       "date": "2025-02-27",
       "desc": "",
-      "tag": "Consent Agenda- General Counsel",
+      "tag": "Consent Agenda: General Counsel",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4400",
       "vote_id": "25-0227-AR10"
     },
@@ -6205,7 +6205,7 @@
       "full": "Transfer and Appoint Title IX Officer Effective February 27, 2025 (Elizabeth Mendoza Browne); 25-0227-EX6 Report on Principal Contracts (New ALSC) (Lekenya Sanders-Sharpe, Collins HS);",
       "date": "2025-02-27",
       "desc": "",
-      "tag": "Consent Agenda- CEO",
+      "tag": "Consent Agenda: CEO",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4400",
       "vote_id": "25-0227-EX5"
     },
@@ -6250,7 +6250,7 @@
       "full": "Resolution Appointing Ed Bannon to the Board of Trustees of the Public School Teachers’ Pension and Retirement Fund of the City of Chicago Adopted      25-0320-RS4 Resolution Appointing Emma Lozano to the Board of Trustees of the Public School Teachers’ Pension and Retirement Fund of the City of Chicago",
       "date": "2025-03-20",
       "desc": "",
-      "tag": "Appointments",
+      "tag": "Appointment",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4401",
       "vote_id": "25-0320-RS3"
     },
@@ -6403,7 +6403,7 @@
       "full": "Appoint Assistant General Counsel Department of Law (Stephen Peters)",
       "date": "2025-03-20",
       "desc": "",
-      "tag": "Appointments",
+      "tag": "Appointment",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4401",
       "vote_id": "25-0320-AR2"
     },
@@ -6412,7 +6412,7 @@
       "full": "Workers’ Compensation Payment for Lump Sum Settlement for Maria Castaneda – Case No. 15 WC 020146 Adopted    25-0320-AR4 Workers’ Compensation Payment for Lump Sum Settlement for Tashanna Johnson-Jenkins – Case No. 22 WC 004881 Adopted    25-0320-AR5 Approve Payment of Proposed Settlement Regarding Kyle Burke v. Board, Case No. 21 L 5409 Adopted    25-0320-AR6 Approve Payment of Proposed Settlement Regarding Destiny Hart, Javari and Jamari Champion v. Board, Case No. 21 L 5413 Adopted    25-0320-AR7 Approve Payment of Proposed Settlement Regarding Isis Holmes v. Board, Case No. 21 L 5424 Adopted    25-0320-AR8 Approve Payment of Proposed Settlement Regarding Latiya and Nacasha Scales v. Board, Case No. 21 L 5411 Adopted    25-0320-AR9 Approve Payment of Proposed Settlement Regarding Ketara and Kefon Tucker v. Board, Case No. 21 L 5426 Adopted    25-0320-AR10 Approve Payment of Proposed Settlement Regarding Richard Warr and Jariah Fletcher v. Board, Case No. 21 L 5418 Adopted    25-0320-AR11 Approve Settlement Between the Board of Education of the City of Chicago and Cottina Woods, Grievance No. 10226/18-11-102(zf) Labor Arbitration",
       "date": "2025-03-20",
       "desc": "",
-      "tag": "Settlements",
+      "tag": "Settlement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4401",
       "vote_id": "25-0320-AR3"
     },
@@ -6421,7 +6421,7 @@
       "full": "Report on Principal Contract (ALSC New) (Rosa Jimenez, Solorio HS)",
       "date": "2025-03-20",
       "desc": "",
-      "tag": "Appointments",
+      "tag": "Appointment",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4401",
       "vote_id": "25-0320-EX10"
     },
@@ -6448,7 +6448,7 @@
       "full": "Resolution Adopting the Amended Annual School Budget for Fiscal Year 2025 (139M in TIF) ; 25-0424-RS5 Resolution Codifying the Creation of the Black Student Achievement Committee and Appointing Aaron “Jitu” Brown as Chair ; Authorize the Commencement of the Public Comment Period for the Amendment of the Commercial Activity Policy ; 25-0424-PO2 Amend Board Report 24-0725-PO1 and Adopt Final Comprehensive  Non-Discrimination, Harassment, and Retaliation Policy; 25-0424-EX1 Transfer of Funds ;  25-0424-PR2 Authorize a New Agreement with Renaissance Learning, Inc. for Student Assessment Platform Services; 25-0424-PR4 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program Adopted    25-0424-PR5 Authorize a New Agreement with Sentinel Technologies, Inc. for Firewall Licensing, Maintenance, and Support Services Adopted    25-0424-PR6 Authorize the Third Renewal Agreement with Various Vendors for Food Management Services Adopted    25-0424-PR7 Authorize a New Agreement with Various Vendors for Custom Printing Services and Promotional Items",
       "date": "2025-04-24",
       "desc": "",
-      "tag": "Appointments, Consent Agenda-Procurement, Consent Agenda- Resolutions, Consent Agenda- CEO",
+      "tag": "Appointment, Consent Agenda: Procurement, Consent Agenda: Resolutions, Consent Agenda: CEO",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4402",
       "vote_id": "25-0424-RS2"
     },
@@ -6502,7 +6502,7 @@
       "full": "Transfer and Appoint Senior Assistant General Counsel Department of Law (Yasemine Givan) Adopted    25-0424-AR3 Workers’ Compensation Payment for Lump Sum Settlement for Mary Parker - Case No. 23 WC 021745  Adopted    25-0424-AR4 Approve Payment of Proposed Settlement Regarding Yvonne Pinkston, on her own behalf and as guardian of K.S., a minor, et al. v. Board of Education, et al., Case No. 19-cv-06477",
       "date": "2025-04-24",
       "desc": "",
-      "tag": "Appointments, Settlements",
+      "tag": "Appointment, Settlement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4402",
       "vote_id": "25-0424-AR2"
     },
@@ -6511,7 +6511,7 @@
       "full": "Approve and Ratify Tentative Collective Bargaining Agreement Between the Board of Education of the City of Chicago and the Chicago Teachers Union, Local 1, American Federation of Teachers, AFL-CIO Adopted    25-0424-EX21 Warning Resolution – Joel Ricks, Tenured Teacher, Assigned to Morgan Park High School Adopted    25-0424-EX22 Transfer and Appoint Chief of Schools Officer Effective May 5, 2025  (Sydney Morris) *Adopted     25-0424-EX23 Report on Principal Contract (ALSC Renewals)",
       "date": "2025-04-24",
       "desc": "",
-      "tag": "Contract/Procurement, Appointments, Employee Discipline",
+      "tag": "Contract/Procurement, Appointment, Employee Discipline",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4402",
       "vote_id": "25-0424-EX20"
     },
@@ -6529,7 +6529,7 @@
       "full": "Resolution Authorizing Payments for Special Education Services to Various State-Approved Non-Public Facilities for Students with Disabilities Placed by Chicago Public Schools (CPS) Adopted     25-0529-RS3 Resolution Providing for the Issue of One or More Series of Unlimited Tax General Obligation Bonds of the Board of Education of the City of Chicago in an Aggregate Principal Amount Not to Exceed $650,000,000 for the Purpose of Paying the Costs of Capital Improvements Adopted    25-0529-RS4 Resolution Authorizing the Issue of One or More Series of Unlimited Tax General Obligation Refunding Bonds of the Board of Education of the City of Chicago in an Aggregate Principal Amount Not to Exceed $1,800,000,000 for the Purpose of Paying the Cost of Refunding Outstanding Bonds of Said Board of Education Adopted    25-0529-RS5 Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies Adopted    25-0529-RS6 Resolution Authorize Appointment of Members to the Local School Council Advisory Board for the Term of Office July 1, 2025 - June 30, 2027 ;  25-0529-PO1 Authorize the Commencement of the Public Comment Period for the Accelerated Placement Policy",
       "date": "2025-05-29",
       "desc": "",
-      "tag": "Consent Agenda- Resolutions",
+      "tag": "Consent Agenda: Resolutions",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4403",
       "vote_id": "25-0529-RS2"
     },
@@ -6556,7 +6556,7 @@
       "full": "Transfer of Funds ; 25-0529-ED1 Amend Board Report 24-0222-ED1 Academic Calendar for 2025-26 School Year  (put report card pick up on same day for ES and HS); 25-0529-FN1 Authorize Placement of the Board’s FY 2026 Excess Liability, Property and Specialty Insurance Programs with Various Insurance Companies Through Mesirow Insurance Services, Inc. ; 5-0529-PR1 Authorize the First Renewal Agreement with Various Vendors for the Purchase of Library Books, eBooks and Related Services Adopted    25-0529-PR2 Authorize New Agreements with Lakeshore Parent LLC DBA Lakeshore Learning Materials, LLC and School Specialty, LLC for the Purchase of PreK-12 Educational Supplies Adopted    25-0529-PR3 Authorize the Pre-Qualification Status of and New Agreements with Various Vendors to Provide Educational Technology and Digital Resource Services Adopted    25-0529-PR4 Authorize the First and Second (Final) Renewal Agreements with UTJ Holdco, Inc. DBA Teaching Strategies, LLC. for Early Childhood Curriculum and Assessment Services Adopted    25-0529-PR5 Authorize a New Agreement with National Louis University for Class Observations for Pre-K Classroom Services Adopted    25-0529-PR6 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program Adopted    25-0529-PR7 Amend Board Report 23-0426-PR18 Authorize a New Agreement with CDW Government LLC for Building Automation System (BAS) Installation, Maintenance, Repair, and Resources Adopted    25-0529-PR8 Amend Board Report 24-0523-PR12 Authorize the Second (Final) Renewal Agreement with Various Vendors for Field Support Services Adopted    25-0529-PR9 Authorize the First Renewal Agreement with Various Vendors for the Purchase and/or Lease of Network Servers and Hyperconvergence Adopted    25-0529-PR10 Authorize the First Renewal Agreement with Curriculum Associates, LLC for  K-2 Reading and Mathematic Assessment Services",
       "date": "2025-05-29",
       "desc": "",
-      "tag": "Consent Agenda-Procurement, Consent Agenda- CEO",
+      "tag": "Consent Agenda: Procurement, Consent Agenda: CEO",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4403",
       "vote_id": "25-0529-EX1"
     },
@@ -6565,7 +6565,7 @@
       "full": "Appoint Assistant General Counsel Department of Law (Clara Kent) Adopted    25-0529-AR3 Appoint Assistant General Counsel Department of Law (André Smith) Adopted    25-0529-AR4 Appoint Assistant General Counsel Department of Law (Alberto Vargas) Adopted    25-0529-AR5 Amend Board Report 25-0227-AR5 Amend Board Report 25-0130-AR2 Amend Board Report 24-1101-AR2 Amend Board Report 24-0829-AR3 Amend Board Report 24-0627-AR2 Authorize Continued Retention of Various Outside Counsel Law Firms Adopted    25-0529-AR6 Workers’ Compensation Payment for Lump Sum Settlement for Esmeralda Marrero - Case No. 21 WC 033769 Adopted    25-0529-AR7 Approve Settlement Between the Board of Education of the City of Chicago and Nancy Degracia Wage Claim",
       "date": "2025-05-29",
       "desc": "",
-      "tag": "Consent Agenda- General Counsel",
+      "tag": "Consent Agenda: General Counsel",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4403",
       "vote_id": "25-0529-AR2"
     },
@@ -6574,7 +6574,7 @@
       "full": "Warning Resolution – Antonina Luszczak, Tenured Teacher, Assigned to Skinner North Classical School Adopted    25-0529-EX5 Report on Principal Contract (ALSC Renewals)",
       "date": "2025-05-29",
       "desc": "",
-      "tag": "Appointments, Employee Discipline, Employee Dismissal",
+      "tag": "Appointment, Employee Discipline, Employee Dismissal",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4403",
       "vote_id": "25-0529-EX4"
     },
@@ -6709,7 +6709,7 @@
       "full": "Resolution to Transfer and Appoint Dr. Macquline King as Interim Superintendent/Chief Executive Officer",
       "date": "2025-06-11",
       "desc": "",
-      "tag": "Appointments",
+      "tag": "Appointment",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4424",
       "vote_id": "25-0611-RS1"
     },
@@ -6718,7 +6718,7 @@
       "full": "Motion RE: Appoint Chief of Staff to the Board of Education (Fae Rabin) for $185k",
       "date": "2025-06-11",
       "desc": "",
-      "tag": "Appointments",
+      "tag": "Appointment",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4424",
       "vote_id": "25-0611-MO3"
     },
@@ -6727,7 +6727,7 @@
       "full": "Resolution Authorizing Expenditures at Beginning of Fiscal Year 2026 *Adopted    25-0626-RS2 Resolution to Authorize Appointment of Members to the ESSA Title I *Adopted     25-0626-RS3 Resolution to Request the Public Building Commission of Chicago to Dedicate Two Alleys Located on the Former Louis Armstrong School Property *Adopted    25-0626-RS4 Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies *Adopted    25-0626-RS5 Resolution Authorize Appointment of Members to the Local School Council Advisory Board for the Term of Office July 1, 2025 - June 30, 2027 *Adopted    25-0626-RS6 Resolution Appointment of Student Representative Members to Local School Councils for the Term July 1, 2025 - June 30, 2026; 25-0626-PO1 Authorize the Commencement of the Public Comment Period for Reporting of Child Abuse, Neglect and Inappropriate Relations Between Adults and Students *Adopted    25-0626-PO2 Authorize the Commencement of the Public Comment Period for Title I Every Student Succeeds Act (ESSA) Parent and Family Engagement *Adopted    25-0626-PO3 Amend Policy on Commercial Activity ; 25-0626-EX1 Transfer of Funds ; 25-0626-OP1 Authorize the Fourth Renewal of the Lease Agreement with Highland Avondale Properties LLC for the Use of Office Space at 6323 North Avondale Avenue *Adopted    25-0626-OP2 Authorization to Accept Title and Possession of 3101 W. Bryn Mawr Ave. and 3024 W. Foster Ave.  from the City of Chicago for Athletic Fields and Additional Open Space at the Northside College Prep High School *Adopted    25-0626-OP3 Authorization to Acquire an Easement for the Construction of a Gymnasium Annex for John T. McCutcheon Steam Elementary School *Adopted    25-0626-OP4 Permanent Debarment of Peter Colomb *Adopted    25-0626-OP5 Permanent Debarment of Jayla Cooper *Adopted    25-0626-OP6 Permanent Debarment of Eric Delgado *Adopted    25-0626-OP7 Permanent Debarment of Christian Demus ; 25-0626-PR1 Authorize the First Renewal Agreement with Youth Advocate Programs, Inc. for Youth Therapy Services *Adopted    25-0626-PR2 Authorize the First Renewal Agreement with Various Vendors for Virtual Learning Online Courses *Adopted    25-0626-PR3 Authorize the First (Final) Renewal Agreement with Arbitersports, LLC for Online Payment Services *Adopted    25-0626-PR4 Authorize the First Renewal Agreements with Various Vendors to Provide Safe Haven Sites and Services *Adopted    25-0626-PR5 Authorize the Annual Renewal Agreement with Oracle America, Inc. for Licensing and Support for Oracle Enterprise Financial Systems *Adopted    25-0626-PR6 Authorize a New Agreement with Mythics, LLC for Oracle Infrastructure Upgrades *Adopted    25-0626-PR7 Authorize the Third (Final) Renewal Agreement with Chicago Fire Protection LLC for Fire Alarm System Maintenance and Repair Services ; 25-0626-PR8 Authorize the Third (Final) Renewal Agreement with Johnson Controls Fire Protection LP for Fire Suppression Ansul and Exhaust System Maintenance and Repair Services *Adopted    25-0626-PR9 Authorize the Third (Final) Renewal Agreement with Johnson Controls Fire Protection LP for Fire Suppression System Maintenance and Repair Services *Adopted    25-0626-PR10 Authorize the Third (Final) Renewal Agreement with Various Vendors for Groundskeeping Products and Services *Adopted    25-0626-PR11 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program",
       "date": "2025-06-26",
       "desc": "",
-      "tag": "Consent Agenda- CEO, Consent Agenda- General Counsel, Consent Agenda-Procurement, Consent Agenda- Resolutions, Appointments",
+      "tag": "Consent Agenda: CEO, Consent Agenda: General Counsel, Consent Agenda: Procurement, Consent Agenda: Resolutions, Appointment",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4404",
       "vote_id": "25-0626-RS1"
     },
@@ -6754,7 +6754,7 @@
       "full": "Appoint Assistant General Counsel Department of Law (Allyson R. Hollie) Adopted    25-0626-AR3 Authorize Continued Retention of Various Outside Counsel Law Firms Adopted    25-0626-AR4 Workers’ Compensation Payment for Lump Sum Settlement for John Byrne, Administrator of the Estate of Michelle Byrne - Case No. 22 WC 026577 Adopted    25-0626-AR5 Workers’ Compensation Payment for Lump Sum Settlement for Sara Hainsfurther- Case No. 19 WC 001856 Adopted    25-0626-AR6 Approve Payment of Proposed Settlement Regarding J.D. Adopted    25-0626-AR7 Approve Payment of Proposed Settlement Regarding Christopher Toczycki, Inc. (“CTI”)",
       "date": "2025-06-26",
       "desc": "",
-      "tag": "Contract/Procurement, Appointments, Settlements",
+      "tag": "Contract/Procurement, Appointment, Settlement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4404",
       "vote_id": "25-0626-AR2"
     },
@@ -6763,7 +6763,7 @@
       "full": "Authorize Continued Retention of the Law Firm Himes, Petrarca & Fester, CHTD.",
       "date": "2025-06-26",
       "desc": "",
-      "tag": "Consent Agenda-Procurement",
+      "tag": "Consent Agenda: Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4404",
       "vote_id": "25-0626-AR8"
     },
@@ -6772,7 +6772,7 @@
       "full": "Report on Principal Contract (ALSC Renewals)",
       "date": "2025-06-26",
       "desc": "",
-      "tag": "Appointments",
+      "tag": "Appointment",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4404",
       "vote_id": "25-0626-EX5"
     },
@@ -6790,7 +6790,7 @@
       "full": "Resolution Adopting the CPS Arts Education Plan 2.0: Cultivating Creativity 2025-2030 Adopted    25-0724-RS4 Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies ; 25-0724-PO1 Authorize the Commencement of the Public Comment Period for the Auditor Independence and Provision of Consulting Services by External Auditors Policy Adopted    25-0724-PO2 Authorize the Commencement of the Public Comment Period for the Amendment of the Imposition of Charges on Returned Payment Instruments Policy Adopted    25-0724-PO3 Authorize the Commencement of the Public Comment Period for the Amendment of the Paid Time Off Policy Adopted    25-0724-PO4 Amend Board Report 23-0628-PO4 Accelerated Placement Policy",
       "date": "2025-07-24",
       "desc": "",
-      "tag": "Policy Resolution, Appointments",
+      "tag": "Policy Resolution, Appointment",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4405",
       "vote_id": "25-0724-RS3"
     },
@@ -6799,7 +6799,7 @@
       "full": "Transfer of Funds; 25-0724-PR2 Authorize a New Agreement with Riverside Assessments, LLC DBA Riverside Insights for the Purchase of Test Materials for High School Admissions, Selective Enrollment, Comprehensive Gifted, Accelerated Placement, and Related Services Adopted    25-0724-PR3 Authorize the Pre-Qualification Status of and New Agreements with Various Vendors to Provide Job Order Contracting Services Adopted    25-0724-PR4 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program Adopted    25-0724-PR5 Authorize the First (Final) Renewal Agreement with Carahsoft Technology Corp. for Docusign Electronic Signature Platform and Related Services Adopted    25-0724-PR6 Authorize the First Renewal Agreement with Amazon.com Sales, Inc dba Amazon.com Services LLC. for Tail Spend Marketplace Products and Services Adopted    25-0724-PR7 Authorize the Third Renewal Agreement with LINEV Systems US, Inc. for the Purchase of Portable X-Ray Machines and Related Installation, Maintenance and Training Services Adopted    25-0724-PR8 Amend Board Report 23-0524-PR16 Authorize the First and Second (Final) Renewal Agreement with Various Vendors for Student Transportation Services (School Bus Services) Adopted    25-0724-PR9 Authorize the First and Second (Final) Renewal Agreement with CIMPAR, S.C. for Vaccination and School Physical Services",
       "date": "2025-07-24",
       "desc": "",
-      "tag": "Consent Agenda-Procurement",
+      "tag": "Consent Agenda: Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4405",
       "vote_id": "25-0724-EX1"
     },
@@ -6817,7 +6817,7 @@
       "full": "Transfer and Appoint Deputy General Counsel Department of Law (Laurel C. Baker) Adopted    25-0724-AR3 Workers’ Compensation Payment for Lump Sum Settlement for Angel Weaver - Case Nos. 18 WC 032562 and 22 WC 06441 Adopted    25-0724-AR4 Approve Payment of Proposed Settlement Regarding John Doe v.  Vega Carl Von Linne Elementary School, Chicago Board of Education, Chicago Public Schools a/k/a CPS, City of Chicago School District 299, and City of Chicago - Case No. 24 L 002928  Adopted    25-0724-AR5 Approve Payment of Proposed Settlement Regarding Johnny Doe v. Board of Education; Mercy Home for Boys & Girls; Catholic Bishop of Chicago Mercy Home for Boys & Girls v. Elizabeth Robbins Case No. 23 L 006478 Adopted    25-0724-AR6 Property Tax Appeal Refund – Authorize Settlement for PTAB No. 19-51720 400 North Lasalle Condominium Association",
       "date": "2025-07-24",
       "desc": "",
-      "tag": "Appointments, Settlements",
+      "tag": "Appointment, Settlement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4405",
       "vote_id": "25-0724-AR2"
     },
@@ -6835,7 +6835,7 @@
       "full": "Motion RE: Appointment of Acting General Counsel (Elizabeth Barton)",
       "date": "2025-07-24",
       "desc": "",
-      "tag": "Appointments",
+      "tag": "Appointment",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4405",
       "vote_id": "25-0724-MO3"
     },
@@ -6853,7 +6853,7 @@
       "full": "Resolution Adopting a Final One-Year Capital Improvement Plan of the Board of Education of the City of Chicago for Fiscal Year 2026 Adopted    25-0828-RS3 Resolution Levying Property Taxes and Authorizing and Directing the Filing of a Controller’s Certificate for the Fiscal Year 2026 for School and Capital Improvement Purposes of the Board of Education of the City of Chicago Adopted     25-0828-RS4 Resolution Authorizing the Issuance of Educational Purposes Tax Anticipation Warrants and Notes of the Board of Education of the City of Chicago, Illinois, in a Maximum Principal Amount Not to Exceed $1,250,000,000 Outstanding. ; 25-0828-RS5 Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies Adopted    25-0828-RS6 Resolution RE: Appointment of New Members to the Local School Council Advisory Board to Fill Vacancies for the Current Term of Office  ; 25-0828-PO1 Authorize the Commencement of the Public Comment Period for the Internet Safety Policy Adopted    25-0828-PO2 Authorize the Commencement of the Public Comment Period for the Ownership of Intellectual Property Policy Adopted    25-0828-PO3 Authorize the Commencement of the Public Comment Period for the Staff Acceptable Use Policy Adopted    25-0828-PO4 Authorize the Commencement of the Public Comment Period for the Student Acceptable Use Policy Adopted    25-0828-PO5 Amend Board Report 22-0622-PO2 Policy on the Reporting of Child Abuse, Neglect and Inappropriate Relations Between Adults and Students Adopted    25-0828-PO6 Rescind Board Report 18-0926-PO1 Rescind and Adopt New ESSA Title I Parent & Family Engagement Policy ; 25-0828-EX1 Transfer of Funds  ; 25-0828-OP1 Transfer Title to Excess Real Estate Located at 3700-3718 South Prairie Avenue to the Chicago Park District ; 25-0828-PR1 Amend Board Report 24-0820-PRDA15 Authorize the First and Second (Final) Renewal Agreements with All American Sports Corp dba Riddell All American Sports and Schutt Sports, LLC for Football Equipment Reconditioning, Recertification, New Purchases, and Related Services for Athlete Safety Adopted    25-0828-PR2 Amend Board Report 24-1101-PR3 Amend Board Report 24-0321-PR2 Amend Board Report 23-1025-PR9 Authorize the First and Second (Final) Renewal Agreement with Various Contractors to Provide Various Trades Work Over $35,000 for the Operations and Maintenance Program ; 25-0828-PR3 Authorize the First and Second (Final) Renewal Agreement with Constellation Newenergy-Gas Division, LLC for Natural Gas Supply Services Adopted    25-0828-PR4 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program Adopted    25-0828-PR5 Authorize the Second (Final) Renewal Agreements with T-Mobile, Inc., Comcast Corporation, and RCN Cable TV of Chicago, Inc., Under Chicago Connected for Internet Connectivity and Related Services Adopted    25-0828-PR6 Authorize the Third (Final) Renewal Agreement with Various Vendors to Provide Safe Passage Services for Designated Neighborhoods",
       "date": "2025-08-28",
       "desc": "",
-      "tag": "Appointments, Consent Agenda- General Counsel, Consent Agenda-Procurement, Consent Agenda- Resolutions",
+      "tag": "Appointment, Consent Agenda: General Counsel, Consent Agenda: Procurement, Consent Agenda: Resolutions",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4406",
       "vote_id": "25-0828-RS2"
     },
@@ -6862,7 +6862,7 @@
       "full": "Workers’ Compensation Payment for Lump Sum Settlement for Shirley Collins - Case No. 02 WC 64347 Adopted    25-0828-AR3 Approve Payment of Proposed Settlement Regarding John Thuet and Michelle Brumfield v. Board of Education, et al.",
       "date": "2025-08-28",
       "desc": "",
-      "tag": "Settlements",
+      "tag": "Settlement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4406",
       "vote_id": "25-0828-AR2"
     },
@@ -6889,7 +6889,7 @@
       "full": "Resolution to Request the Public Building Commission of Chicago to Transfer Title of Real Estate for Various School Sites to the City of Chicago in Trust for the use of Schools Adopted    25-0925-RS2 Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies Adopted     25-0925-RS3 Resolution RE: Appointment of Chairperson for the Local School Council Advisory Board for the Current Term of Office; 25-0925-PO1 Amend Board Report 02-0522-PO01 Adopt Policy on Auditor Independence and Provision of Consulting Services by External Auditors Adopted    25-0925-PO2 Amend Board Report 03-1119-PO01 Adopt Policy on Imposition of Charges on Returned Payment Instruments Adopted    25-0925-PO3 Amend Board Report 24-0926-PO3 Paid Time Off Policy ; 25-0925-EX1 Transfer of Funds  Adopted    25-0925-EX2 Ratify the Fifth (Final) Option to Renew the Intergovernmental Agreement with the Department of Family & Support Services (DFSS) – the City of Chicago Adopted    25-0925-EX3 Ratify the Fourth (Final) Option to Renew the Intergovernmental Agreement with the Department of Family & Support Services (DFSS) – the City of Chicago ; 25-0925-PR1 Authorize the First (Final) Renewal Agreement with SchooLinks, Inc. to Provide a College and Career Enterprise Platform Adopted    25-0925-PR3 Authorize the First and Second (Final) Renewal Agreement with Ombudsman Educational Services, Ltd. and Pathways in Education-Illinois for Alternative Learning Opportunities Program Services Adopted   25-0925-PR4 Authorize the First and Second (Final) Renewal Agreement with Various Vendors for Cost Estimating Services Adopted    25-0925-PR5 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program Adopted    25-0925-PR6 Authorize the Second Renewal Agreement with Apple Inc. for the Purchase of Hardware, Software and Services Adopted    25-0925-PR7 Authorize the Second (Final) Renewal Agreement with Accurate Biometrics, Inc. for Comprehensive Fingerprinting and Related Services ;",
       "date": "2025-09-25",
       "desc": "",
-      "tag": "Consent Agenda- CEO, Consent Agenda- General Counsel, Consent Agenda-Procurement, Consent Agenda- Resolutions",
+      "tag": "Consent Agenda: CEO, Consent Agenda: General Counsel, Consent Agenda: Procurement, Consent Agenda: Resolutions",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4429",
       "vote_id": "25-0925-RS1"
     },
@@ -6898,7 +6898,7 @@
       "full": "Amend Board Report 25-0626-AR3 Authorize Continued Retention of Various Outside Counsel Law Firms Adopted    25-0925-AR3 Approve Payment of Proposed Settlement Regarding John Doe V. Board of Education of the City of Chicago Case No. 24 L 012131 ; 25-0925-AR4 Approve Payment of Proposed Settlement Regarding Eric Lezcano v. Board of Education, et al. Adopted    25-0925-AR5 Property Tax Appeal Refund – Authorize Settlement for PTAB Nos. 21-46465; 22-55947 and 23-42548 840 N. Lake Shore Drive Condo. Assoc. Adopted    25-0925-AR6 Property Tax Appeal Refund – Authorize Settlement for PTAB Nos. 21-53612 and 22-57312 the Legacy at Millennium Park Condo. Assoc. (Parking Spaces)",
       "date": "2025-09-25",
       "desc": "",
-      "tag": "Settlements, Contract/Procurement",
+      "tag": "Settlement, Contract/Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4429",
       "vote_id": "25-0925-AR2"
     },
@@ -6943,7 +6943,7 @@
       "full": "Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies ; 25-1023-PO1 Amend Board Report 00-0322-PO2 Ownership of Intellectual Property Policy Adopted    25-1023-PO2 Amend Board Report 19-0828-PO2 Student Acceptable Use Policy Adopted    25-1023-PO3 Amend Board Report 19-0828-PO3 Staff Acceptable Use Policy Adopted    25-1023-PO4 Rescind Board Report 12-0627-PO2 Internet Safety ; 25-1023-ED1 Approve Application for School Code Waiver Regarding Physical Education; 25-1023-EX1 Transfer of Funds  ; 25-1023-OP1 Permanent Debarment of Brian Metcalf and Kimberly Maddox Adopted    25-1023-OP2 Permanent Debarment of Nations Classroom Adopted    25-1023-OP3 Permanent Debarment of Lavon and Natasha Tims, Mind Over Matter Foundation, Inc., My Brothers and My Sisters Keeper, Inc., and Freadom Productions, Inc. Adopted    25-1023-OP4 Permanent Debarment of Joseph Samuels and Linda Hightower ; 25-1023-PR1 Authorize the New Agreements for the Purchase of Physical Education Supplies and Equipment with BSN Sports LLC and School Health Corporation Adopted    25-1023-PR2 Authorize the Second (Final) Renewal Agreement with Various Vendors to Provide Out of School Time and Student Health and Wellness Products and Services ; 25-1023-PR3 Amend Board Report 23-1025-PR11 Authorize a New Agreement with Various Vendors for Furniture, Accessories and Related Design, Reconfiguration, and Repair Services Adopted    25-1023-PR4 Authorize the First and Second (Final) Renewal Agreement with Trane U.S. Inc. DBA Trane Integrated Funding Solutions for the Purchase or Rental of Heavy Equipment Adopted    25-1023-PR5 Authorize the Pre-Qualification Status of and New Agreements with Various Vendors to Provide Design-Build Contracting Services Adopted    25-1023-PR6 Authorize the Second (Final) Renewal Agreement with Sutton Ford, Inc. to Provide Various Vehicles, Including Maintenance and Related Services Adopted    25-1023-PR7 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program",
       "date": "2025-10-23",
       "desc": "",
-      "tag": "Consent Agenda- CEO, Consent Agenda- General Counsel, Consent Agenda-Procurement, Consent Agenda- Resolutions",
+      "tag": "Consent Agenda: CEO, Consent Agenda: General Counsel, Consent Agenda: Procurement, Consent Agenda: Resolutions",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4430",
       "vote_id": "25-1023-RS2"
     },
@@ -6961,7 +6961,7 @@
       "full": "Warning Resolution – Raashida Preston, Tenured Teacher, George Manierre Elementary School *Adopted    25-1023-EX5 Transfer and Appoint Chief Safety and Security Officer Effective October 6, 2025 and Ratify all Lawful Actions Taken as Chief Safety and Security Officer Since October 6, 2025 (Ronan Shableski) *Adopted    25-1023-EX6 Approve Appointment of Chief of Staff to the CEO Effective September 15, 2025 and Ratify all Lawful Actions Taken as Chief of Staff to CEO since September 15, 2025 (Julie Burnett) *Adopted    25-1023-EX7 Report on Principal Contract (Renewal ALSC)",
       "date": "2025-10-23",
       "desc": "",
-      "tag": "Appointments, Warning Resolution",
+      "tag": "Appointment, Warning Resolution",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4430",
       "vote_id": "25-1023-EX4"
     },
@@ -7042,7 +7042,7 @@
       "full": "Amend Board Report 25-0424-EX7 Authorize Renewal of the EPIC Academy Charter High School Agreement with Conditions",
       "date": "2025-12-03",
       "desc": "",
-      "tag": "Settlements",
+      "tag": "Settlement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4443",
       "vote_id": "25-1030-EX1-B"
     },
@@ -7051,7 +7051,7 @@
       "full": "Resolution Authorizing the Issuance of General Obligation Alternate Bonds of the Board of Education of the City of Chicago in an Aggregate Principal Amount Not to Exceed $1,800,000,000, Pursuant to the School Code and the Local Government Debt Reform Act and Authorizing Certain Other Matters ; 25-1218-PO1 Authorize the Commencement of the Public Comment Period for the Automatic External Defibrillators Policy Adopted    25-1218-PO2 Authorize the Commencement of the Public Comment Period for the Drug and Alcohol Free Workplace Policy Adopted    25-1218-PO3 Authorize the Commencement of the Public Comment Period for the Debarment Policy Adopted    25-1218-PO4 Authorize the Commencement of the Public Comment Period for the Indebtedness Policy Adopted    25-1218-PO5 Authorize the Commencement of the Public Comment Period for the Information Security Policy; 25-1218-EX1 Transfer of Funds (October 2025) Adopted    25-1218-EX2 Transfer of Funds (November 2025) Adopted    25-1218-EX3 Approve Entering into an Intergovernmental Agreement with the City Colleges of Chicago ; 25-1218-EX4 Approve Entering into an Intergovernmental Agreement with the Department of Family & Support Services (DFSS) – the City of Chicago ; 25-1218-OP1 Disposition of Bids Received for the Sale of Property Located at 1241 West 58th Street (Former Bontemps Elementary School) *Adopted    25-1218-OP2 Disposition of Offers Received for the Sale of Property Located at 1326 South Avers Avenue (Former Henson Elementary School) Adopted    25-1218-OP3 Disposition of Bids Received for the Sale of Property Located at 200 East 99th Street (Former Shedd Elementary School) ; 25-1218-PR1 Authorize a New Agreement with Various Vendors for Early Childhood Block Grant Services at Community Based Organizations (CBOS) Adopted    25-1218-PR2 Authorize the First and Second (Final) Renewal with Various Vendors for the Purchase of Maintenance, Repair and Operation Supplies (\"MRO\") and Personal Protective Equipment (\"PPE\") Adopted   25-1218-PR3 Authorize the Pre-Qualification Status of and New Agreements with Various Vendors to Provide Construction Material Testing and Inspection Services Adopted    25-1218-PR4 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program Adopted    25-1218-PR5 Authorize a New Agreement with BIF III US Aggregator (Delaware) DBA Center Square MSA Holdings LLC for Data Center Services Adopted    25-1218-PR6 Authorize the First and Second (Final) Renewal Agreement with Cannon Cochran Management Services, Inc. for Third Party Claims Administration Services Adopted    25-1218-PR7 Authorize the First, Second, and Third (Final) Renewal Agreement with Health Care Service Corporation (HCSC), a Mutual Legal Reserve Company for HMO and PPO Healthcare Administrative Services Medical and Ancillary Medical Services, and Authorize Funding of Health Savings Accounts and Agreement with Webster Bank N.A. ;",
       "date": "2025-12-18",
       "desc": "",
-      "tag": "Property Purchase/Sale, Consent Agenda- CEO, Consent Agenda- General Counsel, Consent Agenda-Procurement, Consent Agenda- Resolutions",
+      "tag": "Property Purchase/Sale, Consent Agenda: CEO, Consent Agenda: General Counsel, Consent Agenda: Procurement, Consent Agenda: Resolutions",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4431",
       "vote_id": "25-1218-RS1"
     },
@@ -7060,7 +7060,7 @@
       "full": "Ratify and Appoint Assistant General Counsel Department of Law (Evan Deichstetter) Adopted    25-1218-AR3 Transfer and Appoint Senior Assistant General Counsel Department of Law (Colleen Kauth) Adopted    25-1218-AR4 Appoint Assistant General Counsel Department of Law (Karina Salazar McGuffie) Adopted    25-1218-AR5 Amend Board Report 25-1023-AR3 Amend Board Report 25-0925-AR2 Amend Board Report 25-0626-AR3 Authorize Continued Retention of Various Outside Counsel Law Firms Adopted    25-1218-AR6 Workers’ Compensation Payment for Lump Sum Settlement for Harriet Joyner - Case No. 22 WC 003176 Adopted    25-1218-AR7 Workers’ Compensation Payment for Lump Sum Settlement for Bertha Sanchez - Case No. 23 WC 026108",
       "date": "2025-12-18",
       "desc": "",
-      "tag": "Appointments, Contract/Procurement",
+      "tag": "Appointment, Contract/Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4431",
       "vote_id": "25-1218-AR2"
     },
@@ -7087,7 +7087,7 @@
       "full": "Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies*",
       "date": "2025-12-18",
       "desc": "",
-      "tag": "Appointments",
+      "tag": "Appointment",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4431",
       "vote_id": "25-1218-RS2-A"
     },
@@ -7159,7 +7159,7 @@
       "full": "Authorize the Second (Final) Renewal Agreement with ATI Holdings, LLC for Sports Athletic Training Coverage and Related Services; 26-0129-PR2 Authorize New Agreements with Facility Optimization Solutions, LLC and the Gordian Group, Inc. for Unit Pricing Construction Management Services; 26-0129-PR3 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program; 26-0129-PR4 Amend Board Report 25-0130-PR5 Amend Board Report 23-1214-PR2 Authorize the First (Final) Renewal Agreement with Carahsoft Technology Corp. for Identity and Access Management Services; 26-0129-PR5 Authorize a New Agreement with ODP Business Solutions LLC for the Purchase of Office Supplies and Related Products and Services; 26-0129-PR6 Chief Procurement Officer Delegation of Authority Report for October and November 2025 Pursuant to Board Rule 7-14(c) and Chief Financial Officer Report for October and November 2025 Pursuant to Board Rule 7-13(d); 26-0129-PR7 Chief Procurement Officer Quarterly Report of Pre-Qualified Vendor Expenditures Pursuant to Board Rule 7-10; 26-0129-EX2 Report on Principal Contracts (New); 26-0129-EX3 Report on Principal Contracts (Renewals)",
       "date": "2026-01-29",
       "desc": "",
-      "tag": "Contract/Procurement, Consent Agenda-Procurement",
+      "tag": "Contract/Procurement, Consent Agenda: Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4432",
       "vote_id": "26-0129-PR1"
     },
@@ -7168,7 +7168,7 @@
       "full": "Report on Board Report Rescissions; 26-0129-AR2 Appoint Assistant General Counsel Department of Law (Brooke Evans); 26-0129-AR3 Appoint Assistant General Counsel Department of Law (Kathryn Wegrzynski); 26-0129-AR4 Amend Board Report 25-1218-AR5 Amend Board Report 25-1023-AR3 Amend Board Report 25-0925-AR2 Amend Board Report 25-0626-AR3 Authorize Continued Retention of Various Outside Counsel Law Firms;  26-0129-AR5 Workers’ Compensation Payment for Lump Sum Settlement for Linda Golliday - Case No. 22 WC 015810; 26-0129-AR6 Workers’ Compensation Payment for Lump Sum Settlement for Latasha Little - Case No. 21 WC 017112; 26-0129-AR7 Workers’ Compensation Payment for Lump Sum Settlement for Saretta Sims - Case No. 18 WC 021763; 26-0129-AR8 Approve Payment of Proposed Settlement Regarding Janet Doe, Mother and Next Friend of John Doe, a Minor v. Board of Education of the City of Chicago - Case No. 2024 L 000989",
       "date": "2026-01-29",
       "desc": "",
-      "tag": "Appointments, Consent Agenda- General Counsel, Settlements",
+      "tag": "Appointment, Consent Agenda: General Counsel, Settlement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4432",
       "vote_id": "26-0129-AR1"
     },
@@ -7276,7 +7276,7 @@
       "full": "Adopt Academic Calendar for 2026-27 School Year and 2027-28 School Year",
       "date": "2026-02-26",
       "desc": "",
-      "tag": "Consent Agenda- CEO",
+      "tag": "Consent Agenda: CEO",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4433",
       "vote_id": "26-0226-ED1"
     },
@@ -7330,7 +7330,7 @@
       "full": "Authorize the Second (Final) Renewal Agreement with Baker Tilly US, LLP for External Auditing Services; 26-0226-PR3 Amend Board Report 24-0926-PR2 Amend Board Report 24-0222-PR6 Authorize the First Renewal Agreement with Jones Lang Lasalle Americas, Inc. for Facility Management and Building Engineering Services; 26-0226-PR4 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program; 26-0226-PR5 Authorize the Third (Final) Renewal Agreement with AT&T Enterprises, LLC for Internet, Voice and Data Circuits and Services; 26-0226-PR6 Amend Board Report 25-0724-PR8 Amend Board Report 23-0524-PR16 Authorize the First and Second (Final) Renewal Agreement with Various Vendors for Student Transportation Services (School Bus Services); 26-0226-PR7 Chief Procurement Officer Delegation of Authority Report for December 2025 Pursuant to Board Rule 7-14(c) and Chief Financial Officer Report for December 2025 Pursuant to Board Rule 7-13(d)",
       "date": "2026-02-26",
       "desc": "",
-      "tag": "Contract/Procurement, Consent Agenda-Procurement",
+      "tag": "Contract/Procurement, Consent Agenda: Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4433",
       "vote_id": "26-0226-PR2"
     },
@@ -7339,7 +7339,7 @@
       "full": "Report on Principal Contracts (New); 26-0226-EX3 Report on Principal Contracts (Renewals)",
       "date": "2026-02-26",
       "desc": "",
-      "tag": "Consent Agenda- CEO",
+      "tag": "Consent Agenda: CEO",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4433",
       "vote_id": "26-0226-EX2"
     },
@@ -7348,7 +7348,7 @@
       "full": "Report on Board Report Rescissions",
       "date": "2026-02-26",
       "desc": "",
-      "tag": "Consent Agenda- General Counsel",
+      "tag": "Consent Agenda: General Counsel",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4433",
       "vote_id": "26-0226-AR1"
     },
@@ -7357,7 +7357,7 @@
       "full": "Amend Board Report 26-0129-AR4 Amend Board Report 25-1218-AR5 Amend Board Report 25-1023-AR3 Amend Board Report 25-0925-AR2 Amend Board Report 25-0626-AR3 Authorize Continued Retention of Various Outside Counsel Law Firms",
       "date": "2026-02-26",
       "desc": "",
-      "tag": "Consent Agenda- General Counsel, Contract/Procurement",
+      "tag": "Consent Agenda: General Counsel, Contract/Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4433",
       "vote_id": "26-0226-AR2"
     },
@@ -7366,7 +7366,7 @@
       "full": "Authorize Retention of the Law Firm Cronin & Co., Ltd; 26-0226-AR4 Workers’ Compensation Payment for Lump Sum Settlement for Marie Newberry - Case No. 23 WC 005945; 26-0226-AR5 Workers’ Compensation Payment for Lump Sum Settlement for Maria Segura - Case No. 21 WC 032181; 26-0226-AR6 Workers’ Compensation Payment for Lump Sum Settlement for Willie Thomas - Case No. 21 WC 05038; 26-0226-AR7 Approve Payment of Proposed Settlement Regarding Claims Brought by Donnette Bright, Pamela Kidd and Tennisha Cox Case No. 25 CV 05807 (Consolidated)",
       "date": "2026-02-26",
       "desc": "",
-      "tag": "Consent Agenda- General Counsel, Contract/Procurement, Settlements",
+      "tag": "Consent Agenda: General Counsel, Contract/Procurement, Settlement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4433",
       "vote_id": "26-0226-AR3"
     },
@@ -7375,7 +7375,7 @@
       "full": "Warning Resolution – Latanya McSwine, Tenured Teacher, Assigned to Morgan Park High School; 26-0226-EX5 Warning Resolution – Raul Valdivia, Tenured Teacher, Assigned to John Greenleaf Whittier Elementary School; 26-0226-EX6 Warning Resolution – Darnell Coleman, Tenured Teacher, Assigned to Frank I. Bennett Elementary School; 26-0226-EX7 Report on Principal Contract (New ALSC); 26-0226-EX8 Transfer and Appoint Chief Information Technology Officer Effective March 9, 2026 (Edward Wagner)",
       "date": "2026-02-26",
       "desc": "",
-      "tag": "Warning Resolution, Appointments, Consent Agenda- CEO",
+      "tag": "Warning Resolution, Appointment, Consent Agenda: CEO",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4433",
       "vote_id": "26-0226-EX4"
     },
@@ -7384,7 +7384,7 @@
       "full": "Adopt Finding that Pupil is a Non-Resident of the City of Chicago Indebted to the Chicago Public Schools for Non-Resident Tuition",
       "date": "2026-02-26",
       "desc": "",
-      "tag": "Consent Agenda- CEO",
+      "tag": "Consent Agenda: CEO",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4433",
       "vote_id": "26-0226-EX9"
     },
@@ -7456,7 +7456,7 @@
       "full": "To defer Board Report 26-0226-PR1, postponing further review and official action until the upcoming board meeting scheduled for March 19.",
       "date": "2026-03-04",
       "desc": "",
-      "tag": "Consent Agenda-Procurement",
+      "tag": "Consent Agenda: Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4454",
       "vote_id": "26-0226-PR1-C"
     },
@@ -7465,7 +7465,7 @@
       "full": "Amend Board Report 25-1023-PR2 Authorize the Second (Final) Renewal Agreement with Various Vendors to Provide Out of School Time and Student Health and Wellness Products and Services",
       "date": "2026-03-04",
       "desc": "",
-      "tag": "Consent Agenda-Procurement",
+      "tag": "Consent Agenda: Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4454",
       "vote_id": "26-0226-PR1-D"
     },
@@ -7537,7 +7537,7 @@
       "full": "Amend Board Report 25-0424-EX4 Authorize Renewal of the ASPIRA Charter School Agreement with Conditions",
       "date": "2026-03-19",
       "desc": "",
-      "tag": "Consent Agenda- CEO, Charter Schools",
+      "tag": "Consent Agenda: CEO, Charter Schools",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4434",
       "vote_id": "26-0319-EX2"
     },
@@ -7546,7 +7546,7 @@
       "full": "Authorize Extension of the Lease Agreement with 4600 S. Kedzie LLC for the Use of Space at 4600 South Kedzie Avenue; 26-0319-OP2 Authorize Extension of the Lease Agreement with Messiah Evangelical Lutheran Church for Use of the Building Located at 6200 West Patterson Avenue by Smyser Elementary School; 26-0319-PR1 Amend Board Report 25-0529-PR3 Authorize the Pre-Qualification Status of and New Agreements with Various Vendors to Provide Educational Technology and Digital Resource Services; 26-0319-PR2 Authorize the Second (Final) Renewal Agreement with Youth Advocate Programs, Inc. for Youth Therapy Services; 26-0319-PR4 Authorize the First (Final) Renewal Agreement with Various Vendors for Medical Related Equipment and Supplies, Personal Protective Equipment, and the Purchase, Installation, and Maintenance Services of Automated External Defibrillators (AED); 26-0319-PR6 Authorize the First and Second (Final) Renewal with Herc Rentals Inc. for the Purchase or Rental of Heavy Equipment; 26-0319-PR7 Authorize the Pre-Qualification Status of and New Agreements with Various Vendors to Provide Various Trades Work for the Operations and Maintenance Program; 26-0319-PR8 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program; 26-0319-PR9 Authorize the First Renewal Agreement with Active Internet Technologies, LLC DBA Finalsite for a District-Wide Communications Solution; 26-0319-PR10 Authorize the First and Second (Final) Renewal Agreement with ConvergeOne, Inc for Cloud-Based Call Center Managed Services; 26-0319-PR11 Chief Procurement Officer Delegation of Authority Report for January 2026 Pursuant to Board Rule 7-14(c) and Chief Financial Officer Report for January 2026 Pursuant to Board Rule 7-13(d)",
       "date": "2026-03-19",
       "desc": "",
-      "tag": "Contract/Procurement, Consent Agenda-Procurement",
+      "tag": "Contract/Procurement, Consent Agenda: Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4434",
       "vote_id": "26-0319-OP1"
     },
@@ -7555,7 +7555,7 @@
       "full": "Authorize the Third Renewal Agreement with Various Not-For-Profit Organizations for Sustainable Community Schools (SCS) Services",
       "date": "2026-03-19",
       "desc": "",
-      "tag": "Consent Agenda-Procurement, Contract/Procurement",
+      "tag": "Consent Agenda: Procurement, Contract/Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4434",
       "vote_id": "26-0319-PR3"
     },
@@ -7564,7 +7564,7 @@
       "full": "Authorize the Second (Final) Renewal Agreement with Jones Lang Lasalle Americas, Inc. for Facility Management and Building Engineering Services",
       "date": "2026-03-19",
       "desc": "",
-      "tag": "Consent Agenda-Procurement, Contract/Procurement",
+      "tag": "Consent Agenda: Procurement, Contract/Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4434",
       "vote_id": "26-0319-PR5"
     },
@@ -7573,7 +7573,7 @@
       "full": "Report on Principal Contracts (New); 26-0319-EX4 Report on Principal Contracts (Renewals); 26-0319-EX5 Adopt Finding that Pupil is a Non-Resident of the City of Chicago Indebted to the Chicago Public Schools for Non-Resident Tuition; 26-0319-EX6 Adopt Finding that Pupil is a Non-Resident of the City of Chicago Indebted to the Chicago Public Schools for Non-Resident Tuition; 26-0319-RS3 Resolution Approving Interim Superintendent/Chief Executive Officer’s Recommendation to Dismiss Educational Support Personnel",
       "date": "2026-03-19",
       "desc": "",
-      "tag": "Consent Agenda- CEO, Employee Dismissal",
+      "tag": "Consent Agenda: CEO, Employee Dismissal",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4434",
       "vote_id": "26-0319-EX3"
     },
@@ -7582,7 +7582,7 @@
       "full": "Amend Board Report 26-0226-AR2 Amend Board Report 26-0129-AR4 Amend Board Report 25-1218-AR5 Amend Board Report 25-1023-AR3 Amend Board Report 25-0925-AR2 Amend Board Report 25-0626-AR3 Authorize Continued Retention of Various Outside Counsel Law Firms",
       "date": "2026-03-19",
       "desc": "",
-      "tag": "Consent Agenda- General Counsel, Contract/Procurement",
+      "tag": "Consent Agenda: General Counsel, Contract/Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4434",
       "vote_id": "26-0319-AR2"
     },
@@ -7636,7 +7636,7 @@
       "full": "Resolution to Appoint Chief Executive Officer and to Approve Chief Executive Officer’s Employment Contract (Dr. Macquline King)",
       "date": "2026-03-30",
       "desc": "",
-      "tag": "Appointments",
+      "tag": "Appointment",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4457",
       "vote_id": "26-0330-RS2"
     },
@@ -7654,7 +7654,7 @@
       "full": "Motion RE: Elect Dr. Angel L. Velez Vice President of the Board of Education of the City of Chicago",
       "date": "2026-04-08",
       "desc": "",
-      "tag": "Appointments",
+      "tag": "Appointment",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4456",
       "vote_id": "26-0408-MO2"
     },
@@ -7726,7 +7726,7 @@
       "full": "Transfer of Funds; 26-0423-MS1 Authorize the Renaming / Designation of Schools",
       "date": "2026-04-23",
       "desc": "",
-      "tag": "Funds Transfer, Consent Agenda- CEO",
+      "tag": "Funds Transfer, Consent Agenda: CEO",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4435",
       "vote_id": "26-0423-EX1"
     },
@@ -7735,7 +7735,7 @@
       "full": "Amend Board Report 26-0226-OP2 Amend Board Report 24-1212-OP1 Authorize the Renewal of a Lease Agreement with the Catholic Bishop of Chicago for the Continued Use of Various Leased School Sites; 26-0423-PR1 Authorize the Second (Final) Renewal Agreement with Various Vendors to Provide Professional Learning Services; 26-0423-PR2 Amend Board Report 25-1218-PR2 Authorize the First and Second (Final) Renewal with Various Vendors for the Purchase of Maintenance, Repair and Operation Supplies (\"MRO\") and Personal Protective Equipment (\"PPE\"); 26-0423-PR3 Authorize the Pre-Qualification Status of and New Agreements with Various Vendors to Provide Services for the Green Schools Solar Program; 26-0423-PR4 Authorize the Fourth (Final) Renewal Agreement with Various Vendors for Food Management Services; 26-0423-PR5 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program; 26-0423-PR6 Amend Board Report 23-0426-PR17 Authorize the Second (Final) Renewal Agreement with RL Canning, Inc. for Service Desk and Tech Support Services; 26-0423-PR7 Amend Board Report 24-0627-PR8 Authorize the First and Second (Final) Renewal Agreement with Sentinel Technologies, Inc. for Information Technology and Security Systems Management, Monitoring and Maintenance Services; 26-0423-PR8 Authorize the First (Final) Renewal Agreement with Sentinel Technologies, Inc. for Firewall Licensing, Maintenance and Support Services; 26-0423-PR9 Chief Procurement Officer Delegation of Authority Report for February 2026 Pursuant to Board Rule 7-14(c) and Chief Financial Officer Report for February 2026 Pursuant to Board Rule 7-13(d)",
       "date": "2026-04-23",
       "desc": "",
-      "tag": "Contract/Procurement, Consent Agenda-Procurement",
+      "tag": "Contract/Procurement, Consent Agenda: Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4435",
       "vote_id": "26-0423-OP1"
     },
@@ -7744,7 +7744,7 @@
       "full": "Report on Principal Contracts (New); 26-0423-EX4 Report on Principal Contracts (Renewals); 26-0423-EX5 Report of the Chief Executive Officer Pursuant to Board Rule 5-4",
       "date": "2026-04-23",
       "desc": "",
-      "tag": "Consent Agenda- CEO",
+      "tag": "Consent Agenda: CEO",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4435",
       "vote_id": "26-0423-EX3"
     },
@@ -7753,7 +7753,7 @@
       "full": "Report on Board Report Rescissions; 26-0423-AR2 Amend Board Report 26-0319-AR2 Amend Board Report 26-0226-AR2 Amend Board Report 26-0129-AR4 Amend Board Report 25-1218-AR5 Amend Board Report 25-1023-AR3 Amend Board Report 25-0925-AR2 Amend Board Report 25-0626-AR3 Authorize Continued Retention of Various Outside Counsel Law Firms; 26-0423-AR3 Workers’ Compensation Payment for Lump Sum Settlement for Patricia Hunter-Scales - Case No. 07 WC 054809",
       "date": "2026-04-23",
       "desc": "",
-      "tag": "Consent Agenda- General Counsel, Contract/Procurement, Settlements",
+      "tag": "Consent Agenda: General Counsel, Contract/Procurement, Settlement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4435",
       "vote_id": "26-0423-AR1"
     },
@@ -7789,7 +7789,7 @@
       "full": "Amend Board Report 25-0626-EX2 Amend Board Report 25-0320-EX6 Authorize Renewal of the Youth Connection Charter School Agreement with Conditions *Regarding YCCS Chatham Academy Amendment",
       "date": "2026-04-23",
       "desc": "",
-      "tag": "Consent Agenda- CEO, Charter Schools",
+      "tag": "Consent Agenda: CEO, Charter Schools",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4435",
       "vote_id": "26-0423-EX2-A"
     },
@@ -7798,7 +7798,7 @@
       "full": "Amend Board Report 25-0626-EX2 Amend Board Report 25-0320-EX6 Authorize Renewal of the Youth Connection Charter School Agreement with Conditions *Regarding ASPIRA- Antonia Pantoja Amendment Postpone to May 28, 2026",
       "date": "2026-04-23",
       "desc": "",
-      "tag": "Consent Agenda- CEO, Charter Schools",
+      "tag": "Consent Agenda: CEO, Charter Schools",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4435",
       "vote_id": "26-0423-EX2-B"
     },
@@ -7852,7 +7852,7 @@
       "full": "Transfer and Appoint General Counsel Effective April 24, 2026 (Elizabeth K. Barton)",
       "date": "2026-04-23",
       "desc": "",
-      "tag": "Appointments",
+      "tag": "Appointment",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4435",
       "vote_id": "26-0423-BD1"
     },
@@ -7879,7 +7879,7 @@
       "full": "Amend Board Report 26-0330-RS2 Resolution to Appoint Superintendent/Chief Executive Officer and to Approve Superintendent/Chief Executive Officer's Employment Contract (Dr. Macquline King)",
       "date": "2026-05-13",
       "desc": "",
-      "tag": "Appointments",
+      "tag": "Appointment",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4458",
       "vote_id": "26-0513-RS1"
     },
@@ -7942,7 +7942,7 @@
       "full": "Authorize the Renaming / Designation of Schools; 26-0528-EX1 Transfer of Funds",
       "date": "2026-05-28",
       "desc": "",
-      "tag": "Consent Agenda- CEO, Funds Transfer",
+      "tag": "Consent Agenda: CEO, Funds Transfer",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
       "vote_id": "26-0528-MS1"
     },
@@ -7951,7 +7951,7 @@
       "full": "Amend Board Report 24-0125-EX5 Authorize the Renewal of the Chicago International Charter School Agreement with Conditions; 26-0528-EX3 Amend Board Report 25-0424-EX15 Authorize Renewal of the Rowe Elementary Charter School Agreement with Conditions; 26-0528-EX4 Amend Board Report 25-0424-EX16 Authorize Renewal of Urban Prep Charter Academy for Young Men High School Bronzeville Campus Agreement with Conditions; 26-0528-EX5 Amend Board Report 25-0424-EX17 Authorize Renewal of Urban Prep Charter Academy for Young Men High School Englewood Campus Agreement with Conditions",
       "date": "2026-05-28",
       "desc": "",
-      "tag": "Consent Agenda- CEO, Charter Schools",
+      "tag": "Consent Agenda: CEO, Charter Schools",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
       "vote_id": "26-0528-EX2"
     },
@@ -7960,7 +7960,7 @@
       "full": "Amend Board Report 25-0626-EX2 Amend Board Report 25-0320-EX6 Authorize Renewal of the Youth Connection Charter School Agreement with Conditions",
       "date": "2026-05-28",
       "desc": "",
-      "tag": "Consent Agenda- CEO, Charter Schools",
+      "tag": "Consent Agenda: CEO, Charter Schools",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
       "vote_id": "26-0423-EX2-C"
     },
@@ -7969,7 +7969,7 @@
       "full": "Authorize Renewal of the Academy for Global Citizenship Charter School Agreement with Conditions; 26-0528-EX7 Authorize Renewal of the Acero Charter Schools Agreement with Conditions; 26-0528-EX8 Authorize Renewal of the Chicago Collegiate Charter School Agreement with Conditions; 26-0528-EX9 Authorize Renewal of the Chicago Mathematics and Science Academy Charter School Agreement with Conditions; 26-0528-EX11 Authorize Renewal of the Intrinsic Charter School Agreement with Conditions",
       "date": "2026-05-28",
       "desc": "",
-      "tag": "Consent Agenda- CEO, Charter Schools",
+      "tag": "Consent Agenda: CEO, Charter Schools",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
       "vote_id": "26-0528-EX6-A"
     },
@@ -7978,7 +7978,7 @@
       "full": "Authorize Renewal of the Christopher House Charter School Agreement with Conditions",
       "date": "2026-05-28",
       "desc": "",
-      "tag": "Consent Agenda- CEO, Charter Schools",
+      "tag": "Consent Agenda: CEO, Charter Schools",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
       "vote_id": "26-0528-EX10-A"
     },
@@ -7987,7 +7987,7 @@
       "full": "Authorize Renewal of the University of Chicago Charter School Agreement with Conditions",
       "date": "2026-05-28",
       "desc": "",
-      "tag": "Consent Agenda- CEO, Charter Schools",
+      "tag": "Consent Agenda: CEO, Charter Schools",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
       "vote_id": "26-0528-EX12"
     },
@@ -7996,7 +7996,7 @@
       "full": "Amend Board Report 26-0423-EX2 Amend Board Report 25-0626-EX2 Amend Board Report 25-0320-EX6 Authorize Renewal of the Youth Connection Charter School Agreement with Conditions",
       "date": "2026-05-28",
       "desc": "",
-      "tag": "Consent Agenda- CEO, Charter Schools",
+      "tag": "Consent Agenda: CEO, Charter Schools",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
       "vote_id": "26-0528-EX13"
     },
@@ -8032,7 +8032,7 @@
       "full": "Authorize the First Renewal with National Louis University for Class Observations for Pre-K Classroom Services; 26-0528-PR2 Authorize the First and Second (Final) Renewal Agreement with Various Vendors for Assessment and Evaluation Tools for Related Service Providers (RSP); 26-0528-PR3 Amend Board Report 24-0627-PR1 Authorize the First Renewal Agreement with Illinois Institute of Technology for Testing Administration Services; 26-0528-PR4 Authorize the First Renewal Agreement with Various Vendors for Financial Professional Services; 26-0528-PR5 Authorize the First Renewal Agreement with Various Vendors for Roofing Consulting Services; 26-0528-PR6 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program; 26-0528-PR7 Authorize the First Renewal Agreement with Trimark Marlinn, LLC for the Purchase of Food Service Equipment and Related Supplies and Services; 26-0528-PR8 Authorize a New Software License Agreement with Carahsoft Technology Corporation for the Purchase of ServiceNow Licensing; 26-0528-PR9 Authorize the Annual Renewal Agreement with Oracle America, Inc. for Licensing and Support for Oracle Enterprise Financial Systems; 26-0528-PR10 Authorize the First Renewal Agreement with Education Logistics, Inc. for Student Transportation Consulting Services and Routing Software; 26-0528-PR11 Authorize the First Renewal Agreement with Various Vendors for Charter/Yellow School Buses and/or Alternative Models of Transportation for Field and Sport Trip Services; 26-0528-PR12 Chief Procurement Officer Delegation of Authority Report for March 2026 Pursuant to Board Rule 7-14(c) and Chief Financial Officer Report for March 2026 Pursuant to Board Rule 7-13(d)",
       "date": "2026-05-28",
       "desc": "",
-      "tag": "Consent Agenda-Procurement, Contract/Procurement",
+      "tag": "Consent Agenda: Procurement, Contract/Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
       "vote_id": "26-0528-PR1"
     },
@@ -8041,7 +8041,7 @@
       "full": "Report on Principal Contracts (New); 26-0528-EX15 Report on Principal Contracts (Renewals)",
       "date": "2026-05-28",
       "desc": "",
-      "tag": "Consent Agenda- CEO",
+      "tag": "Consent Agenda: CEO",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
       "vote_id": "26-0528-EX14"
     },
@@ -8050,7 +8050,7 @@
       "full": "Report on Board Report Rescissions; 26-0528-AR2 Appoint Assistant General Counsel Department of Law (Raisa Alicea); 26-0528-AR3 Appoint Assistant General Counsel Department of Law (Jordan May); 26-0528-AR4 Appoint Assistant General Counsel Department of Law (Betsy Mirella Pisabaj); 26-0528-AR5 Amend Board Report 26-0423-AR2 Amend Board Report 26-0319-AR2 Amend Board Report 26-0226-AR2 Amend Board Report 26-0129-AR2 Amend Board Report 25-1218-AR5 Amend Board Report 25-1023-AR3 Amend Board Report 25-0925-AR2 Amend Board Report 25-0626-AR3 Authorize Continued Retention of Various Outside Counsel Law Firms",
       "date": "2026-05-28",
       "desc": "",
-      "tag": "Consent Agenda- General Counsel, Appointments, Contract/Procurement",
+      "tag": "Consent Agenda: General Counsel, Appointment, Contract/Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
       "vote_id": "26-0528-AR1"
     },
@@ -8059,7 +8059,7 @@
       "full": "Workers’ Compensation Payment for Lump Sum Settlement for Amalia Reyes - Case Nos. 18 WC 015946; 18 WC 015947 and 19 WC 015434; 26-0528-AR7 Approve Payment of Proposed Settlement Regarding L.I.H. and I.N., Individually and as Parents and Next Friends of R.N., a Minor v. Board of Education of the City of Chicago D/B/A Chicago Public Schools; Jones Lang Lasalle Americas, Inc.; and Apache Service and Supply Co. Case No. 25 L 009309",
       "date": "2026-05-28",
       "desc": "",
-      "tag": "Consent Agenda- General Counsel, Settlements",
+      "tag": "Consent Agenda: General Counsel, Settlement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
       "vote_id": "26-0528-AR6"
     },
@@ -8068,7 +8068,7 @@
       "full": "Resolution Approving Superintendent/Chief Executive Officer’s Recommendation to Dismiss Educational Support Personnel; 26-0528-RS4 Resolution Approving Superintendent/Chief Executive Officer’s Recommendation to Dismiss Probationary Appointed Teacher; 26-0528-RS5 Resolution to Approve Superintendent/Chief Executive Officer’s Recommendation to Dismiss (Non-Renew) Probationary Appointed Teachers at the End of the 2025-2026 School Year",
       "date": "2026-05-28",
       "desc": "",
-      "tag": "Consent Agenda- CEO, Employee Dismissal",
+      "tag": "Consent Agenda: CEO, Employee Dismissal",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
       "vote_id": "26-0528-RS3"
     },
@@ -8113,7 +8113,7 @@
       "full": "Authorize Retention of the Law Firm Latham & Watkins, LLP",
       "date": "2026-05-28",
       "desc": "",
-      "tag": "Contract/Procurement, Consent Agenda- General Counsel",
+      "tag": "Contract/Procurement, Consent Agenda: General Counsel",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
       "vote_id": "26-0528-AR8"
     },
@@ -8158,7 +8158,7 @@
       "full": "Approve the Chicago Public Schools Legislative Agenda",
       "date": "2026-06-10",
       "desc": "",
-      "tag": "Consent Agenda- CEO",
+      "tag": "Consent Agenda: CEO",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4460",
       "vote_id": "26-0610-EX1-A"
     },
@@ -8185,7 +8185,7 @@
       "full": "Resolution Authorize Appointment of Members to the ESSA Title I Parent Board of Governors (PBG); 26-0625-RS3 Resolution Authorize Appointment of Members to Local School Councils for the New Terms of Office",
       "date": "2026-06-25",
       "desc": "",
-      "tag": "Appointments, LSC Vacancies",
+      "tag": "Appointment, LSC Vacancies",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
       "vote_id": "26-0625-RS2"
     },
@@ -8221,7 +8221,7 @@
       "full": "Authorize the Second (Final) Renewal Agreement with International Baccalaureate Organization to Provide Professional Development, Student Assessments and Related School Services; 26-0625-PR2 Authorize the First Renewal with ACT Education Corp. for ACT Testing Services; 26-0625-PR3 Authorize the First (Final) Renewal Agreement with College Board for College Entrance Exams, Professional Development and Related Services;  26-0625-PR5 Amend Board Report 24-1101-PR5 Authorize a New Agreement with Various Vendors for the Purchase of Custodial Equipment; 26-0625-PR6 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program; 26-0625-PR7 Amend Board Report 22-0622-PR12 Authorize the First, Second and Final Renewal Agreements with Active Office Solution LLC and Ricoh USA, Inc. for the Purchase and Lease of Output Devices and to Provide Managed Print Services (MPS); 26-0625-PR8 Amend Board Report 23-0222-PR9 Authorize the First (and Final) Renewal Agreement with Sentinel Technologies, Inc for Data Network Upgrade Services; 26-0625-PR9 Amend Board Report 23-0524-PR11 Authorize the Extension of the Agreement with Biomedical Research Foundation of Northwest Louisiana Omicron Technology Solutions, LLC for Student Key Card Systems and Associated Services; 26-0625-PR10 Amend Board Report 24-0523-PR10 Authorize the Extension of the Agreement with UKG INC DBA UKG Kronos Systems LLC for Software and Hardware Maintenance; 26-0625-PR11 Amend Board Report 25-0724-PR5 Authorize the First (Final) Renewal Agreement with Carahsoft Technology Corporation for DocuSign Electronic Signature Platform and Related Services; 26-0625-PR12 Authorize a New Agreement with AT&T Mobility National Accounts, LLC. D/B/A AT&T. for Cellular Services, Applications, Equipment, Accessories, and Support; 26-0625-PR13 Authorize a New Agreement with ClassLink, Inc. for Identity & Access Management Services; 26-0625-PR14 Authorize the Second (Final) Renewal Agreement with Various Vendors for the Purchase and/or Lease of Network Servers and Hyperconvergence",
       "date": "2026-06-25",
       "desc": "",
-      "tag": "Contract/Procurement, Consent Agenda-Procurement",
+      "tag": "Contract/Procurement, Consent Agenda: Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
       "vote_id": "26-0625-PR1"
     },
@@ -8230,7 +8230,7 @@
       "full": "Authorize the Second (Final) Renewal Agreement with Various Vendors for Safe Haven Sites and Services",
       "date": "2026-06-25",
       "desc": "",
-      "tag": "Contract/Procurement, Consent Agenda-Procurement",
+      "tag": "Contract/Procurement, Consent Agenda: Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
       "vote_id": "26-0625-PR4"
     },
@@ -8239,7 +8239,7 @@
       "full": "Authorize the First Renewal Agreement with Various Vendors for District-Wide Marketing Services",
       "date": "2026-06-25",
       "desc": "",
-      "tag": "Contract/Procurement, Consent Agenda-Procurement",
+      "tag": "Contract/Procurement, Consent Agenda: Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
       "vote_id": "26-0625-PR15"
     },
@@ -8248,7 +8248,7 @@
       "full": "Chief Procurement Officer Delegation of Authority Report for April 2026 Pursuant to Board Rule 7-14(c) and Chief Financial Officer Report for April 2026 Pursuant to Board Rule 7-13(d); 26-0625-PR17 Chief Procurement Officer Quarterly Report of Pre-Qualified Vendor Expenditures Pursuant to Board Rule 7-10",
       "date": "2026-06-25",
       "desc": "",
-      "tag": "Consent Agenda-Procurement",
+      "tag": "Consent Agenda: Procurement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
       "vote_id": "26-0625-PR16"
     },
@@ -8257,7 +8257,7 @@
       "full": "Report on Principal Contracts (New); 26-0625-EX3 Report on Principal Contracts (Renewals)",
       "date": "2026-06-25",
       "desc": "",
-      "tag": "Consent Agenda- CEO",
+      "tag": "Consent Agenda: CEO",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
       "vote_id": "26-0625-EX2"
     },
@@ -8266,7 +8266,7 @@
       "full": "Report on Board Report Rescissions",
       "date": "2026-06-25",
       "desc": "",
-      "tag": "Consent Agenda- General Counsel",
+      "tag": "Consent Agenda: General Counsel",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
       "vote_id": "26-0625-AR1"
     },
@@ -8284,7 +8284,7 @@
       "full": "Approve the Chicago Public Schools Legislative Agenda",
       "date": "2026-06-25",
       "desc": "",
-      "tag": "Consent Agenda- CEO",
+      "tag": "Consent Agenda: CEO",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
       "vote_id": "26-0610-EX1-B"
     },
@@ -8293,7 +8293,7 @@
       "full": "Appoint Assistant General Counsel Department of Law (Naomi Forbes); 26-0625-AR3 Appoint Assistant General Counsel Department of Law (Joshua Wiedner); 26-0625-AR4 Amend Board Report 26-0226-AR6 Workers’ Compensation Payment for Lump Sum Settlement for Willie Thomas - Case No. 21 WC 05038; 26-0625-AR5 Workers’ Compensation Payment for Lump Sum Settlement for Kimberly Jachim-Mellenthin - Case No. 21 WC 028481; 26-0625-AR6 Workers’ Compensation Payment for Lump Sum Settlement for Francine Kupec - Case Nos. 06 WC 001702 and 20 WC 012896; 26-0625-AR7 Approve Payment of Proposed Settlement Regarding Claims Brought by Hagan, King/Muhammad, Bowen and Haywood Case No. 25 CV 05807 (Consolidated)",
       "date": "2026-06-25",
       "desc": "",
-      "tag": "Appointments, Consent Agenda- General Counsel, Settlements",
+      "tag": "Appointment, Consent Agenda: General Counsel, Settlement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
       "vote_id": "26-0625-AR2"
     },
@@ -8302,7 +8302,7 @@
       "full": "Resolution Approving Superintendent/Chief Executive Officer’s Recommendation to Dismiss Educational Support Personnel; 26-0625-RS6 Resolution Approving Superintendent/Chief Executive Officer’s Recommendation to Dismiss Probationary Appointed Teacher",
       "date": "2026-06-25",
       "desc": "",
-      "tag": "Employee Dismissal, Consent Agenda- CEO",
+      "tag": "Employee Dismissal, Consent Agenda: CEO",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
       "vote_id": "26-0625-RS5"
     },
@@ -8401,7 +8401,7 @@
       "full": "appoint assistant general counsel, Department of Law, Alexander J. Smith; AR3, authorize new retention of various outside counsel law firms; AR4, authorize continue retention of various outside council law firms; AR5 workers compensation payment for lumpsum settlement for Will Arer; AR6, approved payment of proposed settlement regarding claims brought by Mary Terry on behalf of ZG; AR7 approves settlement between the board of education of the city of Chicago and Chicago teachers union on behalf of all affected coaches, athletic directors, and sports liaison; AR8 property tax appeal refund authorized settlement for 3750 North Lakeshore Drive, Inc.",
       "date": "2026-07-30",
       "desc": "",
-      "tag": "Consent Agenda- General Counsel, Appointments, Settlements",
+      "tag": "Consent Agenda: General Counsel, Appointment, Settlement",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4438",
       "vote_id": "26-0730-AR2"
     },
@@ -8410,7 +8410,7 @@
       "full": "resolution approving interim superintendent, chief executive officer's recommendation to dismiss educational support personnel; RS8 resolution approving interim superintendent chief executive officer's recommendation to dismiss probationary appointed teachers",
       "date": "2026-07-30",
       "desc": "",
-      "tag": "Employee Dismissal, Consent Agenda- CEO",
+      "tag": "Employee Dismissal, Consent Agenda: CEO",
       "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4438",
       "vote_id": "RS7"
     },
@@ -8470,7 +8470,7 @@
     }
   ],
   "rollcall": {
-    "generated_at": "2026-08-16T18:21:37Z",
+    "generated_at": "2026-09-24T14:43:25Z",
     "source": "SB Votes tab, project Google Sheet",
     "term_votes": 273,
     "votes": [
@@ -8514,7 +8514,7 @@
         "date": "2025-01-30",
         "title": "Resolution Appointing Sean B. Harden as Commissioner of the Public Building Commission of Chicago",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4399",
-        "tag": "Appointments",
+        "tag": "Appointment",
         "type": "[\"board-vote\"]",
         "outcome": "Split",
         "positions": {
@@ -8549,7 +8549,7 @@
         "date": "2025-01-30",
         "title": "Ratify Resolution Regarding Acting Inspector General and Inspector General Philip Wagenknecht ; 25-0130-RS5 Resolution by the Board of Education to Support the District’s Application for the Magnet Schools Assistance Program ; 25-0130-RS6 Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4399",
-        "tag": "Consent Agenda- Resolutions",
+        "tag": "Consent Agenda: Resolutions",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -8584,7 +8584,7 @@
         "date": "2025-01-30",
         "title": "Transfer of Funds ; 25-0130-PR1 Authorize the Third (Final) Renewal Agreement with B & L Distributors, Inc. for the Purchase of Furniture and Related Accessories and Services ; 25-0130-PR2 Authorize the Third (Final) Renewal Agreement with Hertz Furniture Systems, LLC for the Purchase of Furniture and Related Accessories and Services ; 25-0130-PR3 Authorize the Third (Final) Renewal Agreements with Various Vendors for the Purchase of Furniture and Related Accessories and Services ; 25-0130-PR4 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program ; 25-0130-PR5 Amend Board Report 23-1214-PR2 Authorize the First (Final) Renewal Agreement with Carahsoft Technology Corp. for Identity and Access Management Services ; 25-0130-PR6 Authorize a New Agreement with CDW Government LLC for the Purchase of Audio Visual and Interactive Whiteboard Equipment ; 25-0130-PR7 Authorize the First Renewal Agreement with QBS LLC for De-Escalation and Physical Restraint Training Services",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4399",
-        "tag": "Consent Agenda-Procurement",
+        "tag": "Consent Agenda: Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -8619,7 +8619,7 @@
         "date": "2025-01-30",
         "title": "Amend Board Report 24-1101-AR2 Amend Board Report 24-0829-AR3 Amend Board Report 24-0627-AR2 Authorize Continued Retention of Various Outside Counsel Law Firms",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4399",
-        "tag": "Consent Agenda- General Counsel",
+        "tag": "Consent Agenda: General Counsel",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -8654,7 +8654,7 @@
         "date": "2025-01-30",
         "title": "Amend Board Report 24-0425-AR5 Workers’ Compensation Payment for Lump Sum Settlement for Mary Casey - Case Nos.  07 WC 044753; 08 WC 019807; 14 WC 017919 and 14 WC 017980 ; 25-0130-AR4 Workers’ Compensation Payment for Lump Sum Settlement for Linda Spence, Case No. 23 WC 000477",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4399",
-        "tag": "Consent Agenda- General Counsel",
+        "tag": "Consent Agenda: General Counsel",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -8899,7 +8899,7 @@
         "date": "2025-02-27",
         "title": "Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies; 25-0227-EX1 Transfer of Funds",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4400",
-        "tag": "Consent Agenda- Resolutions",
+        "tag": "Consent Agenda: Resolutions",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -9109,7 +9109,7 @@
         "date": "2025-02-27",
         "title": "Transfer and Appoint Senior Assistant General Counsel Department of Law (Frank A. Johns); 25-0227-AR3  Transfer and Appoint Senior Assistant General Counsel Department of Law (Talia D. Shifron); 25-0227-AR4 Authorize Retention of the Law Firm Wagstaff & Cartmell, LLP; 25-0227-AR6 Approve Payment of Proposed Settlement Regarding Tamara Castaneda, Case No. 22 L 002807; 25-0227-AR7  Approve Payment of Proposed Settlement Regarding Jane Doe, Case No. 2024 L 001810; 25-0227-AR8        Approve Payment of Proposed Settlement Regarding C.B., Student by His Mother B.B., et al. v. Board of Education, et al., Case No. 20-cv-586; 25-0227-AR9        Approve Payment of Proposed Settlement Regarding Attorneys’ Fees for Asia Gaines, for Herself and As Next Friend of Minor Child, J.C. v. Board, et al., Case No. 19 CV 775",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4400",
-        "tag": "Consent Agenda- General Counsel",
+        "tag": "Consent Agenda: General Counsel",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -9144,7 +9144,7 @@
         "date": "2025-02-27",
         "title": "Amend Board Report 25-0130-AR2 Amend Board Report 24-1101-AR2 Amend Board Report 24-0829-AR3 Amend Board Report 24-0627-AR2 Authorize Continued Retention of Various Outside Counsel Law Firms",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4400",
-        "tag": "Consent Agenda- General Counsel",
+        "tag": "Consent Agenda: General Counsel",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -9179,7 +9179,7 @@
         "date": "2025-02-27",
         "title": "Amend Board Report 24-0627-AR7 Authorize Continued Retention of the Law Firm Himes, Petrarca & Fester, CHTD.",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4400",
-        "tag": "Consent Agenda- General Counsel",
+        "tag": "Consent Agenda: General Counsel",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -9214,7 +9214,7 @@
         "date": "2025-02-27",
         "title": "Transfer and Appoint Title IX Officer Effective February 27, 2025 (Elizabeth Mendoza Browne); 25-0227-EX6 Report on Principal Contracts (New ALSC) (Lekenya Sanders-Sharpe, Collins HS);",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4400",
-        "tag": "Consent Agenda- CEO",
+        "tag": "Consent Agenda: CEO",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -9389,7 +9389,7 @@
         "date": "2025-03-20",
         "title": "Resolution Appointing Ed Bannon to the Board of Trustees of the Public School Teachers’ Pension and Retirement Fund of the City of Chicago Adopted      25-0320-RS4 Resolution Appointing Emma Lozano to the Board of Trustees of the Public School Teachers’ Pension and Retirement Fund of the City of Chicago",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4401",
-        "tag": "Appointments",
+        "tag": "Appointment",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -9984,7 +9984,7 @@
         "date": "2025-03-20",
         "title": "Appoint Assistant General Counsel Department of Law (Stephen Peters)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4401",
-        "tag": "Appointments",
+        "tag": "Appointment",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -10019,7 +10019,7 @@
         "date": "2025-03-20",
         "title": "Workers’ Compensation Payment for Lump Sum Settlement for Maria Castaneda – Case No. 15 WC 020146 Adopted    25-0320-AR4 Workers’ Compensation Payment for Lump Sum Settlement for Tashanna Johnson-Jenkins – Case No. 22 WC 004881 Adopted    25-0320-AR5 Approve Payment of Proposed Settlement Regarding Kyle Burke v. Board, Case No. 21 L 5409 Adopted    25-0320-AR6 Approve Payment of Proposed Settlement Regarding Destiny Hart, Javari and Jamari Champion v. Board, Case No. 21 L 5413 Adopted    25-0320-AR7 Approve Payment of Proposed Settlement Regarding Isis Holmes v. Board, Case No. 21 L 5424 Adopted    25-0320-AR8 Approve Payment of Proposed Settlement Regarding Latiya and Nacasha Scales v. Board, Case No. 21 L 5411 Adopted    25-0320-AR9 Approve Payment of Proposed Settlement Regarding Ketara and Kefon Tucker v. Board, Case No. 21 L 5426 Adopted    25-0320-AR10 Approve Payment of Proposed Settlement Regarding Richard Warr and Jariah Fletcher v. Board, Case No. 21 L 5418 Adopted    25-0320-AR11 Approve Settlement Between the Board of Education of the City of Chicago and Cottina Woods, Grievance No. 10226/18-11-102(zf) Labor Arbitration",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4401",
-        "tag": "Settlements",
+        "tag": "Settlement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -10054,7 +10054,7 @@
         "date": "2025-03-20",
         "title": "Report on Principal Contract (ALSC New) (Rosa Jimenez, Solorio HS)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4401",
-        "tag": "Appointments",
+        "tag": "Appointment",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -10159,7 +10159,7 @@
         "date": "2025-04-24",
         "title": "Resolution Adopting the Amended Annual School Budget for Fiscal Year 2025 (139M in TIF) ; 25-0424-RS5 Resolution Codifying the Creation of the Black Student Achievement Committee and Appointing Aaron “Jitu” Brown as Chair ; Authorize the Commencement of the Public Comment Period for the Amendment of the Commercial Activity Policy ; 25-0424-PO2 Amend Board Report 24-0725-PO1 and Adopt Final Comprehensive  Non-Discrimination, Harassment, and Retaliation Policy; 25-0424-EX1 Transfer of Funds ;  25-0424-PR2 Authorize a New Agreement with Renaissance Learning, Inc. for Student Assessment Platform Services; 25-0424-PR4 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program Adopted    25-0424-PR5 Authorize a New Agreement with Sentinel Technologies, Inc. for Firewall Licensing, Maintenance, and Support Services Adopted    25-0424-PR6 Authorize the Third Renewal Agreement with Various Vendors for Food Management Services Adopted    25-0424-PR7 Authorize a New Agreement with Various Vendors for Custom Printing Services and Promotional Items",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4402",
-        "tag": "Appointments, Consent Agenda-Procurement, Consent Agenda- Resolutions, Consent Agenda- CEO",
+        "tag": "Appointment, Consent Agenda: Procurement, Consent Agenda: Resolutions, Consent Agenda: CEO",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -10369,7 +10369,7 @@
         "date": "2025-04-24",
         "title": "Transfer and Appoint Senior Assistant General Counsel Department of Law (Yasemine Givan) Adopted    25-0424-AR3 Workers’ Compensation Payment for Lump Sum Settlement for Mary Parker - Case No. 23 WC 021745  Adopted    25-0424-AR4 Approve Payment of Proposed Settlement Regarding Yvonne Pinkston, on her own behalf and as guardian of K.S., a minor, et al. v. Board of Education, et al., Case No. 19-cv-06477",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4402",
-        "tag": "Appointments, Settlements",
+        "tag": "Appointment, Settlement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -10404,7 +10404,7 @@
         "date": "2025-04-24",
         "title": "Approve and Ratify Tentative Collective Bargaining Agreement Between the Board of Education of the City of Chicago and the Chicago Teachers Union, Local 1, American Federation of Teachers, AFL-CIO Adopted    25-0424-EX21 Warning Resolution – Joel Ricks, Tenured Teacher, Assigned to Morgan Park High School Adopted    25-0424-EX22 Transfer and Appoint Chief of Schools Officer Effective May 5, 2025  (Sydney Morris) *Adopted     25-0424-EX23 Report on Principal Contract (ALSC Renewals)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4402",
-        "tag": "Contract/Procurement, Appointments, Employee Discipline",
+        "tag": "Contract/Procurement, Appointment, Employee Discipline",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -10474,7 +10474,7 @@
         "date": "2025-05-29",
         "title": "Resolution Authorizing Payments for Special Education Services to Various State-Approved Non-Public Facilities for Students with Disabilities Placed by Chicago Public Schools (CPS) Adopted     25-0529-RS3 Resolution Providing for the Issue of One or More Series of Unlimited Tax General Obligation Bonds of the Board of Education of the City of Chicago in an Aggregate Principal Amount Not to Exceed $650,000,000 for the Purpose of Paying the Costs of Capital Improvements Adopted    25-0529-RS4 Resolution Authorizing the Issue of One or More Series of Unlimited Tax General Obligation Refunding Bonds of the Board of Education of the City of Chicago in an Aggregate Principal Amount Not to Exceed $1,800,000,000 for the Purpose of Paying the Cost of Refunding Outstanding Bonds of Said Board of Education Adopted    25-0529-RS5 Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies Adopted    25-0529-RS6 Resolution Authorize Appointment of Members to the Local School Council Advisory Board for the Term of Office July 1, 2025 - June 30, 2027 ;  25-0529-PO1 Authorize the Commencement of the Public Comment Period for the Accelerated Placement Policy",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4403",
-        "tag": "Consent Agenda- Resolutions",
+        "tag": "Consent Agenda: Resolutions",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -10579,7 +10579,7 @@
         "date": "2025-05-29",
         "title": "Transfer of Funds ; 25-0529-ED1 Amend Board Report 24-0222-ED1 Academic Calendar for 2025-26 School Year  (put report card pick up on same day for ES and HS); 25-0529-FN1 Authorize Placement of the Board’s FY 2026 Excess Liability, Property and Specialty Insurance Programs with Various Insurance Companies Through Mesirow Insurance Services, Inc. ; 5-0529-PR1 Authorize the First Renewal Agreement with Various Vendors for the Purchase of Library Books, eBooks and Related Services Adopted    25-0529-PR2 Authorize New Agreements with Lakeshore Parent LLC DBA Lakeshore Learning Materials, LLC and School Specialty, LLC for the Purchase of PreK-12 Educational Supplies Adopted    25-0529-PR3 Authorize the Pre-Qualification Status of and New Agreements with Various Vendors to Provide Educational Technology and Digital Resource Services Adopted    25-0529-PR4 Authorize the First and Second (Final) Renewal Agreements with UTJ Holdco, Inc. DBA Teaching Strategies, LLC. for Early Childhood Curriculum and Assessment Services Adopted    25-0529-PR5 Authorize a New Agreement with National Louis University for Class Observations for Pre-K Classroom Services Adopted    25-0529-PR6 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program Adopted    25-0529-PR7 Amend Board Report 23-0426-PR18 Authorize a New Agreement with CDW Government LLC for Building Automation System (BAS) Installation, Maintenance, Repair, and Resources Adopted    25-0529-PR8 Amend Board Report 24-0523-PR12 Authorize the Second (Final) Renewal Agreement with Various Vendors for Field Support Services Adopted    25-0529-PR9 Authorize the First Renewal Agreement with Various Vendors for the Purchase and/or Lease of Network Servers and Hyperconvergence Adopted    25-0529-PR10 Authorize the First Renewal Agreement with Curriculum Associates, LLC for  K-2 Reading and Mathematic Assessment Services",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4403",
-        "tag": "Consent Agenda-Procurement, Consent Agenda- CEO",
+        "tag": "Consent Agenda: Procurement, Consent Agenda: CEO",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -10614,7 +10614,7 @@
         "date": "2025-05-29",
         "title": "Appoint Assistant General Counsel Department of Law (Clara Kent) Adopted    25-0529-AR3 Appoint Assistant General Counsel Department of Law (André Smith) Adopted    25-0529-AR4 Appoint Assistant General Counsel Department of Law (Alberto Vargas) Adopted    25-0529-AR5 Amend Board Report 25-0227-AR5 Amend Board Report 25-0130-AR2 Amend Board Report 24-1101-AR2 Amend Board Report 24-0829-AR3 Amend Board Report 24-0627-AR2 Authorize Continued Retention of Various Outside Counsel Law Firms Adopted    25-0529-AR6 Workers’ Compensation Payment for Lump Sum Settlement for Esmeralda Marrero - Case No. 21 WC 033769 Adopted    25-0529-AR7 Approve Settlement Between the Board of Education of the City of Chicago and Nancy Degracia Wage Claim",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4403",
-        "tag": "Consent Agenda- General Counsel",
+        "tag": "Consent Agenda: General Counsel",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -10649,7 +10649,7 @@
         "date": "2025-05-29",
         "title": "Warning Resolution – Antonina Luszczak, Tenured Teacher, Assigned to Skinner North Classical School Adopted    25-0529-EX5 Report on Principal Contract (ALSC Renewals)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4403",
-        "tag": "Appointments, Employee Discipline, Employee Dismissal",
+        "tag": "Appointment, Employee Discipline, Employee Dismissal",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -11174,7 +11174,7 @@
         "date": "2025-06-11",
         "title": "Resolution to Transfer and Appoint Dr. Macquline King as Interim Superintendent/Chief Executive Officer",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4424",
-        "tag": "Appointments",
+        "tag": "Appointment",
         "type": "[\"board-vote\"]",
         "outcome": "Split",
         "positions": {
@@ -11209,7 +11209,7 @@
         "date": "2025-06-11",
         "title": "Motion RE: Appoint Chief of Staff to the Board of Education (Fae Rabin) for $185k",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4424",
-        "tag": "Appointments",
+        "tag": "Appointment",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -11244,7 +11244,7 @@
         "date": "2025-06-26",
         "title": "Resolution Authorizing Expenditures at Beginning of Fiscal Year 2026 *Adopted    25-0626-RS2 Resolution to Authorize Appointment of Members to the ESSA Title I *Adopted     25-0626-RS3 Resolution to Request the Public Building Commission of Chicago to Dedicate Two Alleys Located on the Former Louis Armstrong School Property *Adopted    25-0626-RS4 Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies *Adopted    25-0626-RS5 Resolution Authorize Appointment of Members to the Local School Council Advisory Board for the Term of Office July 1, 2025 - June 30, 2027 *Adopted    25-0626-RS6 Resolution Appointment of Student Representative Members to Local School Councils for the Term July 1, 2025 - June 30, 2026; 25-0626-PO1 Authorize the Commencement of the Public Comment Period for Reporting of Child Abuse, Neglect and Inappropriate Relations Between Adults and Students *Adopted    25-0626-PO2 Authorize the Commencement of the Public Comment Period for Title I Every Student Succeeds Act (ESSA) Parent and Family Engagement *Adopted    25-0626-PO3 Amend Policy on Commercial Activity ; 25-0626-EX1 Transfer of Funds ; 25-0626-OP1 Authorize the Fourth Renewal of the Lease Agreement with Highland Avondale Properties LLC for the Use of Office Space at 6323 North Avondale Avenue *Adopted    25-0626-OP2 Authorization to Accept Title and Possession of 3101 W. Bryn Mawr Ave. and 3024 W. Foster Ave.  from the City of Chicago for Athletic Fields and Additional Open Space at the Northside College Prep High School *Adopted    25-0626-OP3 Authorization to Acquire an Easement for the Construction of a Gymnasium Annex for John T. McCutcheon Steam Elementary School *Adopted    25-0626-OP4 Permanent Debarment of Peter Colomb *Adopted    25-0626-OP5 Permanent Debarment of Jayla Cooper *Adopted    25-0626-OP6 Permanent Debarment of Eric Delgado *Adopted    25-0626-OP7 Permanent Debarment of Christian Demus ; 25-0626-PR1 Authorize the First Renewal Agreement with Youth Advocate Programs, Inc. for Youth Therapy Services *Adopted    25-0626-PR2 Authorize the First Renewal Agreement with Various Vendors for Virtual Learning Online Courses *Adopted    25-0626-PR3 Authorize the First (Final) Renewal Agreement with Arbitersports, LLC for Online Payment Services *Adopted    25-0626-PR4 Authorize the First Renewal Agreements with Various Vendors to Provide Safe Haven Sites and Services *Adopted    25-0626-PR5 Authorize the Annual Renewal Agreement with Oracle America, Inc. for Licensing and Support for Oracle Enterprise Financial Systems *Adopted    25-0626-PR6 Authorize a New Agreement with Mythics, LLC for Oracle Infrastructure Upgrades *Adopted    25-0626-PR7 Authorize the Third (Final) Renewal Agreement with Chicago Fire Protection LLC for Fire Alarm System Maintenance and Repair Services ; 25-0626-PR8 Authorize the Third (Final) Renewal Agreement with Johnson Controls Fire Protection LP for Fire Suppression Ansul and Exhaust System Maintenance and Repair Services *Adopted    25-0626-PR9 Authorize the Third (Final) Renewal Agreement with Johnson Controls Fire Protection LP for Fire Suppression System Maintenance and Repair Services *Adopted    25-0626-PR10 Authorize the Third (Final) Renewal Agreement with Various Vendors for Groundskeeping Products and Services *Adopted    25-0626-PR11 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4404",
-        "tag": "Consent Agenda- CEO, Consent Agenda- General Counsel, Consent Agenda-Procurement, Consent Agenda- Resolutions, Appointments",
+        "tag": "Consent Agenda: CEO, Consent Agenda: General Counsel, Consent Agenda: Procurement, Consent Agenda: Resolutions, Appointment",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -11340,7 +11340,7 @@
         "date": "2025-06-26",
         "title": "Appoint Assistant General Counsel Department of Law (Allyson R. Hollie) Adopted    25-0626-AR3 Authorize Continued Retention of Various Outside Counsel Law Firms Adopted    25-0626-AR4 Workers’ Compensation Payment for Lump Sum Settlement for John Byrne, Administrator of the Estate of Michelle Byrne - Case No. 22 WC 026577 Adopted    25-0626-AR5 Workers’ Compensation Payment for Lump Sum Settlement for Sara Hainsfurther- Case No. 19 WC 001856 Adopted    25-0626-AR6 Approve Payment of Proposed Settlement Regarding J.D. Adopted    25-0626-AR7 Approve Payment of Proposed Settlement Regarding Christopher Toczycki, Inc. (“CTI”)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4404",
-        "tag": "Contract/Procurement, Appointments, Settlements",
+        "tag": "Contract/Procurement, Appointment, Settlement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -11372,7 +11372,7 @@
         "date": "2025-06-26",
         "title": "Authorize Continued Retention of the Law Firm Himes, Petrarca & Fester, CHTD.",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4404",
-        "tag": "Consent Agenda-Procurement",
+        "tag": "Consent Agenda: Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -11404,7 +11404,7 @@
         "date": "2025-06-26",
         "title": "Report on Principal Contract (ALSC Renewals)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4404",
-        "tag": "Appointments",
+        "tag": "Appointment",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -11468,7 +11468,7 @@
         "date": "2025-07-24",
         "title": "Resolution Adopting the CPS Arts Education Plan 2.0: Cultivating Creativity 2025-2030 Adopted    25-0724-RS4 Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies ; 25-0724-PO1 Authorize the Commencement of the Public Comment Period for the Auditor Independence and Provision of Consulting Services by External Auditors Policy Adopted    25-0724-PO2 Authorize the Commencement of the Public Comment Period for the Amendment of the Imposition of Charges on Returned Payment Instruments Policy Adopted    25-0724-PO3 Authorize the Commencement of the Public Comment Period for the Amendment of the Paid Time Off Policy Adopted    25-0724-PO4 Amend Board Report 23-0628-PO4 Accelerated Placement Policy",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4405",
-        "tag": "Policy Resolution, Appointments",
+        "tag": "Policy Resolution, Appointment",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -11500,7 +11500,7 @@
         "date": "2025-07-24",
         "title": "Transfer of Funds; 25-0724-PR2 Authorize a New Agreement with Riverside Assessments, LLC DBA Riverside Insights for the Purchase of Test Materials for High School Admissions, Selective Enrollment, Comprehensive Gifted, Accelerated Placement, and Related Services Adopted    25-0724-PR3 Authorize the Pre-Qualification Status of and New Agreements with Various Vendors to Provide Job Order Contracting Services Adopted    25-0724-PR4 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program Adopted    25-0724-PR5 Authorize the First (Final) Renewal Agreement with Carahsoft Technology Corp. for Docusign Electronic Signature Platform and Related Services Adopted    25-0724-PR6 Authorize the First Renewal Agreement with Amazon.com Sales, Inc dba Amazon.com Services LLC. for Tail Spend Marketplace Products and Services Adopted    25-0724-PR7 Authorize the Third Renewal Agreement with LINEV Systems US, Inc. for the Purchase of Portable X-Ray Machines and Related Installation, Maintenance and Training Services Adopted    25-0724-PR8 Amend Board Report 23-0524-PR16 Authorize the First and Second (Final) Renewal Agreement with Various Vendors for Student Transportation Services (School Bus Services) Adopted    25-0724-PR9 Authorize the First and Second (Final) Renewal Agreement with CIMPAR, S.C. for Vaccination and School Physical Services",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4405",
-        "tag": "Consent Agenda-Procurement",
+        "tag": "Consent Agenda: Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -11564,7 +11564,7 @@
         "date": "2025-07-24",
         "title": "Transfer and Appoint Deputy General Counsel Department of Law (Laurel C. Baker) Adopted    25-0724-AR3 Workers’ Compensation Payment for Lump Sum Settlement for Angel Weaver - Case Nos. 18 WC 032562 and 22 WC 06441 Adopted    25-0724-AR4 Approve Payment of Proposed Settlement Regarding John Doe v.  Vega Carl Von Linne Elementary School, Chicago Board of Education, Chicago Public Schools a/k/a CPS, City of Chicago School District 299, and City of Chicago - Case No. 24 L 002928  Adopted    25-0724-AR5 Approve Payment of Proposed Settlement Regarding Johnny Doe v. Board of Education; Mercy Home for Boys & Girls; Catholic Bishop of Chicago Mercy Home for Boys & Girls v. Elizabeth Robbins Case No. 23 L 006478 Adopted    25-0724-AR6 Property Tax Appeal Refund – Authorize Settlement for PTAB No. 19-51720 400 North Lasalle Condominium Association",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4405",
-        "tag": "Appointments, Settlements",
+        "tag": "Appointment, Settlement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -11628,7 +11628,7 @@
         "date": "2025-07-24",
         "title": "Motion RE: Appointment of Acting General Counsel (Elizabeth Barton)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4405",
-        "tag": "Appointments",
+        "tag": "Appointment",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -11692,7 +11692,7 @@
         "date": "2025-08-28",
         "title": "Resolution Adopting a Final One-Year Capital Improvement Plan of the Board of Education of the City of Chicago for Fiscal Year 2026 Adopted    25-0828-RS3 Resolution Levying Property Taxes and Authorizing and Directing the Filing of a Controller’s Certificate for the Fiscal Year 2026 for School and Capital Improvement Purposes of the Board of Education of the City of Chicago Adopted     25-0828-RS4 Resolution Authorizing the Issuance of Educational Purposes Tax Anticipation Warrants and Notes of the Board of Education of the City of Chicago, Illinois, in a Maximum Principal Amount Not to Exceed $1,250,000,000 Outstanding. ; 25-0828-RS5 Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies Adopted    25-0828-RS6 Resolution RE: Appointment of New Members to the Local School Council Advisory Board to Fill Vacancies for the Current Term of Office  ; 25-0828-PO1 Authorize the Commencement of the Public Comment Period for the Internet Safety Policy Adopted    25-0828-PO2 Authorize the Commencement of the Public Comment Period for the Ownership of Intellectual Property Policy Adopted    25-0828-PO3 Authorize the Commencement of the Public Comment Period for the Staff Acceptable Use Policy Adopted    25-0828-PO4 Authorize the Commencement of the Public Comment Period for the Student Acceptable Use Policy Adopted    25-0828-PO5 Amend Board Report 22-0622-PO2 Policy on the Reporting of Child Abuse, Neglect and Inappropriate Relations Between Adults and Students Adopted    25-0828-PO6 Rescind Board Report 18-0926-PO1 Rescind and Adopt New ESSA Title I Parent & Family Engagement Policy ; 25-0828-EX1 Transfer of Funds  ; 25-0828-OP1 Transfer Title to Excess Real Estate Located at 3700-3718 South Prairie Avenue to the Chicago Park District ; 25-0828-PR1 Amend Board Report 24-0820-PRDA15 Authorize the First and Second (Final) Renewal Agreements with All American Sports Corp dba Riddell All American Sports and Schutt Sports, LLC for Football Equipment Reconditioning, Recertification, New Purchases, and Related Services for Athlete Safety Adopted    25-0828-PR2 Amend Board Report 24-1101-PR3 Amend Board Report 24-0321-PR2 Amend Board Report 23-1025-PR9 Authorize the First and Second (Final) Renewal Agreement with Various Contractors to Provide Various Trades Work Over $35,000 for the Operations and Maintenance Program ; 25-0828-PR3 Authorize the First and Second (Final) Renewal Agreement with Constellation Newenergy-Gas Division, LLC for Natural Gas Supply Services Adopted    25-0828-PR4 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program Adopted    25-0828-PR5 Authorize the Second (Final) Renewal Agreements with T-Mobile, Inc., Comcast Corporation, and RCN Cable TV of Chicago, Inc., Under Chicago Connected for Internet Connectivity and Related Services Adopted    25-0828-PR6 Authorize the Third (Final) Renewal Agreement with Various Vendors to Provide Safe Passage Services for Designated Neighborhoods",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4406",
-        "tag": "Appointments, Consent Agenda- General Counsel, Consent Agenda-Procurement, Consent Agenda- Resolutions",
+        "tag": "Appointment, Consent Agenda: General Counsel, Consent Agenda: Procurement, Consent Agenda: Resolutions",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -11724,7 +11724,7 @@
         "date": "2025-08-28",
         "title": "Workers’ Compensation Payment for Lump Sum Settlement for Shirley Collins - Case No. 02 WC 64347 Adopted    25-0828-AR3 Approve Payment of Proposed Settlement Regarding John Thuet and Michelle Brumfield v. Board of Education, et al.",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4406",
-        "tag": "Settlements",
+        "tag": "Settlement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -11820,7 +11820,7 @@
         "date": "2025-09-25",
         "title": "Resolution to Request the Public Building Commission of Chicago to Transfer Title of Real Estate for Various School Sites to the City of Chicago in Trust for the use of Schools Adopted    25-0925-RS2 Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies Adopted     25-0925-RS3 Resolution RE: Appointment of Chairperson for the Local School Council Advisory Board for the Current Term of Office; 25-0925-PO1 Amend Board Report 02-0522-PO01 Adopt Policy on Auditor Independence and Provision of Consulting Services by External Auditors Adopted    25-0925-PO2 Amend Board Report 03-1119-PO01 Adopt Policy on Imposition of Charges on Returned Payment Instruments Adopted    25-0925-PO3 Amend Board Report 24-0926-PO3 Paid Time Off Policy ; 25-0925-EX1 Transfer of Funds  Adopted    25-0925-EX2 Ratify the Fifth (Final) Option to Renew the Intergovernmental Agreement with the Department of Family & Support Services (DFSS) – the City of Chicago Adopted    25-0925-EX3 Ratify the Fourth (Final) Option to Renew the Intergovernmental Agreement with the Department of Family & Support Services (DFSS) – the City of Chicago ; 25-0925-PR1 Authorize the First (Final) Renewal Agreement with SchooLinks, Inc. to Provide a College and Career Enterprise Platform Adopted    25-0925-PR3 Authorize the First and Second (Final) Renewal Agreement with Ombudsman Educational Services, Ltd. and Pathways in Education-Illinois for Alternative Learning Opportunities Program Services Adopted   25-0925-PR4 Authorize the First and Second (Final) Renewal Agreement with Various Vendors for Cost Estimating Services Adopted    25-0925-PR5 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program Adopted    25-0925-PR6 Authorize the Second Renewal Agreement with Apple Inc. for the Purchase of Hardware, Software and Services Adopted    25-0925-PR7 Authorize the Second (Final) Renewal Agreement with Accurate Biometrics, Inc. for Comprehensive Fingerprinting and Related Services ;",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4429",
-        "tag": "Consent Agenda- CEO, Consent Agenda- General Counsel, Consent Agenda-Procurement, Consent Agenda- Resolutions",
+        "tag": "Consent Agenda: CEO, Consent Agenda: General Counsel, Consent Agenda: Procurement, Consent Agenda: Resolutions",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -11852,7 +11852,7 @@
         "date": "2025-09-25",
         "title": "Amend Board Report 25-0626-AR3 Authorize Continued Retention of Various Outside Counsel Law Firms Adopted    25-0925-AR3 Approve Payment of Proposed Settlement Regarding John Doe V. Board of Education of the City of Chicago Case No. 24 L 012131 ; 25-0925-AR4 Approve Payment of Proposed Settlement Regarding Eric Lezcano v. Board of Education, et al. Adopted    25-0925-AR5 Property Tax Appeal Refund – Authorize Settlement for PTAB Nos. 21-46465; 22-55947 and 23-42548 840 N. Lake Shore Drive Condo. Assoc. Adopted    25-0925-AR6 Property Tax Appeal Refund – Authorize Settlement for PTAB Nos. 21-53612 and 22-57312 the Legacy at Millennium Park Condo. Assoc. (Parking Spaces)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4429",
-        "tag": "Settlements, Contract/Procurement",
+        "tag": "Settlement, Contract/Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -12012,7 +12012,7 @@
         "date": "2025-10-23",
         "title": "Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies ; 25-1023-PO1 Amend Board Report 00-0322-PO2 Ownership of Intellectual Property Policy Adopted    25-1023-PO2 Amend Board Report 19-0828-PO2 Student Acceptable Use Policy Adopted    25-1023-PO3 Amend Board Report 19-0828-PO3 Staff Acceptable Use Policy Adopted    25-1023-PO4 Rescind Board Report 12-0627-PO2 Internet Safety ; 25-1023-ED1 Approve Application for School Code Waiver Regarding Physical Education; 25-1023-EX1 Transfer of Funds  ; 25-1023-OP1 Permanent Debarment of Brian Metcalf and Kimberly Maddox Adopted    25-1023-OP2 Permanent Debarment of Nations Classroom Adopted    25-1023-OP3 Permanent Debarment of Lavon and Natasha Tims, Mind Over Matter Foundation, Inc., My Brothers and My Sisters Keeper, Inc., and Freadom Productions, Inc. Adopted    25-1023-OP4 Permanent Debarment of Joseph Samuels and Linda Hightower ; 25-1023-PR1 Authorize the New Agreements for the Purchase of Physical Education Supplies and Equipment with BSN Sports LLC and School Health Corporation Adopted    25-1023-PR2 Authorize the Second (Final) Renewal Agreement with Various Vendors to Provide Out of School Time and Student Health and Wellness Products and Services ; 25-1023-PR3 Amend Board Report 23-1025-PR11 Authorize a New Agreement with Various Vendors for Furniture, Accessories and Related Design, Reconfiguration, and Repair Services Adopted    25-1023-PR4 Authorize the First and Second (Final) Renewal Agreement with Trane U.S. Inc. DBA Trane Integrated Funding Solutions for the Purchase or Rental of Heavy Equipment Adopted    25-1023-PR5 Authorize the Pre-Qualification Status of and New Agreements with Various Vendors to Provide Design-Build Contracting Services Adopted    25-1023-PR6 Authorize the Second (Final) Renewal Agreement with Sutton Ford, Inc. to Provide Various Vehicles, Including Maintenance and Related Services Adopted    25-1023-PR7 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4430",
-        "tag": "Consent Agenda- CEO, Consent Agenda- General Counsel, Consent Agenda-Procurement, Consent Agenda- Resolutions",
+        "tag": "Consent Agenda: CEO, Consent Agenda: General Counsel, Consent Agenda: Procurement, Consent Agenda: Resolutions",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -12076,7 +12076,7 @@
         "date": "2025-10-23",
         "title": "Warning Resolution – Raashida Preston, Tenured Teacher, George Manierre Elementary School *Adopted    25-1023-EX5 Transfer and Appoint Chief Safety and Security Officer Effective October 6, 2025 and Ratify all Lawful Actions Taken as Chief Safety and Security Officer Since October 6, 2025 (Ronan Shableski) *Adopted    25-1023-EX6 Approve Appointment of Chief of Staff to the CEO Effective September 15, 2025 and Ratify all Lawful Actions Taken as Chief of Staff to CEO since September 15, 2025 (Julie Burnett) *Adopted    25-1023-EX7 Report on Principal Contract (Renewal ALSC)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4430",
-        "tag": "Appointments, Warning Resolution",
+        "tag": "Appointment, Warning Resolution",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -12364,7 +12364,7 @@
         "date": "2025-12-03",
         "title": "Amend Board Report 25-0424-EX7 Authorize Renewal of the EPIC Academy Charter High School Agreement with Conditions",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4443",
-        "tag": "Settlements",
+        "tag": "Settlement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -12396,7 +12396,7 @@
         "date": "2025-12-18",
         "title": "Resolution Authorizing the Issuance of General Obligation Alternate Bonds of the Board of Education of the City of Chicago in an Aggregate Principal Amount Not to Exceed $1,800,000,000, Pursuant to the School Code and the Local Government Debt Reform Act and Authorizing Certain Other Matters ; 25-1218-PO1 Authorize the Commencement of the Public Comment Period for the Automatic External Defibrillators Policy Adopted    25-1218-PO2 Authorize the Commencement of the Public Comment Period for the Drug and Alcohol Free Workplace Policy Adopted    25-1218-PO3 Authorize the Commencement of the Public Comment Period for the Debarment Policy Adopted    25-1218-PO4 Authorize the Commencement of the Public Comment Period for the Indebtedness Policy Adopted    25-1218-PO5 Authorize the Commencement of the Public Comment Period for the Information Security Policy; 25-1218-EX1 Transfer of Funds (October 2025) Adopted    25-1218-EX2 Transfer of Funds (November 2025) Adopted    25-1218-EX3 Approve Entering into an Intergovernmental Agreement with the City Colleges of Chicago ; 25-1218-EX4 Approve Entering into an Intergovernmental Agreement with the Department of Family & Support Services (DFSS) – the City of Chicago ; 25-1218-OP1 Disposition of Bids Received for the Sale of Property Located at 1241 West 58th Street (Former Bontemps Elementary School) *Adopted    25-1218-OP2 Disposition of Offers Received for the Sale of Property Located at 1326 South Avers Avenue (Former Henson Elementary School) Adopted    25-1218-OP3 Disposition of Bids Received for the Sale of Property Located at 200 East 99th Street (Former Shedd Elementary School) ; 25-1218-PR1 Authorize a New Agreement with Various Vendors for Early Childhood Block Grant Services at Community Based Organizations (CBOS) Adopted    25-1218-PR2 Authorize the First and Second (Final) Renewal with Various Vendors for the Purchase of Maintenance, Repair and Operation Supplies (\"MRO\") and Personal Protective Equipment (\"PPE\") Adopted   25-1218-PR3 Authorize the Pre-Qualification Status of and New Agreements with Various Vendors to Provide Construction Material Testing and Inspection Services Adopted    25-1218-PR4 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program Adopted    25-1218-PR5 Authorize a New Agreement with BIF III US Aggregator (Delaware) DBA Center Square MSA Holdings LLC for Data Center Services Adopted    25-1218-PR6 Authorize the First and Second (Final) Renewal Agreement with Cannon Cochran Management Services, Inc. for Third Party Claims Administration Services Adopted    25-1218-PR7 Authorize the First, Second, and Third (Final) Renewal Agreement with Health Care Service Corporation (HCSC), a Mutual Legal Reserve Company for HMO and PPO Healthcare Administrative Services Medical and Ancillary Medical Services, and Authorize Funding of Health Savings Accounts and Agreement with Webster Bank N.A. ;",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4431",
-        "tag": "Property Purchase/Sale, Consent Agenda- CEO, Consent Agenda- General Counsel, Consent Agenda-Procurement, Consent Agenda- Resolutions",
+        "tag": "Property Purchase/Sale, Consent Agenda: CEO, Consent Agenda: General Counsel, Consent Agenda: Procurement, Consent Agenda: Resolutions",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -12428,7 +12428,7 @@
         "date": "2025-12-18",
         "title": "Ratify and Appoint Assistant General Counsel Department of Law (Evan Deichstetter) Adopted    25-1218-AR3 Transfer and Appoint Senior Assistant General Counsel Department of Law (Colleen Kauth) Adopted    25-1218-AR4 Appoint Assistant General Counsel Department of Law (Karina Salazar McGuffie) Adopted    25-1218-AR5 Amend Board Report 25-1023-AR3 Amend Board Report 25-0925-AR2 Amend Board Report 25-0626-AR3 Authorize Continued Retention of Various Outside Counsel Law Firms Adopted    25-1218-AR6 Workers’ Compensation Payment for Lump Sum Settlement for Harriet Joyner - Case No. 22 WC 003176 Adopted    25-1218-AR7 Workers’ Compensation Payment for Lump Sum Settlement for Bertha Sanchez - Case No. 23 WC 026108",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4431",
-        "tag": "Appointments, Contract/Procurement",
+        "tag": "Appointment, Contract/Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -12524,7 +12524,7 @@
         "date": "2025-12-18",
         "title": "Resolution Authorize Appointment of Members to Local School Councils to Fill Vacancies*",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4431",
-        "tag": "Appointments",
+        "tag": "Appointment",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -12798,7 +12798,7 @@
         "date": "2026-01-29",
         "title": "Authorize the Second (Final) Renewal Agreement with ATI Holdings, LLC for Sports Athletic Training Coverage and Related Services; 26-0129-PR2 Authorize New Agreements with Facility Optimization Solutions, LLC and the Gordian Group, Inc. for Unit Pricing Construction Management Services; 26-0129-PR3 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program; 26-0129-PR4 Amend Board Report 25-0130-PR5 Amend Board Report 23-1214-PR2 Authorize the First (Final) Renewal Agreement with Carahsoft Technology Corp. for Identity and Access Management Services; 26-0129-PR5 Authorize a New Agreement with ODP Business Solutions LLC for the Purchase of Office Supplies and Related Products and Services; 26-0129-PR6 Chief Procurement Officer Delegation of Authority Report for October and November 2025 Pursuant to Board Rule 7-14(c) and Chief Financial Officer Report for October and November 2025 Pursuant to Board Rule 7-13(d); 26-0129-PR7 Chief Procurement Officer Quarterly Report of Pre-Qualified Vendor Expenditures Pursuant to Board Rule 7-10; 26-0129-EX2 Report on Principal Contracts (New); 26-0129-EX3 Report on Principal Contracts (Renewals)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4432",
-        "tag": "Contract/Procurement, Consent Agenda-Procurement",
+        "tag": "Contract/Procurement, Consent Agenda: Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -12833,7 +12833,7 @@
         "date": "2026-01-29",
         "title": "Report on Board Report Rescissions; 26-0129-AR2 Appoint Assistant General Counsel Department of Law (Brooke Evans); 26-0129-AR3 Appoint Assistant General Counsel Department of Law (Kathryn Wegrzynski); 26-0129-AR4 Amend Board Report 25-1218-AR5 Amend Board Report 25-1023-AR3 Amend Board Report 25-0925-AR2 Amend Board Report 25-0626-AR3 Authorize Continued Retention of Various Outside Counsel Law Firms;  26-0129-AR5 Workers’ Compensation Payment for Lump Sum Settlement for Linda Golliday - Case No. 22 WC 015810; 26-0129-AR6 Workers’ Compensation Payment for Lump Sum Settlement for Latasha Little - Case No. 21 WC 017112; 26-0129-AR7 Workers’ Compensation Payment for Lump Sum Settlement for Saretta Sims - Case No. 18 WC 021763; 26-0129-AR8 Approve Payment of Proposed Settlement Regarding Janet Doe, Mother and Next Friend of John Doe, a Minor v. Board of Education of the City of Chicago - Case No. 2024 L 000989",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4432",
-        "tag": "Appointments, Consent Agenda- General Counsel, Settlements",
+        "tag": "Appointment, Consent Agenda: General Counsel, Settlement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -13244,7 +13244,7 @@
         "date": "2026-02-26",
         "title": "Adopt Academic Calendar for 2026-27 School Year and 2027-28 School Year",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4433",
-        "tag": "Consent Agenda- CEO",
+        "tag": "Consent Agenda: CEO",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -13451,7 +13451,7 @@
         "date": "2026-02-26",
         "title": "Authorize the Second (Final) Renewal Agreement with Baker Tilly US, LLP for External Auditing Services; 26-0226-PR3 Amend Board Report 24-0926-PR2 Amend Board Report 24-0222-PR6 Authorize the First Renewal Agreement with Jones Lang Lasalle Americas, Inc. for Facility Management and Building Engineering Services; 26-0226-PR4 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program; 26-0226-PR5 Authorize the Third (Final) Renewal Agreement with AT&T Enterprises, LLC for Internet, Voice and Data Circuits and Services; 26-0226-PR6 Amend Board Report 25-0724-PR8 Amend Board Report 23-0524-PR16 Authorize the First and Second (Final) Renewal Agreement with Various Vendors for Student Transportation Services (School Bus Services); 26-0226-PR7 Chief Procurement Officer Delegation of Authority Report for December 2025 Pursuant to Board Rule 7-14(c) and Chief Financial Officer Report for December 2025 Pursuant to Board Rule 7-13(d)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4433",
-        "tag": "Contract/Procurement, Consent Agenda-Procurement",
+        "tag": "Contract/Procurement, Consent Agenda: Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -13486,7 +13486,7 @@
         "date": "2026-02-26",
         "title": "Report on Principal Contracts (New); 26-0226-EX3 Report on Principal Contracts (Renewals)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4433",
-        "tag": "Consent Agenda- CEO",
+        "tag": "Consent Agenda: CEO",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -13521,7 +13521,7 @@
         "date": "2026-02-26",
         "title": "Report on Board Report Rescissions",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4433",
-        "tag": "Consent Agenda- General Counsel",
+        "tag": "Consent Agenda: General Counsel",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -13556,7 +13556,7 @@
         "date": "2026-02-26",
         "title": "Amend Board Report 26-0129-AR4 Amend Board Report 25-1218-AR5 Amend Board Report 25-1023-AR3 Amend Board Report 25-0925-AR2 Amend Board Report 25-0626-AR3 Authorize Continued Retention of Various Outside Counsel Law Firms",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4433",
-        "tag": "Consent Agenda- General Counsel, Contract/Procurement",
+        "tag": "Consent Agenda: General Counsel, Contract/Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -13591,7 +13591,7 @@
         "date": "2026-02-26",
         "title": "Authorize Retention of the Law Firm Cronin & Co., Ltd; 26-0226-AR4 Workers’ Compensation Payment for Lump Sum Settlement for Marie Newberry - Case No. 23 WC 005945; 26-0226-AR5 Workers’ Compensation Payment for Lump Sum Settlement for Maria Segura - Case No. 21 WC 032181; 26-0226-AR6 Workers’ Compensation Payment for Lump Sum Settlement for Willie Thomas - Case No. 21 WC 05038; 26-0226-AR7 Approve Payment of Proposed Settlement Regarding Claims Brought by Donnette Bright, Pamela Kidd and Tennisha Cox Case No. 25 CV 05807 (Consolidated)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4433",
-        "tag": "Consent Agenda- General Counsel, Contract/Procurement, Settlements",
+        "tag": "Consent Agenda: General Counsel, Contract/Procurement, Settlement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -13626,7 +13626,7 @@
         "date": "2026-02-26",
         "title": "Warning Resolution – Latanya McSwine, Tenured Teacher, Assigned to Morgan Park High School; 26-0226-EX5 Warning Resolution – Raul Valdivia, Tenured Teacher, Assigned to John Greenleaf Whittier Elementary School; 26-0226-EX6 Warning Resolution – Darnell Coleman, Tenured Teacher, Assigned to Frank I. Bennett Elementary School; 26-0226-EX7 Report on Principal Contract (New ALSC); 26-0226-EX8 Transfer and Appoint Chief Information Technology Officer Effective March 9, 2026 (Edward Wagner)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4433",
-        "tag": "Warning Resolution, Appointments, Consent Agenda- CEO",
+        "tag": "Warning Resolution, Appointment, Consent Agenda: CEO",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -13661,7 +13661,7 @@
         "date": "2026-02-26",
         "title": "Adopt Finding that Pupil is a Non-Resident of the City of Chicago Indebted to the Chicago Public Schools for Non-Resident Tuition",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4433",
-        "tag": "Consent Agenda- CEO",
+        "tag": "Consent Agenda: CEO",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -13941,7 +13941,7 @@
         "date": "2026-03-04",
         "title": "To defer Board Report 26-0226-PR1, postponing further review and official action until the upcoming board meeting scheduled for March 19.",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4454",
-        "tag": "Consent Agenda-Procurement",
+        "tag": "Consent Agenda: Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Split",
         "positions": {
@@ -13976,7 +13976,7 @@
         "date": "2026-03-04",
         "title": "Amend Board Report 25-1023-PR2 Authorize the Second (Final) Renewal Agreement with Various Vendors to Provide Out of School Time and Student Health and Wellness Products and Services",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4454",
-        "tag": "Consent Agenda-Procurement",
+        "tag": "Consent Agenda: Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Split",
         "positions": {
@@ -14238,7 +14238,7 @@
         "date": "2026-03-19",
         "title": "Amend Board Report 25-0424-EX4 Authorize Renewal of the ASPIRA Charter School Agreement with Conditions",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4434",
-        "tag": "Consent Agenda- CEO, Charter Schools",
+        "tag": "Consent Agenda: CEO, Charter Schools",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -14270,7 +14270,7 @@
         "date": "2026-03-19",
         "title": "Authorize Extension of the Lease Agreement with 4600 S. Kedzie LLC for the Use of Space at 4600 South Kedzie Avenue; 26-0319-OP2 Authorize Extension of the Lease Agreement with Messiah Evangelical Lutheran Church for Use of the Building Located at 6200 West Patterson Avenue by Smyser Elementary School; 26-0319-PR1 Amend Board Report 25-0529-PR3 Authorize the Pre-Qualification Status of and New Agreements with Various Vendors to Provide Educational Technology and Digital Resource Services; 26-0319-PR2 Authorize the Second (Final) Renewal Agreement with Youth Advocate Programs, Inc. for Youth Therapy Services; 26-0319-PR4 Authorize the First (Final) Renewal Agreement with Various Vendors for Medical Related Equipment and Supplies, Personal Protective Equipment, and the Purchase, Installation, and Maintenance Services of Automated External Defibrillators (AED); 26-0319-PR6 Authorize the First and Second (Final) Renewal with Herc Rentals Inc. for the Purchase or Rental of Heavy Equipment; 26-0319-PR7 Authorize the Pre-Qualification Status of and New Agreements with Various Vendors to Provide Various Trades Work for the Operations and Maintenance Program; 26-0319-PR8 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program; 26-0319-PR9 Authorize the First Renewal Agreement with Active Internet Technologies, LLC DBA Finalsite for a District-Wide Communications Solution; 26-0319-PR10 Authorize the First and Second (Final) Renewal Agreement with ConvergeOne, Inc for Cloud-Based Call Center Managed Services; 26-0319-PR11 Chief Procurement Officer Delegation of Authority Report for January 2026 Pursuant to Board Rule 7-14(c) and Chief Financial Officer Report for January 2026 Pursuant to Board Rule 7-13(d)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4434",
-        "tag": "Contract/Procurement, Consent Agenda-Procurement",
+        "tag": "Contract/Procurement, Consent Agenda: Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -14302,7 +14302,7 @@
         "date": "2026-03-19",
         "title": "Authorize the Third Renewal Agreement with Various Not-For-Profit Organizations for Sustainable Community Schools (SCS) Services",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4434",
-        "tag": "Consent Agenda-Procurement, Contract/Procurement",
+        "tag": "Consent Agenda: Procurement, Contract/Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -14334,7 +14334,7 @@
         "date": "2026-03-19",
         "title": "Authorize the Second (Final) Renewal Agreement with Jones Lang Lasalle Americas, Inc. for Facility Management and Building Engineering Services",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4434",
-        "tag": "Consent Agenda-Procurement, Contract/Procurement",
+        "tag": "Consent Agenda: Procurement, Contract/Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -14366,7 +14366,7 @@
         "date": "2026-03-19",
         "title": "Report on Principal Contracts (New); 26-0319-EX4 Report on Principal Contracts (Renewals); 26-0319-EX5 Adopt Finding that Pupil is a Non-Resident of the City of Chicago Indebted to the Chicago Public Schools for Non-Resident Tuition; 26-0319-EX6 Adopt Finding that Pupil is a Non-Resident of the City of Chicago Indebted to the Chicago Public Schools for Non-Resident Tuition; 26-0319-RS3 Resolution Approving Interim Superintendent/Chief Executive Officer’s Recommendation to Dismiss Educational Support Personnel",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4434",
-        "tag": "Consent Agenda- CEO, Employee Dismissal",
+        "tag": "Consent Agenda: CEO, Employee Dismissal",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -14398,7 +14398,7 @@
         "date": "2026-03-19",
         "title": "Amend Board Report 26-0226-AR2 Amend Board Report 26-0129-AR4 Amend Board Report 25-1218-AR5 Amend Board Report 25-1023-AR3 Amend Board Report 25-0925-AR2 Amend Board Report 25-0626-AR3 Authorize Continued Retention of Various Outside Counsel Law Firms",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4434",
-        "tag": "Consent Agenda- General Counsel, Contract/Procurement",
+        "tag": "Consent Agenda: General Counsel, Contract/Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -14590,7 +14590,7 @@
         "date": "2026-03-30",
         "title": "Resolution to Appoint Chief Executive Officer and to Approve Chief Executive Officer’s Employment Contract (Dr. Macquline King)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4457",
-        "tag": "Appointments",
+        "tag": "Appointment",
         "type": "[\"board-vote\"]",
         "outcome": "Split",
         "positions": {
@@ -14654,7 +14654,7 @@
         "date": "2026-04-08",
         "title": "Motion RE: Elect Dr. Angel L. Velez Vice President of the Board of Education of the City of Chicago",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4456",
-        "tag": "Appointments",
+        "tag": "Appointment",
         "type": "[\"board-vote\"]",
         "outcome": "Split",
         "positions": {
@@ -14910,7 +14910,7 @@
         "date": "2026-04-23",
         "title": "Transfer of Funds; 26-0423-MS1 Authorize the Renaming / Designation of Schools",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4435",
-        "tag": "Funds Transfer, Consent Agenda- CEO",
+        "tag": "Funds Transfer, Consent Agenda: CEO",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -14942,7 +14942,7 @@
         "date": "2026-04-23",
         "title": "Amend Board Report 26-0226-OP2 Amend Board Report 24-1212-OP1 Authorize the Renewal of a Lease Agreement with the Catholic Bishop of Chicago for the Continued Use of Various Leased School Sites; 26-0423-PR1 Authorize the Second (Final) Renewal Agreement with Various Vendors to Provide Professional Learning Services; 26-0423-PR2 Amend Board Report 25-1218-PR2 Authorize the First and Second (Final) Renewal with Various Vendors for the Purchase of Maintenance, Repair and Operation Supplies (\"MRO\") and Personal Protective Equipment (\"PPE\"); 26-0423-PR3 Authorize the Pre-Qualification Status of and New Agreements with Various Vendors to Provide Services for the Green Schools Solar Program; 26-0423-PR4 Authorize the Fourth (Final) Renewal Agreement with Various Vendors for Food Management Services; 26-0423-PR5 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program; 26-0423-PR6 Amend Board Report 23-0426-PR17 Authorize the Second (Final) Renewal Agreement with RL Canning, Inc. for Service Desk and Tech Support Services; 26-0423-PR7 Amend Board Report 24-0627-PR8 Authorize the First and Second (Final) Renewal Agreement with Sentinel Technologies, Inc. for Information Technology and Security Systems Management, Monitoring and Maintenance Services; 26-0423-PR8 Authorize the First (Final) Renewal Agreement with Sentinel Technologies, Inc. for Firewall Licensing, Maintenance and Support Services; 26-0423-PR9 Chief Procurement Officer Delegation of Authority Report for February 2026 Pursuant to Board Rule 7-14(c) and Chief Financial Officer Report for February 2026 Pursuant to Board Rule 7-13(d)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4435",
-        "tag": "Contract/Procurement, Consent Agenda-Procurement",
+        "tag": "Contract/Procurement, Consent Agenda: Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -14974,7 +14974,7 @@
         "date": "2026-04-23",
         "title": "Report on Principal Contracts (New); 26-0423-EX4 Report on Principal Contracts (Renewals); 26-0423-EX5 Report of the Chief Executive Officer Pursuant to Board Rule 5-4",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4435",
-        "tag": "Consent Agenda- CEO",
+        "tag": "Consent Agenda: CEO",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -15006,7 +15006,7 @@
         "date": "2026-04-23",
         "title": "Report on Board Report Rescissions; 26-0423-AR2 Amend Board Report 26-0319-AR2 Amend Board Report 26-0226-AR2 Amend Board Report 26-0129-AR4 Amend Board Report 25-1218-AR5 Amend Board Report 25-1023-AR3 Amend Board Report 25-0925-AR2 Amend Board Report 25-0626-AR3 Authorize Continued Retention of Various Outside Counsel Law Firms; 26-0423-AR3 Workers’ Compensation Payment for Lump Sum Settlement for Patricia Hunter-Scales - Case No. 07 WC 054809",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4435",
-        "tag": "Consent Agenda- General Counsel, Contract/Procurement, Settlements",
+        "tag": "Consent Agenda: General Counsel, Contract/Procurement, Settlement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -15134,7 +15134,7 @@
         "date": "2026-04-23",
         "title": "Amend Board Report 25-0626-EX2 Amend Board Report 25-0320-EX6 Authorize Renewal of the Youth Connection Charter School Agreement with Conditions *Regarding YCCS Chatham Academy Amendment",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4435",
-        "tag": "Consent Agenda- CEO, Charter Schools",
+        "tag": "Consent Agenda: CEO, Charter Schools",
         "type": "[\"board-vote\"]",
         "outcome": "Split",
         "positions": {
@@ -15166,7 +15166,7 @@
         "date": "2026-04-23",
         "title": "Amend Board Report 25-0626-EX2 Amend Board Report 25-0320-EX6 Authorize Renewal of the Youth Connection Charter School Agreement with Conditions *Regarding ASPIRA- Antonia Pantoja Amendment Postpone to May 28, 2026",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4435",
-        "tag": "Consent Agenda- CEO, Charter Schools",
+        "tag": "Consent Agenda: CEO, Charter Schools",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -15358,7 +15358,7 @@
         "date": "2026-04-23",
         "title": "Transfer and Appoint General Counsel Effective April 24, 2026 (Elizabeth K. Barton)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4435",
-        "tag": "Appointments",
+        "tag": "Appointment",
         "type": "[\"board-vote\"]",
         "outcome": "Split",
         "positions": {
@@ -15454,7 +15454,7 @@
         "date": "2026-05-13",
         "title": "Amend Board Report 26-0330-RS2 Resolution to Appoint Superintendent/Chief Executive Officer and to Approve Superintendent/Chief Executive Officer's Employment Contract (Dr. Macquline King)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4458",
-        "tag": "Appointments",
+        "tag": "Appointment",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -15678,7 +15678,7 @@
         "date": "2026-05-28",
         "title": "Authorize the Renaming / Designation of Schools; 26-0528-EX1 Transfer of Funds",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
-        "tag": "Consent Agenda- CEO, Funds Transfer",
+        "tag": "Consent Agenda: CEO, Funds Transfer",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -15710,7 +15710,7 @@
         "date": "2026-05-28",
         "title": "Amend Board Report 24-0125-EX5 Authorize the Renewal of the Chicago International Charter School Agreement with Conditions; 26-0528-EX3 Amend Board Report 25-0424-EX15 Authorize Renewal of the Rowe Elementary Charter School Agreement with Conditions; 26-0528-EX4 Amend Board Report 25-0424-EX16 Authorize Renewal of Urban Prep Charter Academy for Young Men High School Bronzeville Campus Agreement with Conditions; 26-0528-EX5 Amend Board Report 25-0424-EX17 Authorize Renewal of Urban Prep Charter Academy for Young Men High School Englewood Campus Agreement with Conditions",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
-        "tag": "Consent Agenda- CEO, Charter Schools",
+        "tag": "Consent Agenda: CEO, Charter Schools",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -15742,7 +15742,7 @@
         "date": "2026-05-28",
         "title": "Amend Board Report 25-0626-EX2 Amend Board Report 25-0320-EX6 Authorize Renewal of the Youth Connection Charter School Agreement with Conditions",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
-        "tag": "Consent Agenda- CEO, Charter Schools",
+        "tag": "Consent Agenda: CEO, Charter Schools",
         "type": "[\"board-vote\"]",
         "outcome": "Withdrawn",
         "positions": {
@@ -15774,7 +15774,7 @@
         "date": "2026-05-28",
         "title": "Authorize Renewal of the Academy for Global Citizenship Charter School Agreement with Conditions; 26-0528-EX7 Authorize Renewal of the Acero Charter Schools Agreement with Conditions; 26-0528-EX8 Authorize Renewal of the Chicago Collegiate Charter School Agreement with Conditions; 26-0528-EX9 Authorize Renewal of the Chicago Mathematics and Science Academy Charter School Agreement with Conditions; 26-0528-EX11 Authorize Renewal of the Intrinsic Charter School Agreement with Conditions",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
-        "tag": "Consent Agenda- CEO, Charter Schools",
+        "tag": "Consent Agenda: CEO, Charter Schools",
         "type": "[\"board-vote\"]",
         "outcome": "Split",
         "positions": {
@@ -15806,7 +15806,7 @@
         "date": "2026-05-28",
         "title": "Authorize Renewal of the Christopher House Charter School Agreement with Conditions",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
-        "tag": "Consent Agenda- CEO, Charter Schools",
+        "tag": "Consent Agenda: CEO, Charter Schools",
         "type": "[\"board-vote\"]",
         "outcome": "Split",
         "positions": {
@@ -15838,7 +15838,7 @@
         "date": "2026-05-28",
         "title": "Authorize Renewal of the University of Chicago Charter School Agreement with Conditions",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
-        "tag": "Consent Agenda- CEO, Charter Schools",
+        "tag": "Consent Agenda: CEO, Charter Schools",
         "type": "[\"board-vote\"]",
         "outcome": "Split",
         "positions": {
@@ -15870,7 +15870,7 @@
         "date": "2026-05-28",
         "title": "Amend Board Report 26-0423-EX2 Amend Board Report 25-0626-EX2 Amend Board Report 25-0320-EX6 Authorize Renewal of the Youth Connection Charter School Agreement with Conditions",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
-        "tag": "Consent Agenda- CEO, Charter Schools",
+        "tag": "Consent Agenda: CEO, Charter Schools",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -15998,7 +15998,7 @@
         "date": "2026-05-28",
         "title": "Authorize the First Renewal with National Louis University for Class Observations for Pre-K Classroom Services; 26-0528-PR2 Authorize the First and Second (Final) Renewal Agreement with Various Vendors for Assessment and Evaluation Tools for Related Service Providers (RSP); 26-0528-PR3 Amend Board Report 24-0627-PR1 Authorize the First Renewal Agreement with Illinois Institute of Technology for Testing Administration Services; 26-0528-PR4 Authorize the First Renewal Agreement with Various Vendors for Financial Professional Services; 26-0528-PR5 Authorize the First Renewal Agreement with Various Vendors for Roofing Consulting Services; 26-0528-PR6 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program; 26-0528-PR7 Authorize the First Renewal Agreement with Trimark Marlinn, LLC for the Purchase of Food Service Equipment and Related Supplies and Services; 26-0528-PR8 Authorize a New Software License Agreement with Carahsoft Technology Corporation for the Purchase of ServiceNow Licensing; 26-0528-PR9 Authorize the Annual Renewal Agreement with Oracle America, Inc. for Licensing and Support for Oracle Enterprise Financial Systems; 26-0528-PR10 Authorize the First Renewal Agreement with Education Logistics, Inc. for Student Transportation Consulting Services and Routing Software; 26-0528-PR11 Authorize the First Renewal Agreement with Various Vendors for Charter/Yellow School Buses and/or Alternative Models of Transportation for Field and Sport Trip Services; 26-0528-PR12 Chief Procurement Officer Delegation of Authority Report for March 2026 Pursuant to Board Rule 7-14(c) and Chief Financial Officer Report for March 2026 Pursuant to Board Rule 7-13(d)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
-        "tag": "Consent Agenda-Procurement, Contract/Procurement",
+        "tag": "Consent Agenda: Procurement, Contract/Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -16030,7 +16030,7 @@
         "date": "2026-05-28",
         "title": "Report on Principal Contracts (New); 26-0528-EX15 Report on Principal Contracts (Renewals)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
-        "tag": "Consent Agenda- CEO",
+        "tag": "Consent Agenda: CEO",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -16062,7 +16062,7 @@
         "date": "2026-05-28",
         "title": "Report on Board Report Rescissions; 26-0528-AR2 Appoint Assistant General Counsel Department of Law (Raisa Alicea); 26-0528-AR3 Appoint Assistant General Counsel Department of Law (Jordan May); 26-0528-AR4 Appoint Assistant General Counsel Department of Law (Betsy Mirella Pisabaj); 26-0528-AR5 Amend Board Report 26-0423-AR2 Amend Board Report 26-0319-AR2 Amend Board Report 26-0226-AR2 Amend Board Report 26-0129-AR2 Amend Board Report 25-1218-AR5 Amend Board Report 25-1023-AR3 Amend Board Report 25-0925-AR2 Amend Board Report 25-0626-AR3 Authorize Continued Retention of Various Outside Counsel Law Firms",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
-        "tag": "Consent Agenda- General Counsel, Appointments, Contract/Procurement",
+        "tag": "Consent Agenda: General Counsel, Appointment, Contract/Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -16094,7 +16094,7 @@
         "date": "2026-05-28",
         "title": "Workers’ Compensation Payment for Lump Sum Settlement for Amalia Reyes - Case Nos. 18 WC 015946; 18 WC 015947 and 19 WC 015434; 26-0528-AR7 Approve Payment of Proposed Settlement Regarding L.I.H. and I.N., Individually and as Parents and Next Friends of R.N., a Minor v. Board of Education of the City of Chicago D/B/A Chicago Public Schools; Jones Lang Lasalle Americas, Inc.; and Apache Service and Supply Co. Case No. 25 L 009309",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
-        "tag": "Consent Agenda- General Counsel, Settlements",
+        "tag": "Consent Agenda: General Counsel, Settlement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -16126,7 +16126,7 @@
         "date": "2026-05-28",
         "title": "Resolution Approving Superintendent/Chief Executive Officer’s Recommendation to Dismiss Educational Support Personnel; 26-0528-RS4 Resolution Approving Superintendent/Chief Executive Officer’s Recommendation to Dismiss Probationary Appointed Teacher; 26-0528-RS5 Resolution to Approve Superintendent/Chief Executive Officer’s Recommendation to Dismiss (Non-Renew) Probationary Appointed Teachers at the End of the 2025-2026 School Year",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
-        "tag": "Consent Agenda- CEO, Employee Dismissal",
+        "tag": "Consent Agenda: CEO, Employee Dismissal",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -16286,7 +16286,7 @@
         "date": "2026-05-28",
         "title": "Authorize Retention of the Law Firm Latham & Watkins, LLP",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4436",
-        "tag": "Contract/Procurement, Consent Agenda- General Counsel",
+        "tag": "Contract/Procurement, Consent Agenda: General Counsel",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -16446,7 +16446,7 @@
         "date": "2026-06-10",
         "title": "Approve the Chicago Public Schools Legislative Agenda",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4460",
-        "tag": "Consent Agenda- CEO",
+        "tag": "Consent Agenda: CEO",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -16542,7 +16542,7 @@
         "date": "2026-06-25",
         "title": "Resolution Authorize Appointment of Members to the ESSA Title I Parent Board of Governors (PBG); 26-0625-RS3 Resolution Authorize Appointment of Members to Local School Councils for the New Terms of Office",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
-        "tag": "Appointments, LSC Vacancies",
+        "tag": "Appointment, LSC Vacancies",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -16670,7 +16670,7 @@
         "date": "2026-06-25",
         "title": "Authorize the Second (Final) Renewal Agreement with International Baccalaureate Organization to Provide Professional Development, Student Assessments and Related School Services; 26-0625-PR2 Authorize the First Renewal with ACT Education Corp. for ACT Testing Services; 26-0625-PR3 Authorize the First (Final) Renewal Agreement with College Board for College Entrance Exams, Professional Development and Related Services;  26-0625-PR5 Amend Board Report 24-1101-PR5 Authorize a New Agreement with Various Vendors for the Purchase of Custodial Equipment; 26-0625-PR6 Report on the Award of Construction Contracts and Changes to Construction Contracts for the Board of Education’s Capital Improvement Program; 26-0625-PR7 Amend Board Report 22-0622-PR12 Authorize the First, Second and Final Renewal Agreements with Active Office Solution LLC and Ricoh USA, Inc. for the Purchase and Lease of Output Devices and to Provide Managed Print Services (MPS); 26-0625-PR8 Amend Board Report 23-0222-PR9 Authorize the First (and Final) Renewal Agreement with Sentinel Technologies, Inc for Data Network Upgrade Services; 26-0625-PR9 Amend Board Report 23-0524-PR11 Authorize the Extension of the Agreement with Biomedical Research Foundation of Northwest Louisiana Omicron Technology Solutions, LLC for Student Key Card Systems and Associated Services; 26-0625-PR10 Amend Board Report 24-0523-PR10 Authorize the Extension of the Agreement with UKG INC DBA UKG Kronos Systems LLC for Software and Hardware Maintenance; 26-0625-PR11 Amend Board Report 25-0724-PR5 Authorize the First (Final) Renewal Agreement with Carahsoft Technology Corporation for DocuSign Electronic Signature Platform and Related Services; 26-0625-PR12 Authorize a New Agreement with AT&T Mobility National Accounts, LLC. D/B/A AT&T. for Cellular Services, Applications, Equipment, Accessories, and Support; 26-0625-PR13 Authorize a New Agreement with ClassLink, Inc. for Identity & Access Management Services; 26-0625-PR14 Authorize the Second (Final) Renewal Agreement with Various Vendors for the Purchase and/or Lease of Network Servers and Hyperconvergence",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
-        "tag": "Contract/Procurement, Consent Agenda-Procurement",
+        "tag": "Contract/Procurement, Consent Agenda: Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -16702,7 +16702,7 @@
         "date": "2026-06-25",
         "title": "Authorize the Second (Final) Renewal Agreement with Various Vendors for Safe Haven Sites and Services",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
-        "tag": "Contract/Procurement, Consent Agenda-Procurement",
+        "tag": "Contract/Procurement, Consent Agenda: Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -16734,7 +16734,7 @@
         "date": "2026-06-25",
         "title": "Authorize the First Renewal Agreement with Various Vendors for District-Wide Marketing Services",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
-        "tag": "Contract/Procurement, Consent Agenda-Procurement",
+        "tag": "Contract/Procurement, Consent Agenda: Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous with Abstentions",
         "positions": {
@@ -16766,7 +16766,7 @@
         "date": "2026-06-25",
         "title": "Chief Procurement Officer Delegation of Authority Report for April 2026 Pursuant to Board Rule 7-14(c) and Chief Financial Officer Report for April 2026 Pursuant to Board Rule 7-13(d); 26-0625-PR17 Chief Procurement Officer Quarterly Report of Pre-Qualified Vendor Expenditures Pursuant to Board Rule 7-10",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
-        "tag": "Consent Agenda-Procurement",
+        "tag": "Consent Agenda: Procurement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -16798,7 +16798,7 @@
         "date": "2026-06-25",
         "title": "Report on Principal Contracts (New); 26-0625-EX3 Report on Principal Contracts (Renewals)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
-        "tag": "Consent Agenda- CEO",
+        "tag": "Consent Agenda: CEO",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -16830,7 +16830,7 @@
         "date": "2026-06-25",
         "title": "Report on Board Report Rescissions",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
-        "tag": "Consent Agenda- General Counsel",
+        "tag": "Consent Agenda: General Counsel",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -16894,7 +16894,7 @@
         "date": "2026-06-25",
         "title": "Approve the Chicago Public Schools Legislative Agenda",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
-        "tag": "Consent Agenda- CEO",
+        "tag": "Consent Agenda: CEO",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -16926,7 +16926,7 @@
         "date": "2026-06-25",
         "title": "Appoint Assistant General Counsel Department of Law (Naomi Forbes); 26-0625-AR3 Appoint Assistant General Counsel Department of Law (Joshua Wiedner); 26-0625-AR4 Amend Board Report 26-0226-AR6 Workers’ Compensation Payment for Lump Sum Settlement for Willie Thomas - Case No. 21 WC 05038; 26-0625-AR5 Workers’ Compensation Payment for Lump Sum Settlement for Kimberly Jachim-Mellenthin - Case No. 21 WC 028481; 26-0625-AR6 Workers’ Compensation Payment for Lump Sum Settlement for Francine Kupec - Case Nos. 06 WC 001702 and 20 WC 012896; 26-0625-AR7 Approve Payment of Proposed Settlement Regarding Claims Brought by Hagan, King/Muhammad, Bowen and Haywood Case No. 25 CV 05807 (Consolidated)",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
-        "tag": "Appointments, Consent Agenda- General Counsel, Settlements",
+        "tag": "Appointment, Consent Agenda: General Counsel, Settlement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -16958,7 +16958,7 @@
         "date": "2026-06-25",
         "title": "Resolution Approving Superintendent/Chief Executive Officer’s Recommendation to Dismiss Educational Support Personnel; 26-0625-RS6 Resolution Approving Superintendent/Chief Executive Officer’s Recommendation to Dismiss Probationary Appointed Teacher",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4437",
-        "tag": "Employee Dismissal, Consent Agenda- CEO",
+        "tag": "Employee Dismissal, Consent Agenda: CEO",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -17310,7 +17310,7 @@
         "date": "2026-07-30",
         "title": "appoint assistant general counsel, Department of Law, Alexander J. Smith; AR3, authorize new retention of various outside counsel law firms; AR4, authorize continue retention of various outside council law firms; AR5 workers compensation payment for lumpsum settlement for Will Arer; AR6, approved payment of proposed settlement regarding claims brought by Mary Terry on behalf of ZG; AR7 approves settlement between the board of education of the city of Chicago and Chicago teachers union on behalf of all affected coaches, athletic directors, and sports liaison; AR8 property tax appeal refund authorized settlement for 3750 North Lakeshore Drive, Inc.",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4438",
-        "tag": "Consent Agenda- General Counsel, Appointments, Settlements",
+        "tag": "Consent Agenda: General Counsel, Appointment, Settlement",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
@@ -17342,7 +17342,7 @@
         "date": "2026-07-30",
         "title": "resolution approving interim superintendent, chief executive officer's recommendation to dismiss educational support personnel; RS8 resolution approving interim superintendent chief executive officer's recommendation to dismiss probationary appointed teachers",
         "source_url": "https://www.cpsboe.org/meetings/meeting-videos/4438",
-        "tag": "Employee Dismissal, Consent Agenda- CEO",
+        "tag": "Employee Dismissal, Consent Agenda: CEO",
         "type": "[\"board-vote\"]",
         "outcome": "Unanimous",
         "positions": {
