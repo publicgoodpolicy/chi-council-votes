@@ -48,14 +48,23 @@ to the reference's chain block with exactly those omissions.
 Votes change only when the Council actually votes, so a manual run after meeting days is
 enough. `build_all.sh` covers the whole path; run it and stop at the gate.
 
-**The source** is DataMade's Councilmatic Datasette (`puddle.datamade.us`). **It blocks
-datacenter IPs** — that is the bot wall, and it is the reason there is no CI. A residential
-IP clears it. If the fetch fails at `SELECT 1` with HTTP 403 or a timeout, that is the wall,
-not a code fault.
+**The source** is DataMade's Chicago City Council OCD database, published nightly as a GitHub
+release asset at https://github.com/datamade/chicago-council-scrapers/releases/download/nightly/chicago_council.db.zip.
+The nightly tag is rolling: its asset is replaced each night, so the asset's Last-Modified (or the
+API's asset updated_at) is the freshness signal, never the release's published_at, which is years
+old. The Datasette DataMade hosted at puddle.datamade.us was shut down on 2026-09-15 and no longer
+resolves; there is no IP restriction on the release asset, so the old bot-wall note no longer
+applies to votes.
 
-> **The 403 belongs to the VOTES source only.** It has been mis-attributed to the SBE /
-> `elections.il.gov` side; that is wrong, and the dollars section below states what is
-> actually true there.
+Each votes refresh seals a vintage first: download the asset into a dated directory
+(~/votes-YYYY-MM-DD/), record its sha256, bytes and Last-Modified in that directory's
+VOTES-VINTAGE.md with Ishan's attestation line, unzip beside it, and serve it locally:
+
+    datasette serve ~/votes-YYYY-MM-DD/chicago_council.db --host 127.0.0.1 --port 8001 --setting sql_time_limit_ms 5000
+
+Then run `build_all.sh` and stop the server afterwards. `ingest_votes.py`'s DEFAULT_BASE is that
+local URL. The divided-votes query costs about 0.5 s warm and can exceed Datasette's 1 s default
+on a cold cache; the raised limit is why. If the fetch fails at SELECT 1, the server is not running.
 
 **Positions are single-source (PS-99).** Every published vote position comes from the vote
 ingest. **Hand-entry is retired** — no position enters the artifact by hand, and content that

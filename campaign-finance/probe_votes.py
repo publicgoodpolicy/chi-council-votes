@@ -42,7 +42,7 @@ USAGE
 -----
     python3 probe_votes.py
     python3 probe_votes.py --session 2023 --out probe_out
-    python3 probe_votes.py --base https://puddle.datamade.us/chicago_council-21e06af
+    python3 probe_votes.py --base http://127.0.0.1:8001/chicago_council
 
 Writes a human-readable report to stdout and saves:
     <out>/probe_report.json   structured findings
@@ -62,7 +62,7 @@ from collections import Counter, defaultdict
 # never trust a hardcoded one without the name check in section 2.
 DEFAULT_ORG = "ocd-organization/d437a413-9392-4992-93ef-0c4bbe0d96e7"
 # Un-hashed alias; Datasette redirects it to the current nightly snapshot.
-DEFAULT_BASE = "https://puddle.datamade.us/chicago_council"
+DEFAULT_BASE = "http://127.0.0.1:8001/chicago_council"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
 
@@ -213,7 +213,7 @@ def run(base, org, target_session, out_dir, sample_limit):
         print("\n  Things to try:")
         print("   * Confirm the URL in a browser: " + base)
         print("   * If the alias 404s, pass the hashed URL via --base")
-        print("     (e.g. https://puddle.datamade.us/chicago_council-21e06af)")
+        print("     (e.g. http://127.0.0.1:8001/chicago_council)")
         print("   * If you see a bot/Cloudflare block, run from a residential")
         print("     IP or your CI runner rather than a flagged host.")
         report["connectivity"] = {"ok": False, "error": err}

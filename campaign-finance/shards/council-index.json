@@ -1,6 +1,6 @@
 {
   "schema_version": "2.1",
-  "generated_at": "2026-09-22T03:00:39Z",
+  "generated_at": "2026-09-24T02:34:24Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "itemization_threshold": 150,
   "cycles": {
@@ -347284,10 +347284,474 @@
     }
   ],
   "rollcall": {
-    "generated_at": "2026-06-22",
-    "source": "DataMade OCD Councilmatic (https://puddle.datamade.us/chicago_council) \u2014 synced 2026-06-22",
-    "term_votes": 175,
+    "generated_at": "2026-09-24",
+    "source": "DataMade chicago-council-scrapers nightly release (chicago_council.db) \u2014 synced 2026-09-24",
+    "term_votes": 182,
     "votes": [
+      {
+        "id": "ocd-vote/a65dc1c4-49be-4297-8c85-16a5f591f737",
+        "date": "2026-07-22",
+        "bill": "R2026-0026834",
+        "title": "Submission of public question by referendum to voters at November 3, 2026 general election on whether City shall pursue all lawful means to recover financial compensation from the federal government for the costs and economic harm caused by the Donald Trump administration's ICE operations to recover lost tax revenue, public safety response costs, and services provided to residents and families affected",
+        "type": "[\"resolution\"]",
+        "result": "pass",
+        "source_url": "https://chicago.councilmatic.org/search/?q=R2026-0026834",
+        "tally": {
+          "yes": 46,
+          "not voting": 2,
+          "absent": 1,
+          "no": 1
+        },
+        "positions": {
+          "11": "yes",
+          "16": "yes",
+          "3": "yes",
+          "15": "yes",
+          "42": "yes",
+          "4": "yes",
+          "5": "yes",
+          "6": "yes",
+          "10": "present",
+          "12": "yes",
+          "14": "yes",
+          "21": "yes",
+          "26": "yes",
+          "30": "yes",
+          "34": "yes",
+          "44": "yes",
+          "46": "yes",
+          "48": "yes",
+          "8": "yes",
+          "19": "yes",
+          "23": "yes",
+          "20": "absent",
+          "38": "yes",
+          "9": "yes",
+          "17": "yes",
+          "25": "yes",
+          "40": "yes",
+          "41": "no",
+          "45": "yes",
+          "47": "yes",
+          "22": "yes",
+          "31": "yes",
+          "37": "yes",
+          "50": "yes",
+          "36": "yes",
+          "2": "yes",
+          "49": "yes",
+          "7": "present",
+          "13": "yes",
+          "18": "yes",
+          "28": "yes",
+          "29": "yes",
+          "1": "yes",
+          "39": "yes",
+          "32": "yes",
+          "33": "yes",
+          "24": "yes",
+          "35": "yes",
+          "27": "yes",
+          "43": "yes"
+        }
+      },
+      {
+        "id": "ocd-vote/7d0751a0-3424-42b7-a1f6-8b782c46e3cf",
+        "date": "2026-07-22",
+        "bill": "R2026-0025438",
+        "title": "Submission of public question by referendum to Chicago voters at February 23, 2027\nprimary election on whether Chicago should create permanent monument celebrating\nChicago's global contributions to music and arts",
+        "type": "[\"resolution\"]",
+        "result": "pass",
+        "source_url": "https://chicago.councilmatic.org/search/?q=R2026-0025438",
+        "tally": {
+          "yes": 24,
+          "no": 23,
+          "not voting": 2,
+          "absent": 1
+        },
+        "positions": {
+          "11": "yes",
+          "16": "yes",
+          "3": "yes",
+          "15": "yes",
+          "42": "yes",
+          "4": "no",
+          "5": "yes",
+          "6": "no",
+          "10": "present",
+          "12": "no",
+          "14": "no",
+          "21": "no",
+          "26": "no",
+          "30": "no",
+          "34": "yes",
+          "44": "yes",
+          "46": "no",
+          "48": "no",
+          "8": "yes",
+          "19": "yes",
+          "23": "yes",
+          "20": "absent",
+          "38": "yes",
+          "9": "yes",
+          "17": "no",
+          "25": "no",
+          "40": "no",
+          "41": "yes",
+          "45": "no",
+          "47": "no",
+          "22": "no",
+          "31": "yes",
+          "37": "yes",
+          "50": "yes",
+          "36": "yes",
+          "2": "yes",
+          "49": "no",
+          "7": "present",
+          "13": "yes",
+          "18": "yes",
+          "28": "no",
+          "29": "no",
+          "1": "no",
+          "39": "yes",
+          "32": "yes",
+          "33": "no",
+          "24": "no",
+          "35": "no",
+          "27": "no",
+          "43": "yes"
+        }
+      },
+      {
+        "id": "ocd-vote/7f1dc482-8e84-45f6-b454-30bde0bc75c6",
+        "date": "2026-07-22",
+        "bill": "R2026-0025457",
+        "title": "Submission of public question by referendum to Chicago voters at February 23, 2027 primary election on whether Chicago City Council should establish and fully fund its own independent legal counsel separate from City's Law Department",
+        "type": "[\"resolution\"]",
+        "result": "pass",
+        "source_url": "https://chicago.councilmatic.org/search/?q=R2026-0025457",
+        "tally": {
+          "yes": 32,
+          "no": 16,
+          "absent": 1,
+          "not voting": 1
+        },
+        "positions": {
+          "11": "yes",
+          "16": "yes",
+          "3": "yes",
+          "15": "yes",
+          "42": "yes",
+          "4": "no",
+          "5": "yes",
+          "6": "no",
+          "10": "yes",
+          "12": "no",
+          "14": "no",
+          "21": "yes",
+          "26": "no",
+          "30": "yes",
+          "34": "yes",
+          "44": "yes",
+          "46": "no",
+          "48": "no",
+          "8": "yes",
+          "19": "yes",
+          "23": "yes",
+          "20": "absent",
+          "38": "yes",
+          "9": "yes",
+          "17": "no",
+          "25": "no",
+          "40": "yes",
+          "41": "yes",
+          "45": "yes",
+          "47": "no",
+          "22": "no",
+          "31": "yes",
+          "37": "yes",
+          "50": "yes",
+          "36": "yes",
+          "2": "yes",
+          "49": "present",
+          "7": "yes",
+          "13": "yes",
+          "18": "yes",
+          "28": "no",
+          "29": "yes",
+          "1": "no",
+          "39": "yes",
+          "32": "yes",
+          "33": "no",
+          "24": "yes",
+          "35": "no",
+          "27": "no",
+          "43": "yes"
+        }
+      },
+      {
+        "id": "ocd-vote/61ec38d9-6e58-48cc-8253-86676e935299",
+        "date": "2026-07-15",
+        "bill": "SO2026-0027311",
+        "title": "Time fixed for next City Council Meeting July 22, 2026, at 10:00 A.M., Council Chamber",
+        "type": "[\"ordinance\"]",
+        "result": "pass",
+        "source_url": "https://chicago.councilmatic.org/search/?q=SO2026-0027311",
+        "tally": {
+          "yes": 26,
+          "no": 20,
+          "not voting": 4
+        },
+        "positions": {
+          "11": "yes",
+          "16": "yes",
+          "3": "yes",
+          "15": "yes",
+          "42": "yes",
+          "4": "no",
+          "5": "present",
+          "6": "no",
+          "10": "yes",
+          "12": "no",
+          "14": "no",
+          "21": "yes",
+          "26": "no",
+          "30": "yes",
+          "34": "yes",
+          "44": "no",
+          "46": "no",
+          "48": "no",
+          "8": "yes",
+          "19": "yes",
+          "23": "yes",
+          "20": "present",
+          "38": "yes",
+          "9": "yes",
+          "17": "no",
+          "25": "no",
+          "40": "no",
+          "41": "yes",
+          "45": "present",
+          "47": "no",
+          "22": "no",
+          "31": "yes",
+          "37": "yes",
+          "50": "yes",
+          "36": "yes",
+          "2": "yes",
+          "49": "no",
+          "7": "yes",
+          "13": "yes",
+          "18": "yes",
+          "28": "no",
+          "29": "no",
+          "1": "no",
+          "39": "yes",
+          "32": "yes",
+          "33": "no",
+          "24": "present",
+          "35": "no",
+          "27": "no",
+          "43": "yes"
+        }
+      },
+      {
+        "id": "ocd-vote/086039fb-4239-4340-8fec-6fa0ed2a52b7",
+        "date": "2026-06-17",
+        "bill": "Or2026-0026210",
+        "title": "Settlement agreement regarding case of Maria Navarro Escobedo and Yadira Novarro Escobedo v. Julian Martha Juarez, Tobias M. Houston, Michael Kocerka, and City of Chicago, cited as 2023 L 10937",
+        "type": "[\"order\"]",
+        "result": "pass",
+        "source_url": "https://chicago.councilmatic.org/search/?q=Or2026-0026210",
+        "tally": {
+          "yes": 36,
+          "no": 12,
+          "not voting": 1,
+          "absent": 1
+        },
+        "positions": {
+          "11": "yes",
+          "16": "yes",
+          "3": "yes",
+          "15": "no",
+          "42": "no",
+          "4": "yes",
+          "5": "yes",
+          "6": "yes",
+          "10": "no",
+          "12": "yes",
+          "14": "yes",
+          "21": "present",
+          "26": "yes",
+          "30": "yes",
+          "34": "yes",
+          "44": "yes",
+          "46": "yes",
+          "48": "yes",
+          "8": "yes",
+          "19": "yes",
+          "23": "no",
+          "20": "yes",
+          "38": "yes",
+          "9": "no",
+          "17": "yes",
+          "25": "yes",
+          "40": "yes",
+          "41": "no",
+          "45": "no",
+          "47": "yes",
+          "22": "yes",
+          "31": "yes",
+          "37": "yes",
+          "50": "no",
+          "36": "absent",
+          "2": "no",
+          "49": "yes",
+          "7": "yes",
+          "13": "no",
+          "18": "no",
+          "28": "yes",
+          "29": "no",
+          "1": "yes",
+          "39": "yes",
+          "32": "yes",
+          "33": "yes",
+          "24": "yes",
+          "35": "yes",
+          "43": "yes"
+        }
+      },
+      {
+        "id": "ocd-vote/070905df-c1ce-4cff-8a4a-69536e3f1c6e",
+        "date": "2026-06-17",
+        "bill": "SO2026-0024076",
+        "title": "Amendment of Municipal Code Chapter 4-156 by defining and prohibiting the installation or use of sweepstakes machines",
+        "type": "[\"ordinance\"]",
+        "result": "pass",
+        "source_url": "https://chicago.councilmatic.org/search/?q=SO2026-0024076",
+        "tally": {
+          "no": 33,
+          "yes": 15,
+          "absent": 1,
+          "not voting": 1
+        },
+        "positions": {
+          "11": "no",
+          "16": "no",
+          "3": "no",
+          "15": "yes",
+          "42": "yes",
+          "4": "no",
+          "5": "no",
+          "6": "no",
+          "10": "yes",
+          "12": "no",
+          "14": "no",
+          "21": "no",
+          "26": "no",
+          "30": "no",
+          "34": "no",
+          "44": "yes",
+          "46": "no",
+          "48": "no",
+          "8": "no",
+          "19": "yes",
+          "23": "yes",
+          "20": "no",
+          "38": "no",
+          "9": "yes",
+          "17": "no",
+          "25": "no",
+          "40": "no",
+          "41": "yes",
+          "45": "yes",
+          "47": "no",
+          "22": "no",
+          "31": "yes",
+          "37": "no",
+          "50": "yes",
+          "36": "absent",
+          "2": "yes",
+          "49": "no",
+          "7": "no",
+          "13": "yes",
+          "18": "no",
+          "28": "no",
+          "29": "no",
+          "1": "no",
+          "39": "no",
+          "32": "yes",
+          "33": "no",
+          "24": "yes",
+          "35": "no",
+          "43": "present"
+        }
+      },
+      {
+        "id": "ocd-vote/08b95f76-1748-4198-8011-3054d012ff66",
+        "date": "2026-06-17",
+        "bill": "SO2026-0025395",
+        "title": "Amendment of Municipal Code Chapter 4-156 regarding social media amusement tax",
+        "type": "[\"ordinance\"]",
+        "result": "pass",
+        "source_url": "https://chicago.councilmatic.org/search/?q=SO2026-0025395",
+        "tally": {
+          "yes": 47,
+          "absent": 1,
+          "no": 2
+        },
+        "positions": {
+          "11": "yes",
+          "16": "yes",
+          "3": "yes",
+          "15": "yes",
+          "42": "yes",
+          "4": "yes",
+          "5": "yes",
+          "6": "yes",
+          "10": "yes",
+          "12": "yes",
+          "14": "yes",
+          "21": "yes",
+          "26": "yes",
+          "30": "yes",
+          "34": "yes",
+          "44": "yes",
+          "46": "yes",
+          "48": "yes",
+          "8": "yes",
+          "19": "yes",
+          "23": "yes",
+          "20": "yes",
+          "38": "yes",
+          "9": "yes",
+          "17": "yes",
+          "25": "yes",
+          "40": "yes",
+          "41": "yes",
+          "45": "yes",
+          "47": "yes",
+          "22": "yes",
+          "31": "yes",
+          "37": "yes",
+          "50": "yes",
+          "36": "absent",
+          "2": "yes",
+          "49": "yes",
+          "7": "yes",
+          "13": "no",
+          "18": "yes",
+          "28": "yes",
+          "29": "yes",
+          "1": "yes",
+          "39": "yes",
+          "32": "no",
+          "33": "yes",
+          "24": "yes",
+          "35": "yes",
+          "43": "yes"
+        }
+      },
       {
         "id": "ocd-vote/0b340de0-d77f-4f7d-b7bf-bf1fa821b3bc",
         "date": "2026-03-18",
@@ -358915,12 +359379,12 @@
     ]
   },
   "council_committees": {
-    "generated_at": "2026-06-22",
+    "generated_at": "2026-09-24",
     "note": "Held for future UI. Not yet surfaced in the embed.",
     "role_vocab": {
-      "Member": 216,
-      "Vice Chair": 13,
-      "Chair": 16
+      "Member": 200,
+      "Vice Chair": 12,
+      "Chair": 17
     },
     "by_ward": {
       "17": [
@@ -358934,10 +359398,6 @@
         },
         {
           "committee": "Committee on Zoning, Landmarks and Building Standards",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
           "role": "Member"
         }
       ],
@@ -358955,25 +359415,7 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Education and Child Development",
-          "role": "Member"
-        }
-      ],
-      "16": [
-        {
-          "committee": "Committee on License and Consumer Protection",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Contracting Oversight and Equity",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Workforce Development",
           "role": "Member"
         },
         {
@@ -358995,19 +359437,33 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Ethics and Government Oversight",
+          "committee": "Committee on Economic, Capital and Technology Development",
           "role": "Member"
         },
         {
-          "committee": "Committee on Economic, Capital and Technology Development",
+          "committee": "Committee on Ethics and Government Oversight",
           "role": "Member"
         },
         {
           "committee": "Committee on Zoning, Landmarks and Building Standards",
           "role": "Member"
+        }
+      ],
+      "16": [
+        {
+          "committee": "Committee on License and Consumer Protection",
+          "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Aviation",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Contracting Oversight and Equity",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Workforce Development",
           "role": "Member"
         }
       ],
@@ -359017,19 +359473,11 @@
           "role": "Chair"
         },
         {
-          "committee": "Committee on Budget and Government Operations",
-          "role": "Member"
-        },
-        {
           "committee": "Committee on Public Safety",
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Police and Fire",
+          "committee": "Committee on Budget and Government Operations",
           "role": "Member"
         }
       ],
@@ -359043,20 +359491,16 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Budget and Government Operations",
+          "committee": "Committee on Public Safety",
           "role": "Member"
         },
         {
-          "committee": "Committee on Public Safety",
+          "committee": "Committee on Budget and Government Operations",
           "role": "Member"
         },
         {
           "committee": "Committee on Ethics and Government Oversight",
           "role": "Chair"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
         }
       ],
       "37": [
@@ -359073,12 +359517,12 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Contracting Oversight and Equity",
-          "role": "Chair"
+          "committee": "Committee on Aviation",
+          "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
+          "committee": "Committee on Contracting Oversight and Equity",
+          "role": "Chair"
         }
       ],
       "46": [
@@ -359095,11 +359539,7 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Police and Fire",
+          "committee": "Committee on Workforce Development",
           "role": "Member"
         },
         {
@@ -359121,14 +359561,6 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Police and Fire",
-          "role": "Member"
-        },
-        {
           "committee": "Committee on Education and Child Development",
           "role": "Member"
         }
@@ -359147,11 +359579,7 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
-          "role": "Vice Chair"
-        },
-        {
-          "committee": "Committee on Police and Fire",
+          "committee": "Committee on Aviation",
           "role": "Member"
         }
       ],
@@ -359169,11 +359597,11 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
-          "role": "Vice Chair"
+          "committee": "Committee on Aviation",
+          "role": "Member"
         },
         {
-          "committee": "Committee on Police and Fire",
+          "committee": "Committee on Immigrant and Refugee Rights",
           "role": "Member"
         }
       ],
@@ -359192,10 +359620,6 @@
         },
         {
           "committee": "Committee on Zoning, Landmarks and Building Standards",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
           "role": "Member"
         }
       ],
@@ -359223,10 +359647,6 @@
         {
           "committee": "Committee on Zoning, Landmarks and Building Standards",
           "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
         }
       ],
       "32": [
@@ -359235,15 +359655,15 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Ethics and Government Oversight",
-          "role": "Member"
-        },
-        {
           "committee": "Committee on Economic, Capital and Technology Development",
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Ethics and Government Oversight",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Aviation",
           "role": "Member"
         }
       ],
@@ -359261,8 +359681,8 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
+          "committee": "Committee on Aviation",
+          "role": "Chair"
         },
         {
           "committee": "Committee on Education and Child Development",
@@ -359285,10 +359705,6 @@
         {
           "committee": "Committee on Zoning, Landmarks and Building Standards",
           "role": "Vice Chair"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
         }
       ],
       "38": [
@@ -359297,11 +359713,11 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Budget and Government Operations",
+          "committee": "Committee on Public Safety",
           "role": "Member"
         },
         {
-          "committee": "Committee on Public Safety",
+          "committee": "Committee on Budget and Government Operations",
           "role": "Member"
         },
         {
@@ -359309,11 +359725,11 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Aviation",
           "role": "Member"
         },
         {
-          "committee": "Committee on Police and Fire",
+          "committee": "Committee on Workforce Development",
           "role": "Member"
         }
       ],
@@ -359333,9 +359749,41 @@
         {
           "committee": "Committee on Ethics and Government Oversight",
           "role": "Member"
+        }
+      ],
+      "48": [
+        {
+          "committee": "Committee on Environmental Protection and Energy",
+          "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Public Safety",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Economic, Capital and Technology Development",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Immigrant and Refugee Rights",
+          "role": "Member"
+        }
+      ],
+      "33": [
+        {
+          "committee": "Committee on Environmental Protection and Energy",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Budget and Government Operations",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Immigrant and Refugee Rights",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Education and Child Development",
           "role": "Member"
         }
       ],
@@ -359357,7 +359805,7 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Workforce Development",
           "role": "Member"
         }
       ],
@@ -359367,11 +359815,11 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Budget and Government Operations",
+          "committee": "Committee on Public Safety",
           "role": "Member"
         },
         {
-          "committee": "Committee on Public Safety",
+          "committee": "Committee on Budget and Government Operations",
           "role": "Member"
         },
         {
@@ -359379,7 +359827,7 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Aviation",
           "role": "Member"
         }
       ],
@@ -359389,11 +359837,11 @@
           "role": "Chair"
         },
         {
-          "committee": "Committee on Budget and Government Operations",
+          "committee": "Committee on Public Safety",
           "role": "Member"
         },
         {
-          "committee": "Committee on Public Safety",
+          "committee": "Committee on Budget and Government Operations",
           "role": "Member"
         },
         {
@@ -359401,43 +359849,7 @@
           "role": "Vice Chair"
         },
         {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        }
-      ],
-      "48": [
-        {
-          "committee": "Committee on Environmental Protection and Energy",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Public Safety",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Economic, Capital and Technology Development",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        }
-      ],
-      "33": [
-        {
-          "committee": "Committee on Environmental Protection and Energy",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Budget and Government Operations",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Education and Child Development",
+          "committee": "Committee on Immigrant and Refugee Rights",
           "role": "Member"
         }
       ],
@@ -359447,11 +359859,11 @@
           "role": "Vice Chair"
         },
         {
-          "committee": "Committee on Budget and Government Operations",
+          "committee": "Committee on Public Safety",
           "role": "Member"
         },
         {
-          "committee": "Committee on Public Safety",
+          "committee": "Committee on Budget and Government Operations",
           "role": "Member"
         },
         {
@@ -359459,11 +359871,7 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Police and Fire",
+          "committee": "Committee on Immigrant and Refugee Rights",
           "role": "Member"
         }
       ],
@@ -359477,19 +359885,15 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Ethics and Government Oversight",
-          "role": "Member"
-        },
-        {
           "committee": "Committee on Economic, Capital and Technology Development",
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Ethics and Government Oversight",
           "role": "Member"
         },
         {
-          "committee": "Committee on Police and Fire",
+          "committee": "Committee on Aviation",
           "role": "Member"
         }
       ],
@@ -359513,10 +359917,6 @@
         {
           "committee": "Committee on Zoning, Landmarks and Building Standards",
           "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
         }
       ],
       "30": [
@@ -359533,7 +359933,7 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Immigrant and Refugee Rights",
           "role": "Member"
         }
       ],
@@ -359543,9 +359943,77 @@
           "role": "Member"
         },
         {
+          "committee": "Committee on Public Safety",
+          "role": "Member"
+        },
+        {
           "committee": "Committee on Budget and Government Operations",
           "role": "Member"
         },
+        {
+          "committee": "Committee on Zoning, Landmarks and Building Standards",
+          "role": "Member"
+        }
+      ],
+      "40": [
+        {
+          "committee": "Committee on Public Safety",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Budget and Government Operations",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Ethics and Government Oversight",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Immigrant and Refugee Rights",
+          "role": "Chair"
+        },
+        {
+          "committee": "Committee on Workforce Development",
+          "role": "Member"
+        }
+      ],
+      "14": [
+        {
+          "committee": "Committee on Public Safety",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Economic, Capital and Technology Development",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Immigrant and Refugee Rights",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Workforce Development",
+          "role": "Vice Chair"
+        },
+        {
+          "committee": "Committee on Education and Child Development",
+          "role": "Member"
+        }
+      ],
+      "2": [
+        {
+          "committee": "Committee on Public Safety",
+          "role": "Chair"
+        },
+        {
+          "committee": "Committee on Aviation",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Zoning, Landmarks and Building Standards",
+          "role": "Member"
+        }
+      ],
+      "26": [
         {
           "committee": "Committee on Public Safety",
           "role": "Member"
@@ -359555,7 +360023,115 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Immigrant and Refugee Rights",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Education and Child Development",
+          "role": "Member"
+        }
+      ],
+      "29": [
+        {
+          "committee": "Committee on Public Safety",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Budget and Government Operations",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Ethics and Government Oversight",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Contracting Oversight and Equity",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Immigrant and Refugee Rights",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Workforce Development",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Education and Child Development",
+          "role": "Member"
+        }
+      ],
+      "5": [
+        {
+          "committee": "Committee on Public Safety",
+          "role": "Vice Chair"
+        },
+        {
+          "committee": "Committee on Budget and Government Operations",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Workforce Development",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Education and Child Development",
+          "role": "Member"
+        }
+      ],
+      "18": [
+        {
+          "committee": "Committee on Public Safety",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Economic, Capital and Technology Development",
+          "role": "Chair"
+        },
+        {
+          "committee": "Committee on Aviation",
+          "role": "Vice Chair"
+        },
+        {
+          "committee": "Committee on Workforce Development",
+          "role": "Member"
+        }
+      ],
+      "27": [
+        {
+          "committee": "Committee on Budget and Government Operations",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Budget and Government Operations",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Aviation",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Aviation",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Contracting Oversight and Equity",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Contracting Oversight and Equity",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Zoning, Landmarks and Building Standards",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Zoning, Landmarks and Building Standards",
+          "role": "Chair"
+        },
+        {
+          "committee": "Committee on Zoning, Landmarks and Building Standards",
           "role": "Member"
         }
       ],
@@ -359581,11 +360157,47 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Immigrant and Refugee Rights",
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Immigrant and Refugee Rights",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Workforce Development",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Workforce Development",
+          "role": "Member"
+        }
+      ],
+      "21": [
+        {
+          "committee": "Committee on Budget and Government Operations",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Economic, Capital and Technology Development",
+          "role": "Vice Chair"
+        },
+        {
+          "committee": "Committee on Zoning, Landmarks and Building Standards",
+          "role": "Member"
+        }
+      ],
+      "9": [
+        {
+          "committee": "Committee on Budget and Government Operations",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Zoning, Landmarks and Building Standards",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Workforce Development",
           "role": "Member"
         }
       ],
@@ -359603,59 +360215,15 @@
           "role": "Chair"
         },
         {
+          "committee": "Committee on Aviation",
+          "role": "Member"
+        },
+        {
           "committee": "Committee on Contracting Oversight and Equity",
           "role": "Chair"
         },
         {
           "committee": "Committee on Contracting Oversight and Equity",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Police and Fire",
-          "role": "Member"
-        }
-      ],
-      "21": [
-        {
-          "committee": "Committee on Budget and Government Operations",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Economic, Capital and Technology Development",
-          "role": "Vice Chair"
-        },
-        {
-          "committee": "Committee on Zoning, Landmarks and Building Standards",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Police and Fire",
-          "role": "Member"
-        }
-      ],
-      "9": [
-        {
-          "committee": "Committee on Budget and Government Operations",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Zoning, Landmarks and Building Standards",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Education and Child Development",
           "role": "Member"
         }
       ],
@@ -359665,7 +360233,11 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Aviation",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Workforce Development",
           "role": "Member"
         },
         {
@@ -359685,32 +360257,6 @@
         {
           "committee": "Committee on Contracting Oversight and Equity",
           "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Police and Fire",
-          "role": "Member"
-        }
-      ],
-      "5": [
-        {
-          "committee": "Committee on Budget and Government Operations",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Public Safety",
-          "role": "Vice Chair"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Education and Child Development",
-          "role": "Member"
         }
       ],
       "22": [
@@ -359719,8 +360265,16 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Aviation",
           "role": "Member"
+        },
+        {
+          "committee": "Committee on Immigrant and Refugee Rights",
+          "role": "Member"
+        },
+        {
+          "committee": "Committee on Workforce Development",
+          "role": "Chair"
         }
       ],
       "11": [
@@ -359729,19 +360283,15 @@
           "role": "Vice Chair"
         },
         {
-          "committee": "Committee on Ethics and Government Oversight",
-          "role": "Member"
-        },
-        {
           "committee": "Committee on Economic, Capital and Technology Development",
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Ethics and Government Oversight",
           "role": "Member"
         },
         {
-          "committee": "Committee on Police and Fire",
+          "committee": "Committee on Aviation",
           "role": "Member"
         },
         {
@@ -359759,15 +360309,11 @@
           "role": "Member"
         },
         {
+          "committee": "Committee on Aviation",
+          "role": "Member"
+        },
+        {
           "committee": "Committee on Contracting Oversight and Equity",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Police and Fire",
           "role": "Member"
         }
       ],
@@ -359777,33 +360323,7 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Police and Fire",
-          "role": "Vice Chair"
-        }
-      ],
-      "27": [
-        {
-          "committee": "Committee on Budget and Government Operations",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Contracting Oversight and Equity",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Zoning, Landmarks and Building Standards",
-          "role": "Chair"
-        },
-        {
-          "committee": "Committee on Zoning, Landmarks and Building Standards",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Aviation",
           "role": "Member"
         }
       ],
@@ -359813,6 +360333,10 @@
           "role": "Member"
         },
         {
+          "committee": "Committee on Aviation",
+          "role": "Member"
+        },
+        {
           "committee": "Committee on Contracting Oversight and Equity",
           "role": "Member"
         },
@@ -359821,37 +360345,7 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        }
-      ],
-      "29": [
-        {
-          "committee": "Committee on Budget and Government Operations",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Public Safety",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Ethics and Government Oversight",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Contracting Oversight and Equity",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Police and Fire",
-          "role": "Chair"
-        },
-        {
-          "committee": "Committee on Education and Child Development",
+          "committee": "Committee on Immigrant and Refugee Rights",
           "role": "Member"
         }
       ],
@@ -359861,71 +360355,21 @@
           "role": "Member"
         },
         {
+          "committee": "Committee on Aviation",
+          "role": "Member"
+        },
+        {
           "committee": "Committee on Contracting Oversight and Equity",
           "role": "Member"
         },
         {
           "committee": "Committee on Zoning, Landmarks and Building Standards",
           "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Chair"
         }
       ],
-      "40": [
-        {
-          "committee": "Committee on Budget and Government Operations",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Public Safety",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Ethics and Government Oversight",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        }
-      ],
-      "14": [
-        {
-          "committee": "Committee on Public Safety",
-          "role": "Member"
-        },
+      "6": [
         {
           "committee": "Committee on Economic, Capital and Technology Development",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Education and Child Development",
-          "role": "Member"
-        }
-      ],
-      "2": [
-        {
-          "committee": "Committee on Public Safety",
-          "role": "Chair"
-        },
-        {
-          "committee": "Committee on Zoning, Landmarks and Building Standards",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        }
-      ],
-      "26": [
-        {
-          "committee": "Committee on Public Safety",
           "role": "Member"
         },
         {
@@ -359933,29 +360377,11 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
+          "committee": "Committee on Workforce Development",
           "role": "Member"
         },
         {
           "committee": "Committee on Education and Child Development",
-          "role": "Member"
-        }
-      ],
-      "18": [
-        {
-          "committee": "Committee on Public Safety",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Economic, Capital and Technology Development",
-          "role": "Chair"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Police and Fire",
           "role": "Member"
         }
       ],
@@ -359969,38 +360395,12 @@
           "role": "Member"
         },
         {
-          "committee": "Committee on Committees and Rules",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Police and Fire",
-          "role": "Member"
+          "committee": "Committee on Immigrant and Refugee Rights",
+          "role": "Vice Chair"
         },
         {
           "committee": "Committee on Education and Child Development",
           "role": "Chair"
-        }
-      ],
-      "6": [
-        {
-          "committee": "Committee on Economic, Capital and Technology Development",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Zoning, Landmarks and Building Standards",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Committees and Rules",
-          "role": "Vice Chair"
-        },
-        {
-          "committee": "Committee on Police and Fire",
-          "role": "Member"
-        },
-        {
-          "committee": "Committee on Education and Child Development",
-          "role": "Member"
         }
       ]
     },
@@ -360015,11 +360415,11 @@
           "role": "Vice Chair"
         },
         {
-          "ward": 16,
+          "ward": 42,
           "role": "Member"
         },
         {
-          "ward": 42,
+          "ward": 16,
           "role": "Member"
         },
         {
@@ -360081,7 +360481,15 @@
       ],
       "Committee on Environmental Protection and Energy": [
         {
+          "ward": 48,
+          "role": "Member"
+        },
+        {
           "ward": 46,
+          "role": "Member"
+        },
+        {
+          "ward": 33,
           "role": "Member"
         },
         {
@@ -360102,14 +360510,6 @@
         },
         {
           "ward": 42,
-          "role": "Member"
-        },
-        {
-          "ward": 48,
-          "role": "Member"
-        },
-        {
-          "ward": 33,
           "role": "Member"
         },
         {
@@ -360145,159 +360545,13 @@
           "role": "Member"
         }
       ],
-      "Committee on Budget and Government Operations": [
-        {
-          "ward": 35,
-          "role": "Member"
-        },
-        {
-          "ward": 28,
-          "role": "Chair"
-        },
-        {
-          "ward": 31,
-          "role": "Member"
-        },
-        {
-          "ward": 21,
-          "role": "Member"
-        },
-        {
-          "ward": 1,
-          "role": "Member"
-        },
-        {
-          "ward": 37,
-          "role": "Member"
-        },
-        {
-          "ward": 33,
-          "role": "Member"
-        },
-        {
-          "ward": 36,
-          "role": "Member"
-        },
-        {
-          "ward": 41,
-          "role": "Member"
-        },
-        {
-          "ward": 24,
-          "role": "Member"
-        },
-        {
-          "ward": 9,
-          "role": "Member"
-        },
-        {
-          "ward": 38,
-          "role": "Member"
-        },
-        {
-          "ward": 13,
-          "role": "Member"
-        },
-        {
-          "ward": 12,
-          "role": "Member"
-        },
-        {
-          "ward": 7,
-          "role": "Member"
-        },
-        {
-          "ward": 5,
-          "role": "Member"
-        },
-        {
-          "ward": 22,
-          "role": "Member"
-        },
-        {
-          "ward": 34,
-          "role": "Member"
-        },
-        {
-          "ward": 25,
-          "role": "Member"
-        },
-        {
-          "ward": 11,
-          "role": "Vice Chair"
-        },
-        {
-          "ward": 39,
-          "role": "Member"
-        },
-        {
-          "ward": 4,
-          "role": "Member"
-        },
-        {
-          "ward": 17,
-          "role": "Member"
-        },
-        {
-          "ward": 50,
-          "role": "Member"
-        },
-        {
-          "ward": 47,
-          "role": "Member"
-        },
-        {
-          "ward": 15,
-          "role": "Member"
-        },
-        {
-          "ward": 35,
-          "role": "Member"
-        },
-        {
-          "ward": 27,
-          "role": "Member"
-        },
-        {
-          "ward": 19,
-          "role": "Member"
-        },
-        {
-          "ward": 49,
-          "role": "Member"
-        },
-        {
-          "ward": 3,
-          "role": "Member"
-        },
-        {
-          "ward": 29,
-          "role": "Member"
-        },
-        {
-          "ward": 43,
-          "role": "Member"
-        },
-        {
-          "ward": 8,
-          "role": "Member"
-        },
-        {
-          "ward": 40,
-          "role": "Member"
-        },
-        {
-          "ward": 42,
-          "role": "Member"
-        }
-      ],
       "Committee on Public Safety": [
         {
-          "ward": 43,
+          "ward": 40,
           "role": "Member"
         },
         {
-          "ward": 40,
+          "ward": 43,
           "role": "Member"
         },
         {
@@ -360365,33 +360619,121 @@
           "role": "Member"
         }
       ],
-      "Committee on Ethics and Government Oversight": [
+      "Committee on Budget and Government Operations": [
         {
-          "ward": 40,
+          "ward": 27,
           "role": "Member"
         },
         {
-          "ward": 23,
+          "ward": 35,
           "role": "Member"
         },
         {
-          "ward": 47,
+          "ward": 31,
+          "role": "Member"
+        },
+        {
+          "ward": 1,
+          "role": "Member"
+        },
+        {
+          "ward": 21,
+          "role": "Member"
+        },
+        {
+          "ward": 33,
+          "role": "Member"
+        },
+        {
+          "ward": 37,
+          "role": "Member"
+        },
+        {
+          "ward": 36,
+          "role": "Member"
+        },
+        {
+          "ward": 41,
+          "role": "Member"
+        },
+        {
+          "ward": 24,
+          "role": "Member"
+        },
+        {
+          "ward": 9,
+          "role": "Member"
+        },
+        {
+          "ward": 28,
           "role": "Chair"
         },
         {
-          "ward": 11,
+          "ward": 38,
           "role": "Member"
+        },
+        {
+          "ward": 12,
+          "role": "Member"
+        },
+        {
+          "ward": 13,
+          "role": "Member"
+        },
+        {
+          "ward": 7,
+          "role": "Member"
+        },
+        {
+          "ward": 5,
+          "role": "Member"
+        },
+        {
+          "ward": 22,
+          "role": "Member"
+        },
+        {
+          "ward": 34,
+          "role": "Member"
+        },
+        {
+          "ward": 25,
+          "role": "Member"
+        },
+        {
+          "ward": 11,
+          "role": "Vice Chair"
         },
         {
           "ward": 39,
           "role": "Member"
         },
         {
-          "ward": 32,
+          "ward": 4,
           "role": "Member"
         },
         {
-          "ward": 44,
+          "ward": 50,
+          "role": "Member"
+        },
+        {
+          "ward": 17,
+          "role": "Member"
+        },
+        {
+          "ward": 47,
+          "role": "Member"
+        },
+        {
+          "ward": 15,
+          "role": "Member"
+        },
+        {
+          "ward": 35,
+          "role": "Member"
+        },
+        {
+          "ward": 27,
           "role": "Member"
         },
         {
@@ -360400,26 +360742,30 @@
         },
         {
           "ward": 49,
-          "role": "Vice Chair"
-        },
-        {
-          "ward": 42,
           "role": "Member"
         },
         {
-          "ward": 38,
-          "role": "Member"
-        },
-        {
-          "ward": 20,
-          "role": "Member"
-        },
-        {
-          "ward": 24,
+          "ward": 3,
           "role": "Member"
         },
         {
           "ward": 29,
+          "role": "Member"
+        },
+        {
+          "ward": 43,
+          "role": "Member"
+        },
+        {
+          "ward": 8,
+          "role": "Member"
+        },
+        {
+          "ward": 40,
+          "role": "Member"
+        },
+        {
+          "ward": 42,
           "role": "Member"
         }
       ],
@@ -360427,10 +360773,6 @@
         {
           "ward": 28,
           "role": "Member"
-        },
-        {
-          "ward": 18,
-          "role": "Chair"
         },
         {
           "ward": 36,
@@ -360449,12 +360791,16 @@
           "role": "Chair"
         },
         {
+          "ward": 6,
+          "role": "Member"
+        },
+        {
           "ward": 7,
           "role": "Member"
         },
         {
-          "ward": 6,
-          "role": "Member"
+          "ward": 18,
+          "role": "Chair"
         },
         {
           "ward": 21,
@@ -360497,25 +360843,169 @@
           "role": "Member"
         },
         {
+          "ward": 32,
+          "role": "Member"
+        },
+        {
           "ward": 41,
+          "role": "Member"
+        }
+      ],
+      "Committee on Ethics and Government Oversight": [
+        {
+          "ward": 40,
+          "role": "Member"
+        },
+        {
+          "ward": 23,
+          "role": "Member"
+        },
+        {
+          "ward": 47,
+          "role": "Chair"
+        },
+        {
+          "ward": 39,
+          "role": "Member"
+        },
+        {
+          "ward": 11,
           "role": "Member"
         },
         {
           "ward": 32,
           "role": "Member"
+        },
+        {
+          "ward": 44,
+          "role": "Member"
+        },
+        {
+          "ward": 19,
+          "role": "Member"
+        },
+        {
+          "ward": 49,
+          "role": "Vice Chair"
+        },
+        {
+          "ward": 42,
+          "role": "Member"
+        },
+        {
+          "ward": 38,
+          "role": "Member"
+        },
+        {
+          "ward": 20,
+          "role": "Member"
+        },
+        {
+          "ward": 24,
+          "role": "Member"
+        },
+        {
+          "ward": 29,
+          "role": "Member"
         }
       ],
-      "Committee on Contracting Oversight and Equity": [
+      "Committee on Aviation": [
+        {
+          "ward": 27,
+          "role": "Member"
+        },
+        {
+          "ward": 38,
+          "role": "Member"
+        },
+        {
+          "ward": 19,
+          "role": "Chair"
+        },
+        {
+          "ward": 41,
+          "role": "Member"
+        },
+        {
+          "ward": 27,
+          "role": "Member"
+        },
+        {
+          "ward": 28,
+          "role": "Member"
+        },
+        {
+          "ward": 37,
+          "role": "Member"
+        },
+        {
+          "ward": 4,
+          "role": "Member"
+        },
+        {
+          "ward": 18,
+          "role": "Vice Chair"
+        },
+        {
+          "ward": 15,
+          "role": "Member"
+        },
+        {
+          "ward": 39,
+          "role": "Member"
+        },
         {
           "ward": 3,
           "role": "Member"
         },
         {
-          "ward": 45,
+          "ward": 23,
           "role": "Member"
         },
         {
+          "ward": 11,
+          "role": "Member"
+        },
+        {
+          "ward": 2,
+          "role": "Member"
+        },
+        {
+          "ward": 32,
+          "role": "Member"
+        },
+        {
+          "ward": 13,
+          "role": "Member"
+        },
+        {
+          "ward": 31,
+          "role": "Member"
+        },
+        {
+          "ward": 22,
+          "role": "Member"
+        },
+        {
+          "ward": 8,
+          "role": "Member"
+        },
+        {
+          "ward": 16,
+          "role": "Member"
+        }
+      ],
+      "Committee on Contracting Oversight and Equity": [
+        {
           "ward": 29,
+          "role": "Member"
+        },
+        {
+          "ward": 27,
+          "role": "Member"
+        },
+        {
+          "ward": 3,
           "role": "Member"
         },
         {
@@ -360525,6 +361015,10 @@
         {
           "ward": 28,
           "role": "Chair"
+        },
+        {
+          "ward": 45,
+          "role": "Member"
         },
         {
           "ward": 7,
@@ -360573,6 +361067,10 @@
           "role": "Chair"
         },
         {
+          "ward": 27,
+          "role": "Member"
+        },
+        {
           "ward": 35,
           "role": "Member"
         },
@@ -360593,11 +361091,11 @@
           "role": "Member"
         },
         {
-          "ward": 26,
+          "ward": 43,
           "role": "Member"
         },
         {
-          "ward": 43,
+          "ward": 26,
           "role": "Member"
         },
         {
@@ -360613,11 +361111,11 @@
           "role": "Vice Chair"
         },
         {
-          "ward": 42,
+          "ward": 2,
           "role": "Member"
         },
         {
-          "ward": 2,
+          "ward": 42,
           "role": "Member"
         },
         {
@@ -360633,11 +361131,11 @@
           "role": "Member"
         },
         {
-          "ward": 8,
+          "ward": 25,
           "role": "Member"
         },
         {
-          "ward": 25,
+          "ward": 8,
           "role": "Member"
         },
         {
@@ -360665,157 +361163,9 @@
           "role": "Member"
         }
       ],
-      "Committee on Committees and Rules": [
-        {
-          "ward": 16,
-          "role": "Member"
-        },
-        {
-          "ward": 26,
-          "role": "Member"
-        },
-        {
-          "ward": 9,
-          "role": "Member"
-        },
-        {
-          "ward": 32,
-          "role": "Member"
-        },
-        {
-          "ward": 8,
-          "role": "Chair"
-        },
-        {
-          "ward": 35,
-          "role": "Member"
-        },
-        {
-          "ward": 25,
-          "role": "Member"
-        },
-        {
-          "ward": 13,
-          "role": "Member"
-        },
-        {
-          "ward": 27,
-          "role": "Member"
-        },
-        {
-          "ward": 21,
-          "role": "Member"
-        },
-        {
-          "ward": 39,
-          "role": "Member"
-        },
+      "Committee on Immigrant and Refugee Rights": [
         {
           "ward": 22,
-          "role": "Member"
-        },
-        {
-          "ward": 36,
-          "role": "Member"
-        },
-        {
-          "ward": 7,
-          "role": "Member"
-        },
-        {
-          "ward": 31,
-          "role": "Vice Chair"
-        },
-        {
-          "ward": 3,
-          "role": "Member"
-        },
-        {
-          "ward": 41,
-          "role": "Vice Chair"
-        },
-        {
-          "ward": 6,
-          "role": "Vice Chair"
-        },
-        {
-          "ward": 50,
-          "role": "Member"
-        },
-        {
-          "ward": 34,
-          "role": "Member"
-        },
-        {
-          "ward": 30,
-          "role": "Member"
-        },
-        {
-          "ward": 14,
-          "role": "Member"
-        },
-        {
-          "ward": 28,
-          "role": "Member"
-        },
-        {
-          "ward": 42,
-          "role": "Member"
-        },
-        {
-          "ward": 15,
-          "role": "Member"
-        },
-        {
-          "ward": 4,
-          "role": "Member"
-        },
-        {
-          "ward": 20,
-          "role": "Member"
-        },
-        {
-          "ward": 47,
-          "role": "Member"
-        },
-        {
-          "ward": 43,
-          "role": "Member"
-        },
-        {
-          "ward": 12,
-          "role": "Member"
-        },
-        {
-          "ward": 19,
-          "role": "Member"
-        },
-        {
-          "ward": 44,
-          "role": "Member"
-        },
-        {
-          "ward": 37,
-          "role": "Member"
-        },
-        {
-          "ward": 45,
-          "role": "Member"
-        },
-        {
-          "ward": 23,
-          "role": "Member"
-        },
-        {
-          "ward": 29,
-          "role": "Member"
-        },
-        {
-          "ward": 1,
-          "role": "Member"
-        },
-        {
-          "ward": 17,
           "role": "Member"
         },
         {
@@ -360823,117 +361173,31 @@
           "role": "Member"
         },
         {
-          "ward": 48,
-          "role": "Member"
-        },
-        {
-          "ward": 38,
-          "role": "Member"
-        },
-        {
           "ward": 35,
           "role": "Member"
         },
         {
-          "ward": 10,
+          "ward": 26,
           "role": "Member"
         },
         {
-          "ward": 46,
-          "role": "Member"
-        },
-        {
-          "ward": 5,
-          "role": "Member"
-        },
-        {
-          "ward": 18,
-          "role": "Member"
-        },
-        {
-          "ward": 2,
+          "ward": 48,
           "role": "Member"
         },
         {
           "ward": 40,
-          "role": "Member"
-        },
-        {
-          "ward": 24,
-          "role": "Member"
-        },
-        {
-          "ward": 11,
-          "role": "Member"
-        },
-        {
-          "ward": 33,
-          "role": "Member"
-        }
-      ],
-      "Committee on Police and Fire": [
-        {
-          "ward": 45,
-          "role": "Member"
-        },
-        {
-          "ward": 28,
-          "role": "Member"
-        },
-        {
-          "ward": 38,
-          "role": "Member"
-        },
-        {
-          "ward": 29,
           "role": "Chair"
-        },
-        {
-          "ward": 39,
-          "role": "Member"
-        },
-        {
-          "ward": 4,
-          "role": "Vice Chair"
-        },
-        {
-          "ward": 23,
-          "role": "Member"
-        },
-        {
-          "ward": 20,
-          "role": "Member"
-        },
-        {
-          "ward": 18,
-          "role": "Member"
-        },
-        {
-          "ward": 50,
-          "role": "Member"
-        },
-        {
-          "ward": 41,
-          "role": "Member"
-        },
-        {
-          "ward": 46,
-          "role": "Member"
-        },
-        {
-          "ward": 11,
-          "role": "Member"
-        },
-        {
-          "ward": 21,
-          "role": "Member"
         },
         {
           "ward": 43,
           "role": "Member"
         },
         {
-          "ward": 7,
+          "ward": 20,
+          "role": "Vice Chair"
+        },
+        {
+          "ward": 14,
           "role": "Member"
         },
         {
@@ -360941,18 +361205,100 @@
           "role": "Member"
         },
         {
+          "ward": 30,
+          "role": "Member"
+        },
+        {
+          "ward": 29,
+          "role": "Member"
+        },
+        {
+          "ward": 35,
+          "role": "Member"
+        },
+        {
+          "ward": 3,
+          "role": "Member"
+        },
+        {
+          "ward": 33,
+          "role": "Member"
+        }
+      ],
+      "Committee on Workforce Development": [
+        {
+          "ward": 35,
+          "role": "Member"
+        },
+        {
+          "ward": 40,
+          "role": "Member"
+        },
+        {
+          "ward": 9,
+          "role": "Member"
+        },
+        {
+          "ward": 22,
+          "role": "Chair"
+        },
+        {
+          "ward": 5,
+          "role": "Member"
+        },
+        {
+          "ward": 13,
+          "role": "Member"
+        },
+        {
+          "ward": 35,
+          "role": "Member"
+        },
+        {
+          "ward": 46,
+          "role": "Member"
+        },
+        {
+          "ward": 16,
+          "role": "Member"
+        },
+        {
+          "ward": 12,
+          "role": "Member"
+        },
+        {
+          "ward": 14,
+          "role": "Vice Chair"
+        },
+        {
           "ward": 6,
+          "role": "Member"
+        },
+        {
+          "ward": 29,
+          "role": "Member"
+        },
+        {
+          "ward": 18,
+          "role": "Member"
+        },
+        {
+          "ward": 38,
+          "role": "Member"
+        },
+        {
+          "ward": 10,
           "role": "Member"
         }
       ],
       "Committee on Education and Child Development": [
         {
-          "ward": 20,
-          "role": "Chair"
-        },
-        {
           "ward": 33,
           "role": "Member"
+        },
+        {
+          "ward": 20,
+          "role": "Chair"
         },
         {
           "ward": 6,
@@ -360975,11 +361321,11 @@
           "role": "Member"
         },
         {
-          "ward": 10,
+          "ward": 13,
           "role": "Member"
         },
         {
-          "ward": 13,
+          "ward": 10,
           "role": "Member"
         },
         {
@@ -360997,22 +361343,14 @@
         {
           "ward": 11,
           "role": "Member"
-        },
-        {
-          "ward": 16,
-          "role": "Member"
-        },
-        {
-          "ward": 9,
-          "role": "Member"
         }
       ]
     }
   },
   "_sync": {
-    "generated_at": "2026-06-22",
+    "generated_at": "2026-09-24",
     "term": "2023",
-    "source": "DataMade OCD Councilmatic (https://puddle.datamade.us/chicago_council) \u2014 synced 2026-06-22",
+    "source": "DataMade chicago-council-scrapers nightly release (chicago_council.db) \u2014 synced 2026-09-24",
     "featured_auto": [
       "1FW Repeal",
       "2026 City Budget",
@@ -361027,7 +361365,6 @@
     "featured_report": {
       "1FW Repeal": {
         "status": "populated",
-        "reverse_coded": false,
         "positions_written": 49,
         "breakdown": {
           "Affirmative": 29,
@@ -361037,7 +361374,6 @@
       },
       "2026 City Budget": {
         "status": "populated",
-        "reverse_coded": false,
         "positions_written": 49,
         "breakdown": {
           "Affirmative": 30,
@@ -361048,7 +361384,6 @@
       },
       "Snap Curfew": {
         "status": "populated",
-        "reverse_coded": false,
         "positions_written": 50,
         "breakdown": {
           "Affirmative": 27,
@@ -361058,7 +361393,6 @@
       },
       "Green Social Housing": {
         "status": "populated",
-        "reverse_coded": false,
         "positions_written": 50,
         "breakdown": {
           "Affirmative": 30,
@@ -361068,7 +361402,6 @@
       },
       "Extend Shotspotter Contract": {
         "status": "populated",
-        "reverse_coded": false,
         "positions_written": 50,
         "breakdown": {
           "Affirmative": 33,
@@ -361079,7 +361412,6 @@
       },
       "$1.5Bn Housing & Economic Development Bond": {
         "status": "populated",
-        "reverse_coded": false,
         "positions_written": 50,
         "breakdown": {
           "Affirmative": 32,
@@ -361089,7 +361421,6 @@
       },
       "Ceasefire Resolution": {
         "status": "populated",
-        "reverse_coded": false,
         "positions_written": 50,
         "breakdown": {
           "Affirmative": 23,
@@ -361099,7 +361430,6 @@
       },
       "Paid PTO": {
         "status": "populated",
-        "reverse_coded": false,
         "positions_written": 50,
         "breakdown": {
           "Affirmative": 36,
@@ -361110,7 +361440,6 @@
       },
       "Bring Chicago Home": {
         "status": "populated",
-        "reverse_coded": false,
         "positions_written": 50,
         "breakdown": {
           "Affirmative": 32,
@@ -361119,8 +361448,8 @@
         }
       }
     },
-    "rollcall_votes": 175,
-    "unresolved_personvotes": 43
+    "rollcall_votes": 182,
+    "unresolved_personvotes": 46
   },
   "donor_clusters": {
     "rollup-001": {

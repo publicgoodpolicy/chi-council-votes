@@ -54,7 +54,7 @@ from collections import defaultdict, Counter
 from datetime import datetime
 
 DEFAULT_ORG = "ocd-organization/d437a413-9392-4992-93ef-0c4bbe0d96e7"
-DEFAULT_BASE = "https://puddle.datamade.us/chicago_council"
+DEFAULT_BASE = "http://127.0.0.1:8001/chicago_council"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
 BATCH = 15  # vote_ids per personvote query; 15*~50 rows stays under Datasette's 1000-row cap
@@ -311,7 +311,7 @@ def run(data_path, map_path, base, org, term, dry_run):
     print(f"  Pulling per-member votes for {len(all_ids)} roll calls (batched)...")
     pv = personvotes_for(base, all_ids)
 
-    source = f"DataMade OCD Councilmatic ({base}) — synced {today}"
+    source = f"DataMade chicago-council-scrapers nightly release (chicago_council.db) — synced {today}"
     rollcall, unresolved = build_rollcall(votes, pv, cw, today, source)
     if unresolved:
         print(f"    NOTE: {unresolved} person-votes did not resolve to a ward (flagged, skipped).")

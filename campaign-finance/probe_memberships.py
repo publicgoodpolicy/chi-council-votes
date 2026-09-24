@@ -47,7 +47,7 @@ import urllib.request
 from collections import Counter, defaultdict
 
 DEFAULT_ORG = "ocd-organization/d437a413-9392-4992-93ef-0c4bbe0d96e7"  # Chicago City Council
-DEFAULT_BASE = "https://puddle.datamade.us/chicago_council"
+DEFAULT_BASE = "http://127.0.0.1:8001/chicago_council"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
 
