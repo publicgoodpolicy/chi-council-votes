@@ -291,6 +291,36 @@ the moment a scope is drafted**; planner session state and memory indexes are no
 
 [Byte-copied from the IE-NAMES-1 HALT (iii) ratification package, revision 2 (`5dc931bf905d85fa2f090b9ee6b716c42d5d06354cf8e62ecb21bc7c2d0cbe71`, 14,207 B / 84 L), its line 50, span sha256 `ae3b67901f4bceb6a91d9903f35938af2040bf95021f2578050049f72328b7e0` (the line's bytes, no trailing newline). The leading `**156 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at IE-NAMES-1 as the package's entry states. Offered in chat as candidates 46–54 and ratified by Ishan 2026-09-22. Numbered 2026-09-22 at IE-NAMES-1 HALT (iii).]
 
+### 157
+
+**157 (pointer class, kin to 150)** — HALT (ii) rev 3's dispatch expected `donors_skipped` 0 and `missing_members` 0 per artifact from `sync_overrides`, where `resolvable_donor_ids`'s own docstring (`:636–639`) states that a Sheet id absent from the artifact being synced is usually the other tool's donor and the per-artifact figure is "alarming and wrong"; the executor measured council 1 / elections 96 and 3 / 5, every one present in the other artifact, and the union check at 0. Defense: **an expectation about a shared-Sheet count is set at the scope the check documents — the union — never per artifact; the docstring is read before the expectation is written.** (2026-09-21, IE-NAMES-1 HALT (ii) rev 3.)
+
+[Byte-copied from the IND-MULTI-1 register package, revision 1 (`8365f4630484fde47376e93f19d8ea37535f844854d936a736eff9d80739f10a`, 9,015 B / 45 L), its line 13, span sha256 `2a2cd9b352a5628722e9c48c563ca41709d0bf588105acc94bf1c316acb39319` (the line's bytes, no trailing newline). The leading `**157 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at IE-NAMES-1 HALT (ii) rev 3 as the entry states. Offered by handover rev AF as candidate 55 and ratified by Ishan 2026-09-23. Numbered 2026-09-24 at IND-MULTI-1 (i).]
+
+### 158
+
+**158 (PS-117 class, kin to 144 and 148)** — the session-open relay carried rev AE's "twelve IE committees" into the lane's framing where the elections artifact holds seventeen (fifteen with funder rows; twelve is the council figure), and the BR-2 dispatch carried rev AE's A7 union 8,546 as an expectation where the log rev AE itself cites read 7,876 after Ishan's DATA-UPDATE-1 edits; the executor measured both and the relay text was annotated. Defense: **a figure carried from a handover into a relay or dispatch is re-measured against its own cited source before it travels; a handover value is a pre-image only until the next edit of the thing it counts.** (2026-09-15, IE-NAMES-1 session-open relay; BR-2.)
+
+[Byte-copied from the IND-MULTI-1 register package, revision 1 (`8365f4630484fde47376e93f19d8ea37535f844854d936a736eff9d80739f10a`, 9,015 B / 45 L), its line 15, span sha256 `e03c6c3a89736fafb2cd50576e95c2f792ff8eba06beca312747808b9dbf16bc` (the line's bytes, no trailing newline). The leading `**158 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at IE-NAMES-1 session-open relay and BR-2 as the entry states. Offered by handover rev AF as candidate 56 and ratified by Ishan 2026-09-23. Numbered 2026-09-24 at IND-MULTI-1 (i).]
+
+### 159
+
+**159 (executor-class, offered at the executor's own suggestion; rev AE's practice keeps executor faults in the reports, so Ishan rules whether the class enters)** — three command-form faults in one executor session — `\b` in `git grep -E` returning nothing, `set -- $p` under zsh collapsing fields so four pins read CURRENT unmeasured, an unquoted heredoc command-substituting backticks so an assertion printed False — each caught by a control that failed or by the command's own error output beside its result, none reported as a measurement. Defense: **every shell assertion runs with fixed strings, quoted heredocs and quoted expansions, and no zero, absence or False is reported without a positive control on the same instrument.** (2026-09-23, IE-NAMES-1 BR-3, HALT (iii), HALT (iii) post-push.)
+
+[Byte-copied from the IND-MULTI-1 register package, revision 1 (`8365f4630484fde47376e93f19d8ea37535f844854d936a736eff9d80739f10a`, 9,015 B / 45 L), its line 17, span sha256 `986f85600c76a251768c74975f5dc8b64637ada1cc701da8729dfa88cc1b4c31` (the line's bytes, no trailing newline). The leading `**159 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at IE-NAMES-1 BR-3, HALT (iii) and HALT (iii) post-push as the entry states. Offered by handover rev AF as candidate 57 and ratified by Ishan 2026-09-23 as an exception to this ledger's executor-class convention, which otherwise stands. Numbered 2026-09-24 at IND-MULTI-1 (i).]
+
+### 160
+
+**160 (PS-117 class, kin to 158)** — two references carried into HALT (ii) dispatches without re-measurement against the artifact the dispatch itself stipulated: rev 4 expected the votes dry run byte-identical to rev 3's capture, taken against a 9-def artifact, in the sentence before it stipulated the 13-def artifact on disk (the executor held, correctly); rev 7 cited HALT (ii) rev 1's post-run key table as HEAD's artifact (the executor established HEAD's three ways and proceeded, the section carrying no hold). Defense: **as 158 — a reference value is re-measured against the artifact the same dispatch stipulates, and a filename is cited with the directory that makes it the right file.** (2026-09-24, VOTES-UPDATE-1 HALT (ii) rev 4 and rev 7.)
+
+[Byte-copied from the IND-MULTI-1 register package, revision 1 (`8365f4630484fde47376e93f19d8ea37535f844854d936a736eff9d80739f10a`, 9,015 B / 45 L), its line 19, span sha256 `9acf9698ca081d3d06fed2e30c51dd4dc4465cd5266c0ba539d9b2db85b17d8d` (the line's bytes, no trailing newline). The leading `**160 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at VOTES-UPDATE-1 HALT (ii) rev 4 and rev 7 as the entry states. Offered in chat as candidate 59 and ratified by Ishan 2026-09-24. Numbered 2026-09-24 at IND-MULTI-1 (i).]
+
+### 161
+
+**161 (remedy class, new)** — the planner recommended two git url-rewrite config lines for fetch-over-HTTPS / push-over-SSH without stating the observable that would show them working; the second line's key never matched the stored remote URL, so push also resolved to HTTPS, which the executor measured at rev 3 and the planner corrected only then. Defense: **a remedy travels with the observable that proves it took — here the `git remote -v` lines expected — and is not relied on until Ishan or the executor has shown that observable.** (2026-09-24, VOTES-UPDATE-1 HALT (ii) rev 2–3.)
+
+[Byte-copied from the IND-MULTI-1 register package, revision 1 (`8365f4630484fde47376e93f19d8ea37535f844854d936a736eff9d80739f10a`, 9,015 B / 45 L), its line 21, span sha256 `c68a58c9a0bb7700dae228e14725f5a6ef2bb86fdbcf3a83cf3732b237a2b231` (the line's bytes, no trailing newline). The leading `**161 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. Arose at VOTES-UPDATE-1 HALT (ii) rev 2 and rev 3 as the entry states. Offered in chat as candidate 60 and ratified by Ishan 2026-09-24. Numbered 2026-09-24 at IND-MULTI-1 (i).]
+
 ## Dispositions without a number
 
 Recorded so the findings are not lost; none consumes a number.
@@ -311,5 +341,6 @@ Recorded so the findings are not lost; none consumes a number.
 | 18 | declined by Ishan 2026-09-02 | same document — the R1 approval relay's `main...origin/main` operand order, carried from the handover's figure |
 | 22 | declined by Ishan 2026-09-08 | handover rev AB rev 2 `67fe9608825fc3a07c2ce4a18f0a9b5b420ab5e40b7acbd1fc7efa023707c646`, its error-ledger section — verify-after-read on the commit-B uploads; existing convention, disclosed, cured |
 | 23 | declined by Ishan 2026-09-08, as covered by entry 126 | handover rev AB rev 2 `67fe9608825fc3a07c2ce4a18f0a9b5b420ab5e40b7acbd1fc7efa023707c646` carries the errant phrase ("allocated at ratification"); the ledger's own conventions block rules allocation at transcription and wins; erratum closes at rev AC |
+| 58 | repo-defect note, unnumbered (ruled 2026-09-24): un-featuring a vote retires it from `votemeta` and `featured_vote_map.json` but nothing prunes its key from `alders[].votes`, so `validate_council_data` VOTES-5 rejects the artifact and `build_all.sh` aborts; workaround, a rebuild from a clean artifact; fix, HYGIENE-1 | VOTES-UPDATE-1 HALT (ii) rev 6 hold report `0988df7726ddb2af5303ba6999876918d5679b39d59bf7b1da8e60823a591046`, its finding section; this package, region §2 |
 
-Next free number: **157**.
+Next free number: **162**.
