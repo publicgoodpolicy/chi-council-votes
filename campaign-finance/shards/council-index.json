@@ -1,6 +1,6 @@
 {
   "schema_version": "2.1",
-  "generated_at": "2026-09-25T14:00:38Z",
+  "generated_at": "2026-09-25T21:29:45Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "itemization_threshold": 150,
   "cycles": {
@@ -346656,12 +346656,12 @@
     },
     {
       "ward": 27,
-      "name": "Walter Burnett Jr",
-      "firstElected": 1995,
+      "name": "Walter Burnett III",
+      "firstElected": 2025,
       "party": "Democratic",
       "neighborhoods": "Near West Side, West Town, Humboldt Park, Near North Side",
       "bio": "Represents the 27th Ward, covering Near West Side, West Town, Humboldt Park, Near North Side. The seat was held for 30 years by Walter Burnett Jr.; his son Walter 'Red' Burnett III was appointed in September 2025. The record shown reflects votes cast under this ward's representation. Party: Democratic.",
-      "tenureNote": "Walter Burnett Jr. held the seat 1995\u20132025; Walter Burnett III appointed Sept. 2025.",
+      "tenureNote": "Appointed Sept. 25, 2025. Votes before that date were cast by Walter Burnett Jr., who held the seat 1995\u20132025.",
       "email": null,
       "website": null,
       "committees": null,
@@ -346669,12 +346669,14 @@
       "votes": {
         "Paid PTO": "Affirmative",
         "Snap Curfew": "Oppositional",
-        "1FW Repeal": "Oppositional",
+        "1FW Repeal": "Affirmative",
         "Green Social Housing": "Affirmative",
         "$1.5Bn Housing & Economic Development Bond": "Affirmative",
         "Ceasefire Resolution": "Neutral",
         "Extend Shotspotter Contract": "-",
-        "Bring Chicago Home": "Affirmative"
+        "Bring Chicago Home": "Affirmative",
+        "Gambling Ban": "Oppositional",
+        "2026 City Budget": "Oppositional"
       }
     },
     {
@@ -347683,6 +347685,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Settlement"
@@ -347750,6 +347753,7 @@
           "33": "no",
           "24": "yes",
           "35": "no",
+          "27": "no",
           "43": "present"
         },
         "tag": "Gambling"
@@ -347816,6 +347820,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         }
       },
@@ -347881,6 +347886,7 @@
           "33": "no",
           "24": "yes",
           "35": "no",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Worker's Rights"
@@ -347946,6 +347952,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Settlement"
@@ -348012,6 +348019,7 @@
           "33": "no",
           "24": "yes",
           "35": "no",
+          "27": "yes",
           "43": "yes"
         }
       },
@@ -348078,6 +348086,7 @@
           "33": "present",
           "24": "no",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Settlement"
@@ -348144,6 +348153,7 @@
           "33": "no",
           "24": "yes",
           "35": "no",
+          "27": "no",
           "43": "yes"
         }
       },
@@ -348210,6 +348220,7 @@
           "33": "no",
           "24": "yes",
           "35": "no",
+          "27": "no",
           "43": "yes"
         },
         "tag": "Budget"
@@ -348277,6 +348288,7 @@
           "33": "yes",
           "24": "no",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Budget"
@@ -348343,6 +348355,7 @@
           "33": "no",
           "24": "yes",
           "35": "no",
+          "27": "no",
           "43": "yes"
         },
         "tag": "Budget"
@@ -348408,6 +348421,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "no"
         },
         "tag": "Budget"
@@ -348474,6 +348488,7 @@
           "33": "no",
           "24": "yes",
           "35": "no",
+          "27": "no",
           "43": "yes"
         }
       },
@@ -348540,6 +348555,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Settlement"
@@ -348607,6 +348623,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "present"
         },
         "tag": "Settlement"
@@ -348674,6 +348691,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Settlement"
@@ -348741,6 +348759,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -348808,6 +348827,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -348874,6 +348894,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Settlement"
@@ -348941,6 +348962,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -349008,6 +349030,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -349027,6 +349050,7 @@
           "not voting": 1
         },
         "positions": {
+          "27": "yes",
           "11": "yes",
           "16": "yes",
           "3": "no",
@@ -349142,6 +349166,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -349209,6 +349234,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         }
       },
@@ -349275,6 +349301,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -349342,6 +349369,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -349409,6 +349437,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -349476,6 +349505,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -349543,6 +349573,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -349562,6 +349593,7 @@
           "not voting": 1
         },
         "positions": {
+          "27": "yes",
           "11": "yes",
           "16": "yes",
           "3": "yes",
@@ -349677,6 +349709,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -349744,6 +349777,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -349811,6 +349845,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -349878,6 +349913,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -349945,6 +349981,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Settlement"
@@ -350012,6 +350049,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -350079,6 +350117,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -350146,6 +350185,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -350165,6 +350205,7 @@
           "not voting": 1
         },
         "positions": {
+          "27": "yes",
           "11": "yes",
           "16": "yes",
           "3": "no",
@@ -350280,6 +350321,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -350347,6 +350389,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Zoning Reclassification"
@@ -350414,6 +350457,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Settlement"
@@ -350481,6 +350525,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Labor Contract"
@@ -350547,6 +350592,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Settlement"
@@ -350614,6 +350660,7 @@
           "33": "yes",
           "24": "yes",
           "35": "present",
+          "27": "yes",
           "43": "yes"
         }
       },
@@ -350679,6 +350726,7 @@
           "33": "yes",
           "24": "yes",
           "35": "yes",
+          "27": "yes",
           "43": "yes"
         },
         "tag": "Settlement"
@@ -361433,9 +361481,9 @@
     "featured_report": {
       "Gambling Ban": {
         "status": "populated",
-        "positions_written": 49,
+        "positions_written": 50,
         "breakdown": {
-          "Oppositional": 32,
+          "Oppositional": 33,
           "Affirmative": 15,
           "-": 1,
           "Neutral": 1
@@ -361443,19 +361491,19 @@
       },
       "1FW Repeal": {
         "status": "populated",
-        "positions_written": 49,
+        "positions_written": 50,
         "breakdown": {
-          "Affirmative": 29,
+          "Affirmative": 30,
           "Oppositional": 18,
           "Neutral": 2
         }
       },
       "2026 City Budget": {
         "status": "populated",
-        "positions_written": 49,
+        "positions_written": 50,
         "breakdown": {
           "Affirmative": 30,
-          "Oppositional": 17,
+          "Oppositional": 18,
           "Neutral": 1,
           "-": 1
         }
@@ -361527,7 +361575,8 @@
       }
     },
     "rollcall_votes": 182,
-    "unresolved_personvotes": 46
+    "unresolved_personvotes": 0,
+    "name_resolved_personvotes": 46
   },
   "donor_clusters": {
     "rollup-001": {

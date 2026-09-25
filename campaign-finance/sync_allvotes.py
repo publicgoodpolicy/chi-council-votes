@@ -201,8 +201,8 @@ def apply_featured(data, effective, base, org, dry_run=False):
         if truthy(ed.get("featured")) and not str(ed.get("code") or "").strip():
             report["skipped_no_code"] += 1
 
-    cw, _ = (IV.build_crosswalk(base, org) if featured else ({}, {}))
-    pv = IV.personvotes_for(base, list(featured)) if featured else {}
+    cw, names = (IV.build_crosswalk(base, org) if featured else ({}, {}))
+    pv = IV.personvotes_for(base, list(featured), IV.name_index(names)) if featured else {}
     ward_index = {}
     for a in data.get("alders", []):
         try:

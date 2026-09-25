@@ -174,17 +174,46 @@ def divided_votes(base, org, sess_start, sess_end):
     return rows
 
 
-def personvotes_for(base, vote_ids):
-    """{vote_id: [(voter_id, option)]} pulled in small batches to dodge the row cap."""
-    out = defaultdict(list)
+# WARD-27-1: how many person-vote rows the most recent personvotes_for call keyed by voter_name.
+# Module state rather than a second return value, so every caller keeps the one-value contract
+# (sync_allvotes.py imports personvotes_for and binds its result as a dict).
+NAME_RESOLVED = 0
+
+
+def name_index(names):
+    """WARD-27-1: exact person.name -> person_id, crosswalk people only. A name shared by two
+    crosswalk people maps to None so it can never key a nameless row to the wrong person."""
+    out = {}
+    for pid, nm in names.items():
+        out[nm] = None if nm in out else pid
+    return out
+
+
+def personvotes_for(base, vote_ids, name_pid=None):
+    """{vote_id: [(voter_id, option)]} pulled in small batches to dodge the row cap.
+
+    WARD-27-1 (2026-09-25): the release carries personvote rows whose voter_id is NULL and
+    whose voter_name is the member's name (Burnett III, 2025-09-25 to 2026-06-17: 46 rows on
+    46 divided votes). Such a row is keyed by its voter_name ONLY when that exact string is the
+    name of exactly one crosswalk person (name_pid, from name_index). Vacancy strings
+    ("16th Ward VACANCY", "(4th Ward) VACANCY", "33 VACANT", ...) name no person and fall through
+    unresolved — never parse a ward number out of voter_name. Sets NAME_RESOLVED."""
+    global NAME_RESOLVED
+    out, name_resolved = defaultdict(list), 0
     for grp in chunk(vote_ids, BATCH):
         rows, err = sql(base,
-            f"SELECT vote_event_id AS e, voter_id AS v, option AS o "
+            f"SELECT vote_event_id AS e, voter_id AS v, voter_name AS n, option AS o "
             f"FROM personvote WHERE vote_event_id IN ({in_list(grp)})", "personvotes batch")
         if err:
             raise SystemExit(f"Personvote pull failed: {err}")
         for r in rows:
-            out[r["e"]].append((r["v"], r["o"]))
+            pid = r["v"]
+            if pid is None and name_pid:
+                pid = name_pid.get(r.get("n") or "")
+                if pid is not None:
+                    name_resolved += 1
+            out[r["e"]].append((pid, r["o"]))
+    NAME_RESOLVED = name_resolved
     return out
 
 
@@ -299,6 +328,7 @@ def run(data_path, map_path, base, org, term, dry_run):
     print("  Building ward crosswalk (live)...")
     cw, names = build_crosswalk(base, org)
     print(f"    {len(cw)} people with ward seats.")
+    name_pid = name_index(names)   # WARD-27-1
 
     print("  Pulling divided votes for the term...")
     votes = divided_votes(base, org, term_start, term_end)
@@ -309,7 +339,10 @@ def run(data_path, map_path, base, org, term, dry_run):
     featured_ids = [m["vote_id"] for m in fmap.values() if m.get("vote_id")]
     all_ids = list(dict.fromkeys(vote_ids + featured_ids))
     print(f"  Pulling per-member votes for {len(all_ids)} roll calls (batched)...")
-    pv = personvotes_for(base, all_ids)
+    pv = personvotes_for(base, all_ids, name_pid)
+    name_resolved = NAME_RESOLVED
+    if name_resolved:
+        print(f"    NOTE: {name_resolved} person-votes carried no voter_id and were keyed by exact voter_name.")
 
     source = f"DataMade chicago-council-scrapers nightly release (chicago_council.db) — synced {today}"
     rollcall, unresolved = build_rollcall(votes, pv, cw, today, source)
@@ -338,6 +371,7 @@ def run(data_path, map_path, base, org, term, dry_run):
         "featured_report": feat_report,
         "rollcall_votes": rollcall["term_votes"],
         "unresolved_personvotes": unresolved,
+        "name_resolved_personvotes": name_resolved,
     }
 
     # ---- report ----
