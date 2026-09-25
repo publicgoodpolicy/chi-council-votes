@@ -1,6 +1,6 @@
 {
   "schema_version": "2.1",
-  "generated_at": "2026-09-24T18:41:50Z",
+  "generated_at": "2026-09-25T14:00:38Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "itemization_threshold": 150,
   "cycles": {
@@ -66577,7 +66577,8 @@
       "name": "Sacks, Michael J.",
       "type": "Individual",
       "industries": [
-        "individual"
+        "individual",
+        "finance"
       ],
       "flags": [],
       "notes": "auto: real-estate word",
@@ -189461,7 +189462,8 @@
       "name": "Finnegan, Paul",
       "type": "Individual",
       "industries": [
-        "individual"
+        "individual",
+        "finance"
       ],
       "flags": [],
       "notes": "auto: Paul Vallas \u2014 establishment/conservative Democrat",
@@ -343959,7 +343961,7 @@
       "type": "Other",
       "industries": [
         "individual",
-        "corporate"
+        "finance"
       ],
       "flags": [],
       "notes": "auto: Democratic ward / party regular organization (machine)",
@@ -345981,7 +345983,9 @@
       "sbe_committee_id": "38670",
       "ward": null,
       "alder_name": null,
-      "industry_tags": [],
+      "industry_tags": [
+        "progressive-pol"
+      ],
       "donor_id": null,
       "data_quality": "INGESTED_IE"
     },
@@ -347342,8 +347346,8 @@
     }
   ],
   "rollcall": {
-    "generated_at": "2026-09-24",
-    "source": "DataMade chicago-council-scrapers nightly release (chicago_council.db) \u2014 synced 2026-09-24",
+    "generated_at": "2026-09-25",
+    "source": "DataMade chicago-council-scrapers nightly release (chicago_council.db) \u2014 synced 2026-09-25",
     "term_votes": 182,
     "votes": [
       {
@@ -359442,7 +359446,7 @@
     ]
   },
   "council_committees": {
-    "generated_at": "2026-09-24",
+    "generated_at": "2026-09-25",
     "note": "Held for future UI. Not yet surfaced in the embed.",
     "role_vocab": {
       "Member": 200,
@@ -361411,9 +361415,9 @@
     }
   },
   "_sync": {
-    "generated_at": "2026-09-24",
+    "generated_at": "2026-09-25",
     "term": "2023",
-    "source": "DataMade chicago-council-scrapers nightly release (chicago_council.db) \u2014 synced 2026-09-24",
+    "source": "DataMade chicago-council-scrapers nightly release (chicago_council.db) \u2014 synced 2026-09-25",
     "featured_auto": [
       "Gambling Ban",
       "1FW Repeal",
@@ -608281,7 +608285,8 @@
         "name": "Finnegan, Paul",
         "type": "Individual",
         "industries": [
-          "individual"
+          "individual",
+          "finance"
         ],
         "direct": 545700.0,
         "independent": 0.0,
@@ -636468,7 +636473,7 @@
         "type": "Other",
         "industries": [
           "individual",
-          "corporate"
+          "finance"
         ],
         "direct": 850000.0,
         "independent": 0.0,
@@ -639733,12 +639738,12 @@
       },
       "corporate": {
         "all": {
-          "direct": 15053921.23,
+          "direct": 14353921.23,
           "independent": 878073.49
         },
         "by_cycle": {
           "2015": {
-            "direct": 1041481.14
+            "direct": 341481.14
           },
           "2019": {
             "direct": 3913150.6
@@ -639830,20 +639835,20 @@
       },
       "finance": {
         "all": {
-          "direct": 5183567.44
+          "direct": 7504667.44
         },
         "by_cycle": {
           "2015": {
-            "direct": 2407889.0
+            "direct": 4099089.0
           },
           "2019": {
-            "direct": 578352.07
+            "direct": 600752.07
           },
           "2023": {
-            "direct": 1614129.69
+            "direct": 1694729.69
           },
           "2027": {
-            "direct": 583196.68
+            "direct": 1110096.68
           }
         }
       },
@@ -639968,7 +639973,8 @@
       },
       "progressive-pol": {
         "all": {
-          "direct": 450672.7
+          "direct": 450672.7,
+          "independent": 3500.0
         },
         "by_cycle": {
           "2027": {
@@ -639981,7 +639987,8 @@
             "direct": 125630.93
           },
           "2023": {
-            "direct": 253629.31
+            "direct": 253629.31,
+            "independent": 3500.0
           }
         }
       },

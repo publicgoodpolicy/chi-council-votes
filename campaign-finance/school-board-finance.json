@@ -1,15 +1,15 @@
 {
   "schema_version": 1.4,
-  "generated_at": "2026-09-24T14:44:24Z",
+  "generated_at": "2026-09-25T14:01:11Z",
   "source": "derived: school-board-data.json (bridge) x election-data.json (rollups)",
   "_sync": {
-    "generated_at": "2026-09-24T14:44:24Z",
+    "generated_at": "2026-09-25T14:01:11Z",
     "inputs": {
       "school-board-data.json": {
         "sha256": "ebd6c8e88cdb4de93207bd21e3b26b12678da2e1c1ca8cb25b682e02c75d6bb3"
       },
       "election-data.json": {
-        "sha256": "b8833e42921139418e735480c6cf4690e034bf3bb20cef7cf6cadb042c2cc4f7"
+        "sha256": "2a6f6875f438d377b4e39b436ce911fc859cd90390b425b7a01306aaf3865985"
       }
     },
     "convention": "figures are election-labeled and sourced from rollups.by_candidate_election; by_candidate is resolution-only; the four streams are never summed in this artifact"
@@ -28,6 +28,10 @@
     "charter-schools": {
       "label": "Charter Schools",
       "color": "#7a4a2e"
+    },
+    "corporate": {
+      "label": "Corporate",
+      "color": "#4a7a6a"
     },
     "establishment-pol": {
       "label": "Establishment Political Org",
@@ -3143,7 +3147,9 @@
         "committee_id": "ie-committee-41012",
         "name": "Common Ground Collective",
         "sbe_committee_id": "41012",
-        "industries": [],
+        "industries": [
+          "corporate"
+        ],
         "support": {
           "amount": 22500.0,
           "count": 1
@@ -3297,7 +3303,9 @@
         "committee_id": "ie-committee-41327",
         "name": "Brighter Futures Chicago",
         "sbe_committee_id": "41327",
-        "industries": [],
+        "industries": [
+          "labor-service"
+        ],
         "support": {
           "amount": 26460.0,
           "count": 1
@@ -5478,9 +5486,10 @@
             "amount": 7300.0,
             "count": 1,
             "industries": [
-              "individual"
+              "individual",
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2026-05-05",
@@ -6878,16 +6887,16 @@
           "donor_total": 135131.3,
           "donor_count": 78,
           "dollars": {
-            "substantive": 59871.3,
-            "individual_only": 64360.0,
+            "substantive": 67171.3,
+            "individual_only": 57060.0,
             "unclassified": 10900.0
           },
           "shares": {
-            "substantive": 0.44306,
-            "individual_only": 0.476278,
+            "substantive": 0.497082,
+            "individual_only": 0.422256,
             "unclassified": 0.080662
           },
-          "substantive_share": 0.44306,
+          "substantive_share": 0.497082,
           "meets_industry_threshold": false
         }
       },
@@ -10089,9 +10098,10 @@
             "amount": 7300.0,
             "count": 1,
             "industries": [
-              "individual"
+              "individual",
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2026-04-29",
@@ -10144,9 +10154,10 @@
             "amount": 7300.0,
             "count": 1,
             "industries": [
-              "individual"
+              "individual",
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2025-09-26",
@@ -11170,16 +11181,16 @@
           "donor_total": 111329.12,
           "donor_count": 57,
           "dollars": {
-            "substantive": 36020.24,
-            "individual_only": 68433.88,
+            "substantive": 50620.24,
+            "individual_only": 53833.88,
             "unclassified": 6875.0
           },
           "shares": {
-            "substantive": 0.323547,
-            "individual_only": 0.614699,
+            "substantive": 0.45469,
+            "individual_only": 0.483556,
             "unclassified": 0.061754
           },
-          "substantive_share": 0.323547,
+          "substantive_share": 0.45469,
           "meets_industry_threshold": false
         }
       },
@@ -17109,9 +17120,10 @@
             "amount": 7300.0,
             "count": 1,
             "industries": [
-              "individual"
+              "individual",
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2026-05-08",
@@ -18797,16 +18809,16 @@
           "donor_total": 136369.25,
           "donor_count": 89,
           "dollars": {
-            "substantive": 32696.32,
-            "individual_only": 86988.0,
+            "substantive": 39996.32,
+            "individual_only": 79688.0,
             "unclassified": 16684.93
           },
           "shares": {
-            "substantive": 0.239763,
-            "individual_only": 0.637886,
+            "substantive": 0.293294,
+            "individual_only": 0.584355,
             "unclassified": 0.122351
           },
-          "substantive_share": 0.239763,
+          "substantive_share": 0.293294,
           "meets_industry_threshold": false
         }
       },
@@ -25126,9 +25138,10 @@
             "amount": 7300.0,
             "count": 1,
             "industries": [
-              "individual"
+              "individual",
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2026-04-29",
@@ -27570,16 +27583,16 @@
           "donor_total": 383259.34,
           "donor_count": 132,
           "dollars": {
-            "substantive": 220300.0,
-            "individual_only": 152209.34,
+            "substantive": 227600.0,
+            "individual_only": 144909.34,
             "unclassified": 10750.0
           },
           "shares": {
-            "substantive": 0.574807,
-            "individual_only": 0.397144,
+            "substantive": 0.593854,
+            "individual_only": 0.378097,
             "unclassified": 0.028049
           },
-          "substantive_share": 0.574807,
+          "substantive_share": 0.593854,
           "meets_industry_threshold": true
         }
       },
@@ -30230,9 +30243,10 @@
             "amount": 7300.0,
             "count": 1,
             "industries": [
-              "individual"
+              "individual",
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2026-05-05",
@@ -30635,16 +30649,16 @@
           "donor_total": 54100.0,
           "donor_count": 22,
           "dollars": {
-            "substantive": 11300.0,
-            "individual_only": 41800.0,
+            "substantive": 18600.0,
+            "individual_only": 34500.0,
             "unclassified": 1000.0
           },
           "shares": {
-            "substantive": 0.208873,
-            "individual_only": 0.772643,
+            "substantive": 0.343808,
+            "individual_only": 0.637708,
             "unclassified": 0.018484
           },
-          "substantive_share": 0.208873,
+          "substantive_share": 0.343808,
           "meets_industry_threshold": false
         }
       },
@@ -31366,9 +31380,10 @@
             "amount": 7300.0,
             "count": 1,
             "industries": [
-              "individual"
+              "individual",
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2026-05-10",
@@ -31402,9 +31417,10 @@
             "amount": 7300.0,
             "count": 1,
             "industries": [
-              "individual"
+              "individual",
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2025-09-29",
@@ -31696,17 +31712,17 @@
           "donor_total": 81104.02,
           "donor_count": 19,
           "dollars": {
-            "substantive": 31740.17,
-            "individual_only": 47363.85,
+            "substantive": 46340.17,
+            "individual_only": 32763.85,
             "unclassified": 2000.0
           },
           "shares": {
-            "substantive": 0.391351,
-            "individual_only": 0.583989,
+            "substantive": 0.571367,
+            "individual_only": 0.403973,
             "unclassified": 0.02466
           },
-          "substantive_share": 0.391351,
-          "meets_industry_threshold": false
+          "substantive_share": 0.571367,
+          "meets_industry_threshold": true
         }
       },
       "has_donor_detail": true,
@@ -32899,9 +32915,10 @@
             "amount": 7300.0,
             "count": 1,
             "industries": [
-              "individual"
+              "individual",
+              "finance"
             ],
-            "industry_class": "individual_only",
+            "industry_class": "substantive",
             "items": [
               {
                 "date": "2026-04-30",
@@ -33789,16 +33806,16 @@
           "donor_total": 100624.3,
           "donor_count": 49,
           "dollars": {
-            "substantive": 36300.0,
-            "individual_only": 62074.3,
+            "substantive": 43600.0,
+            "individual_only": 54774.3,
             "unclassified": 2250.0
           },
           "shares": {
-            "substantive": 0.360748,
-            "individual_only": 0.616892,
+            "substantive": 0.433295,
+            "individual_only": 0.544345,
             "unclassified": 0.02236
           },
-          "substantive_share": 0.360748,
+          "substantive_share": 0.433295,
           "meets_industry_threshold": false
         }
       },

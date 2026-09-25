@@ -744,7 +744,7 @@
         if (EXCLUDED_CYCLES[ie.cycle]) return;
         if (cycle != null && ie.cycle !== cycle) return;
         if (win && !inWindow(ie.date, win)) return;
-        var sp = index.committees[ie.spender_committee_id] || {}, tags = sp.industry_tags || [], amt2 = ie.amount || 0;
+        var sp = index.committees[ie.spender_committee_id] || {}, tags = (sp.industry_tags && sp.industry_tags.length) ? sp.industry_tags : ['uncategorized'], amt2 = ie.amount || 0;
         for (var t = 0; t < tags.length; t++) { var s2 = slot(tags[t]); s2[field] = round2(s2[field] + amt2); }
       });
     });
@@ -1288,7 +1288,7 @@
         ieB[field].forEach(function (ie) {
           if (!keep(ie.cycle)) return;
           if (win && !inWindow(ie.date, win)) return;
-          var sp = index.committees[ie.spender_committee_id] || {}, tags = sp.industry_tags || [], amt2 = ie.amount || 0;
+          var sp = index.committees[ie.spender_committee_id] || {}, tags = (sp.industry_tags && sp.industry_tags.length) ? sp.industry_tags : ['uncategorized'], amt2 = ie.amount || 0;
           for (var t = 0; t < tags.length; t++) ind(byCand, cid, tags[t])[field] = round2(ind(byCand, cid, tags[t])[field] + amt2);
         });
       });
@@ -2660,7 +2660,8 @@
     for (var m = 0; m < industries.length; m++) if (industries[m].total > max) max = industries[m].total;
     var note = '<p class="contrib-note">Total money deployed by industry — direct contributions plus ' +
       'independent support and opposition, shown separately. Largest first. Click an industry to see ' +
-      'who gave or spent.</p>';
+      'who gave or spent. A donor tagged with more than one industry is listed under each; ' +
+      'the total counts each donor\'s money once.</p>';
     var legend = '<div class="ind-legend" aria-hidden="true"><span><i class="sw third"></i>Direct contributions</span>' +
       '<span><i class="sw support"></i>Independent support</span>' +
       '<span><i class="sw oppose"></i>Independent opposition</span></div>';

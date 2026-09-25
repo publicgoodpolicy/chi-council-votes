@@ -285,6 +285,7 @@ def validate(art, ed=None):
     # rather than hoped for; and a cluster_id pointing at nothing is a referential defect,
     # not an empty panel.
     vocab = art.get("industry_tags") or {}
+    vocab = art.get("industry_tags") or {}
     used_inds, used_clusters = set(), set()
     for d in dmaps:
         for v in d.values():
@@ -292,13 +293,23 @@ def validate(art, ed=None):
                 used_inds.update(x.get("industries") or [])
                 if x.get("cluster_id"):
                     used_clusters.add(x["cluster_id"])
+    # IND-MULTI-1 (2026-09-25): an independent spender's industry is a use of that industry.
+    # The builder admits spender tags to the vocabulary and the industry view attributes the
+    # IE carve by them, so the unused-entry check counts ie_spenders[].industries as well.
+    # Until the first IE-only tag every spender tag was also a donor-row tag, so this set
+    # was always inside used_inds and the gap never fired. SBF-15a keeps its donor-row scope.
+    spender_inds = set()
+    for bucket in (art.get("ie_spenders") or {}).values():
+        for sp in bucket or []:
+            spender_inds.update(sp.get("industries") or [])
+    used_all = used_inds | spender_inds
     r.ok("SBF-15a every industry on a donor row has a vocabulary entry",
          not (used_inds - set(vocab)), f"missing {sorted(used_inds - set(vocab))}")
     r.ok("SBF-15b every vocabulary entry carries a label and a colour",
          all(v.get("label") and v.get("color") for v in vocab.values()),
          f"incomplete {sorted(k for k, v in vocab.items() if not (v.get('label') and v.get('color')))}")
-    r.ok("SBF-15c the vocabulary carries no unused entries",
-         not (set(vocab) - used_inds), f"unused {sorted(set(vocab) - used_inds)}")
+    r.ok("SBF-15c the vocabulary carries no unused entries (donor rows or IE spenders)",
+         not (set(vocab) - used_all), f"unused {sorted(set(vocab) - used_all)}")
     clusters = art.get("donor_clusters") or {}
     r.ok("SBF-15d every cluster_id on a donor row resolves",
          not (used_clusters - set(clusters)), f"dangling {sorted(used_clusters - set(clusters))}")
@@ -910,6 +921,11 @@ def self_test():
               any(not ok and n.startswith("SBF-15c") for n, ok, _ in
                   run({**base, "industry_tags": {"never-used": {"label": "L", "color": "#000"}},
                        "members": [person_member()]}).checks)))
+    t.append(("SBF-15c does NOT bite on an entry used only by an IE spender (IND-MULTI-1)",
+              not any(not ok and n.startswith("SBF-15c") for n, ok, _ in
+                      run(ie_art({"2024": [spender(industries=["ie-only-tag"])]},
+                                 industry_tags={"ie-only-tag": {"label": "L", "color": "#000"}})
+                          ).checks)))
     t.append(("SBF-15d bites: a cluster_id pointing at nothing fails",
               any(not ok and n.startswith("SBF-15d") for n, ok, _ in
                   run({**base, "donor_clusters": {}, "members": [person_member(

@@ -787,12 +787,14 @@ const IPG_SB_FEEDBACK = {
     indSub: 'Click an industry to see who its donors are and which members they funded.',
     directOnlyIndustries: 'Independent spending is not included here — these totals are direct contributions only.',
     indBarHead: 'Where each dollar comes from',
-    indBarSub: 'Total raised across all Board committees in this election: {N}. Each segment below is one industry; width is its share of the total. Donors with multiple industry tags count in each category.',
+    indBarSub: 'Total raised across all Board committees in this election: {N}. Each segment below is one industry; width is its share of the total. A donor tagged with more than one industry is listed under each; the total counts each donor\'s money once.',
+    onceNote: 'A donor tagged with more than one industry is listed under each; the total counts each donor\'s money once.',
     indListHead: 'Industry breakdown',
     indEmpty: 'No industry data yet.',
     indBack: '← All industries',
     indDonorsHead: 'Donors in this industry',
     indMembersHead: 'Members they funded',
+    indSpendersHead: 'Independent spenders in this industry',
 
     // SBFIN-3 B.1: the direct-only sentence was REMOVED from Browse donors — with IE
     // spenders in the list it is false. `directOnlyDonors` is retired with it.
@@ -1385,9 +1387,11 @@ const IPG_SB_FEEDBACK = {
     rows.forEach(function(d){
       var inds = (d.industries && d.industries.length) ? d.industries : ['unclassified'];
       inds.forEach(function(i){
-        if(!by[i]){ by[i] = { industry:i, amount:0, donors:0 }; order.push(i); }
+        if(!by[i]){ by[i] = { industry:i, amount:0, donors:0, donorIds:{} }; order.push(i); }
         by[i].amount = round2(by[i].amount + Number(d.amount||0));
-        by[i].donors += 1;
+        // IND-MULTI-1: a donor counts once under an industry, however many rows it has there.
+        by[i].donorIds[String(d.donor_id || d.name || '')] = 1;
+        by[i].donors = Object.keys(by[i].donorIds).length;
       });
     });
     return order.map(function(k){ return by[k]; }).sort(function(a,b){
@@ -1963,6 +1967,15 @@ const IPG_SB_FEEDBACK = {
       return e;
     }).sort(function(a, b){ return b.amount - a.amount || a.industry.localeCompare(b.industry); });
   }
+  // IND-MULTI-1: the count-once total for the industry view — every donor row once and every
+  // spender once, so a donor tagged with more than one industry is never counted twice. The
+  // per-industry rows above keep the full amount under each industry the donor carries.
+  function spendCountOnceTotal(ek){
+    var direct = spendDonorRows(ek).reduce(function(s, x){ return s + Number(x.d.amount || 0); }, 0);
+    var ie = ieSpenders(ek).reduce(function(s, sp){
+      return s + Number(sp.support.amount || 0) + Number(sp.oppose.amount || 0); }, 0);
+    return round2(direct + ie);
+  }
 
   // ==========================================================
   // SBFIN-3 B — independent expenditure enters the spend family.
@@ -2307,7 +2320,7 @@ const IPG_SB_FEEDBACK = {
           // place and says something the old sentence never did.
           + '<div class="ipg-sb-note">' + esc(SPC.twoClassifier) + '</div>';
     if(!inds.length) return h + '<div class="ipg-sb-empty">' + esc(SPC.indEmpty) + '</div>';
-    var grand = inds.reduce(function(s, x){ return s + Number(x.amount || 0); }, 0);
+    var grand = spendCountOnceTotal(ek);   // IND-MULTI-1: count once, list under both
     h += '<div class="ipg-sb-fin-sub">' + esc(SPC.indBarHead) + '</div>'
        + '<div class="ipg-sb-meta">' + esc(fill(SPC.indBarSub, money(grand))) + '</div>'
        + '<div class="ipg-sb-bar-legend ipg-sb-streamkey">'
@@ -2351,41 +2364,61 @@ const IPG_SB_FEEDBACK = {
     var rows = spendDonorRows(ek).filter(function(x){
       return ((x.d.industries && x.d.industries.length) ? x.d.industries : ['unclassified'])
              .indexOf(key) >= 0; });
+    // IND-MULTI-1: an industry's money can be independent spending alone, so the drill lists
+    // the spenders carrying this industry as well as its donors — a bar is never a dead click.
+    var sps = ieSpenders(ek).filter(function(sp){
+      return ((sp.industries && sp.industries.length) ? sp.industries : ['unclassified'])
+             .indexOf(key) >= 0; });
     var h = '<div class="ipg-sb-fin-sub">' + esc(meta.label)
           + ' <button type="button" class="ipg-sb-more" id="ipg-sb-ind-back">'
-          + esc(SPC.indBack) + '</button></div>'
-          + '<div class="ipg-sb-note">' + esc(SPC.directOnlyIndustries) + '</div>';
-    if(!rows.length) return h + '<div class="ipg-sb-empty">' + esc(SPC.indEmpty) + '</div>';
+          + esc(SPC.indBack) + '</button></div>';
+    if(!rows.length && !sps.length) return h + '<div class="ipg-sb-empty">' + esc(SPC.indEmpty) + '</div>';
 
-    var byDonor = {}, dorder = [], byMember = {}, morder = [];
-    rows.forEach(function(x){
-      if(!byDonor[x.d.donor_id]){
-        byDonor[x.d.donor_id] = { name: x.d.name, donor_id: x.d.donor_id, amount: 0, count: 0 };
-        dorder.push(x.d.donor_id); }
-      byDonor[x.d.donor_id].amount = round2(byDonor[x.d.donor_id].amount + Number(x.d.amount || 0));
-      byDonor[x.d.donor_id].count += Number(x.d.count || 0);
-      if(!byMember[x.m.seat]){
-        byMember[x.m.seat] = { seat: x.m.seat, name: x.m.name, amount: 0 };
-        morder.push(x.m.seat); }
-      byMember[x.m.seat].amount = round2(byMember[x.m.seat].amount + Number(x.d.amount || 0));
-    });
-    h += '<div class="ipg-sb-fin-sub">' + esc(SPC.indDonorsHead) + '</div>';
-    dorder.map(function(k){ return byDonor[k]; })
-      .sort(function(a, b){ return b.amount - a.amount; })
-      .forEach(function(d){
-        h += '<button type="button" class="ipg-sb-donor ipg-sb-donor-click" data-donor="'
-           + esc(d.donor_id) + '"><div><div class="n">' + esc(d.name || d.donor_id) + '</div>'
-           + '<div class="s">' + esc(d.count + (d.count === 1 ? ' contribution' : ' contributions'))
-           + '</div></div><div class="a">' + esc(money(d.amount)) + '</div></button>';
+    if(rows.length){
+      h += '<div class="ipg-sb-note">' + esc(SPC.directOnlyIndustries) + '</div>';
+      var byDonor = {}, dorder = [], byMember = {}, morder = [];
+      rows.forEach(function(x){
+        if(!byDonor[x.d.donor_id]){
+          byDonor[x.d.donor_id] = { name: x.d.name, donor_id: x.d.donor_id, amount: 0, count: 0 };
+          dorder.push(x.d.donor_id); }
+        byDonor[x.d.donor_id].amount = round2(byDonor[x.d.donor_id].amount + Number(x.d.amount || 0));
+        byDonor[x.d.donor_id].count += Number(x.d.count || 0);
+        if(!byMember[x.m.seat]){
+          byMember[x.m.seat] = { seat: x.m.seat, name: x.m.name, amount: 0 };
+          morder.push(x.m.seat); }
+        byMember[x.m.seat].amount = round2(byMember[x.m.seat].amount + Number(x.d.amount || 0));
       });
-    h += '<div class="ipg-sb-fin-sub">' + esc(SPC.indMembersHead) + '</div>';
-    morder.map(function(k){ return byMember[k]; })
-      .sort(function(a, b){ return b.amount - a.amount; })
-      .forEach(function(m){
-        h += '<button type="button" class="ipg-sb-donor ipg-sb-donor-click" data-spend-seat="'
-           + esc(m.seat) + '"><div><div class="n">Seat ' + esc(m.seat) + ' — ' + esc(m.name)
-           + '</div></div><div class="a">' + esc(money(m.amount)) + '</div></button>';
+      h += '<div class="ipg-sb-fin-sub">' + esc(SPC.indDonorsHead) + '</div>';
+      dorder.map(function(k){ return byDonor[k]; })
+        .sort(function(a, b){ return b.amount - a.amount; })
+        .forEach(function(d){
+          h += '<button type="button" class="ipg-sb-donor ipg-sb-donor-click" data-donor="'
+             + esc(d.donor_id) + '"><div><div class="n">' + esc(d.name || d.donor_id) + '</div>'
+             + '<div class="s">' + esc(d.count + (d.count === 1 ? ' contribution' : ' contributions'))
+             + '</div></div><div class="a">' + esc(money(d.amount)) + '</div></button>';
+        });
+      h += '<div class="ipg-sb-fin-sub">' + esc(SPC.indMembersHead) + '</div>';
+      morder.map(function(k){ return byMember[k]; })
+        .sort(function(a, b){ return b.amount - a.amount; })
+        .forEach(function(m){
+          h += '<button type="button" class="ipg-sb-donor ipg-sb-donor-click" data-spend-seat="'
+             + esc(m.seat) + '"><div><div class="n">Seat ' + esc(m.seat) + ' — ' + esc(m.name)
+             + '</div></div><div class="a">' + esc(money(m.amount)) + '</div></button>';
+        });
+    }
+    if(sps.length){
+      h += '<div class="ipg-sb-fin-sub">' + esc(SPC.indSpendersHead) + '</div>';
+      sps.slice().sort(function(a, b){ return ieDeployed(b) - ieDeployed(a); }).forEach(function(sp){
+        var ieSub = [];
+        if(Number(sp.support.amount || 0) > 0) ieSub.push(money(sp.support.amount) + ' ' + SPI.forWord);
+        if(Number(sp.oppose.amount || 0) > 0) ieSub.push(money(sp.oppose.amount) + ' ' + SPI.againstWord);
+        h += '<button type="button" class="ipg-sb-donor ipg-sb-donor-click ipg-sb-ie-row" data-ie="'
+           + esc(sp.committee_id) + '"><div><div class="n">' + esc(sp.name || sp.committee_id)
+           + ' <span class="ipg-sb-pac-tag">' + esc(SPI.pacTag) + '</span></div>'
+           + '<div class="s">' + esc(ieSub.join(' · ')) + '</div></div>'
+           + '<div class="a">' + esc(money(ieDeployed(sp))) + '</div></button>';
       });
+    }
     return h;
   }
 
@@ -2393,7 +2426,8 @@ const IPG_SB_FEEDBACK = {
   function industriesByMemberBody(ek){
     // Exit 1's sentence is the FIRST thing this view says, as the council's does.
     var h = '<div class="ipg-sb-meta">' + esc(SPC.mixIntro)
-          + '<span class="ipg-sb-meta-sub">' + esc(SPC.mixSub) + '</span></div>';
+          + '<span class="ipg-sb-meta-sub">' + esc(SPC.mixSub) + '</span></div>'
+          + '<div class="ipg-sb-note">' + esc(SPC.onceNote) + '</div>';
     var any = false, body = '';
     // Roster order, which is the board's own seat order — never a string sort, which
     // would put seat 10A before seat 2A.
@@ -2411,7 +2445,7 @@ const IPG_SB_FEEDBACK = {
       }
       if(!rows.length) return;
       var inds = industryTotals(rows);
-      var tot = inds.reduce(function(s, x){ return s + Number(x.amount || 0); }, 0);
+      var tot = rows.reduce(function(s, d){ return s + Number(d.amount || 0); }, 0);   // IND-MULTI-1: each donor row once
       if(tot <= 0) return;
       any = true;
       var cm = (m.committees || [])[0];

@@ -1262,7 +1262,8 @@
     for (var m = 0; m < industries.length; m++) if (industries[m].total > max) max = industries[m].total;
     var note = '<p class="contrib-note">Total money deployed by industry — direct contributions plus ' +
       'independent support and opposition, shown separately. Largest first. Click an industry to see ' +
-      'who gave or spent.</p>';
+      'who gave or spent. A donor tagged with more than one industry is listed under each; ' +
+      'the total counts each donor\'s money once.</p>';
     var legend = '<div class="ind-legend" aria-hidden="true"><span><i class="sw third"></i>Direct contributions</span>' +
       '<span><i class="sw support"></i>Independent support</span>' +
       '<span><i class="sw oppose"></i>Independent opposition</span></div>';

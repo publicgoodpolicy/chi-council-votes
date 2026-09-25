@@ -726,7 +726,7 @@
         if (EXCLUDED_CYCLES[ie.cycle]) return;
         if (cycle != null && ie.cycle !== cycle) return;
         if (win && !inWindow(ie.date, win)) return;
-        var sp = index.committees[ie.spender_committee_id] || {}, tags = sp.industry_tags || [], amt2 = ie.amount || 0;
+        var sp = index.committees[ie.spender_committee_id] || {}, tags = (sp.industry_tags && sp.industry_tags.length) ? sp.industry_tags : ['uncategorized'], amt2 = ie.amount || 0;
         for (var t = 0; t < tags.length; t++) { var s2 = slot(tags[t]); s2[field] = round2(s2[field] + amt2); }
       });
     });
@@ -1270,7 +1270,7 @@
         ieB[field].forEach(function (ie) {
           if (!keep(ie.cycle)) return;
           if (win && !inWindow(ie.date, win)) return;
-          var sp = index.committees[ie.spender_committee_id] || {}, tags = sp.industry_tags || [], amt2 = ie.amount || 0;
+          var sp = index.committees[ie.spender_committee_id] || {}, tags = (sp.industry_tags && sp.industry_tags.length) ? sp.industry_tags : ['uncategorized'], amt2 = ie.amount || 0;
           for (var t = 0; t < tags.length; t++) ind(byCand, cid, tags[t])[field] = round2(ind(byCand, cid, tags[t])[field] + amt2);
         });
       });

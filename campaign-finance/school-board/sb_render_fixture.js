@@ -918,23 +918,36 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   ok('[SBF3/INDUSTRY] the two-classifier disclosure replaces the direct-only sentence',
      pInd.text.indexOf('Direct segments are attributed by the donor') >= 0
        && pInd.text.indexOf('these totals are direct contributions only') < 0);
-  ok('[SBF2/INDUSTRY] the totals equal the same money the member pages carry', (function () {
-    // 0 donor rows carry more than one industry in this universe, so the industry sum is
-    // the donor-row sum, which is each member's own direct figure for this election.
-    var multi = boardRows.filter(function (x) { return (x.d.industries || []).length > 1; }).length;
-    var rowSum = boardRows.reduce(function (a, x) { return a + Number(x.d.amount || 0); }, 0);
-    var directSum = REALFIN.members.reduce(function (a, m) {
-      var has = ((m.donors_by_election || {})[spendEK] || []).length;
-      return a + (has ? Number(((m.elections || {})[spendEK] || {}).direct.amount || 0) : 0); }, 0);
-    // R44: Industry Totals is carve (a) — election-wide, direct + support + oppose
-    // (school-board-embed.html spendIndustryTotals: e.amount = direct + support +
-    // oppose, and the view's grand total sums those). The rendered total is therefore
-    // rowSum PLUS each spender's own deployment, which this sought only while
-    // ie_spenders had no bucket for spendEK. Conjuncts 1 and 2 are unchanged.
-    var ieCarve = ((REALFIN.ie_spenders || {})[spendEK] || []).reduce(function (a, sp) {
-      return a + Number(sp.support.amount || 0) + Number(sp.oppose.amount || 0); }, 0);
-    return multi === 0 && Math.abs(rowSum - directSum) < 0.005
-        && pInd.text.indexOf(money(rowSum + ieCarve)) >= 0;
+  ok('[SBF2/INDUSTRY] the total counts each donor once, on every election (IND-MULTI-1)', (function () {
+    // IND-MULTI-1: a donor tagged with more than one industry is listed under each industry at
+    // its full amount, and the grand total counts its money once — the donor-row sum plus the
+    // spenders' own deployment, never the sum over industry rows, which double-counts. The check
+    // runs on EVERY election key, not only the newest, and requires at least one election where
+    // a donor carries more than one industry, so the rule is exercised rather than vacuously true.
+    var eks = (function () { var e = {}; REALFIN.members.forEach(function (m) {
+      Object.keys(m.elections || {}).forEach(function (k) { e[k] = 1; }); }); return Object.keys(e).sort(); })();
+    var anyMulti = false, allOk = eks.length > 0;
+    eks.forEach(function (ek) {
+      var rows = [];
+      REALFIN.members.forEach(function (m) {
+        ((m.donors_by_election || {})[ek] || []).forEach(function (d) { rows.push({ m: m, d: d }); }); });
+      var multi = rows.filter(function (x) { return (x.d.industries || []).length > 1; }).length;
+      if (multi > 0) anyMulti = true;
+      var rowSum = rows.reduce(function (a, x) { return a + Number(x.d.amount || 0); }, 0);
+      var directSum = REALFIN.members.reduce(function (a, m) {
+        var has = ((m.donors_by_election || {})[ek] || []).length;
+        return a + (has ? Number(((m.elections || {})[ek] || {}).direct.amount || 0) : 0); }, 0);
+      var ieCarve = ((REALFIN.ie_spenders || {})[ek] || []).reduce(function (a, sp) {
+        return a + Number(sp.support.amount || 0) + Number(sp.oppose.amount || 0); }, 0);
+      var p = setSel(subtab({ doc: spv.doc, app: spv.app }, 'industries'), 'ipg-sb-spend-el', ek);
+      var okEk = Math.abs(rowSum - directSum) < 0.005
+              && p.text.indexOf(money(rowSum + ieCarve)) >= 0
+              && p.text.indexOf('the total counts each donor\'s money once') >= 0;
+      if (!okEk) allOk = false;
+    });
+    // Put the page back on the newest election, which the checks below read.
+    pInd = setSel(subtab({ doc: spv.doc, app: spv.app }, 'industries'), 'ipg-sb-spend-el', spendEK);
+    return allOk && anyMulti;
   })());
   ok('[SBF2/INDUSTRY] every label comes from the artifact vocabulary, never a raw key',
      (function () {
@@ -1501,7 +1514,9 @@ function around(tpl, marker) { return String(tpl).split(marker); }
     var dead = [];
     keys.forEach(function (k) {
       var p2 = fire(pg, pg.doc.querySelector('[data-industry-drill="' + k + '"]'));
-      if (p2.text.indexOf('Donors in this industry') < 0) dead.push(k);
+      // IND-MULTI-1: an IE-only industry drills to its spenders, not to donors it has none of.
+      if (p2.text.indexOf('Donors in this industry') < 0
+          && p2.text.indexOf('Independent spenders in this industry') < 0) dead.push(k);
       var b = p2.doc.getElementById('ipg-sb-ind-back'); if (b) fire(p2, b);
     });
     if (dead.length) console.log('        dead: ' + dead.join(' | '));
