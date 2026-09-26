@@ -138,7 +138,7 @@
 
   function notice(root, msg, coral) {
     root.innerHTML = '<div class="wrap"><p style="padding:44px 0;font-family:Poppins,system-ui,sans-serif;color:' +
-      (coral ? '#B0553A' : '#6E5F58') + '">' + msg + '</p></div>';
+      (coral ? '#B0553A' : '#6a5d4e') + '">' + msg + '</p></div>';
   }
 
   function firstSlug(omVM) {

@@ -891,12 +891,12 @@ that catch defect classes the existing gates structurally cannot see.
 | S-rst | `campaign-finance/ingestion/restamp_committee_linkage.py` | `6ceb82f9bbcffa08fdb21904b8585982a6bff7e3982e0b810937e2958019d06e` |
 | S-cbr | `campaign-finance/ingestion/convert_bulk_receipts.py` | `6062d0dfea8802f17a3434bef8e88097b7ad932bc17811f14d75055dfc3269ce` |
 | S-av | `campaign-finance/sync_allvotes.py` | `cc24932b8c01c8e57710d2b5650009fcb1a3330680541ad40b244dc39c4b5885` |
-| S-cemb | `campaign-finance/elections/reference/council-embed.html` | `69e107cb4ad3caf1ed87d1a0b6e31b87608f811ea479f3ca9bcbabb59da8c7de` |
-| S-sbemb | `campaign-finance/school-board/school-board-embed.html` | `856adafc5cda36709368e97222eb017a9913e9f538738b692f8075e4e2690272` |
-| S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8fb04287a9a542f15c3d28e65bd3c1a400edd08ceef697e985bd0491f74359f9` |
+| S-cemb | `campaign-finance/elections/reference/council-embed.html` | `abb2f76f79d2259a2e609c3a67e32e8c522d283bd083ee173b3b597cdcc12aef` |
+| S-sbemb | `campaign-finance/school-board/school-board-embed.html` | `27ca3f44c082d50092a5185e83e8607a60ae4413d55bb790a5ac13999d6bc101` |
+| S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8e76a38ad11562fe8de5bee1c2ff339ea60251795171bdd37f9aa29da2e0b82a` |
 | S-edat | `campaign-finance/elections/embed/data.js` | `6ff914e5a17fe61ade9102d6c3eaadab8dc0c13142bbf2d6fdbccee7869fc52a` |
-| S-eren | `campaign-finance/elections/embed/render.js` | `5769c2dab94c36ebb77f069f23e730d9f797a8713a5f1f5c07b70557d760b9aa` |
-| S-eapp | `campaign-finance/elections/embed/app.js` | `33c896e8c8924e143da40d63c69a66e01f9c9e8801af0017e7dea8c77366c71d` |
+| S-eren | `campaign-finance/elections/embed/render.js` | `0cd256eb6ce78d648d5709f840983ff02b777efd195be92b9f7852875532ffec` |
+| S-eapp | `campaign-finance/elections/embed/app.js` | `9add3d7d75e7214af0d90737fdf5db352097a19b77f5d3a424053015ef5305a3` |
 | S-srv | `campaign-finance/editor/serve.py` | `f430f67b2d2367893ab4cb37a1c25ff84d71bb93b53a23b78f253ec17dccaa3a` |
 | S-rec | `campaign-finance/ingestion/reconcile.py` | `363c3c19341508463d6f5563e2fe2defa3fb59e7626b48b3e31b13e0180acb50` |
 | S-egate | `campaign-finance/elections/embed/tools/gate_bundle.js` | `5aab7c2b9a556e4848a911285d6f9ebc5a3e18cbdb4c332cde3f4c0abfdf57b3` |

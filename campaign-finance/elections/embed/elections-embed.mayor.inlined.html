@@ -1539,40 +1539,40 @@
 
   function styles() {
     return '<style>' +
-      // Real Recoleta — the council embed's exact @font-face (onlinewebfonts CDN),
-      // with a Georgia serif fallback so the editorial feel survives if the CDN font
-      // doesn\'t load. Matches the council tool for type parity.
-      '@font-face{font-family:"Recoleta";src:url("https://db.onlinewebfonts.com/t/4b3a3f6c2c6e4f1e8e5d4c3b2a1f0e9d.woff2") format("woff2");font-weight:700;font-display:swap;}' +
-      '.ipg-elect{--cream:#F6EFE9;--paper:#FCF8F3;--ink:#342828;--ink-soft:#6E5F58;--tan:#EBDAC6;--line:#E0CDB6;' +
-        '--teal:#044127;--sage:#508F88;--coral:#B0553A;--display:Recoleta,Georgia,ui-serif,serif;' +
-        '--body:Poppins,system-ui,-apple-system,sans-serif;--r:14px;' +
+      // DESIGN-1 (2026-09-25): the display face is Georgia, the face the council voting tool ratified
+      // (SBVOTE-2/A) after its Recoleta @font-face was measured dead. The same declaration sat
+      // here and cost one failed request per page load; removed. Full-bleed root: the reference's rule.
+      '#ipg-elect-root.ipg-elect{width:100vw;max-width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;}' +
+      '.ipg-elect{--cream:#F6EFE9;--paper:#FFFFFF;--ink:#342828;--ink-soft:#6a5d4e;--ink-label:#7d7264;--ink-muted:#9a8e7e;--tan:#EBDAC6;--line:#dcd2c4;--content:1080px;--pad:max(30px,calc((100% - var(--content))/2));' +
+        '--teal:#044147;--sage:#508F88;--coral:#B0553A;--aff:#044147;--aff-bg:#dCEae8;--opp:#B0553A;--opp-bg:#f1e1dc;--neu:#9a8e74;--neu-bg:#efe7d8;--nd:#a9a299;--nd-bg:#e9e4dc;--display:Georgia,ui-serif,serif;' +
+        '--body:Poppins,system-ui,-apple-system,sans-serif;--r:12px;' +
         'background:var(--cream);color:var(--ink);font-family:var(--body);font-weight:400;line-height:1.55;-webkit-font-smoothing:antialiased;}' +
       '.ipg-elect *{box-sizing:border-box;}' +
-      '.ipg-elect .wrap{max-width:980px;margin:0 auto;padding:0 20px;}' +
-      '.ipg-elect .masthead{padding:30px 0 16px;}' +
-      '.ipg-elect .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);font-weight:600;margin:0 0 14px;display:flex;align-items:center;gap:10px;}' +
-      '.ipg-elect .eyebrow .box{width:14px;height:14px;border:2px solid var(--teal);border-radius:3px;position:relative;flex:none;}' +
-      '.ipg-elect .eyebrow .box::after{content:"";position:absolute;left:2px;top:-3px;width:6px;height:10px;border:solid var(--teal);border-width:0 2px 2px 0;transform:rotate(40deg);}' +
-      '.ipg-elect h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,5vw,44px);line-height:1.05;letter-spacing:-.01em;margin:0 0 14px;max-width:18ch;}' +
-      '.ipg-elect .lede{font-size:16px;color:var(--ink-soft);max-width:60ch;margin:0;}' +
-      '.ipg-elect .lede strong{color:var(--ink);font-weight:500;}' +
-      '.ipg-elect .topnav{display:inline-flex;background:var(--tan);border-radius:30px;padding:4px;margin:24px 0 0;gap:2px;}' +
-      '.ipg-elect .topnav button{appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);font-size:14px;font-weight:500;color:var(--ink-soft);padding:9px 20px;border-radius:26px;}' +
-      '.ipg-elect .topnav button[aria-selected="true"]{background:var(--teal);color:#fff;}' +
+      '.ipg-elect .wrap{max-width:none;margin:0;padding:0 var(--pad) 8px;}' +
+      '.ipg-elect .masthead{background:var(--teal);color:var(--cream);margin:0 calc(-1 * var(--pad));padding:38px var(--pad) 0;position:relative;overflow:hidden;}' +
+      '.ipg-elect .eyebrow{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:#cfe0dd;font-weight:600;margin:0 0 12px;display:flex;align-items:center;gap:10px;}' +
+      '.ipg-elect .eyebrow .box{display:none;}' +
+      '.ipg-elect .eyebrow .box::after{content:none;}' +
+      '.ipg-elect h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,4.6vw,46px);line-height:1.04;letter-spacing:-.01em;margin:0 0 14px;max-width:20ch;color:var(--cream);}' +
+      '.ipg-elect .lede{font-size:15.5px;color:#cfe0dd;max-width:60ch;margin:0 0 24px;}' +
+      '.ipg-elect .lede strong{color:var(--cream);font-weight:500;}' +
+      '.ipg-elect .topnav{display:flex;background:var(--tan);border-radius:0;padding:0 var(--pad);margin:0 calc(-1 * var(--pad));gap:0;border-bottom:1px solid var(--line);overflow-x:auto;}' +
+      '.ipg-elect .topnav button{appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);font-size:12.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);padding:16px 22px;border-radius:0;border-bottom:3px solid transparent;flex:0 0 auto;}' +
+      '.ipg-elect .topnav button[aria-selected="true"]{background:var(--cream);color:var(--teal);border-bottom-color:var(--sage);}' +
       '.ipg-elect .topnav button:focus-visible{outline:2px solid var(--sage);outline-offset:2px;}' +
-      '.ipg-elect .offices{display:flex;gap:6px;margin:22px 0 0;border-bottom:2px solid var(--line);flex-wrap:wrap;}' +
-      '.ipg-elect .office{appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);font-size:15px;font-weight:500;color:var(--ink-soft);padding:12px 16px;border-bottom:3px solid transparent;margin-bottom:-2px;border-radius:6px 6px 0 0;}' +
-      '.ipg-elect .office[aria-selected="true"]{color:var(--teal);border-bottom-color:var(--teal);}' +
+      '.ipg-elect .offices{display:flex;gap:6px;margin:22px 0 0;border-bottom:2px solid var(--tan);flex-wrap:wrap;}' +
+      '.ipg-elect .office{appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);font-size:12.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);padding:12px 16px;border-bottom:3px solid transparent;margin-bottom:-2px;border-radius:0;}' +
+      '.ipg-elect .office[aria-selected="true"]{color:var(--teal);border-bottom-color:var(--sage);}' +
       '.ipg-elect .office:focus-visible{outline:2px solid var(--sage);outline-offset:2px;}' +
-      '.ipg-elect .office .tag{font-size:11px;color:var(--ink-soft);font-weight:400;}' +
+      '.ipg-elect .office .tag{font-size:10px;color:var(--ink-muted);font-weight:600;letter-spacing:.06em;text-transform:none;display:block;}' +
       '.ipg-elect .districts{display:flex;flex-wrap:wrap;gap:8px;padding:20px 0 4px;}' +
-      '.ipg-elect .chip{appearance:none;cursor:pointer;font-family:var(--body);font-size:13px;font-weight:500;padding:7px 13px;border-radius:20px;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);}' +
+      '.ipg-elect .chip{appearance:none;cursor:pointer;font-family:var(--body);font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:6px 11px;border-radius:20px;border:1px solid var(--line);background:var(--tan);color:var(--ink-soft);}' +
       '.ipg-elect .chip[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff;}' +
       '.ipg-elect .chip[data-status="soon"]{opacity:.55;}' +
       '.ipg-elect .chip:focus-visible{outline:2px solid var(--sage);outline-offset:2px;}' +
       '.ipg-elect .picker-note{font-size:12.5px;color:var(--ink-soft);margin:8px 0 0;}' +
       '.ipg-elect .race-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:26px 0 4px;}' +
-      '.ipg-elect .race-head h2{font-family:var(--display);font-weight:600;font-size:26px;margin:0;}' +
+      '.ipg-elect .race-head h2{font-family:var(--display);font-weight:700;font-size:26px;margin:0;color:var(--teal);letter-spacing:-.01em;}' +
       '.ipg-elect .race-meta{font-size:13px;color:var(--ink-soft);}' +
       '.ipg-elect .field-note{font-size:13px;color:var(--ink-soft);background:var(--tan);border-radius:10px;padding:10px 14px;margin:14px 0 22px;display:flex;gap:9px;align-items:flex-start;}' +
       '.ipg-elect .field-note b{color:var(--ink);font-weight:500;}' +
@@ -1585,12 +1585,12 @@
       '.ipg-elect .sw{width:15px;height:13px;border-radius:3px;flex:none;}' +
       '.ipg-elect .sw.third{background:var(--teal);}.ipg-elect .sw.self{background:repeating-linear-gradient(135deg,#3E6B53 0 4px,#9DBBA9 4px 8px);}' +
       '.ipg-elect .sw.support{background:var(--sage);}.ipg-elect .sw.oppose{background:var(--coral);}' +
-      '.ipg-elect .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;margin:0 0 16px;}' +
+      '.ipg-elect .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:17px 18px;margin:0 0 12px;}' +
       '.ipg-elect .card-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;}' +
-      '.ipg-elect .cand-name{font-family:var(--display);font-weight:600;font-size:21px;margin:0;}' +
-      '.ipg-elect .chip-inc{font-size:11px;font-weight:500;color:var(--teal);background:#E5EFE9;border-radius:20px;padding:2px 10px;}' +
-      '.ipg-elect .chip-self{font-size:11px;font-weight:500;color:var(--coral);background:#F4E3DC;border-radius:20px;padding:2px 10px;}' +
-      '.ipg-elect .chip-status{font-size:11px;font-weight:500;border-radius:20px;padding:2px 10px;background:var(--tan);color:var(--ink-soft);margin-left:4px;}' +
+      '.ipg-elect .cand-name{font-family:var(--display);font-weight:700;letter-spacing:-.01em;font-size:21px;margin:0;color:var(--teal);}' +
+      '.ipg-elect .chip-inc{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);background:var(--aff-bg);border-radius:20px;padding:4px 9px;}' +
+      '.ipg-elect .chip-self{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--coral);background:var(--opp-bg);border-radius:20px;padding:4px 9px;}' +
+      '.ipg-elect .chip-status{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border-radius:20px;padding:4px 9px;background:var(--tan);color:var(--ink-soft);margin-left:4px;}' +
       '.ipg-elect .chip-status.s-elected{background:#E5EFE9;color:var(--teal);}' +
       '.ipg-elect .chip-status.wi{background:#F4E3DC;color:var(--coral);}' +
       '.ipg-elect .result-note{font-size:12px;color:var(--ink-soft);margin:2px 0 8px;}' +
@@ -1609,14 +1609,14 @@
       '.ipg-elect .show-more[aria-expanded="true"] .caret{transform:rotate(90deg);}' +
       '.ipg-elect .contrib-inner.bare{background:none;border:0;padding:0;border-radius:0;}' +
       '.ipg-elect .contrib-inner{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}' +
-      '.ipg-elect .contrib-h{font-size:12px;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 10px;}' +
+      '.ipg-elect .contrib-h{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin:0 0 14px;padding-bottom:9px;border-bottom:2px solid var(--tan);}' +
       '.ipg-elect .donor-search{width:100%;box-sizing:border-box;font-family:var(--body);font-size:13px;padding:8px 11px;margin:0 0 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);}' +
       '.ipg-elect .donor-search:focus-visible{outline:2px solid var(--sage);outline-offset:1px;}' +
       '.ipg-elect .crow{display:grid;grid-template-columns:1fr auto;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px;}' +
       '.ipg-elect .crow:last-child{border-bottom:0;}' +
       '.ipg-elect .crow .who{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}' +
       '.ipg-elect .crow .amt{font-weight:500;white-space:nowrap;}.ipg-elect .crow .n{font-size:11px;color:var(--ink-soft);font-weight:400;}' +
-      '.ipg-elect .tagchip{font-size:10.5px;padding:1px 8px;border-radius:14px;background:var(--tan);color:var(--ink-soft);}' +
+      '.ipg-elect .tagchip{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:20px;background:var(--tan);color:var(--ink-soft);}' +
       '.ipg-elect .tagchip.self{background:#F4E3DC;color:var(--coral);}' +
       '.ipg-elect .contrib-note{font-size:12px;color:var(--ink-soft);margin:8px 0 0;}' +
       '.ipg-elect .ie-lead{font-size:13.5px;color:var(--ink);margin:0 0 6px;}.ipg-elect .ie-lead b{font-weight:500;}' +
@@ -1662,10 +1662,10 @@
       '.ipg-elect .ie-items.support .iamt{color:var(--sage);}.ipg-elect .ie-items.oppose .iamt{color:var(--coral);}' +
       '.ipg-elect .tagchip.ind{background:var(--tan);color:var(--ink-soft);}.ipg-elect .tagchip.flag{background:#F4E3DC;color:var(--coral);}' +
       '.ipg-elect .ipg-modal-overlay{position:fixed;inset:0;background:rgba(52,40,40,.55);display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px;z-index:99999;overflow:auto;}' +
-      '.ipg-elect .ipg-modal{background:var(--paper);border-radius:14px;max-width:560px;width:100%;padding:24px 26px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3);}' +
+      '.ipg-elect .ipg-modal{background:var(--paper);border-radius:12px;max-width:560px;width:100%;padding:24px 26px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3);}' +
       '.ipg-elect .ipg-modal-close{position:absolute;top:10px;right:14px;appearance:none;border:0;background:none;font-size:24px;line-height:1;color:var(--ink-soft);cursor:pointer;}' +
-      '.ipg-elect .modal-kicker{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);font-weight:600;}' +
-      '.ipg-elect .modal-name{font-family:var(--display);font-weight:600;font-size:22px;margin:4px 0;}' +
+      '.ipg-elect .modal-kicker{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--sage);font-weight:700;}' +
+      '.ipg-elect .modal-name{font-family:var(--display);font-weight:700;font-size:22px;margin:4px 0;color:var(--teal);}' +
       '.ipg-elect .modal-tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;}' +
       '.ipg-elect .modal-note{font-size:12.5px;color:var(--ink-soft);margin:0 0 14px;}' +
       '.ipg-elect .modal-summary{font-size:13px;font-weight:500;margin:0 0 8px;padding-bottom:8px;border-bottom:1px solid var(--line);}' +
@@ -1674,12 +1674,12 @@
       '.ipg-elect .person-member{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);}' +
       '.ipg-elect .person-member-h{margin-bottom:8px;}' +
       '.ipg-elect .person-oow{font-style:italic;}' +
-      '.ipg-elect .elect-stat{flex:1 1 calc(50% - 8px);min-width:120px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:11px 13px;}' +
-      '.ipg-elect .elect-stat .num{font-family:var(--display);font-weight:700;font-size:23px;line-height:1.05;color:var(--teal);white-space:nowrap;}' +
-      '.ipg-elect .elect-stat .lab{font-weight:600;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-top:6px;}' +
+      '.ipg-elect .elect-stat{flex:1 1 calc(50% - 8px);min-width:118px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:15px 16px;}' +
+      '.ipg-elect .elect-stat .num{font-family:var(--display);font-weight:700;font-size:30px;line-height:1;color:var(--teal);white-space:nowrap;}' +
+      '.ipg-elect .elect-stat .lab{font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-top:8px;}' +
       // Affiliated-entity rollup card (E-2): combined total (nowrap) + always-shown entity breakdown.
       '.ipg-elect .elect-rollup{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--sage);border-radius:10px;padding:13px 15px;margin:0 0 14px;}' +
-      '.ipg-elect .elect-rollup-kicker{font-weight:600;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--sage);margin-bottom:6px;}' +
+      '.ipg-elect .elect-rollup-kicker{font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin-bottom:6px;}' +
       '.ipg-elect .elect-rollup-total{font-family:var(--display);font-weight:700;font-size:25px;line-height:1;color:var(--teal);white-space:nowrap;}' +
       '.ipg-elect .elect-rollup-sub{font-size:12px;color:var(--ink-soft);margin-top:4px;}' +
       '.ipg-elect .elect-rollup-members{margin-top:10px;}' +
@@ -1710,8 +1710,8 @@
       '.ipg-elect .clear-filters{appearance:none;border:0;background:none;cursor:pointer;color:var(--sage);font:inherit;font-weight:600;font-size:12.5px;text-decoration:underline;padding:0;margin-left:6px;}' +
       '.ipg-elect .kind{font-size:10px;text-transform:uppercase;letter-spacing:.04em;padding:1px 6px;border-radius:4px;background:var(--tan);color:var(--ink-soft);}' +
       '.ipg-elect .kind.cand{background:#E5EFE9;color:var(--teal);}.ipg-elect .kind.ie{background:#F4E3DC;color:var(--coral);}' +
-      '.ipg-elect .subnav{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0 16px;border-bottom:2px solid var(--line);}' +
-      '.ipg-elect .subtab{appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);font-size:14px;font-weight:500;color:var(--ink-soft);padding:10px 14px;border-bottom:3px solid transparent;margin-bottom:-2px;border-radius:6px 6px 0 0;}' +
+      '.ipg-elect .subnav{display:flex;flex-wrap:wrap;gap:0 22px;margin:26px 0 14px;border-bottom:2px solid var(--tan);}' +
+      '.ipg-elect .subtab{appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);padding:0 0 9px;border-bottom:2px solid transparent;margin-bottom:-2px;border-radius:0;}' +
       '.ipg-elect .subtab[aria-selected="true"]{color:var(--teal);border-bottom-color:var(--teal);}' +
       '.ipg-elect .subtab:focus-visible{outline:2px solid var(--sage);outline-offset:2px;}' +
       '.ipg-elect .srow{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:11px 15px;margin:0 0 8px;}' +
@@ -2604,7 +2604,7 @@
     if (df.search) bits.push('“' + df.search + '”');
     var filtSummary = bits.length
       ? ' · <b>Filtered by ' + esc(bits.join(' + ')) + '.</b> <button class="clear-filters" type="button" data-clear-filters>Clear filters</button>' : '';
-    return '<p class="browse-meta">' + n + (n === 1 ? ' result' : ' results') +
+    return '<p class="contrib-note">An independent-expenditure committee is an outside group that spends for or against candidates without coordinating with their campaigns. Its spending is reported by the group, not by any candidate, and is never added to what a candidate raised.</p>' + '<p class="browse-meta">' + n + (n === 1 ? ' result' : ' results') +
       (ieCount ? ' (' + ieCount + ' independent-expenditure ' + (ieCount === 1 ? 'committee' : 'committees') + ')' : '') + ' matched.' + filtSummary +
       '<span class="framing">' + BROWSE_FRAMING + ' ' +
       'Affiliated donors are combined into one group; an <span class="kind ie">IE PAC</span> opens its profile. Click any row for its footprint.</span></p>';
@@ -2755,7 +2755,7 @@
             }).join('') + '</div></div></div>';
         }).join('');
     } else if (tab === 'flags') {
-      body = '<p class="contrib-note">Editorial flags aggregated across this office’s donors.</p>' +
+      body = '<p class="contrib-note">Editorial flags are notes IPG attaches to a donor from public records; each flag\'s label says what it means. Each figure is the direct contributions of every donor carrying that flag, listed under each flag the donor carries. Independent spending is not included.</p>' +
         (vm.flags.length ? vm.flags.map(function (x) {
           return '<div class="srow"><div class="sname">⚑ ' + esc(prettyTag(x.flag)) +
             '<div class="figrow"><span class="mini c">' + money(x.amount) + '</span><span class="muted">· ' + x.count + ' contributions</span></div></div></div>';
@@ -2994,7 +2994,7 @@
 
   function notice(root, msg, coral) {
     root.innerHTML = '<div class="wrap"><p style="padding:44px 0;font-family:Poppins,system-ui,sans-serif;color:' +
-      (coral ? '#B0553A' : '#6E5F58') + '">' + msg + '</p></div>';
+      (coral ? '#B0553A' : '#6a5d4e') + '">' + msg + '</p></div>';
   }
 
   function firstSlug(omVM) {

@@ -85,7 +85,7 @@ const FEEDBACK_CONFIG = {
   --cream:#F6EFE9; --sage:#508F88; --teal:#044147; --tan:#EBDAC6;
   --ink:#342828; --white:#FFFFFF;
   --aff:#044147;  --aff-bg:#dCEae8;
-  --opp:#9c3b2e;  --opp-bg:#f1e1dc;
+  --opp:#B0553A;  --opp-bg:#f1e1dc;
   --neu:#9a8e74;  --neu-bg:#efe7d8;
   --nd:#a9a299;   --nd-bg:#e9e4dc;
   --line:#dcd2c4;
@@ -162,7 +162,7 @@ const FEEDBACK_CONFIG = {
   border:1.5px solid var(--teal);background:var(--white);color:var(--ink);
   border-radius:9px;appearance:none;width:100%;
 }
-#ipg-council-app select:focus,#ipg-council-app input:focus{outline:2.5px solid var(--sage);outline-offset:1px}
+#ipg-council-app select:focus,#ipg-council-app input:focus{outline:2.5px solid var(--sage);outline-offset:1px} #ipg-council-app button:focus-visible,#ipg-council-app .ipg-tab:focus-visible,#ipg-council-app a:focus-visible,#ipg-council-app [tabindex]:focus-visible{outline:2px solid var(--sage);outline-offset:2px}
 /* status sits below the field without pushing the input up or misaligning the row */
 #ipg-council-app .ipg-addr-status{position:absolute;top:100%;left:0;font-size:12.5px;color:#7d7264;margin-top:6px}
 
@@ -574,7 +574,7 @@ const FEEDBACK_CONFIG = {
 .ipg-modal-flags .ipg-cf-flag::before{content:"⚑";font-size:11px}
 .ipg-modal-flags .ipg-cf-flag.sev-watch{background:#fbeed0;color:#7a5a1a;border-color:#c89a3a}
 .ipg-modal-flags .ipg-cf-flag.sev-alert{background:#f5dccf;color:#7a3a1a;border-color:#a23a2e}
-.ipg-modal-flags .ipg-cf-flag.sev-critical{background:#9c3b2e;color:#fff;border-color:#9c3b2e}
+.ipg-modal-flags .ipg-cf-flag.sev-critical{background:#B0553A;color:#fff;border-color:#B0553A}
 .ipg-modal-flags .ipg-cf-flag a{color:inherit;text-decoration:underline}
 
 .ipg-modal-summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
@@ -631,7 +631,7 @@ const FEEDBACK_CONFIG = {
 .ipg-fb-submit:hover{background:#0a5a5e}
 .ipg-fb-submit:disabled{opacity:.55;cursor:default}
 .ipg-fb-status{font-size:12.5px;color:#6a5d4e}
-.ipg-fb-status.err{color:#9c3b2e}
+.ipg-fb-status.err{color:#B0553A}
 .ipg-fb-done{text-align:center;padding:22px 6px}
 .ipg-fb-done .big{font-size:36px;line-height:1;color:var(--sage,#508F88)}
 .ipg-fb-done p{margin-top:12px;font-size:14.5px;color:var(--ink,#342828);line-height:1.5}
@@ -1612,7 +1612,7 @@ const FEEDBACK_CONFIG = {
   function cfIESpendByTarget(committeeId){
     const ies=(state.cf&&state.cf.independent_expenditures)||[];
     const wn={}; (state.cf.alders||[]).forEach(a=>{wn[String(a.ward)]=a.name;});
-    Object.values(state.cf.committees||{}).forEach(c=>{ if(c&&c.ward!=null&&c.alder_name&&!wn[String(c.ward)]) wn[String(c.ward)]=c.alder_name; });
+    Object.values(state.cf.committees||{}).forEach(c=>{ if(c&&c.ward!=null&&c.alder_name&&!wn[String(c.ward)]) wn[String(c.ward)]=(alderByWard(c.ward)?.name)||c.alder_name; /* D13: roster name first */ });
     const by=new Map();
     ies.forEach(e=>{
       if(e.spender_committee_id!==committeeId) return;
@@ -1752,7 +1752,7 @@ const FEEDBACK_CONFIG = {
       ? ' <span style="color:#7d7264;font-weight:500">·</span> <span style="color:#7d7264">Filtered by '+filtBits.join(' + ')+'.</span>'
         +' <button class="ipg-cf-toggle" id="ipg-cf-clear-filters" style="margin-left:6px;text-decoration:underline">Clear filters</button>'
       : '';
-    h+='<div class="ipg-cf-meta" style="margin-top:8px">'+merged.length+(merged.length===1?' result':' results')
+    h+='<div class="ipg-cf-meta" style="margin-top:8px">Independent spending is money an outside group spends for or against a candidate without coordinating with the campaign. It is reported by that group, never added to what the candidate raised.</div>'+'<div class="ipg-cf-meta" style="margin-top:8px">'+merged.length+(merged.length===1?' result':' results')
       +(ieRows.length?' ('+ieRows.length+' independent-expenditure '+(ieRows.length===1?'committee':'committees')+')':'')+' matched.'+filtSummary
       +' <span style="color:#9a8e7e;display:block;margin-top:4px">Affiliated donors are combined into one group. Independent-expenditure committees (political spenders) appear here too, tagged <span class="ipg-cf-pac-tag">IE PAC</span>. Click any row to see its full footprint.</span></div>';
     // E4's list-level coverage statement (string 5) + the pointer to the deliberate
@@ -1806,7 +1806,7 @@ const FEEDBACK_CONFIG = {
     const R=(state.cf.rollups&&state.cf.rollups.by_alder)||{};
     const cyc=state.cfSpendCycle||'all';
     const wardName={}; (state.cf.alders||[]).forEach(a=>{wardName[String(a.ward)]=a.name;});
-    Object.values(state.cf.committees||{}).forEach(c=>{ if(c&&c.ward!=null&&c.alder_name&&!wardName[String(c.ward)]) wardName[String(c.ward)]=c.alder_name; });
+    Object.values(state.cf.committees||{}).forEach(c=>{ if(c&&c.ward!=null&&c.alder_name&&!wardName[String(c.ward)]) wardName[String(c.ward)]=(alderByWard(c.ward)?.name)||c.alder_name; /* D13: roster name first */ });
     const pick=o=> !o?{}:(cyc==='all'?(o.all||{}):((o.by_cycle&&o.by_cycle[cyc])||{}));
     const rows=Object.keys(R).map(w=>{
       const v=pick(R[w]); const direct=v.direct||0, sup=v.ie_support||0, opp=v.ie_oppose||0;
@@ -1954,7 +1954,7 @@ const FEEDBACK_CONFIG = {
         const isWardRow=(cmt.ward!=null && cmt.type==='candidate');
         if(isWardRow){
           const ward=cmt.ward;
-          const alderName = cmt.alder_name || alderByWard(ward)?.name || ('Ward '+ward);
+          const alderName = alderByWard(ward)?.name || cmt.alder_name || ('Ward '+ward);   // D13: roster name first
           h += '<div class="ipg-cf-row ipg-cf-clickable ipg-cf-committee-row" data-ward="'+ward+'">'
             + '<div><div class="name">Ward '+ward+' \u2014 '+relEsc(alderName)+'</div>'
             + '<div class="sub">'+countStr+'</div></div>'
@@ -2031,7 +2031,7 @@ const FEEDBACK_CONFIG = {
       rows.push({
         ward,
         cm_id: cm.id,
-        alder_name: cm.alder_name || (alder ? alder.name : 'Ward '+ward),
+        alder_name: (alder && alder.name) || cm.alder_name || ('Ward '+ward),   // D13: roster name first
         total,
         inds,
         data_quality: cm.data_quality,

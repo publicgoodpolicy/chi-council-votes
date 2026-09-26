@@ -681,8 +681,8 @@ function d25Independent(cand) {
     !!D.personView(isb, pid) && D.personView(isb, pid).sections.length > 0);
 })();
 
-ok('real Recoleta @font-face present (onlinewebfonts CDN) + Georgia fallback',
-  /@font-face\{font-family:"Recoleta";src:url\("https:\/\/db\.onlinewebfonts\.com/.test(R.styles()) && /--display:Recoleta,Georgia/.test(R.styles()));
+ok('DESIGN-1: no @font-face and no Recoleta in the elections styles; the display face is Georgia (D1, ratified 2026-09-25)',
+  !/@font-face/.test(R.styles()) && !/Recoleta/.test(R.styles()) && /--display:Georgia,ui-serif,serif;/.test(R.styles()));
 
 console.log('\n' + (fails ? (fails + ' ASSERTION(S) FAILED') : 'ALL ASSERTIONS PASSED'));
 process.exit(fails ? 1 : 0);
