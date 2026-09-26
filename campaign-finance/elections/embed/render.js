@@ -745,13 +745,13 @@
   // HALT-P1-B: the 2024 CBOE-native RESULT axis renders as its own pill (separate from the
   // filing-lifecycle status), with a write-in marker carried BESIDE the base result, never
   // fused. Copy lives here (presentation) keyed by the data-side enum (data carries semantics).
-  var RESULT_LABEL = { elected: 'Elected', defeated: 'Defeated', withdrawn: 'Withdrawn',
-    removed: 'Removed', challenged: 'Challenged' };
+  var RESULT_LABEL = { elected: 'Elected', defeated: 'Defeated', withdrawn: 'Withdrawn', removed: 'Removed', challenged: 'Challenged' };
+  var BALLOT_LABEL = { withdrawn: 'Withdrawn', removed: 'Removed from ballot' };  // DESIGN-1b: the 2026 ballot-lifecycle axis (ballot_status, HALT-Q2R); challenged renders nothing (Ishan, 2026-09-26)
   var CHALLENGED_TITLE = 'Ballot petitions challenged; objection sustained before certification';
   function statusPill(c) {
-    if (!c.result) return '';
-    var lbl = RESULT_LABEL[c.result] || c.result;
-    return '<span class="chip-status s-' + esc(c.result) + '">' + esc(lbl) + '</span>' +
+    var k = c.result ? c.result : ((c.ballotStatus && BALLOT_LABEL[c.ballotStatus]) ? c.ballotStatus : null);
+    if (!k) return '';
+    return '<span class="chip-status s-' + esc(k) + '">' + esc(c.result ? (RESULT_LABEL[k] || k) : BALLOT_LABEL[k]) + '</span>' +
       (c.writeIn ? '<span class="chip-status wi">Write-in</span>' : '');
   }
   // Always-visible explainer for a result that needs one (challenged). Replaces a native

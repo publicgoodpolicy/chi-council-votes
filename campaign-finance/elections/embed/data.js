@@ -822,7 +822,7 @@
           incumbent: !!c.incumbent, status: c.status,
           // HALT-P1-B: 2024 CBOE-native result axis + write-in marker + finance_facet enum
           // (+ empty-committee sbe ref) pass through to render; null/absent for 2026 records.
-          result: c.result || null, writeIn: !!c.write_in,
+          result: c.result || null, ballotStatus: c.ballot_status || null, writeIn: !!c.write_in,  // DESIGN-1b: ballot_status rides the VM
           financeFacet: c.finance_facet || null, committeeSbeRef: c.committee_sbe_ref || null,
           hasFinance: hasFinance, stillPopulating: !hasFinance,
           // SCOPE-UI (F-1 ruled): the prior-run carriage re-homed verbatim from the
