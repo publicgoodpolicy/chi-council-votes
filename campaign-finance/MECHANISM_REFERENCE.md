@@ -894,8 +894,8 @@ that catch defect classes the existing gates structurally cannot see.
 | S-cemb | `campaign-finance/elections/reference/council-embed.html` | `abb2f76f79d2259a2e609c3a67e32e8c522d283bd083ee173b3b597cdcc12aef` |
 | S-sbemb | `campaign-finance/school-board/school-board-embed.html` | `27ca3f44c082d50092a5185e83e8607a60ae4413d55bb790a5ac13999d6bc101` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8e76a38ad11562fe8de5bee1c2ff339ea60251795171bdd37f9aa29da2e0b82a` |
-| S-edat | `campaign-finance/elections/embed/data.js` | `bcecf5ef4f126e1f076eb12dd75cdd640215a2043527e9ad28ee7897a0fe4464` |
-| S-eren | `campaign-finance/elections/embed/render.js` | `244681506fe37b2d04e82a897593df2790cc8dc0af924ca8a9878387038e0332` |
+| S-edat | `campaign-finance/elections/embed/data.js` | `19e0b90f16367b3eb021885ae8d07d67d62ef4c92aaa49fdbabe81ce05409420` |
+| S-eren | `campaign-finance/elections/embed/render.js` | `11427083e6152db9c8041612a52ec9e169c514d6582647e9d5b7bc0a647c967d` |
 | S-eapp | `campaign-finance/elections/embed/app.js` | `9add3d7d75e7214af0d90737fdf5db352097a19b77f5d3a424053015ef5305a3` |
 | S-srv | `campaign-finance/editor/serve.py` | `f430f67b2d2367893ab4cb37a1c25ff84d71bb93b53a23b78f253ec17dccaa3a` |
 | S-rec | `campaign-finance/ingestion/reconcile.py` | `363c3c19341508463d6f5563e2fe2defa3fb59e7626b48b3e31b13e0180acb50` |
@@ -1001,7 +1001,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.5 | S-edat | 146-150 (selectorOptions — the {year} {body} pattern), 864-875 (officeRaces election scoping via the year-prefix join), 811-813 (the race's window rides the VM), 828-830 (priorElection re-homed to the base VM) |
 | C5.5 | S-eren | 928-936 (selectorNav), 813-820 (the verbatim prior-note; the formerly-cited on_current_record string is DELETED — its retirement is C5.7's affordance clause) |
 | C5.5 | S-eapp | 164-184 (selector state + read-only ?election= boot), 240-249 (scope switch resets the active race — the ruled B6 resolution) |
-| C5.7 | S-edat | 924-1009 (resolvePersonRef 928 — id-only resolution + durable link; personView 959 — member sections, window-scoped figures, career total, boolean out-of-window condition, no IE key), 1372 (exports) |
+| C5.7 | S-edat | 924-1009 (resolvePersonRef 928 — id-only resolution + durable link; personView 959 — member sections, window-scoped figures, career total, boolean out-of-window condition, no IE key), 1408 (exports; re-lined by DESIGN-1c per PS-83 — 36 lines inserted at 1012) |
 | C5.7 | S-eren | 697-733 (renderPersonModal — per-member sections + ratified strings), 735-741 (renderPersonMissing — string 7), 766-776 (facet map with on_current_record retired), 781-786 (personAffordance — string 13 label), 822-824 (card affordance), 840-851 (pendingCard explicit on_current_record branch) |
 | C5.7 | S-eapp | 102-106 (openPerson — no window parameter), 118-119 (data-person dispatch, no winFromEl), 309-318 (read-only ?person= boot — the deep-link path) |
 | C5.8 | S-edat | 463-467 (spenderFunders exclusion — the funder-rollup gap closed), 513-517 (donorFootprint exclusion — load-bearing for the windowless opener) |

@@ -525,7 +525,7 @@
         m = by[cid] = { committee_id: cid, total: 0, count: 0, kind: 'other', label: cm.committee_name || cid, rows: [] };
         if (cm.candidate_id) {
           var cand = index.candidateById[cm.candidate_id] || {}, race = index.raceById[cand.race_id] || {};
-          m.kind = 'candidate'; m.label = (cand.name || cm.candidate_id) + (race.label ? (' — ' + race.label) : '');
+          m.kind = 'candidate'; m.label = (cand.name || cm.candidate_id) + (race.label ? (' — ' + race.label) : '');  m.office = race.office || null;  // DESIGN-1c: grouping key
         } else if (cm.type === 'independent_expenditure') {
           m.kind = 'ie'; m.label = cm.committee_name || cid;
           m.ieIdentity = spenderFunders(index, cid).funders.slice(0, 3).map(function (x) { return x.name; });
@@ -584,7 +584,7 @@
       industries: parent.industries || [], flags: parent.flags || [],
       committees: committees, total: round2(total), count: committees.length,
       contributionsCount: kept, cycles: sortCycles(Object.keys(cyc)), rollup: rollup,
-      industryTags: index.industryTags
+      industryTags: index.industryTags, office: index.office || null   // DESIGN-1c: the page office, for grouping
     };
   }
 
@@ -656,7 +656,7 @@
     var candId = cm.candidate_id || null;
     var cand2 = candId ? (index.candidateById[candId] || {}) : {};
     var race2 = cand2.race_id ? (index.raceById[cand2.race_id] || {}) : {};
-    var contrib = candId ? candidateContributors(index, candId, null, win) : { lines: [], total: 0, count: 0 };
+    var contrib = candId ? withInKind(index, candId, win, candidateContributors(index, candId, null, win)) : { lines: [], total: 0, count: 0 };
     return {
       committee_id: committeeKey, kind: 'candidate', name: cm.committee_name || committeeKey, win: win || null,
       candidateName: cand2.name || null, raceLabel: race2.label || null, sunshineUrl: sun, isIE: false,
@@ -830,7 +830,7 @@
           priorElection: priorByCandidate(index)[c.id] || null,
           committee: hasFinance ? committeeMeta(index, c.id) : null,
           figures: hasFinance ? candidateFigures(index, c.id, cycle, win) : null,
-          contributors: hasFinance ? candidateContributors(index, c.id, cycle, win) : null,
+          contributors: hasFinance ? withInKind(index, c.id, win, candidateContributors(index, c.id, cycle, win)) : null,
           ieSupportDetail: hasFinance ? candidateIE(index, c.id, 'support', cycle, win) : null,
           ieOpposeDetail: hasFinance ? candidateIE(index, c.id, 'oppose', cycle, win) : null
         };
@@ -1009,9 +1009,45 @@
 
   // ---- Election Spend subtabs (office-scoped) ----
 
+  // DESIGN-1c (Ishan, 2026-09-26): an IE committee's funders count toward an office view only if the
+  // committee spent on that office in the ACTIVE election cycle or the one before it — not merely at any
+  // time (the all-time test let school-board-only funders lead the council list). "The one before" is the
+  // preceding window tabled for the office type in ELECTION_WINDOWS; where none is tabled (municipal 2027)
+  // it is the four years before the active window's start. A null lower bound (school_board's open 2024
+  // window) means all-time. ELECTION_WINDOWS itself is untouched: the selector reads it (D-20 / PS-110).
+  function priorCycleStart(office, win) {
+    var t = officeType(office), o = t && ELECTION_WINDOWS[t]; if (!o || !win) return undefined;
+    var ids = Object.keys(o).sort(), i = -1;
+    for (var k = 0; k < ids.length; k++) if (o[ids[k]].start === win.start && o[ids[k]].end === win.end) i = k;
+    if (i > 0) return o[ids[i - 1]].start;   // the tabled prior window; null = open past
+    return win.start ? (String(+win.start.slice(0, 4) - 4) + win.start.slice(4)) : null;
+  }
+  function ieActiveForOffice(index, committeeKey, win) {
+    var rows = index.iesBySpender[committeeKey] || [];   // office-scoped at build (item 4)
+    if (!win) return rows.length > 0;
+    var lo = priorCycleStart(index.office, win);
+    for (var i = 0; i < rows.length; i++) { var d = rows[i].date || ''; if (d && (win.end == null || d <= win.end) && (lo == null || d >= lo)) return true; }
+    return false;
+  }
+  // DESIGN-1c: the candidate card's donor lines are aggregates and carried no in-kind marker (the per-gift
+  // chip lives in the footprint modal). inKindShare = in-kind dollars / total dollars per rolled-up donor,
+  // computed from the same window-scoped rows candidateContributors aggregates; the render shows 'in-kind'
+  // at a share of 1 and 'partly in-kind' above 0. Wraps the result rather than editing the cited function.
+  function withInKind(index, candidateId, win, cd) {
+    if (!cd || !cd.lines) return cd;
+    var rows = index.directByCandidate[candidateId] || [], ik = {}, tot = {};
+    for (var i = 0; i < rows.length; i++) {
+      var c = rows[i]; if (EXCLUDED_CYCLES[c.cycle] || c.contribution_type === DUES_TYPE || (win && !inWindow(c.date, win))) continue;
+      var d = index.donors[c.donor_id] || {}, pid = d.parent_id || c.donor_id, a = c.amount || 0;
+      tot[pid] = (tot[pid] || 0) + a; if (c.is_in_kind) ik[pid] = (ik[pid] || 0) + a;
+    }
+    for (var j = 0; j < cd.lines.length; j++) { var l = cd.lines[j]; l.inKindShare = tot[l.parent_id] > 0 ? (ik[l.parent_id] || 0) / tot[l.parent_id] : 0; }
+    return cd;
+  }
+
   // Is a recipient committee in the current office scope? Candidate committees of
   // an in-office race, and IE committees that spent in-office, are in scope.
-  function recipInScope(index, committeeKey) {
+  function recipInScope(index, committeeKey, win) {
     var cm = index.committees[committeeKey] || {};
     if (!index.office) return true;
     var offs = OFFICE_RACE_OFFICES[index.office] || [];
@@ -1019,7 +1055,7 @@
       var race = index.raceById[(index.candidateById[cm.candidate_id] || {}).race_id] || {};
       return offs.indexOf(race.office) >= 0;
     }
-    if (cm.type === 'independent_expenditure') return !!index.inScopeIE[committeeKey];
+    if (cm.type === 'independent_expenditure') return !!index.inScopeIE[committeeKey] && ieActiveForOffice(index, committeeKey, win);
     return false;
   }
 
@@ -1095,7 +1131,7 @@
         if (c.contribution_type === DUES_TYPE) continue;
         if (!keep(c.cycle)) continue;
         if (win && !inWindow(c.date, win)) continue;
-        if (!recipInScope(index, c.committee_id)) continue;
+        if (!recipInScope(index, c.committee_id, win)) continue;
         total += c.amount || 0; ncontrib++;
         if (c.committee_id) cmset[c.committee_id] = 1;
         if (c.donor_id) entset[c.donor_id] = 1;
@@ -1212,7 +1248,7 @@
             if (expandedId && c.id === expandedId && c.committee_id) {
               entry.slug = candidateSlug(c, r);
               entry.committee = committeeMeta(index, c.id);
-              entry.contributors = candidateContributors(index, c.id, cycle, win);
+              entry.contributors = withInKind(index, c.id, win, candidateContributors(index, c.id, cycle, win));
               entry.ieSupportDetail = candidateIE(index, c.id, 'support', cycle, win);
               entry.ieOpposeDetail = candidateIE(index, c.id, 'oppose', cycle, win);
             }

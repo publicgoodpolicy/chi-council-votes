@@ -197,8 +197,8 @@ ok('funder amount is a PAC receipt, not the race spend', sp0.topFunders[0].total
 var topFunderId = sp0.funders[0].parent_id;
 var fp = D.donorFootprint(index, topFunderId);
 ok('Tier 3 footprint resolves to >=1 recipient committee/candidate', fp.committees.length >= 1 && fp.total > 0);
-ok('Tier 3 footprint is election-scoped (modal copy says so)',
-  /Donor footprint · this election only/.test(R.renderFunderModal(fp)) && /Council-side giving is a separate/.test(R.renderFunderModal(fp)));
+ok('Tier 3 footprint is election-scoped and office-grouped (modal copy says so; DESIGN-1c, ratified 2026-09-26)',
+  /Donor footprint · this election only/.test(R.renderFunderModal(fp)) && /grouped by the office of the recipient/.test(R.renderFunderModal(fp)) && /class="contrib-h fgroup-h"/.test(R.renderFunderModal(fp)));
 // Tags/flags surface (uncategorized never blank)
 ok('funder rows render industry tag(s) (uncategorized if none)', /class="tagchip ind">/.test(page));
 ok('tags helper shows "uncategorized" rather than blank for an empty donor',

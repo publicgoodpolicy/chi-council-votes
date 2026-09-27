@@ -211,7 +211,7 @@
       '.ipg-elect .show-more[aria-expanded="true"] .caret{transform:rotate(90deg);}' +
       '.ipg-elect .contrib-inner.bare{background:none;border:0;padding:0;border-radius:0;}' +
       '.ipg-elect .contrib-inner{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}' +
-      '.ipg-elect .contrib-h{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin:0 0 14px;padding-bottom:9px;border-bottom:2px solid var(--tan);}' +
+      '.ipg-elect .contrib-h{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin:0 0 14px;padding-bottom:9px;border-bottom:2px solid var(--tan);}.ipg-elect .fgroup-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;}.ipg-elect .fgroup-amt{letter-spacing:0;text-transform:none;font-size:13px;color:var(--ink-soft);}' +
       '.ipg-elect .donor-search{width:100%;box-sizing:border-box;font-family:var(--body);font-size:13px;padding:8px 11px;margin:0 0 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);}' +
       '.ipg-elect .donor-search:focus-visible{outline:2px solid var(--sage);outline-offset:1px;}' +
       '.ipg-elect .crow{display:grid;grid-template-columns:1fr auto;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px;}' +
@@ -219,7 +219,7 @@
       '.ipg-elect .crow .who{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}' +
       '.ipg-elect .crow .amt{font-weight:500;white-space:nowrap;}.ipg-elect .crow .n{font-size:11px;color:var(--ink-soft);font-weight:400;}' +
       '.ipg-elect .tagchip{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:20px;background:var(--tan);color:var(--ink-soft);}' +
-      '.ipg-elect .tagchip.self{background:#F4E3DC;color:var(--coral);}' +
+      '.ipg-elect .tagchip.self{background:#F4E3DC;color:var(--coral);}.ipg-elect .tagchip.inkind{background:var(--cream);color:var(--ink-soft);border:1px solid var(--line);}' +
       '.ipg-elect .contrib-note{font-size:12px;color:var(--ink-soft);margin:8px 0 0;}' +
       '.ipg-elect .ie-lead{font-size:13.5px;color:var(--ink);margin:0 0 6px;}.ipg-elect .ie-lead b{font-weight:500;}' +
       '.ipg-elect .ie-pac-tag{font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--coral);background:#F4E3DC;border-radius:4px;padding:1px 5px;}' +
@@ -433,7 +433,7 @@
       return '<div class="crow plain"><div class="who">' + esc(line.name) + '</div>' + amt + '</div>';
     }
     return '<button class="crow funder-row" type="button" data-funder="' + esc(line.parent_id) + '">' +
-      '<div class="who">' + esc(line.name) + ' ' + tagsHtml(line.industries, line.flags) + '</div>' + amt + '</button>';
+      '<div class="who">' + esc(line.name) + ' ' + tagsHtml(line.industries, line.flags) + (line.inKindShare >= 0.999 ? ' <span class="tagchip inkind">in-kind</span>' : (line.inKindShare > 0 ? ' <span class="tagchip inkind">partly in-kind</span>' : '')) + '</div>' + amt + '</button>';
   }
 
   // Contributor drill-down panel (collapsed; app toggles .open). Top 25 real
@@ -547,28 +547,28 @@
   // committees use their real name; placeholder IE PACs use the identity
   // treatment ("Funded primarily by …"). Each row is clickable -> committee profile.
   function renderFunderModal(fp) {
-    var rows = fp.committees.map(function (x) {
+    var rowOf = function (x) {   // DESIGN-1c: one committee row; the rows are grouped by the recipient's office below
       var who;
-      if (x.kind === 'ie') {
-        var nm = ieNaming(x.label, x.ieIdentity);
-        who = nm.primary + ' <span class="kind ie">IE PAC</span>' + (nm.subtitle ? '<div class="sub">' + nm.subtitle + '</div>' : '');
-      } else if (x.kind === 'candidate') {
-        who = esc(x.label) + ' <span class="kind cand">candidate</span>';
-      } else { who = esc(x.label) + ' <span class="kind">committee</span>'; }
+      if (x.kind === 'ie') { var nm = ieNaming(x.label, x.ieIdentity); who = nm.primary + ' <span class="kind ie">IE PAC</span>' + (nm.subtitle ? '<div class="sub">' + nm.subtitle + '</div>' : ''); }
+      else if (x.kind === 'candidate') { who = esc(x.label) + ' <span class="kind cand">candidate</span>'; }
+      else { who = esc(x.label) + ' <span class="kind">committee</span>'; }
       // Committee button — UNCHANGED. It alone carries data-committee -> modalNav -> openCommittee.
       var btn = '<button class="crow funder-row" type="button" data-committee="' + esc(x.committee_id) + '">' +
         '<div class="who">' + who + '</div>' +
         '<div class="amt">' + money(x.total) + ' <span class="n">· ' + plural(x.count, 'gift', 'gifts') + '</span></div></button>';
       // X-1: itemized rows render as a SIBLING after the button, never a child. They carry
       // NO data-committee, so a click on a row can never enter the committee-navigate path.
-      var items = (x.rows || []).map(function (r) {
-        return '<div class="ipg-item">' +
-          '<div class="ileft"><span class="idate">' + esc(fmtRowDate(r)) + '</span>' +
-          '<span class="ichips">' + itemChips(r) + '</span></div>' +
-          '<div class="iamt">' + money(r.amount) + '</div></div>';
-      }).join('');
+      var items = (x.rows || []).map(function (r) { return '<div class="ipg-item"><div class="ileft"><span class="idate">' + esc(fmtRowDate(r)) + '</span>' +
+          '<span class="ichips">' + itemChips(r) + '</span></div><div class="iamt">' + money(r.amount) + '</div></div>'; }).join('');
       return btn + (items ? '<div class="ipg-items">' + items + '</div>' : '');
-    }).join('') || '<p class="contrib-note">No election giving recorded.</p>';
+    };
+    // DESIGN-1c (Ishan, 2026-09-26): the footprint spans every office the tools cover, so rows are grouped by the recipient's office — this page's office first — with a subtotal per group; IE and other committees last.
+    var OFF = { alderperson: 'City Council', school_board_member: 'School Board', school_board_president: 'School Board', mayor: 'Mayor', city_clerk: 'City Clerk', city_treasurer: 'City Treasurer' };
+    var PAGE = ({ city_council: 'City Council', school_board: 'School Board', mayor: 'Mayor' })[fp.office] || null;
+    var groupOf = function (x) { return x.kind === 'ie' ? 'Independent-expenditure committees' : (x.kind === 'candidate' ? (OFF[x.office] || 'Other offices') : 'Other committees'); };
+    var order = [PAGE, 'City Council', 'School Board', 'Mayor', 'City Clerk', 'City Treasurer', 'Other offices', 'Independent-expenditure committees', 'Other committees'].filter(function (g, i, a) { return !!g && a.indexOf(g) === i; });
+    var groups = {}; fp.committees.forEach(function (x) { var g = groupOf(x), gg = groups[g] || (groups[g] = { total: 0, html: '' }); gg.total += (x.total || 0); gg.html += rowOf(x); });
+    var rows = order.filter(function (g) { return !!groups[g]; }).map(function (g) { return '<div class="fgroup"><div class="contrib-h fgroup-h"><span>' + esc(g) + (g === PAGE ? ' · this page' : '') + '</span><span class="fgroup-amt">' + money(groups[g].total) + '</span></div>' + groups[g].html + '</div>'; }).join('') || '<p class="contrib-note">No election giving recorded.</p>';
     // Four stat cards (E-2/E-3) + chronological cycle line (pre-YYYY first).
     var stat = function (num, lab) { return '<div class="elect-stat"><div class="num">' + num + '</div><div class="lab">' + lab + '</div></div>'; };
     var cyc = fp.cycles || [];
@@ -601,9 +601,9 @@
       '<div class="modal-kicker">Donor footprint · this election only</div>' +
       '<div class="modal-name">' + esc(fp.name) + '</div>' +
       '<div class="modal-tags">' + tagsHtml(fp.industries, fp.flags, fp.industryTags) + '</div>' +
-      '<p class="modal-note">Everything <b>' + esc(fp.name) + '</b> has given within the 2026 Board of Education data — ' +
-      'direct contributions and money into independent-expenditure committees. Council-side giving is a separate, ' +
-      'not-yet-connected view.</p>' +
+      '<p class="modal-note">Everything <b>' + esc(fp.name) + '</b> has given within this election window, across every office ' +
+      'these tools cover — direct contributions and money into independent-expenditure committees, grouped by the office ' +
+      'of the recipient.</p>' +
       statgrid + cycLine + rc +
       '<div class="modal-summary">' + money(fp.total) + ' across ' + plural(fp.count, 'recipient', 'recipients') + '</div>' +
       rows +
