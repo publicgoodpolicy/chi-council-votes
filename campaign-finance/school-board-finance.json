@@ -1,15 +1,15 @@
 {
   "schema_version": 1.4,
-  "generated_at": "2026-09-25T14:01:11Z",
+  "generated_at": "2026-09-27T03:58:23Z",
   "source": "derived: school-board-data.json (bridge) x election-data.json (rollups)",
   "_sync": {
-    "generated_at": "2026-09-25T14:01:11Z",
+    "generated_at": "2026-09-27T03:58:23Z",
     "inputs": {
       "school-board-data.json": {
         "sha256": "ebd6c8e88cdb4de93207bd21e3b26b12678da2e1c1ca8cb25b682e02c75d6bb3"
       },
       "election-data.json": {
-        "sha256": "2a6f6875f438d377b4e39b436ce911fc859cd90390b425b7a01306aaf3865985"
+        "sha256": "ecf76a03f19f5597c3f51e3b5fac31670de37581bbedf0bdf8288b8d51f2c725"
       }
     },
     "convention": "figures are election-labeled and sourced from rollups.by_candidate_election; by_candidate is resolution-only; the four streams are never summed in this artifact"
@@ -3466,7 +3466,7 @@
           "name": "Friends of Ed Bannon",
           "sbe_committee_id": "38810",
           "data_quality": "REAL",
-          "last_updated": "2026-09-14"
+          "last_updated": "2026-09-26"
         }
       ],
       "finance_state": "totals_only",
@@ -6910,7 +6910,7 @@
           "name": "Friends of Jennifer Custer",
           "sbe_committee_id": "39805",
           "data_quality": "REAL",
-          "last_updated": "2026-09-14"
+          "last_updated": "2026-09-26"
         }
       ],
       "finance_state": "full",
@@ -9137,7 +9137,7 @@
           "name": "Ebony DeBerry for School Board",
           "sbe_committee_id": "39821",
           "data_quality": "REAL",
-          "last_updated": "2026-09-14"
+          "last_updated": "2026-09-26"
         }
       ],
       "finance_state": "full",
@@ -9209,7 +9209,7 @@
           "name": "Debby For District 2B",
           "sbe_committee_id": "39834",
           "data_quality": "REAL",
-          "last_updated": "2026-09-14"
+          "last_updated": "2026-09-26"
         }
       ],
       "finance_state": "totals_only",
@@ -9259,7 +9259,7 @@
           "name": "Friends of Norma Rios Sierra",
           "sbe_committee_id": "41082",
           "data_quality": "REAL",
-          "last_updated": "2026-09-14"
+          "last_updated": "2026-09-26"
         }
       ],
       "finance_state": "totals_only",
@@ -11204,7 +11204,7 @@
           "name": "Community for Carlos Rivas",
           "sbe_committee_id": "39786",
           "data_quality": "REAL",
-          "last_updated": "2026-09-14"
+          "last_updated": "2026-09-26"
         }
       ],
       "finance_state": "full",
@@ -13934,7 +13934,7 @@
           "name": "Neighbors for Karen Zaccor for ERSB",
           "sbe_committee_id": "39866",
           "data_quality": "REAL",
-          "last_updated": "2026-09-14"
+          "last_updated": "2026-09-26"
         }
       ],
       "finance_state": "full",
@@ -18832,7 +18832,7 @@
           "name": "Ellen for Education",
           "sbe_committee_id": "39858",
           "data_quality": "REAL",
-          "last_updated": "2026-09-14"
+          "last_updated": "2026-09-26"
         }
       ],
       "finance_state": "full",
@@ -20510,7 +20510,7 @@
           "name": "Friends of Jitu Brown",
           "sbe_committee_id": "39853",
           "data_quality": "REAL",
-          "last_updated": "2026-09-14"
+          "last_updated": "2026-09-26"
         }
       ],
       "finance_state": "full",
@@ -21752,7 +21752,7 @@
           "name": "Committee to Elect Michilla Blaise",
           "sbe_committee_id": "37001",
           "data_quality": "REAL",
-          "last_updated": "2026-09-14"
+          "last_updated": "2026-09-26"
         }
       ],
       "finance_state": "full",
@@ -23864,7 +23864,7 @@
           "name": "Neighbors for Anusha",
           "sbe_committee_id": "39855",
           "data_quality": "REAL",
-          "last_updated": "2026-09-14"
+          "last_updated": "2026-09-26"
         }
       ],
       "finance_state": "full",
@@ -27604,7 +27604,7 @@
           "name": "Citizens for Biggs",
           "sbe_committee_id": "39881",
           "data_quality": "REAL",
-          "last_updated": "2026-09-14"
+          "last_updated": "2026-09-26"
         }
       ],
       "finance_state": "full",
@@ -29183,7 +29183,7 @@
           "name": "Friends of Yesenia Lopez",
           "sbe_committee_id": "39844",
           "data_quality": "REAL",
-          "last_updated": "2026-09-14"
+          "last_updated": "2026-09-26"
         }
       ],
       "finance_state": "full",
@@ -30672,7 +30672,7 @@
           "name": "Friends for Angel Gutierrez",
           "sbe_committee_id": "39873",
           "data_quality": "REAL",
-          "last_updated": "2026-09-14"
+          "last_updated": "2026-09-26"
         }
       ],
       "finance_state": "full",
@@ -31735,7 +31735,7 @@
           "name": "Therese Boyle for District 9 CPS BOE",
           "sbe_committee_id": "39843",
           "data_quality": "REAL",
-          "last_updated": "2026-09-14"
+          "last_updated": "2026-09-26"
         }
       ],
       "finance_state": "full",
@@ -33829,7 +33829,7 @@
           "name": "Citizens for Che \"Rhymefest\" Smith",
           "sbe_committee_id": "39788",
           "data_quality": "REAL",
-          "last_updated": "2026-09-14"
+          "last_updated": "2026-09-26"
         }
       ],
       "finance_state": "full",

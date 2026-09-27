@@ -9,7 +9,7 @@
     "scope": "elections candidate committees (v2): school_board and city_council; IE committees out of reconciliation scope; mayoral lane deferred",
     "inputs": {
       "election-data.json": {
-        "sha256": "2a6f6875f438d377b4e39b436ce911fc859cd90390b425b7a01306aaf3865985",
+        "sha256": "ecf76a03f19f5597c3f51e3b5fac31670de37581bbedf0bdf8288b8d51f2c725",
         "path": "campaign-finance/election-data.json"
       },
       "d2totals": {
@@ -33,14 +33,14 @@
     "ours_itemized_total": 75697966.45,
     "residual": -84542.25,
     "dollar_weighted_match_pct": 99.89,
-    "committees_candidate": 123,
-    "committees_with_sbe_id": 123,
+    "committees_candidate": 125,
+    "committees_with_sbe_id": 125,
     "committees_no_sbe_id": 0,
-    "committees_with_periods": 118,
-    "reconciled": 108,
+    "committees_with_periods": 120,
+    "reconciled": 110,
     "residual_state": 10,
     "too_new": 5,
-    "pending_a1_total": 2706352.66,
+    "pending_a1_total": 2707852.66,
     "aggregate_total": 0.0,
     "inkind_d2_total": 5126568.48,
     "inkind_ours_total": 5112304.73,
@@ -1772,6 +1772,36 @@
           "residual": 0.0,
           "d2_inkind": 890.0,
           "ours_inkind": 890.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-dominguez-sb-president": {
+      "committee_name": "Friends of Hilario Dominguez",
+      "sbe_committee_id": "41210",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 1,
+      "d2_itemized": 0.0,
+      "ours_itemized": 0,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-06-04",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
           "coverage_miss": false
         }
       ]
@@ -24982,6 +25012,48 @@
           "end": "2026-03-31",
           "d2_itemized": 10000.0,
           "ours_itemized": 10000.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-lozano-sb-d13": {
+      "committee_name": "Committee to Elect Emma Lozano",
+      "sbe_committee_id": "41119",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [
+        "PENDING-A1"
+      ],
+      "periods_count": 2,
+      "d2_itemized": 0.0,
+      "ours_itemized": 0,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 1500.0,
+      "last_period_end": "2026-06-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-03-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
           "residual": 0.0,
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
