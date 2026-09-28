@@ -62,7 +62,7 @@ ratification: the canonical council chain, the canonical elections chain, and `b
 council-canonical:
   convert_bulk_receipts -> ingest -> repair_clusters -> transform_slice1
   -> transform_slice2 -> ingest_ie -> enrich_committee_names -> sync_overrides
-  -> build_rollups -> build_shards -> validate_council_data
+  -> build_rollups -> apply_cash_on_hand -> build_shards -> validate_council_data
 
 elections-canonical:
   build_election_seed -> ingest -> transform_slice1 -> transform_slice2
@@ -73,7 +73,7 @@ elections-canonical:
 
 build_all.sh (votes builder; finance section conforms to council-canonical,
 omitting by design: convert_bulk_receipts, repair_clusters, ingest_ie,
-enrich_committee_names):
+enrich_committee_names, apply_cash_on_hand):
   sync_bios -> ingest_votes -> sync_allvotes -> [ingest, gated on staged receipts]
   -> transform_slice1 -> transform_slice2 -> sync_overrides -> build_rollups
   -> build_shards -> validate
@@ -204,8 +204,12 @@ consequence: **a vote absent from the ingest source is absent from the tool** un
 source carries it.
 
 Two writers set per-alder positions, both keyed on the current featured set, and — the
-mechanism this rule exists to close — **neither has ever deleted a key**, while `votemeta`
-is authoritatively rebuilt each run. A renamed vote code therefore left its old key on every
+mechanism this rule exists to close — ~~**neither has ever deleted a key**~~ — **amended at
+HYGIENE-1: until then neither deleted a key; since then `apply_featured` prunes every
+per-alder code the rebuilt `votemeta` no longer carries, and `merge_bios` carries forward
+only codes that still resolve to a `votemeta` entry, so un-featuring or renaming a vote
+leaves no orphan for the single-source assertion below to reject** — while `votemeta` is
+authoritatively rebuilt each run. A renamed vote code therefore left its old key on every
 alder permanently, and the vocabularies forked silently: the artifact accumulated codes that
 resolved to no `votemeta` entry, one pair drifting to different values for the same vote.
 Nothing detected it, because the votes family had **no validator of any kind** while the
@@ -331,6 +335,8 @@ currently unpopulated or recomputed. Fixture: `aka` — populated on zero donors
 time, invisible to the key census, caught by the writer sweep, resolved as recomputed.
 
 **IE funder identity** [C2.11, SOURCED]: an IE funder's donor id is minted from a name built by the receipts ingest's own builder — the "Last, First" form assembled in `campaign-finance/ingestion/convert_bulk_receipts.py` from SBE's LastOnlyName and FirstName — handed to the shared slug, so a person filed on both the receipts side and the IE side resolves to one id; `campaign-finance/ingestion/ingest_ie.py` imports that builder rather than carrying a second rule. After re-adding its rows the IE ingest prunes every donor left with zero contribution rows, counted as donors_pruned_rowless; a receipts-side donor can never be pruned because the referenced set is over all contributions. Ruled at IE-NAMES-1 (the register entry of that name). The `ie-committee-*` suffix gap (C4.3) is a different mechanism and is not characterized by this row.
+
+**A ward committee's cash on hand is pipeline-written from its latest D-2** [C2.12, SOURCED]: `campaign-finance/ingestion/apply_cash_on_hand.py` writes `cash_on_hand`, its as-of date, the same report's investments and its FiledDocs id on every ward committee, from the final version of the committee's latest D-2 period report in the sealed vintage — "final" exactly as `reconcile.build_filing_registry` resolves it, imported rather than restated. It replaces an editor-entered value, and a committee with no D-2 period report gets no figure rather than a stale one. `campaign-finance/ingestion/ingest.py` updates an existing committee's factual fields and leaves these four alone, so a council rebuild keeps them; nothing else writes them. The council embed renders the figure and its date on the Political Spend tab, and the investments as a second line only where they are non-zero.
 
 ---
 
@@ -722,6 +728,19 @@ an office branch. Office-gated methodology rendering is the elections embed's be
 implemented as the D-22 / PS-112 gate in its own `render.js` and asserted by the gate's
 `[MUNI/METH]` line; no such gate exists on this single-office surface.
 
+**The elections data+render harness is the pre-paste check of the pure layers** [C5.14,
+SOURCED]: `campaign-finance/elections/embed/tools/prerender_b2.js` loads the committed
+`campaign-finance/election-data.json` and exercises
+`campaign-finance/elections/embed/data.js` and `campaign-finance/elections/embed/render.js`
+as a server-side pre-render would — no DOM, no preview file, and since SBE-RERUN-1 it writes
+nothing. Its assertions pin subjects no other check covers, among them the donor footprint
+modal's kicker, grouping sentence and office groups, the scoped footprint's exclusion of IE
+committees that never spent in the page's office, the coming-soon states, and the display
+face; the gate runs it whole as `[RENDER/B2]`, so it is both the verify-before-paste step in
+`campaign-finance/elections/embed/DEPLOY.md` and a gate line. It reads the sources, not the
+bundles: a bundle rebuilt by `campaign-finance/elections/embed/tools/build_embed.js` renders
+what it asserts, and a hand-edited bundle is invisible to it.
+
 ---
 
 ## §6 — Defect visibility classes
@@ -890,19 +909,24 @@ that catch defect classes the existing gates structurally cannot see.
 | S-sbv | `campaign-finance/ingest_sb_votes.py` | `d4d7f6050b1f7dac07e07d27067fbf35ffe4f29a05e6cee74687412338a110b3` |
 | S-rst | `campaign-finance/ingestion/restamp_committee_linkage.py` | `6ceb82f9bbcffa08fdb21904b8585982a6bff7e3982e0b810937e2958019d06e` |
 | S-cbr | `campaign-finance/ingestion/convert_bulk_receipts.py` | `6062d0dfea8802f17a3434bef8e88097b7ad932bc17811f14d75055dfc3269ce` |
-| S-av | `campaign-finance/sync_allvotes.py` | `cc24932b8c01c8e57710d2b5650009fcb1a3330680541ad40b244dc39c4b5885` |
-| S-cemb | `campaign-finance/elections/reference/council-embed.html` | `abb2f76f79d2259a2e609c3a67e32e8c522d283bd083ee173b3b597cdcc12aef` |
+| S-av | `campaign-finance/sync_allvotes.py` | `489ece598a942f9e2c205e229ce4b97e3e51687dc03313243c893ace41f5c40c` |
+| S-cemb | `campaign-finance/elections/reference/council-embed.html` | `2af69485f9f6a4f2deba2249b2345263d8591f20613796510e3705657f81bcc1` |
 | S-sbemb | `campaign-finance/school-board/school-board-embed.html` | `27ca3f44c082d50092a5185e83e8607a60ae4413d55bb790a5ac13999d6bc101` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8e76a38ad11562fe8de5bee1c2ff339ea60251795171bdd37f9aa29da2e0b82a` |
 | S-edat | `campaign-finance/elections/embed/data.js` | `19e0b90f16367b3eb021885ae8d07d67d62ef4c92aaa49fdbabe81ce05409420` |
-| S-eren | `campaign-finance/elections/embed/render.js` | `11427083e6152db9c8041612a52ec9e169c514d6582647e9d5b7bc0a647c967d` |
+| S-eren | `campaign-finance/elections/embed/render.js` | `2cfcaa88a23388bb235443b0e8fe721cdc6529df55378480572c8f612e6ba801` |
 | S-eapp | `campaign-finance/elections/embed/app.js` | `9add3d7d75e7214af0d90737fdf5db352097a19b77f5d3a424053015ef5305a3` |
 | S-srv | `campaign-finance/editor/serve.py` | `f430f67b2d2367893ab4cb37a1c25ff84d71bb93b53a23b78f253ec17dccaa3a` |
 | S-rec | `campaign-finance/ingestion/reconcile.py` | `363c3c19341508463d6f5563e2fe2defa3fb59e7626b48b3e31b13e0180acb50` |
-| S-egate | `campaign-finance/elections/embed/tools/gate_bundle.js` | `5aab7c2b9a556e4848a911285d6f9ebc5a3e18cbdb4c332cde3f4c0abfdf57b3` |
+| S-egate | `campaign-finance/elections/embed/tools/gate_bundle.js` | `14581dbdb6c21142f415d9e622c2d73bf5ed176104ab3d736205e70589169069` |
 | S-chk | `campaign-finance/tools/check_sheet_scopes.py` | `9c980fd7362351a7df8a889ba60dc1a38d4fcee397200903a4f7d1b7bc620e94` |
 | S-sbf | `campaign-finance/ingestion/build_sb_finance.py` | `566e15999c29359d66c7e6c87b5f44c982e8df0fe5cd9c309ecb644bf6769553` |
 | S-a7 | `campaign-finance/sheets-sync/a7_precheck.py` | `a9d7e4669a4dc7b614d5d85939432a3317e3718d9a91cc9a9f0d50ca9ef73374` |
+| S-iv | `campaign-finance/ingest_votes.py` | `167757809a654effaddaf79f62e3ea82881dfe85e555b9acaa90532eb63b0ef1` |
+| S-bios | `campaign-finance/sheets-sync/sync_bios.py` | `0bce2d545e884fedd07fa814f69381582f7487cc12734c1b8c4152a83d89722a` |
+| S-bemit | `campaign-finance/elections/embed/tools/build_embed.js` | `727955e51eb4739646ea81b6d007135eec13fe16de2acc92c95db904dd6c370e` |
+| S-b2 | `campaign-finance/elections/embed/tools/prerender_b2.js` | `6fd849aa7e4675ec984b485bf29ec3cdd3affb3be2c02421e781e7365ae41376` |
+| S-coh | `campaign-finance/ingestion/apply_cash_on_hand.py` | `fc6593ad330c80f611ba6af54fb371aef17324eb8815b850e1f23e34e0e7fc73` |
 | A-probe | `~/probe-sync-2026-07-24/probe-report.md` | `4c678cf0c14dd370f8b52744bf473000340ce16449a5365841b6ac92d8e5f9bb` |
 | A-add | `~/probe-sync-a-2026-07-24/addendum-a-report.md` | `468ba24f4f418f72c2720608353c83e52694c41637cf9ff16a9b267d37e49ed6` |
 | A-ba1g0 | `~/halt-ba-1-2026-07-24/g0-report.md` | `9aeaa793fd5f4afe59d9ac504f7f00dd219f4417cbafdd3403e5a44f661e812e` |
@@ -939,9 +963,12 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.14 | S-cbr | 72-78 (`D2PART_NAME`, the five itemizable codes), 440 and 618 (the selection pass and the reassembly pass, both requiring membership) |
 | C1.14 | A-l0g0 | §5 (the D2Part tally over the receipts bulk: the out-of-map values are field-shifted artifacts, not types) |
 | C1.15 | S-vld | 201-318 (`validate_votes` — VOTES-ROSTER + VOTES-1..8, the single-source assertion at VOTES-5), 143-198 (`ROSTER_FIELDS`, `ROSTER_SCHEMAS` and `_roster` — the parameterization point: absence distinguishable from emptiness, and each shape declaring its position key and optional column contract), 87 (wired into validate) |
-| C1.15 | S-av | 156-158 (the seed map, flip-free), 221-238 (apply_featured: votemeta rebuilt whole, positions set-only — the asymmetry the rule closes) |
+| C1.15 | S-av | 159-161 (the seed map, flip-free), 195-253 (apply_featured: votemeta rebuilt whole, then every per-alder code it no longer carries pruned — the asymmetry the rule named, closed), 256-267 (_prune_positions), 270-340 (self_test — the un-feature fixture across both writers, with its bite) |
 | C1.15 | S-vld | 426-476 (`validate_shard_freshness` — the two-namespace stamp discriminator and the deep total assert), 1419-1422 (the `--shards` opt-in), 1045-1394 (`self_test` — the roster-and-votes fixtures, incl. the undeclared-shape false-green case and MEMBER-1..7), 1398-1401 + 1416-1418 (its pre-argparse handler and the `--self-test` flag) |
 | C1.15 | S-bld | 114 (the validator invoked with `--shards`) |
+| C1.15 | S-iv | 265-285 (populate_featured — positions written set-only from the featured map; the prune downstream in sync_allvotes removes what it leaves) |
+| C1.15 | S-bios | 91-119 (merge_bios — the rebuilt roster carries forward only codes resolving to a votemeta entry) |
+| C1.15 | S-egate | 2330-2338 ([AV/SELF]) |
 | C1.16 | S-sbv | whole file (`ingest_sb_votes.py` — the school-board ingest: read-only scope by construction, no write verb anywhere; `mint_member_id` the D-3 slug rule with the four ratified examples as `--self-test` cases; `read_votes` the blank→marker mapping, the fatal unknown-token branch, the structural header contract and the `Outcomes`/`Featured` validation (PS-122, PS-123); `read_cast_by` the optional third tab and its five fatalities (PS-121); `build` the artifact assembly, own-namespace stamps, the `candidacy_ref` carry-through, and the outcome, featured and cast-by carry) |
 | C1.16 | S-vld | 321-423 (`validate_members` — MEMBER-1..7, the roster column contract, deliberately outside `validate_votes`' early return), 88 (wired into validate), 155-177 (`ROSTER_SCHEMAS` — the per-shape declaration the contract hangs on), 178 (`_ISO_DATE`, the date predicate a′ names) |
 | C1.16 | S-chk | `EDITORIAL_TABS` (all three school-board source tabs declared, the third optional at ingest per PS-121) + `ROLES` (`ingest_sb_votes.py` classified `pipeline-reader`) — the pair that makes the read-only property structural rather than promised |
@@ -1025,6 +1052,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.10 | S-sbemb | 60-64 (the enumerated N=2 fetch statement the gate asserts by count, so a third fetch fails rather than drifting silently) |
 | C5.11 | S-sbemb | 2654-2690 (`render` — the view router; its terminal `else` at 2683 falls through to `methodologyView` rather than throwing) |
 | C5.11 | S-sbemb | 2663-2666 (the member, record, matrix and spend tests), 2682 (the board test — the fifth named view) |
+| C5.11 | S-bemit | 34-38 (OFFICES — the enumerated office map), 41-45 (the refusal to emit a bundle for an office outside it) |
 | C5.12 | S-sbemb | 2601-2652 (`methodologyView` — the view the terminal else reaches), 2634-2643 (the SFM fold: heading through f6, with `SF.allElectionsDisclosure` re-emitted at 2636 and the `duesFigure` loading fallback at 2638-2641) |
 | C5.12 | S-sbemb | 672-679 (the SFM string declarations) |
 | C5.9 | S-srv | 471-508 (cluster-preview totals mirror the rollup exclusion set exactly) |
@@ -1033,6 +1061,13 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.9 | S-eren | 442-451 (the labeled, non-clickable pinned aggregate line; rows sum to the headline), 541 (the aggregate-of-N row chip) |
 | C5.9 | S-cemb | 1145-1153 (alder-profile headline counts the tail into totals and stats), 1192-1212 (the restored disclosure line and its superseded HALT-MIG-1 comment of record), 3125 (correlation-index donor-type skip) |
 | P1 | A-fw1 | 60-62 (proposed fused-per-candidate detector, not built) |
+| C5.14 | S-b2 | 2-24 (the header: pure layers, gated as [RENDER/B2], writes nothing), 106, 143 (the coming-soon states), 201 (the footprint modal's kicker, grouping sentence and office groups), 336-337 (the scoped footprint drops an IE committee that never spent in the page's office), 684-685 (the display face) |
+| C5.14 | S-egate | 1620-1634 ([RENDER/B2] — the harness run whole) |
+| C2.12 | S-coh | 77-110 (compute — the ward committees, the registry's finals, the latest period, the D2Totals join and its refusal), 113-117 (apply — the four fields replaced), 137-218 (self_test) |
+| C2.12 | S-rec | 69-125 (build_filing_registry — the resolution of the final report the step imports) |
+| C2.12 | S-ing | 457-467 (the existing-committee branch: factual fields updated, the rest left) |
+| C2.12 | S-cemb | 1157-1158 (the tile and its investments line), 1261 (statCash) |
+| C2.12 | S-egate | 2341-2349 ([COH/SELF]) |
 
 **RULED pointers** (`claim-id | ruling | register entry`; ruling text and provenance live in
 `RULINGS.md`, the authority of record per PS-75/PS-87):

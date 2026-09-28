@@ -1619,10 +1619,10 @@ async function assertPersonSurface(T, ctx, fx) {
 
   // [RENDER/B2] the elections data+render harness (SBE-RERUN-1 F). 120 assertions over the
   // pure data + render layers. Wired because the inverse sweep found it invoked by nothing
-  // in code — only by DEPLOY.md:59's "Verify before pasting" ritual — and FAILING, with
+  // in code — only by DEPLOY.md's "Verify before pasting" ritual — and FAILING, with
   // paste debt outstanding in front of it. It covers ten subjects no other check does
   // (the ie-cmte-toggle absence pin, coming-soon for city_council/mayor, the "· soon"
-  // marking, footer disclaimer copy, the elections embed's Recoleta @font-face, single
+  // marking, footer disclaimer copy, the display face (Georgia, no @font-face — D1), single
   // openModal/closeModal, cycle pills removed, the cycle data-layer arg, the IE scope
   // counts 110/218/328, and the Custer/Biggs vacating notes), which is why it was repaired
   // rather than deleted. It reads election-data.json directly — no preview, so
@@ -2072,7 +2072,7 @@ async function assertPersonSurface(T, ctx, fx) {
   // no constructed oracle because the correct row count changes with every refresh.
   //
   // WHY IT EXISTS: G0 measured ZERO harness coverage of the council donor surfaces while they are
-  // large and live in code — 8,923 rows in the 2027 donors tab, 21,498 browse rows. The three
+  // large and live in code — thousands of donor and browse rows (the live counts print on the PASS line below). The three
   // properties asserted are the ones the code enforces in three different places (the DUES_TYPE
   // skip, EXCLUDED_CYCLES, and the office-scope filter on IE committees), so a regression in any
   // of them shows up here rather than on a reader's screen.
@@ -2325,6 +2325,28 @@ async function assertPersonSurface(T, ctx, fx) {
     T.ok('[METH/REGISTER:bite] a one-character edit to the council artifact-links paragraph makes ' +
       'the sibling-branch comparison fire',
       mutLinks !== html && (!mc || (sLinks && mc[0] !== sLinks[0])));
+  })();
+
+  // [AV/SELF] the all-votes un-feature fixture (HYGIENE-1, open ledger 76 / row 58). PS-128 mode B:
+  // a constructed artifact with the ingest layer patched in memory, so no Sheet and no Datasette.
+  // It un-features one of two votes and asserts the code is pruned from every alder by
+  // apply_featured and by sync_bios.merge_bios, with a bite proving the prune is what removes it.
+  (function () {
+    var res = require('child_process').spawnSync('python3',
+      [path.join(__dirname, '..', '..', '..', 'sync_allvotes.py'), '--self-test'], { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[AV/SELF] all-votes un-feature self-test green — ' + tail, res.status === 0);
+  })();
+
+  // [COH/SELF] the cash-on-hand step's self-test (COH-1). PS-128 mode B over synthetic SBE
+  // exports: the latest D-2 period wins, its final amendment wins, a committee with no D-2 gets
+  // no figure, and the step refuses when a final report has no D2Totals row.
+  (function () {
+    var res = require('child_process').spawnSync('python3',
+      [path.join(__dirname, '..', '..', '..', 'ingestion', 'apply_cash_on_hand.py'), '--self-test'],
+      { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[COH/SELF] cash-on-hand self-test green — ' + tail, res.status === 0);
   })();
 
   console.log('\n' + T.n + ' checks · ' + (T.fail ? ('FAILED ' + T.fail) : 'ALL PASS'));

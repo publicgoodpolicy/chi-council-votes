@@ -6,8 +6,8 @@ doesn't count for the page's SEO), one per office, all from one codebase.
 ## What to paste
 
 **One file per page**, each self-contained and paste-ready (data.js + render.js +
-app.js inlined; Poppins via Google Fonts; Recoleta via the council embed's
-`@font-face`). Regenerate all three after any source change:
+app.js inlined; Poppins via Google Fonts; the display face is Georgia (D1), so no
+web font is loaded for it). Regenerate all three after any source change:
 
 ```
 cd campaign-finance/elections/embed
@@ -16,9 +16,11 @@ node tools/build_embed.js        # -> all three files below
 
 | Page          | File                                        |
 |---------------|---------------------------------------------|
-| /school-board | `elections-embed.inlined.html`              |
+| /school-board-elections | `elections-embed.inlined.html`    |
 | /city-council | `elections-embed.city-council.inlined.html` |
 | /mayor        | `elections-embed.mayor.inlined.html`        |
+
+Host: `https://www.publicgoodpolicy.org`.
 
 The payload is byte-identical across the three; they differ only in the baked
 `data-office` and in the paste instruction naming their page. Each file names its
@@ -32,9 +34,9 @@ add a **Code Block** containing that page's file from the table above.
 
 | Page          | `data-office`  | State now                                  |
 |---------------|----------------|--------------------------------------------|
-| /school-board | `school_board` | **Live** — 9 committees, IE layer, spend   |
-| /city-council | `city_council` | live — first paste at CNCL-DATA-1 P2.2      |
-| /mayor        | `mayor`        | Coming-soon; page not created (R7, 2026-08-31) |
+| /school-board-elections | `school_board` | **Live** |
+| /city-council | `city_council` | **Live** |
+| /mayor        | `mayor`        | **Not pasted.** A Squarespace pointer page to the published mayoral report (ruled 2026-09-27); the mayor bundle is built and mounted nowhere |
 
 `data-office` is **already baked into each file** (D-16 / PS-106, MUNI-ENABLE-1 G7)
 — nothing in the pasted block is edited by hand. It used to be one file whose mount
@@ -42,8 +44,7 @@ attribute the paster edited per page; that step is retired.
 
 `mayor` renders a clean "coming soon — finance processing as candidates file"
 state (not an error) until its candidate committees are mapped in `race-map.json`.
-`city_council` is mapped and live (readiness TRUE, 50 wards, 86 of 87 committees
-valued, as of the 2026-08-20 vintage).
+`city_council` is mapped and live.
 
 ## Paste record
 
@@ -54,9 +55,14 @@ fewer than its packet.
 
 | Page          | Pasted            | Packet sha256 (bytes / lines)                                                 | Post-paste capture sha256 (bytes / lines)                                     |
 |---------------|-------------------|-------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
-| /school-board | 2026-08-31 (P2.2) | `f939c7cff90e409ea85a013584cd1d39bfb684b582e5b37bf5340dee6e595002` (211,194 / 3,195) | `1d12308bb594d0c73445613241aadb2088ad6b96496a93c7215b7cf4a61409d4` (211,193 / 3,194) |
+| /school-board-elections | 2026-08-31 (P2.2) | `f939c7cff90e409ea85a013584cd1d39bfb684b582e5b37bf5340dee6e595002` (211,194 / 3,195) | `1d12308bb594d0c73445613241aadb2088ad6b96496a93c7215b7cf4a61409d4` (211,193 / 3,194) |
 | /city-council | 2026-08-31 (P2.2; page created that day) | `5dac3ec1c92e19c0d3c66800434ff85af31d90e4d1e99505ee0fc74cbd75072f` (211,194 / 3,195) | `f401d88dbe609e6998caae04b3eff6664a10c6e2e7078c75e21a0804777f0ca4` (211,193 / 3,194) |
 | /mayor        | —                 | not created (R7, 2026-08-31)                                                  | —                                                                             |
+
+This table is the P2.2 baseline, kept as history. Every paste since — IND-MULTI-1 (ii),
+DESIGN-1, DESIGN-1b and DESIGN-1c on 2026-09-27, and each later one — is recorded with its
+packet and served identities in that lane's paste-verification report and in the handover
+of record.
 
 A paste is owed only when the embed bundle's bytes change; data artifacts update on
 push alone (next section).

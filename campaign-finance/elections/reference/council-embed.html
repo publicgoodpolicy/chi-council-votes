@@ -1155,7 +1155,7 @@ const FEEDBACK_CONFIG = {
     // Summary stats — cash on hand gets a special tile when available
     h+='<div class="ipg-cf-summary">';
     if(cm.cash_on_hand!=null){
-      h+=statCash(fmtMoney(cm.cash_on_hand),'Cash on hand', cm.cash_on_hand_as_of?'as of '+fmtDateLong(cm.cash_on_hand_as_of):null);
+      h+=statCash(fmtMoney(cm.cash_on_hand),'Cash on hand', cm.cash_on_hand_as_of?'as of '+fmtDateLong(cm.cash_on_hand_as_of):null, cm.cash_on_hand_investments>0?'plus '+fmtMoney(cm.cash_on_hand_investments)+' in investments':null);
     }
     h+=stat(fmtMoney(total),'Raised',true);
     h+=stat(totalDonors.toLocaleString(),'Donors');
@@ -1258,7 +1258,7 @@ const FEEDBACK_CONFIG = {
     return '<div class="ipg-bio-cell"><div class="k">'+k+'</div>'+val+'</div>';
   }
   function stat(n,l,ser){return '<div class="ipg-stat"><div class="num'+(ser?' serif':'')+'">'+n+'</div><div class="lab">'+l+'</div></div>'}
-  function statCash(n,l,sub){return '<div class="ipg-stat ipg-stat-cash"><div class="num serif">'+n+'</div><div class="lab">'+l+'</div>'+(sub?'<div class="ipg-stat-sub">'+sub+'</div>':'')+'</div>'}
+  function statCash(n,l,sub,sub2){return '<div class="ipg-stat ipg-stat-cash"><div class="num serif">'+n+'</div><div class="lab">'+l+'</div>'+(sub?'<div class="ipg-stat-sub">'+sub+'</div>':'')+(sub2?'<div class="ipg-stat-sub">'+sub2+'</div>':'')+'</div>'}
 
   // ============================================================
   // STAGE 2.5 — Multi-tag helpers (schema v1.4)
@@ -2267,7 +2267,7 @@ const FEEDBACK_CONFIG = {
         const isWardRow=(cm.ward!=null && cm.type==='candidate');
         if(isWardRow){
           h+='<div class="ipg-cf-row ipg-cf-clickable ipg-cf-recipient" data-ward="'+cm.ward+'">'
-            +'<div><div class="name">Ward '+cm.ward+' \u2014 '+relEsc(cm.alder_name||'')+'</div>'
+            +'<div><div class="name">Ward '+cm.ward+' \u2014 '+relEsc(alderByWard(cm.ward)?.name||cm.alder_name||'')+'</div>'   // D13: roster name first
             +'<div class="sub">'+relEsc(cm.committee_name||'Committee')+' · '+countStr+'</div>'
             +'</div>'
             +'<div class="amount">'+fmtMoney(r.total)+'</div></div>';

@@ -6,8 +6,8 @@
  * figures are three separate segmented bars, NEVER summed — contributions (teal)
  * with the self-funding hatch shown distinctly, independent support (sage),
  * independent opposition (coral). All CSS is scoped under `.ipg-elect` so it is
- * safe inside a Squarespace Code Block. Recoleta is named with a serif fallback;
- * the real @font-face arrives at B5. Drill-downs are B3 (bars are static here).
+ * safe inside a Squarespace Code Block. The display face is Georgia (D1); no web
+ * font is loaded for it. Drill-downs are B3 (bars are static here).
  */
 (function (root, factory) {
   if (typeof module !== 'undefined' && module.exports) module.exports = factory();
@@ -603,7 +603,7 @@
       '<div class="modal-tags">' + tagsHtml(fp.industries, fp.flags, fp.industryTags) + '</div>' +
       '<p class="modal-note">Everything <b>' + esc(fp.name) + '</b> has given within this election window, across every office ' +
       'these tools cover — direct contributions and money into independent-expenditure committees, grouped by the office ' +
-      'of the recipient.</p>' +
+      'of the recipient — independent-expenditure committees appear here only where they have spent in this page\'s office.</p>' +
       statgrid + cycLine + rc +
       '<div class="modal-summary">' + money(fp.total) + ' across ' + plural(fp.count, 'recipient', 'recipients') + '</div>' +
       rows +

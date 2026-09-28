@@ -111,7 +111,7 @@ Per office page:
 ## Design
 
 Election variant of the council system: cream `#F6EFE9`, ink `#342828`, tan
-`#EBDAC6`, teal `#044127`, sage `#508F88`, **coral `#B0553A` for opposition**.
+`#EBDAC6`, teal `#044147`, sage `#508F88`, **coral `#B0553A` for opposition**.
 Recoleta (display) / Poppins (body) — **use the council embed's real Recoleta
 source**, not the prototype's Fraunces stand-in. The approved prototype
 (`elections-embed-prototype.html`, the single-race + spend view) is the visual

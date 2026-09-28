@@ -118,7 +118,7 @@ productionization must honor so the pre-render reuses, not reimplements:
 ## Design
 
 Election variant of the council system: cream `#F6EFE9`, ink `#342828`, tan
-`#EBDAC6`, teal `#044127`, sage `#508F88`, Recoleta (display) / Poppins (body),
+`#EBDAC6`, teal `#044147`, sage `#508F88`, Recoleta (display) / Poppins (body),
 plus **coral `#B0553A` for opposition** — the one color the accountability tool
 doesn't need. The per-candidate money composition is the signature element.
 

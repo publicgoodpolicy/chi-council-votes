@@ -2063,7 +2063,7 @@ async function maybeSelftest(){
   if(location.hash!=='#selftest') return;
   const D=state.data.donors, C=state.data.committees;
   const newDonor = D.find(r=>r.donor_id==='illinois-realtors') || D.find(r=>r.suggested_industry);
-  const updDonor = D.find(r=>r.donor_id==='david-a-weinberg') || D[0];
+  const updDonor = D.find(r=>r.donor_id==='weinberg-david-a') || D[0];
   // an UPDATE donor accepted on PRIMARY ONLY — proves no-clobber of live additional/flags/notes
   const noClobber = D.find(r=>r.donor_id==='security-logistics-group-inc')
                  || D.find(r=>r.suggested_industry && r!==newDonor && r!==updDonor);

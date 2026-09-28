@@ -1,4 +1,4 @@
-# IE committee SBE id -> name. 12 from council-data.json; 3 (539, 36936, 39901)
+# IE committee SBE id -> name, 19 rows: 12 from council-data.json; 4 added since (530, 38670, 41012, 41327); 3 (539, 36936, 39901)
 # pulled from Illinois Sunshine (illinoissunshine.org/committees/<id>/) since they are
 # school-board-only spenders absent from the council artifact. Feed to
 # enrich_committee_names.py (header ID<TAB>Name) so election IE names are reproducible.

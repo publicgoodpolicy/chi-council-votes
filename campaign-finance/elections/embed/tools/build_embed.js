@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Build the self-contained, paste-ready Squarespace Code Blocks: inline the pure
- * data.js + render.js + app.js (+ Poppins link; Recoleta @font-face is injected by
- * render.styles()) into ONE HTML FILE PER OFFICE. The embed fetches election-data.json
+ * data.js + render.js + app.js (+ Poppins link; the display face is Georgia, D1 — no
+ * @font-face) into ONE HTML FILE PER OFFICE. The embed fetches election-data.json
  * from the GitHub raw CDN at runtime. Run from embed/:  node tools/build_embed.js
  *
  * D-16 (PS-106), MUNI-ENABLE-1 G7: page topology is three pages, one per election, each
@@ -56,7 +56,7 @@ function render(office, overrides) {
   '<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
   '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
   '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
-  '<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">\n' +
+  '<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">\n' +
   '</head>\n<body style="margin:0">\n' +
   '<!-- ============================================================\n' +
   '     IPG Elections embed — paste this ENTIRE block into the ' + o.page + ' page\'s\n' +

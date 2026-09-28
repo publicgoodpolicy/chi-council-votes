@@ -37,8 +37,9 @@ does **not** commit — it prints the commands and stops, on purpose.
 
 ### What is *not* in `build_all.sh`, by design
 
-`convert_bulk_receipts`, `repair_clusters`, `ingest_ie`, and `enrich_committee_names` are
-omitted — they need the multi-gigabyte SBE bulk files and run quarterly. The script conforms
+`convert_bulk_receipts`, `repair_clusters`, `ingest_ie`, `enrich_committee_names` and
+`apply_cash_on_hand` are omitted — they need the SBE bulk files of a sealed pull and run
+quarterly. The script conforms
 to the reference's chain block with exactly those omissions.
 
 ---
@@ -230,6 +231,28 @@ absorb drift. There is no auto-annotate path by design.
 `IE Committee Receipt` and `IE Committee Dues Transfer`, which map differently and
 carry decades-long D-2 histories — and the **council lane** are deliberately out of
 v1 scope. v1 covers elections candidate committees only.
+
+---
+
+## Cash on hand (`campaign-finance/ingestion/apply_cash_on_hand.py`)
+
+The council tool's cash-on-hand tile reads each ward committee's `cash_on_hand`, which this
+step writes from the committee's latest D-2 in the sealed pull. Run it **after the council
+rebuild and before `campaign-finance/ingestion/build_shards.py`**, with the same pull's
+`D2Totals` and `FiledDocs` that `campaign-finance/ingestion/reconcile.py` reads:
+
+```
+python3 campaign-finance/ingestion/apply_cash_on_hand.py campaign-finance/council-data.json \
+  --fileddocs raw/sbe-summary/'FiledDocs - <date>.txt' \
+  --d2totals raw/sbe-summary/'D2Totals - <date>.txt' --dry-run
+```
+
+Read the dry run — every ward committee should resolve, and a clean quarter shows a single
+as-of date — then run it without `--dry-run`, then
+`campaign-finance/ingestion/build_shards.py` and the validator. It refuses and writes
+nothing when a final report has no D2Totals row. `campaign-finance/ingestion/ingest.py`
+preserves what it writes, so a rebuild between refreshes keeps the figures. The rule is
+`campaign-finance/MECHANISM_REFERENCE.md` §2 (C2.12).
 
 ---
 

@@ -32,6 +32,9 @@ crosswalk / position-mapping logic is shared, not duplicated). It:
             POSITION maps them — the reverse-coding flip is retired (REFRESH-1).
           • The `tag` column on ANY row is attached to that rollcall vote, so
             the full record can be filtered by tag — featured or not.
+          • A code that is no longer featured is PRUNED from every alder's
+            positions, as it is from votemeta (HYGIENE-1, open ledger 76):
+            un-featuring a vote no longer leaves an orphan VOTES-5 rejects.
 
 Needs WRITE scope (spreadsheets), unlike the read-only sheet syncs.
 
@@ -191,12 +194,13 @@ def apply_tags(data, effective):
 
 def apply_featured(data, effective, base, org, dry_run=False):
     """OWN votemeta: rebuild it entirely from the All Votes tab's featured rows
-    (so un-checking a vote removes it). Also build featured_vote_map and populate
-    per-alder positions. Returns (fmap, report)."""
+    (so un-checking a vote removes it). Also build featured_vote_map, populate
+    per-alder positions, and prune every per-alder code the rebuilt votemeta no
+    longer carries. Returns (fmap, report)."""
     rc_by_id = {v["id"]: v for v in data.get("rollcall", {}).get("votes", [])}
     featured = {vid: ed for vid, ed in effective.items()
                 if truthy(ed.get("featured")) and str(ed.get("code") or "").strip()}
-    report = {"featured": 0, "skipped_no_code": 0, "positions_written": 0}
+    report = {"featured": 0, "skipped_no_code": 0, "positions_written": 0, "positions_pruned": 0}
     for vid, ed in effective.items():
         if truthy(ed.get("featured")) and not str(ed.get("code") or "").strip():
             report["skipped_no_code"] += 1
@@ -241,7 +245,99 @@ def apply_featured(data, effective, base, org, dry_run=False):
 
     # Single source of truth: featured set fully defines votemeta.
     data["votemeta"] = new_votemeta
+    # ...and therefore the per-alder positions (HYGIENE-1, open ledger 76 / row 58). Both writers
+    # of alders[].votes were set-only, so an un-featured or renamed code stayed on every alder,
+    # VOTES-5 rejected the artifact and build_all.sh aborted until it was rebuilt from a clean
+    # one. The prune keys on the votemeta just rebuilt, so it removes exactly the orphans.
+    report["positions_pruned"] = _prune_positions(data)
     return fmap, report
+
+
+def _prune_positions(data):
+    """Remove every per-alder vote code that resolves to no votemeta entry; return the count."""
+    codes = {m.get("code") for m in data.get("votemeta", [])}
+    pruned = 0
+    for a in data.get("alders", []):
+        votes = a.get("votes")
+        if not votes:
+            continue
+        for code in [c for c in votes if c not in codes]:
+            del votes[code]
+            pruned += 1
+    return pruned
+
+
+def self_test():
+    """[AV/SELF] the un-feature fixture (HYGIENE-1, open ledger 76 / row 58). PS-128 mode B: a
+    constructed artifact and a patched ingest layer, so no Sheet, no Datasette and no repository
+    state is read. It exercises the transition the votes family had never been tested against --
+    a vote featured on the last run and un-featured on this one -- through both writers that
+    carry positions forward: apply_featured here and sync_bios.merge_bios."""
+    import importlib.util
+    checks, fails = [0], [0]
+
+    def t(label, cond):
+        checks[0] += 1
+        if not cond:
+            fails[0] += 1
+            print("  FAIL", label)
+
+    def artifact():
+        return {"rollcall": {"votes": [{"id": "v1", "date": "2026-01-01", "title": "A"},
+                                       {"id": "v2", "date": "2026-02-01", "title": "B"}]},
+                "votemeta": [{"code": "A", "vote_id": "v1"}, {"code": "B", "vote_id": "v2"}],
+                "alders": [{"ward": 1, "votes": {"A": "Affirmative", "B": "Oppositional"}},
+                           {"ward": 2, "votes": {"B": "Affirmative"}}]}
+
+    def orphans(d):
+        codes = {m.get("code") for m in d.get("votemeta", [])}
+        return sorted({c for a in d["alders"] for c in (a.get("votes") or {}) if c not in codes})
+
+    both = {"v1": {"featured": True, "code": "A"}, "v2": {"featured": True, "code": "B"}}
+    only_a = {"v1": {"featured": True, "code": "A"}, "v2": {"featured": False, "code": "B"}}
+    saved = (IV.build_crosswalk, IV.personvotes_for, IV.name_index, IV.resolve_ward)
+    IV.build_crosswalk = lambda base, org: ({}, {})
+    IV.name_index = lambda names: {}
+    IV.personvotes_for = lambda base, vids, name_pid=None: {v: [("p1", "yes")] for v in vids}
+    IV.resolve_ward = lambda cw, pid, vote_date: 1
+    global _prune_positions
+    real = _prune_positions
+    try:
+        d = artifact()
+        _f, rep = apply_featured(d, both, "x", "y")
+        t("control: both votes featured -> nothing pruned, no orphan",
+          rep["positions_pruned"] == 0 and orphans(d) == [])
+        t("control: ward 1 keeps both codes", set(d["alders"][0]["votes"]) == {"A", "B"})
+        d = artifact()
+        _f, rep = apply_featured(d, only_a, "x", "y")
+        t("un-feature B: votemeta holds A only", [m["code"] for m in d["votemeta"]] == ["A"])
+        t("un-feature B: B pruned from both alders (2 positions)", rep["positions_pruned"] == 2)
+        t("un-feature B: no orphan remains (VOTES-5's predicate)", orphans(d) == [])
+        t("un-feature B: ward 1 keeps A as the ingest writes it",
+          d["alders"][0]["votes"] == {"A": IV.POSITION["yes"]})
+        t("un-feature B: ward 2 carries no position", d["alders"][1]["votes"] == {})
+        _prune_positions = lambda data: 0
+        d = artifact()
+        apply_featured(d, only_a, "x", "y")
+        t("bite: with the prune disabled, B survives as an orphan", orphans(d) == ["B"])
+    finally:
+        _prune_positions = real
+        IV.build_crosswalk, IV.personvotes_for, IV.name_index, IV.resolve_ward = saved
+    t("bite restored: the real prune and the real ingest layer are back",
+      _prune_positions is real and IV.build_crosswalk is saved[0])
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sheets-sync", "sync_bios.py")
+    spec = importlib.util.spec_from_file_location("sync_bios_selftest", path)
+    sb = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(sb)
+    d = {"votemeta": [{"code": "A"}],
+         "alders": [{"ward": 1, "name": "old", "votes": {"A": "Affirmative", "GHOST": "Neutral"}}]}
+    ch = sb.merge_bios(d, {1: {"ward": 1, "name": "New"}})
+    t("merge_bios: the bios are rebuilt and A is preserved",
+      d["alders"] == [{"ward": 1, "name": "New", "votes": {"A": "Affirmative"}}])
+    t("merge_bios: GHOST, resolving to no votemeta entry, is not carried forward",
+      ch["votes_pruned"] == 1 and ch["votes_preserved"] == 1)
+    print(f"self-test: {checks[0]} checks · " + ("ALL PASS" if not fails[0] else f"{fails[0]} FAILED"))
+    return 0 if not fails[0] else 1
 
 
 # ----------------------------------------------------------------------------
@@ -300,6 +396,7 @@ def run(data_path, map_path, sheet_id, creds_file, base, org, dry_run, no_sheet)
     print("\n  SYNC ALL-VOTES REPORT")
     print(f"    featured votes:     {report['featured']}")
     print(f"    positions written:  {report['positions_written']}")
+    print(f"    positions pruned:   {report['positions_pruned']}")
     print(f"    tagged votes:       {n_tags}")
     if report["skipped_no_code"]:
         print(f"    ! {report['skipped_no_code']} rows checked featured but missing a code — skipped.")
@@ -326,7 +423,11 @@ def main():
     ap.add_argument("--org", default=IV.DEFAULT_ORG)
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--no-sheet", action="store_true", help="Skip Sheet I/O (testing).")
+    ap.add_argument("--self-test", action="store_true",
+                    help="Run the un-feature fixture ([AV/SELF]); no Sheet, no Datasette.")
     args = ap.parse_args()
+    if args.self_test:
+        return self_test()
     if not args.no_sheet and not args.sheet_id:
         raise SystemExit("Missing --sheet-id (or SHEET_ID env var)")
     try:

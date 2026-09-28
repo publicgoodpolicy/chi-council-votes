@@ -89,8 +89,12 @@ def read_alder_bios(sheet) -> dict:
 
 
 def merge_bios(data: dict, bios: dict) -> dict:
-    """Rebuild alders from bios, PRESERVING each ward's existing votes."""
-    changes = {'bios_updated': 0, 'votes_preserved': 0}
+    """Rebuild alders from bios, PRESERVING each ward's existing votes -- every code that still
+    resolves to a votemeta entry. A code that resolves to none (un-featured or renamed since the
+    last votes run) is not carried forward, so a bios re-sync never re-attaches an orphan
+    VOTES-5 would reject (HYGIENE-1, open ledger 76; sync_allvotes.apply_featured prunes the
+    same set)."""
+    changes = {'bios_updated': 0, 'votes_preserved': 0, 'votes_pruned': 0}
     if not bios:
         print("  No bios to merge.")
         return changes
@@ -100,10 +104,13 @@ def merge_bios(data: dict, bios: dict) -> dict:
             existing_votes[int(a.get('ward'))] = a.get('votes', {}) or {}
         except (TypeError, ValueError):
             pass
+    codes = {m.get('code') for m in data.get('votemeta', [])}
     new_alders = []
     for ward in sorted(bios):
         alder = dict(bios[ward])
-        alder['votes'] = existing_votes.get(ward, {})   # preserve roll-call positions
+        prior = existing_votes.get(ward, {})
+        alder['votes'] = {c: p for c, p in prior.items() if c in codes}   # preserve roll-call positions
+        changes['votes_pruned'] += len(prior) - len(alder['votes'])
         if alder['votes']:
             changes['votes_preserved'] += 1
         new_alders.append(alder)
