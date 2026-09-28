@@ -344906,14 +344906,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": 111344.82,
-      "cash_on_hand_as_of": "2026-03-31",
+      "cash_on_hand": 137168.22,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "Ingested from SBE on 2026-05-29.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "neighbors-for-daniel-la-spata"
+      "donor_id": "neighbors-for-daniel-la-spata",
+      "cash_on_hand_investments": 2500.0,
+      "cash_on_hand_d2_doc": "1015052"
     },
     "ward-2-brian-hopkins": {
       "id": "ward-2-brian-hopkins",
@@ -344925,14 +344927,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 552713.34,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "Ingested from SBE on 2026-05-29.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "hopkins-for-chicago"
+      "donor_id": "hopkins-for-chicago",
+      "cash_on_hand_investments": 21.0,
+      "cash_on_hand_d2_doc": "1014787"
     },
     "ward-25-byron-sigcho-lopez": {
       "id": "ward-25-byron-sigcho-lopez",
@@ -344944,14 +344948,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 1234.93,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "Ingested from SBE on 2026-05-31.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1016102"
     },
     "ward-33-rossana-rodriguez-sanchez": {
       "id": "ward-33-rossana-rodriguez-sanchez",
@@ -344963,14 +344969,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 87238.66,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "Ingested from SBE on 2026-05-31.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "people-for-rossana"
+      "donor_id": "people-for-rossana",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1016244"
     },
     "ward-35-anthony-quezada": {
       "id": "ward-35-anthony-quezada",
@@ -344982,14 +344990,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 16514.2,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "Ingested from SBE on 2026-05-31.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "people-for-anthony"
+      "donor_id": "people-for-anthony",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1014402"
     },
     "ward-40-andre-vasquez": {
       "id": "ward-40-andre-vasquez",
@@ -345001,14 +345011,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 179974.4,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "Ingested from SBE on 2026-05-31.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "neighbors-for-andre"
+      "donor_id": "neighbors-for-andre",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1016243"
     },
     "ward-42-brendan-reilly": {
       "id": "ward-42-brendan-reilly",
@@ -345020,14 +345032,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 319004.77,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "Ingested from SBE on 2026-05-31.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "citizens-for-reilly"
+      "donor_id": "citizens-for-reilly",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1014959"
     },
     "ward-49-maria-hadden": {
       "id": "ward-49-maria-hadden",
@@ -345039,14 +345053,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 32101.56,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "Ingested from SBE on 2026-05-31.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "maria-for-the-49th-ward"
+      "donor_id": "maria-for-the-49th-ward",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1012874"
     },
     "ward-3": {
       "id": "ward-3",
@@ -345058,14 +345074,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 63516.16,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "citizens-for-pat-dowell"
+      "donor_id": "citizens-for-pat-dowell",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1016018"
     },
     "ward-4": {
       "id": "ward-4",
@@ -345077,14 +345095,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 49247.51,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 1151.99,
+      "cash_on_hand_d2_doc": "1014156"
     },
     "ward-5": {
       "id": "ward-5",
@@ -345096,14 +345116,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 74428.22,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1015939"
     },
     "ward-6": {
       "id": "ward-6",
@@ -345115,14 +345137,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 3914.01,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1015446"
     },
     "ward-7": {
       "id": "ward-7",
@@ -345134,14 +345158,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 177995.71,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1011951"
     },
     "ward-8": {
       "id": "ward-8",
@@ -345153,14 +345179,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 311997.74,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-of-michelle-a-harris"
+      "donor_id": "friends-of-michelle-a-harris",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1018393"
     },
     "ward-9": {
       "id": "ward-9",
@@ -345172,14 +345200,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 116314.63,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "citizens-to-elect-anthony-beale"
+      "donor_id": "citizens-to-elect-anthony-beale",
+      "cash_on_hand_investments": 8568.49,
+      "cash_on_hand_d2_doc": "1016266"
     },
     "ward-10": {
       "id": "ward-10",
@@ -345191,14 +345221,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 425510.79,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1014348"
     },
     "ward-11": {
       "id": "ward-11",
@@ -345210,14 +345242,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 292909.32,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-of-nicole-lee"
+      "donor_id": "friends-of-nicole-lee",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1016205"
     },
     "ward-12": {
       "id": "ward-12",
@@ -345229,14 +345263,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 73857.94,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "ramirez-for-12"
+      "donor_id": "ramirez-for-12",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1016163"
     },
     "ward-13": {
       "id": "ward-13",
@@ -345248,14 +345284,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 264265.2,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1013637"
     },
     "ward-14": {
       "id": "ward-14",
@@ -345267,14 +345305,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 166118.82,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-of-jeylu-gutierrez"
+      "donor_id": "friends-of-jeylu-gutierrez",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1016272"
     },
     "ward-15": {
       "id": "ward-15",
@@ -345286,14 +345326,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 178809.01,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1016276"
     },
     "ward-16": {
       "id": "ward-16",
@@ -345305,14 +345347,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 286442.55,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-of-stephanie-coleman"
+      "donor_id": "friends-of-stephanie-coleman",
+      "cash_on_hand_investments": 200.0,
+      "cash_on_hand_d2_doc": "1016278"
     },
     "ward-17": {
       "id": "ward-17",
@@ -345324,14 +345368,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 143082.42,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1015408"
     },
     "ward-18": {
       "id": "ward-18",
@@ -345343,14 +345389,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 35325.26,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 2971.96,
+      "cash_on_hand_d2_doc": "1012036"
     },
     "ward-19": {
       "id": "ward-19",
@@ -345362,14 +345410,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 217163.93,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-of-matt-o-shea"
+      "donor_id": "friends-of-matt-o-shea",
+      "cash_on_hand_investments": 803046.1,
+      "cash_on_hand_d2_doc": "1015969"
     },
     "ward-20": {
       "id": "ward-20",
@@ -345381,14 +345431,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 143.27,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-for-jeanette-b-taylor"
+      "donor_id": "friends-for-jeanette-b-taylor",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1014868"
     },
     "ward-21": {
       "id": "ward-21",
@@ -345400,14 +345452,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 70745.19,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1016210"
     },
     "ward-22": {
       "id": "ward-22",
@@ -345419,14 +345473,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 222210.68,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-of-michael-d-rodriguez"
+      "donor_id": "friends-of-michael-d-rodriguez",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1017600"
     },
     "ward-23": {
       "id": "ward-23",
@@ -345438,14 +345494,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 91214.35,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1011687"
     },
     "ward-24": {
       "id": "ward-24",
@@ -345457,14 +345515,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 147056.37,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1014119"
     },
     "ward-26": {
       "id": "ward-26",
@@ -345476,14 +345536,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 110046.11,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-of-jessie-fuentes"
+      "donor_id": "friends-of-jessie-fuentes",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1013951"
     },
     "ward-27": {
       "id": "ward-27",
@@ -345495,14 +345557,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 50549.21,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1016625"
     },
     "ward-28": {
       "id": "ward-28",
@@ -345514,14 +345578,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 410200.36,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "citizens-for-ervin"
+      "donor_id": "citizens-for-ervin",
+      "cash_on_hand_investments": 225051.6,
+      "cash_on_hand_d2_doc": "1016105"
     },
     "ward-29": {
       "id": "ward-29",
@@ -345533,14 +345599,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 51992.16,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-of-chris-taliaferro"
+      "donor_id": "friends-of-chris-taliaferro",
+      "cash_on_hand_investments": 6913.74,
+      "cash_on_hand_d2_doc": "1016169"
     },
     "ward-30": {
       "id": "ward-30",
@@ -345552,14 +345620,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 79257.34,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-of-ruth-cruz"
+      "donor_id": "friends-of-ruth-cruz",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1015988"
     },
     "ward-31": {
       "id": "ward-31",
@@ -345571,14 +345641,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 54680.14,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "citizens-to-elect-felix-cardona-jr"
+      "donor_id": "citizens-to-elect-felix-cardona-jr",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1015799"
     },
     "ward-32": {
       "id": "ward-32",
@@ -345590,14 +345662,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 300485.86,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "citizens-for-waguespack"
+      "donor_id": "citizens-for-waguespack",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1015092"
     },
     "ward-34": {
       "id": "ward-34",
@@ -345609,14 +345683,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 1138737.35,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "new-day-bill-conway"
+      "donor_id": "new-day-bill-conway",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1015343"
     },
     "ward-36": {
       "id": "ward-36",
@@ -345628,14 +345704,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 167188.04,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-of-gilbert-villegas-for-alderman"
+      "donor_id": "friends-of-gilbert-villegas-for-alderman",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1015699"
     },
     "ward-37": {
       "id": "ward-37",
@@ -345647,14 +345725,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 47728.09,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1013428"
     },
     "ward-38": {
       "id": "ward-38",
@@ -345666,14 +345746,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 142734.8,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-of-nicholas-sposato"
+      "donor_id": "friends-of-nicholas-sposato",
+      "cash_on_hand_investments": 20103.87,
+      "cash_on_hand_d2_doc": "1014817"
     },
     "ward-39": {
       "id": "ward-39",
@@ -345685,14 +345767,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 380594.61,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-of-samantha-nugent"
+      "donor_id": "friends-of-samantha-nugent",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1014532"
     },
     "ward-41": {
       "id": "ward-41",
@@ -345704,14 +345788,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 116944.85,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-of-anthony-napolitano"
+      "donor_id": "friends-of-anthony-napolitano",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1014710"
     },
     "ward-43": {
       "id": "ward-43",
@@ -345723,14 +345809,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 338624.09,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1015768"
     },
     "ward-44": {
       "id": "ward-44",
@@ -345742,14 +345830,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 172723.93,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-of-bennett-lawson"
+      "donor_id": "friends-of-bennett-lawson",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1015380"
     },
     "ward-45": {
       "id": "ward-45",
@@ -345761,14 +345851,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 30236.96,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-to-elect-jim-gardiner"
+      "donor_id": "friends-to-elect-jim-gardiner",
+      "cash_on_hand_investments": 310578.21,
+      "cash_on_hand_d2_doc": "1014506"
     },
     "ward-46": {
       "id": "ward-46",
@@ -345780,14 +345872,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 9851.74,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 15000.0,
+      "cash_on_hand_d2_doc": "1014093"
     },
     "ward-47": {
       "id": "ward-47",
@@ -345799,14 +345893,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 319415.37,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-of-matt-martin"
+      "donor_id": "friends-of-matt-martin",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1015655"
     },
     "ward-48": {
       "id": "ward-48",
@@ -345818,14 +345914,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 24894.02,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": "friends-of-leni-manaa-hoppenworth"
+      "donor_id": "friends-of-leni-manaa-hoppenworth",
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1015785"
     },
     "ward-50": {
       "id": "ward-50",
@@ -345837,14 +345935,16 @@
       "founded": null,
       "data_quality": "REAL",
       "last_updated": "2026-09-14",
-      "cash_on_hand": null,
-      "cash_on_hand_as_of": null,
+      "cash_on_hand": 616467.58,
+      "cash_on_hand_as_of": "2026-06-30",
       "notes": "No data ingested yet. Run scripts/ingest.py to populate from SBE.",
       "type": "candidate",
       "industry_tags": [
         "candidate-account"
       ],
-      "donor_id": null
+      "donor_id": null,
+      "cash_on_hand_investments": 0.0,
+      "cash_on_hand_d2_doc": "1015161"
     },
     "ie-committee-22729": {
       "id": "ie-committee-22729",
