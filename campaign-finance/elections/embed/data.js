@@ -50,9 +50,14 @@
   // school-board committee predated the tool's subject; council incumbent committees carry
   // receipts back to 1999, and an open past would pour up to sixteen years of them into a
   // single "2027" figure — the coverage misstatement PS-93 exists to prevent.
+  // FIX-1 (E1): school board's 2024 window starts 2024-01-01. The open start was harmless
+  // only while no committee predated the tool's subject; once independent-expenditure funders
+  // count toward an office view it put ten years of IE-committee gifts into "2024" (the
+  // numbers audit, 2026-09-29). Money before a window is stated, never folded in
+  // (preWindowReceipts below).
   var ELECTION_WINDOWS = {
     school_board: {
-      '2024': { start: null, end: '2024-12-31' },
+      '2024': { start: '2024-01-01', end: '2024-12-31' },
       '2026': { start: '2025-01-01', end: '2026-12-31' } },
     municipal: {
       '2027': { start: '2023-05-15', end: '2027-12-31' } } };
@@ -400,6 +405,27 @@
       independentSupport: round2(sup.amount), independentSupportCount: sup.count,
       independentOpposition: round2(opp.amount), independentOppositionCount: opp.count
     };
+  }
+
+  // FIX-1 (E1): a candidate's committee receipts dated before the office's earliest window
+  // start — money outside every election this office shows. Stated as its own line on the
+  // card, never folded into a windowed figure. Scoped by table to the office types E1 names
+  // (school board): municipal incumbents carry receipts back to 1999, and E1 does not reach
+  // them. Returns null when there is nothing to state.
+  var PRE_WINDOW_OFFICE_TYPES = { school_board: 1 };
+  function preWindowReceipts(index, candidateId, race) {
+    var t = officeType(race && race.office);
+    if (!t || !PRE_WINDOW_OFFICE_TYPES[t]) return null;
+    var u = unionWindow(race.office);
+    if (!u || !u.start) return null;
+    var rows = index.directByCandidate[candidateId] || [], total = 0, count = 0;
+    for (var i = 0; i < rows.length; i++) {
+      var c = rows[i];
+      if (EXCLUDED_CYCLES[c.cycle] || c.contribution_type === DUES_TYPE) continue;
+      if (!c.date || c.date >= u.start) continue;
+      total += c.amount || 0; count++;
+    }
+    return total > 0 ? { before: u.start, year: u.start.slice(0, 4), total: round2(total), count: count } : null;
   }
 
   // Illinois Sunshine link — council embed's exact construction: prefer a stored
@@ -832,7 +858,8 @@
           figures: hasFinance ? candidateFigures(index, c.id, cycle, win) : null,
           contributors: hasFinance ? withInKind(index, c.id, win, candidateContributors(index, c.id, cycle, win)) : null,
           ieSupportDetail: hasFinance ? candidateIE(index, c.id, 'support', cycle, win) : null,
-          ieOpposeDetail: hasFinance ? candidateIE(index, c.id, 'oppose', cycle, win) : null
+          ieOpposeDetail: hasFinance ? candidateIE(index, c.id, 'oppose', cycle, win) : null,
+          preWindow: hasFinance ? preWindowReceipts(index, c.id, race) : null   // FIX-1 (E1)
         };
       })
     };
@@ -1125,7 +1152,7 @@
       if (!index.parentRollup.hasOwnProperty(pid)) continue;
       var d = index.donors[pid] || {};
       if (!donorMatches(d, d.name || pid, f)) continue;     // E-1 donor filters (parent unit)
-      var pr = index.parentRollup[pid], total = 0, cmset = {}, entset = {}, ncontrib = 0;
+      var pr = index.parentRollup[pid], total = 0, selfAmt = 0, cmset = {}, entset = {}, ncontrib = 0;
       for (var i = 0; i < pr.rows.length; i++) {
         var c = pr.rows[i];
         if (c.contribution_type === DUES_TYPE) continue;
@@ -1133,13 +1160,15 @@
         if (win && !inWindow(c.date, win)) continue;
         if (!recipInScope(index, c.committee_id, win)) continue;
         total += c.amount || 0; ncontrib++;
+        if (c.is_self) selfAmt += c.amount || 0;          // FIX-1 (E4): the row's own-money share
         if (c.committee_id) cmset[c.committee_id] = 1;
         if (c.donor_id) entset[c.donor_id] = 1;
       }
       if (total > 0) {
         rows.push({ kind: 'donor', parent_id: pid, name: d.name || pid,
           industries: d.industries || [], flags: d.flags || [], total: round2(total),
-          entities: Object.keys(entset).length, committees: Object.keys(cmset).length, contributions: ncontrib });
+          entities: Object.keys(entset).length, committees: Object.keys(cmset).length, contributions: ncontrib,
+          selfShare: selfAmt / total });
       }
     }
     var q = (f.search || '').toLowerCase();

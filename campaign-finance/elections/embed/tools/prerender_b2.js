@@ -33,7 +33,7 @@ var index = D.loadData(json, { office: 'school_board' });   // the embed is per-
 var indexAll = D.loadData(json);                            // unscoped, for scope comparison
 
 var OFFICE = 'school_board';
-var W24 = { start: null, end: '2024-12-31' };
+var W24 = { start: '2024-01-01', end: '2024-12-31' };
 var omVM = D.viewModels.officeRaces(index, OFFICE);
 var rv = D.viewModels.raceView(index, index.raceBySlug['district-2a'], null);
 // District 2A is a TOGGLE race (HALT-P1-C): render the COMBINED ('all') election tab, whose
@@ -467,11 +467,14 @@ ok('cycle data functions still accept a cycle arg (data layer intact)', cyclesAv
 ok('cycle filter degrades cleanly (single cycle: 2027 == current)',
   Math.round(D.candidateFigures(index, 'deberry-sb-d03', '2027').contributions.total) === Math.round(D.candidateFigures(index, 'deberry-sb-d03', null).contributions.total));
 (function () {
-  // SCOPE-UI: thread under the 2024 selection — its window spans the 2023 + 2027 SBE cycles,
-  // so the cycle argument is differentiable (the 2026 window holds cycle-2027 rows only).
+  // SCOPE-UI: thread under the 2024 selection. RE-EXPRESSED at FIX-1 (E1). The retired premise,
+  // recorded rather than deleted: the 2024 window spanned the 2023 + 2027 SBE cycles, so @2027 was
+  // strictly below all-time. E1's fixed 2024-01-01 start left no school-board window spanning two
+  // cycles (@2027 now equals all-time), so the thread is proven by a real cycle that holds no rows
+  // in the window: @2023 is 0 while all-time is positive. An unthreaded argument returns all-time.
   function dir(cyc) { return D.spendSubtab(index, 'school_board', 'industries', cyc, '2024').industries.reduce(function (s, x) { return s + x.direct; }, 0); }
-  ok('spend subtabs genuinely thread cycle (industries direct @2027 < all-time, both > 0)',
-    dir('2027') > 0 && dir('2027') < dir(null) && dir('bogus-cycle') === 0);
+  ok('spend subtabs genuinely thread cycle (industries direct @2023 == 0 < all-time == @2027, bogus == 0)',
+    dir('2023') === 0 && dir(null) > 0 && dir('2027') === dir(null) && dir('bogus-cycle') === 0);
 })();
 // MUNI-ENABLE-1 G4, RE-EXPRESSED at ELEC-IDENTITY-1 S1 revision 2 (Ishan, option C).
 //

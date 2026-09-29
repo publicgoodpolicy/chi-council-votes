@@ -822,9 +822,14 @@
     // Person affordance (D4): on the returner card — the card that carries prior-run
     // context is exactly the card whose person spans elections.
     var personLine = c.priorElection ? personAffordance(c) : '';
+    // FIX-1 (E1, ratified): receipts dated before the office's earliest window are stated as
+    // their own line with the amount, never folded into a windowed figure.
+    var preLine = c.preWindow
+      ? '<p class="committee prewin">Raised before ' + esc(c.preWindow.year) + ' (outside this election): <b>' +
+        money(c.preWindow.total) + '</b></p>' : '';
     return '<article class="card" id="cand-' + esc(c.slug) + '">' +
       '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' + chips + '</div>' + resultNote(c) + committeeLine + priorLine + personLine +
-      '<div class="bars">' + contribBar + contribPanel + supportBar + supportPanel + opposeBar + opposePanel + '</div>' + selfLine +
+      '<div class="bars">' + contribBar + contribPanel + supportBar + supportPanel + opposeBar + opposePanel + '</div>' + selfLine + preLine +
       '<p class="caption">Independent support and opposition are spending by outside groups, reported by those ' +
       'groups and not coordinated with the campaign. Figures are shown separately, never added together.</p></article>';
   }
@@ -1228,6 +1233,9 @@
     sub.push(plural(r.contributions || 0, 'contribution', 'contributions'));
     return '<button class="crow funder-row" type="button" data-funder="' + esc(r.parent_id) + '">' +
       '<div class="who">' + esc(r.name) + (isRollup ? ' <span class="rollup-pill">rollup</span>' : '') + ' ' + tagsHtml(r.industries, r.flags, tagMap) +
+      // FIX-1 (E4, ratified): the row stays ranked at its full amount; its own-money share is marked.
+      (r.selfShare >= 0.999 ? ' <span class="tagchip self">Candidate’s own money / loans</span>'
+        : (r.selfShare > 0 ? ' <span class="tagchip self">Partly candidate’s own money / loans</span>' : '')) +
       '<div class="browse-counts">' + sub.join(' · ') + '</div></div>' +
       '<div class="amt">' + money(r.total) + '</div></button>';
   }

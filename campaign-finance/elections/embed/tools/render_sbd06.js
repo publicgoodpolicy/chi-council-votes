@@ -49,7 +49,7 @@ ok('meta names the election ("2026 election")', html.indexOf('2026 election') >=
 ok('F-2 PINNED: the 2024-window $340,740 does NOT render on the 2026-scoped page', html.indexOf('$340,740') < 0);
 ok('F-2 PINNED: the 2024-window $35,153 does NOT render on the 2026-scoped page', html.indexOf('$35,153') < 0);
 // Where the money went (data-layer): the 2024 window still carries it in full.
-var W24 = { start: null, end: '2024-12-31' };
+var W24 = { start: '2024-01-01', end: '2024-12-31' };
 ok('2024 window carries Rivas support in full ($340,740)', money(D.candidateFigures(index, 'rivas-sb-d06', null, W24).independentSupport) === 340740);
 ok('2024 window carries Dones opposition in full ($35,153)', money(D.candidateFigures(index, 'dones-sb-d06', null, W24).independentOpposition) === 35153);
 

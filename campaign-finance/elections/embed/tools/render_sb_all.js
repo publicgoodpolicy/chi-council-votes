@@ -18,7 +18,7 @@ var fails = 0;
 function ok(n, c) { console.log((c ? 'PASS  ' : 'FAIL  ') + n); if (!c) fails++; }
 function M(n) { return Math.round(n); }
 function bk(cid, eid) { return (bce[cid] || {})[eid] || null; }
-var W24 = { start: null, end: '2024-12-31' }, W26 = { start: '2025-01-01', end: '2026-12-31' };
+var W24 = { start: '2024-01-01', end: '2024-12-31' }, W26 = { start: '2025-01-01', end: '2026-12-31' };
 
 console.log('=== Diagnostic-C POST-FIX oracles (by_candidate_election buckets) ===');
 var z24 = bk('zaccor-sb-d07', '2024'), z26 = bk('zaccor-sb-d07', '2026');

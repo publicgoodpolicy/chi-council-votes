@@ -102,7 +102,8 @@ def _split_name(n):
     """(surname-tokens, given-tokens). Donor names are stored 'Last, First'; candidate
     names 'First [M.] Last [Suffix]'. With a comma, family=pre-comma; else family=last
     non-suffix token. Used for the committee-scoped self-funding match (surname + given
-    subset), which is robust to nickname/middle-name drift (e.g. 'Deborah "Debby" Pope'
+    subset; FIX-1 E3 amends it to a shared given name through a closed equivalence table),
+    which is robust to nickname/middle-name drift (e.g. 'Deborah "Debby" Pope'
     vs donor 'Pope, Debby')."""
     if not n: return frozenset(), frozenset()
     n=unicodedata.normalize('NFKD',n).encode('ascii','ignore').decode().lower()
@@ -115,19 +116,39 @@ def _split_name(n):
         fam=frozenset(toks[-1:]); giv=frozenset(toks[:-1])
     return fam,giv
 
+# FIX-1 E3 (ratified 2026-09-29): the CLOSED given-name equivalence table. Each tuple is one
+# given name; every spelling maps to the tuple's first entry. An addition is a new ruling.
+_GIVEN_EQUIV=(('william','bill','will'),('robert','bob','rob'),('james','jim'),
+              ('timothy','tim','timmy'),('anthony','tony'),('michael','mike'),('thomas','tom'),
+              ('joseph','joe'),('daniel','dan'),('christopher','chris'),('edward','ed'),
+              ('kenneth','ken'),('charles','chuck','charlie'),('elizabeth','liz','beth'),
+              ('katherine','kate','katie'),('patricia','pat'),('jennifer','jen'))
+_GIVEN_CANON={t:grp[0] for grp in _GIVEN_EQUIV for t in grp}
+def _canon_given(toks):
+    return frozenset(_GIVEN_CANON.get(t,t) for t in toks)
+
 def _self_match(donor_name, ctoks, ctype):
-    """The ONE relational self-funding predicate (3b rule): a contribution is self IFF the
-    donor identity-matches the RECIPIENT candidate -- committee-scoped surname match AND
-    >=1 given/nick token shared. A Loan Received no longer independently satisfies the
-    match: a same-surname relative's loan (e.g. a spouse) is NOT the candidate's own
-    self-funding, so a loan must still clear the given-name test like any other row.
+    """The ONE relational self-funding predicate (3b rule, as amended by FIX-1 E3): a
+    contribution is self IFF the donor identity-matches the RECIPIENT candidate --
+    committee-scoped surname match AND >=1 of the donor's given-name tokens equal to one of
+    the candidate's, after the closed equivalence table (_GIVEN_EQUIV). E3 replaced the
+    subset test (every donor given token inside the candidate's name), which missed
+    'Conway, Bill' against William Conway and a filed middle name or nickname
+    ('Quezada, Anthony Joel'; 'Knudsen, Timothy "Timmy"'). The candidate's surname token is
+    never a given-name match. Given-name tokens exist only on a person-form name ('Last,
+    First', the form every filed individual takes); a name without a comma -- a committee's,
+    such as 'Friends to Elect ...' -- keeps the pre-E3 subset test, so a transfer from a
+    candidate's own other committee is not decided here (numbers-audit M5, a separate
+    ruling). A Loan Received still clears the same test as any other row:
+    a same-surname relative's loan (e.g. a spouse) is NOT the candidate's own self-funding.
     NOT self merely because the donor is a Candidate-type / self-funding-flagged person
     in their own race. Used to stamp is_self; candidateContributors (embed) READS that
     stamp, so render can't diverge. (ctype retained for signature/call-site stability.)"""
     if not ctoks or not donor_name: return False
     dfam,dgiv=_split_name(donor_name)
-    if dfam & ctoks and (dgiv and dgiv<=ctoks): return True
-    return False
+    if not (dfam & ctoks) or not dgiv: return False
+    if ',' not in donor_name: return dgiv<=ctoks     # not a person-form name: pre-E3 rule
+    return bool(_canon_given(dgiv) & (_canon_given(ctoks) - _canon_given(dfam)))
 
 def _bucket(date,wins):
     if not date: return None

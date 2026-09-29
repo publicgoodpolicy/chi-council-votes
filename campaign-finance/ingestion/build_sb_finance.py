@@ -140,12 +140,22 @@ def industry_class(donor):
     return "substantive"
 
 
-def elections_for(candidacy_ids, bce):
+def not_on_ballot_label(election):
+    """FIX-1 E1 (ratified 2026-09-29): the per-member label for money in an election window
+    the member was not a candidate in -- "Before 2025 (not on the 2024 ballot)", never the
+    bare year. At this vintage it fires on the 2024 window only (Ed Bannon, Debby Pope)."""
+    return f"Before {int(election) + 1} (not on the {election} ballot)"
+
+
+def elections_for(candidacy_ids, bce, cand_elections=None):
     """Per-election, per-stream aggregation across a member's candidacies.
 
     Sources every figure from by_candidate_election, which is the only election-scoped
     money structure in the elections artifact. Amount AND count are carried per stream so
-    the member page's Contributions/Donors tiles do not have to re-derive them."""
+    the member page's Contributions/Donors tiles do not have to re-derive them.
+
+    cand_elections ({candidacy_id: election_id}), when given, applies FIX-1 E1: a window
+    none of the member's candidacies ran in takes not_on_ballot_label, never the bare year."""
     out = {}
     for cid in candidacy_ids:
         for election, rec in (bce.get(cid) or {}).items():
@@ -164,6 +174,11 @@ def elections_for(candidacy_ids, bce):
                 slot[dst]["amount"] += float(v.get("amount") or 0.0)
                 slot[dst]["count"] += int(v.get("count") or 0)
             slot["candidacies"].append(cid)
+    if cand_elections is not None:
+        for election, slot in out.items():
+            if not any(str(cand_elections.get(c) or "").startswith(f"{election}-")
+                       for c in candidacy_ids):
+                slot["label"] = not_on_ballot_label(election)
     for slot in out.values():
         slot["candidacies"].sort()
         for s in STREAMS:
@@ -554,6 +569,11 @@ def cluster_slice(members, ed):
     return out, by_donor
 
 
+def cand_elections(ed):
+    """{candidacy_id: election_id} for FIX-1 E1's not-on-the-ballot label."""
+    return {c["id"]: c.get("election_id") for c in ed.get("candidates", [])}
+
+
 def build_member(m, ed):
     bp = ed["rollups"].get("by_person", {})
     bc = ed["rollups"].get("by_candidate", {})
@@ -602,7 +622,7 @@ def build_member(m, ed):
         out["candidacies"] = sorted(x["candidacy_id"] for x in person.get("members", []))
         # Elections first: the donor lists are keyed by them, and a donor election that
         # the figures do not know about is a defect, not a key to invent (SBF-9c).
-        out["elections"] = elections_for(out["candidacies"], bce)
+        out["elections"] = elections_for(out["candidacies"], bce, cand_elections(ed))
         out["committees"] = committees_for(out["candidacies"], ed)
         items, self_ids, mixed = scan_committee_rows(ed, out["candidacies"])
         if mixed:
@@ -623,7 +643,7 @@ def build_member(m, ed):
     out["candidacies"] = [ref]
     out["resolves_in_by_candidate"] = ref in bc
     out["finance_state"] = "totals_only"
-    out["elections"] = elections_for(out["candidacies"], bce)
+    out["elections"] = elections_for(out["candidacies"], bce, cand_elections(ed))
     out["committees"] = committees_for(out["candidacies"], ed)
     return out
 
@@ -726,6 +746,12 @@ def self_test():
                            "self_funding": {"amount": 0, "count": 0},
                            "ie_support": {"amount": 0, "count": 0},
                            "ie_oppose": {"amount": 0, "count": 0}}}}
+    # FIX-1 E1: a window no candidacy ran in takes the not-on-the-ballot label; one it ran in keeps its own
+    e3 = elections_for(["x-1"], bce, {"x-1": "2026-school-board"})
+    e4 = elections_for(["x-1"], bce, {"x-1": "2024-school-board"})
+    t.append(("E1 label: no 2024 candidacy -> 'Before 2025 (not on the 2024 ballot)'",
+              e3["2024"]["label"] == "Before 2025 (not on the 2024 ballot)"))
+    t.append(("E1 label: a 2024 candidacy keeps its own label", e4["2024"]["label"] == "2024: D1"))
     e2 = elections_for(["a", "b"], bce2)
     t.append(("multi-candidacy aggregation, amount", e2["2024"]["direct"]["amount"] == 3.75))
     t.append(("multi-candidacy aggregation, count", e2["2024"]["direct"]["count"] == 3))

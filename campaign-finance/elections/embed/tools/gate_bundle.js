@@ -254,8 +254,9 @@ var OFFICE_TYPE_ORACLE = {
   city_clerk: 'municipal',
   city_treasurer: 'municipal'
 };
-// D-20's ratified municipal values. `start` is the 2027 council-era cycle boundary, NOT the
-// school-board `start: null` idiom — see the ruling and the note in election-windows.json.
+// D-20's ratified municipal values. `start` is the 2027 council-era cycle boundary, NOT an
+// open `start: null` — see the ruling and the note in election-windows.json. (School board's
+// open 2024 start was retired by FIX-1 E1.)
 var MUNICIPAL_WINDOWS_ORACLE = { '2027': { start: '2023-05-15', end: '2027-12-31' } };
 
 // D-21 (PS-111) + D-22 (PS-112), MUNI-ENABLE-1 G5. The ratified display strings, transcribed
@@ -306,7 +307,7 @@ var FIXTURES = {
     // HALT-F2 oracle: the office's per-election windows, stated INDEPENDENTLY of data.js
     // (mirrors election-windows.json). If data.js's ELECTION_WINDOWS drifts from these,
     // the [F2] window-scoping checks fail — that drift is the defect being caught.
-    windows: { '2024': { start: null, end: '2024-12-31' },
+    windows: { '2024': { start: '2024-01-01', end: '2024-12-31' },   // FIX-1 E1
                '2026': { start: '2025-01-01', end: '2026-12-31' } },
     incs: {
       committee: 'ie-committee-26066',  // INCS Action Independent Committee (2024-window spender)
@@ -431,10 +432,12 @@ var FIXTURES = {
       s13: 'Campaign finance for this candidate →',                     // string 13 (HALT-S13, ratified label)
       s7: 'No person matches this link.',                               // string 7
       s11: "outside this election's window",                        // string 11 (anchor; ratified straight apostrophe)
-      // The five verified out-of-window singles (probe-links-report 969fd9f2: no
-      // counterpart candidacy at any tier). string 11 fires on EXACTLY these.
+      // The verified out-of-window singles (probe-links-report 969fd9f2: no counterpart
+      // candidacy at any tier). string 11 fires on EXACTLY these. FIX-1 E1 adds
+      // williams-sb-2024-d9: the 2024 window's fixed start puts his committee's
+      // 2022 receipts ($213,831.35, 38 rows) outside every member window.
       outOfWindowIds: ['bannon-sb-d01', 'pope-sb-d04', 'hernandez-sb-2024-d1',
-                       'smith-sb-2024-d6', 'thomas-sb-2024-d9']
+                       'smith-sb-2024-d6', 'thomas-sb-2024-d9', 'williams-sb-2024-d9']
     }
   }
 };
@@ -594,6 +597,12 @@ async function assertSpendTabFeatures(T, ctx, fx) {
   var R24 = ctx.root().innerHTML;
   T.ok('[spend.A/B] browse under 2024 scope shows IE PAC spenders (their money\u2019s window)', /IE PAC/.test(R24));
   T.ok('[spend.A/B] browse note (donors+spenders) present under 2024', /funded an independent-expenditure committee/.test(R24));
+  // [FIX1/E4] — mode A (PS-128): pinned subject — Bruce Leon's 2024 row (parent leon-bruce;
+  // $620,025 of $621,025 is his own, share 0.998, measured at 8b752224) stays in the ranked list
+  // and carries the ratified partial chip.
+  var leonRow = ctx.root().querySelector('.spend-body [data-funder="leon-bruce"]');
+  T.ok('[FIX1/E4] a candidate\u2019s own money stays ranked and is marked: Leon row carries \u201cPartly candidate\u2019s own money / loans\u201d',
+    !!leonRow && leonRow.innerHTML.indexOf('Partly candidate\u2019s own money / loans') >= 0);
   // C — firewall drill (exact lines) under the 2024 scope (INCS is a 2024-window spender)
   ctx.click(ctx.root().querySelector('[data-spendtab="donors"]')); await ctx.wait(60);
   var incsRow = ctx.root().querySelector('[data-committee="' + fx.incs.committee + '"]');
@@ -654,7 +663,7 @@ async function assertParity(T, ctx, fx) {
   if (!ED || !RAW) { T.ok('[parity] ElectData + PREVIEW_DATA reachable', false); return; }
   var idx = ED.loadData(RAW, { office: fx.office });
   var w24 = fx.windows['2024'], w26 = fx.windows['2026'];
-  var wU = { start: null, end: fx.windows['2026'].end };   // union, constructed from the FIXTURE
+  var wU = { start: fx.windows['2024'].start, end: fx.windows['2026'].end };   // union, constructed from the FIXTURE (FIX-1 E1: the earliest start)
   var bce = (RAW.rollups || {}).by_candidate_election || {};
   function r2(x) { return Math.round(x * 100) / 100; }
   var checked = 0, bad = [];
@@ -931,6 +940,36 @@ async function assertWindowScoping(T, ctx, fx) {
   } catch (e) { b1 = /PS-79\/B1/.test(String(e && e.message)) ? 'threw-b1' : 'threw-other: ' + (e && e.message); }
   T.ok('[F2/B1] finance without a resolvable window throws loud, never an unwindowed total [' + b1 + ']',
        b1 === 'threw-b1');
+  // FIX-1 E1 (ratified): receipts dated before the office's earliest window are stated on the
+  // card as their own line, never folded into a windowed figure.
+  // [FIX1/E1] — mode A (PS-128): the subject is pinned independently of live state — the
+  // candidacy williams-sb-2024-d9, its amount $213,831.35 (38 rows, 2022-03..2022-07, measured
+  // at 8b752224 against the sealed 2026-09-13 vintage) and the ratified string.
+  var ER = W.ElectRender;
+  var wvm = ED.viewModels.raceView(idx, 'sb-2024-d9', null);
+  var wc = wvm && wvm.candidates.filter(function (c) { return c.id === 'williams-sb-2024-d9'; })[0];
+  var wHtml = (wvm && ER) ? ER.renderRaceView(wvm) : '';
+  T.ok('[FIX1/E1] pre-window receipts stated on the card: Williams, Raised before 2024 (outside this election): $213,831',
+    !!wc && !!wc.preWindow && wc.preWindow.total === 213831.35 && wc.preWindow.count === 38 &&
+    wHtml.indexOf('Raised before 2024 (outside this election): <b>$213,831</b>') >= 0);
+  // [FIX1/E1-MUNI] — mode B (PS-128): live-derived over every city-council race, premise
+  // asserted by the check itself — at least one municipal candidate's committee holds receipts
+  // dated before the municipal window start (so the absence below has teeth) — and no
+  // municipal card carries the line (E1 reaches school board only).
+  var mIdx = ED.loadData(RAW, { office: 'city_council' });
+  var mStart = ED.ELECTION_WINDOWS.municipal['2027'].start, mTeeth = 0, mLines = [];
+  (mIdx.races || []).forEach(function (r) {
+    if (r.office !== 'alderperson') return;
+    var mv = ED.viewModels.raceView(mIdx, r.id, null);
+    (mv ? mv.candidates : []).forEach(function (c) {
+      if (!c.hasFinance) return;
+      var early = (mIdx.directByCandidate[c.id] || []).some(function (x) { return x.date && x.date < mStart && x.cycle !== 'pre-2011' && x.cycle !== 'undated'; });
+      if (early) mTeeth++;
+      if (c.preWindow) mLines.push(c.id);
+    });
+  });
+  T.ok('[FIX1/E1-MUNI] no municipal card states pre-window receipts (' + mTeeth + ' candidates hold them)' +
+    (mLines.length ? ' — CARRIED: ' + mLines.slice(0, 4).join(', ') : ''), mTeeth >= 1 && mLines.length === 0);
 }
 
 // (EXCL) EXCL-UNIFORM / PS-93: out-of-subject money (pre-2011/undated) never enters an
@@ -1228,8 +1267,8 @@ async function assertPersonSurface(T, ctx, fx) {
   T.ok('[PERSON/PS-90] no IE value enters the person view-model (deferral-scoped exclusion)' +
     (leaked.length ? ' — LEAKED: ' + leaked.join(',') : ''), leaked.length === 0);
 
-  // --- 5. [PERSON/S11] the out-of-window condition fires on EXACTLY the five verified
-  // singles (a boolean by construction — personView materialises no unwindowed figure).
+  // --- 5. [PERSON/S11] the out-of-window condition fires on EXACTLY the verified singles
+  // (a boolean by construction — personView materialises no unwindowed figure).
   var linkedIds = {};
   Object.keys(bp).forEach(function (pid) { bp[pid].members.forEach(function (m) { linkedIds[m.candidacy_id] = 1; }); });
   var fired = [];
@@ -1240,7 +1279,7 @@ async function assertPersonSurface(T, ctx, fx) {
     var vm = ED.personView(idx, c.id);
     if (vm && vm.hasOutOfWindow) fired.push(c.id);
   });
-  T.ok('[PERSON/S11] string-11 condition fires on exactly the five verified singles' +
+  T.ok('[PERSON/S11] string-11 condition fires on exactly the ' + pf.outOfWindowIds.length + ' verified singles' +
     ' (fired: ' + fired.length + ')',
     JSON.stringify(fired.slice().sort()) === JSON.stringify(pf.outOfWindowIds.slice().sort()) &&
     ER.renderPersonModal(ED.personView(idx, pf.outOfWindowIds[0])).indexOf(pf.s11) >= 0 &&

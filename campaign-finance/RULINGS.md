@@ -1587,6 +1587,117 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: ruled by Ishan 2026-09-08 (chat); recorded in handover rev AB rev 2 (sha256 67fe9608825fc3a07c2ce4a18f0a9b5b420ab5e40b7acbd1fc7efa023707c646, attested). Measured basis: the 20 Gi figure exists in no tracked file and was authored once at dispatch rev 1, byte-identical across all four dispatch revisions (line sha 899aa10cb1643eb24d284cd94ffd397f0ee7ecbe950cd44ff08a8af5e4bc9719); the standing feasibility convention names the method and no floor; CNCL-DATA-1's G0 dispatch used ≥ 5 GiB and measured 33 GiB against it; HARRIS-1's run recorded 18 Gi at first measure with 288 MB peak need (67× headroom) and 41 Gi re-measured (HALT rev 4, sha256 736e7e5aa184e0dd9f31febf0755a47fa2be4100c0c3c4378b44d7b8107d29d1, §A5).*
 
+### PS-134 — the school-board 2024 window has a fixed start; money before a window is stated, never folded in (supersedes the open-start idiom D-20 recorded at PS-110)
+
+> **The window.** School board `'2024'` is `start: '2024-01-01'`, `end: '2024-12-31'`. It
+> changes at every site that carries the window, in one commit:
+> - the `data.js` object;
+> - `election-windows.json`;
+> - the gate fixture;
+> - the three prerender fixtures.
+>
+> The `'2026'` window is unchanged.
+>
+> **Why the open start goes.** D-20 recorded that school board's open start "was harmless only
+> because no committee predated the tool's subject". The numbers audit measured that premise
+> false once independent-expenditure funders count toward an office view. An open start put ten
+> years of gifts to INCS Action into "2024": James S. Frank $5,713,366.00, and Alice L. Walton
+> $1,750,000.00, all of it given 2016–2020.
+>
+> **Nothing leaves silently.** Money dated before a window is never folded into it, and it is
+> never dropped without a statement.
+> - **Before the window.** Where a candidate's committee holds receipts dated before
+>   2024-01-01, the candidate's surface states them as their own line:
+>   **Raised before 2024 (outside this election)**, with the amount.
+> - **No 2024 candidacy.** For a member or candidate with no 2024 candidacy, money in the 2024
+>   window is labeled **Before 2025 (not on the 2024 ballot)**, never "2024".
+>
+> At this vintage the first case is two committees, $297,412.51 in total: Friends of Lamont
+> Williams, $213,831.35, and Friends of Ed Bannon, $83,581.16. The second case is two members,
+> Ed Bannon and Debby Pope.
+
+*Provenance: FIX-1 register draft rev 1 (`fix1-register-draft-rev1.md`, sha256 `00926b7cf9ad6d0de670fd66b60c4404528a22ef75fff0b25a8e1fdc4a632374`, 6,372 B / 120 L), §E1, lines 13–38, transcribed verbatim; ratified by Ishan 2026-09-29 (chat, "ratified", as drafted). Carried unchanged, byte-identical, into rev 2 (`fix1-register-draft-rev2.md`, sha256 `e9e0ee033214da2cdfe722ca94ff63f907dc2a1d34c14823338e41ff8815caf3`, 7,613 B / 132 L) at lines 17–42. Arises from the numbers audit of 2026-09-29 (finding W2). Supersedes, for school board only, the open-start idiom D-20 records at PS-110; PS-110 itself is not edited (transcription is never harmonization). Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-133`; `PS-134` occurring 0 times before this commit), never carried.*
+
+### PS-135 — the self-funding match compares given names through a closed table of equivalents, on person-form names (rev 2)
+
+> **The rule.** A contribution is self-funding if and only if:
+> - the donor's surname matches the recipient committee's own candidate; **and**
+> - at least one of the donor's given-name tokens equals one of the candidate's, after the
+>   equivalence table below.
+>
+> This replaces the subset test, under which every given token of the donor had to appear in the
+> candidate's name, **for person-form names** ('Last, First', the form every filed individual takes).
+> **[rev 2]** A name without a comma, such as a committee's ("Friends to Elect ..."), has no given-name
+> tokens and keeps the subset test. So a transfer from a candidate's own other committee is not
+> decided by this rule; that is the separate M5 question. As revision 1 read, three such transfers
+> would have become self-funding with no ruling on M5: Friends to Elect Lamont Robinson $112,699.54,
+> Citizens for Michelle Harris $30,000.00, and Committee to Elect Chris Taliaferro $4,086.26. That test missed "Conway, Bill" against William Conway ($680,100), and it
+> missed a filed middle name or nickname on "Quezada, Anthony Joel" ($5,250) and
+> "Knudsen, Timothy "Timmy"" ($5,000). The surname test and the committee scope are unchanged.
+> A Loan Received still clears the same test as any other row.
+>
+> **The equivalence table is closed.** Each line is one given name:
+> - William, Bill, Will
+> - Robert, Bob, Rob
+> - James, Jim
+> - Timothy, Tim, Timmy
+> - Anthony, Tony
+> - Michael, Mike
+> - Thomas, Tom
+> - Joseph, Joe
+> - Daniel, Dan
+> - Christopher, Chris
+> - Edward, Ed
+> - Kenneth, Ken
+> - Charles, Chuck, Charlie
+> - Elizabeth, Liz, Beth
+> - Katherine, Kate, Katie
+> - Patricia, Pat
+> - Jennifer, Jen
+>
+> An addition is a new ruling.
+>
+> **Review.** The HALT that lands this rule lists every row whose `is_self` stamp changes, for
+> Ishan's review before commit.
+
+*Provenance: FIX-1 register draft rev 2 (`fix1-register-draft-rev2.md`, sha256 `e9e0ee033214da2cdfe722ca94ff63f907dc2a1d34c14823338e41ff8815caf3`, 7,613 B / 132 L), §E3, lines 62–100, transcribed verbatim; rev 1 (`fix1-register-draft-rev1.md`, sha256 `00926b7cf9ad6d0de670fd66b60c4404528a22ef75fff0b25a8e1fdc4a632374`, 6,372 B / 120 L, §E3, lines 58–91) was ratified 2026-09-29 and amended by rev 2 the same day, for the person-form clause marked [rev 2]; rev 2 ratified by Ishan 2026-09-29 (chat, "1 - a"). Arises from the numbers audit (finding W4). Amends the 3b self-funding rule as implemented in `campaign-finance/ingestion/build_rollups.py` `_self_match`. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-134`; `PS-135` occurring 0 times before this commit), never carried.*
+
+### PS-136 — the elections donor list keeps a candidate's own money in the ranking and marks it
+
+> **A row stays at its full amount.** A row in the elections donor list (Browse donors) stays in
+> the ranked list at its full amount when some or all of its money is the candidate's own:
+> rows stamped `is_self`.
+>
+> **The chip.** Its share is the `is_self` dollars over the row's dollars, in the active window.
+> - A share of at least 0.999 carries the chip **Candidate's own money / loans**. That is the
+>   string the contributor panel already renders.
+> - A share above zero carries **Partly candidate's own money / loans**.
+>
+> **Measured basis.** Bruce Leon's $620,025 to his own committee ($620,000 of it loans) ranks
+> 5th on the 2024 school-board list. Bill Conway's $680,100 would rank on the city-council list.
+
+*Provenance: FIX-1 register draft rev 1 (`fix1-register-draft-rev1.md`, sha256 `00926b7cf9ad6d0de670fd66b60c4404528a22ef75fff0b25a8e1fdc4a632374`, 6,372 B / 120 L), §E4, lines 95–105, transcribed verbatim; ratified by Ishan 2026-09-29 (chat, "ratified", as drafted), choosing the numbers audit's W8 option (b). Carried unchanged, byte-identical, into rev 2 (`fix1-register-draft-rev2.md`, sha256 `e9e0ee033214da2cdfe722ca94ff63f907dc2a1d34c14823338e41ff8815caf3`, 7,613 B / 132 L) at lines 104–114. The full-share chip is the contributor panel's existing string, whose apostrophe is U+2019 in `render.js`; the partial chip takes the same character. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-135`; `PS-136` occurring 0 times before this commit), never carried.*
+
+### PS-137 — filers' repeated line items are kept as filed; filings absent from the receipts file are already caught by reconcile and the known-gaps ledger (rev 2)
+
+> **Repeated line items.** An itemized row repeated on one filing (same donor, committee, date,
+> amount and type) is kept as filed. AUDIT-1 §2 measured all 875 such groups as separate line
+> items on a single filing, current and consecutive, with none from an amendment. That is
+> $341,913.37 of extra rows in the elections artifact and $209,559.14 in the council artifact.
+> Whether each is a repeat gift or a filer's double entry cannot be told from the files, so no
+> row is removed. The disclosure sentence belongs to the methodology view, and its copy is
+> drafted in the P2 lane.
+>
+> **Filings absent from the receipts file.** **[rev 2]** No new warning is added: the existing
+> machinery already catches these. `reconcile.py` compares every D-2 period against the rows the
+> artifact carries, and the known-gaps ledger (`campaign-finance/elections/known-gaps.json`)
+> records each such period as an SBE-side gap. AUDIT-1 §4's three are already ledgered, for
+> Villalobos (39840, VILLALOBOS-1), Dones (filing 926379) and Hargrove (39831). The fourth
+> difference AUDIT-1 measured (39881) is an archived original that its amendment replaced.
+> Revision 1's warning would have duplicated the ledger.
+
+*Provenance: FIX-1 register draft rev 2 (`fix1-register-draft-rev2.md`, sha256 `e9e0ee033214da2cdfe722ca94ff63f907dc2a1d34c14823338e41ff8815caf3`, 7,613 B / 132 L), §E5, lines 118–132, transcribed verbatim; rev 1 (`fix1-register-draft-rev1.md`, sha256 `00926b7cf9ad6d0de670fd66b60c4404528a22ef75fff0b25a8e1fdc4a632374`, 6,372 B / 120 L, §E5, lines 109–120) was ratified 2026-09-29 and amended by rev 2 the same day, its second clause replaced as marked [rev 2]; rev 2 ratified by Ishan 2026-09-29 (chat, "2 - a"). Measured basis: AUDIT-1 report (`audit1-report.md`, sha256 `1ffe3b20b1fdc96ff35b1e581bbdb753988bfe8db5bbc9d0c07b4702b7c21251`, 155,732 B / 1,934 L), §2 and §4. Arises from the numbers audit (findings S1, S2). Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-136`; `PS-137` occurring 0 times before this commit), never carried.*
+
 ---
 
 ## Rulings ratified without an id
