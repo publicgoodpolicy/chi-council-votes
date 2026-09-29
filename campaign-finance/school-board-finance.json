@@ -1,12 +1,12 @@
 {
   "schema_version": 1.4,
-  "generated_at": "2026-09-27T03:58:23Z",
+  "generated_at": "2026-09-29T04:25:07Z",
   "source": "derived: school-board-data.json (bridge) x election-data.json (rollups)",
   "_sync": {
-    "generated_at": "2026-09-27T03:58:23Z",
+    "generated_at": "2026-09-29T04:25:07Z",
     "inputs": {
       "school-board-data.json": {
-        "sha256": "ebd6c8e88cdb4de93207bd21e3b26b12678da2e1c1ca8cb25b682e02c75d6bb3"
+        "sha256": "45179604794bf9eeb894cc2d1a6c3030741bf509be5765cecb27e4b123e0212b"
       },
       "election-data.json": {
         "sha256": "ecf76a03f19f5597c3f51e3b5fac31670de37581bbedf0bdf8288b8d51f2c725"
