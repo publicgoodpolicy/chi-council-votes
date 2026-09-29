@@ -188,16 +188,16 @@ def build(d):
         dv=donors.get(c.get('donor_id'))
         if dv is None or c['donor_id'] in agg: continue
         amt=c.get('amount') or 0.0; cyc=c['cycle']
-        # by_parent (giving lens; independent stays 0 here by design)
+        fld='independent' if c.get('contribution_type')=='IE Committee Receipt' else 'direct'  # by_parent, PS-138: a gift INTO an IE committee is independent
         pid=dv['parent_id']; p=donors[pid]
         r=by_parent.setdefault(pid,{'name':p.get('cluster_name') or p.get('name'),
             'type':p.get('type'),'industries':p.get('industries',[]),
             'direct':0.0,'independent':0.0,'total':0.0,'count':0,
             'committees':0,'members':members.get(pid,1),'by_cycle':{}})
-        r['direct']=rnd(r['direct']+amt); r['total']=rnd(r['total']+amt); r['count']+=1
+        r[fld]=rnd(r[fld]+amt); r['total']=rnd(r['total']+amt); r['count']+=1
         pcom.setdefault(pid,set()).add(c['committee_id'])
         b=r['by_cycle'].setdefault(cyc,{'direct':0.0,'independent':0.0,'total':0.0,'count':0})
-        b['direct']=rnd(b['direct']+amt); b['total']=rnd(b['total']+amt); b['count']+=1
+        b[fld]=rnd(b[fld]+amt); b['total']=rnd(b['total']+amt); b['count']+=1
         # by_industry direct: count under EACH of the donor's tags ("associated with")
         for tag in dv.get('industries',[]):
             add(by_industry,tag,cyc,'direct',amt)

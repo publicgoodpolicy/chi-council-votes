@@ -1698,6 +1698,76 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: FIX-1 register draft rev 2 (`fix1-register-draft-rev2.md`, sha256 `e9e0ee033214da2cdfe722ca94ff63f907dc2a1d34c14823338e41ff8815caf3`, 7,613 B / 132 L), §E5, lines 118–132, transcribed verbatim; rev 1 (`fix1-register-draft-rev1.md`, sha256 `00926b7cf9ad6d0de670fd66b60c4404528a22ef75fff0b25a8e1fdc4a632374`, 6,372 B / 120 L, §E5, lines 109–120) was ratified 2026-09-29 and amended by rev 2 the same day, its second clause replaced as marked [rev 2]; rev 2 ratified by Ishan 2026-09-29 (chat, "2 - a"). Measured basis: AUDIT-1 report (`audit1-report.md`, sha256 `1ffe3b20b1fdc96ff35b1e581bbdb753988bfe8db5bbc9d0c07b4702b7c21251`, 155,732 B / 1,934 L), §2 and §4. Arises from the numbers audit (findings S1, S2). Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-136`; `PS-137` occurring 0 times before this commit), never carried.*
 
+### PS-138 — money into independent-expenditure committees is booked as independent; the council tool shows direct, independent and total giving, ranked by total (rev 3)
+
+> **(a) The rollup.** In `by_parent`, in both artifacts:
+> - contributions typed `IE Committee Receipt` are booked to `independent`, not `direct`;
+> - `total` remains `direct` + `independent`.
+>
+> This retires the convention in `build_rollups.py` that "independent stays 0 here by design".
+>
+> **(b) The council donor list. [rev 2]**
+> - The list carries a header row: **Donor** · **To alder campaigns** · **Via outside-spending
+>   groups** · **Total giving**.
+> - Each donor row states all three figures: `direct`, `independent` and `total`. The list is
+>   **ranked by Total giving**.
+> - An independent-expenditure committee's own row (tagged IE PAC) keeps its spending figure,
+>   stated as spent. It stays in the one ranking by that figure, as today.
+>
+> **(c) The Industries and Flags tabs. [rev 2]** Each industry row and each flag row states the same
+> three figures under the same three headings, ranked by Total giving. A contribution counts in
+> the second figure when its recipient is an independent-expenditure committee, and in the first
+> otherwise. The "Where each dollar comes from" bar is unchanged.
+>
+> **Why a total is allowed here. [rev 2]** Total giving is a donor's giving across every committee
+> it gave to. It is not a figure about any candidate. The firewall (FW-1) forbids fusing a
+> candidate's direct money with the independent spending for or against that candidate, and it
+> does not reach this figure. The elections pages' donor lists already rank donors the same way.
+>
+> **(d) The disclosure line (new copy, ratified separately). [rev 2]** Directly under the donor
+> list's header row, and under the Industries tab's ranked-list heading:
+> **Money given to outside-spending groups counts in full here, whichever races those groups then
+> spent on.**
+>
+> **Measured basis.**
+> - IE-committee receipts come to $36,624,095.74, 35% of all `by_parent` totals.
+> - 11 IE committees spent $3,042,316.20 on council races in the tool's cycles, and none in the
+>   2027 cycle. A twelfth committee in the artifact, Welcome Wal-Mart, spent only before 2011.
+>   **[rev 3: revision 2 said 12, counting spending from before 2011; revision 1's 11 was right.]**
+> - Share of each industry total given through IE committees: lobby/business 97%, corporate 94%,
+>   finance 81%, real estate 69%.
+> - Ranked by Total giving, the list keeps today's order: James S. Frank, $149,050.00 to alder
+>   campaigns and $9,358,466.81 via outside-spending groups. The 255 donors who gave only through
+>   IE committees keep their places.
+
+*Provenance: FIX-1 register draft E2 rev 3 (`fix1-e2-draft-rev3.md`, sha256 `ef3070f4b19ab8ff7b58ddc017c9846ccea20098137b96e16950f553e6f30eed`, 3,643 B / 51 L), lines 13–51, transcribed verbatim. Rev 1 (`fix1-register-draft-rev1.md`, sha256 `00926b7cf9ad6d0de670fd66b60c4404528a22ef75fff0b25a8e1fdc4a632374`, 6,372 B / 120 L, §E2) was ratified 2026-09-29 with a ranking on direct giving; rev 2 (`fix1-e2-draft-rev2.md`, sha256 `8600fca8bc9cb4099dcabce8d8cd4cd94b64252db04b8022f8d44ca6bfc0fdcf`, 3,292 B / 51 L) amended it at Ishan's request to three figures ranked by total, marked [rev 2], ratified by Ishan 2026-09-29 (chat, "1. ratified", with clause (d) "2. (a)"); rev 3 corrected one bullet of the measured basis, marked [rev 3], ratified by Ishan 2026-09-29 (chat). The same ruling set the display of an independent-expenditure committee's own row in the donor list, as the planner offered it and Ishan chose it ("3. (a)"): "Keep them in the one ranking, tagged "IE PAC", with their spending in the Total column, marked "spent", and the other two columns blank." Arises from the numbers audit of 2026-09-29 (finding W1). Retires the `build_rollups.py` convention that `by_parent.independent` stays 0. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-137`; `PS-138` occurring 0 times in this file before this commit), never carried.*
+
+### PS-139 — the council tool's ranked lists state their timeframe, and the industry headline is the money given
+
+> **The timeframe line.** Browse donors, Industry totals and Flag totals each carry one line, once,
+> at the top of the list. As it renders at this vintage:
+> **Totals add up all four council election cycles, from May 2011 through September 11, 2026, the
+> latest contribution in this data.**
+> The cycle count and the date render from the data: the number of cycles the artifact carries, and
+> the date of its latest countable contribution. The date is never written into copy. With no dated
+> contribution, the line renders nothing.
+>
+> **The industry headline.** Industry totals states the money given, each contribution counted once:
+> **Total given across all committees in this data: $104,079,927.** Its bar is described as what it
+> is: **Each segment below is one industry; its width is that industry’s share of $129,464,093, the
+> sum of every industry’s total. That sum is larger than the total given because a donor with
+> several industry tags counts in each of them.** Each row's percentage reads **% of the industry
+> sum**. Both dollar figures render from the data.
+>
+> **Why.** The page stated $129,464,093 as "Total raised across all committees in dataset". That
+> figure is the sum of the industry totals, in which a donor with several tags counts in each, so
+> it overstated the money given by $25,384,166. And none of the three lists said that its figures
+> add up fifteen years of giving.
+>
+> **Later.** A cycle picker for these lists is its own piece of work, after the push.
+
+*Provenance: FIX-1 register draft E6 rev 1 (`fix1-e6-draft-rev1.md`, sha256 `7356ca413cfa3be629c70e82b0e7fd608eab17a0d85686786c812b2de0ad6cf8`, 2,280 B / 35 L), lines 15–35, transcribed verbatim; ratified by Ishan 2026-09-29 (chat). The rulings it records were made the same day in chat, on two gaps the planner reported while commit C was under review: "1. (a)" (the timeframe line, its date read from the data, with the cycle picker ruled as later work) and "2. (a)" (the true total given). Arises from the numbers audit of 2026-09-29, alongside finding W1. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-138`; `PS-139` occurring 0 times in this file before this commit), never carried.*
+
 ---
 
 ## Rulings ratified without an id

@@ -320,6 +320,16 @@ const FEEDBACK_CONFIG = {
 #ipg-council-app .ipg-cf-row .sub{font-size:12.5px;color:#9a8e7e;margin-top:3px;font-weight:400}
 #ipg-council-app .ipg-cf-row .amount{font-size:17px;color:var(--teal);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
 #ipg-council-app .ipg-cf-tags{margin-top:7px;display:flex;gap:6px;flex-wrap:wrap}
+/* PS-138 (E2): three giving figures per row, under one header row */
+#ipg-council-app .ipg-cf-amt3{display:grid;grid-template-columns:repeat(3,116px);gap:10px;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+#ipg-council-app .ipg-cf-amt3 .v{font-size:14px;color:#6a5d4e;font-weight:500}
+#ipg-council-app .ipg-cf-amt3 .v.tot{font-size:17px;color:var(--teal);font-weight:600}
+#ipg-council-app .ipg-cf-amt3 .lab{display:none}
+#ipg-council-app .ipg-cf-amt3 .spent{display:block;font-size:10.5px;color:#9a8e7e;font-weight:500;letter-spacing:.04em}
+#ipg-council-app .ipg-cf-amt3 .note{grid-column:1 / -1;font-size:13px;color:#6a5d4e;font-weight:500;white-space:normal}
+#ipg-council-app .ipg-cf-colhead{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:end;padding:10px 17px 6px;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#7d7264}
+#ipg-council-app .ipg-cf-colhead .ipg-cf-amt3{white-space:normal;line-height:1.3}
+#ipg-council-app .ipg-cf-disclose{font-size:12.5px;color:#7d7264;margin:0 0 10px;padding:0 17px}
 #ipg-council-app .ipg-cf-chip{
   display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;
   letter-spacing:.04em;padding:3px 9px;border-radius:20px;color:#fff;
@@ -676,6 +686,14 @@ const FEEDBACK_CONFIG = {
   .ipg-modal-overlay{padding:0;align-items:stretch}
   .ipg-modal{border-radius:0;min-height:100vh;padding:24px 18px 20px;max-width:100vw}
   .ipg-modal-summary .ipg-stat{min-width:0;flex:1 1 calc(50% - 10px)}
+  /* PS-138: the three-figure grid's phone layout (one 640px block; sb_render_fixture reads its first) */
+  #ipg-council-app .ipg-cf-colhead{display:none}
+  #ipg-council-app .ipg-cf-disclose{padding:0}
+  #ipg-council-app .ipg-cf-row.ipg-cf-row3{grid-template-columns:1fr}
+  #ipg-council-app .ipg-cf-amt3{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.25fr);gap:8px;text-align:left}
+  #ipg-council-app .ipg-cf-amt3 .v{font-size:13px}
+  #ipg-council-app .ipg-cf-amt3 .v.tot{font-size:14.5px}
+  #ipg-council-app .ipg-cf-amt3 .lab{display:block;font-size:10.5px;color:#9a8e7e;font-weight:500;white-space:normal;line-height:1.25;margin-bottom:2px}
 }
 
 /* RANKING */
@@ -1384,6 +1402,34 @@ const FEEDBACK_CONFIG = {
     });
     return out.sort((a,b)=>b.total-a.total);
   }
+  // PS-138 (E2): the donor, industry and flag lists state three figures side by side --
+  // money to alder campaigns, money via outside-spending groups, and the two together --
+  // and rank by the third. The total is a donor's giving across every committee; it is
+  // never a figure about a candidate, so the FW-1 firewall does not reach it. A gift counts
+  // as outside-spending money when its recipient is an independent-expenditure committee.
+  const CF_COLS=['To alder campaigns','Via outside-spending groups','Total giving'];
+  const CF_DISCLOSE='Money given to outside-spending groups counts in full here, whichever races those groups then spent on.';
+  function cfToIE(c){const cm=state.cf.committees&&state.cf.committees[c.committee_id];return !!cm&&cm.type==='independent_expenditure';}
+  function cfAmt3(direct,indep,total){
+    const cell=(i,v,cls)=>'<div class="v'+(cls?' '+cls:'')+'"><span class="lab">'+CF_COLS[i]+'</span>'+(v==null?'\u2014':fmtMoney(v))+'</div>';
+    return '<div class="ipg-cf-amt3">'+cell(0,direct)+cell(1,indep)+cell(2,total,'tot')+'</div>';
+  }
+  function cfColHead(first){
+    return '<div class="ipg-cf-colhead"><div>'+first+'</div><div class="ipg-cf-amt3">'+CF_COLS.map(c=>'<div>'+c+'</div>').join('')+'</div></div>';
+  }
+  // PS-139: the three ranked lists add up every cycle, so each says so. The cycle count and the
+  // end date render FROM the artifact -- the latest countable contribution -- never from copy, so
+  // the line cannot go stale at a data refresh (the ELEC-FIGURE-1 R3 lesson). With no dated row
+  // or no cycles it renders nothing rather than a partial sentence.
+  const CF_NUMWORD=['zero','one','two','three','four','five','six','seven','eight','nine','ten'];
+  function cfTimeframeLine(){
+    if(!state.cf) return '';
+    let last=''; (state.cf.contributions||[]).forEach(c=>{ if(cfCountable(c)&&c.date&&c.date>last) last=c.date; });
+    const n=Object.keys(state.cf.cycles||{}).length;
+    if(!last||!n) return '';
+    const d=new Date(last+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+    return '<div class="ipg-cf-meta ipg-cf-timeframe" style="margin-top:6px">Totals add up all '+(CF_NUMWORD[n]||n)+' council election cycles, from May 2011 through '+d+', the latest contribution in this data.</div>';
+  }
   // Rollup-first donor list. Prefers precomputed rollups.by_parent (no client
   // re-scan); falls back to grouping cfAllDonors by parent_id, then to per-donor,
   // so the embed still works against older data files without rollups.
@@ -1409,7 +1455,7 @@ const FEEDBACK_CONFIG = {
         const ind=r.industries||donorIndustries(donors[pid]||{});
         if(!passes(pid,r.name,r.type,ind)) return;
         out.push({id:pid, donor:donors[pid]||{id:pid,name:r.name,type:r.type,industries:ind},
-          name:r.name, total:r.total||0, count:r.count||0,
+          name:r.name, direct:r.direct||0, independent:r.independent||0, total:r.total||0, count:r.count||0,
           committees:r.committees||0, members:r.members||1});
       });
       return out.sort((a,b)=>b.total-a.total);
@@ -1419,7 +1465,7 @@ const FEEDBACK_CONFIG = {
     cfAllDonors({type:opts.type,industry:opts.industry,flag:opts.flag}).forEach(x=>{
       const pid=x.donor.parent_id||x.donor.id;
       let g=groups.get(pid);
-      if(!g){ const pd=donors[pid]||x.donor; g={id:pid,donor:pd,name:pd.name,total:0,count:0,committees:0,members:0}; groups.set(pid,g); }
+      if(!g){ const pd=donors[pid]||x.donor; g={id:pid,donor:pd,name:pd.name,direct:null,independent:null,total:0,count:0,committees:0,members:0}; groups.set(pid,g); }
       g.total+=x.total; g.count+=x.contribCount; g.members++;
       g.committees=Math.max(g.committees,x.committeeCount||0);
     });
@@ -1440,8 +1486,8 @@ const FEEDBACK_CONFIG = {
       if(!cfCountable(c)) return;
       const d=state.cf.donors[c.donor_id]; if(!d) return;
       donorIndustries(d).forEach(ind=>{
-        const cur=byInd.get(ind)||{industry:ind,total:0,donors:new Set(),committees:new Set()};
-        cur.total+=c.amount;
+        const cur=byInd.get(ind)||{industry:ind,direct:0,independent:0,total:0,donors:new Set(),committees:new Set()};
+        cur.total+=c.amount; if(cfToIE(c)) cur.independent+=c.amount; else cur.direct+=c.amount;
         cur.donors.add(c.donor_id);
         cur.committees.add(c.committee_id);
         byInd.set(ind,cur);
@@ -1559,7 +1605,7 @@ const FEEDBACK_CONFIG = {
     // non-zero on a dues-coextensive flag is a tell worth keeping visible.
     Object.values(state.cf.donors).forEach(d=>{
       (d.flags||[]).forEach(f=>{
-        if(!byFlag.has(f.type)) byFlag.set(f.type,{flag:f.type,total:0,donors:new Set(),committees:new Set()});
+        if(!byFlag.has(f.type)) byFlag.set(f.type,{flag:f.type,direct:0,independent:0,total:0,donors:new Set(),committees:new Set()});
         byFlag.get(f.type).donors.add(d.id);
       });
     });
@@ -1568,7 +1614,7 @@ const FEEDBACK_CONFIG = {
       const d=state.cf.donors[c.donor_id]; if(!d) return;
       (d.flags||[]).forEach(f=>{
         const cur=byFlag.get(f.type);
-        cur.total+=c.amount;
+        cur.total+=c.amount; if(cfToIE(c)) cur.independent+=c.amount; else cur.direct+=c.amount;
         cur.committees.add(c.committee_id);
       });
     });
@@ -1764,6 +1810,7 @@ const FEEDBACK_CONFIG = {
 
     if(!merged.length) return h+'<div class="ipg-cf-empty">No donors or spenders match these filters.</div>';
     const showN=state.cfShowAllLookup?merged.length:Math.min(25,merged.length);
+    h+=cfTimeframeLine()+cfColHead('Donor')+'<div class="ipg-cf-disclose">'+CF_DISCLOSE+'</div>';
     for(let i=0;i<showN;i++){
       const x=merged[i];
       if(x._ie){
@@ -1772,24 +1819,24 @@ const FEEDBACK_CONFIG = {
         sub.push(fmtMoney(x.oppose)+' against');
         sub.push(x.count+(x.count===1?' expenditure':' expenditures'));
         const chips=(x.industries||[]).map(k=>{const m=state.cf.industry_tags[k]||{label:k,color:'#cfc5b5'};return '<span class="ipg-cf-chip" style="background:'+m.color+';color:'+readableText(m.color)+'">'+m.label+'</span>';}).join('');
-        h+='<div class="ipg-cf-row ipg-cf-ie-clickable" data-ie-id="'+relEscAttr(x.id)+'">'
+        h+='<div class="ipg-cf-row ipg-cf-row3 ipg-cf-ie-clickable" data-ie-id="'+relEscAttr(x.id)+'">'
           +'<div><div class="name">'+relEsc(x.name)+' <span class="ipg-cf-pac-tag">IE PAC</span></div>'
           +'<div class="sub">Independent spending \u00b7 '+sub.join(' \u00b7 ')+'</div>'
           +'<div class="ipg-cf-tags">'+chips+'</div>'
           +'</div>'
-          +'<div class="amount">'+fmtMoney(x.total)+'</div></div>';
+          +'<div class="ipg-cf-amt3"><div class="v"></div><div class="v"></div><div class="v tot">'+fmtMoney(x.total)+'<span class="spent">spent</span></div></div></div>';
       } else {
         const sub=[];
         if(x.members>1) sub.push(x.members+' entities');
         sub.push(x.committees+(x.committees===1?' committee':' committees'));
         sub.push(x.count+(x.count===1?' contribution':' contributions'));
-        h+='<div class="ipg-cf-row ipg-cf-clickable" data-donor-id="'+x.id+'">'
+        h+='<div class="ipg-cf-row ipg-cf-row3 ipg-cf-clickable" data-donor-id="'+x.id+'">'
           +'<div><div class="name">'+x.name
           +(x.members>1?' <span class="ipg-cf-rollup-pill">rollup</span>':'')+'</div>'
           +'<div class="sub">'+sub.join(' \u00b7 ')+'</div>'
           +'<div class="ipg-cf-tags">'+renderIndustryChips(x.donor,{compact:true})+'</div>'
           +'</div>'
-          +'<div class="amount">'+fmtMoney(x.total)+'</div></div>';
+          +cfAmt3(x.direct,x.independent,x.total)+'</div>';
       }
     }
     if(merged.length>25){
@@ -1859,31 +1906,38 @@ const FEEDBACK_CONFIG = {
     let h='<div class="ipg-cf-meta" style="margin:8px 0 16px">Industries ranked by total dollars given across all committees in the dataset. '
       +'<span style="color:#9a8e7e">Click an industry to see who its donors are and which alders they\u2019ve funded.</span></div>';
     if(!inds.length) return h+'<div class="ipg-cf-empty">No industry data yet.</div>';
+    h+=cfTimeframeLine();
 
     // Dollar-bill visualization: horizontal stacked bar where each segment is one
     // industry, width proportional to its share of total. Hover shows label;
     // segments wide enough also show inline label.
     const grandTotal = inds.reduce((s,x)=>s+x.total, 0);
+    // PS-139: the headline is the money actually given, each countable row once. grandTotal (the
+    // bar's denominator) sums the industries, and a donor with several tags counts in each of them,
+    // so it is larger; the copy says which figure the widths and percentages are shares of.
+    let givenTotal=0;
+    state.cf.contributions.forEach(c=>{ if(cfCountable(c)&&state.cf.donors[c.donor_id]) givenTotal+=c.amount; });
     if(grandTotal > 0){
       h+='<div class="ipg-cf-meta" style="margin:18px 0 6px;color:var(--ink);font-weight:600">Where each dollar comes from</div>';
-      h+='<div class="ipg-cf-meta" style="margin:0 0 12px;color:#7d7264;font-size:12.5px">Total raised across all committees in dataset: <strong>'+fmtMoney(grandTotal)+'</strong>. '
-        +'Each segment below is one industry; width is its share of the total. Donors with multiple industry tags count in each category.</div>';
+      h+='<div class="ipg-cf-meta" style="margin:0 0 12px;color:#7d7264;font-size:12.5px">Total given across all committees in this data: <strong>'+fmtMoney(givenTotal)+'</strong>. '
+        +'Each segment below is one industry; its width is that industry\u2019s share of '+fmtMoney(grandTotal)+', the sum of every industry\u2019s total. That sum is larger than the total given because a donor with several industry tags counts in each of them.</div>';
       h+=renderDollarBar(inds, {clickAction:'industry-detail', legend:true});
     }
 
     // The ranked-list section header
     h+='<div class="ipg-section-h" style="margin-top:24px">Industry breakdown</div>';
+    h+='<div class="ipg-cf-disclose">'+CF_DISCLOSE+'</div>'+cfColHead('Industry');
 
     inds.forEach(x=>{
       const meta=state.cf.industry_tags[x.industry]||{label:x.industry,color:'#cfc5b5'};
       const pct = grandTotal > 0 ? (x.total / grandTotal) * 100 : 0;
-      h+='<div class="ipg-cf-row ipg-cf-clickable ipg-cf-industry-row" data-industry="'+x.industry+'">'
+      h+='<div class="ipg-cf-row ipg-cf-row3 ipg-cf-clickable ipg-cf-industry-row" data-industry="'+x.industry+'">'
         +'<div><div class="name">'+meta.label+'</div>'
         +'<div class="sub">'+x.donorCount+(x.donorCount===1?' donor':' donors')+' \u00b7 funded '+x.committeeCount+(x.committeeCount===1?' committee':' committees')
-        +(pct ? ' \u00b7 <strong>'+(pct>=1?Math.round(pct):pct.toFixed(1))+'% of total</strong>' : '')+'</div>'
+        +(pct ? ' \u00b7 <strong>'+(pct>=1?Math.round(pct):pct.toFixed(1))+'% of the industry sum</strong>' : '')+'</div>'
         +'<div class="ipg-cf-tags"><span class="ipg-cf-chip" style="background:'+meta.color+';color:'+readableText(meta.color)+'">'+meta.label+'</span></div>'
         +'</div>'
-        +'<div class="amount">'+fmtMoney(x.total)+'</div></div>';
+        +cfAmt3(x.direct,x.independent,x.total)+'</div>';
     });
     return h;
   }
@@ -2062,20 +2116,21 @@ const FEEDBACK_CONFIG = {
       +'<span style="color:#9a8e7e">Flags are sourced editorial assertions about giving patterns or alignments (e.g., AIPAC-affiliated giving, funded BCH opposition). '
       +'Click a flag to filter the donor list to everyone carrying it.</span></div>';
     if(!flags.length) return h+'<div class="ipg-cf-empty">No flagged donors yet. Editors add flags via the Donor Overrides sheet.</div>';
+    h+=cfTimeframeLine()+cfColHead('Flag');
     flags.forEach(x=>{
       const meta=state.cf.flag_types[x.flag]||{label:x.flag,severity:'watch'};
       // String 7 (HALT-DUES, ratified): the dues-disclosure flag's structural zero explains
       // itself -- the row stays rendered (PS-95's flag clause), its amount cell carries the
       // ratified line instead of a bare figure.
       const amt=(x.flag==='pac_dues_funding'&&x.total===0)
-        ?'$0 &mdash; dues transfers are excluded from all totals'
-        :fmtMoney(x.total);
-      h+='<div class="ipg-cf-row ipg-cf-clickable ipg-cf-flag-row" data-flag="'+x.flag+'">'
+        ?'<div class="ipg-cf-amt3"><div class="note">$0 &mdash; dues transfers are excluded from all totals</div></div>'
+        :cfAmt3(x.direct,x.independent,x.total);
+      h+='<div class="ipg-cf-row ipg-cf-row3 ipg-cf-clickable ipg-cf-flag-row" data-flag="'+x.flag+'">'
         +'<div><div class="name">'+meta.label+'</div>'
         +'<div class="sub">'+x.donorCount+(x.donorCount===1?' donor':' donors')+' &middot; funded '+x.committeeCount+(x.committeeCount===1?' committee':' committees')+'</div>'
         +'<div class="ipg-cf-tags"><span class="ipg-cf-flag sev-'+meta.severity+'"><span>'+meta.label+'</span></span></div>'
         +'</div>'
-        +'<div class="amount">'+amt+'</div></div>';
+        +amt+'</div>';
     });
     return h;
   }

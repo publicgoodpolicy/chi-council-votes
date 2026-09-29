@@ -88,6 +88,7 @@ def validate(d):
     errors.extend(validate_members(d))
     errors.extend(validate_dues_excluded(d))
     errors.extend(validate_stream_fusion(d))
+    errors.extend(validate_ie_split(d))
     _alder_errs, _alder_warns = validate_alder_linkage(d)
     errors.extend(_alder_errs)
     warnings.extend(_alder_warns)
@@ -781,6 +782,7 @@ def validate_committee_linkage(d):
 # other by the value rule below.
 DUES_TYPE_CHECK = 'IE Committee Dues Transfer'
 EXCLUDED_CYCLES_CHECK = {'pre-2011', 'undated'}
+IE_RECEIPT_TYPE_CHECK = 'IE Committee Receipt'   # PS-138; build_rollups' by_parent literal
 
 # ELEC-FIGURE-1 §2 — the schema version this lane's shape requires, asserted at the other
 # end of the ownership build_rollups now holds. Stated here rather than imported, for the
@@ -1023,6 +1025,79 @@ def validate_dues_excluded(d):
                       f"(to the cent, over this artifact's own contributions)")
     if cnt != exp_cnt:
         errors.append(f"dues_excluded.count {cnt} != independent recount {exp_cnt}")
+    return errors
+
+
+def validate_ie_split(d):
+    """PS-138 (E2) — money INTO an independent-expenditure committee is `independent`.
+
+    PS-128 declaration: MODE B — live-derived, premise asserted by the check itself. The
+    premise (a committees map, and a non-empty rollups.by_parent) is asserted before any
+    value is compared, so an artifact without the rollup fails here rather than passing
+    vacuously.
+
+    Two rules, both errors:
+    (1) ONE SET. E2 (a) names the independent set by type (`IE Committee Receipt`); E2 (c),
+        which the council embed's Industries and Flags tabs implement, names it by recipient
+        (a committee typed independent_expenditure). Outside the dues rows, which every
+        total already excludes, a row is in one set exactly when it is in the other. This
+        is what lets the two readings stay one rule.
+    (2) THE SPLIT. Every by_parent entry's `direct` and `independent` equal this check's own
+        recount under the builder's exclusion set (is_aggregate, excluded cycles, dues,
+        Aggregate-typed or unknown donors), to the cent, and `direct + independent` equals
+        `total`, to the cent.
+    """
+    errors = []
+    if 'contributions' not in d:
+        return errors                      # not a contributions-bearing artifact
+    comms = d.get('committees')
+    if not isinstance(comms, dict) or not comms:
+        return ["[IE/SPLIT] premise: a contributions-bearing artifact carries no committees map"]
+    bp = (d.get('rollups') or {}).get('by_parent')
+    if not isinstance(bp, dict) or not bp:
+        return ["[IE/SPLIT] premise: rollups.by_parent is absent or empty"]
+    donors = d.get('donors') or {}
+    agg = {k for k, v in donors.items() if (v or {}).get('type') == 'Aggregate'}
+    typed_only, into_untyped, exp = [], [], {}
+    for c in d['contributions']:
+        ctype = c.get('contribution_type')
+        if ctype == DUES_TYPE_CHECK:
+            continue
+        typed = ctype == IE_RECEIPT_TYPE_CHECK
+        into_ie = (comms.get(c.get('committee_id')) or {}).get('type') == 'independent_expenditure'
+        if typed and not into_ie:
+            typed_only.append(c.get('id'))
+        if into_ie and not typed:
+            into_untyped.append(c.get('id'))
+        if c.get('is_aggregate') or c.get('cycle') in EXCLUDED_CYCLES_CHECK:
+            continue
+        dv = donors.get(c.get('donor_id'))
+        if dv is None or c.get('donor_id') in agg:
+            continue
+        e = exp.setdefault(dv.get('parent_id'), [0.0, 0.0])
+        e[1 if typed else 0] += round(float(c.get('amount') or 0.0), 2)
+    if typed_only:
+        errors.append(f"[IE/SPLIT] {len(typed_only)} row(s) typed {IE_RECEIPT_TYPE_CHECK!r} go "
+                      f"to a committee not typed independent_expenditure (first: {typed_only[:3]})")
+    if into_untyped:
+        errors.append(f"[IE/SPLIT] {len(into_untyped)} non-dues row(s) into an "
+                      f"independent_expenditure committee are not typed "
+                      f"{IE_RECEIPT_TYPE_CHECK!r} (first: {into_untyped[:3]})")
+    off = []
+    for pid in sorted(set(bp) | set(exp)):
+        r, e = bp.get(pid) or {}, exp.get(pid, [0.0, 0.0])
+        di, ii, tt = (r.get('direct'), r.get('independent'), r.get('total'))
+        if not all(isinstance(x, (int, float)) and not isinstance(x, bool) for x in (di, ii, tt)):
+            off.append(f"{pid}: direct/independent/total not all numbers")
+            continue
+        if abs(round(di, 2) - round(e[0], 2)) > 0.005 or abs(round(ii, 2) - round(e[1], 2)) > 0.005:
+            off.append(f"{pid}: direct {di} / independent {ii} != recount "
+                       f"{round(e[0], 2)} / {round(e[1], 2)}")
+        elif abs(round(di + ii, 2) - round(tt, 2)) > 0.005:
+            off.append(f"{pid}: direct {di} + independent {ii} != total {tt}")
+    if off:
+        errors.append(f"[IE/SPLIT] {len(off)} by_parent entr(ies) off the recount or the sum "
+                      f"(first: {off[:3]})")
     return errors
 
 
@@ -1387,6 +1462,62 @@ def self_test():
               {'id': 'cand-dup-ward-01', 'race_id': 'ward-01', 'incumbent': False,
                'committee_id': '11111'}]},
           _wm, "is shared by candidacies")
+
+    # PS-138 (E2) — [IE/SPLIT] on synthetic fixtures.
+    # PS-128 declaration: MODE A — pinned independently of live repo state. No artifact
+    # on disk is read; every fixture is a literal, and each negative case is proved to
+    # fail before the positive cases are trusted.
+    def icase(name, artifact, expect):
+        errs = validate_ie_split(artifact)
+        ok = (not errs) if expect is None else any(expect in e for e in errs)
+        results.append((name, ok))
+        print(f"SELF-TEST {'PASS' if ok else 'FAIL'}  {name}")
+        if not ok:
+            print(f"          expected {expect!r}, got: {errs}")
+
+    _cm = {'cand': {'type': 'candidate'}, 'iec': {'type': 'independent_expenditure'}}
+    _dn = {'p': {'parent_id': 'p'}, 'q': {'parent_id': 'p'}}
+    _gift = {'id': 'g1', 'donor_id': 'p', 'committee_id': 'cand', 'amount': 100.0,
+             'cycle': '2027', 'contribution_type': 'Individual Contribution'}
+    _iegift = {'id': 'g2', 'donor_id': 'q', 'committee_id': 'iec', 'amount': 40.0,
+               'cycle': '2027', 'contribution_type': 'IE Committee Receipt'}
+    _dues = {'id': 'g3', 'donor_id': 'q', 'committee_id': 'iec', 'amount': 9.0,
+             'cycle': '2027', 'contribution_type': 'IE Committee Dues Transfer'}
+    def _ia(contribs, bp):
+        return {'committees': _cm, 'donors': _dn, 'contributions': contribs,
+                'rollups': {'by_parent': bp}}
+    _good = {'p': {'direct': 100.0, 'independent': 40.0, 'total': 140.0}}
+
+    icase("[IE/SPLIT] a typed receipt into a candidate committee errors",
+          _ia([_gift, dict(_iegift, committee_id='cand')], _good), "not typed independent_expenditure")
+    icase("[IE/SPLIT] an untyped non-dues row into an IE committee errors",
+          _ia([_gift, dict(_iegift, contribution_type='Transfer In')], _good), "are not typed")
+    icase("[IE/SPLIT] an IE receipt booked direct errors (the pre-PS-138 rollup)",
+          _ia([_gift, _iegift], {'p': {'direct': 140.0, 'independent': 0.0, 'total': 140.0}}),
+          "!= recount")
+    icase("[IE/SPLIT] direct + independent != total errors",
+          _ia([_gift, _iegift], {'p': {'direct': 100.0, 'independent': 40.0, 'total': 150.0}}),
+          "!= total")
+    icase("[IE/SPLIT] a non-numeric figure errors",
+          _ia([_gift, _iegift], {'p': {'direct': 100.0, 'independent': None, 'total': 140.0}}),
+          "not all numbers")
+    icase("[IE/SPLIT] a missing by_parent errors (premise)",
+          {'committees': _cm, 'donors': _dn, 'contributions': [_gift]}, "premise")
+    icase("[IE/SPLIT] the correct split passes; a dues row into the IE committee counts nowhere",
+          _ia([_gift, _iegift, _dues], _good), None)
+    icase("[IE/SPLIT] an excluded-cycle IE receipt is not recounted",
+          _ia([_gift, _iegift, dict(_iegift, id='g4', cycle='pre-2011')], _good), None)
+    icase("[IE/SPLIT] an is_aggregate IE receipt is not recounted",
+          _ia([_gift, _iegift, dict(_iegift, id='g5', is_aggregate=True)], _good), None)
+    icase("[IE/SPLIT] an IE receipt from an Aggregate-typed donor is not recounted",
+          dict(_ia([_gift, _iegift, dict(_iegift, id='g6', donor_id='agg')], _good),
+               donors=dict(_dn, agg={'parent_id': 'p', 'type': 'Aggregate'})), None)
+    icase("[IE/SPLIT] an IE receipt from a donor absent from donors is not recounted",
+          _ia([_gift, _iegift, dict(_iegift, id='g7', donor_id='ghost')], _good), None)
+    icase("[IE/SPLIT] a contributions-bearing artifact with no committees map errors (premise)",
+          {'donors': _dn, 'contributions': [_gift], 'rollups': {'by_parent': _good}}, "no committees map")
+    icase("[IE/SPLIT] an artifact with no contributions key SKIPS cleanly",
+          {'members': []}, None)
 
     bad = [n for n, ok in results if not ok]
     print(f"self-test: {len(results)} checks · "

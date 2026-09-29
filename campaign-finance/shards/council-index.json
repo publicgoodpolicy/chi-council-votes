@@ -1,6 +1,6 @@
 {
   "schema_version": "2.1",
-  "generated_at": "2026-09-25T21:29:45Z",
+  "generated_at": "2026-09-29T16:30:34Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "itemization_threshold": 150,
   "cycles": {
@@ -373489,8 +373489,8 @@
         "industries": [
           "labor-trades"
         ],
-        "direct": 404000.0,
-        "independent": 0.0,
+        "direct": 204000.0,
+        "independent": 200000.0,
         "total": 404000.0,
         "count": 124,
         "committees": 26,
@@ -373892,8 +373892,8 @@
         "industries": [
           "real-estate"
         ],
-        "direct": 983608.87,
-        "independent": 0.0,
+        "direct": 167250.0,
+        "independent": 816358.87,
         "total": 983608.87,
         "count": 147,
         "committees": 33,
@@ -374243,8 +374243,8 @@
         "industries": [
           "lobby-business"
         ],
-        "direct": 181450.0,
-        "independent": 0.0,
+        "direct": 151450.0,
+        "independent": 30000.0,
         "total": 181450.0,
         "count": 111,
         "committees": 25,
@@ -374477,8 +374477,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 4447.69,
-        "independent": 0.0,
+        "direct": 3447.69,
+        "independent": 1000.0,
         "total": 4447.69,
         "count": 5,
         "committees": 3,
@@ -375699,8 +375699,8 @@
         "industries": [
           "individual"
         ],
-        "direct": 42000.0,
-        "independent": 0.0,
+        "direct": 17000.0,
+        "independent": 25000.0,
         "total": 42000.0,
         "count": 15,
         "committees": 5,
@@ -375790,8 +375790,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 1750.0,
-        "independent": 0.0,
+        "direct": 1250.0,
+        "independent": 500.0,
         "total": 1750.0,
         "count": 5,
         "committees": 5,
@@ -376453,8 +376453,8 @@
         "industries": [
           "individual"
         ],
-        "direct": 20100.0,
-        "independent": 0.0,
+        "direct": 12600.0,
+        "independent": 7500.0,
         "total": 20100.0,
         "count": 6,
         "committees": 4,
@@ -377038,8 +377038,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1550.0,
-        "independent": 0.0,
+        "direct": 1300.0,
+        "independent": 250.0,
         "total": 1550.0,
         "count": 5,
         "committees": 3,
@@ -377636,8 +377636,8 @@
         "industries": [
           "labor-trades"
         ],
-        "direct": 1051225.0,
-        "independent": 0.0,
+        "direct": 751225.0,
+        "independent": 300000.0,
         "total": 1051225.0,
         "count": 229,
         "committees": 33,
@@ -378182,8 +378182,8 @@
         "industries": [
           "restaurant"
         ],
-        "direct": 264450.0,
-        "independent": 0.0,
+        "direct": 214450.0,
+        "independent": 50000.0,
         "total": 264450.0,
         "count": 208,
         "committees": 40,
@@ -378221,8 +378221,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 6980.25,
-        "independent": 0.0,
+        "direct": 6480.25,
+        "independent": 500.0,
         "total": 6980.25,
         "count": 13,
         "committees": 8,
@@ -378520,8 +378520,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 14000.0,
-        "independent": 0.0,
+        "direct": 1500.0,
+        "independent": 12500.0,
         "total": 14000.0,
         "count": 4,
         "committees": 3,
@@ -379274,8 +379274,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 7800.0,
-        "independent": 0.0,
+        "direct": 2800.0,
+        "independent": 5000.0,
         "total": 7800.0,
         "count": 6,
         "committees": 6,
@@ -380041,8 +380041,8 @@
         "industries": [
           "restaurant"
         ],
-        "direct": 131500.0,
-        "independent": 0.0,
+        "direct": 116500.0,
+        "independent": 15000.0,
         "total": 131500.0,
         "count": 48,
         "committees": 15,
@@ -380366,8 +380366,8 @@
         "industries": [
           "real-estate"
         ],
-        "direct": 4663553.52,
-        "independent": 0.0,
+        "direct": 203550.0,
+        "independent": 4460003.52,
         "total": 4663553.52,
         "count": 79,
         "committees": 27,
@@ -380379,8 +380379,8 @@
         "industries": [
           "real-estate"
         ],
-        "direct": 260500.0,
-        "independent": 0.0,
+        "direct": 240500.0,
+        "independent": 20000.0,
         "total": 260500.0,
         "count": 162,
         "committees": 36,
@@ -380457,8 +380457,8 @@
         "industries": [
           "finance"
         ],
-        "direct": 2509200.0,
-        "independent": 0.0,
+        "direct": 434200.0,
+        "independent": 2075000.0,
         "total": 2509200.0,
         "count": 102,
         "committees": 31,
@@ -380471,8 +380471,8 @@
           "individual",
           "finance"
         ],
-        "direct": 1260700.0,
-        "independent": 0.0,
+        "direct": 435700.0,
+        "independent": 825000.0,
         "total": 1260700.0,
         "count": 96,
         "committees": 30,
@@ -380484,8 +380484,8 @@
         "industries": [
           "labor-service"
         ],
-        "direct": 1531585.46,
-        "independent": 0.0,
+        "direct": 750448.21,
+        "independent": 781137.25,
         "total": 1531585.46,
         "count": 108,
         "committees": 36,
@@ -380601,8 +380601,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 5865.12,
-        "independent": 0.0,
+        "direct": 4865.12,
+        "independent": 1000.0,
         "total": 5865.12,
         "count": 9,
         "committees": 7,
@@ -380783,8 +380783,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 50375.0,
-        "independent": 0.0,
+        "direct": 49375.0,
+        "independent": 1000.0,
         "total": 50375.0,
         "count": 16,
         "committees": 11,
@@ -380952,8 +380952,8 @@
         "industries": [
           "real-estate"
         ],
-        "direct": 7800.0,
-        "independent": 0.0,
+        "direct": 7500.0,
+        "independent": 300.0,
         "total": 7800.0,
         "count": 6,
         "committees": 4,
@@ -382993,8 +382993,8 @@
         "industries": [
           "individual"
         ],
-        "direct": 79257.0,
-        "independent": 0.0,
+        "direct": 74257.0,
+        "independent": 5000.0,
         "total": 79257.0,
         "count": 6,
         "committees": 5,
@@ -384450,8 +384450,8 @@
           "individual",
           "corporate"
         ],
-        "direct": 9507516.81,
-        "independent": 0.0,
+        "direct": 149050.0,
+        "independent": 9358466.81,
         "total": 9507516.81,
         "count": 41,
         "committees": 9,
@@ -384697,8 +384697,8 @@
         "industries": [
           "charter-schools"
         ],
-        "direct": 1574900.0,
-        "independent": 0.0,
+        "direct": 3000.0,
+        "independent": 1571900.0,
         "total": 1574900.0,
         "count": 15,
         "committees": 2,
@@ -384736,8 +384736,8 @@
         "industries": [
           "labor-public"
         ],
-        "direct": 227374.75,
-        "independent": 0.0,
+        "direct": 97374.75,
+        "independent": 130000.0,
         "total": 227374.75,
         "count": 88,
         "committees": 17,
@@ -384789,8 +384789,8 @@
           "individual",
           "finance"
         ],
-        "direct": 352800.0,
-        "independent": 0.0,
+        "direct": 5000.0,
+        "independent": 347800.0,
         "total": 352800.0,
         "count": 9,
         "committees": 4,
@@ -385479,8 +385479,8 @@
         "industries": [
           "labor-service"
         ],
-        "direct": 810577.43,
-        "independent": 0.0,
+        "direct": 776577.43,
+        "independent": 34000.0,
         "total": 810577.43,
         "count": 273,
         "committees": 34,
@@ -386636,8 +386636,8 @@
         "industries": [
           "self-funding"
         ],
-        "direct": 14957.18,
-        "independent": 0.0,
+        "direct": 8957.18,
+        "independent": 6000.0,
         "total": 14957.18,
         "count": 7,
         "committees": 6,
@@ -388430,8 +388430,8 @@
         "industries": [
           "labor-teachers"
         ],
-        "direct": 1613782.89,
-        "independent": 0.0,
+        "direct": 880460.89,
+        "independent": 733322.0,
         "total": 1613782.89,
         "count": 179,
         "committees": 34,
@@ -389015,8 +389015,8 @@
         "industries": [
           "real-estate"
         ],
-        "direct": 21000.0,
-        "independent": 0.0,
+        "direct": 20000.0,
+        "independent": 1000.0,
         "total": 21000.0,
         "count": 17,
         "committees": 5,
@@ -391992,8 +391992,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 19500.0,
-        "independent": 0.0,
+        "direct": 2000.0,
+        "independent": 17500.0,
         "total": 19500.0,
         "count": 4,
         "committees": 2,
@@ -392161,8 +392161,8 @@
         "industries": [
           "individual"
         ],
-        "direct": 1725.0,
-        "independent": 0.0,
+        "direct": 1000.0,
+        "independent": 725.0,
         "total": 1725.0,
         "count": 4,
         "committees": 2,
@@ -399532,8 +399532,8 @@
         "industries": [
           "corporate-tech"
         ],
-        "direct": 5500.0,
-        "independent": 0.0,
+        "direct": 4750.0,
+        "independent": 750.0,
         "total": 5500.0,
         "count": 6,
         "committees": 3,
@@ -402626,8 +402626,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 27941.6,
-        "independent": 0.0,
+        "direct": 27441.6,
+        "independent": 500.0,
         "total": 27941.6,
         "count": 56,
         "committees": 19,
@@ -410738,8 +410738,8 @@
         "industries": [
           "labor-teachers"
         ],
-        "direct": 209400.0,
-        "independent": 0.0,
+        "direct": 206400.0,
+        "independent": 3000.0,
         "total": 209400.0,
         "count": 112,
         "committees": 27,
@@ -411414,8 +411414,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 4000.0,
-        "independent": 0.0,
+        "direct": 1500.0,
+        "independent": 2500.0,
         "total": 4000.0,
         "count": 2,
         "committees": 2,
@@ -411674,8 +411674,8 @@
         "industries": [
           "corporate"
         ],
-        "direct": 67076.0,
-        "independent": 0.0,
+        "direct": 52076.0,
+        "independent": 15000.0,
         "total": 67076.0,
         "count": 21,
         "committees": 11,
@@ -413247,8 +413247,8 @@
         "industries": [
           "corporate-legal"
         ],
-        "direct": 5728.14,
-        "independent": 0.0,
+        "direct": 3000.0,
+        "independent": 2728.14,
         "total": 5728.14,
         "count": 3,
         "committees": 2,
@@ -414196,8 +414196,8 @@
         "industries": [
           "construction"
         ],
-        "direct": 42220.0,
-        "independent": 0.0,
+        "direct": 32020.0,
+        "independent": 10200.0,
         "total": 42220.0,
         "count": 17,
         "committees": 7,
@@ -414339,8 +414339,8 @@
         "industries": [
           "real-estate"
         ],
-        "direct": 3075282.21,
-        "independent": 0.0,
+        "direct": 63800.0,
+        "independent": 3011482.21,
         "total": 3075282.21,
         "count": 31,
         "committees": 2,
@@ -416523,8 +416523,8 @@
         "industries": [
           "real-estate"
         ],
-        "direct": 33480.25,
-        "independent": 0.0,
+        "direct": 8480.25,
+        "independent": 25000.0,
         "total": 33480.25,
         "count": 5,
         "committees": 3,
@@ -426026,8 +426026,8 @@
         "industries": [
           "construction"
         ],
-        "direct": 16725.0,
-        "independent": 0.0,
+        "direct": 15500.0,
+        "independent": 1225.0,
         "total": 16725.0,
         "count": 8,
         "committees": 5,
@@ -427586,8 +427586,8 @@
         "industries": [
           "construction"
         ],
-        "direct": 50400.0,
-        "independent": 0.0,
+        "direct": 50200.0,
+        "independent": 200.0,
         "total": 50400.0,
         "count": 50,
         "committees": 16,
@@ -428054,8 +428054,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 3500.0,
-        "independent": 0.0,
+        "direct": 2500.0,
+        "independent": 1000.0,
         "total": 3500.0,
         "count": 4,
         "committees": 2,
@@ -428665,8 +428665,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 3073.0,
-        "independent": 0.0,
+        "direct": 573.0,
+        "independent": 2500.0,
         "total": 3073.0,
         "count": 3,
         "committees": 2,
@@ -428691,8 +428691,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 3600.0,
-        "independent": 0.0,
+        "direct": 1850.0,
+        "independent": 1750.0,
         "total": 3600.0,
         "count": 9,
         "committees": 6,
@@ -429861,8 +429861,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 42500.0,
-        "independent": 0.0,
+        "direct": 17500.0,
+        "independent": 25000.0,
         "total": 42500.0,
         "count": 13,
         "committees": 6,
@@ -429901,8 +429901,8 @@
           "individual",
           "finance"
         ],
-        "direct": 182500.0,
-        "independent": 0.0,
+        "direct": 22500.0,
+        "independent": 160000.0,
         "total": 182500.0,
         "count": 7,
         "committees": 6,
@@ -431396,8 +431396,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 62500.0,
-        "independent": 0.0,
+        "direct": 52500.0,
+        "independent": 10000.0,
         "total": 62500.0,
         "count": 9,
         "committees": 4,
@@ -432267,8 +432267,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 35000.0,
-        "independent": 0.0,
+        "direct": 10000.0,
+        "independent": 25000.0,
         "total": 35000.0,
         "count": 2,
         "committees": 2,
@@ -432515,8 +432515,8 @@
           "individual",
           "real-estate"
         ],
-        "direct": 65000.0,
-        "independent": 0.0,
+        "direct": 15000.0,
+        "independent": 50000.0,
         "total": 65000.0,
         "count": 2,
         "committees": 2,
@@ -435349,8 +435349,8 @@
         "industries": [
           "corporate"
         ],
-        "direct": 2051.0,
-        "independent": 0.0,
+        "direct": 1819.41,
+        "independent": 231.59,
         "total": 2051.0,
         "count": 7,
         "committees": 5,
@@ -436077,8 +436077,8 @@
         "industries": [
           "progressive-pol"
         ],
-        "direct": 201227.72,
-        "independent": 0.0,
+        "direct": 200727.72,
+        "independent": 500.0,
         "total": 201227.72,
         "count": 123,
         "committees": 18,
@@ -438885,8 +438885,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 11000.0,
-        "independent": 0.0,
+        "direct": 1000.0,
+        "independent": 10000.0,
         "total": 11000.0,
         "count": 2,
         "committees": 2,
@@ -439821,8 +439821,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 10348.26,
-        "independent": 0.0,
+        "direct": 9348.26,
+        "independent": 1000.0,
         "total": 10348.26,
         "count": 4,
         "committees": 4,
@@ -440562,8 +440562,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 14000.0,
-        "independent": 0.0,
+        "direct": 9000.0,
+        "independent": 5000.0,
         "total": 14000.0,
         "count": 11,
         "committees": 2,
@@ -450169,8 +450169,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 750.0,
-        "independent": 0.0,
+        "direct": 250.0,
+        "independent": 500.0,
         "total": 750.0,
         "count": 2,
         "committees": 2,
@@ -451040,8 +451040,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 1950.0,
-        "independent": 0.0,
+        "direct": 950.0,
+        "independent": 1000.0,
         "total": 1950.0,
         "count": 4,
         "committees": 4,
@@ -451781,8 +451781,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 6000.0,
-        "independent": 0.0,
+        "direct": 3500.0,
+        "independent": 2500.0,
         "total": 6000.0,
         "count": 9,
         "committees": 9,
@@ -455044,8 +455044,8 @@
         "industries": [
           "corporate-legal"
         ],
-        "direct": 54300.0,
-        "independent": 0.0,
+        "direct": 4300.0,
+        "independent": 50000.0,
         "total": 54300.0,
         "count": 4,
         "committees": 2,
@@ -455512,8 +455512,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 9435.0,
-        "independent": 0.0,
+        "direct": 8760.0,
+        "independent": 675.0,
         "total": 9435.0,
         "count": 19,
         "committees": 2,
@@ -457293,8 +457293,8 @@
         "industries": [
           "real-estate"
         ],
-        "direct": 9970.0,
-        "independent": 0.0,
+        "direct": 9470.0,
+        "independent": 500.0,
         "total": 9970.0,
         "count": 11,
         "committees": 2,
@@ -460556,8 +460556,8 @@
         "industries": [
           "corporate"
         ],
-        "direct": 6960.5,
-        "independent": 0.0,
+        "direct": 5960.5,
+        "independent": 1000.0,
         "total": 6960.5,
         "count": 8,
         "committees": 4,
@@ -461336,8 +461336,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 5300.0,
-        "independent": 0.0,
+        "direct": 5000.0,
+        "independent": 300.0,
         "total": 5300.0,
         "count": 5,
         "committees": 5,
@@ -463065,8 +463065,8 @@
         "industries": [
           "individual"
         ],
-        "direct": 9900.0,
-        "independent": 0.0,
+        "direct": 4200.0,
+        "independent": 5700.0,
         "total": 9900.0,
         "count": 15,
         "committees": 3,
@@ -463611,8 +463611,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1250.0,
-        "independent": 0.0,
+        "direct": 250.0,
+        "independent": 1000.0,
         "total": 1250.0,
         "count": 2,
         "committees": 2,
@@ -465795,8 +465795,8 @@
         "industries": [
           "construction"
         ],
-        "direct": 4250.0,
-        "independent": 0.0,
+        "direct": 3250.0,
+        "independent": 1000.0,
         "total": 4250.0,
         "count": 5,
         "committees": 4,
@@ -466224,8 +466224,8 @@
         "industries": [
           "real-estate"
         ],
-        "direct": 7775.0,
-        "independent": 0.0,
+        "direct": 2000.0,
+        "independent": 5775.0,
         "total": 7775.0,
         "count": 13,
         "committees": 4,
@@ -466653,8 +466653,8 @@
         "industries": [
           "individual"
         ],
-        "direct": 17700.0,
-        "independent": 0.0,
+        "direct": 2250.0,
+        "independent": 15450.0,
         "total": 17700.0,
         "count": 17,
         "committees": 5,
@@ -468486,8 +468486,8 @@
         "industries": [
           "individual"
         ],
-        "direct": 16000.0,
-        "independent": 0.0,
+        "direct": 7500.0,
+        "independent": 8500.0,
         "total": 16000.0,
         "count": 3,
         "committees": 3,
@@ -468850,8 +468850,8 @@
         "industries": [
           "real-estate"
         ],
-        "direct": 2200.0,
-        "independent": 0.0,
+        "direct": 1700.0,
+        "independent": 500.0,
         "total": 2200.0,
         "count": 4,
         "committees": 2,
@@ -471321,8 +471321,8 @@
           "individual",
           "finance"
         ],
-        "direct": 76100.0,
-        "independent": 0.0,
+        "direct": 16100.0,
+        "independent": 60000.0,
         "total": 76100.0,
         "count": 9,
         "committees": 4,
@@ -472011,8 +472011,8 @@
           "individual",
           "healthcare"
         ],
-        "direct": 50500.0,
-        "independent": 0.0,
+        "direct": 500.0,
+        "independent": 50000.0,
         "total": 50500.0,
         "count": 2,
         "committees": 2,
@@ -473558,8 +473558,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 42300.0,
-        "independent": 0.0,
+        "direct": 17300.0,
+        "independent": 25000.0,
         "total": 42300.0,
         "count": 5,
         "committees": 4,
@@ -474585,8 +474585,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 13500.0,
-        "independent": 0.0,
+        "direct": 8500.0,
+        "independent": 5000.0,
         "total": 13500.0,
         "count": 7,
         "committees": 4,
@@ -475014,8 +475014,8 @@
         "industries": [
           "real-estate"
         ],
-        "direct": 10110.0,
-        "independent": 0.0,
+        "direct": 9650.0,
+        "independent": 460.0,
         "total": 10110.0,
         "count": 14,
         "committees": 3,
@@ -475508,8 +475508,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 67000.0,
-        "independent": 0.0,
+        "direct": 66000.0,
+        "independent": 1000.0,
         "total": 67000.0,
         "count": 28,
         "committees": 9,
@@ -475677,8 +475677,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 2300.0,
-        "independent": 0.0,
+        "direct": 2000.0,
+        "independent": 300.0,
         "total": 2300.0,
         "count": 5,
         "committees": 4,
@@ -475976,8 +475976,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 3750.0,
-        "independent": 0.0,
+        "direct": 1000.0,
+        "independent": 2750.0,
         "total": 3750.0,
         "count": 5,
         "committees": 2,
@@ -476639,8 +476639,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 650.0,
-        "independent": 0.0,
+        "direct": 200.0,
+        "independent": 450.0,
         "total": 650.0,
         "count": 2,
         "committees": 2,
@@ -477354,8 +477354,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 3500.0,
-        "independent": 0.0,
+        "direct": 2000.0,
+        "independent": 1500.0,
         "total": 3500.0,
         "count": 3,
         "committees": 2,
@@ -477406,8 +477406,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1500.0,
-        "independent": 0.0,
+        "direct": 500.0,
+        "independent": 1000.0,
         "total": 1500.0,
         "count": 2,
         "committees": 2,
@@ -477588,8 +477588,8 @@
         "industries": [
           "real-estate"
         ],
-        "direct": 8000.0,
-        "independent": 0.0,
+        "direct": 7000.0,
+        "independent": 1000.0,
         "total": 8000.0,
         "count": 6,
         "committees": 5,
@@ -482125,8 +482125,8 @@
         "industries": [
           "real-estate"
         ],
-        "direct": 2200.0,
-        "independent": 0.0,
+        "direct": 1200.0,
+        "independent": 1000.0,
         "total": 2200.0,
         "count": 6,
         "committees": 3,
@@ -485765,8 +485765,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 2750.0,
-        "independent": 0.0,
+        "direct": 1750.0,
+        "independent": 1000.0,
         "total": 2750.0,
         "count": 4,
         "committees": 4,
@@ -487247,8 +487247,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 7869.64,
-        "independent": 0.0,
+        "direct": 7569.64,
+        "independent": 300.0,
         "total": 7869.64,
         "count": 4,
         "committees": 3,
@@ -493747,8 +493747,8 @@
         "industries": [
           "labor-trades"
         ],
-        "direct": 141300.0,
-        "independent": 0.0,
+        "direct": 121300.0,
+        "independent": 20000.0,
         "total": 141300.0,
         "count": 7,
         "committees": 4,
@@ -493955,8 +493955,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 3500.0,
-        "independent": 0.0,
+        "direct": 2000.0,
+        "independent": 1500.0,
         "total": 3500.0,
         "count": 12,
         "committees": 4,
@@ -494411,8 +494411,8 @@
           "individual",
           "finance"
         ],
-        "direct": 105000.0,
-        "independent": 0.0,
+        "direct": 5000.0,
+        "independent": 100000.0,
         "total": 105000.0,
         "count": 2,
         "committees": 2,
@@ -494476,8 +494476,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 2000.0,
-        "independent": 0.0,
+        "direct": 1000.0,
+        "independent": 1000.0,
         "total": 2000.0,
         "count": 2,
         "committees": 2,
@@ -495880,8 +495880,8 @@
         "industries": [
           "labor-teachers"
         ],
-        "direct": 282000.0,
-        "independent": 0.0,
+        "direct": 52000.0,
+        "independent": 230000.0,
         "total": 282000.0,
         "count": 10,
         "committees": 2,
@@ -500054,8 +500054,8 @@
           "individual",
           "real-estate"
         ],
-        "direct": 155000.0,
-        "independent": 0.0,
+        "direct": 5000.0,
+        "independent": 150000.0,
         "total": 155000.0,
         "count": 2,
         "committees": 2,
@@ -500068,8 +500068,8 @@
           "individual",
           "finance"
         ],
-        "direct": 130000.0,
-        "independent": 0.0,
+        "direct": 5000.0,
+        "independent": 125000.0,
         "total": 130000.0,
         "count": 3,
         "committees": 3,
@@ -500094,8 +500094,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 40000.0,
-        "independent": 0.0,
+        "direct": 5000.0,
+        "independent": 35000.0,
         "total": 40000.0,
         "count": 3,
         "committees": 3,
@@ -501277,8 +501277,8 @@
         "industries": [
           "individual"
         ],
-        "direct": 8500.0,
-        "independent": 0.0,
+        "direct": 1500.0,
+        "independent": 7000.0,
         "total": 8500.0,
         "count": 2,
         "committees": 2,
@@ -501290,8 +501290,8 @@
         "industries": [
           "individual"
         ],
-        "direct": 10000.0,
-        "independent": 0.0,
+        "direct": 3000.0,
+        "independent": 7000.0,
         "total": 10000.0,
         "count": 3,
         "committees": 2,
@@ -506152,8 +506152,8 @@
         "industries": [
           "construction"
         ],
-        "direct": 11300.0,
-        "independent": 0.0,
+        "direct": 8800.0,
+        "independent": 2500.0,
         "total": 11300.0,
         "count": 13,
         "committees": 5,
@@ -506230,8 +506230,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 12750.0,
-        "independent": 0.0,
+        "direct": 10250.0,
+        "independent": 2500.0,
         "total": 12750.0,
         "count": 12,
         "committees": 5,
@@ -515174,8 +515174,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 14068.0,
-        "independent": 0.0,
+        "direct": 13568.0,
+        "independent": 500.0,
         "total": 14068.0,
         "count": 19,
         "committees": 8,
@@ -520803,8 +520803,8 @@
         "industries": [
           "construction"
         ],
-        "direct": 9800.0,
-        "independent": 0.0,
+        "direct": 9500.0,
+        "independent": 300.0,
         "total": 9800.0,
         "count": 5,
         "committees": 2,
@@ -521557,8 +521557,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 9100.0,
-        "independent": 0.0,
+        "direct": 1250.0,
+        "independent": 7850.0,
         "total": 9100.0,
         "count": 11,
         "committees": 2,
@@ -522727,8 +522727,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 3900.0,
-        "independent": 0.0,
+        "direct": 1000.0,
+        "independent": 2900.0,
         "total": 3900.0,
         "count": 9,
         "committees": 3,
@@ -523598,8 +523598,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 500.0,
+        "independent": 500.0,
         "total": 1000.0,
         "count": 2,
         "committees": 2,
@@ -523650,8 +523650,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1700.0,
-        "independent": 0.0,
+        "direct": 1250.0,
+        "independent": 450.0,
         "total": 1700.0,
         "count": 4,
         "committees": 2,
@@ -525821,8 +525821,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 800.0,
-        "independent": 0.0,
+        "direct": 500.0,
+        "independent": 300.0,
         "total": 800.0,
         "count": 2,
         "committees": 2,
@@ -525925,8 +525925,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 4500.0,
-        "independent": 0.0,
+        "direct": 1500.0,
+        "independent": 3000.0,
         "total": 4500.0,
         "count": 6,
         "committees": 2,
@@ -527472,8 +527472,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 5500.0,
-        "independent": 0.0,
+        "direct": 4000.0,
+        "independent": 1500.0,
         "total": 5500.0,
         "count": 5,
         "committees": 5,
@@ -528681,8 +528681,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 9225.0,
-        "independent": 0.0,
+        "direct": 5000.0,
+        "independent": 4225.0,
         "total": 9225.0,
         "count": 8,
         "committees": 2,
@@ -535857,8 +535857,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 5900.0,
-        "independent": 0.0,
+        "direct": 3400.0,
+        "independent": 2500.0,
         "total": 5900.0,
         "count": 7,
         "committees": 2,
@@ -539783,8 +539783,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 6608.8,
-        "independent": 0.0,
+        "direct": 3608.8,
+        "independent": 3000.0,
         "total": 6608.8,
         "count": 6,
         "committees": 4,
@@ -543020,8 +543020,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 700.0,
-        "independent": 0.0,
+        "direct": 200.0,
+        "independent": 500.0,
         "total": 700.0,
         "count": 2,
         "committees": 2,
@@ -559478,8 +559478,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 18000.0,
-        "independent": 0.0,
+        "direct": 500.0,
+        "independent": 17500.0,
         "total": 18000.0,
         "count": 4,
         "committees": 2,
@@ -564496,8 +564496,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 2700.0,
-        "independent": 0.0,
+        "direct": 2200.0,
+        "independent": 500.0,
         "total": 2700.0,
         "count": 5,
         "committees": 3,
@@ -567759,8 +567759,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 750.0,
-        "independent": 0.0,
+        "direct": 250.0,
+        "independent": 500.0,
         "total": 750.0,
         "count": 2,
         "committees": 2,
@@ -591627,8 +591627,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1500.0,
-        "independent": 0.0,
+        "direct": 500.0,
+        "independent": 1000.0,
         "total": 1500.0,
         "count": 2,
         "committees": 2,
@@ -598205,8 +598205,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 5520.68,
-        "independent": 0.0,
+        "direct": 5000.0,
+        "independent": 520.68,
         "total": 5520.68,
         "count": 2,
         "committees": 2,
@@ -598296,8 +598296,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 60900.0,
-        "independent": 0.0,
+        "direct": 59900.0,
+        "independent": 1000.0,
         "total": 60900.0,
         "count": 2,
         "committees": 2,
@@ -599271,8 +599271,8 @@
         "industries": [
           "individual"
         ],
-        "direct": 51500.0,
-        "independent": 0.0,
+        "direct": 1500.0,
+        "independent": 50000.0,
         "total": 51500.0,
         "count": 2,
         "committees": 2,
@@ -601962,8 +601962,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 18500.0,
-        "independent": 0.0,
+        "direct": 16000.0,
+        "independent": 2500.0,
         "total": 18500.0,
         "count": 8,
         "committees": 3,
@@ -607903,8 +607903,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 25750.0,
-        "independent": 0.0,
+        "direct": 750.0,
+        "independent": 25000.0,
         "total": 25750.0,
         "count": 3,
         "committees": 2,
@@ -608437,8 +608437,8 @@
           "individual",
           "finance"
         ],
-        "direct": 545700.0,
-        "independent": 0.0,
+        "direct": 26000.0,
+        "independent": 519700.0,
         "total": 545700.0,
         "count": 5,
         "committees": 3,
@@ -628782,8 +628782,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 5500.0,
-        "independent": 0.0,
+        "direct": 2500.0,
+        "independent": 3000.0,
         "total": 5500.0,
         "count": 2,
         "committees": 2,
@@ -629679,8 +629679,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 21000.0,
-        "independent": 0.0,
+        "direct": 1000.0,
+        "independent": 20000.0,
         "total": 21000.0,
         "count": 2,
         "committees": 2,
@@ -636348,8 +636348,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 750.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 750.0,
         "total": 750.0,
         "count": 1,
         "committees": 1,
@@ -636361,8 +636361,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -636374,8 +636374,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 5000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 5000.0,
         "total": 5000.0,
         "count": 2,
         "committees": 1,
@@ -636387,8 +636387,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -636400,8 +636400,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 5000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 5000.0,
         "total": 5000.0,
         "count": 1,
         "committees": 1,
@@ -636413,8 +636413,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -636426,8 +636426,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 238.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 238.0,
         "total": 238.0,
         "count": 1,
         "committees": 1,
@@ -636439,8 +636439,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 750.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 750.0,
         "total": 750.0,
         "count": 1,
         "committees": 1,
@@ -636452,8 +636452,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -636465,8 +636465,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -636478,8 +636478,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 15000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 15000.0,
         "total": 15000.0,
         "count": 1,
         "committees": 1,
@@ -636491,8 +636491,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 200.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 200.0,
         "total": 200.0,
         "count": 1,
         "committees": 1,
@@ -636504,8 +636504,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -636517,8 +636517,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 300.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 300.0,
         "total": 300.0,
         "count": 1,
         "committees": 1,
@@ -636530,8 +636530,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 13494.39,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 13494.39,
         "total": 13494.39,
         "count": 2,
         "committees": 1,
@@ -636543,8 +636543,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 17465.79,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 17465.79,
         "total": 17465.79,
         "count": 4,
         "committees": 1,
@@ -636556,8 +636556,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1598.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1598.0,
         "total": 1598.0,
         "count": 1,
         "committees": 1,
@@ -636569,8 +636569,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 8000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 8000.0,
         "total": 8000.0,
         "count": 2,
         "committees": 1,
@@ -636582,8 +636582,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 2200.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 2200.0,
         "total": 2200.0,
         "count": 3,
         "committees": 1,
@@ -636596,8 +636596,8 @@
           "individual",
           "tech"
         ],
-        "direct": 150000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 150000.0,
         "total": 150000.0,
         "count": 2,
         "committees": 1,
@@ -636610,8 +636610,8 @@
           "individual",
           "finance"
         ],
-        "direct": 100000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 100000.0,
         "total": 100000.0,
         "count": 1,
         "committees": 1,
@@ -636624,8 +636624,8 @@
           "individual",
           "finance"
         ],
-        "direct": 850000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 850000.0,
         "total": 850000.0,
         "count": 3,
         "committees": 1,
@@ -636638,8 +636638,8 @@
           "individual",
           "finance"
         ],
-        "direct": 150000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 150000.0,
         "total": 150000.0,
         "count": 1,
         "committees": 1,
@@ -636651,8 +636651,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 2000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 2000.0,
         "total": 2000.0,
         "count": 2,
         "committees": 1,
@@ -636664,8 +636664,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 30000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 30000.0,
         "total": 30000.0,
         "count": 1,
         "committees": 1,
@@ -636677,8 +636677,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 25000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 25000.0,
         "total": 25000.0,
         "count": 1,
         "committees": 1,
@@ -636691,8 +636691,8 @@
           "individual",
           "healthcare"
         ],
-        "direct": 100000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 100000.0,
         "total": 100000.0,
         "count": 1,
         "committees": 1,
@@ -636704,8 +636704,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 25000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 25000.0,
         "total": 25000.0,
         "count": 1,
         "committees": 1,
@@ -636718,8 +636718,8 @@
           "individual",
           "real-estate"
         ],
-        "direct": 50000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 50000.0,
         "total": 50000.0,
         "count": 1,
         "committees": 1,
@@ -636732,8 +636732,8 @@
           "individual",
           "finance"
         ],
-        "direct": 100000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 100000.0,
         "total": 100000.0,
         "count": 1,
         "committees": 1,
@@ -636745,8 +636745,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 25000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 25000.0,
         "total": 25000.0,
         "count": 1,
         "committees": 1,
@@ -636758,8 +636758,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -636771,8 +636771,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 25000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 25000.0,
         "total": 25000.0,
         "count": 1,
         "committees": 1,
@@ -636785,8 +636785,8 @@
           "individual",
           "finance"
         ],
-        "direct": 150000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 150000.0,
         "total": 150000.0,
         "count": 1,
         "committees": 1,
@@ -636799,8 +636799,8 @@
           "individual",
           "finance"
         ],
-        "direct": 50000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 50000.0,
         "total": 50000.0,
         "count": 1,
         "committees": 1,
@@ -636812,8 +636812,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 25000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 25000.0,
         "total": 25000.0,
         "count": 1,
         "committees": 1,
@@ -636826,8 +636826,8 @@
           "individual",
           "finance"
         ],
-        "direct": 100000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 100000.0,
         "total": 100000.0,
         "count": 1,
         "committees": 1,
@@ -636840,8 +636840,8 @@
           "individual",
           "finance"
         ],
-        "direct": 100000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 100000.0,
         "total": 100000.0,
         "count": 1,
         "committees": 1,
@@ -636853,8 +636853,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 5000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 5000.0,
         "total": 5000.0,
         "count": 1,
         "committees": 1,
@@ -636866,8 +636866,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 25000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 25000.0,
         "total": 25000.0,
         "count": 1,
         "committees": 1,
@@ -636879,8 +636879,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 2500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 2500.0,
         "total": 2500.0,
         "count": 1,
         "committees": 1,
@@ -636893,8 +636893,8 @@
           "individual",
           "finance"
         ],
-        "direct": 50000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 50000.0,
         "total": 50000.0,
         "count": 1,
         "committees": 1,
@@ -636907,8 +636907,8 @@
           "individual",
           "finance"
         ],
-        "direct": 100000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 100000.0,
         "total": 100000.0,
         "count": 1,
         "committees": 1,
@@ -636921,8 +636921,8 @@
           "individual",
           "corporate"
         ],
-        "direct": 50000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 50000.0,
         "total": 50000.0,
         "count": 1,
         "committees": 1,
@@ -636934,8 +636934,8 @@
         "industries": [
           "labor"
         ],
-        "direct": 25000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 25000.0,
         "total": 25000.0,
         "count": 2,
         "committees": 1,
@@ -636947,8 +636947,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 4000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 4000.0,
         "total": 4000.0,
         "count": 3,
         "committees": 1,
@@ -636960,8 +636960,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 3500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 3500.0,
         "total": 3500.0,
         "count": 4,
         "committees": 1,
@@ -636973,8 +636973,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 7000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 7000.0,
         "total": 7000.0,
         "count": 6,
         "committees": 1,
@@ -636986,8 +636986,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 7250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 7250.0,
         "total": 7250.0,
         "count": 8,
         "committees": 1,
@@ -636999,8 +636999,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1725.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1725.0,
         "total": 1725.0,
         "count": 3,
         "committees": 1,
@@ -637012,8 +637012,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1700.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1700.0,
         "total": 1700.0,
         "count": 3,
         "committees": 1,
@@ -637025,8 +637025,8 @@
         "industries": [
           "charter-schools"
         ],
-        "direct": 28660.35,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 28660.35,
         "total": 28660.35,
         "count": 2,
         "committees": 1,
@@ -637038,8 +637038,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 5000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 5000.0,
         "total": 5000.0,
         "count": 1,
         "committees": 1,
@@ -637051,8 +637051,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 5000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 5000.0,
         "total": 5000.0,
         "count": 1,
         "committees": 1,
@@ -637064,8 +637064,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -637077,8 +637077,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 417.18,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 417.18,
         "total": 417.18,
         "count": 1,
         "committees": 1,
@@ -637090,8 +637090,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 309190.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 309190.0,
         "total": 309190.0,
         "count": 8,
         "committees": 1,
@@ -637103,8 +637103,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1450.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1450.0,
         "total": 1450.0,
         "count": 1,
         "committees": 1,
@@ -637116,8 +637116,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1127.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1127.0,
         "total": 1127.0,
         "count": 5,
         "committees": 1,
@@ -637129,8 +637129,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 10750.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 10750.0,
         "total": 10750.0,
         "count": 2,
         "committees": 1,
@@ -637142,8 +637142,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 2,
         "committees": 1,
@@ -637155,8 +637155,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 10500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 10500.0,
         "total": 10500.0,
         "count": 1,
         "committees": 1,
@@ -637168,8 +637168,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 6417.83,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 6417.83,
         "total": 6417.83,
         "count": 1,
         "committees": 1,
@@ -637181,8 +637181,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 43227.73,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 43227.73,
         "total": 43227.73,
         "count": 1,
         "committees": 1,
@@ -637195,8 +637195,8 @@
           "individual",
           "healthcare"
         ],
-        "direct": 50000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 50000.0,
         "total": 50000.0,
         "count": 1,
         "committees": 1,
@@ -637208,8 +637208,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -637221,8 +637221,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 2500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 2500.0,
         "total": 2500.0,
         "count": 1,
         "committees": 1,
@@ -637235,8 +637235,8 @@
           "individual",
           "finance"
         ],
-        "direct": 50000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 50000.0,
         "total": 50000.0,
         "count": 1,
         "committees": 1,
@@ -637248,8 +637248,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 5000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 5000.0,
         "total": 5000.0,
         "count": 1,
         "committees": 1,
@@ -637261,8 +637261,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 15000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 15000.0,
         "total": 15000.0,
         "count": 1,
         "committees": 1,
@@ -637274,8 +637274,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 15000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 15000.0,
         "total": 15000.0,
         "count": 1,
         "committees": 1,
@@ -637287,8 +637287,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1161.46,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1161.46,
         "total": 1161.46,
         "count": 1,
         "committees": 1,
@@ -637300,8 +637300,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 25000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 25000.0,
         "total": 25000.0,
         "count": 1,
         "committees": 1,
@@ -637313,8 +637313,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1021.49,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1021.49,
         "total": 1021.49,
         "count": 1,
         "committees": 1,
@@ -637326,8 +637326,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -637339,8 +637339,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 2000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 2000.0,
         "total": 2000.0,
         "count": 1,
         "committees": 1,
@@ -637352,8 +637352,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 259.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 259.0,
         "total": 259.0,
         "count": 1,
         "committees": 1,
@@ -637365,8 +637365,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -637378,8 +637378,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -637391,8 +637391,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 7175.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 7175.0,
         "total": 7175.0,
         "count": 7,
         "committees": 1,
@@ -637404,8 +637404,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 46100.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 46100.0,
         "total": 46100.0,
         "count": 1,
         "committees": 1,
@@ -637417,8 +637417,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 10000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 10000.0,
         "total": 10000.0,
         "count": 1,
         "committees": 1,
@@ -637431,8 +637431,8 @@
           "individual",
           "corporate"
         ],
-        "direct": 151200.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 151200.0,
         "total": 151200.0,
         "count": 2,
         "committees": 1,
@@ -637444,8 +637444,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -637457,8 +637457,8 @@
         "industries": [
           "construction"
         ],
-        "direct": 103475.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 103475.0,
         "total": 103475.0,
         "count": 40,
         "committees": 1,
@@ -637470,8 +637470,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 25966.36,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 25966.36,
         "total": 25966.36,
         "count": 184,
         "committees": 1,
@@ -637483,8 +637483,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -637497,8 +637497,8 @@
           "individual",
           "corporate"
         ],
-        "direct": 1750000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1750000.0,
         "total": 1750000.0,
         "count": 7,
         "committees": 1,
@@ -637510,8 +637510,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 5195.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 5195.0,
         "total": 5195.0,
         "count": 2,
         "committees": 2,
@@ -637523,8 +637523,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 50000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 50000.0,
         "total": 50000.0,
         "count": 2,
         "committees": 1,
@@ -637536,8 +637536,8 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 52400.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 52400.0,
         "total": 52400.0,
         "count": 1,
         "committees": 1,
@@ -637549,8 +637549,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -637562,8 +637562,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -637575,8 +637575,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -637589,8 +637589,8 @@
           "individual",
           "corporate"
         ],
-        "direct": 2138000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 2138000.0,
         "total": 2138000.0,
         "count": 7,
         "committees": 1,
@@ -637602,8 +637602,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 935.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 935.0,
         "total": 935.0,
         "count": 1,
         "committees": 1,
@@ -637616,8 +637616,8 @@
           "charter-schools",
           "lobby-business"
         ],
-        "direct": 409000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 409000.0,
         "total": 409000.0,
         "count": 5,
         "committees": 1,
@@ -637629,8 +637629,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 6000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 6000.0,
         "total": 6000.0,
         "count": 2,
         "committees": 1,
@@ -637642,8 +637642,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -637655,8 +637655,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -637668,8 +637668,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -637681,8 +637681,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -637694,8 +637694,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -637707,8 +637707,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -637720,8 +637720,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -637733,8 +637733,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -637746,8 +637746,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -637759,8 +637759,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 200.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 200.0,
         "total": 200.0,
         "count": 1,
         "committees": 1,
@@ -637772,8 +637772,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -637785,8 +637785,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -637798,8 +637798,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -637811,8 +637811,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 300.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 300.0,
         "total": 300.0,
         "count": 2,
         "committees": 1,
@@ -637824,8 +637824,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -637837,8 +637837,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -637850,8 +637850,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -637863,8 +637863,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 5000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 5000.0,
         "total": 5000.0,
         "count": 1,
         "committees": 1,
@@ -637876,8 +637876,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 750.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 750.0,
         "total": 750.0,
         "count": 1,
         "committees": 1,
@@ -637889,8 +637889,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -637902,8 +637902,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -637915,8 +637915,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -637928,8 +637928,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 4500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 4500.0,
         "total": 4500.0,
         "count": 2,
         "committees": 1,
@@ -637941,8 +637941,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -637954,8 +637954,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -637967,8 +637967,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 10000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 10000.0,
         "total": 10000.0,
         "count": 1,
         "committees": 1,
@@ -637980,8 +637980,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 45289.24,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 45289.24,
         "total": 45289.24,
         "count": 2,
         "committees": 1,
@@ -637993,8 +637993,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 300.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 300.0,
         "total": 300.0,
         "count": 1,
         "committees": 1,
@@ -638006,8 +638006,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 300.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 300.0,
         "total": 300.0,
         "count": 1,
         "committees": 1,
@@ -638019,8 +638019,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 300.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 300.0,
         "total": 300.0,
         "count": 1,
         "committees": 1,
@@ -638032,8 +638032,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 300.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 300.0,
         "total": 300.0,
         "count": 1,
         "committees": 1,
@@ -638045,8 +638045,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 750.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 750.0,
         "total": 750.0,
         "count": 1,
         "committees": 1,
@@ -638058,8 +638058,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 750.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 750.0,
         "total": 750.0,
         "count": 1,
         "committees": 1,
@@ -638071,8 +638071,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 300.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 300.0,
         "total": 300.0,
         "count": 1,
         "committees": 1,
@@ -638084,8 +638084,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 25000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 25000.0,
         "total": 25000.0,
         "count": 1,
         "committees": 1,
@@ -638097,8 +638097,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1239.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1239.0,
         "total": 1239.0,
         "count": 1,
         "committees": 1,
@@ -638110,8 +638110,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 3000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 3000.0,
         "total": 3000.0,
         "count": 1,
         "committees": 1,
@@ -638123,8 +638123,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 25000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 25000.0,
         "total": 25000.0,
         "count": 1,
         "committees": 1,
@@ -638136,8 +638136,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 52000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 52000.0,
         "total": 52000.0,
         "count": 1,
         "committees": 1,
@@ -638149,8 +638149,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 25000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 25000.0,
         "total": 25000.0,
         "count": 1,
         "committees": 1,
@@ -638162,8 +638162,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -638175,8 +638175,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -638188,8 +638188,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -638201,8 +638201,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 2938.91,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 2938.91,
         "total": 2938.91,
         "count": 1,
         "committees": 1,
@@ -638214,8 +638214,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 750.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 750.0,
         "total": 750.0,
         "count": 1,
         "committees": 1,
@@ -638227,8 +638227,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 200.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 200.0,
         "total": 200.0,
         "count": 1,
         "committees": 1,
@@ -638240,8 +638240,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 13000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 13000.0,
         "total": 13000.0,
         "count": 1,
         "committees": 1,
@@ -638253,8 +638253,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 3100.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 3100.0,
         "total": 3100.0,
         "count": 2,
         "committees": 1,
@@ -638266,8 +638266,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 200.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 200.0,
         "total": 200.0,
         "count": 1,
         "committees": 1,
@@ -638279,8 +638279,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -638292,8 +638292,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -638305,8 +638305,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -638318,8 +638318,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -638331,8 +638331,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -638344,8 +638344,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 800.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 800.0,
         "total": 800.0,
         "count": 1,
         "committees": 1,
@@ -638357,8 +638357,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -638370,8 +638370,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -638383,8 +638383,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1250.0,
         "total": 1250.0,
         "count": 3,
         "committees": 1,
@@ -638396,8 +638396,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 800.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 800.0,
         "total": 800.0,
         "count": 2,
         "committees": 1,
@@ -638409,8 +638409,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -638422,8 +638422,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 2000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 2000.0,
         "total": 2000.0,
         "count": 1,
         "committees": 1,
@@ -638435,8 +638435,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -638448,8 +638448,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 2000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 2000.0,
         "total": 2000.0,
         "count": 1,
         "committees": 1,
@@ -638461,8 +638461,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -638474,8 +638474,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -638487,8 +638487,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -638500,8 +638500,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 2000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 2000.0,
         "total": 2000.0,
         "count": 1,
         "committees": 1,
@@ -638513,8 +638513,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -638526,8 +638526,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -638539,8 +638539,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -638552,8 +638552,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -638565,8 +638565,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 750.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 750.0,
         "total": 750.0,
         "count": 2,
         "committees": 1,
@@ -638578,8 +638578,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 200.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 200.0,
         "total": 200.0,
         "count": 1,
         "committees": 1,
@@ -638591,8 +638591,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -638604,8 +638604,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -638617,8 +638617,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 3350.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 3350.0,
         "total": 3350.0,
         "count": 3,
         "committees": 1,
@@ -638630,8 +638630,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -638643,8 +638643,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -638656,8 +638656,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -638669,8 +638669,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1750.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1750.0,
         "total": 1750.0,
         "count": 7,
         "committees": 1,
@@ -638682,8 +638682,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -638695,8 +638695,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -638708,8 +638708,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -638721,8 +638721,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -638734,8 +638734,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 25000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 25000.0,
         "total": 25000.0,
         "count": 1,
         "committees": 1,
@@ -638747,8 +638747,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 10000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 10000.0,
         "total": 10000.0,
         "count": 1,
         "committees": 1,
@@ -638760,8 +638760,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 25000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 25000.0,
         "total": 25000.0,
         "count": 1,
         "committees": 1,
@@ -638773,8 +638773,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -638786,8 +638786,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 200.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 200.0,
         "total": 200.0,
         "count": 1,
         "committees": 1,
@@ -638799,8 +638799,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -638812,8 +638812,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -638825,8 +638825,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -638838,8 +638838,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -638851,8 +638851,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1584.52,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1584.52,
         "total": 1584.52,
         "count": 11,
         "committees": 1,
@@ -638864,8 +638864,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 5000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 5000.0,
         "total": 5000.0,
         "count": 1,
         "committees": 1,
@@ -638877,8 +638877,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 750.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 750.0,
         "total": 750.0,
         "count": 1,
         "committees": 1,
@@ -638890,8 +638890,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -638903,8 +638903,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1030.26,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1030.26,
         "total": 1030.26,
         "count": 1,
         "committees": 1,
@@ -638916,8 +638916,8 @@
         "industries": [
           "corporate"
         ],
-        "direct": 50000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 50000.0,
         "total": 50000.0,
         "count": 1,
         "committees": 1,
@@ -638930,8 +638930,8 @@
           "individual",
           "finance"
         ],
-        "direct": 100000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 100000.0,
         "total": 100000.0,
         "count": 1,
         "committees": 1,
@@ -638943,8 +638943,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 10000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 10000.0,
         "total": 10000.0,
         "count": 1,
         "committees": 1,
@@ -638956,8 +638956,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -638969,8 +638969,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 357.64,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 357.64,
         "total": 357.64,
         "count": 5,
         "committees": 1,
@@ -638982,8 +638982,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -638995,8 +638995,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 2000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 2000.0,
         "total": 2000.0,
         "count": 1,
         "committees": 1,
@@ -639008,8 +639008,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -639021,8 +639021,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -639034,8 +639034,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 25000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 25000.0,
         "total": 25000.0,
         "count": 1,
         "committees": 1,
@@ -639047,8 +639047,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 5000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 5000.0,
         "total": 5000.0,
         "count": 1,
         "committees": 1,
@@ -639060,8 +639060,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -639073,8 +639073,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -639086,8 +639086,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -639099,8 +639099,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -639112,8 +639112,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -639125,8 +639125,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -639138,8 +639138,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 20000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 20000.0,
         "total": 20000.0,
         "count": 1,
         "committees": 1,
@@ -639151,8 +639151,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 10000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 10000.0,
         "total": 10000.0,
         "count": 1,
         "committees": 1,
@@ -639164,8 +639164,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 152.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 152.0,
         "total": 152.0,
         "count": 1,
         "committees": 1,
@@ -639177,8 +639177,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 760.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 760.0,
         "total": 760.0,
         "count": 1,
         "committees": 1,
@@ -639190,8 +639190,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 500.0,
         "total": 500.0,
         "count": 1,
         "committees": 1,
@@ -639203,8 +639203,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 180.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 180.0,
         "total": 180.0,
         "count": 1,
         "committees": 1,
@@ -639217,8 +639217,8 @@
           "individual",
           "tech"
         ],
-        "direct": 100000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 100000.0,
         "total": 100000.0,
         "count": 1,
         "committees": 1,
@@ -639231,8 +639231,8 @@
           "individual",
           "real-estate"
         ],
-        "direct": 1000000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000000.0,
         "total": 1000000.0,
         "count": 3,
         "committees": 1,
@@ -639244,8 +639244,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -639257,8 +639257,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 750.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 750.0,
         "total": 750.0,
         "count": 1,
         "committees": 1,
@@ -639270,8 +639270,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 5000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 5000.0,
         "total": 5000.0,
         "count": 1,
         "committees": 1,
@@ -639283,8 +639283,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 3000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 3000.0,
         "total": 3000.0,
         "count": 1,
         "committees": 1,
@@ -639296,8 +639296,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -639309,8 +639309,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 300.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 300.0,
         "total": 300.0,
         "count": 1,
         "committees": 1,
@@ -639322,8 +639322,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1500.0,
         "total": 1500.0,
         "count": 1,
         "committees": 1,
@@ -639335,8 +639335,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 1000.0,
         "total": 1000.0,
         "count": 1,
         "committees": 1,
@@ -639348,8 +639348,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 3000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 3000.0,
         "total": 3000.0,
         "count": 1,
         "committees": 1,
@@ -639361,8 +639361,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 300.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 300.0,
         "total": 300.0,
         "count": 1,
         "committees": 1,
@@ -639374,8 +639374,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 13389.94,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 13389.94,
         "total": 13389.94,
         "count": 3,
         "committees": 1,
@@ -639387,8 +639387,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 5000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 5000.0,
         "total": 5000.0,
         "count": 1,
         "committees": 1,
@@ -639400,8 +639400,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 175.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 175.0,
         "total": 175.0,
         "count": 1,
         "committees": 1,
@@ -639413,8 +639413,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 225.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 225.0,
         "total": 225.0,
         "count": 1,
         "committees": 1,
@@ -639426,8 +639426,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 175.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 175.0,
         "total": 175.0,
         "count": 1,
         "committees": 1,
@@ -639439,8 +639439,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 175.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 175.0,
         "total": 175.0,
         "count": 1,
         "committees": 1,
@@ -639452,8 +639452,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 225.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 225.0,
         "total": 225.0,
         "count": 1,
         "committees": 1,
@@ -639465,8 +639465,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 225.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 225.0,
         "total": 225.0,
         "count": 1,
         "committees": 1,
@@ -639478,8 +639478,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 300.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 300.0,
         "total": 300.0,
         "count": 1,
         "committees": 1,
@@ -639491,8 +639491,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 300.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 300.0,
         "total": 300.0,
         "count": 1,
         "committees": 1,
@@ -639504,8 +639504,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 300.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 300.0,
         "total": 300.0,
         "count": 1,
         "committees": 1,
@@ -639517,8 +639517,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 250.0,
         "total": 250.0,
         "count": 1,
         "committees": 1,
@@ -639530,8 +639530,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 175.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 175.0,
         "total": 175.0,
         "count": 1,
         "committees": 1,
@@ -639543,8 +639543,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 300.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 300.0,
         "total": 300.0,
         "count": 1,
         "committees": 1,
@@ -639556,8 +639556,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 225.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 225.0,
         "total": 225.0,
         "count": 1,
         "committees": 1,
@@ -639569,8 +639569,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 225.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 225.0,
         "total": 225.0,
         "count": 1,
         "committees": 1,
@@ -639582,8 +639582,8 @@
         "industries": [
           "real-estate"
         ],
-        "direct": 216786.2,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 216786.2,
         "total": 216786.2,
         "count": 1,
         "committees": 1,
@@ -639595,8 +639595,8 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 45581.4,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 45581.4,
         "total": 45581.4,
         "count": 6,
         "committees": 1,
@@ -639606,8 +639606,8 @@
         "name": "Unknown",
         "type": "Other",
         "industries": [],
-        "direct": 50000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 50000.0,
         "total": 50000.0,
         "count": 1,
         "committees": 1,
@@ -639617,8 +639617,8 @@
         "name": "Illinois Democratic County Chairs' Assoc.",
         "type": "Other",
         "industries": [],
-        "direct": 10000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 10000.0,
         "total": 10000.0,
         "count": 1,
         "committees": 1,
@@ -639628,8 +639628,8 @@
         "name": "Neighbors for Angela Clay",
         "type": "Other",
         "industries": [],
-        "direct": 2500.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 2500.0,
         "total": 2500.0,
         "count": 1,
         "committees": 1,
@@ -639639,8 +639639,8 @@
         "name": "TrueNorth Travel Solutions LLC",
         "type": "Other",
         "industries": [],
-        "direct": 6250.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 6250.0,
         "total": 6250.0,
         "count": 1,
         "committees": 1,
@@ -639650,8 +639650,8 @@
         "name": "Mary Beth Canty for Illinois",
         "type": "Other",
         "industries": [],
-        "direct": 30000.0,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 30000.0,
         "total": 30000.0,
         "count": 1,
         "committees": 1,
@@ -639661,8 +639661,8 @@
         "name": "SWATware LLC",
         "type": "Other",
         "industries": [],
-        "direct": 2045.98,
-        "independent": 0.0,
+        "direct": 0.0,
+        "independent": 2045.98,
         "total": 2045.98,
         "count": 1,
         "committees": 1,
