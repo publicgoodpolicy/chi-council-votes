@@ -130,32 +130,46 @@ _SUFFIX={'jr','sr','ii','iii','iv'}
 def _fold(s): return unicodedata.normalize('NFKD',(s or '')).encode('ascii','ignore').decode()
 def _foldnorm(s): return norm(_fold(s))
 def _mtoks(s): return [t for t in _foldnorm(s).split() if t not in _SUFFIX and len(t)>1]
+# P1-E (PS-140): a school-board candidacy is an IE target only for spending dated inside its
+# election's window. The HALT-P1-B guard this replaces kept every 2024 school-board candidacy
+# out of the index, so 2024-dated IE on a returner landed on the 2026 candidacy and IE on a
+# 2024-only candidate matched nothing (the numbers audit's W7: 110 rows / $1,613,335.66 and
+# 87 rows / $1,425,962.99 at the 2026-09-13 vintage). With every candidacy indexed, the
+# window is what keeps a returner's two candidacies from colliding: a row's date admits one
+# election, so the cross-election collision never forms (same-election ones resolve as before).
+# Other offices carry no window and stay eligible for every row, as today (PS-140).
+def _sb_windows():
+    # {election_id: (start, end)} from election-windows.json, through build_rollups' fail-loud
+    # reader (D-19 / PS-109): a missing window is an error, never an empty filter.
+    return {f"{w['id']}-school-board": (w['start'], w['end'])
+            for w in build_rollups.load_windows().get('school_board', [])}
+def _eligible(entries, date):
+    # A school-board entry is eligible only when `date` falls inside its window (a null start or
+    # end is open-ended, as election-windows.json allows); an entry with no window (any other
+    # office) is always eligible. date=None disables the filter: ingest() uses it only to REPORT.
+    if date is None: return list(entries)
+    return [e for e in entries if e.get('win') is None or ((e['win'][0] is None or e['win'][0] <= date) and (e['win'][1] is None or date <= e['win'][1]))]
 def build_target_index(d):
     races_by_id={r['id']:r for r in d.get('races',[])}
-    by_committee={}; by_name=defaultdict(list); by_folded=defaultdict(list); by_surname=defaultdict(list)
+    sbwin=_sb_windows()
+    by_committee=defaultdict(list); by_name=defaultdict(list); by_folded=defaultdict(list); by_surname=defaultdict(list)
     for cand in d.get('candidates',[]):
         r=races_by_id.get(cand.get('race_id'),{})
-        # HALT-P1-B SCOPE GUARD (ratified deviation from "IE code untouched"): the IE
-        # target index resolves against the CURRENT elections only. The 2024 school-board
-        # backfill candidacies are excluded until P1-E wires 2024-IE routing deliberately.
-        # Without this, authoring the 2024 registry silently re-routes/unmatches live 2026
-        # IE targets -- the dormant same-name district-collision branch (_resolve) activates
-        # (e.g. the 29 Carlos Rivas surname_plus_given rows go unmatched, cohort-B names
-        # newly match). Gate 4.5.4 IE byte-identity (295/29/4, 328 rows, $2,934,615.20) IS
-        # the dormancy proof. SATISFACTION CONDITION: removing this guard is P1-E's FIRST
-        # act, cross-referenced with the §8.1 corroboration-fragility ledger entry.
-        # (Reads the stamped candidate election_id one-hop — HALT-F5-SEED / SCOPE-PIPE.)
-        if cand.get('election_id')=='2024-school-board':
-            continue
         w=r.get('ward'); ward=int(w) if w not in (None,'') else None
         mt=_mtoks(cand.get('name'))
+        is_sb=(r.get('office') or '').startswith('school_board')
         entry={'candidate_id':cand.get('id'),'race_id':cand.get('race_id'),
                'office':r.get('office'),'ward':ward,'district':r.get('district'),
                'committee_id':cand.get('committee_id'),
-               'surname':(mt[-1] if mt else None),'given':set(mt[:-1])}
+               'surname':(mt[-1] if mt else None),'given':set(mt[:-1]),
+               'win':(sbwin.get(cand.get('election_id')) if is_sb else None)}
+        if is_sb and entry['win'] is None:
+            raise SystemExit(f"FATAL [PS-140] school-board candidacy {cand.get('id')!r} carries "
+                             f"election_id {cand.get('election_id')!r}, which has no window in "
+                             f"election-windows.json; refusing to index it without one")
         nm=norm(cand.get('name'))
         if nm: by_name[nm].append(entry)
-        if cand.get('committee_id'): by_committee[str(cand['committee_id'])]=entry
+        if cand.get('committee_id'): by_committee[str(cand['committee_id'])].append(entry)
         # SCOPE (HALT-3b Option A): the robust rungs (accent-fold + surname
         # corroboration + multi-name guard) are indexed ONLY for school_board targets,
         # so ward/mayor keep exact-only (Rung 0) = committed behavior. DEFERRED root
@@ -190,29 +204,31 @@ def _resolve(hits,office,cand,method):
         dd=[e for e in hits if _district_key(e.get('district'))==dk]
         if len(dd)==1: return _tgt(dd[0],method,True)
     return _tgt(hits[0],'name_fallback',True)
-def match_target_registry(row,by_committee,by_name,by_folded,by_surname):
+def match_target_registry(row,by_committee,by_name,by_folded,by_surname,date=None):
+    # PS-140: every rung sees only the entries eligible for the row's date (_eligible).
     F=FIELD_MAP['exp']
     # 0) defensive committee-id (SBE exp rows carry only the SPENDER id today)
     tcid=row.get('CandidateID') or row.get('TargetCommitteeID')
     if tcid and str(tcid) in by_committee:
-        return _tgt(by_committee[str(tcid)],'exact',False)
+        ce=_eligible(by_committee[str(tcid)],date)
+        if len(ce)==1: return _tgt(ce[0],'exact',False)
     cand=row.get(F['candidate']); office=row.get(F['office'])
     if not norm(cand): return None
     # Rung 0 — exact normalized full name (identity-grade)
-    hits=by_name.get(norm(cand))
+    hits=_eligible(by_name.get(norm(cand),[]),date)
     if hits: return _resolve(hits,office,cand,'exact')
     # Rung 1 — equal after accent-folding (differed only by accents; identity-grade)
-    fhits=by_folded.get(_foldnorm(cand))
+    fhits=_eligible(by_folded.get(_foldnorm(cand),[]),date)
     if fhits: return _resolve(fhits,office,cand,'accent_fold_exact')
     # MULTI-NAME GUARD — a beneficiary field naming >1 DISTINCT registry surname
     # (e.g. "Carlos Rivas, ... Michelle N. Pierre") must NOT single-match: route to
     # review without auto-attributing (return None; reported, not persisted).
     bt=_mtoks(cand)
-    if len({t for t in bt if t in by_surname})>1: return None
+    if len({t for t in bt if _eligible(by_surname.get(t,[]),date)})>1: return None
     # Rung 2 — surname + >=1 corroborating token (a given-name token OR Office/ward).
     # Surname-alone is rejected; no fuzzy / edit-distance.
     bsur=bt[-1] if bt else None; bgiven=set(bt[:-1])
-    cohort=by_surname.get(bsur,[]) if bsur else []
+    cohort=_eligible(by_surname.get(bsur,[]),date) if bsur else []
     if not cohort: return None
     g=[e for e in cohort if e['given'] & bgiven]
     if len(g)==1: return _tgt(g[0],'surname_plus_given',True)
@@ -228,6 +244,7 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
     election_mode=bool(d.get('races')) and bool(d.get('candidates'))
     if election_mode:
         by_committee,by_name,by_folded,by_surname=build_target_index(d)
+        sb_races={r['id'] for r in d.get('races',[]) if (r.get('office') or '').startswith('school_board')}
     else:
         alders=build_matcher(comms)
     # precomputed indexes (built once)
@@ -264,7 +281,7 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
         return did
 
     F=FIELD_MAP['exp']; seen={}; raw=0; matched=0; dups=0; unmatched=0; spenders={}; cand_spender_skipped=0
-    method_counts=defaultdict(int); review_n=0
+    method_counts=defaultdict(int); review_n=0; sb_outside=0; sb_outside_amt=0.0
     ies=[]
     for i,row in enumerate(read_tsv(exp_path)):
         if progress and i%500000==0 and i: sys.stderr.write(f'  ..exp {i:,}\n')
@@ -273,7 +290,14 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
         if not (sup or opp): continue
         raw+=1
         if election_mode:
-            tgt=match_target_registry(row,by_committee,by_name,by_folded,by_surname)
+            _date=(row.get(F['date']) or '')[:10]
+            tgt=match_target_registry(row,by_committee,by_name,by_folded,by_surname,date=_date)
+            if tgt is None:
+                # PS-140's report: a row that matches a school-board candidacy only with the window
+                # lifted stays unmatched and is COUNTED (here, before de-duplication and the skip).
+                t2=match_target_registry(row,by_committee,by_name,by_folded,by_surname,date=None)
+                if t2 and t2.get('target_race_id') in sb_races:
+                    sb_outside+=1; sb_outside_amt+=float(row.get(F['amount']) or 0)
         else:
             ward,tcmte=match_target(row.get(F['candidate']),row.get(F['office']),alders)
             tgt=None if ward is None else {'target_committee_id':tcmte,'target_candidate_id':None,
@@ -321,7 +345,8 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
             'matched_by_committee_id':method_counts.get('committee_id',0),
             'matched_by_registry_name':method_counts.get('registry_name',0),
             'matched_by_name_fallback':method_counts.get('name_fallback',0),
-            'flagged_needs_review':review_n})
+            'flagged_needs_review':review_n,
+            'sb_outside_window':sb_outside,'sb_outside_window_total':round(sb_outside_amt,2)})
     if dry_run: return stats
 
     # IDEMPOTENCY: drop any IE-committee receipt rows from a previous run before

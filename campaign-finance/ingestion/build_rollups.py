@@ -257,6 +257,20 @@ def build(d):
             _yr=(_pri['election_id'] or '').split('-')[0]
             if _pr.get('district'):
                 prior_win_label.setdefault(_cur,{})[_yr]=f"{_yr}: {_pr['district']}"
+        # P1-E (PS-140): since 2024 IE rides the 2024 candidacy it was spent on, a prior-election
+        # school-board candidacy labels ITS OWN window with its own race's district -- the same
+        # "YYYY: District N" its linked current candidacy carries for that window above -- so a
+        # line or a member heading reads exactly as before the re-route, whichever candidacy holds it.
+        # "Current" is the latest school-board election the candidacies carry, derived, never a literal.
+        _sb_elections=sorted({c.get('election_id') for c in d.get('candidates',[])
+                              if (c.get('election_id') or '').endswith('-school-board')})
+        _sb_current=_sb_elections[-1] if _sb_elections else None
+        for _c in d.get('candidates',[]):
+            _eid=_c.get('election_id') or ''
+            _r=_races_by_id.get(_c.get('race_id'),{})
+            if _eid.endswith('-school-board') and _eid!=_sb_current and _r.get('district'):
+                _yr=_eid.split('-')[0]
+                prior_win_label.setdefault(_c['id'],{})[_yr]=f"{_yr}: {_r['district']}"
         # Stamp the ONE relational self-funding decision on each candidate-recipient
         # contribution row (election-only; council rows get NO stamp). candidateContributors
         # READS c['is_self'] instead of deciding from donor-global attributes -> render

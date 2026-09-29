@@ -86,5 +86,50 @@ check("(pm) token=12 -> member (president has no district token)", r['target_can
 r=m._resolve(list(pm),'School Board President','Jessica Biggs','exact')
 check("(pm) no token -> name_fallback hits[0]",      r['match_method'],       'name_fallback')
 
+# ---- PS-140: date-routed school-board targets (P1-E) --------------------------
+# A synthetic registry: one person holding a 2024 AND a 2026 school-board candidacy (same name,
+# shared committee id), a 2024-only candidate, and an alderperson. The windows are read from
+# the committed election-windows.json (2024: 2024-01-01..2024-12-31; 2026: 2025-01-01..).
+# PS-128 declaration: MODE E. The registry and the rows are constructed; the windows are live,
+# read from election-windows.json, and the first (E7) case asserts that premise before any
+# case depends on it.
+check("(E7) premise: the school-board windows read are 2024 and 2026 as committed", m._sb_windows(),
+      {'2024-school-board':('2024-01-01','2024-12-31'),'2026-school-board':('2025-01-01','2026-12-31')})
+D={'races':[{'id':'sb-2024-d4','office':'school_board_member','district':'4'},
+            {'id':'sb-d07','office':'school_board_member','district':'District 7'},
+            {'id':'sb-2024-d9','office':'school_board_member','district':'9'},
+            {'id':'ward-05','office':'alderperson','ward':'5'}],
+   'candidates':[{'id':'z-2024','name':'Karen Zaccor','race_id':'sb-2024-d4','election_id':'2024-school-board','committee_id':'777'},
+                 {'id':'z-2026','name':'Karen Zaccor','race_id':'sb-d07','election_id':'2026-school-board','committee_id':'777'},
+                 {'id':'l-2024','name':'Miquel Lewis','race_id':'sb-2024-d9','election_id':'2024-school-board','committee_id':None},
+                 {'id':'inc-ward-05','name':'Some Alder','race_id':'ward-05','election_id':'2027-municipal','committee_id':'555'}]}
+IX=m.build_target_index(D)
+def row(name,office='Board of Education',cid=None):
+    r={'CandidateName':name,'Office':office}
+    if cid: r['TargetCommitteeID']=cid
+    return r
+def tgt(r,date):
+    t=m.match_target_registry(r,*IX,date=date); return t['target_candidate_id'] if t else None
+check("(E7) 2024-dated row on a returner -> the 2024 candidacy", tgt(row('Karen Zaccor'),'2024-10-02'), 'z-2024')
+check("(E7) the same name dated 2026 -> the 2026 candidacy",     tgt(row('Karen Zaccor'),'2026-02-02'), 'z-2026')
+t=m.match_target_registry(row('Karen Zaccor'),*IX,date='2024-10-02')
+check("(E7) one eligible hit is identity-grade: needs_review False", t['needs_review'], False)
+check("(E7) a 2024-only candidate dated 2024 -> matched",         tgt(row('Miquel Lewis'),'2024-10-01'), 'l-2024')
+check("(E7) a 2024-only candidate dated 2026 -> unmatched",       tgt(row('Miquel Lewis'),'2026-01-15'), None)
+check("(E7) a school-board name dated outside every window -> unmatched", tgt(row('Karen Zaccor'),'2023-01-05'), None)
+check("(E7) ...and date=None (the report path only) finds it",   tgt(row('Karen Zaccor'),None) is not None, True)
+check("(E7) the shared committee id resolves by date: 2024",     tgt(row('Nobody','x','777'),'2024-06-01'), 'z-2024')
+check("(E7) the shared committee id resolves by date: 2026",     tgt(row('Nobody','x','777'),'2025-06-01'), 'z-2026')
+check("(E7) an alderperson carries no window: a 2019 row still matches", tgt(row('Some Alder','Alderperson Ward 5'),'2019-02-01'), 'inc-ward-05')
+try:
+    m.build_target_index({'races':[{'id':'sb-x','office':'school_board_member'}],
+                          'candidates':[{'id':'x','name':'A B','race_id':'sb-x','election_id':'2030-school-board'}]})
+    check("(E7) a school-board candidacy with no window is refused", False, True)
+except SystemExit as e:
+    check("(E7) a school-board candidacy with no window is refused", 'PS-140' in str(e), True)
+OPEN=[{'candidate_id':'a','win':(None,'2024-12-31')},{'candidate_id':'b','win':('2025-01-01',None)}]
+check("(E7) a null start or end is open-ended, as election-windows.json allows",
+      [[e['candidate_id'] for e in m._eligible(OPEN,dt)] for dt in ('2019-05-01','2031-05-01')], [['a'],['b']])
+
 print(f"\n{PASS} passed, {FAIL} failed")
 sys.exit(1 if FAIL else 0)

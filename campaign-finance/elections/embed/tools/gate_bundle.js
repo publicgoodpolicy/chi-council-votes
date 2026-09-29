@@ -313,12 +313,14 @@ var FIXTURES = {
       committee: 'ie-committee-26066',  // INCS Action Independent Committee (2024-window spender)
       scope: '2024',                    // SCOPE-UI: its money is 2024-window; drills run in the 2024 scope
       // exact-figure firewall lines (election label + stance + amount), checked precisely:
+      // P1-E (PS-140) re-pin: the 2024 rows ride the 2024 candidacies, which carry the name as
+      // filed in 2024 ('Jason C. Dones', 'Ebony L. DeBerry'); the label and amounts are unchanged.
       exactLines: [
-        { name: 'Jason Dónes', label: '2024: District 3', amount: '$35,153', stance: 'against' },
+        { name: 'Jason C. Dones', label: '2024: District 3', amount: '$35,153', stance: 'against' },
         { name: 'Carlos A. Rivas', label: '2024: District 3', amount: '$234,231', stance: 'for' }
       ],
       // broader coverage: every name must render as a clickable for/against fact:
-      fiveNames: ['Carlos A. Rivas', 'Karen Zaccor', 'Ebony DeBerry', 'Anusha Thotakura', 'Jason Dónes']
+      fiveNames: ['Carlos A. Rivas', 'Karen Zaccor', 'Ebony L. DeBerry', 'Anusha Thotakura', 'Jason C. Dones']
     },
     // INCS All-vs-(This+Last) parity. INCS spent ONLY in 2024, so the 2026 leg is 0
     // by absence (the spender row is correctly missing from the 2026 browse list) —
@@ -327,7 +329,10 @@ var FIXTURES = {
     // Data-layer parity (SCOPE-UI A2): re-expressed off the UI — per-stream, per-election
     // windowed figures must sum to the union computed at the data layer (no UI union
     // surface exists). INCS pins keep the old tripwire: its 2026 leg is 0 by absence.
-    parity: { support: 663608.78, oppose: 401217 },
+    // P1-E (PS-140) re-pin: INCS's 42 of the 87 rows recovered on 2024-only candidacies join its
+    // 2024 figures (support +$1,033,846.57, oppose +$153,107.00), measured on the planner's simulation of the
+    // 2026-09-13 vintage under PS-140 routing; still union == 2024, its 2026 leg 0 by absence.
+    parity: { support: 1697455.35, oppose: 554324 },
     // self-funding negative case (relational is_self, 8f148b2): a funder who self-funds
     // their OWN race must NOT be flagged self in another candidate's drill.
     // ownRace anchor made specific (HALT-Q2R): after Q2, the bare 'Leon' substring also
@@ -353,9 +358,11 @@ var FIXTURES = {
     // HALT-GUARD re-pin: the 2024-scope cross-tab now includes the admitted 2024
     // candidacies' direct money, so charter-schools gains a $19,000 direct segment
     // (rank 2 behind labor-teachers) while its IE figures are UNCHANGED — asserted.
-    industryDrill: { scope: '2024', topBarTotal: 1632335.66,
-      hasDirectSeg: true, ieDirectVal: 19000, ieSupportVal: 1212118.66, ieOpposeVal: 401217,
-      ieIndustry: 'charter-schools', ieRank: 2, ieSpender: 'ie-committee-26066',
+    // P1-E (PS-140) re-pin: the recovered 2024 IE (INCS and Urban Center Action, both tagged
+    // charter-schools) makes charter-schools #1 at $3,058,298.65 total deployed; direct $19,000 unchanged.
+    industryDrill: { scope: '2024', topBarTotal: 3058298.65,
+      hasDirectSeg: true, ieDirectVal: 19000, ieSupportVal: 2484974.65, ieOpposeVal: 554324,
+      ieIndustry: 'charter-schools', ieRank: 1, ieSpender: 'ie-committee-26066',
       directIndustry: 'labor-teachers' },
     // Grouped spend-by-candidate (E-7): President first, district order, within-race ranking, race filter.
     candidateGroups: { firstRaceText: 'President', raceCount: 21, raceCount2024Scope: 21,
@@ -763,9 +770,9 @@ async function assertIndustryDrill(T, ctx, fx) {
     !!bars[d.ieRank - 1].querySelector('.seg.support') && !!bars[d.ieRank - 1].querySelector('.seg.oppose') &&
     (d.hasDirectSeg ? !!bars[d.ieRank - 1].querySelector('.seg.third') : true) &&
     bars[d.ieRank - 1].textContent.indexOf(fmt(d.ieSupportVal)) >= 0 && bars[d.ieRank - 1].textContent.indexOf(fmt(d.ieOpposeVal)) >= 0);
-  // HALT-GUARD stop-condition assert: the IE layer did NOT move — charter-schools'
-  // support/oppose are byte-equal to the pre-removal pins; only direct joined.
-  T.ok('[E6.L1] charter-schools IE figures UNCHANGED (support ' + fmt(d.ieSupportVal) + ' / oppose ' + fmt(d.ieOpposeVal) + ')',
+  // HALT-GUARD's stop-condition assert, re-expressed by P1-E (PS-140): the IE layer DID move, by
+  // ruling, so this now pins charter-schools' support/oppose to the measured post-routing figures.
+  T.ok('[E6.L1] charter-schools IE figures as measured under PS-140 routing (support ' + fmt(d.ieSupportVal) + ' / oppose ' + fmt(d.ieOpposeVal) + ')',
     bars[d.ieRank - 1].textContent.indexOf(fmt(d.ieSupportVal)) >= 0 && bars[d.ieRank - 1].textContent.indexOf(fmt(d.ieOpposeVal)) >= 0);
   T.ok('[E6.L1] all bars: parts sum EXACTLY to total, zero "independent" labels, no per-candidate phrasing (rule a+b, firewall)',
     ctx.root().querySelector('.spend-body').innerHTML.indexOf('Spent to support') < 0 && bars.length > 0 && bars.every(function (b) {

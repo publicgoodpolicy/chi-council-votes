@@ -465,9 +465,9 @@ def ie_slice(sb_members, ed):
             }
         t[stream]["amount"] = round(t[stream]["amount"] + amt, 2)
         t[stream]["count"] += 1
-        # needs_review and match_method are carried VERBATIM from the source. 29 of the 77
-        # rows are flagged, all of them Rung 2 (`surname_plus_given`) name-variant matches
-        # on one member. Carried so a render decision can be made on data rather than on a
+        # needs_review and match_method are carried VERBATIM from the source. In the 2024
+        # bucket 32 of the 77 rows are flagged (P1-E, PS-140), all Rung 2 (`surname_plus_given`)
+        # name-variant matches, on two members. Carried so a render decision rests on data, not a
         # re-derivation; how (or whether) to surface it is B's ruling, not this file's.
         t["rows"].append({
             "date": ie.get("date"), "amount": amt, "stance": stream,

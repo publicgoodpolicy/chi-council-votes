@@ -1768,6 +1768,52 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: FIX-1 register draft E6 rev 1 (`fix1-e6-draft-rev1.md`, sha256 `7356ca413cfa3be629c70e82b0e7fd608eab17a0d85686786c812b2de0ad6cf8`, 2,280 B / 35 L), lines 15–35, transcribed verbatim; ratified by Ishan 2026-09-29 (chat). The rulings it records were made the same day in chat, on two gaps the planner reported while commit C was under review: "1. (a)" (the timeframe line, its date read from the data, with the cycle picker ruled as later work) and "2. (a)" (the true total given). Arises from the numbers audit of 2026-09-29, alongside finding W1. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-138`; `PS-139` occurring 0 times in this file before this commit), never carried.*
 
+### PS-140 — a school-board candidacy is an independent-expenditure target only for spending dated inside its election's window
+
+> **The rule.** The IE ingest indexes every candidacy, 2024 school-board included. A school-board
+> candidacy is eligible as a row's target only when the row is dated inside its election's window
+> as `elections/election-windows.json` states it: 2024 runs 2024-01-01 to 2024-12-31, and 2026 runs
+> 2025-01-01 to 2026-12-31. Every matching rung applies this, the committee-id rung included.
+> Candidacies for other offices carry no window and stay eligible for every row, as today.
+>
+> - A row that names a school-board candidate but is dated outside that candidate's window stays
+>   unmatched. The ingest counts it (`sb_outside_window`, with its dollar total, before
+>   de-duplication) rather than attributing it.
+> - A school-board candidacy whose election has no window stops the build. A missing window is
+>   never an empty filter.
+> - This retires the HALT-P1-B guard in `ingest_ie.py`, which kept every 2024 school-board
+>   candidacy out of the target index.
+>
+> **Review.** Rows the matcher attributes by surname plus a given name stay flagged
+> `needs_review`, as today. They are carried, not held back, and listed for review when the
+> lane that re-routes them stops for approval.
+>
+> **What this does not change.** PS-90's deferral stands until the display lane (P1-E B) ships
+> independent expenditures on the by-person surface in its own component. INV-PERSON-2 is
+> permanent.
+>
+> **Display, ruled with it.**
+> - A prior-election school-board candidacy's figures are labelled from its own race, in the
+>   form a returner's prior window already uses: **"2024: District 3"**.
+> - 2024 IE renders under the name the 2024 candidacy carries in the registry, so a row filed as
+>   "Jason Dones" reads **Jason C. Dones**, and "Ebony DeBerry" reads **Ebony L. DeBerry**.
+>
+> **Measured basis.** At the 2026-09-13 vintage (P1-E BR carrier; the planner's simulation ran
+> the modified ingest on the same rows):
+> - IE rows go from 364 ($3,499,641.50) to 451 ($4,925,604.49).
+> - 110 rows ($1,613,335.66) dated 2024 move from 2026 candidacies to 2024 ones. 87 rows
+>   ($1,425,962.99) on 2024-only candidates, matched by nothing today, are matched.
+> - 254 rows keep their target, method and review flag. No row matched today goes unmatched. No
+>   changed row touches a candidacy for another office, and no candidacy for another office
+>   shares a name with a school-board candidacy.
+> - 2024 school-board IE: 197 rows, $3,039,298.65 (support $2,484,974.65, oppose $554,324.00),
+>   from INCS Action Independent Committee ($2,251,779.35) and Urban Center Action ($787,519.30).
+> - 100 of the moved or recovered rows ($1,238,165.86) are flagged `needs_review`, in 10 groups.
+>   In the school-board finance artifact's 2024 bucket, the flagged count goes from 29 of 77 rows
+>   to 32.
+
+*Provenance: P1-E register draft E7 rev 1 (`p1e-e7-draft-rev1.md`, sha256 `3f28ba74ad084e3643ecaf3c022da497175b3838f137df95a9f16badaa0276ae`, 3,360 B / 49 L), lines 7–49, transcribed verbatim; ratified by Ishan 2026-09-29 (chat). The routing it records was ruled the same day in chat, on the P1-E BR carrier's measurements (`p1e-br-report.md`): "1. a" (the date-window rule), "2. a" (the flagged rows carried, with a review list at the HALT) and "3. a" (two commits, the data then the display). Arises from the numbers audit of 2026-09-29 (finding W7). Retires the HALT-P1-B guard in `ingest_ie.py`'s target index. Discharges the routing premise of PS-90; PS-90's display obligation passes to P1-E B. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-139`; `PS-140` occurring 0 times in this file before this commit), never carried.*
+
 ---
 
 ## Rulings ratified without an id

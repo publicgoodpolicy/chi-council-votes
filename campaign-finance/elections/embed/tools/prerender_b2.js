@@ -77,18 +77,26 @@ ok('neutral order: DeBerry before Leon', page.indexOf('Ebony DeBerry') < page.in
 // 2026-window rows. The same dollars are pinned at the DATA layer, per window.
 ok('scoped page: Leon renders WITHOUT the 2024-window $620,403 (F-2 pinned)', /Bruce Leon/.test(page) && page.indexOf('$620,403') < 0);
 ok('scoped page: DeBerry 2026-window contributions render ($2,781)', page.indexOf('$2,781') >= 0);
-ok('Leon 2024-window figures intact at the data layer ($620,403 / self $620,025 / third $378 / ieS $24,766)',
-  (function () { var f = D.candidateFigures(index, 'leon-sb-d03', null, W24);
+// P1-E (PS-140) re-expression: the 2024-window IE now rides the 2024 candidacy it was spent on
+// (leon-sb-2024-d2). The direct money stays on the committee's 2026 candidacy, where the
+// on_current_record receipts are booked; the 2026 candidacy's 2024-window IE is now ZERO, and
+// that zero is asserted, so the move itself is pinned rather than inferred.
+ok('Leon 2024-window figures intact at the data layer ($620,403 / self $620,025 / third $378 on leon-sb-d03; ieS $24,766 on leon-sb-2024-d2, $0 left on leon-sb-d03)',
+  (function () { var f = D.candidateFigures(index, 'leon-sb-d03', null, W24), g = D.candidateFigures(index, 'leon-sb-2024-d2', null, W24);
     return Math.round(f.contributions.total) === 620403 && Math.round(f.contributions.selfFunded) === 620025 &&
-           Math.round(f.contributions.thirdParty) === 378 && Math.round(f.independentSupport) === 24766; })());
+           Math.round(f.contributions.thirdParty) === 378 && f.independentSupport === 0 &&
+           Math.round(g.independentSupport) === 24766; })());
 // The support half was PORTED from smoke_b1.js at SBE-RERUN-1 G — a THIRD uncovered
 // subject, found while confirming the other 11 before deleting that file. Opposition was
 // already asserted here; support == 0 was asserted nowhere. An opposed-only candidate
 // whose support silently became non-zero is exactly the kind of firewall leak the
 // separate-streams rule exists to prevent, so the zero is the load-bearing half.
-ok('DeBerry 2024-window IE intact at the data layer (support $0 / opposition $126,078)',
-  D.candidateFigures(index, 'deberry-sb-d03', null, W24).independentSupport === 0 &&
-  Math.round(D.candidateFigures(index, 'deberry-sb-d03', null, W24).independentOpposition) === 126078);
+// P1-E (PS-140) re-expression: DeBerry's 2024 opposition rides deberry-sb-2024-d2; her 2026
+// candidacy carries none of it in the 2024 window any more (asserted).
+ok('DeBerry 2024-window IE intact at the data layer (support $0 / opposition $126,078 on deberry-sb-2024-d2; $0 left on deberry-sb-d03)',
+  D.candidateFigures(index, 'deberry-sb-2024-d2', null, W24).independentSupport === 0 &&
+  Math.round(D.candidateFigures(index, 'deberry-sb-2024-d2', null, W24).independentOpposition) === 126078 &&
+  D.candidateFigures(index, 'deberry-sb-d03', null, W24).independentOpposition === 0);
 ok('three figure bars present', /From contributors/.test(page) && /Independent support/.test(page) && /Independent opposition/.test(page));
 // "Mostly self-funded" is a base-view chip (absent from the toggle DOM); assert the
 // underlying fact at the data layer instead — Leon's self-funding dwarfs his third-party gifts.
@@ -165,7 +173,7 @@ ok('DeBerry contributor lines sum EXACTLY to $537,306', sumLines(debC) === 53730
 ok('Leon contributor list flags a self/loan line', leonC.lines.some(function (l) { return l.isSelf; }));
 ok('contributor list has NO small-dollar aggregate line (every contribution itemized)', leonC.lines.some(function (l) { return l.isAggregate; }) === false && debC.lines.some(function (l) { return l.isAggregate; }) === false);
 
-var debOpp = D.candidateIE(index, 'deberry-sb-d03', 'oppose', null);
+var debOpp = D.candidateIE(index, 'deberry-sb-2024-d2', 'oppose', null);   // P1-E (PS-140): the 2024 candidacy
 ok('DeBerry opposition drill-down totals $126,078 with >=1 spender', Math.round(debOpp.total) === 126078 && debOpp.spenders.length >= 1);
 ok('DeBerry opposition spender surfaces SECOND-HOP funders', debOpp.spenders[0].topFunders.length >= 1 && debOpp.spenders[0].funderTotal > 0);
 console.log('       (lead funders: ' + debOpp.spenders[0].topFunders.map(function (f) { return f.name; }).join(', ') + ')');
@@ -318,7 +326,8 @@ ok('genuinely-unnamed IE (39901) falls back to framed identity, never a bare id'
 console.log('\n=== B3-REVISE-5 assertions (school-board scope + spender guard + Bannon) ===');
 function ieCount(idx) { var n = 0; for (var c in idx.ieByCandidate) n += idx.ieByCandidate[c].support.length + idx.ieByCandidate[c].oppose.length; return n; }
 ok('unscoped index keeps all IEs incl. council (' + ieCount(indexAll) + ' = ' + json.independent_expenditures.length + ')', ieCount(indexAll) === json.independent_expenditures.length);
-ok('school-board scope keeps ONLY school-board IEs (145), drops council (219)', ieCount(index) === 145);
+// P1-E (PS-140) re-pin: 145 + the 87 rows now matched to 2024-only candidacies = 232; council 219, unchanged.
+ok('school-board scope keeps ONLY school-board IEs (232), drops council (219)', ieCount(index) === 232 && ieCount(indexAll) - ieCount(index) === 219);
 var councilTarget = false;
 for (var cc in index.ieByCandidate) { var r5 = index.raceById[(index.candidateById[cc] || {}).race_id] || {}; if (r5.office === 'alderperson' || r5.office === 'mayor') councilTarget = true; }
 ok('no council/municipal IE target survives school-board scope', !councilTarget);
@@ -357,7 +366,7 @@ ok('NO IE committee remains a bare placeholder', Object.keys(json.committees).ev
   var cm = json.committees[k]; return cm.type !== 'independent_expenditure' || !/^IE committee \d+$/.test(cm.committee_name || '');
 }));
 // Tier-2 funder tail expands to ALL funders, each a clickable donorRow.
-var ieDebOpp = D.candidateIE(index, 'deberry-sb-d03', 'oppose', null);
+var ieDebOpp = D.candidateIE(index, 'deberry-sb-2024-d2', 'oppose', null);   // P1-E (PS-140): the 2024 candidacy
 var iePanelHtml = R.iePanel(ieDebOpp, 'Ebony DeBerry', 'tst');
 var totalFunders = ieDebOpp.spenders.reduce(function (s, sp) { return s + sp.funders.length; }, 0);
 var funderRows = (iePanelHtml.match(/class="crow funder-row" type="button" data-funder=/g) || []).length;

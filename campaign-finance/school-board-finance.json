@@ -1,15 +1,15 @@
 {
   "schema_version": 1.4,
-  "generated_at": "2026-09-29T16:30:43Z",
+  "generated_at": "2026-09-29T21:02:52Z",
   "source": "derived: school-board-data.json (bridge) x election-data.json (rollups)",
   "_sync": {
-    "generated_at": "2026-09-29T16:30:43Z",
+    "generated_at": "2026-09-29T21:02:52Z",
     "inputs": {
       "school-board-data.json": {
         "sha256": "45179604794bf9eeb894cc2d1a6c3030741bf509be5765cecb27e4b123e0212b"
       },
       "election-data.json": {
-        "sha256": "a588c8ae726d2525c3f5d6c7d5fb928fdebd591d17b8203d78abdf65b002ad4f"
+        "sha256": "efbd55dda358e53eed2de8a1348288e844b78b8e9606879f523487029ba9faf6"
       }
     },
     "convention": "figures are election-labeled and sourced from rollups.by_candidate_election; by_candidate is resolution-only; the four streams are never summed in this artifact"
@@ -2467,7 +2467,7 @@
             "seat": "3B",
             "member_id": "carlos-rivas-jr",
             "name": "Carlos Rivas, Jr.",
-            "candidacy_id": "rivas-sb-d06",
+            "candidacy_id": "rivas-sb-2024-d3",
             "support": {
               "amount": 234230.59,
               "count": 9
@@ -2546,7 +2546,7 @@
             "seat": "8A",
             "member_id": "angel-gutierrez",
             "name": "Angel Gutierrez",
-            "candidacy_id": "gutierrez-sb-d15",
+            "candidacy_id": "gutierrez-sb-2024-d8",
             "support": {
               "amount": 210223.19,
               "count": 10
@@ -2632,7 +2632,7 @@
             "seat": "4A",
             "member_id": "karen-zaccor",
             "name": "Karen Zaccor",
-            "candidacy_id": "zaccor-sb-d07",
+            "candidacy_id": "zaccor-sb-2024-d4",
             "support": {
               "amount": 0.0,
               "count": 0
@@ -2676,7 +2676,7 @@
             "seat": "2A",
             "member_id": "ebony-deberry",
             "name": "Ebony DeBerry",
-            "candidacy_id": "deberry-sb-d03",
+            "candidacy_id": "deberry-sb-2024-d2",
             "support": {
               "amount": 0.0,
               "count": 0
@@ -2690,22 +2690,22 @@
                 "date": "2024-10-15",
                 "amount": 42026.0,
                 "stance": "oppose",
-                "match_method": "exact",
-                "needs_review": false
+                "match_method": "surname_plus_given",
+                "needs_review": true
               },
               {
                 "date": "2024-10-18",
                 "amount": 42026.0,
                 "stance": "oppose",
-                "match_method": "exact",
-                "needs_review": false
+                "match_method": "surname_plus_given",
+                "needs_review": true
               },
               {
                 "date": "2024-10-21",
                 "amount": 42026.0,
                 "stance": "oppose",
-                "match_method": "exact",
-                "needs_review": false
+                "match_method": "surname_plus_given",
+                "needs_review": true
               }
             ]
           },
@@ -2713,7 +2713,7 @@
             "seat": "6A",
             "member_id": "anusha-thotakura",
             "name": "Anusha Thotakura",
-            "candidacy_id": "thotakura-sb-d11",
+            "candidacy_id": "thotakura-sb-2024-d6",
             "support": {
               "amount": 0.0,
               "count": 0
@@ -2736,7 +2736,7 @@
             "seat": "7B",
             "member_id": "yesenia-lopez",
             "name": "Yesenia Lopez",
-            "candidacy_id": "lopez-sb-d14",
+            "candidacy_id": "lopez-sb-2024-d7",
             "support": {
               "amount": 0.0,
               "count": 0
@@ -2777,7 +2777,7 @@
             "seat": "4B",
             "member_id": "ellen-rosenfeld",
             "name": "Ellen Rosenfeld",
-            "candidacy_id": "rosenfeld-sb-d08",
+            "candidacy_id": "rosenfeld-sb-2024-d4",
             "support": {
               "amount": 146025.64,
               "count": 11
@@ -2870,7 +2870,7 @@
             "seat": "8A",
             "member_id": "angel-gutierrez",
             "name": "Angel Gutierrez",
-            "candidacy_id": "gutierrez-sb-d15",
+            "candidacy_id": "gutierrez-sb-2024-d8",
             "support": {
               "amount": 122582.83,
               "count": 18
@@ -3012,7 +3012,7 @@
             "seat": "3B",
             "member_id": "carlos-rivas-jr",
             "name": "Carlos Rivas, Jr.",
-            "candidacy_id": "rivas-sb-d06",
+            "candidacy_id": "rivas-sb-2024-d3",
             "support": {
               "amount": 106509.49,
               "count": 20
@@ -6972,6 +6972,7 @@
             "count": 3
           },
           "candidacies": [
+            "deberry-sb-2024-d2",
             "deberry-sb-d03"
           ]
         },
@@ -9321,6 +9322,7 @@
             "count": 0
           },
           "candidacies": [
+            "rivas-sb-2024-d3",
             "rivas-sb-d06"
           ]
         },
@@ -11266,6 +11268,7 @@
             "count": 4
           },
           "candidacies": [
+            "zaccor-sb-2024-d4",
             "zaccor-sb-d07"
           ]
         },
@@ -13996,6 +13999,7 @@
             "count": 0
           },
           "candidacies": [
+            "rosenfeld-sb-2024-d4",
             "rosenfeld-sb-d08"
           ]
         },
@@ -21815,6 +21819,7 @@
             "count": 1
           },
           "candidacies": [
+            "thotakura-sb-2024-d6",
             "thotakura-sb-d11"
           ]
         },
@@ -27684,6 +27689,7 @@
             "count": 1
           },
           "candidacies": [
+            "lopez-sb-2024-d7",
             "lopez-sb-d14"
           ]
         },
@@ -29247,6 +29253,7 @@
             "count": 0
           },
           "candidacies": [
+            "gutierrez-sb-2024-d8",
             "gutierrez-sb-d15"
           ]
         },
