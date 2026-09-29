@@ -1,15 +1,15 @@
 {
   "schema_version": 1.4,
-  "generated_at": "2026-09-29T04:25:07Z",
+  "generated_at": "2026-09-29T13:40:51Z",
   "source": "derived: school-board-data.json (bridge) x election-data.json (rollups)",
   "_sync": {
-    "generated_at": "2026-09-29T04:25:07Z",
+    "generated_at": "2026-09-29T13:40:51Z",
     "inputs": {
       "school-board-data.json": {
         "sha256": "45179604794bf9eeb894cc2d1a6c3030741bf509be5765cecb27e4b123e0212b"
       },
       "election-data.json": {
-        "sha256": "ecf76a03f19f5597c3f51e3b5fac31670de37581bbedf0bdf8288b8d51f2c725"
+        "sha256": "7022d208780bd0bbfa8b46189ecf326e22541fe31ba4ea6192833e629a6cca41"
       }
     },
     "convention": "figures are election-labeled and sourced from rollups.by_candidate_election; by_candidate is resolution-only; the four streams are never summed in this artifact"
@@ -1290,6 +1290,31 @@
           "donor_id": "chicago-teachers-union-local-1-pac-committee-id-34464",
           "name": "Chicago Teachers Union Local 1 PAC, Committee ID: 34464",
           "role": "related"
+        },
+        {
+          "donor_id": "chicago-teachers-union-local-pac-1",
+          "name": "Chicago Teachers Union Local Pac 1",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-teachers-union-pac-illinois-federation-of-teachers-id-444",
+          "name": "Chicago Teachers Union PAC (Illinois Federation of Teachers), ID: 444",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "ctu-illinois-federation-of-teachers",
+          "name": "CTU (Illinois Federation of Teachers)",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "chicago-teacher-s-union-pac-illinois-federation-of-teachers",
+          "name": "Chicago Teacher's Union PAC (Illinois Federation of Teachers)",
+          "role": "affiliated-pac"
+        },
+        {
+          "donor_id": "ctu-pac-illinois-federation-of-teachers",
+          "name": "CTU PAC (Illinois Federation of Teachers)",
+          "role": "affiliated-pac"
         }
       ]
     },
@@ -3412,14 +3437,14 @@
       ],
       "elections": {
         "2024": {
-          "label": "2024",
+          "label": "Before 2025 (not on the 2024 ballot)",
           "direct": {
-            "amount": 14620.0,
-            "count": 29
+            "amount": 0.0,
+            "count": 0
           },
           "self_funding": {
-            "amount": 70739.82,
-            "count": 71
+            "amount": 1778.66,
+            "count": 14
           },
           "ie_support": {
             "amount": 0.0,
@@ -9155,7 +9180,7 @@
       ],
       "elections": {
         "2024": {
-          "label": "2024",
+          "label": "Before 2025 (not on the 2024 ballot)",
           "direct": {
             "amount": 500.0,
             "count": 1
@@ -19139,7 +19164,8 @@
                 "is_in_kind": true,
                 "in_kind_description": "Field Staff"
               }
-            ]
+            ],
+            "cluster_id": "rollup-477"
           },
           {
             "donor_id": "united-working-families-pac",
@@ -23618,7 +23644,8 @@
                 "is_in_kind": true,
                 "in_kind_description": "Legal services"
               }
-            ]
+            ],
+            "cluster_id": "rollup-477"
           },
           {
             "donor_id": "thotakura-syam",
