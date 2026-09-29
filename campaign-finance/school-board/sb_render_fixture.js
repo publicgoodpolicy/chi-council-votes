@@ -133,6 +133,15 @@ function trySel(v, id, value) {          // drive a select IF it exists; else pa
 function nav(v, view) {
   return fire(v, v.doc.querySelector('[data-view="' + view + '"]'));
 }
+// HALT (iii): the member page's complete record sits behind #ipg-sb-rec-expand, closed
+// by default (ruled 2026-09-28). A surface below that asserts on the member's full vote
+// list opens it first, by a real click; a page with no button passes through unchanged,
+// and an already-open record is never toggled shut.
+function expandRec(v) {
+  var b = v.doc.getElementById('ipg-sb-rec-expand');
+  if (!b || b.textContent.indexOf('Show all') !== 0) return v;
+  return fire(v, b);
+}
 
 /* The five ratified strings, read from the REGISTER rather than retyped here — the
  * entry of record is what the page must match, and a fixture carrying its own copy
@@ -265,7 +274,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   });
   mixed.rollcall.term_votes = VALS.length;
   var v4 = await boot(mixed, 'ok');
-  var sv = pick(v4, subject.seat);
+  var sv = expandRec(pick(v4, subject.seat));
   ok('[C3/4] all four stored values render on one member page',
      ['Yes', 'No', 'Present', 'Not recorded'].every(function (l) { return sv.text.indexOf(l) >= 0; }));
   ok('[C3/4] `-` renders as "Not recorded", in its own pill class',
@@ -1987,7 +1996,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   // nav() explicitly: `g4` was left on the RECORD view by g4rec above, and picking a
   // seat does not change the view — reading the member page off `pick` alone made
   // both assertions below vacuous, which the bite-tests caught.
-  var g4mem = nav(pick(g4, subject.seat), 'member');
+  var g4mem = expandRec(nav(pick(g4, subject.seat), 'member'));
   ok('[G4/ORDER] the member page renders date-descending, not sheet row order',
      g4mem.html.indexOf('Board vote 4') < g4mem.html.indexOf('Board vote 1'));
 
@@ -2014,6 +2023,44 @@ function around(tpl, marker) { return String(tpl).split(marker); }
      g4mem.text.indexOf(CB_EXPECT) >= 0);
   ok('[G4/CASTBY] a vote with no cast-by record carries no attribution and no mark',
      (g4rec.text.match(/who held this seat at the time/g) || []).length === 1);
+
+  // ---- HALT (iii), ruled 2026-09-28: the member page takes the alder tool's shape --
+  // Key votes stand open under the ratified heading; the complete record sits behind one
+  // button, closed by default. The two button labels are the strings Ishan ratified in
+  // chat (register transcription rides the next register-side commit).
+  var countCards = function (v) { return v.html.split('class="ipg-sb-vote"').length - 1; };
+  var kvA = nav(pick(await boot(g4Art({ featured: true }), 'ok'), subject.seat), 'member');
+  var kvBtn = kvA.doc.getElementById('ipg-sb-rec-expand');
+  ok('[SBV3/COLLAPSE] closed by default: the key-votes block holds the one featured vote '
+     + 'and no other vote card renders',
+     kvA.html.indexOf('ipg-sb-keyvotes') >= 0 && countCards(kvA) === 1
+       && kvA.text.indexOf('Board vote 2') >= 0 && kvA.text.indexOf('Board vote 4') < 0,
+     'cards ' + countCards(kvA));
+  ok('[SBV3/COLLAPSE] the closed label is the ruled string, counting the votes shown',
+     !!kvBtn && kvBtn.textContent === 'Show all 4 votes for this member \u2193'
+       && kvBtn.getAttribute('aria-expanded') === 'false',
+     JSON.stringify(kvBtn && kvBtn.textContent));
+  var kvOpen = fire(kvA, kvBtn);
+  var kvBtn2 = kvOpen.doc.getElementById('ipg-sb-rec-expand');
+  var kvTail = kvOpen.html.slice(kvOpen.html.indexOf('id="ipg-sb-rec-expand"'));
+  ok('[SBV3/COLLAPSE] one click opens the complete record under the key votes, '
+     + 'date-descending, and the label becomes the ruled close string',
+     countCards(kvOpen) === 5 && !!kvBtn2 && kvBtn2.textContent === 'Hide full record \u2191'
+       && kvBtn2.getAttribute('aria-expanded') === 'true'
+       && kvTail.indexOf('Board vote 4') >= 0
+       && kvTail.indexOf('Board vote 4') < kvTail.indexOf('Board vote 1'),
+     'cards ' + countCards(kvOpen));
+  var kvShut = fire(kvOpen, kvBtn2);
+  ok('[SBV3/COLLAPSE] a second click closes it again (the bite: the open and closed '
+     + 'renders differ by exactly the four record cards)',
+     countCards(kvShut) === 1 && countCards(kvOpen) - countCards(kvShut) === 4);
+  var KV_EMPTY = (EMBED_HTML.match(/keyVotesEmpty: '([^']+)'/) || [])[1];
+  var kvB = pick(await boot(g4Art({}), 'ok'), subject.seat);
+  ok('[SBV3/COLLAPSE] zero flagged: the block shows its heading and the empty state, '
+     + 'and the button still reaches the complete record',
+     !!KV_EMPTY && kvB.html.indexOf('ipg-sb-keyvotes') >= 0 && kvB.text.indexOf(KV_EMPTY) >= 0
+       && countCards(kvB) === 0 && !!kvB.doc.getElementById('ipg-sb-rec-expand'),
+     JSON.stringify(KV_EMPTY));
 
   // ---- PS-125: the conditional President render ---------------------------
   var g4mx = nav(g4, 'matrix');
@@ -2075,7 +2122,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
       var r = bv.doc.querySelector('[data-board-seat="President"]');
       r.dispatchEvent(new bv.doc.defaultView.MouseEvent('click', { bubbles: true }));
       var app = bv.doc.getElementById('ipg-sb-app');
-      return { doc: bv.doc, html: app.innerHTML, text: app.textContent || '' };
+      return expandRec({ doc: bv.doc, app: app, html: app.innerHTML, text: app.textContent || '' });
     })();
   }
   var presBlank = await presPage({});                          // no recorded position

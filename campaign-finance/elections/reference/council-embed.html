@@ -2537,7 +2537,7 @@ function recTagChips(){
           <button type="button" data-meth-target="meth-finance">Campaign finance</button>
           <button type="button" data-meth-target="meth-donors">Identifying donors</button>
           <button type="button" data-meth-target="meth-ie">Independent expenditures</button>
-          <button type="button" data-meth-target="meth-moneyvotes">Money &amp; votes together</button>
+          ${SHOW_VOTE_FUNDING?'<button type="button" data-meth-target="meth-moneyvotes">Money &amp; votes together</button>':''}
           <button type="button" data-meth-target="meth-ward">Finding your ward</button>
           <button type="button" data-meth-target="meth-current">Keeping data current</button>
           <button type="button" data-meth-target="meth-limits">Limitations</button>
@@ -2609,13 +2609,13 @@ function recTagChips(){
       <p>One category of money flowing into these committees is <strong>not</strong> outside money and <strong>not</strong> spending on a Council race &mdash; it is an organization moving its own money into its own political fund. The clearest example is a union transferring a portion of its members' <strong>dues</strong> into its own affiliated PAC. That transfer capitalizes the PAC; it is the organization filling its own account, not giving to a candidate or spending on an election. Counting these internal transfers as &ldquo;giving&rdquo; would badly overstate what an organization actually directed toward Council politics &mdash; in some cases by tens of millions of dollars. So we identify these dues-and-membership transfers (the filings label them as such) and <strong>exclude them from giving and spending totals.</strong></p>
       <p>We are deliberately narrow about this. We exclude <strong>only</strong> an organization's transfers into its <em>own</em> fund. Money from a genuine third party into an IE committee &mdash; a person or company funding a committee they do not control &mdash; is <strong>kept</strong>, because that is real outside money and exactly what should be shown. And consistent with everything else here, <strong>nothing is deleted.</strong> A dues transfer is reclassified, not removed: the underlying record stays in the data, individually traceable to its SBE filing and labeled for what it is. You can always see that the money exists and where it went &mdash; we have simply declined to count an organization's self-funding as political giving.</p>
 
-      <h3 class="ipg-meth-h" id="meth-moneyvotes">Showing money and votes together</h3>
+      ${SHOW_VOTE_FUNDING?`<h3 class="ipg-meth-h" id="meth-moneyvotes">Showing money and votes together</h3>
       <p>Some views let you see how members who voted a given way on a measure were funded &mdash; for instance, the contribution patterns among members who voted Yes versus No on a measure.</p>
       <p>Two safeguards apply to every such view:</p>
       <ul>
         <li><strong>The association-is-not-causation caveat is shown alongside it.</strong> These views describe a correlation in the data, nothing more.</li>
         <li><strong>We suppress comparisons that are too thin to be meaningful.</strong> We only display a funding-versus-voting comparison when there are <strong>at least five members with real campaign-finance data on each side of the vote.</strong> Below that threshold, a &ldquo;pattern&rdquo; would be noise, so we don't show one.</li>
-      </ul>
+      </ul>`:''}
 
       <h3 class="ipg-meth-h" id="meth-ward">Finding your ward (address lookup)</h3>
       <p>The address lookup is <strong>best-effort</strong>. It uses <strong>U.S. Census geocoding</strong> to turn an address into coordinates and <strong>City of Chicago ward boundaries</strong> to map those coordinates to a ward. Geocoding can misplace some addresses, and ward boundaries change with redistricting. If a result looks wrong, verify your ward directly at <strong>chicago.gov</strong>. Nothing you type into the lookup is stored.</p>
@@ -2691,7 +2691,7 @@ function recordView(){
         +'<div>'+relEsc(vm.desc||vm.description||'\u2014')+'</div></div>';});
     return h;
   }
-
+  const SHOW_VOTE_FUNDING = false;   // HALT (iii), ruled 2026-09-28: the "Funding patterns by vote" cards (rankingView) and their methodology subsection are hidden, not removed; true restores both.
   function rankingView(){
     let h='<div class="ipg-controls"><div class="ipg-field" style="max-width:340px">'
       +'<label>Compare the Council by issue area</label><select id="ipg-rank-sel">';
@@ -2706,7 +2706,7 @@ function recordView(){
     // No voters. Only renders cards where ≥5 alders in
     // each position have real (not demo) campaign-finance data.
     // -----------------------------------------------------------
-    if(state.cf && state.cf.committees){
+    if(SHOW_VOTE_FUNDING && state.cf && state.cf.committees){
       // Count how many alders have real CF data
       const aldersWithReal = new Set();
       Object.values(state.cf.committees).forEach(cm => {

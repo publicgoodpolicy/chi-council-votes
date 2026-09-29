@@ -232,6 +232,8 @@ const IPG_SB_FEEDBACK = {
 #ipg-sb-app .ipg-sb-keyvotes{margin-bottom:18px}
 #ipg-sb-app .ipg-sb-keyvotes h4{font-size:13px;font-weight:700;letter-spacing:.05em;
   text-transform:uppercase;color:var(--ink-mid);margin:0 0 8px}
+/* HALT (iii): the member page's full-record button, the council's .rec-expand form. */
+#ipg-sb-app .ipg-sb-rec-expand{margin:6px 0 4px;font-size:13.5px;font-weight:600;color:var(--sage);background:none;border:none;cursor:pointer;text-decoration:underline;font-family:'Poppins',sans-serif;padding:0}
 #ipg-sb-app .ipg-sb-outcome-head{font-size:13px;font-weight:700;letter-spacing:.05em;
   text-transform:uppercase;color:var(--ink-mid);margin:18px 0 8px}
 #ipg-sb-app .ipg-sb-rec-right{display:flex;align-items:center;gap:14px;justify-self:end}
@@ -569,7 +571,7 @@ const IPG_SB_FEEDBACK = {
   // degrade only the finance section, never the voting record, so finStatus is its
   // own state and the votes views never consult it.
   var F = null;
-  var state = { view:'member', seat:null, tag:'All', recQuery:'', recTag:'All',
+  var state = { view:'member', seat:null, tag:'All', memberRecOpen:false, recQuery:'', recTag:'All',
                 status:'loading', error:null,
                 finStatus:'loading', finError:null,
                 finElection:null, finShowAllDonors:false, spendElection:null,
@@ -1247,9 +1249,13 @@ const IPG_SB_FEEDBACK = {
     if(!shown.length){
       h += '<div class="ipg-sb-empty">No votes carry the tag &ldquo;'+esc(state.tag)+'&rdquo;.</div>';
     } else {
-      shown.forEach(function(vm){
+      // HALT (iii), ruled 2026-09-28 — the alder tool's shape. The member's key votes
+      // stand open under the ratified heading; the complete record (date-descending,
+      // key votes still starred) sits behind one button, closed by default. The tag
+      // chips above filter both parts.
+      var card = function(vm){
         var cbName = castByFor(vm.vote_id, row.seat);
-        h += '<div class="ipg-sb-vote">'
+        return '<div class="ipg-sb-vote">'
            + '<h4>'+esc(vm.full || vm.code)+' '+featuredMark(vm)+' '
            + pillAt(row.seat, seatPosition(vm, row.seat))+castByMark(cbName)+'</h4>'
            + castByNote(cbName)
@@ -1257,7 +1263,17 @@ const IPG_SB_FEEDBACK = {
            + (vm.desc ? '<p>'+esc(vm.desc)+'</p>' : '')
            + (vm.source_url ? '<div class="ipg-sb-when"><a href="'+esc(vm.source_url)+'" target="_blank" rel="noopener">Source</a></div>' : '')
            + '</div>';
-      });
+      };
+      var keyShown = shown.filter(isFeatured);
+      h += '<div class="ipg-sb-keyvotes"><h4>'+esc(SPF.keyVotesHeading)+'</h4>';
+      if(keyShown.length) keyShown.forEach(function(vm){ h += card(vm); });
+      else if(!featuredVotes().length) h += '<div class="ipg-sb-empty">'+esc(SPF.keyVotesEmpty)+'</div>';
+      else h += '<div class="ipg-sb-empty">No votes carry the tag &ldquo;'+esc(state.tag)+'&rdquo;.</div>';
+      h += '</div>';
+      h += '<button type="button" class="ipg-sb-rec-expand" id="ipg-sb-rec-expand" aria-expanded="'+(state.memberRecOpen?'true':'false')+'">'
+         + (state.memberRecOpen ? 'Hide full record \u2191' : 'Show all '+shown.length+' votes for this member \u2193')
+         + '</button>';
+      if(state.memberRecOpen) shown.forEach(function(vm){ h += card(vm); });
     }
     // R-BR2: the footer sits at the foot of the VOTE surface — after the vote
     // list, BEFORE the finance section. Below the finance figures it would read
@@ -2759,6 +2775,8 @@ const IPG_SB_FEEDBACK = {
     if(sel) sel.onchange = function(){ state.seat = sel.value; state.tag='All'; render(); };
     app.querySelectorAll('[data-tag]').forEach(function(b){
       b.onclick = function(){ state.tag = b.getAttribute('data-tag'); render(); }; });
+    var rx = document.getElementById('ipg-sb-rec-expand');
+    if(rx) rx.onclick = function(){ state.memberRecOpen = !state.memberRecOpen; render(); };
     app.querySelectorAll('[data-rectag]').forEach(function(b){
       b.onclick = function(){ state.recTag = b.getAttribute('data-rectag'); render(); }; });
     var q = document.getElementById('ipg-sb-rec-q');
