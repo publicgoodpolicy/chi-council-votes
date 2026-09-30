@@ -1814,6 +1814,49 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: P1-E register draft E7 rev 1 (`p1e-e7-draft-rev1.md`, sha256 `3f28ba74ad084e3643ecaf3c022da497175b3838f137df95a9f16badaa0276ae`, 3,360 B / 49 L), lines 7–49, transcribed verbatim; ratified by Ishan 2026-09-29 (chat). The routing it records was ruled the same day in chat, on the P1-E BR carrier's measurements (`p1e-br-report.md`): "1. a" (the date-window rule), "2. a" (the flagged rows carried, with a review list at the HALT) and "3. a" (two commits, the data then the display). Arises from the numbers audit of 2026-09-29 (finding W7). Retires the HALT-P1-B guard in `ingest_ie.py`'s target index. Discharges the routing premise of PS-90; PS-90's display obligation passes to P1-E B. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-139`; `PS-140` occurring 0 times in this file before this commit), never carried.*
 
+### PS-141 — the 17 2024 cards show their 2024 money, and the person surface shows independent expenditures in their own section
+
+> **The 2024 cards (M3).** A 2024 candidacy whose receipts were filed on the committee its
+> person owns for a later election (`finance_facet: on_current_record`) renders a full card:
+> - contributions are that committee's receipts dated inside the 2024 window;
+> - independent support and opposition are the candidacy's own rows in that window (PS-140
+>   put them there);
+> - under the committee line: **"These 2024 contributions were filed on this committee, which
+>   the candidate also uses for 2026."** Both years render from the data;
+> - the person affordance (string 13) stays on the card.
+>
+> The owning candidacy is found by id through `by_person` (PS-92), never by name. The
+> committee's receipts from before the 2024 window are stated once, on the committee's own
+> card (FIX-1 E1), not repeated here. A 2024 race whose candidates filed this way is no longer
+> marked "soon". The spend tab and every other money surface keep their per-candidacy keying,
+> so no figure appears twice on one surface.
+>
+> **The person surface (PS-90's display, shipped).** Independent expenditures render in their
+> own section below the member sections, headed **"Independent expenditures"**, with the note:
+> **"Spending by outside groups for or against this candidate, reported by those groups and not
+> coordinated with the campaign. Shown by election, never added to contributions or across
+> elections."**
+> - One row per member election, in the member-section heading form. Support and opposition
+>   stand side by side, and each spender is a committee row that opens its profile.
+> - A row with none reads **"No independent expenditures reported for this election."**
+> - There is no total across elections. IE never enters a member section, the career total, a
+>   shared denominator or a stacked bar.
+> - The modal carries no window attribute (PS-89), so a committee opened from a row shows its
+>   full profile. String 6 stays verbatim.
+> - The deferral-scoped `[PERSON/PS-90]` check is superseded, as PS-90 provided, by
+>   `[PERSON/IE-FW]` and `[PERSON/IE-GRAIN]`. INV-PERSON-2 is permanent and unchanged.
+>
+> **Measured basis** (at `c761a5ab…`, the 2026-09-13 vintage):
+> - The 17 cards carry $3,940,949 of 2024 contributions and $1,613,336 of independent
+>   spending (support $1,212,119, opposition $401,217). No card showed it before.
+> - Every other card renders byte-identically: the 21 2026 school-board races, all 50
+>   city-council races and the mayor race. Only the ten 2024 races change.
+> - 2024 Districts 3 and 5 were marked "soon"; neither is now.
+> - On the person surface, 15 of the 18 linked people carry independent spending, in 19
+>   non-zero election rows.
+
+*Provenance: P1-E register draft E8 rev 1 (`p1e-e8-draft-rev1.md`, sha256 `ddc7fdd5941480a351c221413dc32234439fe144feefa1626eea4dd964c241a7`, 3,334 B / 46 L), lines 7–46, transcribed verbatim; ratified by Ishan 2026-09-30 (chat). The rulings it records were made the same day in chat, on the planner's measurement of the live data after P1-E A: "1. a" (full 2024 figures on the 17 cards, the numbers audit's M3), "2. a" (one outside-spending section on the person surface, a row per election, no cross-election total) and "3. a" (one display commit, P1-E B). Ships the display PS-90 deferred, in PS-90's banked form; supersedes the deferral-scoped `[PERSON/PS-90]` check as PS-90 provided. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-140`; `PS-141` occurring 0 times in this file before this commit), never carried.*
+
 ---
 
 ## Rulings ratified without an id

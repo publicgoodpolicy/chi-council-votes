@@ -779,9 +779,31 @@
   }
 
   // ---- view models ----
+  // P1-E B (M3, PS-141): a candidacy whose finance_facet is on_current_record owns no
+  // committee; its election's receipts were filed on the committee its person owns for a
+  // later election. That owning candidacy is its FUNDING candidacy: the race card reads the
+  // committee's receipts through it, windowed to THIS race's election, and reads IE from
+  // the candidacy itself. Resolved by id through by_person (PS-92), never by name. A
+  // candidacy with its own committee funds itself; anything else has no funding candidacy.
+  function fundingCandidacy(index, c) {
+    if (!c) return null;
+    if (c.committee_id) return c.id;
+    if (c.finance_facet !== 'on_current_record') return null;
+    var bp = (index.rollups && index.rollups.by_person) || {};
+    for (var pid in bp) {
+      if (!bp.hasOwnProperty(pid)) continue;
+      var ms = bp[pid].members || [], mine = false, owner = null;
+      for (var i = 0; i < ms.length; i++) {
+        if (ms[i].candidacy_id === c.id) mine = true;
+        if (ms[i].owns_committee) owner = ms[i].candidacy_id;
+      }
+      if (mine) return (owner && index.committeeKeyByCandidate[owner]) ? owner : null;
+    }
+    return null;
+  }
   function hasAnyFinance(index, raceId) {
     var cs = index.candidatesByRace[raceId] || [];
-    for (var i = 0; i < cs.length; i++) if (cs[i].committee_id) return true;
+    for (var i = 0; i < cs.length; i++) if (fundingCandidacy(index, cs[i])) return true;
     return false;
   }
 
@@ -838,11 +860,17 @@
       // container (modals opened from cards inherit it — Gate G, extended to base path).
       win: raceWin(race),
       candidates: active.map(function (c) {
-        var hasFinance = !!c.committee_id;
+        // M3 (PS-141): fid is the candidacy whose committee carries this card's receipts —
+        // c itself, or (on_current_record) the person's owning candidacy. borrowed marks the
+        // second case: contributions read through fid, IE through c, both in THIS race's window.
+        var fid = fundingCandidacy(index, c), borrowed = !!fid && fid !== c.id;
+        var hasFinance = !!fid;
         // A1+B1 (PS-79 / HALT-F2): the race's own election window scopes every figure
         // below. Resolution (and B1's loud failure) live INSIDE this hasFinance guard:
         // a window-less race with no money still renders its pending/coming-soon state.
         var win = hasFinance ? requireWin(race) : null;
+        var fOwn = hasFinance ? candidateFigures(index, c.id, cycle, win) : null;
+        var fFund = borrowed ? candidateFigures(index, fid, cycle, win) : fOwn;
         return {
           id: c.id, slug: candidateSlug(c, race), name: c.name,
           incumbent: !!c.incumbent, status: c.status,
@@ -854,12 +882,27 @@
           // SCOPE-UI (F-1 ruled): the prior-run carriage re-homed verbatim from the
           // retired toggle path — label + qualifier TEXT only, never dollars.
           priorElection: priorByCandidate(index)[c.id] || null,
-          committee: hasFinance ? committeeMeta(index, c.id) : null,
-          figures: hasFinance ? candidateFigures(index, c.id, cycle, win) : null,
-          contributors: hasFinance ? withInKind(index, c.id, win, candidateContributors(index, c.id, cycle, win)) : null,
+          fundingId: fid,
+          committee: hasFinance ? committeeMeta(index, fid) : null,
+          // M3: on a borrowed card, this race's year and the owning candidacy's, so render can
+          // say where the receipts were filed; null on a card whose committee is its own.
+          filedNote: borrowed ? {
+            year: (/^(\d{4})-/.exec(race.election_id || '') || [])[1] || '',
+            under: (/^(\d{4})-/.exec((index.candidateById[fid] || {}).election_id || '') || [])[1] || ''
+          } : null,
+          // The three figures stay SEPARATE: contributions from the funding candidacy's
+          // committee, IE from this candidacy's own rows — never summed (FW-1).
+          figures: hasFinance ? {
+            contributions: fFund.contributions,
+            independentSupport: fOwn.independentSupport, independentSupportCount: fOwn.independentSupportCount,
+            independentOpposition: fOwn.independentOpposition, independentOppositionCount: fOwn.independentOppositionCount
+          } : null,
+          contributors: hasFinance ? withInKind(index, fid, win, candidateContributors(index, fid, cycle, win)) : null,
           ieSupportDetail: hasFinance ? candidateIE(index, c.id, 'support', cycle, win) : null,
           ieOpposeDetail: hasFinance ? candidateIE(index, c.id, 'oppose', cycle, win) : null,
-          preWindow: hasFinance ? preWindowReceipts(index, c.id, race) : null   // FIX-1 (E1)
+          // FIX-1 (E1): stated once, on the committee's OWN card; a borrowed card leaves it
+          // there rather than restating the same pre-window receipts under a second race.
+          preWindow: (hasFinance && !borrowed) ? preWindowReceipts(index, c.id, race) : null
         };
       })
     };
@@ -930,10 +973,11 @@
           id: r.id, label: r.label, status: r.status, district: r.district || null, ward: r.ward || null,
           candidates: (index.candidatesByRace[r.id] || []).slice().sort(byNameNeutral).map(function (c) {
             return {
-              id: c.id, name: c.name, incumbent: !!c.incumbent, hasFinance: !!c.committee_id,
+              id: c.id, name: c.name, incumbent: !!c.incumbent, hasFinance: !!fundingCandidacy(index, c),
               // A1 (PS-79): same election-window rule as raceView — no per-candidate
               // figure leaves this file unwindowed, even on the exported browse path.
-              contributions: c.committee_id ? candidateFigures(index, c.id, cycle, requireWin(r)).contributions.total : null
+              // M3 (PS-141): the same funding candidacy raceView reads.
+              contributions: fundingCandidacy(index, c) ? candidateFigures(index, fundingCandidacy(index, c), cycle, requireWin(r)).contributions.total : null
             };
           })
         };
@@ -979,10 +1023,12 @@
   // that member's OWN election (PS-79/A1) — computed from the owning candidacy's rows,
   // independent of by_person's money values (PS-82: the gate's D14 equality check must not
   // read its subject). The career total is Σ member own-window figures (D14).
-  // NO IE value enters this view-model. This exclusion is DEFERRAL-SCOPED (PS-90): the lane
-  // that ships IE display after P1-E re-routes supersedes it consciously, and its removal is
-  // NOT a firewall regression — the permanent invariant is INV-PERSON-2 at the artifact
-  // layer, which this comment is expressly not.
+  // IE (PS-90, shipped by P1-E B under PS-141): the deferral-scoped exclusion is superseded
+  // consciously. IE rides its OWN array (ieByElection), never a member section: no IE value
+  // enters `sections`, `careerTotal` or any shared figure. Each row is one member election,
+  // read from that member candidacy's own IE rows (P1-E A routed them there) in that
+  // election's window; support and opposition stay separate and are never summed across
+  // elections. The permanent invariant remains INV-PERSON-2 at the artifact layer.
   function personView(index, ref) {
     var r = resolvePersonRef(index, ref);
     if (!r) return null;
@@ -1029,9 +1075,26 @@
         if (!inAny) hasOutOfWindow = true;
       }
     }
+    var ieByElection = [];
+    for (var q = 0; q < membs.length; q++) {
+      var qc = index.candidateById[membs[q].candidacy_id] || {}, qr = index.raceById[qc.race_id] || {};
+      // B1 (PS-79) as the member sections apply it: a candidacy that carries IE fails loud
+      // without a window, never renders an unwindowed IE total; one with none renders zeros.
+      var qie = index.ieByCandidate[membs[q].candidacy_id] || { support: [], oppose: [] };
+      var qw = (qie.support.length || qie.oppose.length) ? requireWin(qr) : raceWin(qr);
+      ieByElection.push({
+        candidacyId: membs[q].candidacy_id, electionId: membs[q].election_id,
+        year: (/^(\d{4})-/.exec(membs[q].election_id || '') || [])[1] || '',
+        officeType: officeType(qr.office), raceLabel: qr.district || raceCode(qr),
+        win: qw,
+        support: candidateIE(index, membs[q].candidacy_id, 'support', null, qw),
+        oppose: candidateIE(index, membs[q].candidacy_id, 'oppose', null, qw)
+      });
+    }
     return { pid: r.pid, displayName: r.displayName, sections: sections,
       careerTotal: career, hasOutOfWindow: hasOutOfWindow,
-      committee: ownerId ? committeeMeta(index, ownerId) : null };
+      committee: ownerId ? committeeMeta(index, ownerId) : null,
+      ieByElection: ieByElection };
   }
 
   // ---- Election Spend subtabs (office-scoped) ----
@@ -1434,7 +1497,7 @@
     industryTotals: industryTotals, industriesByCandidate: industriesByCandidate,
     flagTotals: flagTotals, spendSubtab: spendSubtab,
     isSelfFunded: isSelfFunded,
-    resolvePersonRef: resolvePersonRef, personView: personView,
+    resolvePersonRef: resolvePersonRef, personView: personView, fundingCandidacy: fundingCandidacy,
     kebab: kebab, raceSlug: raceSlug, candidateSlug: candidateSlug, raceCode: raceCode,
     selectorOptions: selectorOptions,
     viewModels: { raceBrowse: raceBrowse, raceView: raceView, officeRaces: officeRaces }

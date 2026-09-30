@@ -444,7 +444,17 @@ var FIXTURES = {
       // williams-sb-2024-d9: the 2024 window's fixed start puts his committee's
       // 2022 receipts ($213,831.35, 38 rows) outside every member window.
       outOfWindowIds: ['bannon-sb-d01', 'pope-sb-d04', 'hernandez-sb-2024-d1',
-                       'smith-sb-2024-d6', 'thomas-sb-2024-d9', 'williams-sb-2024-d9']
+                       'smith-sb-2024-d6', 'thomas-sb-2024-d9', 'williams-sb-2024-d9'],
+      // P1-E B (PS-141): the person surface's IE component and the M3 card line, as ratified.
+      ieHeading: 'Independent expenditures',
+      m3Line: 'contributions were filed on this committee, which the candidate also uses for',
+      // M3's subject, pinned (mode A on the set): the 17 on_current_record 2024 candidacies,
+      // measured at c761a5ab… against the sealed 2026-09-13 vintage.
+      m3Ids: ['ayala-sb-2024-d7', 'biggs-sb-2024-d6', 'blaise-sb-2024-d5', 'boyle-sb-2024-d9',
+              'brown-sb-2024-d5', 'custer-sb-2024-d1', 'deberry-sb-2024-d2', 'dones-sb-2024-d3',
+              'gutierrez-sb-2024-d8', 'leon-sb-2024-d2', 'lopez-sb-2024-d7', 'pierre-sb-2024-d1',
+              'rivas-sb-2024-d3', 'rosenfeld-sb-2024-d4', 'smith-sb-2024-d10', 'thotakura-sb-2024-d6',
+              'zaccor-sb-2024-d4']
     }
   }
 };
@@ -907,6 +917,20 @@ async function assertWindowScoping(T, ctx, fx) {
   if (!ED || !RAW) { T.ok('[F2] ElectData + PREVIEW_DATA reachable in page scope', false); return; }
   var idx = ED.loadData(RAW, { office: fx.office });
   var checked = 0, unscoped = [], teeth = 0, teethLeaks = [];
+  // P1-E B (M3, PS-141): the EXPECTED funding candidacy, derived from PREVIEW_DATA alone
+  // (PS-82 — never from the view model under test): a candidacy with its own committee funds
+  // itself; an on_current_record candidacy is funded by its by_person owner.
+  var f2Owner = {};
+  Object.keys((RAW.rollups || {}).by_person || {}).forEach(function (pid) {
+    var ms = RAW.rollups.by_person[pid].members || [], own = null;
+    ms.forEach(function (m) { if (m.owns_committee) own = m.candidacy_id; });
+    ms.forEach(function (m) { f2Owner[m.candidacy_id] = own; });
+  });
+  function expectedFunding(cid) {
+    var rc = (RAW.candidates || []).filter(function (x) { return x.id === cid; })[0] || {};
+    if (rc.committee_id) return cid;
+    return rc.finance_facet === 'on_current_record' ? (f2Owner[cid] || null) : null;
+  }
   (idx.races || []).forEach(function (r) {
     if (String(r.office || '').indexOf(fx.office) !== 0) return;
     var vm = ED.viewModels.raceView(idx, r.id, null);
@@ -916,8 +940,18 @@ async function assertWindowScoping(T, ctx, fx) {
     vm.candidates.forEach(function (c) {
       if (!c.hasFinance || !c.figures) return;
       checked++;
+      // P1-E B (M3, PS-141): a borrowed card reads contributions through its funding
+      // candidacy and IE through itself, so the oracle does the same, with the funding id it
+      // derives independently above; the VM's fundingId must equal it on every card.
       var fWin = ED.candidateFigures(idx, c.id, null, w);
       var fAll = ED.candidateFigures(idx, c.id, null);
+      var xf = expectedFunding(c.id);
+      if (c.fundingId !== xf) unscoped.push(r.id + '/' + c.id + ':funding');
+      if (xf && xf !== c.id) {
+        var fw2 = ED.candidateFigures(idx, xf, null, w), fa2 = ED.candidateFigures(idx, xf, null);
+        fWin = { contributions: fw2.contributions, independentSupport: fWin.independentSupport, independentOpposition: fWin.independentOpposition };
+        fAll = { contributions: fa2.contributions };
+      }
       var scoped = c.figures.contributions.total === fWin.contributions.total &&
                    c.figures.independentSupport === fWin.independentSupport &&
                    c.figures.independentOpposition === fWin.independentOpposition;
@@ -977,6 +1011,56 @@ async function assertWindowScoping(T, ctx, fx) {
   });
   T.ok('[FIX1/E1-MUNI] no municipal card states pre-window receipts (' + mTeeth + ' candidates hold them)' +
     (mLines.length ? ' — CARRIED: ' + mLines.slice(0, 4).join(', ') : ''), mTeeth >= 1 && mLines.length === 0);
+  // [M3/CARD] — P1-E B (PS-141). PS-128 mode E: the SUBJECT SET is constructed (pinned,
+  // fixture m3Ids, and asserted equal to the live on_current_record set first, so a vintage
+  // that changes it fires here rather than passing on a stale list); the FIGURES are live and
+  // recomputed from PREVIEW_DATA rows by an oracle that reads neither raceView nor by_person
+  // (PS-82): each card's contributions = the owning candidacy's committee receipts in the
+  // 2024 window; its IE = its own rows in that window. Each renders a full card carrying the
+  // ratified line, and not the pre-window line (stated on the committee's own card), and no
+  // 2024 race is left marked "soon".
+  var pf = fx.person, live = [];
+  (RAW.candidates || []).forEach(function (c) { if (c.finance_facet === 'on_current_record') live.push(c.id); });
+  var ownerOf = {};
+  Object.keys((RAW.rollups || {}).by_person || {}).forEach(function (pid) {
+    var ms = RAW.rollups.by_person[pid].members || [], own = null;
+    ms.forEach(function (m) { if (m.owns_committee) own = m.candidacy_id; });
+    ms.forEach(function (m) { ownerOf[m.candidacy_id] = own; });
+  });
+  var ckOf = {};
+  Object.keys(RAW.committees || {}).forEach(function (k) { var cid = RAW.committees[k].candidate_id; if (cid) ckOf[cid] = k; });
+  var w24 = fx.windows['2024'];
+  function inW(d) { return !!d && (w24.start == null || d >= w24.start) && (w24.end == null || d <= w24.end); }
+  var m3bad = [], m3n = 0;
+  pf.m3Ids.forEach(function (id) {
+    var c = (RAW.candidates || []).filter(function (x) { return x.id === id; })[0];
+    var vm = c && ED.viewModels.raceView(idx, c.race_id, null);
+    var vc = vm && vm.candidates.filter(function (x) { return x.id === id; })[0];
+    var ck = ckOf[ownerOf[id]];
+    var oc = 0, os = 0, oo = 0;
+    (RAW.contributions || []).forEach(function (x) {
+      if (x.committee_id !== ck || ED.EXCLUDED_CYCLES[x.cycle] || x.contribution_type === 'IE Committee Dues Transfer') return;
+      if (inW(x.date)) oc += x.amount || 0;
+    });
+    (RAW.independent_expenditures || []).forEach(function (x) {
+      if (x.target_candidate_id !== id || ED.EXCLUDED_CYCLES[x.cycle] || !inW(x.date)) return;
+      if (x.stance === 'oppose') oo += x.amount || 0; else os += x.amount || 0;
+    });
+    var r2 = function (v) { return Math.round(v * 100) / 100; };
+    var html = vm ? ER.renderRaceView(vm) : '';
+    var art = html.split('<article class="card"').filter(function (a) { return a.indexOf('data-person="' + id + '"') >= 0; })[0] || '';
+    var ok = !!vc && vc.hasFinance && vc.fundingId === ownerOf[id] &&
+      vc.figures.contributions.total === r2(oc) && vc.figures.independentSupport === r2(os) && vc.figures.independentOpposition === r2(oo) &&
+      art.indexOf(pf.m3Line) >= 0 && art.indexOf('still populating') < 0 && art.indexOf('class="bars"') >= 0 &&
+      vc.preWindow === null && art.indexOf('class="committee prewin"') < 0;
+    if (ok) m3n++; else m3bad.push(id);
+  });
+  var soon24 = [];
+  var om = ED.viewModels.officeRaces(idx, fx.office, '2024');
+  om.groups.forEach(function (g) { g.races.forEach(function (r) { if (!r.hasFinance) soon24.push(r.id); }); });
+  T.ok('[M3/CARD] the ' + pf.m3Ids.length + ' on_current_record 2024 cards render full, oracle-equal figures with the ratified line; no 2024 race marked soon' +
+    (m3bad.length ? ' — BAD: ' + m3bad.join(', ') : '') + (soon24.length ? ' — SOON: ' + soon24.join(', ') : ''),
+    JSON.stringify(live.slice().sort()) === JSON.stringify(pf.m3Ids.slice().sort()) && m3n === pf.m3Ids.length && soon24.length === 0);
 }
 
 // (EXCL) EXCL-UNIFORM / PS-93: out-of-subject money (pre-2011/undated) never enters an
@@ -1254,25 +1338,84 @@ async function assertPersonSurface(T, ctx, fx) {
     grainChecked + ' sections)' + (grainBad.length ? ' — BAD: ' + grainBad.join(',') : ''),
     grainChecked >= 36 && grainBad.length === 0);
 
-  // --- 4. [PERSON/PS-90] the view-model IE exclusion. DEFERRAL-SCOPED (PS-90): the lane
-  // that ships IE display after P1-E re-routes supersedes THIS CHECK consciously; its
-  // removal then is NOT a firewall regression. The permanent invariant is INV-PERSON-2
-  // at the artifact layer — expressly not this check.
+  // --- 4. [PERSON/IE-FW] P1-E B (PS-141) SUPERSEDES the deferral-scoped [PERSON/PS-90]
+  // exclusion consciously, as PS-90 provided; its removal is not a firewall regression. The
+  // permanent invariant remains INV-PERSON-2 at the artifact layer. What replaces it is the
+  // banked form's firewall: IE lives ONLY in ieByElection — no IE key anywhere in `sections`,
+  // the career total untouched (asserted by [PERSON/D14] above), and in the render the IE
+  // component follows every member section and no member section carries IE copy.
+  // PS-128 mode B: live-derived over every person, premise asserted by the check itself — at
+  // least one person carries non-zero IE, so the absence below has teeth.
   function ieKeys(o, found) {
     if (o && typeof o === 'object') {
       Object.keys(o).forEach(function (k) {
-        if (/independent|ie[_A-Z]/.test(k)) found.push(k);
+        if (/independent|ie[_A-Z]|^support$|^oppose$/.test(k)) found.push(k);
         ieKeys(o[k], found);
       });
     }
     return found;
   }
-  var leaked = [];
+  var leaked = [], withIE = 0, singlesIE = 0, orderBad = [];
   Object.keys(bp).concat(pf.outOfWindowIds).forEach(function (ref) {
-    ieKeys(ED.personView(idx, ref), leaked);
+    var vm = ED.personView(idx, ref);
+    if (!vm) { orderBad.push(ref + ':no-vm'); return; }
+    ieKeys(vm.sections, leaked);
+    if ((vm.ieByElection || []).some(function (e) { return e.support.total > 0 || e.oppose.total > 0; })) {
+      if (bp.hasOwnProperty(ref)) withIE++; else singlesIE++;
+    }
+    var h = ER.renderPersonModal(vm), iIE = h.indexOf('class="person-ie"');
+    var members = h.split('class="person-member"').slice(1);
+    var headAt = h.indexOf('<p class="contrib-h person-ie-h">' + pf.ieHeading + '</p>');
+    if (iIE < 0 || h.lastIndexOf('class="person-member"') > iIE || headAt < iIE || headAt > iIE + 40 ||
+        members.some(function (m) { var body = m.split('class="person-ie"')[0]; return /Independent (support|opposition)|IE PAC/.test(body); }))
+      orderBad.push(ref);
   });
-  T.ok('[PERSON/PS-90] no IE value enters the person view-model (deferral-scoped exclusion)' +
-    (leaked.length ? ' — LEAKED: ' + leaked.join(',') : ''), leaked.length === 0);
+  T.ok('[PERSON/IE-FW] IE renders only in its own component after the member sections; none in any section (' + withIE +
+    ' linked persons and ' + singlesIE + ' single candidacies carry IE)' +
+    (leaked.length ? ' — LEAKED: ' + leaked.join(',') : '') + (orderBad.length ? ' — ORDER: ' + orderBad.join(',') : ''),
+    withIE >= 1 && leaked.length === 0 && orderBad.length === 0);
+
+  // --- 4b. [PERSON/IE-GRAIN] every IE row equals an independent recompute from PREVIEW_DATA's
+  // IE rows + the FIXTURE's windows (PS-82: reads neither personView's figures nor by_person).
+  // PS-128 mode B: live-derived; its premise (at least one non-zero row) asserted in-check.
+  var ieChecked = 0, ieNonZero = 0, ieBad = [];
+  Object.keys(bp).forEach(function (pid) {
+    var pv = ED.personView(idx, pid);
+    if (!pv) { ieBad.push(pid + ':no-vm'); return; }
+    var rowIds = pv.ieByElection.map(function (e) { return e.candidacyId; }).sort();
+    var memIds = bp[pid].members.map(function (m) { return m.candidacy_id; }).sort();
+    if (JSON.stringify(rowIds) !== JSON.stringify(memIds)) ieBad.push(pid + ':rows-vs-members');
+    pv.ieByElection.forEach(function (e) {
+      ieChecked++;
+      var w = fx.windows[e.year], sup = 0, opp = 0;
+      if (!w) { ieBad.push(pid + '/' + e.year + ':no-fixture-window'); return; }
+      (RAW.independent_expenditures || []).forEach(function (x) {
+        if (x.target_candidate_id !== e.candidacyId || ED.EXCLUDED_CYCLES[x.cycle]) return;
+        var d = x.date || '';
+        if (!d || (w.start != null && d < w.start) || (w.end != null && d > w.end)) return;
+        if (x.stance === 'oppose') opp += x.amount || 0; else sup += x.amount || 0;
+      });
+      sup = Math.round(sup * 100) / 100; opp = Math.round(opp * 100) / 100;
+      if (sup || opp) ieNonZero++;
+      if (Math.abs(e.support.total - sup) > 0.01 || Math.abs(e.oppose.total - opp) > 0.01) ieBad.push(pid + '/' + e.year);
+    });
+  });
+  // The window's teeth, in a DEEP COPY (the [F2/B1] pattern): an IE row dated outside its
+  // candidacy's election window is added to a linked member, and that member's row must not move.
+  var biteOk = false;
+  try {
+    var bcp = JSON.parse(JSON.stringify(RAW)), bpid = Object.keys(bp)[0];
+    var bmem = bp[bpid].members[0].candidacy_id;
+    var before = ED.personView(idx, bpid).ieByElection.filter(function (e) { return e.candidacyId === bmem; })[0];
+    bcp.independent_expenditures.push({ id: 'zz-ie-grain-bite', spender_committee_id: (RAW.independent_expenditures[0] || {}).spender_committee_id,
+      target_candidate_id: bmem, stance: 'support', amount: 12345.67, date: '2015-06-01', cycle: '2015', match_method: 'exact', needs_review: false });
+    var after = ED.personView(ED.loadData(bcp, { office: fx.office }), bpid).ieByElection.filter(function (e) { return e.candidacyId === bmem; })[0];
+    biteOk = !!before && !!after && after.support.total === before.support.total;
+  } catch (e) { biteOk = false; }
+  T.ok('[PERSON/IE-GRAIN] every person IE row equals the independent oracle recompute, one row per member (' + ieChecked + ' rows, ' + ieNonZero +
+    ' non-zero); an out-of-window row in a deep copy does not move its row' +
+    (ieBad.length ? ' — BAD: ' + ieBad.join(',') : '') + (biteOk ? '' : ' — WINDOW BITE FAILED'),
+    ieChecked >= 36 && ieNonZero >= 1 && ieBad.length === 0 && biteOk);
 
   // --- 5. [PERSON/S11] the out-of-window condition fires on EXACTLY the verified singles
   // (a boolean by construction — personView materialises no unwindowed figure).

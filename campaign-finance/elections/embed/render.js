@@ -276,6 +276,8 @@
       '.ipg-elect .person-member{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);}' +
       '.ipg-elect .person-member-h{margin-bottom:8px;}' +
       '.ipg-elect .person-oow{font-style:italic;}' +
+      '.ipg-elect .person-ie{margin:18px 0 0;padding-top:12px;border-top:2px solid var(--line);}' +
+      '.ipg-elect .person-ie-row{margin:12px 0 0;}' +
       '.ipg-elect .elect-stat{flex:1 1 calc(50% - 8px);min-width:118px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:15px 16px;}' +
       '.ipg-elect .elect-stat .num{font-family:var(--display);font-weight:700;font-size:30px;line-height:1;color:var(--teal);white-space:nowrap;}' +
       '.ipg-elect .elect-stat .lab{font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-top:8px;}' +
@@ -692,7 +694,11 @@
   // window-scoped to ITS OWN election (the VM guarantees it). Deliberately carries NO
   // [data-win-*] attributes and is mounted on <body> by the app — a person modal never
   // inherits the window of the card it was opened from (PS-89's exemption, structural).
-  // No IE stream renders here (PS-90, deferral-scoped — see personView). Every state is
+  // IE renders in its OWN component below the member sections (PS-90's banked form, shipped
+  // by P1-E B under PS-141): never inside a member section, never in a shared total, one row
+  // per member election, support and opposition side by side and never summed. No row
+  // carries a [data-win-*] attribute: the modal carries none anywhere (PS-89, asserted by
+  // [PERSON/EQ]), so a committee opened from a row shows its full profile. Every state is
   // visible by default, never pointer-revealed (SCOPE-UI B6 / the jsdom lesson).
   function renderPersonModal(vm) {
     var stat = function (num, lab) { return '<div class="elect-stat"><div class="num">' + num + '</div><div class="lab">' + lab + '</div></div>'; };
@@ -719,6 +725,28 @@
       ? '<p class="committee">Committee: ' + esc(vm.committee.name) +
         (vm.committee.sunshineUrl ? ' · <a href="' + esc(vm.committee.sunshineUrl) + '" target="_blank" rel="noopener">Illinois Sunshine ↗</a>' : '') + '</p>'
       : '';
+    var ieRows = (vm.ieByElection || []).map(function (e) {
+      var noun = PERSON_ELECTION_NOUN[e.officeType] || PERSON_ELECTION_NOUN.school_board;
+      var head = '<p class="contrib-h person-member-h">' + esc(e.year) + ' ' + noun + ' — ' + esc(e.raceLabel) + '</p>';
+      var any = e.support.spenders.length || e.oppose.spenders.length;
+      var rows = function (d, verb) {
+        return d.spenders.map(function (sp) {
+          return '<button class="crow funder-row person-ie-cmte" type="button" data-committee="' + esc(sp.spender_committee_id) + '">' +
+            '<div class="who">' + esc(sp.committeeName) + ' <span class="kind ie">IE PAC</span>' +
+            (sp.needsReview ? ' <span class="tagchip flag">⚑ needs review</span>' : '') + '</div>' +
+            '<div class="amt">' + money(sp.amount) + ' <span class="n">' + verb + '</span></div></button>';
+        }).join('');
+      };
+      var body = any
+        ? '<div class="elect-statgrid person-ie-figs">' + stat(money(e.support.total), 'Independent support') +
+          stat(money(e.oppose.total), 'Independent opposition') + '</div>' + rows(e.support, 'for') + rows(e.oppose, 'against')
+        : '<p class="committee person-ie-none">No independent expenditures reported for this election.</p>';
+      return '<div class="person-ie-row">' + head + body + '</div>';
+    }).join('');
+    var ieBlock = '<div class="person-ie"><p class="contrib-h person-ie-h">Independent expenditures</p>' +
+      '<p class="contrib-note">Spending by outside groups for or against this candidate, reported by those groups and ' +
+      'not coordinated with the campaign. Shown by election, never added to contributions or across elections.</p>' +
+      ieRows + '</div>';
     var oow = vm.hasOutOfWindow
       ? '<p class="committee person-oow">This committee also received contributions outside this election\'s window.</p>'   // string 11 (ratified byte-form: straight apostrophe)
       : '';
@@ -727,7 +755,7 @@
       '<div class="modal-name">' + esc(vm.displayName) + '</div>' +
       committeeLine +
       '<div class="elect-statgrid person-career">' + stat(money(vm.careerTotal), 'Total direct contributions') + '</div>' +   // string 12 + D14
-      sections + oow +
+      sections + oow + ieBlock +
       '<p class="caption">Independent expenditures are reported separately and are not included in these totals.</p>' +   // string 6
       '</div></div>';
   }
@@ -819,16 +847,22 @@
       ? '<p class="committee prior-note">' + esc(c.priorElection.label) +
         (c.priorElection.qualifier ? ' · ' + esc(c.priorElection.qualifier) : '') + '</p>'
       : '';
+    // M3 (PS-141): a card whose receipts were filed on the committee the candidate uses in a
+    // later election says so, under the committee line (the figures are this race's window).
+    var filedLine = c.filedNote
+      ? '<p class="committee filed-note">These ' + esc(c.filedNote.year) + ' contributions were filed on this committee, ' +
+        'which the candidate also uses for ' + esc(c.filedNote.under) + '.</p>' : '';
     // Person affordance (D4): on the returner card — the card that carries prior-run
-    // context is exactly the card whose person spans elections.
-    var personLine = c.priorElection ? personAffordance(c) : '';
+    // context is exactly the card whose person spans elections. M3 (PS-141): a borrowed
+    // card's person spans elections too, and keeps the affordance it carried as a pending card.
+    var personLine = (c.priorElection || c.filedNote) ? personAffordance(c) : '';
     // FIX-1 (E1, ratified): receipts dated before the office's earliest window are stated as
     // their own line with the amount, never folded into a windowed figure.
     var preLine = c.preWindow
       ? '<p class="committee prewin">Raised before ' + esc(c.preWindow.year) + ' (outside this election): <b>' +
         money(c.preWindow.total) + '</b></p>' : '';
     return '<article class="card" id="cand-' + esc(c.slug) + '">' +
-      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' + chips + '</div>' + resultNote(c) + committeeLine + priorLine + personLine +
+      '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' + chips + '</div>' + resultNote(c) + committeeLine + filedLine + priorLine + personLine +
       '<div class="bars">' + contribBar + contribPanel + supportBar + supportPanel + opposeBar + opposePanel + '</div>' + selfLine + preLine +
       '<p class="caption">Independent support and opposition are spending by outside groups, reported by those ' +
       'groups and not coordinated with the campaign. Figures are shown separately, never added together.</p></article>';
