@@ -900,7 +900,7 @@ that catch defect classes the existing gates structurally cannot see.
 
 | tag | file | sha256 |
 |---|---|---|
-| S-ing | `campaign-finance/ingestion/ingest.py` | `7fe43b0d919d6d80edb1b3661d343b826881b63e6613421b6150d6e7f4bd3b5b` |
+| S-ing | `campaign-finance/ingestion/ingest.py` | `5f84efb279c3d7f37bc7cea4bffb003d0d77f05831b77ced67aa89c308966347` |
 | S-syn | `campaign-finance/sheets-sync/sync_overrides.py` | `0bac13ab7c15a02197822b77b7c1144ad3b12655b37322208476a3b0d3d73913` |
 | S-bld | `campaign-finance/build_all.sh` | `a7b1675cdf0cb34130bd0df6d865d5575ab596d8cff4f816722b12ab55edefe6` |
 | S-t1 | `campaign-finance/ingestion/transform_slice1.py` | `5f807b26245ee22173d3903b9b8a3825f224c47c4f2d7ad11042ee87a6ccb68d` |
@@ -921,7 +921,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-eapp | `campaign-finance/elections/embed/app.js` | `9add3d7d75e7214af0d90737fdf5db352097a19b77f5d3a424053015ef5305a3` |
 | S-srv | `campaign-finance/editor/serve.py` | `f430f67b2d2367893ab4cb37a1c25ff84d71bb93b53a23b78f253ec17dccaa3a` |
 | S-rec | `campaign-finance/ingestion/reconcile.py` | `363c3c19341508463d6f5563e2fe2defa3fb59e7626b48b3e31b13e0180acb50` |
-| S-egate | `campaign-finance/elections/embed/tools/gate_bundle.js` | `7b00825a8da2980bab00d8fd6bd77ce9be55952f6afb4d36a59da778d6518fde` |
+| S-egate | `campaign-finance/elections/embed/tools/gate_bundle.js` | `cedc5e503da2cb6c957fb3457587c8017a2b93241062bfe2dd91ed20484bac80` |
 | S-chk | `campaign-finance/tools/check_sheet_scopes.py` | `9c980fd7362351a7df8a889ba60dc1a38d4fcee397200903a4f7d1b7bc620e94` |
 | S-sbf | `campaign-finance/ingestion/build_sb_finance.py` | `e49f3dc9c3841016c4cf0345932ff12c01a54d5e58c8bb72c8b57cc126f13cb7` |
 | S-a7 | `campaign-finance/sheets-sync/a7_precheck.py` | `a9d7e4669a4dc7b614d5d85939432a3317e3718d9a91cc9a9f0d50ca9ef73374` |
@@ -1068,7 +1068,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.14 | S-egate | 1809-1823 ([RENDER/B2] — the harness run whole) |
 | C2.12 | S-coh | 77-110 (compute — the ward committees, the registry's finals, the latest period, the D2Totals join and its refusal), 113-117 (apply — the four fields replaced), 137-218 (self_test) |
 | C2.12 | S-rec | 69-125 (build_filing_registry — the resolution of the final report the step imports) |
-| C2.12 | S-ing | 457-467 (the existing-committee branch: factual fields updated, the rest left) |
+| C2.12 | S-ing | 457-468 (the existing-committee branch: factual fields updated, the rest left) |
 | C2.12 | S-cemb | 1175-1176 (the tile and its investments line), 1279 (statCash) |
 | C2.12 | S-egate | 2530-2538 ([COH/SELF]) |
 

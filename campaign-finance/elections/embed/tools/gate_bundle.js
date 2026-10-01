@@ -1787,7 +1787,7 @@ async function assertPersonSurface(T, ctx, fx) {
   })();
 
   // [SHARD/STALE] council shards vs the council monolith. RATIFIED at the SBE-RERUN-1
-  // sweep: validate_shard_freshness (validate_council_data.py:420) is the good precedent
+  // sweep: validate_shard_freshness (in validate_council_data.py) is the good precedent
   // for a build-product vintage tie — it compares the index shard's generated_at to the
   // monolith's and then the totals behind it — but it runs only `if a.shards`, and NO
   // gate passed the flag. Freshness verified solely inside build_all.sh means this gate

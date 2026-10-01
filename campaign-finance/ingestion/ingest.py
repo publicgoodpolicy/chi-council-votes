@@ -463,7 +463,7 @@ def merge_into_data(data: dict, parsed: dict, ward, linkage: dict = None) -> dic
         cm['data_quality'] = 'REAL'
         cm['last_updated'] = today
         cm['il_sunshine_url'] = f"https://illinoissunshine.org/committees/{parsed['committee_id']}/"
-        # Preserve cash_on_hand (editor-entered)
+        # cash_on_hand is left as it is here; apply_cash_on_hand.py sets it from the latest D-2
         if linkage is not None:
             _apply_linkage(cm, linkage)
     else:
