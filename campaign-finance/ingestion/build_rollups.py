@@ -22,7 +22,7 @@ DUES_TYPE='IE Committee Dues Transfer'
 # build(d) directly with no filename in scope), so presence is the only signal available at
 # the point the write must happen. It also preserves R1 (iv)'s "if any" exactly —
 # election-data.json carries no version field, so none is written and none is invented.
-COUNCIL_SCHEMA_VERSION='2.1'
+COUNCIL_SCHEMA_VERSION='2.2'   # 2.2 (M5): contribution rows may carry is_own_committee
 # Keyed by id() of the row, NOT appended: the three predicate sites are three passes
 # over the SAME contributions list, so a row excluded by all three must still count
 # once (R1 i). id() is stable for the lifetime of the loaded document, which is the
@@ -65,6 +65,48 @@ OFFICE_TYPE={
 }
 def _office_type(office):
     return OFFICE_TYPE.get(office)
+
+
+# M5 (own-committee transfers): the CLOSED list of (receiving candidate committee's SBE id,
+# giving donor id) pairs whose rows are a transfer from another committee of the same person.
+# The list is ruled text (RULINGS.md, the own-committee transfers entry); an addition or a
+# removal is a new ruling. Loaded fail-loud, like the windows: a missing or malformed list
+# must never read as "no pairs".
+OWN_COMMITTEE_PATH=os.path.join(os.path.dirname(os.path.abspath(__file__)),'own-committee-transfers.json')
+def load_own_committee_pairs(path=OWN_COMMITTEE_PATH):
+    try:
+        with open(path) as f: raw=json.load(f)
+    except Exception as e:
+        raise SystemExit(f"[build_rollups] FATAL: cannot read the own-committee list {path}: {e}")
+    pairs=raw.get('pairs') if isinstance(raw,dict) else None
+    if not isinstance(pairs,list) or not pairs:
+        raise SystemExit(f"[build_rollups] FATAL: {path} carries no pairs")
+    out=set()
+    for p in pairs:
+        if not isinstance(p,dict):
+            raise SystemExit(f"[build_rollups] FATAL: {path}: a pair is not an object: {p!r}")
+        sbe=str(p.get('recipient_sbe_committee_id') or ''); did=str(p.get('donor_id') or '')
+        if not sbe or not did:
+            raise SystemExit(f"[build_rollups] FATAL: {path}: a pair lacks recipient_sbe_committee_id or donor_id: {p!r}")
+        if (sbe,did) in out:
+            raise SystemExit(f"[build_rollups] FATAL: {path}: pair listed twice: {(sbe,did)!r}")
+        out.add((sbe,did))
+    return out
+
+def stamp_own_committee(d,pairs):
+    """Stamp is_own_committee on every row of a listed pair and remove it from every other
+    row, so the stamp is exactly the list at every build (both artifacts). The recipient is the
+    committee typed `candidate` carrying the pair's SBE id: election-data.json holds a second
+    record with the same SBE id for a committee that also makes independent expenditures, and
+    money into that record is not a transfer into the candidate's campaign committee."""
+    comms=d.get('committees') or {}; n=0
+    for c in d.get('contributions',[]):
+        rc=comms.get(c.get('committee_id')) or {}
+        if rc.get('type')=='candidate' and (str(rc.get('sbe_committee_id') or ''),c.get('donor_id')) in pairs:
+            c['is_own_committee']=True; n+=1
+        else:
+            c.pop('is_own_committee',None)
+    return n
 
 
 def load_windows():
@@ -161,6 +203,7 @@ def build(d):
     _DUES_SKIPPED.clear()   # R1 (i): reset at every build() entry — build() runs more than once per pipeline run
     donors=d['donors']; comms=d['committees']; contribs=d['contributions']
     ies=d.get('independent_expenditures',[])
+    stamp_own_committee(d,load_own_committee_pairs())   # M5: the stamp is the list, every build
     agg={k for k,v in donors.items() if v.get('type')=='Aggregate'}
     rnd=lambda x:round(x,2)
 

@@ -1,15 +1,15 @@
 {
   "schema_version": 1.4,
-  "generated_at": "2026-09-29T21:02:52Z",
+  "generated_at": "2026-10-03T18:02:41Z",
   "source": "derived: school-board-data.json (bridge) x election-data.json (rollups)",
   "_sync": {
-    "generated_at": "2026-09-29T21:02:52Z",
+    "generated_at": "2026-10-03T18:02:41Z",
     "inputs": {
       "school-board-data.json": {
         "sha256": "45179604794bf9eeb894cc2d1a6c3030741bf509be5765cecb27e4b123e0212b"
       },
       "election-data.json": {
-        "sha256": "efbd55dda358e53eed2de8a1348288e844b78b8e9606879f523487029ba9faf6"
+        "sha256": "9d27c04eb4643de2d391cfab4fadd3a55a7e60d5c4619cd61c982062bd545862"
       }
     },
     "convention": "figures are election-labeled and sourced from rollups.by_candidate_election; by_candidate is resolution-only; the four streams are never summed in this artifact"
@@ -911,33 +911,6 @@
           "donor_id": "incs-actions-pac",
           "name": "INCS Actions PAC",
           "role": "affiliated-pac"
-        }
-      ]
-    },
-    "rollup-459": {
-      "name": "Gilbert Villegas for Congress",
-      "relationship": "affiliated entities",
-      "canonical_id": "gilbert-villegas-for-congress",
-      "members": [
-        {
-          "donor_id": "gilbert-villegas-for-congress",
-          "name": "Gilbert Villegas for Congress",
-          "role": "parent"
-        },
-        {
-          "donor_id": "friends-of-gilbert-villegas-for-alderman",
-          "name": "Friends of Gilbert Villegas for Alderman",
-          "role": "alt-name"
-        },
-        {
-          "donor_id": "friends-of-gilbert-villegas",
-          "name": "Friends of Gilbert Villegas",
-          "role": "alt-name"
-        },
-        {
-          "donor_id": "villegas-gilbert",
-          "name": "Villegas, Gilbert",
-          "role": "alt-name"
         }
       ]
     },
@@ -4081,8 +4054,7 @@
                 "amount": 1500.0,
                 "contribution_type": "Individual Contribution"
               }
-            ],
-            "cluster_id": "rollup-459"
+            ]
           },
           {
             "donor_id": "alvarez-mike",
@@ -6742,8 +6714,7 @@
                 "amount": 250.0,
                 "contribution_type": "Individual Contribution"
               }
-            ],
-            "cluster_id": "rollup-459"
+            ]
           },
           {
             "donor_id": "wiesner-jennifer",

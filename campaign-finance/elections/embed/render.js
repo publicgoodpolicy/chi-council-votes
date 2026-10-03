@@ -185,6 +185,7 @@
       '.ipg-elect .legend{display:flex;flex-wrap:wrap;gap:14px 20px;margin:6px 0 0;font-size:12px;color:var(--ink-soft);}' +
       '.ipg-elect .legend span{display:flex;align-items:center;gap:7px;}' +
       '.ipg-elect .sw{width:15px;height:13px;border-radius:3px;flex:none;}' +
+      '.ipg-elect .sw.owncmte{background:#8DB7B4;}' +
       '.ipg-elect .sw.third{background:var(--teal);}.ipg-elect .sw.self{background:repeating-linear-gradient(135deg,#3E6B53 0 4px,#9DBBA9 4px 8px);}' +
       '.ipg-elect .sw.support{background:var(--sage);}.ipg-elect .sw.oppose{background:var(--coral);}' +
       '.ipg-elect .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:17px 18px;margin:0 0 12px;}' +
@@ -219,6 +220,7 @@
       '.ipg-elect .crow .who{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}' +
       '.ipg-elect .crow .amt{font-weight:500;white-space:nowrap;}.ipg-elect .crow .n{font-size:11px;color:var(--ink-soft);font-weight:400;}' +
       '.ipg-elect .tagchip{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:20px;background:var(--tan);color:var(--ink-soft);}' +
+      '.ipg-elect .tagchip.owncmte{background:#DDEBEA;color:var(--teal);}' +
       '.ipg-elect .tagchip.self{background:#F4E3DC;color:var(--coral);}.ipg-elect .tagchip.inkind{background:var(--cream);color:var(--ink-soft);border:1px solid var(--line);}' +
       '.ipg-elect .contrib-note{font-size:12px;color:var(--ink-soft);margin:8px 0 0;}' +
       '.ipg-elect .ie-lead{font-size:13.5px;color:var(--ink);margin:0 0 6px;}.ipg-elect .ie-lead b{font-weight:500;}' +
@@ -247,6 +249,7 @@
       '.ipg-elect .ipg-item .iamt{font-weight:500;color:var(--ink);white-space:nowrap;}' +
       '.ipg-elect .ichip{font-size:10px;padding:1px 7px;border-radius:12px;background:var(--tan);color:var(--ink-soft);white-space:nowrap;}' +
       '.ipg-elect .ichip.self{background:var(--teal);color:#fff;}' +
+      '.ipg-elect .ichip.owncmte{background:#DDEBEA;color:var(--teal);}' +
       '.ipg-elect .ichip.loan{background:var(--tan);color:var(--ink);font-weight:500;}' +
       '.ipg-elect .ichip.inkind{background:var(--cream);color:var(--ink-soft);border:1px solid var(--line);}' +
       '.ipg-elect .ichip.agg{background:var(--cream);color:var(--ink-soft);border:1px solid var(--line);}' +
@@ -339,6 +342,7 @@
       '.ipg-elect .barfill{height:100%;display:flex;}' +
       '.ipg-elect .seg{height:100%;}' +
       '.ipg-elect .seg.third{background:var(--teal);}' +
+      '.ipg-elect .seg.owncmte{background:#8DB7B4;}' +
       '.ipg-elect .seg.self{background:repeating-linear-gradient(135deg,#3E6B53 0 5px,#9DBBA9 5px 10px);}' +
       '.ipg-elect .seg.support{background:var(--sage);}.ipg-elect .seg.oppose{background:var(--coral);}' +
       '.ipg-elect .seg.indep{background:var(--sage);}' +
@@ -435,7 +439,9 @@
       return '<div class="crow plain"><div class="who">' + esc(line.name) + '</div>' + amt + '</div>';
     }
     return '<button class="crow funder-row" type="button" data-funder="' + esc(line.parent_id) + '">' +
-      '<div class="who">' + esc(line.name) + ' ' + tagsHtml(line.industries, line.flags) + (line.inKindShare >= 0.999 ? ' <span class="tagchip inkind">in-kind</span>' : (line.inKindShare > 0 ? ' <span class="tagchip inkind">partly in-kind</span>' : '')) + '</div>' + amt + '</button>';
+      '<div class="who">' + esc(line.name) + ' ' + tagsHtml(line.industries, line.flags) +
+      // M5 (OC-E3, ratified): the giver stays a named, clickable donor and carries the chip.
+      (line.ownCommittee ? ' <span class="tagchip owncmte">From the candidate’s other committee</span>' : '') + (line.inKindShare >= 0.999 ? ' <span class="tagchip inkind">in-kind</span>' : (line.inKindShare > 0 ? ' <span class="tagchip inkind">partly in-kind</span>' : '')) + '</div>' + amt + '</button>';
   }
 
   // Contributor drill-down panel (collapsed; app toggles .open). Top 25 real
@@ -538,6 +544,7 @@
   function itemChips(r) {
     var out = '';
     if (r.is_self) out += '<span class="ichip self">self-funding</span>';
+    if (r.is_own_committee) out += '<span class="ichip owncmte">candidate’s other committee</span>';   // M5 (OC-E5)
     if (r.is_loan) out += '<span class="ichip loan">loan · not a gift</span>';
     if (r.is_in_kind) out += '<span class="ichip inkind">in-kind' + (r.in_kind_description ? ' · ' + esc(r.in_kind_description) : '') + '</span>';
     if (r.is_aggregate) out += '<span class="ichip agg">aggregate of ' + esc(String(r.contribution_count || '?')) + '</span>';
@@ -712,9 +719,7 @@
         body = '<div class="elect-statgrid person-member-figs">' +
           stat(money(s.contributions.total), 'Direct contributions') +
           stat(s.contributions.count, s.contributions.count === 1 ? 'contribution' : 'contributions') + '</div>' +
-          (s.contributions.selfFunded > 0
-            ? '<p class="selfline"><b>' + money(s.contributions.selfFunded) + '</b> is the candidate’s own money or loans · <b>' +
-              money(s.contributions.thirdParty) + '</b> from other donors</p>' : '');
+          ownMoneyLine(s.contributions);   // M5 (OC-E6): the card's sentence
       } else {
         body = '<p class="committee person-no-money">No itemized contributions reported for this election.</p>';   // string 3
       }
@@ -813,6 +818,19 @@
       esc(c.id) + '">Campaign finance for this candidate →</button></p>';
   }
 
+  // M5 (OC-E1, ratified): the own-money sentence. It renders when the figures hold own money or
+  // other-committee money. Those two parts appear only when above zero; "from other donors" is
+  // always last and always printed, at $0 if need be. Each figure is rounded on its own. With no
+  // other-committee money the sentence is, byte for byte, the one this replaced.
+  function ownMoneyLine(c) {
+    var own = c.selfFunded || 0, oc = c.ownCommittee || 0, parts = [];
+    if (!(own > 0) && !(oc > 0)) return '';
+    if (own > 0) parts.push('<b>' + money(own) + '</b> is the candidate’s own money or loans');
+    if (oc > 0) parts.push('<b>' + money(oc) + '</b> ' + (own > 0 ? '' : 'is ') + 'from the candidate’s other committee');
+    parts.push('<b>' + money(c.thirdParty) + '</b> from other donors');
+    return '<p class="selfline">' + parts.join(' · ') + '</p>';
+  }
+
   function card(c, scale, idPrefix) {
     var f = c.figures;
     var mostlySelf = f.contributions.total > 0 && (f.contributions.selfFunded / f.contributions.total) >= 0.5;
@@ -822,7 +840,8 @@
     var base = (idPrefix || 'd-') + esc(c.slug);   // raceView passes nothing -> 'd-' (byte-identical); grouped passes 'g-'
     var hasSup = f.independentSupport > 0, hasOpp = f.independentOpposition > 0;
     var contribBar = bar('From contributors',
-      [{ cls: 'third', v: f.contributions.thirdParty }, { cls: 'self', v: f.contributions.selfFunded }],
+      [{ cls: 'third', v: f.contributions.thirdParty }, { cls: 'owncmte', v: f.contributions.ownCommittee || 0 },
+       { cls: 'self', v: f.contributions.selfFunded }],   // M5 (OC-E2): the other-committee segment sits between
       plural(f.contributions.count, 'contribution', 'contributions'), scale, base + '-c');
     var contribPanel = contributorPanel(c.contributors, base + '-c');
     var supportBar = bar('Independent support', [{ cls: 'support', v: f.independentSupport }],
@@ -831,9 +850,7 @@
     var opposeBar = bar('Independent opposition', [{ cls: 'oppose', v: f.independentOpposition }],
       f.independentOppositionCount ? plural(f.independentOppositionCount, 'expenditure', 'expenditures') : '', scale, hasOpp ? base + '-o' : null);
     var opposePanel = hasOpp ? iePanel(c.ieOpposeDetail, c.name, base + '-o') : '';
-    var selfLine = f.contributions.selfFunded > 0
-      ? '<p class="selfline"><b>' + money(f.contributions.selfFunded) + '</b> is the candidate’s own money or loans · <b>' +
-        money(f.contributions.thirdParty) + '</b> from other donors</p>' : '';
+    var selfLine = ownMoneyLine(f.contributions);
     var committeeLine = (c.committee && c.committee.name)
       ? '<p class="committee">Committee: ' + esc(c.committee.name) +
         (c.committee.sunshineUrl ? ' · <a href="' + esc(c.committee.sunshineUrl) + '" target="_blank" rel="noopener">Illinois Sunshine ↗</a>' : '') + '</p>'
@@ -868,9 +885,11 @@
       'groups and not coordinated with the campaign. Figures are shown separately, never added together.</p></article>';
   }
 
-  function legend() {
+  // M5 (OC-E2): the other-committee swatch shows only on a race view where a card has such money.
+  function legend(withOwnCommittee) {
     return '<div class="legend" aria-hidden="true">' +
       '<span><i class="sw third"></i>From other donors</span>' +
+      (withOwnCommittee ? '<span><i class="sw owncmte"></i>From the candidate’s other committee</span>' : '') +
       '<span><i class="sw self"></i>Candidate’s own money / loans</span>' +
       '<span><i class="sw support"></i>Independent support</span>' +
       '<span><i class="sw oppose"></i>Independent opposition</span></div>';
@@ -932,7 +951,9 @@
       (anyPending && vm.race.election_id !== '2024-school-board'
         ? '<p class="field-note">▸ <span><b>Field still being added.</b> Candidates with registered ' +
           'committees are shown; others appear as they file and finance is processed.</span></p>' : '') +
-      legend() + '<div style="height:18px"></div>' + cards + '</div>';
+      legend(vm.candidates.some(function (c) {
+        return !!(c.figures && c.figures.contributions && c.figures.contributions.ownCommittee > 0);
+      })) + '<div style="height:18px"></div>' + cards + '</div>';
   }
 
   function renderComingSoon(label) {
@@ -1085,8 +1106,8 @@
       'the same way.</p>';
 
     if (office === 'city_council') {
-      // R9's composition, in order and nothing else: the frame, five <p> carrying C1, C2, C5, C3,
-      // C4, then the verification section. NO <h3> precedes any C-string, and no school-board
+      // R9's composition as amended at M5: the frame, six <p> carrying C1, C2, C5, C3, C4, C6,
+      // then the verification section. NO <h3> precedes any C-string, and no school-board
       // section is carried across — [MUNI/SUBJ] is the guard that makes the second of those
       // structural rather than careful, since the school-board body names its own subject.
       //
@@ -1114,7 +1135,13 @@
         ? ('Contribution data is current through ' + verify.dataThrough + ', from the Illinois ' +
            'State Board of Elections bulk export of ' + verify.pulled + '.')
         : null;
-      var paras = [C1, C2, C5, C3, C4];
+      // M5 (R3, ratified 2026-10-02): C6, the own-committee paragraph, a plain <p> after C4. The
+      // register's bytes, typographic apostrophes and quotation marks included.
+      var C6 = 'Some candidates move money into their campaign committee from another committee of their own, ' +
+        'such as a fund for a state or federal office. We count it in the total raised and label it ' +
+        '“From the candidate’s other committee.” It is not the candidate’s personal money, and it is not a ' +
+        'contribution from an outside donor. We mark only committees we have confirmed belong to the same person.';
+      var paras = [C1, C2, C5, C3, C4, C6];
       return METH_FRAME_OPEN +
         paras.map(function (t) { return t == null ? '' : '<p>' + t + '</p>'; }).join('') +
         VERIFICATION_SECTION +
@@ -1268,6 +1295,8 @@
     return '<button class="crow funder-row" type="button" data-funder="' + esc(r.parent_id) + '">' +
       '<div class="who">' + esc(r.name) + (isRollup ? ' <span class="rollup-pill">rollup</span>' : '') + ' ' + tagsHtml(r.industries, r.flags, tagMap) +
       // FIX-1 (E4, ratified): the row stays ranked at its full amount; its own-money share is marked.
+      // M5 (OC-E4, ratified): a listed giver's row says what the donor is.
+      (r.ownCommitteeGiver ? ' <span class="tagchip owncmte">Candidate’s other committee</span>' : '') +
       (r.selfShare >= 0.999 ? ' <span class="tagchip self">Candidate’s own money / loans</span>'
         : (r.selfShare > 0 ? ' <span class="tagchip self">Partly candidate’s own money / loans</span>' : '')) +
       '<div class="browse-counts">' + sub.join(' · ') + '</div></div>' +

@@ -194,15 +194,12 @@
 
   function round2(n) { return Math.round((n + Number.EPSILON) * 100) / 100; }
 
-  // A contribution is self-funded if it is a loan OR comes from the candidate
-  // themselves (donor typed Candidate / self-funding). Small-dollar aggregate
-  // and third-party donors are NOT self.
-  function isSelfFunded(donors, c) {
-    var d = donors[c.donor_id] || {};
-    return !!(c.is_loan || c.contribution_type === 'Loan Received' ||
-              d.type === 'Candidate' ||
-              (d.industries || []).indexOf('self-funding') >= 0);
-  }
+  // M5 (ratified 2026-10-02): the candidate's own money is decided by the per-row `is_self`
+  // stamp on EVERY surface. The donor-wide test this file once applied to the card figures
+  // (any loan, any donor typed Candidate, any donor tagged self-funding) is retired: it counted
+  // a same-surname relative's gift or loan as the candidate's own and missed a candidate whose
+  // donor record was not typed. A transfer from the candidate's other committee is its own
+  // figure (`is_own_committee`, stamped from the closed list), neither own money nor a donor's.
 
   function loadData(json, opts) {
     opts = opts || {};
@@ -387,7 +384,7 @@
   // cycle = null -> all-time (all non-excluded cycles); else a specific cycle code.
   function candidateFigures(index, candidateId, cycle, win) {
     var direct = index.directByCandidate[candidateId] || [];
-    var total = 0, self = 0, count = 0;
+    var total = 0, self = 0, own = 0, count = 0;
     for (var i = 0; i < direct.length; i++) {
       var c = direct[i];
       if (EXCLUDED_CYCLES[c.cycle]) continue;
@@ -396,12 +393,14 @@
       if (win && !inWindow(c.date, win)) continue;
       var a = c.amount || 0;
       total += a; count++;
-      if (isSelfFunded(index.donors, c)) self += a;
+      if (c.is_self) self += a;
+      else if (c.is_own_committee) own += a;
     }
     var ieB = index.ieByCandidate[candidateId] || { support: [], oppose: [] };
     var sup = sumIE(ieB.support, cycle, win), opp = sumIE(ieB.oppose, cycle, win);
     return {
-      contributions: { total: round2(total), selfFunded: round2(self), thirdParty: round2(total - self), count: count },
+      contributions: { total: round2(total), selfFunded: round2(self), ownCommittee: round2(own),
+                       thirdParty: round2(total - self - own), count: count },
       independentSupport: round2(sup.amount), independentSupportCount: sup.count,
       independentOpposition: round2(opp.amount), independentOppositionCount: opp.count
     };
@@ -464,13 +463,16 @@
       var parent = index.donors[pid] || donor;
       var m = by[pid] || (by[pid] = { parent_id: pid, name: parent.name || pid,
         industries: parent.industries || [], flags: parent.flags || [],
-        total: 0, count: 0, isSelf: false, isAggregate: false });
+        total: 0, count: 0, isSelf: false, ownCommittee: false, isAggregate: false });
       m.total = round2(m.total + (c.amount || 0)); m.count++;
       // Self-funding is the pipeline's ONE relational decision, stamped per row by
       // build_rollups (donor identity-matches THIS recipient). The render DISPLAYS it; it
       // does not decide self from donor-global attributes (which leaked a self-funder's
       // gift to ANOTHER candidate, e.g. Leon->Rosenfeld).
       if (c.is_self) m.isSelf = true;
+      // M5: a listed giver stands alone in its line (the validator refuses a clustered giver),
+      // so a line with one such row is that giver's transfers and nothing else.
+      if (c.is_own_committee) m.ownCommittee = true;
       if (parent.type === 'Aggregate' || (parent.industries || []).indexOf('small-dollar') >= 0) m.isAggregate = true;
     }
     var lines = []; for (var k in by) if (by.hasOwnProperty(k)) lines.push(by[k]);
@@ -564,7 +566,7 @@
       // contributions[] only, never IE rows (verified: no contribution carries a stance).
       m.rows.push({
         date: c.date || null, year: rowYear(c), amount: c.amount || 0,
-        is_self: !!c.is_self, is_loan: !!c.is_loan, is_in_kind: !!c.is_in_kind,
+        is_self: !!c.is_self, is_own_committee: !!c.is_own_committee, is_loan: !!c.is_loan, is_in_kind: !!c.is_in_kind,
         in_kind_description: c.in_kind_description || null,
         is_aggregate: !!c.is_aggregate, contribution_count: c.contribution_count || null
       });
@@ -1045,7 +1047,7 @@
       var win = ownerId ? requireWin(race) : raceWin(race);
       memberWins.push(win);
       var f = ownerId ? candidateFigures(index, ownerId, null, win) : null;
-      var contrib = f ? f.contributions : { total: 0, selfFunded: 0, thirdParty: 0, count: 0 };
+      var contrib = f ? f.contributions : { total: 0, selfFunded: 0, ownCommittee: 0, thirdParty: 0, count: 0 };
       career = round2(career + contrib.total);
       var yr = (/^(\d{4})-/.exec(membs[m].election_id || '') || [])[1] || '';
       sections.push({
@@ -1216,8 +1218,12 @@
       var d = index.donors[pid] || {};
       if (!donorMatches(d, d.name || pid, f)) continue;     // E-1 donor filters (parent unit)
       var pr = index.parentRollup[pid], total = 0, selfAmt = 0, cmset = {}, entset = {}, ncontrib = 0;
+      var ownGiver = false;
       for (var i = 0; i < pr.rows.length; i++) {
         var c = pr.rows[i];
+        // M5: the chip names what the donor IS, so it is read before any scope filter — a
+        // listed giver is one whichever of its gifts the active window shows.
+        if (c.is_own_committee) ownGiver = true;
         if (c.contribution_type === DUES_TYPE) continue;
         if (!keep(c.cycle)) continue;
         if (win && !inWindow(c.date, win)) continue;
@@ -1231,7 +1237,7 @@
         rows.push({ kind: 'donor', parent_id: pid, name: d.name || pid,
           industries: d.industries || [], flags: d.flags || [], total: round2(total),
           entities: Object.keys(entset).length, committees: Object.keys(cmset).length, contributions: ncontrib,
-          selfShare: selfAmt / total });
+          selfShare: selfAmt / total, ownCommitteeGiver: ownGiver });
       }
     }
     var q = (f.search || '').toLowerCase();
@@ -1496,7 +1502,6 @@
     browseDonors: browseDonors, spendByCandidate: spendByCandidate,
     industryTotals: industryTotals, industriesByCandidate: industriesByCandidate,
     flagTotals: flagTotals, spendSubtab: spendSubtab,
-    isSelfFunded: isSelfFunded,
     resolvePersonRef: resolvePersonRef, personView: personView, fundingCandidacy: fundingCandidacy,
     kebab: kebab, raceSlug: raceSlug, candidateSlug: candidateSlug, raceCode: raceCode,
     selectorOptions: selectorOptions,

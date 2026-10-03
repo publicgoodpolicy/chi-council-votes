@@ -220236,7 +220236,8 @@
       "date": "2019-07-20",
       "cycle": "2023",
       "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
+      "source_filing": "Quarterly",
+      "is_own_committee": true
     },
     {
       "id": "c-20016-01105",
@@ -220246,7 +220247,8 @@
       "date": "2019-07-20",
       "cycle": "2023",
       "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
+      "source_filing": "Quarterly",
+      "is_own_committee": true
     },
     {
       "id": "c-20016-01106",
@@ -220666,7 +220668,8 @@
       "date": "2022-12-13",
       "cycle": "2023",
       "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
+      "source_filing": "Quarterly",
+      "is_own_committee": true
     },
     {
       "id": "c-20016-01148",
@@ -221316,7 +221319,8 @@
       "date": "2023-08-24",
       "cycle": "2027",
       "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
+      "source_filing": "Quarterly",
+      "is_own_committee": true
     },
     {
       "id": "c-20016-01213",
@@ -389722,7 +389726,8 @@
       "date": "2022-08-19",
       "cycle": "2023",
       "contribution_type": "Other Receipt",
-      "source_filing": "Quarterly"
+      "source_filing": "Quarterly",
+      "is_own_committee": true
     },
     {
       "id": "c-25937-00790",
@@ -420347,7 +420352,8 @@
       "date": "2022-02-17",
       "cycle": "2023",
       "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
+      "source_filing": "Quarterly",
+      "is_own_committee": true
     },
     {
       "id": "c-26023-01277",
@@ -420377,7 +420383,8 @@
       "date": "2022-02-17",
       "cycle": "2023",
       "contribution_type": "Other Receipt",
-      "source_filing": "Quarterly"
+      "source_filing": "Quarterly",
+      "is_own_committee": true
     },
     {
       "id": "c-26023-01280",
@@ -420537,7 +420544,8 @@
       "date": "2022-04-20",
       "cycle": "2023",
       "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
+      "source_filing": "Quarterly",
+      "is_own_committee": true
     },
     {
       "id": "c-26023-01296",
@@ -421817,7 +421825,8 @@
       "date": "2023-01-12",
       "cycle": "2023",
       "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
+      "source_filing": "Quarterly",
+      "is_own_committee": true
     },
     {
       "id": "c-26023-01424",
@@ -423819,7 +423828,8 @@
       "contribution_type": "In-kind Contribution",
       "source_filing": "Quarterly",
       "is_in_kind": true,
-      "in_kind_description": "Pictures, videos, lists"
+      "in_kind_description": "Pictures, videos, lists",
+      "is_own_committee": true
     },
     {
       "id": "c-26023-01624",
@@ -594024,7 +594034,8 @@
       "date": "2025-12-16",
       "cycle": "2027",
       "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
+      "source_filing": "Quarterly",
+      "is_own_committee": true
     },
     {
       "id": "c-34894-00978",
@@ -693749,7 +693760,8 @@
       "date": "2024-06-19",
       "cycle": "2027",
       "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
+      "source_filing": "Quarterly",
+      "is_own_committee": true
     },
     {
       "id": "c-38831-00274",
@@ -693949,7 +693961,8 @@
       "date": "2023-12-13",
       "cycle": "2027",
       "contribution_type": "Other Receipt",
-      "source_filing": "Quarterly"
+      "source_filing": "Quarterly",
+      "is_own_committee": true
     },
     {
       "id": "c-38831-00294",
@@ -693989,7 +694002,8 @@
       "date": "2024-07-15",
       "cycle": "2027",
       "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
+      "source_filing": "Quarterly",
+      "is_own_committee": true
     },
     {
       "id": "c-38831-00298",
@@ -700787,7 +700801,8 @@
       "date": "2023-02-15",
       "cycle": "2023",
       "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
+      "source_filing": "Quarterly",
+      "is_own_committee": true
     },
     {
       "id": "c-38916-00242",
@@ -703497,7 +703512,8 @@
       "date": "2023-11-20",
       "cycle": "2027",
       "contribution_type": "Transfer In",
-      "source_filing": "Quarterly"
+      "source_filing": "Quarterly",
+      "is_own_committee": true
     },
     {
       "id": "c-38916-00509",

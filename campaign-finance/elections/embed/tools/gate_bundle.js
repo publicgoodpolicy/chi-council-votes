@@ -341,8 +341,14 @@ var FIXTURES = {
     // R40: the [self] group resolves by ID, never by name substring — a donor named
     // 'Rosenfeld' filing into the President race captured the old cardByName walk
     // (A2 1.4). leakRaceSlug/leakCardId are measured, not assumed.
+    // M5 (PS-143): the cards read the is_self stamp, so the leak race's own card no longer
+    // claims own money — the $8,750 it showed was three gifts from other people named
+    // Rosenfeld. The "renders separately" leg therefore reads a 2026 card whose own money is
+    // stamped (ownCard*, measured, resolved by id); the NO LEAK leg stays on the leak card.
     selfLeak: { funder: 'Leon', leakRace: 'Rosenfeld', ownRace: 'Bruce Leon',
-                leakRaceSlug: 'district-4b', leakCardId: 'cand-ellen-rosenfeld-district-4b' },
+                leakRaceSlug: 'district-4b', leakCardId: 'cand-ellen-rosenfeld-district-4b',
+                ownCardName: 'Henderson', ownCardRaceSlug: 'school-board-president',
+                ownCardId: 'cand-victor-henderson-school-board-president' },
     // Browse-Donors filters (E-1): a search term that hits a known rollup, and a donor type.
     browseFilters: { search: 'frank', searchHit: 'Frank', type: 'Individual' },
     // Industry-tag color + curated label (E-5): canonical color + curated label, not the slug.
@@ -566,10 +572,13 @@ async function assertSelfFundingNoLeak(T, ctx, fx) {
   ctx.selectElection('2026'); await ctx.wait(60);
   var leakSlug = fx.selfLeak.leakRaceSlug;                       // R40: pinned, not name-walked
   T.ok('[self] found ' + fx.selfLeak.leakRace + ' race (' + leakSlug + ')', ctx.slugs().indexOf(leakSlug) >= 0);
+  // M5 (PS-143): the positive leg, on a card whose own money is stamped.
+  ctx.nav(fx.selfLeak.ownCardRaceSlug); await ctx.wait(60);
+  var ownCard = ctx.root().querySelector('article.card[id="' + fx.selfLeak.ownCardId + '"]') || { innerHTML: '' };
+  T.ok('[self] ' + fx.selfLeak.ownCardName + ' self-funding renders separately (own money / loans)',
+    /class="selfline"/.test(ownCard.innerHTML) && /tagchip self/.test(ownCard.innerHTML) &&
+    /candidate\u2019s own money or loans/.test(ownCard.innerHTML));
   ctx.nav(leakSlug); await ctx.wait(60);
-  var card = ctx.root().querySelector('article.card[id="' + fx.selfLeak.leakCardId + '"]') || { innerHTML: '' };
-  T.ok('[self] ' + fx.selfLeak.leakRace + ' self-funding renders separately (own money / loans)',
-    /own money|tagchip self|candidate\u2019s own money/.test(card.innerHTML));
   var leak = [].slice.call((ctx.root().querySelector('article.card[id="' + fx.selfLeak.leakCardId + '"]') || ctx.doc.createElement('div')).querySelectorAll('.crow,.selfline'))
     .filter(function (r) { return new RegExp(fx.selfLeak.funder).test(r.textContent) && /own money|tagchip self/.test(r.innerHTML); });
   T.ok('[self] NO LEAK: no ' + fx.selfLeak.funder + ' row in ' + fx.selfLeak.leakRace + ' marked self (relational is_self)', leak.length === 0);
@@ -2381,12 +2390,27 @@ async function assertPersonSurface(T, ctx, fx) {
     // R47: the school-board branch's one ratified string is its OWN register entry, not a sixth
     // item in the council set — so it is a second extraction target, extracted by the same form.
     var sEntry = entry('### SB-METH-1 — school-board methodology string C5');
+    // M5 (R3): C6, the own-committee paragraph, is ratified as an amendment inside the R8/R9
+    // composition entry. It is extracted from that block: the lines after "C6 reads:", up to
+    // the next blank line, joined on single spaces.
+    var c6Entry = entry('### CNCL-DATA-1 P2 — R8 and R9 as applied');
+    var C6 = null;
+    if (c6Entry) {
+      var c6l = c6Entry.split('\n'), c6i = -1;
+      for (var q = 0; q < c6l.length; q++) if (/C6 reads:$/.test(c6l[q])) c6i = q;
+      if (c6i >= 0) {
+        var c6j = c6i + 1; while (c6j < c6l.length && c6l[c6j] === '') c6j++;
+        var c6k = c6j; while (c6k < c6l.length && c6l[c6k] !== '') c6k++;
+        C6 = c6l.slice(c6j, c6k).join(' ').replace(/\s+/g, ' ').trim();
+      }
+    }
 
     var bad = [];
     // --- premise 1: both entries resolve by heading, and neither is empty
     if (!cEntry) bad.push('the C1–C4 entry does not resolve by heading in the register');
     if (!rEntry) bad.push('the R11 entry does not resolve by heading in the register');
     if (!sEntry) bad.push('the SB-METH-1 entry does not resolve by heading in the register');
+    if (!C6) bad.push('C6 not found in the R8/R9 composition entry\'s amendment');
     var C = {};
     if (cEntry) {
       [1, 2, 3, 4, 5].forEach(function (n) {
@@ -2450,12 +2474,12 @@ async function assertPersonSurface(T, ctx, fx) {
     }
     function check(html) {
       var p = paras(html), fails = [];
-      var want = [bind(C[1]), bind(C[2]), bind(C[5]), bind(C[3]), bind(C[4])];
-      // --- premise 3: the page rendered the five C-paragraphs, the verification paragraph, and
-      // the artifact-links paragraph (D3). The count is asserted, not assumed, because every
+      var want = [bind(C[1]), bind(C[2]), bind(C[5]), bind(C[3]), bind(C[4]), C6];   // M5 (R3): C6 after C4
+      // --- premise 3: the page rendered the six C-paragraphs (C6 added at M5), the verification
+      // paragraph, and the artifact-links paragraph (D3). The count is asserted, not assumed, because every
       // comparison below is positional: a page one paragraph short would otherwise compare C4
       // against the verification text and report a difference that is really a shape change.
-      if (p.length !== 7) { fails.push('rendered ' + p.length + ' <p>, expected 7'); return fails; }
+      if (p.length !== 8) { fails.push('rendered ' + p.length + ' <p>, expected 8'); return fails; }
       want.forEach(function (w, i) {
         if (p[i] !== w) fails.push('C-paragraph ' + (i + 1) + ' differs from the register');
       });
@@ -2464,7 +2488,7 @@ async function assertPersonSurface(T, ctx, fx) {
       var block = rEntry.split('\n**Bindings**')[0].split('\n');
       var start = block.findIndex(function (l) { return l.indexOf('Every data update') === 0; });
       var sentence = block.slice(start).join(' ').replace(/\s+/g, ' ').trim();
-      if (p[5] !== bindR11(sentence)) fails.push('the verify paragraph differs from the register');
+      if (p[6] !== bindR11(sentence)) fails.push('the verify paragraph differs from the register');
       return fails;
     }
 
@@ -2495,7 +2519,7 @@ async function assertPersonSurface(T, ctx, fx) {
     }
     T.ok('[METH/REGISTER] every rendered council methodology paragraph equals the register\'s ' +
       'ratified text — ' + (bad.length ? bad.join('; ')
-        : '5 C-strings + R11 on the council branch and SB-METH-1\'s C5 on the school-board ' +
+        : '6 C-strings + R11 on the council branch and SB-METH-1\'s C5 on the school-board ' +
           'branch, extracted by heading from RULINGS.md, character-identical; the ' +
           'artifact-links paragraph byte-identical across the two branches'),
       bad.length === 0);
@@ -2514,6 +2538,126 @@ async function assertPersonSurface(T, ctx, fx) {
     T.ok('[METH/REGISTER:bite] a one-character edit to the council artifact-links paragraph makes ' +
       'the sibling-branch comparison fire',
       mutLinks !== html && (!mc || (sLinks && mc[0] !== sLinks[0])));
+    // M5 (R3): the same bite on C6, the paragraph the amendment added.
+    var mutC6 = html.replace('We mark only committees', 'We mark only committee');
+    T.ok('[METH/REGISTER:bite] a one-character edit to the rendered C6 makes the check fire',
+      mutC6 !== html && check(mutC6).length > 0);
+  })();
+
+  // [OWN/FIGURES] + [OWN/RENDER] — M5 (PS-142, PS-143).
+  // PS-128 modes. [OWN/FIGURES] is mode A: the live artifact, with the oracle recounted HERE
+  // from each card's own rows by their stamps (the committee the card reads, the race's window,
+  // the excluded cycles and the dues type are restated below, not taken from candidateFigures).
+  // [OWN/RENDER] is mode E: a constructed axis. It stamps rows in in-memory copies of the live
+  // artifact, so each ratified form renders whatever the live data holds that day; the three
+  // ratified strings are stated here and their source is the register (PS-142).
+  (function () {
+    var R = require(path.join(__dirname, '..', 'render.js'));
+    var D = require(path.join(__dirname, '..', 'data.js'));
+    var json = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', '..', 'election-data.json'), 'utf8'));
+    var TYPE = { city_council: 'municipal', mayor: 'municipal', school_board: 'school_board' };
+    var DUES = 'IE Committee Dues Transfer', EXCL = { 'pre-2011': 1, 'undated': 1 };
+    function inWin(c, win) {
+      return !!c.date && (win.start == null || c.date >= win.start) && (win.end == null || c.date <= win.end);
+    }
+    function cents(a, b) { return Math.abs(a - b) <= 0.011; }
+    function eachCard(doc, fn) {
+      ['city_council', 'school_board', 'mayor'].forEach(function (office) {
+        var idx = D.loadData(doc, { office: office });
+        D.selectorOptions(office).forEach(function (opt) {
+          var win = (D.ELECTION_WINDOWS[TYPE[office]] || {})[opt.id];
+          var om = D.viewModels.officeRaces(idx, office, opt.id);
+          (om.groups || []).forEach(function (g) { (g.races || []).forEach(function (r) {
+            var rv = D.viewModels.raceView(idx, idx.raceBySlug[r.slug], null);
+            ((rv && rv.candidates) || []).forEach(function (c) {
+              if (c.hasFinance) fn({ office: office, sel: opt.id, win: win, idx: idx, race: r, c: c });
+            });
+          }); });
+        });
+      });
+    }
+    function rowsOf(x) {
+      return (x.idx.directByCandidate[x.c.fundingId] || []).filter(function (c) {
+        return !EXCL[c.cycle] && c.contribution_type !== DUES && x.win && inWin(c, x.win);
+      });
+    }
+    function measure(doc) {
+      var out = { cards: 0, bad: [], withOwn: 0, stamped: 0, raised: {} };
+      (doc.contributions || []).forEach(function (c) { if (c.is_own_committee) out.stamped++; });
+      eachCard(doc, function (x) {
+        out.cards++;
+        var f = x.c.figures.contributions, tot = 0, self = 0, own = 0, rows = rowsOf(x);
+        rows.forEach(function (c) {
+          var a = c.amount || 0; tot += a;
+          if (c.is_self) self += a; else if (c.is_own_committee) own += a;
+        });
+        out.raised[x.office + '|' + x.sel + '|' + x.c.id] = f.total;
+        if (!cents(tot, f.total) || !cents(self, f.selfFunded) || !cents(own, f.ownCommittee) ||
+            !cents(tot - self - own, f.thirdParty) || rows.length !== f.count) out.bad.push(x.c.id);
+        if (f.ownCommittee > 0) out.withOwn++;
+      });
+      return out;
+    }
+    var m = measure(json);
+    T.ok('[OWN/FIGURES] every card\'s raised, own-money, other-committee and other-donor figures equal a recount of its own ' +
+      'rows by their stamps — ' + m.cards + ' cards, ' + m.withOwn + ' with other-committee money, ' + m.stamped +
+      ' stamped rows' + (m.bad.length ? '; DIFFERING: ' + m.bad.slice(0, 4).join(',') : ''),
+      m.cards > 0 && m.stamped > 0 && m.bad.length === 0);
+    // BITE: strip the stamp from every row of an in-memory copy. No card may then show
+    // other-committee money, and every card's raised figure must be the one it had.
+    var stripped = JSON.parse(JSON.stringify(json));
+    stripped.contributions.forEach(function (c) { delete c.is_own_committee; });
+    var ms = measure(stripped);
+    T.ok('[OWN/FIGURES:bite] with the stamps stripped no card shows other-committee money, and every raised figure is unmoved',
+      m.stamped > 0 && ms.stamped === 0 && ms.withOwn === 0 && ms.bad.length === 0 &&
+      JSON.stringify(ms.raised) === JSON.stringify(m.raised));
+
+    // The constructed axis: the first council card holding in-window rows from two different
+    // donor lines. Row A becomes the candidate's own money, row B an other-committee transfer.
+    var host = null;
+    eachCard(stripped, function (x) {
+      if (host || x.office !== 'city_council') return;
+      var rows = rowsOf(x).slice().sort(function (a, b) { return a.id < b.id ? -1 : (a.id > b.id ? 1 : 0); });
+      var pidOf = function (c) { return (x.idx.donors[c.donor_id] || {}).parent_id || c.donor_id; };
+      for (var i = 1; i < rows.length; i++) {
+        if (pidOf(rows[i]) !== pidOf(rows[0])) { host = { race: x.race.slug, slug: x.c.slug, a: rows[0].id, b: rows[i].id, bParent: pidOf(rows[i]), win: x.win, sel: x.sel }; break; }
+      }
+    });
+    var probs = [];
+    function variant(selfId, ownId) {
+      var doc = JSON.parse(JSON.stringify(stripped));
+      doc.contributions.forEach(function (c) {
+        if (c.id === host.a || c.id === host.b) delete c.is_self;
+        if (selfId && c.id === selfId) c.is_self = true;
+        if (ownId && c.id === ownId) c.is_own_committee = true;
+      });
+      var idx = D.loadData(doc, { office: 'city_council' });
+      var page = R.renderRaceView(D.viewModels.raceView(idx, idx.raceBySlug[host.race], null));
+      var card = (page.split('<article class="card" id="cand-' + host.slug + '">')[1] || '').split('</article>')[0];
+      return { idx: idx, page: page, card: card,
+               sentence: ((/<p class="selfline">(.*?)<\/p>/.exec(card) || [])[1] || '').replace(/<[^>]+>/g, '') };
+    }
+    var FROM = 'From the candidate’s other committee', GIVER = 'Candidate’s other committee',
+        ROW = 'candidate’s other committee';
+    if (!host) probs.push('premise: no council card holds in-window rows from two donor lines');
+    else {
+      var both = variant(host.a, host.b), only = variant(null, host.b), none = variant(null, null);
+      if (!/^\$[\d,]+ is the candidate’s own money or loans · \$[\d,]+ from the candidate’s other committee · \$[\d,]+ from other donors$/.test(both.sentence)) probs.push('three-part sentence reads: ' + both.sentence);
+      if (!/class="seg third"[^>]*><\/div><div class="seg owncmte"[^>]*><\/div><div class="seg self"/.test(both.card)) probs.push('the bar is not other donors, other committee, own money in that order');
+      if (both.card.indexOf('<span class="tagchip owncmte">' + FROM + '</span>') < 0) probs.push('the giver line carries no chip');
+      if (both.page.indexOf('<i class="sw owncmte"></i>' + FROM + '</span>') < 0) probs.push('the legend carries no other-committee swatch');
+      if (!/^\$[\d,]+ is from the candidate’s other committee · \$[\d,]+ from other donors$/.test(only.sentence)) probs.push('two-part sentence reads: ' + only.sentence);
+      if (none.sentence !== '' || none.page.indexOf('owncmte"') >= 0 || none.page.indexOf(FROM) >= 0) probs.push('a race view with no such money still shows the sentence, a segment, a chip or the swatch');
+      var browse = R.renderSpend(D.spendSubtab(only.idx, 'city_council', 'donors', null, host.sel), 'city_council');
+      if (browse.indexOf('<span class="tagchip owncmte">' + GIVER + '</span>') < 0) probs.push('the browse row of the giver carries no chip');
+      var browse0 = R.renderSpend(D.spendSubtab(none.idx, 'city_council', 'donors', null, host.sel), 'city_council');
+      if (browse0.indexOf(GIVER) >= 0) probs.push('a browse row carries the chip with no stamped row');
+      var modal = R.renderFunderModal(D.donorFootprint(only.idx, host.bParent, host.win));
+      if ((modal.split('<span class="ichip owncmte">' + ROW + '</span>').length - 1) !== 1) probs.push('the donor profile does not mark exactly the one stamped row');
+    }
+    T.ok('[OWN/RENDER] the three ratified strings render where PS-142 puts them — the three-part and two-part card ' +
+      'sentence, the bar order, the giver chip, the conditional legend swatch, the browse chip and the profile row chip — ' +
+      (probs.length ? probs.join('; ') : 'constructed on ' + host.slug), probs.length === 0);
   })();
 
   // [AV/SELF] the all-votes un-feature fixture (HYGIENE-1, open ledger 76 / row 58). PS-128 mode B:

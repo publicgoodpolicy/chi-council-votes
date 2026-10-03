@@ -234,6 +234,27 @@ v1 scope. v1 covers elections candidate committees only.
 
 ---
 
+## Transfers from a candidate's other committee (the closed list)
+
+`campaign-finance/ingestion/build_rollups.py` stamps `is_own_committee` on the rows of the
+pairs listed in `campaign-finance/ingestion/own-committee-transfers.json`, in both artifacts,
+at every build; nothing is run by hand. The list is ruled text (PS-142): adding or removing a
+pair is a new ruling, not an edit. `campaign-finance/ingestion/validate_council_data.py`
+aborts the build with an `[OWN/COMMITTEE]` error in four cases, and each has one remedy:
+
+- **a listed giver shares a donor cluster** — take the giver out of the Sheet's Donor Clusters
+  tab and re-run; a listed giver stands alone.
+- **a listed pair matches no row** — the giver's donor id or the committee changed, so the
+  list is stale. Stop and bring it for a ruling; do not edit the list to make the build pass.
+- **a row of a listed pair lacks the stamp, or a stamp sits outside the list** — the artifact
+  was not rebuilt after the list or the code changed. Re-run the builder named above.
+- **a row carries both `is_own_committee` and `is_self`** — the list names a donor that the
+  self-funding match also claims. Stop and bring it for a ruling.
+
+Mechanism: `campaign-finance/MECHANISM_REFERENCE.md` §5 (C5.15).
+
+---
+
 ## Cash on hand (`campaign-finance/ingestion/apply_cash_on_hand.py`)
 
 The council tool's cash-on-hand tile reads each ward committee's `cash_on_hand`, which this

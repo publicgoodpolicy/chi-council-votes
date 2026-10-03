@@ -1,6 +1,6 @@
 {
-  "schema_version": "2.1",
-  "generated_at": "2026-09-29T16:30:34Z",
+  "schema_version": "2.2",
+  "generated_at": "2026-10-03T18:02:06Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "itemization_threshold": 150,
   "cycles": {
@@ -104721,12 +104721,8 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "friends-of-michelle-a-harris",
-      "committee_id": null,
-      "cluster_id": "rollup-504",
-      "cluster_name": "Friends of Michelle A Harris",
-      "cluster_role": "alt-name",
-      "cluster_is_parent": false
+      "parent_id": "citizens-for-michelle-harris",
+      "committee_id": null
     },
     "civil-environmental-consultants-inc": {
       "id": "civil-environmental-consultants-inc",
@@ -109722,12 +109718,8 @@
       "occupation": "Committeeman",
       "employer": "Chicago",
       "city": "Chicago, IL",
-      "parent_id": "gilbert-villegas-for-congress",
-      "committee_id": null,
-      "cluster_id": "rollup-459",
-      "cluster_name": "Gilbert Villegas for Congress",
-      "cluster_role": "alt-name",
-      "cluster_is_parent": false
+      "parent_id": "villegas-gilbert",
+      "committee_id": null
     },
     "vincent-r-williams-associates": {
       "id": "vincent-r-williams-associates",
@@ -122977,12 +122969,8 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "silverstein-for-senator",
-      "committee_id": null,
-      "cluster_id": "rollup-453",
-      "cluster_name": "Silverstein for Senator",
-      "cluster_role": "alt-name",
-      "cluster_is_parent": false
+      "parent_id": "friends-for-debra-l-silverstein",
+      "committee_id": null
     },
     "friends-of-barrett-pedersen": {
       "id": "friends-of-barrett-pedersen",
@@ -153304,12 +153292,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "gilbert-villegas-for-congress",
+      "parent_id": "friends-of-gilbert-villegas-for-alderman",
       "committee_id": "ward-36",
       "cluster_id": "rollup-459",
-      "cluster_name": "Gilbert Villegas for Congress",
-      "cluster_role": "alt-name",
-      "cluster_is_parent": false
+      "cluster_name": "Friends of Gilbert Villegas for Alderman",
+      "cluster_role": "parent",
+      "cluster_is_parent": true
     },
     "friends-of-jeylu-gutierrez": {
       "id": "friends-of-jeylu-gutierrez",
@@ -180268,12 +180256,8 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "friends-of-chris-taliaferro",
-      "committee_id": null,
-      "cluster_id": "rollup-314",
-      "cluster_name": "Friends of Chris Taliaferro",
-      "cluster_role": "affiliated-pac",
-      "cluster_is_parent": false
+      "parent_id": "committee-to-elect-chris-taliaferro",
+      "committee_id": null
     },
     "committee-to-elect-jonathan-clark-green": {
       "id": "committee-to-elect-jonathan-clark-green",
@@ -184927,10 +184911,10 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "gilbert-villegas-for-congress",
+      "parent_id": "friends-of-gilbert-villegas-for-alderman",
       "committee_id": null,
       "cluster_id": "rollup-459",
-      "cluster_name": "Gilbert Villegas for Congress",
+      "cluster_name": "Friends of Gilbert Villegas for Alderman",
       "cluster_role": "alt-name",
       "cluster_is_parent": false
     },
@@ -213484,11 +213468,7 @@
       "notes": null,
       "city": "Chicago, IL",
       "parent_id": "friends-of-chris-taliaferro",
-      "committee_id": "ward-29",
-      "cluster_id": "rollup-314",
-      "cluster_name": "Friends of Chris Taliaferro",
-      "cluster_role": "parent",
-      "cluster_is_parent": true
+      "committee_id": "ward-29"
     },
     "friends-of-dave-feller": {
       "id": "friends-of-dave-feller",
@@ -238352,11 +238332,7 @@
       "parent_id": "gilbert-villegas-for-congress",
       "committee_id": null,
       "entity_type": "candidate-committee",
-      "_last_edited_by": "editor-ui",
-      "cluster_id": "rollup-459",
-      "cluster_name": "Gilbert Villegas for Congress",
-      "cluster_role": "parent",
-      "cluster_is_parent": true
+      "_last_edited_by": "editor-ui"
     },
     "ginsberg-steven": {
       "id": "ginsberg-steven",
@@ -253567,11 +253543,7 @@
       "notes": null,
       "city": "Chicago, IL",
       "parent_id": "silverstein-for-senator",
-      "committee_id": null,
-      "cluster_id": "rollup-453",
-      "cluster_name": "Silverstein for Senator",
-      "cluster_role": "parent",
-      "cluster_is_parent": true
+      "committee_id": null
     },
     "silverstein-abraham": {
       "id": "silverstein-abraham",
@@ -367346,24 +367318,6 @@
       },
       "total": 15000.0
     },
-    "rollup-314": {
-      "name": "Friends of Chris Taliaferro",
-      "relationship": "affiliated entities",
-      "canonical_id": "friends-of-chris-taliaferro",
-      "members": [
-        "friends-of-chris-taliaferro",
-        "committee-to-elect-chris-taliaferro"
-      ],
-      "roles": {
-        "friends-of-chris-taliaferro": "parent",
-        "committee-to-elect-chris-taliaferro": "affiliated-pac"
-      },
-      "member_totals": {
-        "friends-of-chris-taliaferro": 6262.0,
-        "committee-to-elect-chris-taliaferro": 4086.26
-      },
-      "total": 10348.26
-    },
     "rollup-315": {
       "name": "Oxford 127 Huron Hotel Venture Property Company, LLC",
       "relationship": "affiliated entities",
@@ -370337,24 +370291,6 @@
       },
       "total": 54600.0
     },
-    "rollup-453": {
-      "name": "Silverstein for Senator",
-      "relationship": "affiliated entities",
-      "canonical_id": "silverstein-for-senator",
-      "members": [
-        "silverstein-for-senator",
-        "friends-for-debra-l-silverstein"
-      ],
-      "roles": {
-        "silverstein-for-senator": "parent",
-        "friends-for-debra-l-silverstein": "alt-name"
-      },
-      "member_totals": {
-        "silverstein-for-senator": 12500.0,
-        "friends-for-debra-l-silverstein": 500.0
-      },
-      "total": 13000.0
-    },
     "rollup-454": {
       "name": "JPMorgan Chase & Co. PAC",
       "relationship": "affiliated entities",
@@ -370485,28 +370421,22 @@
       "total": 49250.0
     },
     "rollup-459": {
-      "name": "Gilbert Villegas for Congress",
+      "name": "Friends of Gilbert Villegas for Alderman",
       "relationship": "affiliated entities",
-      "canonical_id": "gilbert-villegas-for-congress",
+      "canonical_id": "friends-of-gilbert-villegas-for-alderman",
       "members": [
-        "gilbert-villegas-for-congress",
         "friends-of-gilbert-villegas-for-alderman",
-        "friends-of-gilbert-villegas",
-        "villegas-gilbert"
+        "friends-of-gilbert-villegas"
       ],
       "roles": {
-        "gilbert-villegas-for-congress": "parent",
-        "friends-of-gilbert-villegas-for-alderman": "alt-name",
-        "friends-of-gilbert-villegas": "alt-name",
-        "villegas-gilbert": "alt-name"
+        "friends-of-gilbert-villegas-for-alderman": "parent",
+        "friends-of-gilbert-villegas": "alt-name"
       },
       "member_totals": {
-        "gilbert-villegas-for-congress": 42454.61,
         "friends-of-gilbert-villegas-for-alderman": 1000.0,
-        "friends-of-gilbert-villegas": 1000.0,
-        "villegas-gilbert": 5450.0
+        "friends-of-gilbert-villegas": 1000.0
       },
-      "total": 49904.61
+      "total": 2000.0
     },
     "rollup-460": {
       "name": "DLA Piper LLP",
@@ -372184,24 +372114,21 @@
         "friends-of-michelle-a-harris",
         "friends-of-michelle-a-harris-q",
         "friends-of-michelle-harris",
-        "citizens-for-michelle-harris",
         "harris-michelle"
       ],
       "roles": {
         "friends-of-michelle-a-harris": "parent",
         "friends-of-michelle-a-harris-q": "alt-name",
         "friends-of-michelle-harris": "alt-name",
-        "citizens-for-michelle-harris": "alt-name",
         "harris-michelle": "alt-name"
       },
       "member_totals": {
         "friends-of-michelle-a-harris": 15500.0,
         "friends-of-michelle-a-harris-q": 2500.0,
         "friends-of-michelle-harris": 1000.0,
-        "citizens-for-michelle-harris": 31000.0,
         "harris-michelle": 10375.0
       },
-      "total": 60375.0
+      "total": 29375.0
     },
     "rollup-505": {
       "name": "Illinois Restaurant Association",
@@ -380783,12 +380710,12 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 49375.0,
+        "direct": 18375.0,
         "independent": 1000.0,
-        "total": 50375.0,
-        "count": 16,
-        "committees": 11,
-        "members": 5
+        "total": 19375.0,
+        "count": 11,
+        "committees": 9,
+        "members": 4
       },
       "18th-ward-democratic-party": {
         "name": "18th Ward Democratic Party",
@@ -386734,18 +386661,18 @@
         "committees": 1,
         "members": 1
       },
-      "gilbert-villegas-for-congress": {
-        "name": "Gilbert Villegas for Congress",
-        "type": "PAC",
+      "villegas-gilbert": {
+        "name": "Villegas, Gilbert",
+        "type": "Individual",
         "industries": [
-          "candidate-account"
+          "individual"
         ],
-        "direct": 49904.61,
+        "direct": 5450.0,
         "independent": 0.0,
-        "total": 49904.61,
-        "count": 15,
-        "committees": 9,
-        "members": 4
+        "total": 5450.0,
+        "count": 7,
+        "committees": 6,
+        "members": 1
       },
       "connolly-maurice": {
         "name": "Connolly, Maurice",
@@ -423888,6 +423815,19 @@
         "committees": 2,
         "members": 1
       },
+      "friends-of-gilbert-villegas-for-alderman": {
+        "name": "Friends of Gilbert Villegas for Alderman",
+        "type": "PAC",
+        "industries": [
+          "candidate-account"
+        ],
+        "direct": 2000.0,
+        "independent": 0.0,
+        "total": 2000.0,
+        "count": 3,
+        "committees": 3,
+        "members": 2
+      },
       "honeywell-international-pac": {
         "name": "Honeywell International PAC",
         "type": "PAC",
@@ -439821,12 +439761,12 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 9348.26,
+        "direct": 5262.0,
         "independent": 1000.0,
-        "total": 10348.26,
-        "count": 4,
-        "committees": 4,
-        "members": 2
+        "total": 6262.0,
+        "count": 3,
+        "committees": 3,
+        "members": 1
       },
       "national-association-of-promotional-retailers": {
         "name": "National Association of Promotional Retailers",
@@ -451552,6 +451492,19 @@
         "total": 500.0,
         "count": 1,
         "committees": 1,
+        "members": 1
+      },
+      "citizens-for-michelle-harris": {
+        "name": "Citizens for Michelle Harris",
+        "type": "PAC",
+        "industries": [
+          "candidate-account"
+        ],
+        "direct": 31000.0,
+        "independent": 0.0,
+        "total": 31000.0,
+        "count": 5,
+        "committees": 2,
         "members": 1
       },
       "montclare-senior-residences-of-avalon-park-phase-ii-llc": {
@@ -478102,8 +478055,8 @@
         "committees": 1,
         "members": 1
       },
-      "silverstein-for-senator": {
-        "name": "Silverstein for Senator",
+      "friends-for-debra-l-silverstein": {
+        "name": "Friends for Debra L. Silverstein",
         "type": "PAC",
         "industries": [
           "candidate-account"
@@ -478113,7 +478066,7 @@
         "total": 500.0,
         "count": 1,
         "committees": 1,
-        "members": 2
+        "members": 1
       },
       "committee-to-elect-dan-burke": {
         "name": "Committee to Elect Dan Burke",
@@ -512880,6 +512833,19 @@
         "committees": 2,
         "members": 1
       },
+      "committee-to-elect-chris-taliaferro": {
+        "name": "Committee to Elect Chris Taliaferro",
+        "type": "Other",
+        "industries": [
+          "unclassified"
+        ],
+        "direct": 4086.26,
+        "independent": 0.0,
+        "total": 4086.26,
+        "count": 1,
+        "committees": 1,
+        "members": 1
+      },
       "ricchio-and-son-inc": {
         "name": "Ricchio and Son Inc",
         "type": "Individual",
@@ -526150,6 +526116,19 @@
         "independent": 0.0,
         "total": 500.0,
         "count": 1,
+        "committees": 1,
+        "members": 1
+      },
+      "gilbert-villegas-for-congress": {
+        "name": "Gilbert Villegas for Congress",
+        "type": "PAC",
+        "industries": [
+          "candidate-account"
+        ],
+        "direct": 42454.61,
+        "independent": 0.0,
+        "total": 42454.61,
+        "count": 5,
         "committees": 1,
         "members": 1
       },

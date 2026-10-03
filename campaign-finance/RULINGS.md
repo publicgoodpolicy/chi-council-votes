@@ -1857,6 +1857,133 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: P1-E register draft E8 rev 1 (`p1e-e8-draft-rev1.md`, sha256 `ddc7fdd5941480a351c221413dc32234439fe144feefa1626eea4dd964c241a7`, 3,334 B / 46 L), lines 7–46, transcribed verbatim; ratified by Ishan 2026-09-30 (chat). The rulings it records were made the same day in chat, on the planner's measurement of the live data after P1-E A: "1. a" (full 2024 figures on the 17 cards, the numbers audit's M3), "2. a" (one outside-spending section on the person surface, a row per election, no cross-election total) and "3. a" (one display commit, P1-E B). Ships the display PS-90 deferred, in PS-90's banked form; supersedes the deferral-scoped `[PERSON/PS-90]` check as PS-90 provided. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-140`; `PS-141` occurring 0 times in this file before this commit), never carried.*
 
+### PS-142 — transfers from a candidate’s other committee are counted in raised, shown as their own line, and kept on a closed list
+
+> **What it is.** A transfer into a candidate’s committee from another political committee of
+> the same person, such as a fund kept for another office or an earlier campaign, is neither the
+> candidate’s personal money nor money from an outside donor. It stays in the committee’s
+> total raised, is shown as its own line, and is marked on the surfaces listed below.
+>
+> **Who counts.** The same person only. A committee of a relative, a predecessor or a namesake
+> is an ordinary donor, named as filed.
+>
+> **The list is closed.** The pairs are kept in
+> `campaign-finance/ingestion/own-committee-transfers.json`. A pair’s key is the receiving
+> candidate committee’s State Board of Elections committee id and the giving donor’s id; the
+> file’s other fields describe the pair and are not validated. The build stamps
+> `is_own_committee` on every row of a listed pair and on no other row, in `council-data.json`
+> and in `election-data.json`. An addition or a removal is a new ruling.
+>
+> **What the validators refuse.** A build fails if the stamps and the list differ; if a listed
+> pair matches no row, which means the list has gone stale and is re-ruled; if a listed giver
+> shares a donor cluster with any other donor; or if a row in `election-data.json` carries both
+> `is_own_committee` and `is_self`. The cluster condition is met by Ishan’s edits to the
+> Sheet’s Donor Clusters tab of 2026-10-02 (`rollup-504`, `rollup-314`, `rollup-459`), which
+> reach the artifacts in the chain run that lands this ruling.
+>
+> **Only the pair’s money is marked.** The same giver’s gifts to any other committee are
+> ordinary contributions. Where a list shows donors across all their recipients, the chip names
+> what the donor is and marks none of its other gifts.
+>
+> **As filed.** The rows of a listed pair keep their filed type and amount. A loan repayment and
+> a returned check stay inside the line.
+>
+> **It is not self-funding.** `is_self` and the self-funding stream are unchanged (PS-135).
+>
+> **The six pairs at this ruling.**
+>
+> | recipient (State Board id) | giver | rows | all years | since 2023-05-15 |
+> |---|---|---|---|---|
+> | Lamont Robinson, ward 4 (38916) | Friends to Elect Lamont Robinson | 2 | $112,699.54 | $44,199.54 |
+> | Gilbert Villegas, ward 36 (26023) | Gilbert Villegas for Congress | 5 | $42,454.61 | $0.00 |
+> | Michelle Harris, ward 8 (20016) | Citizens for Michelle Harris | 4 | $30,000.00 | $10,000.00 |
+> | Jessie Fuentes, ward 26 (38831) | Progressive Democrats for Jessie Fuentes | 3 | $15,150.00 | $15,150.00 |
+> | Chris Taliaferro, ward 29 (25937) | Committee to Elect Chris Taliaferro | 1 | $4,086.26 | $0.00 |
+> | Jim Gardiner, ward 45 (34894) | Gardiner for Ward Committeeman | 1 | $1,200.00 | $1,200.00 |
+>
+> Gilbert Villegas for Congress is a federal committee (FEC C00794040) that is not in State
+> Board data; it is listed on Ishan’s attestation that it is his. The other five givers were
+> identified in the sealed vintage by their committee records and by each giver’s own reported
+> payment to the recipient.
+>
+> **The three strings.** Typographic apostrophes, as the existing chips have.
+> - **From the candidate’s other committee** marks the money where a candidate’s own
+>   receipts are shown.
+> - **Candidate’s other committee** marks the giver in a list of donors across recipients.
+> - **candidate’s other committee** marks a row of a listed pair inside a donor’s profile.
+>
+> **Display, elections tool** (`/city-council`; the same code serves the other office pages).
+> - **OC-E1, the card sentence.** It renders when the card has own money or other-committee
+>   money. The own-money part and the other-committee part each appear only when above zero.
+>   **from other donors** is always the last part and is always printed, at $0 if need be. Each
+>   figure is rounded to the dollar on its own, as every figure on the card is.
+>   - **$A** is the candidate’s own money or loans · **$B** from the candidate’s other
+>     committee · **$C** from other donors
+>   - with no own money: **$B** is from the candidate’s other committee · **$C** from other
+>     donors
+>   - with no other-committee money: the sentence as it reads today.
+> - **OC-E2, the bar and legend.** The contributions bar gains a segment for the
+>   other-committee money, between its two existing segments. The legend gains **From the
+>   candidate’s other committee**, after **From other donors**, shown only on a race view
+>   where a card has such money. The segment’s colour is a display decision taken on the
+>   rendered page at the HALT.
+> - **OC-E3, donor lists.** In a card’s contributor list and in a committee profile, the
+>   giver’s line stays a named, clickable donor and carries **From the candidate’s other
+>   committee**.
+> - **OC-E4, browse rows.** In Browse donors, a listed giver’s row carries **Candidate’s
+>   other committee**.
+> - **OC-E5, donor profile.** In a donor’s profile, each itemized row of a listed pair
+>   carries **candidate’s other committee**, in the form of the existing item chips.
+> - **OC-E6, the person surface.** Its money line takes OC-E1’s sentence.
+>
+> **Display, council voting tool** (`/alder-voting-history`).
+> - **OC-V1, the alder page.** Under the tiles, when the selected cycle holds such money, with
+>   the figure in the tiles’ whole-dollar form: **From the candidate’s other committee: $B,
+>   included in Raised.**
+> - **OC-V2, donor rows.** On an alder’s donor list the giver’s row carries **From the
+>   candidate’s other committee**. In Browse donors and in an industry’s donor list a
+>   listed giver’s row carries **Candidate’s other committee**.
+> - **OC-V3, donor profile.** In the giver’s profile, the recipient row of a listed pair
+>   carries **candidate’s other committee**.
+> - The Follow the money tab is not marked.
+>
+> **Methodology, council voting tool.** One item is added at the end of the list under
+> “What counts as a contribution shown here”, with the lead **Transfers from a
+> candidate’s other committee.** and then this text:
+>
+> Some candidates move money into their campaign committee from another committee of their own,
+> such as a fund for a state or federal office. We count it in the total raised and label it “From
+> the candidate’s other committee.” It is not the candidate’s personal money, and it is not a
+> contribution from an outside donor. We mark only committees we have confirmed belong to the same
+> person.
+
+*Provenance: AUDIT-2 M5 ratification package, revision 1 (`audit-2-m5-package-rev1.md`), sha256 `7ec3e5b1a501875e2e8c94aba807611a423d38b1484741bc97db7c7be87c9292`, 19,149 B / 292 L, region R1 (its lines 23–119), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-02 as drafted (“ratified”), on his rulings of 2026-10-01 and 2026-10-02. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-141`; `PS-142` occurring 0 times before this commit), never carried. Measured basis: AUDIT-2 BR-11 report `a877ea17f34152ee25d5e536cd548d64c477cdebb772214c9b8601d2fbc458bc` and BR-12 report `08a760af2c018d68265b2be8b361020e5e307be4b8551a24065db0a7433b9298`.*
+
+### PS-143 — the elections cards decide the candidate’s own money by the per-row stamp
+
+> **One test.** Every surface of the elections tool decides the candidate’s own money by the
+> per-row `is_self` stamp (PS-135). The card’s own-money figure, its bar segment, its own-money
+> sentence, the **Mostly self-funded** chip and the person surface’s money line read the stamp,
+> as the contributor list, the donor profile and the browse rows (PS-136) already do. The
+> donor-wide test those figures used, any loan or any donor typed `Candidate` or tagged
+> `self-funding`, is retired from the page.
+>
+> **What follows.** A gift or loan from anyone other than the committee’s own candidate is
+> counted as from other donors: a relative with the same surname, another candidate, another
+> committee. The one exception is a transfer on the own-committee list, which is its own part of
+> the card sentence. The candidate’s own gifts and own loans are own money whatever type the
+> donor record carries.
+>
+> **Strings.** No string changes. **the candidate’s own money or loans** now means the
+> candidate’s own gifts and the candidate’s own loans.
+>
+> **Measured basis.** AUDIT-2 BR-12: the two tests disagreed on 63 of the 158 cards that have a
+> committee on file. Own money as the cards showed it, and by the stamp: city council 2027,
+> $1,409,671.31 and $1,202,537.31; school board 2026, $988,661.46 and $968,715.04; school board
+> 2024, $925,834.74 and $832,886.67.
+
+*Provenance: AUDIT-2 M5 ratification package, revision 1 (`audit-2-m5-package-rev1.md`), sha256 `7ec3e5b1a501875e2e8c94aba807611a423d38b1484741bc97db7c7be87c9292`, 19,149 B / 292 L, region R2 (its lines 127–146), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-02 as drafted (“ratified”), on his rulings of 2026-10-01 and 2026-10-02. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-142`; `PS-143` occurring 0 times before this commit), never carried. Measured basis: AUDIT-2 BR-11 report `a877ea17f34152ee25d5e536cd548d64c477cdebb772214c9b8601d2fbc458bc` and BR-12 report `08a760af2c018d68265b2be8b361020e5e307be4b8551a24065db0a7433b9298`.*
+
 ---
 
 ## Rulings ratified without an id
@@ -2653,6 +2780,18 @@ The mechanism that materializes C5's `{DATA_THROUGH}` and the exact composition 
 > branch 1051–1087, call site 1402 of `render.js` at `420ef877818fa4506ddabfab06dfb3b5ca1808961f49dbac3d9119dc8f1ba354`.
 
 *Provenance, amendment (the seam and the third element): ARC-BOUNDARY-3 ratification package, revision 1 (`arc-boundary-3-ratification-package-rev1.md`), sha256 `a4977582acb3dd42319f243975e984c59f866b6a294b796ad80d412d68d0ab29`, 18,258 B / 147 L, Region 1, lines 22–35, transcribed verbatim from the marked ruling region; the source's own `>` prefix is the register's quoted-block marker carried across at the same level rather than nested, text after the marker unaltered character for character — the transform stated at §PS-127. Ratified by Ishan 2026-09-01 as drafted. Recorded under the PS-93 pattern: no id is allocated, the next free numbered id is untouched, and the R9 block stands unaltered above with its two-parameter signature and its "nothing else" clause, because transcription is never harmonization and an amendment says what now governs rather than editing the superseded reading away. The seam it records was built and ratified at CNCL-DATA-1 P2.1 (D2, D3, HALT-edits relay `7da6bd87…`) and disclosed in `render.js` at its definition; the coordinates it cites were measured at this boundary's G0 (`cb97b0b0450c4fe56543939abf87d4863ca607a19566fd8c5419db6ee809a48b` §E2). The paired pointer was checked at the moment of use under PS-129: the heading `### CNCL-DATA-1 P2 — R8 and R9 as applied` measured exactly once, and the R9 block it governs was compared byte for byte against `a92f7835c5e6f67ef9c8dc38001cda163a2b3d57dcf48a6471a41c457013eff1` before and after the insertion, both sides asserted non-empty. The entry is read by no gate check.*
+
+> **Amendment (the own-committee paragraph).** The municipal methodology on `/city-council`
+> gains one paragraph, C6, a plain paragraph after C4 and before the verification section. The
+> composition is otherwise as it stands. The school-board methodology is unchanged. C6 reads:
+>
+> Some candidates move money into their campaign committee from another committee of their own,
+> such as a fund for a state or federal office. We count it in the total raised and label it “From
+> the candidate’s other committee.” It is not the candidate’s personal money, and it is not a
+> contribution from an outside donor. We mark only committees we have confirmed belong to the same
+> person.
+
+*Provenance, amendment (the own-committee paragraph, C6): AUDIT-2 M5 ratification package, revision 1 (`audit-2-m5-package-rev1.md`), sha256 `7ec3e5b1a501875e2e8c94aba807611a423d38b1484741bc97db7c7be87c9292`, 19,149 B / 292 L, region R3 (its lines 214–222), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-02 as drafted. Recorded under the PS-93 pattern: no id is allocated, and the R9 block and the ARC-BOUNDARY-3 amendment stand unaltered above, because an amendment says what now governs rather than editing the superseded reading away. The gate’s `[METH/REGISTER]` reads C6 from this block and compares the rendered paragraph to it.*
 
 ### CNCL-DATA-1 P2 — display decisions
 

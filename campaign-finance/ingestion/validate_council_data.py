@@ -89,6 +89,7 @@ def validate(d):
     errors.extend(validate_dues_excluded(d))
     errors.extend(validate_stream_fusion(d))
     errors.extend(validate_ie_split(d))
+    errors.extend(validate_own_committee(d))
     _alder_errs, _alder_warns = validate_alder_linkage(d)
     errors.extend(_alder_errs)
     warnings.extend(_alder_warns)
@@ -470,6 +471,11 @@ def validate_shard_freshness(d, shards_dir):
             return round(s, 2)
         if tot(mc) != tot(cc):
             errs.append(f"SHARD/STALE: contribution dollars monolith {tot(mc)} != shard {tot(cc)}")
+        # M5: the shard must carry the same own-committee stamps as the monolith it was cut from.
+        own = lambda rows: sorted(str(r.get('id')) for r in rows if r.get('is_own_committee'))
+        if own(mc) != own(cc):
+            errs.append(f"SHARD/STALE: is_own_committee rows monolith {len(own(mc))} != shard "
+                        f"{len(own(cc))} (or different rows) — re-run build_shards")
     for key in ('donors', 'committees'):
         if len(d.get(key, {})) != len(idx.get(key, {})):
             errs.append(f"SHARD/STALE: {key} monolith {len(d.get(key, {})):,} != "
@@ -788,7 +794,7 @@ IE_RECEIPT_TYPE_CHECK = 'IE Committee Receipt'   # PS-138; build_rollups' by_par
 # end of the ownership build_rollups now holds. Stated here rather than imported, for the
 # PS-82 reason the predicate above is stated here. Presence-conditional to match the
 # builder: election-data.json carries no version field and none is invented.
-COUNCIL_SCHEMA_VERSION_CHECK = '2.1'
+COUNCIL_SCHEMA_VERSION_CHECK = '2.2'
 
 
 def _dues_recount(contribs):
@@ -994,7 +1000,7 @@ def validate_dues_excluded(d):
     if 'schema_version' in d and d['schema_version'] != COUNCIL_SCHEMA_VERSION_CHECK:
         errors.append(f"schema_version {d['schema_version']!r} != "
                       f"{COUNCIL_SCHEMA_VERSION_CHECK!r} — the dues_excluded field's shape "
-                      f"requires it, and build_rollups writes it (ELEC-FIGURE-1)")
+                      f"requires it and M5's is_own_committee row field moved it to 2.2; build_rollups writes it")
 
     dx = d.get('dues_excluded')
 
@@ -1099,6 +1105,93 @@ def validate_ie_split(d):
         errors.append(f"[IE/SPLIT] {len(off)} by_parent entr(ies) off the recount or the sum "
                       f"(first: {off[:3]})")
     return errors
+
+
+# M5 — the own-committee list, stated here by path rather than imported from the builder (the
+# PS-82 reason: the check must not inherit the builder's reading of the file).
+OWN_COMMITTEE_LIST = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                  'own-committee-transfers.json')
+
+
+def validate_own_committee(d, pairs=None):
+    """[OWN/COMMITTEE] M5 — transfers from a candidate's other committee.
+
+    PS-128 declaration: MODE B — live-derived, premise asserted by the check itself. The list
+    must load and be non-empty before any row is compared, so a missing list fails here rather
+    than passing with nothing to compare.
+
+    Four rules, all errors, on any artifact that carries contributions and committees. Each
+    artifact is held to the whole list: both council-data.json and election-data.json carry
+    every ward committee, so a pair that matches nothing in either is a stale list.
+    (1) THE STAMP IS THE LIST. A row carries is_own_committee exactly when its recipient is
+        the committee typed `candidate` with a listed SBE id and its donor is that pair's
+        donor. A stamp on any other row, or a listed pair's row without the stamp, errors.
+    (2) NO STALE PAIR. Every listed pair matches at least one row.
+    (3) A LISTED GIVER STANDS ALONE. A listed giver is its own parent, no other donor names
+        it as parent, and no donor cluster holds it with another member, so a donor line that
+        carries the chip holds only that giver's rows.
+    (4) NEVER BOTH. No row carries is_own_committee and is_self."""
+    contribs = d.get('contributions')
+    if not isinstance(contribs, list):
+        return []          # a members- or votes-shaped artifact: nothing to check
+    comms = d.get('committees')
+    if not isinstance(comms, dict):
+        return ["[OWN/COMMITTEE] premise: contributions present but no committees map"]
+    if pairs is None:
+        try:
+            with open(OWN_COMMITTEE_LIST) as f:
+                raw = json.load(f)
+            pairs = {(str(p['recipient_sbe_committee_id']), str(p['donor_id']))
+                     for p in raw['pairs']}
+        except Exception as e:
+            return [f"[OWN/COMMITTEE] premise: the list {OWN_COMMITTEE_LIST} did not load: {e}"]
+    if not pairs:
+        return ["[OWN/COMMITTEE] premise: the own-committee list is empty"]
+    donors = d.get('donors') or {}
+    errs, seen = [], {p: 0 for p in pairs}
+    unstamped, stray, both = [], [], []
+    for c in contribs:
+        rc = comms.get(c.get('committee_id')) or {}
+        key = (str(rc.get('sbe_committee_id') or ''), c.get('donor_id'))
+        listed = rc.get('type') == 'candidate' and key in pairs
+        stamped = c.get('is_own_committee') is True      # the builder writes True or no key
+        if listed:
+            seen[key] += 1
+            if not stamped:
+                unstamped.append(c.get('id'))
+        elif 'is_own_committee' in c:
+            stray.append(c.get('id'))
+        if stamped and c.get('is_self'):
+            both.append(c.get('id'))
+    if unstamped:
+        errs.append(f"[OWN/COMMITTEE] {len(unstamped)} row(s) of a listed pair lack the stamp "
+                    f"(first: {unstamped[:3]}) — rebuild with build_rollups")
+    if stray:
+        errs.append(f"[OWN/COMMITTEE] {len(stray)} row(s) carry is_own_committee outside the "
+                    f"list (first: {stray[:3]})")
+    stale = sorted(p for p, n in seen.items() if n == 0)
+    if stale:
+        errs.append(f"[OWN/COMMITTEE] {len(stale)} listed pair(s) match no row (first: "
+                    f"{stale[:3]}) — the list is stale; an addition or removal is a new ruling")
+    if both:
+        errs.append(f"[OWN/COMMITTEE] {len(both)} row(s) carry both is_own_committee and "
+                    f"is_self (first: {both[:3]})")
+    clusters = d.get('donor_clusters') or {}
+    for giver in sorted({did for _, did in pairs}):
+        g = donors.get(giver)
+        if g is None:
+            continue      # an unresolved donor id is [AGG/PS-96-DEFECT]'s; no rows is rule (2)'s
+        shared = sorted(k for k, v in donors.items()
+                        if k != giver and (v or {}).get('parent_id') == giver)
+        comembers = sorted({m for cl in clusters.values()
+                            if giver in ((cl or {}).get('members') or [])
+                            for m in cl['members'] if m != giver})
+        if (g.get('parent_id') or giver) != giver or shared or comembers:
+            errs.append(f"[OWN/COMMITTEE] listed giver {giver!r} shares a donor cluster "
+                        f"(parent {g.get('parent_id')!r}, children {shared[:3]}, "
+                        f"cluster co-members {comembers[:3]}) — a listed giver stands alone; "
+                        f"take it out of the Sheet's Donor Clusters tab or re-rule the list")
+    return errs
 
 
 def summary(d):
@@ -1349,11 +1442,11 @@ def self_test():
           {'members': []}, None)
     # §2 — the version assertion, both ways.
     dcase("[DUES/SCHEMA] the ruled schema_version passes",
-          {'contributions': [_row], 'schema_version': '2.1',
+          {'contributions': [_row], 'schema_version': '2.2',
            'dues_excluded': {'amount': 100.0, 'count': 1}}, None)
     dcase("[DUES/SCHEMA] a stale schema_version errors",
-          {'contributions': [_row], 'schema_version': '2.0',
-           'dues_excluded': {'amount': 100.0, 'count': 1}}, "schema_version '2.0' !=")
+          {'contributions': [_row], 'schema_version': '2.1',
+           'dues_excluded': {'amount': 100.0, 'count': 1}}, "schema_version '2.1' !=")
 
     # ELEC-IDENTITY-1 R1 (iii) — the alder-linkage rules on synthetic fixtures.
     # PS-128 declaration: MODE A — pinned independently of live repo state. No artifact
@@ -1518,6 +1611,48 @@ def self_test():
           {'donors': _dn, 'contributions': [_gift], 'rollups': {'by_parent': _good}}, "no committees map")
     icase("[IE/SPLIT] an artifact with no contributions key SKIPS cleanly",
           {'members': []}, None)
+
+    # M5 — [OWN/COMMITTEE] on synthetic fixtures; the list is passed in, no file is read.
+    def ocase(name, artifact, expect, pairs={('100', 'giver')}):
+        errs = validate_own_committee(artifact, pairs)
+        ok = (not errs) if expect is None else any(expect in e for e in errs)
+        results.append((name, ok))
+        print(("SELF-TEST PASS  " if ok else "SELF-TEST FAIL  ") + name +
+              ("" if ok else f"  errors={errs}"))
+    _ocm = {'c1': {'type': 'candidate', 'sbe_committee_id': '100'},
+            'ie1': {'type': 'independent_expenditure', 'sbe_committee_id': '100'},
+            'c2': {'type': 'candidate', 'sbe_committee_id': '200'}}
+    _odn = {'giver': {'parent_id': 'giver'}, 'other': {'parent_id': 'other'}}
+    _own = {'id': 'o1', 'committee_id': 'c1', 'donor_id': 'giver', 'is_own_committee': True}
+    _oth = {'id': 'o2', 'committee_id': 'c1', 'donor_id': 'other'}
+    def _oa(rows, donors=None):
+        return {'committees': _ocm, 'donors': donors or _odn, 'contributions': rows}
+    ocase("[OWN/COMMITTEE] the stamp on exactly the listed pair's rows passes",
+          _oa([_own, _oth, {'id': 'o3', 'committee_id': 'c2', 'donor_id': 'giver'}]), None)
+    ocase("[OWN/COMMITTEE] a listed pair's row without the stamp errors",
+          _oa([{k: v for k, v in _own.items() if k != 'is_own_committee'}]), "lack the stamp")
+    ocase("[OWN/COMMITTEE] a stamp on the same giver's gift to another committee errors",
+          _oa([_own, dict(_own, id='o4', committee_id='c2')]), "outside the list")
+    ocase("[OWN/COMMITTEE] a stamp on money into the same SBE id's IE record errors",
+          _oa([_own, dict(_own, id='o5', committee_id='ie1')]), "outside the list")
+    ocase("[OWN/COMMITTEE] a listed pair with no row errors (stale list)",
+          _oa([_oth]), "match no row")
+    ocase("[OWN/COMMITTEE] a row carrying both stamps errors",
+          _oa([dict(_own, is_self=True)]), "both is_own_committee and is_self")
+    ocase("[OWN/COMMITTEE] a listed giver under another parent errors",
+          _oa([_own], {'giver': {'parent_id': 'boss'}, 'boss': {'parent_id': 'boss'}}), "stands alone")
+    ocase("[OWN/COMMITTEE] a listed giver heading a cluster errors",
+          _oa([_own], {'giver': {'parent_id': 'giver'}, 'kid': {'parent_id': 'giver'}}), "stands alone")
+    ocase("[OWN/COMMITTEE] a listed giver in a cluster with another member errors",
+          dict(_oa([_own]), donor_clusters={'r1': {'members': ['giver', 'other']}}), "stands alone")
+    ocase("[OWN/COMMITTEE] a listed giver alone in a cluster passes",
+          dict(_oa([_own]), donor_clusters={'r1': {'members': ['giver']}}), None)
+    ocase("[OWN/COMMITTEE] a stamp that is not the literal True errors",
+          _oa([dict(_own, is_own_committee='yes')]), "lack the stamp")
+    ocase("[OWN/COMMITTEE] an empty list errors (premise)", _oa([_oth]), "list is empty", pairs=set())
+    ocase("[OWN/COMMITTEE] a contributions-bearing artifact with no committees map errors (premise)",
+          {'contributions': [_oth]}, "no committees map")
+    ocase("[OWN/COMMITTEE] an artifact with no contributions key SKIPS cleanly", {'members': []}, None)
 
     bad = [n for n, ok in results if not ok]
     print(f"self-test: {len(results)} checks · "

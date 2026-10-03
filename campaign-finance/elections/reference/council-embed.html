@@ -574,6 +574,9 @@ const FEEDBACK_CONFIG = {
   display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;
   letter-spacing:.04em;padding:3px 9px;border-radius:20px;color:#fff;line-height:1.4;
 }
+/* M5: the own-committee chip. One self-contained rule, so it reads the same in a list row and in the modal. */
+.ipg-cf-own{display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;letter-spacing:.04em;padding:3px 9px;border-radius:20px;background:#DDEBEA;color:#1F5D5A;line-height:1.4}
+.ipg-cf-ownline{margin:-6px 0 18px;font-size:13.5px;color:#4d4439}
 .ipg-modal-type{font-weight:600;color:#6a5d4e}
 .ipg-modal-city{color:#9a8e7e}
 .ipg-modal-flags{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
@@ -839,7 +842,7 @@ const FEEDBACK_CONFIG = {
             .then(rr=>{ if(!rr.ok) throw new Error('HTTP '+rr.status); return rr.json(); })
             .then(cj=>{
               state.cf.contributions = Array.isArray(cj)?cj:((cj&&cj.contributions)||[]);
-              state._cfDonorIndex=null; state._cfClusterIndex=null; state._cfIESpenders=null;   // rebuild memoized indexes with real data
+              state._cfDonorIndex=null; state._cfClusterIndex=null; state._cfIESpenders=null; state._cfOwn=null;   // rebuild memoized indexes with real data
               state.contribStatus='loaded'; renderBody();
             })
             .catch(e=>{ state.contribStatus='error'; console.warn('IPG: contributions shard failed:',e); renderBody(); });
@@ -866,12 +869,29 @@ const FEEDBACK_CONFIG = {
     if(!state.cf) return [];
     return state.cf.contributions.filter(c=>c.committee_id===cid);
   }
+  // M5 (ratified 2026-10-02): transfers from a candidate's other committee. build_rollups stamps
+  // is_own_committee on the rows of the closed list's pairs and on no other row; this page only
+  // reads the stamp. OWN_FROM marks the money on the candidate's own page, OWN_GIVER names the
+  // giver in a list of donors across recipients, OWN_ROW marks the pair's row in a donor profile.
+  const OWN_FROM='<span class="ipg-cf-own">From the candidate\u2019s other committee</span>';
+  const OWN_GIVER='<span class="ipg-cf-own">Candidate\u2019s other committee</span>';
+  const OWN_ROW='<span class="ipg-cf-own">candidate\u2019s other committee</span>';
+  function cfOwnCommittee(){
+    if(state._cfOwn) return state._cfOwn;
+    const pairs=new Set(), givers=new Set();
+    ((state.cf&&state.cf.contributions)||[]).forEach(c=>{
+      if(c.is_own_committee){ pairs.add(c.committee_id+'|'+c.donor_id); givers.add(c.donor_id); }
+    });
+    state._cfOwn={pairs,givers};
+    return state._cfOwn;
+  }
   // Aggregate by donor for a given list of contributions.
   function aggregateByDonor(contribs){
     const m=new Map();
     contribs.forEach(c=>{
-      const cur=m.get(c.donor_id)||{donor_id:c.donor_id,total:0,count:0,latest:null,earliest:null};
+      const cur=m.get(c.donor_id)||{donor_id:c.donor_id,total:0,count:0,latest:null,earliest:null,own:false};
       cur.total+=c.amount; cur.count++;
+      if(c.is_own_committee) cur.own=true;
       if(!cur.latest||c.date>cur.latest) cur.latest=c.date;
       if(!cur.earliest||c.date<cur.earliest) cur.earliest=c.date;
       m.set(c.donor_id,cur);
@@ -1180,6 +1200,9 @@ const FEEDBACK_CONFIG = {
     h+=stat(fmtMoney(avgGift),'Avg. gift',true);
     h+=stat(totalContribs.toLocaleString(),'Contributions');
     h+='</div>';
+    // M5 (OC-V1): the other-committee line, in the tiles' whole-dollar form; the money stays in Raised.
+    const ownAmt=contribs.reduce((s,c)=>s+(c.is_own_committee?c.amount:0),0);
+    if(ownAmt>0) h+='<p class="ipg-cf-ownline">From the candidate\u2019s other committee: <strong>'+fmtMoney(ownAmt)+'</strong>, included in Raised.</p>';
 
     // Per-alder industry breakdown (dollar-bill stacked bar).
     // Skip if no industries (very early data or no real contributions yet).
@@ -1267,7 +1290,7 @@ const FEEDBACK_CONFIG = {
     return '<div class="ipg-cf-row ipg-cf-clickable" data-donor-id="'+a.donor_id+'">'
       +'<div><div class="name">'+d.name+'</div>'
       +'<div class="sub">'+subBits.join(' · ')+'</div>'
-      +'<div class="ipg-cf-tags">'+indChips+flagChips+'</div>'
+      +'<div class="ipg-cf-tags">'+indChips+flagChips+(a.own?OWN_FROM:'')+'</div>'   // M5 (OC-V2)
       +'</div>'
       +'<div class="amount">'+fmtMoney(a.total)+'</div></div>';
   }
@@ -1834,7 +1857,7 @@ const FEEDBACK_CONFIG = {
           +'<div><div class="name">'+x.name
           +(x.members>1?' <span class="ipg-cf-rollup-pill">rollup</span>':'')+'</div>'
           +'<div class="sub">'+sub.join(' \u00b7 ')+'</div>'
-          +'<div class="ipg-cf-tags">'+renderIndustryChips(x.donor,{compact:true})+'</div>'
+          +'<div class="ipg-cf-tags">'+renderIndustryChips(x.donor,{compact:true})+(cfOwnCommittee().givers.has(x.id)?OWN_GIVER:'')+'</div>'   // M5 (OC-V2)
           +'</div>'
           +cfAmt3(x.direct,x.independent,x.total)+'</div>';
       }
@@ -2050,7 +2073,7 @@ const FEEDBACK_CONFIG = {
         h += '<div class="ipg-cf-row ipg-cf-clickable" data-donor-id="'+donor.id+'">'
           + '<div><div class="name">'+donor.name+'</div>'
           + '<div class="sub">'+count+(count===1?' contribution':' contributions')+'</div>'
-          + '<div class="ipg-cf-tags">'+renderIndustryChips(donor,{compact:true})+'</div></div>'
+          + '<div class="ipg-cf-tags">'+renderIndustryChips(donor,{compact:true})+(cfOwnCommittee().givers.has(donor.id)?OWN_GIVER:'')+'</div></div>'   // M5 (OC-V2)
           + '<div class="amount">'+fmtMoney(total)+'</div></div>';
       });
       if(donorTotals.length > 25){
@@ -2324,6 +2347,7 @@ const FEEDBACK_CONFIG = {
           h+='<div class="ipg-cf-row ipg-cf-clickable ipg-cf-recipient" data-ward="'+cm.ward+'">'
             +'<div><div class="name">Ward '+cm.ward+' \u2014 '+relEsc(alderByWard(cm.ward)?.name||cm.alder_name||'')+'</div>'   // D13: roster name first
             +'<div class="sub">'+relEsc(cm.committee_name||'Committee')+' · '+countStr+'</div>'
+            +(cfOwnCommittee().pairs.has(r.committee_id+'|'+donor.id)?'<div class="ipg-cf-tags">'+OWN_ROW+'</div>':'')   // M5 (OC-V3)
             +'</div>'
             +'<div class="amount">'+fmtMoney(r.total)+'</div></div>';
         } else {
@@ -2637,6 +2661,7 @@ function recTagChips(){
         <li><strong>Itemization follows the SBE record.</strong> Contribution data is pulled directly from Illinois State Board of Elections filings, and our itemization and disclosure boundaries follow the filings themselves &mdash; every contribution the SBE itemizes, we itemize and attribute to the named donor. (Donor-cluster roll-up totals &mdash; which stand in for a group of related records rather than a single identifiable donor &mdash; remain excluded from the donor-network and &ldquo;Follow the money&rdquo; relationship views.)</li>
         <li>Amounts and dates reflect what was reported in the filings. Filers occasionally amend, misreport, or duplicate entries; see <em>Limitations</em> below.</li>
         <li>This tool also excludes contributions with no usable date. Because their date is unknown, they cannot be placed in any cycle and are not shown in any view.</li>
+        <li><strong>Transfers from a candidate&rsquo;s other committee.</strong> Some candidates move money into their campaign committee from another committee of their own, such as a fund for a state or federal office. We count it in the total raised and label it &ldquo;From the candidate&rsquo;s other committee.&rdquo; It is not the candidate&rsquo;s personal money, and it is not a contribution from an outside donor. We mark only committees we have confirmed belong to the same person.</li>
       </ul>
 
       <h3 class="ipg-meth-h" id="meth-donors">How we identify and group donors</h3>

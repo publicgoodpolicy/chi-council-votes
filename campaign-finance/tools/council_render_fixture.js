@@ -226,6 +226,31 @@ function withSynthetic(base, opts) {
     'curated headline ' + curatedRaised + ' vs pre-2011 subset ' + preSubset.toFixed(2) +
     ' (the undated $' + SYNTH_UNDATED + ' is in neither collection)');
 
+  // ---- M5 (PS-142) — the other-committee line and chips, on a constructed row -------------
+  // A synthetic donor gives the target committee one stamped row. The stamp is what the page
+  // reads; the closed list and the builder that writes the stamp are the validator's subject.
+  var OWN_AMT = 7777;
+  var od = JSON.parse(baseRaw);
+  od.donors['_own-fixture'] = { name: 'Own-committee donor (fixture)', type: 'PAC',
+    parent_id: '_own-fixture', industries: [], flags: [] };
+  od.contributions.push({ id: 'fixture-own-1', donor_id: '_own-fixture', committee_id: TARGET,
+    amount: OWN_AMT, date: '2024-06-30', cycle: '2027', contribution_type: 'Transfer In',
+    is_own_committee: true });
+  var own = await boot(embedNow, od, { showAll: true });
+  var ownLine = own.app.querySelector('.ipg-cf-ownline');
+  var ownChips = [].slice.call(own.app.querySelectorAll('.ipg-cf-own'));
+  var ownRow = own.app.querySelector('.ipg-cf-row[data-donor-id="_own-fixture"]');
+  T.ok('[M5/OWN] the line under the tiles states the stamped money in whole dollars, and Raised includes it',
+    !!ownLine && ownLine.textContent === 'From the candidate\u2019s other committee: $7,777, included in Raised.' &&
+    money((own.text.match(/\$([\d,]+)\s*Raised/) || [])[1]) === realRaised + OWN_AMT,
+    ownLine ? ownLine.textContent : 'no line');
+  T.ok('[M5/OWN] exactly the stamped donor\u2019s row carries the chip, and unstamped data renders neither line nor chip',
+    ownChips.length === 1 && !!ownRow && ownRow.contains(ownChips[0]) &&
+    ownChips[0].textContent === 'From the candidate\u2019s other committee' &&
+    real.app.querySelectorAll('.ipg-cf-own, .ipg-cf-ownline').length === 0,
+    ownChips.length + ' chip(s) on the constructed data, ' +
+    real.app.querySelectorAll('.ipg-cf-own, .ipg-cf-ownline').length + ' on the real ward');
+
   // ---- assert 4 (E1.4 / F3) — no-writes, measured last -------------------------------
   var postEmbed = sha(EMBED), postData = sha(DATA);
   var postTree = execFileSync('git', ['status', '--porcelain'], { cwd: REPO, encoding: 'utf8' });

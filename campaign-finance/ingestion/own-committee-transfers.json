@@ -1,0 +1,47 @@
+{
+  "_about": "Closed list of own-committee transfer pairs. Each pair is a receiving candidate committee, by its State Board of Elections committee id, and a giving donor that is another political committee of the same person. The key is recipient_sbe_committee_id plus donor_id; the other fields describe the pair and are not validated. An addition or removal is a new ruling: see campaign-finance/RULINGS.md, the entry on transfers from a candidate's other committee.",
+  "pairs": [
+    {
+      "recipient_sbe_committee_id": "38916",
+      "recipient_committee": "Lamont Robinson For Alderman",
+      "donor_id": "friends-to-elect-lamont-robinson",
+      "donor_name": "Friends to Elect Lamont Robinson",
+      "basis": "State Board committee 34073, his state-representative committee"
+    },
+    {
+      "recipient_sbe_committee_id": "26023",
+      "recipient_committee": "Friends of Gilbert Villegas for Alderman",
+      "donor_id": "gilbert-villegas-for-congress",
+      "donor_name": "Gilbert Villegas for Congress",
+      "basis": "federal committee, FEC C00794040; not in State Board data; listed on Ishan's attestation of 2026-10-01 that it is his"
+    },
+    {
+      "recipient_sbe_committee_id": "20016",
+      "recipient_committee": "Friends of Michelle A Harris",
+      "donor_id": "citizens-for-michelle-harris",
+      "donor_name": "Citizens for Michelle Harris",
+      "basis": "State Board committee 31907, her other candidate committee"
+    },
+    {
+      "recipient_sbe_committee_id": "38831",
+      "recipient_committee": "Friends of Jessie Fuentes",
+      "donor_id": "progressive-democrats-for-jessie-fuentes",
+      "donor_name": "Progressive Democrats for Jessie Fuentes",
+      "basis": "State Board committee 39498, her other candidate committee"
+    },
+    {
+      "recipient_sbe_committee_id": "25937",
+      "recipient_committee": "Friends of Chris Taliaferro",
+      "donor_id": "committee-to-elect-chris-taliaferro",
+      "donor_name": "Committee to Elect Chris Taliaferro",
+      "basis": "State Board committee 37127, his judicial-race committee"
+    },
+    {
+      "recipient_sbe_committee_id": "34894",
+      "recipient_committee": "Friends to Elect Jim Gardiner",
+      "donor_id": "gardiner-for-ward-committeeman",
+      "donor_name": "Gardiner for Ward Committeeman",
+      "basis": "State Board committee 35902, his ward-committeeman committee"
+    }
+  ]
+}
