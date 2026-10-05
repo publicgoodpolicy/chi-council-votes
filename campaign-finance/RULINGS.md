@@ -1984,6 +1984,110 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: AUDIT-2 M5 ratification package, revision 1 (`audit-2-m5-package-rev1.md`), sha256 `7ec3e5b1a501875e2e8c94aba807611a423d38b1484741bc97db7c7be87c9292`, 19,149 B / 292 L, region R2 (its lines 127–146), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-02 as drafted (“ratified”), on his rulings of 2026-10-01 and 2026-10-02. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-142`; `PS-143` occurring 0 times before this commit), never carried. Measured basis: AUDIT-2 BR-11 report `a877ea17f34152ee25d5e536cd548d64c477cdebb772214c9b8601d2fbc458bc` and BR-12 report `08a760af2c018d68265b2be8b361020e5e307be4b8551a24065db0a7433b9298`.*
 
+### PS-144 — on the school-board voting page, money streams are fused only in an election-wide total and in one spender’s own spend, and a fused figure is labelled as deployed
+
+> **The rule,** as the school-board voting page and its render fixture have each carried it
+> since SBFIN-3 B, in a comment that calls it verbatim and in force:
+>
+> Fusion of money streams is FORBIDDEN on any per-member or per-candidate surface, without
+> exception. It is permitted in exactly two scopes: (a) election-wide aggregates and (b) a
+> single spender's own spend. Where permitted, every part must be separately labeled and the
+> fused label must name deployment ("total deployed"), never "independent". The per-member
+> prohibition is asserted per member per election, by figure; the two carves are asserted to
+> occur only on the surfaces that own them.
+>
+> **Scope.** This entry governs the school-board voting page (`/school-board-voting-history`)
+> and nothing else. The council tool’s direct, independent and total giving figures are governed
+> by PS-138.
+>
+> **Where it lives.** The page is `campaign-finance/school-board/school-board-embed.html`. Its
+> fixture, `campaign-finance/school-board/sb_render_fixture.js`, asserts the rule in the checks
+> named `[SBF/NEVERSUM]` and `[SBF3/AMEND]`. The streams the two carves concern are direct
+> contributions to a member’s committee, independent spending in support, and independent
+> spending in opposition. The page keeps a fourth, a candidate’s own money, which it shows on
+> its own and adds to nothing. Carve (a) is the Industry totals view. Carve (b) is an
+> independent-expenditure committee’s own figure, which the page shows in three places: its row
+> in Browse donors, its detail view, and its row in an industry’s list of independent spenders.
+>
+> **Why it is entered now.** The register already carried the per-member prohibition, as the
+> page’s funding-methodology string F3 ("no combined figure of the two is shown for any
+> member"). It did not carry the two carves or the labelling rule; their only home was the
+> comment in the page and in the fixture. Ishan ruled on 2026-10-04 that the rule enters the
+> register as it stands, scoped to this page. Nothing in the rule is changed by this entry.
+>
+> **Widening.** As the page’s comment has it, a request to widen the rule is a finding, not an
+> edit: it is reported and ruled before any code changes. That covers widening either carve and
+> fusing the streams on any surface about one member or one candidate.
+
+*Provenance: AUDIT-2 M4 ratification package, revision 1 (`audit-2-m4-package-rev1.md`), sha256 `a4d1b688f2f46f1654f6ad8b05611624d57c79ae6916e5e855f13ed882db1bc5`, 17,373 B / 176 L, region R1 (its lines 22–53), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-04 as drafted (“1. ratify”), on his ruling of 2026-10-04. The rule’s own text is the comment the page and its fixture have carried since SBFIN-3 B, extracted by script and re-wrapped at spaces only. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-143`; `PS-144` occurring 0 times before this commit), never carried. Measured basis: AUDIT-2 BR-11 report `a877ea17f34152ee25d5e536cd548d64c477cdebb772214c9b8601d2fbc458bc` and BR-13 report `6968fdc5b499de0aed6af65e2330ce04ad95ce7f6b20cd69c5f89c5a064229d6`.*
+
+### PS-145 — on the school-board voting page an outside group’s figure covers current Board members, says so, and links the page that shows all of it
+
+> **What the figure is.** On the school-board voting page (`/school-board-voting-history`), an
+> outside group’s spending figure is read from `campaign-finance/school-board-finance.json`,
+> which carries independent spending for or against current Board members only. The same group’s
+> spending on school-board candidates who are not on the Board is not in that figure. The
+> numbers audit found that the page labelled the figure as what the group spent (finding M4).
+>
+> **Ruled.** The figure stays as it is and is relabelled as spending on current Board members,
+> with a pointer to the School Board Elections page, which shows all of a group’s school-board
+> spending. No figure on the page changes.
+>
+> **The strings.** Typographic apostrophes, as the page has them.
+> - The detail view’s first tile is labelled **total deployed on current members**. It replaces
+>   **total deployed** on that tile only; the Industry totals rows keep **total deployed**.
+> - The detail view’s list is headed **Spending on current Board members**, replacing **What it
+>   spent on**.
+> - The detail view gains one sentence, after the caution and before the tiles: **These figures
+>   cover this committee’s spending for or against current Board members only. All of its school
+>   board spending is on the School Board Elections page.**
+> - In Browse donors, the list note’s last sentence, "An IE row’s amount is what that committee
+>   deployed — spending for and against, shown separately on the row and on click.", becomes:
+>   **An IE row’s amount is what that committee deployed for and against current Board members
+>   only, shown separately on the row and on click. All of its school board spending is on the
+>   School Board Elections page.**
+> - In Industry totals, the note on the two classifiers gains a last sentence: **Independent
+>   spending here covers current Board members only.**
+> - In an industry’s list of independent spenders (Industry totals, after clicking an industry),
+>   one sentence is added under the heading "Independent spenders in this industry": **Each
+>   figure covers that committee’s spending for or against current Board members only. All of
+>   its school board spending is on the School Board Elections page.**
+> - In Industry totals, the sentence above the bar reads **Total deployed across all Board
+>   committees in this election: {N}.** It read "Total raised", and the figure adds direct
+>   contributions and independent spending, which no committee raised. "Deployed" is the word
+>   the fusion rule requires on a fused figure. The rest of that sentence is unchanged.
+> - In Industry totals, the introduction reads **Industries ranked by total dollars deployed
+>   across all Board committees in this election.** It read "total dollars given", for the same
+>   reason.
+>
+> **The link.** In the detail view, the Browse donors note and the industry’s list of
+> independent spenders, the words "School Board Elections page" are a link to
+> https://www.publicgoodpolicy.org/school-board-elections, opening in a new tab, once in each
+> view. It is the third outside address the page may name, after the feedback endpoint and the
+> Board Rule link. The fixture’s `[SBF/FETCH]` checks permit the feedback endpoint by its host
+> and the other two by exact address, and assert that this one is present; a different address
+> on the same site fails.
+>
+> **Left as it is.** The words "in this election" also show when the election selector reads
+> All elections, in three sentences on Browse donors and Industry totals. Ruled 2026-10-04:
+> left as it is in this change and carried as an open item.
+>
+> **What does not change.** The **Spent to support** and **Spent to oppose** tiles, the label
+> **total deployed** on every Industry totals row, the per-member rows, Spend by member,
+> Industries by member, the member pages, and every figure.
+>
+> **Measured basis.** Measured at AUDIT-2 BR-13 on 2026-10-04, at commit
+> `9e760440620dc306cf235230d3ede5eee7d931c9`, from
+> `campaign-finance/school-board-finance.json` and, for each group’s full school-board spending,
+> `campaign-finance/election-data.json`. For 2024 the page’s artifact carried INCS Action
+> Independent Committee at $810,517.78 against $2,251,779.35 of school-board spending, and Urban
+> Center Action at $375,117.96 against $787,519.30. For 2026 it carried Common Ground Collective
+> at $95,837.50 against $390,800.00, Urban Center Action at $2,166.36 against $40,478.88, and
+> Brighter Futures Chicago at $26,460.00, which was all of its spending. The page prints whole
+> dollars.
+
+*Provenance: AUDIT-2 M4 ratification package, revision 1 (`audit-2-m4-package-rev1.md`), sha256 `a4d1b688f2f46f1654f6ad8b05611624d57c79ae6916e5e855f13ed882db1bc5`, 17,373 B / 176 L, region R2 (its lines 63–124), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-04 as drafted (“2. ratify”), on his rulings of 2026-10-01 and 2026-10-04. Arises from the numbers audit of 2026-09-29 (finding M4). Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-144`; `PS-145` occurring 0 times before this commit), never carried. Measured basis: AUDIT-2 BR-11 report `a877ea17f34152ee25d5e536cd548d64c477cdebb772214c9b8601d2fbc458bc` and BR-13 report `6968fdc5b499de0aed6af65e2330ce04ad95ce7f6b20cd69c5f89c5a064229d6`.*
+
 ---
 
 ## Rulings ratified without an id

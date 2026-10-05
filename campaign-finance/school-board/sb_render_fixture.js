@@ -435,16 +435,30 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   // URL rather than to its domain, so a different Board Rule address, or any
   // third target, still fails.
   var RATIFIED_BR_URL = 'https://board-rule.ghost.io/';
+  // WIDENED AGAIN AT AUDIT-2 M4, DELIBERATELY AND BY RATIFICATION (Ishan, 2026-10-04),
+  // stated in the commit message. M4 ratifies a THIRD target: the link from the
+  // outside-spending surfaces to the School Board Elections page, where a spender's full
+  // school-board spending is shown. The permitted set is still enumerated exactly, the new
+  // member is pinned to the ratified URL and not to its domain, and its presence is asserted
+  // below so the widened branch cannot go hollow.
+  var RATIFIED_ELECTIONS_URL = 'https://www.publicgoodpolicy.org/school-board-elections';
   var externals = (EMBED_HTML.match(/https:\/\/[^"' ]+/g) || [])
     .filter(function (u) { return u.indexOf('raw.githubusercontent') < 0
                                && u.indexOf('fonts.googleapis') < 0
                                && u.indexOf('fonts.gstatic') < 0
                                && /^https:\/\/[a-z0-9.-]+\.[a-z]{2,}/i.test(u); });
-  ok('[SBF/FETCH] the feedback endpoint and the ratified Board Rule link are the '
-     + 'only other targets in the source',
+  ok('[SBF/FETCH] the feedback endpoint, the ratified Board Rule link and the ratified '
+     + 'School Board Elections link are the only other targets in the source',
      externals.every(function (u) {
-       return u.indexOf('formspree.io') >= 0 || u === RATIFIED_BR_URL; }),
+       return u.indexOf('formspree.io') >= 0 || u === RATIFIED_BR_URL
+           || u === RATIFIED_ELECTIONS_URL; }),
      externals.join(' | '));
+  ok('[SBF/FETCH] the School Board Elections target is present and is the RATIFIED url, not '
+     + 'merely some publicgoodpolicy.org address',
+     externals.filter(function (u) { return u.indexOf('publicgoodpolicy.org') >= 0; })
+       .every(function (u) { return u === RATIFIED_ELECTIONS_URL; })
+       && externals.indexOf(RATIFIED_ELECTIONS_URL) >= 0,
+     externals.filter(function (u) { return u.indexOf('publicgoodpolicy.org') >= 0; }).join(' | '));
   ok('[SBF/FETCH] the Board Rule target is present and is the RATIFIED url, not '
      + 'merely some board-rule address',
      externals.filter(function (u) { return u.indexOf('board-rule') >= 0; })
@@ -883,6 +897,27 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   ok('[SBF3/BROWSE] the mixed list says what it contains (the retired sentence\'s successor)',
      pBd.text.indexOf('This list mixes two kinds of money') >= 0
        && pBd.text.indexOf('Independent spending is not shown here') < 0);
+  // ---- AUDIT-2 M4 (ratified 2026-10-04): an outside group's figure on this page covers its
+  // spending on current Board members only, says so, and points to the page that shows all
+  // of it. PS-128 mode B for every [M4/SCOPE] check: live-derived from the rendered page, and
+  // each check's first conjunct asserts its own premise — that the surface it reads is the
+  // one rendered (the list note, the open detail view, the industry view).
+  // The link is counted as its exact ratified markup — address, new tab, rel and link text
+  // together — in the SNAPSHOT string each check reads its sentence from, never in the live DOM.
+  var M4_ANCHOR = '<a href="' + RATIFIED_ELECTIONS_URL + '" target="_blank" rel="noopener">'
+                + 'School Board Elections page</a>';
+  var m4Count = function (hay, needle) { return String(hay).split(needle).length - 1; };
+  ok('[M4/SCOPE] the mixed list says an IE row covers current Board members only, and links '
+     + 'the School Board Elections page exactly once, in a new tab',
+     pBd.text.indexOf('This list mixes two kinds of money') >= 0
+       && pBd.html.indexOf('ipg-sb-ie-overlay') < 0
+       && pBd.text.indexOf('An IE row\u2019s amount is what that committee deployed for and against '
+            + 'current Board members only, shown separately on the row and on click. All of its '
+            + 'school board spending is on the School Board Elections page.') >= 0
+       && m4Count(pBd.html, M4_ANCHOR) === 1
+       && m4Count(pBd.html, RATIFIED_ELECTIONS_URL) === 1,
+     'ratified anchors in the list view: ' + m4Count(pBd.html, M4_ANCHOR)
+       + ' · mentions of the address: ' + m4Count(pBd.html, RATIFIED_ELECTIONS_URL));
   ok('[SBF2/BROWSE] NO flag filter is offered (Flag totals is banked)',
      pBd.html.indexOf('ipg-sb-bd-q') >= 0 && pBd.html.indexOf('ipg-sb-bd-type') >= 0
        && pBd.html.indexOf('ipg-sb-bd-ind') >= 0 && pBd.html.indexOf('ipg-sb-bd-flag') < 0);
@@ -1167,6 +1202,35 @@ function around(tpl, marker) { return String(tpl).split(marker); }
      spDetail.text.indexOf('total deployed') >= 0
        && /total deployed/.test(spDetail.text)
        && spDetail.text.indexOf('independent deployed') < 0);
+  // The overlay's own markup, cut from the same snapshot: from its opening tag to its footer.
+  // The list beneath the overlay stays in the snapshot and carries its own link, so the cut
+  // is what makes "exactly once" a statement about the detail view.
+  var m4OvHtml = (function () {
+    var a = spDetail.html.indexOf('id="ipg-sb-ie-overlay"');
+    var b = a < 0 ? -1 : spDetail.html.indexOf('ipg-sb-modal-foot', a);
+    return (a < 0 || b < 0) ? '' : spDetail.html.slice(a, b);
+  })();
+  var m4OvSp = (REALFIN.ie_spenders[ieEK] || []).filter(function (x) {
+    return x.committee_id === spDetail.id; })[0];
+  var m4OvFused = m4OvSp ? money(Number(m4OvSp.support.amount || 0) + Number(m4OvSp.oppose.amount || 0)) : null;
+  ok('[M4/SCOPE] the IE detail\'s fused tile reads "total deployed on current members" and '
+     + 'its list is headed "Spending on current Board members"',
+     !!m4OvHtml && !!m4OvSp && m4OvHtml.indexOf('Independent-expenditure committee') >= 0
+       && m4OvHtml.indexOf('<div class="ipg-sb-stat"><div class="v">' + m4OvFused + '</div>'
+            + '<div class="l">total deployed on current members</div></div>') >= 0
+       && m4Count(m4OvHtml, '<div class="l">total deployed</div>') === 0
+       && m4Count(m4OvHtml, '<div class="ipg-sb-fin-sub">Spending on current Board members</div>') === 1
+       && m4OvHtml.indexOf('What it spent on') < 0,
+     'fused figure looked for: ' + m4OvFused);
+  ok('[M4/SCOPE] the IE detail states its scope and links the School Board Elections page '
+     + 'exactly once, in a new tab',
+     !!m4OvHtml && m4OvHtml.indexOf('Independent-expenditure committee') >= 0
+       && m4OvHtml.indexOf('These figures cover this committee\u2019s spending for or against '
+            + 'current Board members only. All of its school board spending is on the ' + M4_ANCHOR + '.') >= 0
+       && m4Count(m4OvHtml, M4_ANCHOR) === 1
+       && m4Count(m4OvHtml, RATIFIED_ELECTIONS_URL) === 1,
+     'ratified anchors in the detail view: ' + m4Count(m4OvHtml, M4_ANCHOR)
+       + ' · mentions of the address: ' + m4Count(m4OvHtml, RATIFIED_ELECTIONS_URL));
   ok('[SBF3/IE] every targeted member is listed, with both streams separately', (function () {
     var sp = (REALFIN.ie_spenders[ieEK] || []).filter(function (x) {
       return x.committee_id === spDetail.id; })[0];
@@ -1187,6 +1251,62 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   })());
   ok('[SBF3/INDUSTRY] the headline is "total deployed", never "independent"',
      spInd.text.indexOf('total deployed') >= 0);
+  ok('[M4/SCOPE] Industry totals names its ranking and its total as deployed and says its '
+     + 'independent segments cover current Board members only',
+     spInd.text.indexOf('Industry breakdown') >= 0
+       && spInd.text.indexOf('Total deployed across all Board committees in this election: $') >= 0
+       && spInd.text.indexOf('Total raised across all Board committees') < 0
+       && spInd.text.indexOf('Industries ranked by total dollars deployed across all Board committees in this election.') >= 0
+       && spInd.text.indexOf('ranked by total dollars given') < 0
+       && spInd.text.indexOf('Independent spending here covers current Board members only.') >= 0);
+  ok('[M4/SCOPE] every Industry totals row keeps the label "total deployed" and none takes '
+     + 'the single-spender label',
+     (function () {
+       var rows = spInd.html.split('ipg-sb-indrow-top').slice(1);
+       return rows.length > 0
+           && rows.every(function (c) { return c.indexOf('<span class="lab">total deployed</span>') >= 0; })
+           && spInd.html.indexOf('total deployed on current members') < 0;
+     })());
+  // EVERY industry whose drill lists an independent spender, at the election under test AND
+  // at All elections — a drill that lists donors as well takes a different path through the
+  // render, and one industry at one election would leave that path unread. The check
+  // therefore REQUIRES both kinds of drill in the data (PS-128: it must not go hollow). If a
+  // later data commit leaves only one kind, this check goes red on that premise with the page
+  // unchanged; its evidence line prints the two counts so the cause reads at once.
+  var m4Drills = (function () {
+    var got = [];
+    [ieEK, 'all'].forEach(function (ek) {
+      var pv = setSel(subtab({ doc: spInd.doc, app: spInd.app }, 'industries'), 'ipg-sb-spend-el', ek);
+      (pv.html.match(/data-industry-drill="([^"]+)"/g) || [])
+        .map(function (x) { return x.slice(21, -1); })
+        .forEach(function (k) {
+          var p2 = fire(pv, pv.doc.querySelector('[data-industry-drill="' + k + '"]'));
+          if (p2.html.indexOf('ipg-sb-ie-row') >= 0) got.push({ ek: ek, key: k, html: p2.html,
+            donors: p2.text.indexOf('Donors in this industry') >= 0 });
+          var bk = p2.doc.getElementById('ipg-sb-ind-back'); if (bk) fire(p2, bk);
+        });
+    });
+    setSel(subtab({ doc: spInd.doc, app: spInd.app }, 'industries'), 'ipg-sb-spend-el', ieEK);
+    return got;
+  })();
+  var m4DrillBad = m4Drills.filter(function (d) {
+    return d.html.indexOf('Independent spenders in this industry</div><div class="ipg-sb-note">'
+             + 'Each figure covers that committee\u2019s spending for or against current Board '
+             + 'members only. All of its school board spending is on the ' + M4_ANCHOR + '.</div>') < 0
+        || m4Count(d.html, M4_ANCHOR) !== 1
+        || m4Count(d.html, RATIFIED_ELECTIONS_URL) !== 1; });
+  ok('[M4/SCOPE] every industry\'s list of independent spenders, at the election under test and '
+     + 'at All elections, says each figure covers current Board members only and links the '
+     + 'School Board Elections page exactly once, in a new tab',
+     m4Drills.length > 0
+       && m4Drills.some(function (d) { return d.ek === ieEK; })
+       && m4Drills.some(function (d) { return d.ek === 'all'; })
+       && m4Drills.some(function (d) { return d.donors; })
+       && m4Drills.some(function (d) { return !d.donors; })
+       && m4DrillBad.length === 0,
+     'drills that list a spender: ' + m4Drills.length
+       + ' · of them also listing donors: ' + m4Drills.filter(function (d) { return d.donors; }).length
+       + ' · failing: ' + (m4DrillBad.map(function (d) { return d.ek + '/' + d.key; }).join(', ') || 'none'));
   ok('[SBF3/INDUSTRY] the displayed parts sum EXACTLY to the displayed total (largest-remainder)',
      (function () {
        var rows = spInd.html.split('ipg-sb-indrow-top').slice(1);

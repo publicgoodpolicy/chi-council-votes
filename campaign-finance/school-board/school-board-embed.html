@@ -785,18 +785,18 @@ const IPG_SB_FEEDBACK = {
     // reader from reading the absence of the IE committees as an omission.
     directOnlyDonors: 'These are direct contributions to members’ own committees. Independent spending is not shown here — it appears in Spend by member, as its own two streams.',
 
-    indIntro: 'Industries ranked by total dollars given across all Board committees in this election.',
+    indIntro: 'Industries ranked by total dollars deployed across all Board committees in this election.',
     indSub: 'Click an industry to see who its donors are and which members they funded.',
     directOnlyIndustries: 'Independent spending is not included here — these totals are direct contributions only.',
     indBarHead: 'Where each dollar comes from',
-    indBarSub: 'Total raised across all Board committees in this election: {N}. Each segment below is one industry; width is its share of the total. A donor tagged with more than one industry is listed under each; the total counts each donor\'s money once.',
+    indBarSub: 'Total deployed across all Board committees in this election: {N}. Each segment below is one industry; width is its share of the total. A donor tagged with more than one industry is listed under each; the total counts each donor\'s money once.',
     onceNote: 'A donor tagged with more than one industry is listed under each; the total counts each donor\'s money once.',
     indListHead: 'Industry breakdown',
     indEmpty: 'No industry data yet.',
     indBack: '← All industries',
     indDonorsHead: 'Donors in this industry',
     indMembersHead: 'Members they funded',
-    indSpendersHead: 'Independent spenders in this industry',
+    indSpendersHead: 'Independent spenders in this industry', indSpendersNote: 'Each figure covers that committee’s spending for or against current Board members only. All of its school board spending is on the ',
 
     // SBFIN-3 B.1: the direct-only sentence was REMOVED from Browse donors — with IE
     // spenders in the list it is false. `directOnlyDonors` is retired with it.
@@ -804,11 +804,11 @@ const IPG_SB_FEEDBACK = {
     // card's ratified string, which is written about one member's own runs ("every school
     // board election this member has run in") and would be false on a board-wide surface.
     allElectionsBoard: 'Every school board election this tool covers, combined. Direct contributions and independent spending are each summed within their own stream and are never added together.',
-    mixedListNote: 'This list mixes two kinds of money: direct contributions to a member’s own committee, and independent spending by committees tagged IE PAC, which is made without coordinating with the candidate. An IE row’s amount is what that committee deployed — spending for and against, shown separately on the row and on click.',
+    mixedListNote: 'This list mixes two kinds of money: direct contributions to a member’s own committee, and independent spending by committees tagged IE PAC, which is made without coordinating with the candidate. An IE row’s amount is what that committee deployed for and against current Board members only, shown separately on the row and on click. All of its school board spending is on the ',
     // SBFIN-3 B.3: this REPLACES the direct-only sentence on Industry Totals, which is now
     // false there. It says the thing the old sentence never did — that two different
     // classifiers produced the segments in one bar.
-    twoClassifier: 'Direct segments are attributed by the donor’s own industry tag; independent-spending segments by the tag on the committee that did the spending. Two different classifiers appear in one bar, so an industry’s independent segment says who deployed the money, not who gave it.',
+    twoClassifier: 'Direct segments are attributed by the donor’s own industry tag; independent-spending segments by the tag on the committee that did the spending. Two different classifiers appear in one bar, so an industry’s independent segment says who deployed the money, not who gave it. Independent spending here covers current Board members only.',
     mixIntro: 'Where each member’s direct contributions come from, by industry, shown as a 100% bar — independent spending is not included here.',
     mixSub: 'Bars in seat order. Click any row to open that member’s page.',
     mixEmpty: 'No campaign-finance data yet for this election.',
@@ -825,13 +825,13 @@ const IPG_SB_FEEDBACK = {
     kicker: 'Independent-expenditure committee',
     pacTag: 'IE PAC',
     caution: 'Independent spending is made without coordinating with the candidate — the candidate need not know about it, approve it, or receive any of it. It is even more attenuated from a vote than a direct contribution. This shows correlation, not causation.',
-    deployedLabel: 'total deployed',
+    deployedLabel: 'total deployed', spenderDeployedLabel: 'total deployed on current members',
     supportLabel: 'Spent to support',
     opposeLabel: 'Spent to oppose',
     forWord: 'for',
     againstWord: 'against',
-    targetsHead: 'What it spent on',
-    targetsNote: 'Support and opposition are shown separately for every member and are never added together.',
+    targetsHead: 'Spending on current Board members',
+    targetsNote: 'Support and opposition are shown separately for every member and are never added together.', scopeNote: 'These figures cover this committee’s spending for or against current Board members only. All of its school board spending is on the ', scopeLinkHtml: '<a href="https://www.publicgoodpolicy.org/school-board-elections" target="_blank" rel="noopener">School Board Elections page</a>',
     segDirect: 'Direct',
     segSupport: 'Independent support',
     segOppose: 'Independent opposition'
@@ -2105,11 +2105,11 @@ const IPG_SB_FEEDBACK = {
       + ' <span class="ipg-sb-pac-tag">' + esc(SPI.pacTag) + '</span></div>'
       + '<div class="ipg-sb-modal-meta">' + chips
       + ' <span class="ipg-sb-dscope">' + esc(ekLabel) + '</span></div></div>';
-    h += '<div class="ipg-sb-note">' + esc(SPI.caution) + '</div>';
+    h += '<div class="ipg-sb-note">' + esc(SPI.caution) + '</div>' + '<div class="ipg-sb-note">' + esc(SPI.scopeNote) + SPI.scopeLinkHtml + '.</div>';
     // Carve (b). The fused figure is this spender's own deployment, every part labeled,
     // and the fused label names DEPLOYMENT, never "independent".
     h += '<div class="ipg-sb-stats">'
-       + statTile(money(ieDeployed(sp)), SPI.deployedLabel)
+       + statTile(money(ieDeployed(sp)), SPI.spenderDeployedLabel)
        + statTile(money(sp.support.amount), SPI.supportLabel)
        + statTile(money(sp.oppose.amount), SPI.opposeLabel)
        + '</div>';
@@ -2230,7 +2230,7 @@ const IPG_SB_FEEDBACK = {
           // The SBFIN-2 C direct-only sentence was REMOVED here: with IE spenders in the
           // list it is false. Its replacement says what the mixed list contains, so a
           // reader can tell a contribution from an independent expenditure at a glance.
-          + '<div class="ipg-sb-note">' + esc(SPC.mixedListNote) + '</div>';
+          + '<div class="ipg-sb-note">' + esc(SPC.mixedListNote) + SPI.scopeLinkHtml + '.</div>';
 
     h += '<div class="ipg-sb-filters">'
        + '<div class="ipg-sb-field grow"><label for="ipg-sb-bd-q">Search donors</label>'
@@ -2423,7 +2423,7 @@ const IPG_SB_FEEDBACK = {
         });
     }
     if(sps.length){
-      h += '<div class="ipg-sb-fin-sub">' + esc(SPC.indSpendersHead) + '</div>';
+      h += '<div class="ipg-sb-fin-sub">' + esc(SPC.indSpendersHead) + '</div>' + '<div class="ipg-sb-note">' + esc(SPC.indSpendersNote) + SPI.scopeLinkHtml + '.</div>';
       sps.slice().sort(function(a, b){ return ieDeployed(b) - ieDeployed(a); }).forEach(function(sp){
         var ieSub = [];
         if(Number(sp.support.amount || 0) > 0) ieSub.push(money(sp.support.amount) + ' ' + SPI.forWord);
