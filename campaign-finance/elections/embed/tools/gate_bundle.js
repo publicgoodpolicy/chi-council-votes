@@ -2682,6 +2682,265 @@ async function assertPersonSurface(T, ctx, fx) {
     T.ok('[COH/SELF] cash-on-hand self-test green — ' + tail, res.status === 0);
   })();
 
+  // [M1/*] AUDIT-2 M1 — the elections tool's donor list: three filed figures per row, and an
+  // outside-spending group's funders counted only where the group spent on the page's races inside
+  // the selected election's window.
+  //
+  // PS-128 DERIVATION MODES. [M1/SPLIT] and [M1/POPUP] are **A (live-only)**: both sides come from
+  // the artifact, and what is asserted is an agreement between two readers of it, not a pinned
+  // figure. [M1/SPLIT]'s recount is this block's own code over each donor's raw rows: it calls
+  // neither recipInScope nor ieActiveForOffice, the two functions under test. It does borrow from
+  // the code under test the index (parentRollup, iesBySpender, which is already office-scoped),
+  // the window, EXCLUDED_CYCLES and OFFICE_RACE_OFFICES, so the office half of the scope test is
+  // NOT recounted here; [RENDER/B2] and [COUNCIL/DONOR] are what read it. [M1/POPUP] has no
+  // recount: it compares two readers, donorFootprint and browseDonors. [M1/SCOPE] is **E (live
+  // host, constructed axis)**: a real committee and its real funders, its own in-window spending
+  // rows removed from an in-memory copy, with one constructed spending row whose date is the only
+  // thing that moves. [M1/RENDER] reads the rendered list against the view model it was rendered
+  // from. [M1/REGISTER] is **register-derived**, as [METH/REGISTER] is.
+  //
+  // WHY IT EXISTS: the numbers audit (finding M1) measured $9,193,017.72 of funders' money ranked
+  // on /city-council against $0.00 its outside-spending groups had spent there in the window, with
+  // one undivided figure per row and a pop-up that listed gifts the row left out. Nothing in this
+  // gate read the scope test, the split, or the agreement of the row with its pop-up.
+  (function () {
+    var R = require(path.join(__dirname, '..', 'render.js'));
+    var D = require(path.join(__dirname, '..', 'data.js'));
+    var raw = fs.readFileSync(path.join(__dirname, '..', '..', '..', 'election-data.json'), 'utf8');
+    var json = JSON.parse(raw);
+    var LISTS = [['school_board', '2026'], ['school_board', '2024'], ['city_council', '2027']];
+    var DUES = 'IE Committee Dues Transfer';
+    var cents = function (x) { return Math.round((x || 0) * 100); };
+    var usd = function (c) { return '$' + (c / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); };
+    var inWin = function (d, w) { return !!d && (w.start == null || d >= w.start) && (w.end == null || d <= w.end); };
+
+    // One list, measured: the view model's rows beside this block's own recount of every donor.
+    function measure(doc, office, sel) {
+      var idx = D.loadData(doc, { office: office });
+      var vm = D.spendSubtab(idx, office, 'donors', null, sel), win = vm.win;
+      var offs = D.OFFICE_RACE_OFFICES[office] || [];   // the race offices this page covers
+      var spentInWin = {};   // IE committee -> it has a spending row on this office dated inside the window
+      Object.keys(idx.iesBySpender).forEach(function (k) {
+        spentInWin[k] = idx.iesBySpender[k].some(function (ie) { return inWin(ie.date, win); });
+      });
+      var recount = {}, giftsTo = {}, giversTo = {};
+      Object.keys(idx.parentRollup).forEach(function (pid) {
+        var direct = 0, via = 0;
+        idx.parentRollup[pid].rows.forEach(function (c) {
+          if (c.contribution_type === DUES || D.EXCLUDED_CYCLES[c.cycle] || !inWin(c.date, win)) return;
+          var cm = idx.committees[c.committee_id] || {}, a = cents(c.amount);
+          if (cm.candidate_id) {
+            var race = idx.raceById[(idx.candidateById[cm.candidate_id] || {}).race_id] || {};
+            if (offs.indexOf(race.office) >= 0) direct += a;
+          } else if (cm.type === 'independent_expenditure') {
+            giftsTo[c.committee_id] = (giftsTo[c.committee_id] || 0) + a;
+            (giversTo[c.committee_id] || (giversTo[c.committee_id] = {}))[pid] = 1;
+            if (spentInWin[c.committee_id]) via += a;
+          }
+        });
+        if (direct + via > 0) recount[pid] = { direct: direct, via: via };
+      });
+      var out = { idx: idx, vm: vm, win: win, offs: offs, n: 0, direct: 0, via: 0, total: 0, withVia: 0,
+                  bad: [], giftsTo: giftsTo, giversTo: giversTo, spentInWin: spentInWin, donors: [], unordered: 0 };
+      for (var q = 1; q < vm.rows.length; q++) if (cents(vm.rows[q].total) > cents(vm.rows[q - 1].total)) out.unordered++;
+      vm.rows.forEach(function (r) {
+        if (r.kind === 'ie') return;
+        out.n++; out.donors.push(r);
+        var d = cents(r.direct), v = cents(r.independent), t = cents(r.total), rc = recount[r.parent_id];
+        out.direct += d; out.via += v; out.total += t; if (v > 0) out.withVia++;
+        if (d + v !== t || !rc || rc.direct !== d || rc.via !== v) out.bad.push(r.parent_id);
+      });
+      Object.keys(recount).forEach(function (pid) {     // a donor the recount finds and the list omits
+        if (!out.donors.some(function (r) { return r.parent_id === pid; })) out.bad.push('absent:' + pid);
+      });
+      return out;
+    }
+
+    // The pop-up a row opens is donorFootprint at the row's window. Its groups span every office
+    // and its own total spans them too (DESIGN-1c (ii)), so the comparison is by part: its
+    // candidates in this page's races against the row's first figure, its outside-spending groups
+    // against the second. A donor with no row must have a pop-up with neither part.
+    function popupDiffers(m, pid) {
+      var r = m.donors.filter(function (x) { return x.parent_id === pid; })[0] || { direct: 0, independent: 0 };
+      var fp = D.donorFootprint(m.idx, pid, m.win), dir = 0, ie = 0;
+      (fp.committees || []).forEach(function (c) {
+        if (c.kind === 'ie') ie += cents(c.total);
+        else if (c.kind === 'candidate' && m.offs.indexOf(c.office) >= 0) dir += cents(c.total);
+      });
+      return { differs: dir !== cents(r.direct) || ie !== cents(r.independent), ie: ie };
+    }
+
+    var base = LISTS.map(function (l) { return measure(json, l[0], l[1]); });
+    var line = base.map(function (m, i) {
+      return LISTS[i][0] + ' ' + LISTS[i][1] + ': ' + m.n + ' rows, ' + usd(m.direct) + ' + ' + usd(m.via) + ' = ' + usd(m.total);
+    }).join('; ');
+    var bad = base.reduce(function (a, m) { return a.concat(m.bad); }, []);
+    var unordered = base.reduce(function (a, m) { return a + m.unordered; }, 0);
+    // PREMISE FIRST (PS-128 (i)): every list has rows, and the split is exercised on both sides.
+    var premise = base.every(function (m) { return m.n > 0 && m.direct > 0; }) &&
+      base.some(function (m) { return m.withVia > 0; });
+    T.ok('[M1/SPLIT] every Browse donors row carries what the donor gave candidates in these races and what it gave ' +
+      'outside-spending groups in scope, the two sum to its total, each equals a recount of the donor\'s own rows, and ' +
+      'the list is ranked by total — ' + line + (bad.length ? '; DIFFERING: ' + bad.slice(0, 4).join(',') : '') +
+      (unordered ? '; ' + unordered + ' rows out of order' : ''), premise && bad.length === 0 && unordered === 0);
+
+    // [M1/SCOPE] On each page: a real committee that has spent on the page's races and has funders
+    // inside the selected window. In an in-memory copy its own spending rows dated inside the
+    // window are removed, so its funders must not count; one constructed spending row is then
+    // dated at four places around the window's two edges, in each stance. Removing the rows is
+    // what keeps this check standing when the committee later reports spending in the window.
+    function addDays(iso, n) { var t = new Date(iso + 'T00:00:00Z'); t.setUTCDate(t.getUTCDate() + n); return t.toISOString().slice(0, 10); }
+    var scopeProbs = [], scopeNote = [];
+    [['school_board', '2026'], ['city_council', '2027']].forEach(function (l) {
+      var tag = l[0] + ' ' + l[1], live = measure(json, l[0], l[1]), win = live.win;
+      var cands = Object.keys(live.idx.iesBySpender).sort().filter(function (k) {
+        return live.idx.iesBySpender[k].length > 0 && (live.giftsTo[k] || 0) > 0;
+      });
+      // prefer a committee whose funders do not count as the data stands; otherwise strip one that does
+      var host = cands.filter(function (k) { return !live.spentInWin[k]; })[0] || cands[0];
+      if (!host) { scopeProbs.push(tag + ': no outside-spending group on this page has funders inside the window (the premise)'); return; }
+      var G = live.giftsTo[host], seed = live.idx.iesBySpender[host][0], givers = Object.keys(live.giversTo[host]);
+      var build = function (date, stance) {
+        var doc = JSON.parse(raw);
+        doc.independent_expenditures = doc.independent_expenditures.filter(function (ie) {
+          return !(ie.spender_committee_id === host && inWin(ie.date, win));
+        });
+        if (date) {
+          var row = JSON.parse(JSON.stringify(seed));
+          row.id = seed.id + '-m1'; row.date = date; row.amount = 1; row.stance = stance;
+          doc.independent_expenditures.push(row);
+        }
+        var m = measure(doc, l[0], l[1]);
+        if (m.bad.length) scopeProbs.push(tag + ' ' + (date || 'stripped') + ': the split differs on ' + m.bad[0]);
+        var pop = givers.filter(function (pid) { return popupDiffers(m, pid).differs; });
+        if (pop.length) scopeProbs.push(tag + ' ' + (date || 'stripped') + ': the pop-up differs from the row on ' + pop[0]);
+        return m.total;
+      };
+      var T0 = build(null);
+      if (!live.spentInWin[host] && T0 !== live.total) scopeProbs.push(tag + ': removing nothing moved the total');
+      [['the day before the window', addDays(win.start, -1), 0], ['the window\'s first day', win.start, G],
+       ['the window\'s last day', win.end, G], ['the day after the window', addDays(win.end, 1), 0]].forEach(function (c) {
+        ['support', 'oppose'].forEach(function (stance) {
+          var got = build(c[1], stance) - T0;
+          if (got !== c[2]) scopeProbs.push(tag + ': ' + stance + ' spending dated ' + c[0] + ' adds ' + usd(got) + ', not ' + usd(c[2]));
+        });
+      });
+      scopeNote.push(tag + ' on ' + host + ' (' + usd(G) + ' from ' + givers.length + ' funders)');
+    });
+    T.ok('[M1/SCOPE] an outside-spending group\'s funders count on a page only where the group spent on that page\'s races ' +
+      'inside the selected election\'s window: not counted with no spending in the window, nor with spending dated a day ' +
+      'outside either edge; counted in full with spending dated on either edge, for or against; and the funders\' pop-ups ' +
+      'agree with their rows in every case — ' +
+      (scopeProbs.length ? scopeProbs.slice(0, 4).join('; ') : scopeNote.join('; ')), scopeProbs.length === 0 && scopeNote.length === 2);
+
+    // [M1/POPUP] Every donor row of the three lists against the pop-up it opens (popupDiffers).
+    var popProbs = [], popRows = 0, popVia = 0;
+    base.forEach(function (m, i) {
+      m.donors.forEach(function (r) {
+        var p = popupDiffers(m, r.parent_id);
+        popRows++; if (p.ie > 0) popVia++;
+        if (p.differs) popProbs.push(LISTS[i].join(' ') + ':' + r.parent_id);
+      });
+    });
+    T.ok('[M1/POPUP] a donor\'s row and the pop-up it opens count the same money, part by part: the pop-up\'s candidates in ' +
+      'these races equal the row\'s first figure and its outside-spending groups equal the second — ' + popRows +
+      ' rows on three lists, ' + popVia + ' with outside-spending groups' +
+      (popProbs.length ? '; DIFFERING: ' + popProbs.slice(0, 4).join(',') : ''),
+      popRows > 0 && popVia > 0 && popProbs.length === 0);
+
+    // [M1/RENDER] The rendered list against the view model it was rendered from, and the pop-up's
+    // note with and without an election window.
+    var rat = R._ratified || {}, COLS = rat.browseCols || [], DISC = rat.browseDisclose || '';
+    var IN_ELECTION = rat.footprintScopeElection || '', IN_OFFICE = rat.footprintScopeOffice || '';
+    var money0 = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
+    var count = function (hay, needle) { return needle ? hay.split(needle).length - 1 : -1; };
+    var rProbs = [], rRows = 0, rIE = 0;
+    var head = '<div class="browse-colhead"><div>Donor</div><div class="amt3">' +
+      COLS.map(function (c) { return '<div>' + c + '</div>'; }).join('') + '</div></div>';
+    var disc = '<p class="contrib-note browse-disclose">' + DISC + '</p>';
+    base.forEach(function (m, i) {
+      var tag = LISTS[i].join(' '), html = R.renderSpend(m.vm, LISTS[i][0]);
+      if (COLS.length !== 3 || count(html, head) !== 1) rProbs.push(tag + ': the head row is not rendered exactly once');
+      if (count(html, disc) !== 1 || html.indexOf(disc + head) < 0) rProbs.push(tag + ': the disclosure line is not rendered once, directly above the head row');
+      var cell = function (k, v, cls) { return '<div class="v' + (cls ? ' ' + cls : '') + '"><span class="lab">' + COLS[k] + '</span>' + money0(v) + '</div>'; };
+      m.vm.rows.forEach(function (r) {   // every row, those behind "show more" included: all are in the markup
+        var open = r.kind === 'ie' ? 'data-committee="' + r.committee_id + '">' : 'data-funder="' + r.parent_id + '">';
+        var at = html.indexOf('<button class="crow funder-row" type="button" ' + open);
+        var row = at < 0 ? '' : html.slice(at, html.indexOf('</button>', at));
+        var want = r.kind === 'ie'
+          ? '<div class="amt3"><div class="v"></div><div class="v"></div><div class="v tot">' + money0(r.total) + '<span class="spent">spent</span></div></div>'
+          : '<div class="amt3">' + cell(0, r.direct) + cell(1, r.independent) + cell(2, r.total, 'tot') + '</div>';
+        if (r.kind === 'ie') rIE++; else rRows++;
+        if (row.slice(-want.length) !== want && rProbs.length < 6) rProbs.push(tag + ': row ' + (r.parent_id || r.committee_id) + ' does not end in its three figures');
+      });
+      // a filter that matches nothing: the empty state, with no head row and no disclosure line
+      var none = D.spendSubtab(m.idx, LISTS[i][0], 'donors', null, LISTS[i][1], { search: 'zz-no-such-donor-zz', type: 'All', industry: 'All', flag: 'All' });
+      var html0 = R.renderSpend(none, LISTS[i][0]);
+      if (none.rows.length !== 0 || count(html0, 'browse-colhead') !== 0 || count(html0, 'browse-disclose') !== 0) rProbs.push(tag + ': the empty list draws a head row or a disclosure line');
+      // the pop-up's note: the election clause where a window applies, DESIGN-1c (v)'s clause where none does
+      var first = m.donors[0];
+      var withWin = first ? R.renderFunderModal(D.donorFootprint(m.idx, first.parent_id, m.win)) : '';
+      var noWin = first ? R.renderFunderModal(D.donorFootprint(m.idx, first.parent_id, null)) : '';
+      if (count(withWin, IN_ELECTION) !== 1 || count(withWin, IN_OFFICE) !== 0) rProbs.push(tag + ': the pop-up opened with a window does not carry the election clause alone');
+      if (count(noWin, IN_OFFICE) !== 1 || count(noWin, IN_ELECTION) !== 0) rProbs.push(tag + ': the pop-up opened with no window does not carry the office clause alone');
+    });
+    // the styles the layout ruling rests on: labels hidden beside a head row, shown under 640px where the head row is hidden
+    var css = typeof R.styles === 'function' ? R.styles() : String(R.styles || '');
+    // (the narrow-screen block is pinned whole, braces included, so that its rules cannot sit outside it)
+    ['.ipg-elect .amt3 .lab{display:none;}', '.ipg-elect .browse-colhead{display:grid;',
+     '@media (max-width:640px){.ipg-elect .browse-colhead{display:none;}' +
+     '.ipg-elect .amt3{grid-column:1 / -1;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.25fr);gap:8px;text-align:left;}' +
+     '.ipg-elect .amt3 .lab{display:block;font-size:10.5px;color:var(--ink-soft);font-weight:500;white-space:normal;line-height:1.25;margin-bottom:2px;}}'
+    ].forEach(function (rule) {
+      if (count(css, rule) !== 1) rProbs.push('the stylesheet does not carry `' + rule.slice(0, 60) + '` once');
+    });
+    T.ok('[M1/RENDER] Browse donors renders the head row once with the disclosure line directly above it, three figures on ' +
+      'every donor row equal to its split, an outside-spending group\'s own figure marked "spent" under the total, no head ' +
+      'row on an empty list, the narrow-screen labels, and the pop-up\'s note in its ratified words with and without a ' +
+      'window — ' + rRows + ' donor rows and ' + rIE + ' group rows on three lists' +
+      (rProbs.length ? '; ' + rProbs.join('; ') : ''), rRows > 0 && rIE > 0 && rProbs.length === 0);
+
+    // [M1/REGISTER] The display strings are the register's words. The register is read with the
+    // `> ` quote marker stripped and its line-wrap collapsed to single spaces; nothing else is
+    // altered. The entry is found by the disclosure line, which no other entry carries in bold;
+    // the other six strings must be in bold in THAT entry, so that an older entry's bold
+    // "Total giving" (PS-138) cannot stand in for this one's. The no-window clause is
+    // DESIGN-1c (v)'s and must be there, in that entry's backticks.
+    var regRaw = fs.readFileSync(path.join(__dirname, '..', '..', '..', 'RULINGS.md'), 'utf8');
+    var sections = regRaw.split(/\n(?=##+ )/).map(function (sec) {
+      return sec.split('\n').map(function (ln) { return ln.replace(/^> ?/, ''); }).join(' ').replace(/\s+/g, ' ');
+    });
+    var bold = function (x) { return '**' + x + '**'; };
+    var strings = ['Donor'].concat(COLS, ['spent', DISC, IN_ELECTION]);
+    // the finder: which of the seven are NOT in bold in the entry text it is given
+    var notIn = function (entry) { return strings.filter(function (x) { return !x || entry.indexOf(bold(x)) < 0; }); };
+    var mine = sections.filter(function (sec) { return DISC && sec.indexOf(bold(DISC)) >= 0; });
+    // its own numbered heading, then at once the entry's first words: an entry whose heading line is
+    // lost merges into the entry above it, whose own text would sit between the two
+    var numbered = mine.length === 1 && /^### PS-\d+ — (?:(?!\*\*).)* \*\*What was found\.\*\* The numbers audit \(finding M1\)/.test(mine[0]);
+    var missing = mine.length === 1 ? notIn(mine[0]) : strings;
+    var d1c = sections.filter(function (sec) { return sec.indexOf('### DESIGN-1c ') === 0; });
+    var officeOk = d1c.length === 1 && IN_OFFICE.slice(-1) === '.' && d1c[0].indexOf('` — ' + IN_OFFICE.slice(0, -1) + '`') >= 0;
+    var amended = d1c.length === 1 && d1c[0].indexOf('**Amendment (2026-10-05, the scoping rule).**') >= 0;
+    T.ok('[M1/REGISTER] the head row\'s four words, "spent", the disclosure line and the pop-up\'s election clause are in ' +
+      'bold in one numbered register entry, character for character; the pop-up\'s no-window clause is DESIGN-1c (v)\'s; ' +
+      'and DESIGN-1c carries its amendment — ' + (strings.length - missing.length) + ' of ' + strings.length + ' in ' +
+      mine.length + ' entry' +
+      (missing.length ? '; NOT FOUND: ' + missing.map(function (x) { return JSON.stringify(String(x).slice(0, 40)); }).join(', ') : '') +
+      (numbered ? '' : '; the entry is not under a PS heading') + (officeOk ? '' : '; the no-window clause is not DESIGN-1c (v)\'s') +
+      (amended ? '' : '; DESIGN-1c carries no amendment note'),
+      strings.length === 7 && numbered && missing.length === 0 && officeOk && amended);
+    // BITE, in memory: alter the last character of each string in a copy of the entry, one at a
+    // time; the finder must then report exactly that string.
+    var unbitten = mine.length !== 1 ? strings : strings.filter(function (x) {
+      var got = notIn(mine[0].split(bold(x)).join(bold(x.slice(0, -1) + 'x')));
+      return got.length !== 1 || got[0] !== x;
+    });
+    T.ok('[M1/REGISTER:bite] with any one of the seven strings altered by one character in a copy of the entry, the finder ' +
+      'reports that string and no other — ' + (strings.length - unbitten.length) + ' of ' + strings.length,
+      mine.length === 1 && unbitten.length === 0);
+  })();
+
   console.log('\n' + T.n + ' checks · ' + (T.fail ? ('FAILED ' + T.fail) : 'ALL PASS'));
   process.exit(T.fail ? 1 : 0);
 })();

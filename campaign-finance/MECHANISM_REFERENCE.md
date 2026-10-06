@@ -937,12 +937,12 @@ that catch defect classes the existing gates structurally cannot see.
 | S-cemb | `campaign-finance/elections/reference/council-embed.html` | `c014a33e400ba7e1027c65f3023644b4eaf17bdfa3c1570d28357690e3784fba` |
 | S-sbemb | `campaign-finance/school-board/school-board-embed.html` | `a80351a91bc51fad203330629e8016ea2a48d1b74827cd4d1e0fb638621402e9` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8e76a38ad11562fe8de5bee1c2ff339ea60251795171bdd37f9aa29da2e0b82a` |
-| S-edat | `campaign-finance/elections/embed/data.js` | `2f87785bb273a725e2f0e6817bfb8899f3d3bbfd5230ad15164f3313c9945168` |
-| S-eren | `campaign-finance/elections/embed/render.js` | `bd6cdb47e19288346aaabcd567390e439509189fd56570ca3ad2388251fce94e` |
+| S-edat | `campaign-finance/elections/embed/data.js` | `cb993bf1e31b0ab9510510fe836abb1b8a37811ba16d419328a584a31009dafe` |
+| S-eren | `campaign-finance/elections/embed/render.js` | `61ba174ea5755db16e8d0bfce12fe6c9b85e55ed904e7f0bdcc04665daffd996` |
 | S-eapp | `campaign-finance/elections/embed/app.js` | `9add3d7d75e7214af0d90737fdf5db352097a19b77f5d3a424053015ef5305a3` |
 | S-srv | `campaign-finance/editor/serve.py` | `f430f67b2d2367893ab4cb37a1c25ff84d71bb93b53a23b78f253ec17dccaa3a` |
 | S-rec | `campaign-finance/ingestion/reconcile.py` | `363c3c19341508463d6f5563e2fe2defa3fb59e7626b48b3e31b13e0180acb50` |
-| S-egate | `campaign-finance/elections/embed/tools/gate_bundle.js` | `8c7190c34a629c41d962fd0a72c7affb065c737a744846e75f98ce3848942a55` |
+| S-egate | `campaign-finance/elections/embed/tools/gate_bundle.js` | `14a8c46861e0a9bca7b389d66d20127c5bec622a3478e57478ad02cff369134e` |
 | S-chk | `campaign-finance/tools/check_sheet_scopes.py` | `9c980fd7362351a7df8a889ba60dc1a38d4fcee397200903a4f7d1b7bc620e94` |
 | S-sbf | `campaign-finance/ingestion/build_sb_finance.py` | `e49f3dc9c3841016c4cf0345932ff12c01a54d5e58c8bb72c8b57cc126f13cb7` |
 | S-a7 | `campaign-finance/sheets-sync/a7_precheck.py` | `a9d7e4669a4dc7b614d5d85939432a3317e3718d9a91cc9a9f0d50ca9ef73374` |

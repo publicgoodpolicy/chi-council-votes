@@ -563,9 +563,9 @@
       if (EXCLUDED_CYCLES[c.cycle]) continue;
       if (win && !inWindow(c.date, win)) continue;
       var cid = c.committee_id, cm = index.committees[cid] || {};
-      // office scope: an IE committee that didn't spend in this office is out of
-      // scope (e.g. a council-only IE PAC must not appear in a school-board view).
-      if (cm.type === 'independent_expenditure' && index.office && !index.inScopeIE[cid]) continue;
+      // office scope: an IE committee is in scope by the SAME test the donor's row uses (M1): it spent
+      // on this office, and inside the click-context window where there is one (ieActiveForOffice).
+      if (cm.type === 'independent_expenditure' && index.office && !(index.inScopeIE[cid] && ieActiveForOffice(index, cid, win))) continue;
       var m = by[cid];
       if (!m) {
         m = by[cid] = { committee_id: cid, total: 0, count: 0, kind: 'other', label: cm.committee_name || cid, rows: [] };
@@ -1119,24 +1119,24 @@
 
   // ---- Election Spend subtabs (office-scoped) ----
 
-  // DESIGN-1c (Ishan, 2026-09-26): an IE committee's funders count toward an office view only if the
-  // committee spent on that office in the ACTIVE election cycle or the one before it — not merely at any
-  // time (the all-time test let school-board-only funders lead the council list). "The one before" is the
-  // preceding window tabled for the office type in ELECTION_WINDOWS; where none is tabled (municipal 2027)
-  // it is the four years before the active window's start. A null lower bound (school_board's open 2024
-  // window) means all-time. ELECTION_WINDOWS itself is untouched: the selector reads it (D-20 / PS-110).
-  function priorCycleStart(office, win) {
-    var t = officeType(office), o = t && ELECTION_WINDOWS[t]; if (!o || !win) return undefined;
-    var ids = Object.keys(o).sort(), i = -1;
-    for (var k = 0; k < ids.length; k++) if (o[ids[k]].start === win.start && o[ids[k]].end === win.end) i = k;
-    if (i > 0) return o[ids[i - 1]].start;   // the tabled prior window; null = open past
-    return win.start ? (String(+win.start.slice(0, 4) - 4) + win.start.slice(4)) : null;
-  }
+  // AUDIT-2 M1 (Ishan, 2026-10-05), amending DESIGN-1c (i): an IE committee's funders count toward an
+  // office view only if the committee spent on that office INSIDE the selected election's window.
+  // DESIGN-1c (i) also admitted the election before it (a lower bound one tabled window, or four years,
+  // earlier). Under that test a committee that last spent on a page's races in an earlier election still
+  // brought every in-window gift made to it onto that page's donor list: the numbers audit measured
+  // $9,193,017.72 of such gifts on /city-council against $0.00 spent on its races in the window, and
+  // $9,843,742.84 against $457,738.88 on /school-board-elections for 2026. The earlier bound and the
+  // function that computed it (priorCycleStart) are removed.
+  // With no window (the windowless openers: the person surface, and a pop-up opened from a row that
+  // carries none) the test stays "spent on this office at any date".
+  //
+  // Two readers call this and must keep calling the SAME test: browseDonors, through recipInScope, and
+  // donorFootprint. A donor's row and the pop-up that row opens therefore count the same committees
+  // (M1, ruling 5). ELECTION_WINDOWS itself is untouched: the selector reads it (D-20 / PS-110).
   function ieActiveForOffice(index, committeeKey, win) {
     var rows = index.iesBySpender[committeeKey] || [];   // office-scoped at build (item 4)
     if (!win) return rows.length > 0;
-    var lo = priorCycleStart(index.office, win);
-    for (var i = 0; i < rows.length; i++) { var d = rows[i].date || ''; if (d && (win.end == null || d <= win.end) && (lo == null || d >= lo)) return true; }
+    for (var i = 0; i < rows.length; i++) if (inWindow(rows[i].date, win)) return true;
     return false;
   }
   // DESIGN-1c: the candidate card's donor lines are aggregates and carried no in-kind marker (the per-gift
@@ -1235,7 +1235,7 @@
       if (!index.parentRollup.hasOwnProperty(pid)) continue;
       var d = index.donors[pid] || {};
       if (!donorMatches(d, d.name || pid, f)) continue;     // E-1 donor filters (parent unit)
-      var pr = index.parentRollup[pid], total = 0, selfAmt = 0, cmset = {}, entset = {}, ncontrib = 0;
+      var pr = index.parentRollup[pid], total = 0, viaIE = 0, selfAmt = 0, cmset = {}, entset = {}, ncontrib = 0;
       var ownGiver = false;
       for (var i = 0; i < pr.rows.length; i++) {
         var c = pr.rows[i];
@@ -1246,14 +1246,14 @@
         if (!keep(c.cycle)) continue;
         if (win && !inWindow(c.date, win)) continue;
         if (!recipInScope(index, c.committee_id, win)) continue;
-        total += c.amount || 0; ncontrib++;
+        total += c.amount || 0; ncontrib++; if ((index.committees[c.committee_id] || {}).type === 'independent_expenditure') viaIE += c.amount || 0;   // M1: the row's split
         if (c.is_self) selfAmt += c.amount || 0;          // FIX-1 (E4): the row's own-money share
         if (c.committee_id) cmset[c.committee_id] = 1;
         if (c.donor_id) entset[c.donor_id] = 1;
       }
       if (total > 0) {
         rows.push({ kind: 'donor', parent_id: pid, name: d.name || pid,
-          industries: d.industries || [], flags: d.flags || [], total: round2(total),
+          industries: d.industries || [], flags: d.flags || [], total: round2(total), direct: round2(total - viaIE), independent: round2(viaIE),
           entities: Object.keys(entset).length, committees: Object.keys(cmset).length, contributions: ncontrib,
           selfShare: selfAmt / total, ownCommitteeGiver: ownGiver });
       }
@@ -1766,7 +1766,7 @@
       '.ipg-elect .tier2 .contrib-inner{background:#fff;border-radius:0 10px 10px 0;}' +
       '.ipg-elect .framing{font-style:italic;color:var(--coral);}' +
       '.ipg-elect button.funder-row{display:grid;grid-template-columns:1fr auto;gap:10px;width:100%;text-align:left;appearance:none;border:0;border-bottom:1px solid var(--line);background:none;cursor:pointer;font-family:var(--body);padding:7px 4px;align-items:center;}' +
-      '.ipg-elect button.funder-row:hover{background:#F2E8DC;}.ipg-elect button.funder-row:focus-visible{outline:2px solid var(--sage);outline-offset:1px;}' +
+      '.ipg-elect .amt3{display:grid;grid-template-columns:repeat(3,116px);gap:10px;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}.ipg-elect .amt3 .v{font-size:13px;color:var(--ink-soft);font-weight:500;}.ipg-elect .amt3 .v.tot{font-size:15px;color:var(--teal);font-weight:600;}.ipg-elect .amt3 .lab{display:none;}.ipg-elect .amt3 .spent{display:block;font-size:10.5px;color:var(--ink-soft);font-weight:500;letter-spacing:.04em;}.ipg-elect .browse-colhead{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end;padding:10px 4px 6px;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);}.ipg-elect .browse-colhead .amt3{white-space:normal;line-height:1.3;}.ipg-elect .browse-disclose{margin:10px 0 0;}@media (max-width:640px){.ipg-elect .browse-colhead{display:none;}.ipg-elect .amt3{grid-column:1 / -1;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.25fr);gap:8px;text-align:left;}.ipg-elect .amt3 .lab{display:block;font-size:10.5px;color:var(--ink-soft);font-weight:500;white-space:normal;line-height:1.25;margin-bottom:2px;}}.ipg-elect button.funder-row:hover{background:#F2E8DC;}.ipg-elect button.funder-row:focus-visible{outline:2px solid var(--sage);outline-offset:1px;}' +
       '.ipg-elect .crow.plain{cursor:default;}' +
       '.ipg-elect .who .sub{display:block;font-size:11px;font-weight:400;color:var(--ink-soft);margin-top:1px;}' +
       // X-1 itemized direct-contribution rows: sage left-border block, indented under each
@@ -2143,7 +2143,7 @@
       '<div class="modal-tags">' + tagsHtml(fp.industries, fp.flags, fp.industryTags) + '</div>' +
       '<p class="modal-note">Everything <b>' + esc(fp.name) + '</b> has given within this election window, across every office ' +
       'these tools cover — direct contributions and money into independent-expenditure committees, grouped by the office ' +
-      'of the recipient — independent-expenditure committees appear here only where they have spent in this page\'s office.</p>' +
+      'of the recipient — ' + (fp.win ? FOOTPRINT_SCOPE_ELECTION : FOOTPRINT_SCOPE_OFFICE) + '</p>' +
       statgrid + cycLine + rc +
       '<div class="modal-summary">' + money(fp.total) + ' across ' + plural(fp.count, 'recipient', 'recipients') + '</div>' +
       rows +
@@ -2815,7 +2815,7 @@
       return '<button class="crow funder-row" type="button" data-committee="' + esc(r.committee_id) + '">' +
         '<div class="who">' + nm.primary + ' <span class="kind ie">IE PAC</span>' +
         (nm.subtitle ? '<div class="sub">' + nm.subtitle + '</div>' : '') + '</div>' +
-        '<div class="amt">' + money(r.total) + ' <span class="n">· spent</span></div></button>';
+        '<div class="amt3"><div class="v"></div><div class="v"></div><div class="v tot">' + money(r.total) + '<span class="spent">spent</span></div></div></button>';
     }
     // Front card (E-4): rollup pill + "N entities · N committees · N contributions".
     var isRollup = (r.entities || 0) > 1;
@@ -2831,7 +2831,7 @@
       (r.selfShare >= 0.999 ? ' <span class="tagchip self">Candidate’s own money / loans</span>'
         : (r.selfShare > 0 ? ' <span class="tagchip self">Partly candidate’s own money / loans</span>' : '')) +
       '<div class="browse-counts">' + sub.join(' · ') + '</div></div>' +
-      '<div class="amt">' + money(r.total) + '</div></button>';
+      amt3(r.direct, r.independent, r.total) + '</button>';
   }
 
   function threeFig(f) {
@@ -2979,7 +2979,7 @@
             '<span class="caret" aria-hidden="true">▸</span> Show all ' + rows.length + ' donors &amp; spenders</button>' +
             '<div class="contrib tall" id="spend-donors-more"><div class="contrib-inner bare">' + moreRows + '</div></div>';
         }
-        body = controls + note + top + more;
+        body = controls + note + browseColHead() + top + more;
       }
     }
     // The active election window rides on the container so a spender drill-down opened
@@ -3032,6 +3032,25 @@
       '<section>' + inner + '</section>' + footer() + '</div>';
   }
 
+  // Placed after renderPage so that no line the mechanism reference cites into this file moves.
+  // AUDIT-2 M1 (ratified by Ishan 2026-10-05): a donor row states three filed figures side by side, as the
+  // council voting tool's lists do (PS-138): what the donor gave candidates in these races, what it gave
+  // outside-spending groups in scope (data.js ieActiveForOffice), and their sum, which ranks the row.
+  var BROWSE_COLS = ['To candidates in these races', 'Via outside-spending groups', 'Total giving'];
+  var BROWSE_DISCLOSE = 'Money given to an outside-spending group counts in full here once that group has spent on these races in this election, whichever other races it also spent on.';
+  // The pop-up's last clause says which test its outside-spending groups passed: the election's where the
+  // pop-up was opened with a window, DESIGN-1c (v)'s words where it was opened with none (data.js ieActiveForOffice).
+  var FOOTPRINT_SCOPE_ELECTION = "independent-expenditure committees appear here only where they have spent on this page's races in this election.";
+  var FOOTPRINT_SCOPE_OFFICE = "independent-expenditure committees appear here only where they have spent in this page's office.";
+  function amt3(direct, indep, total) {
+    var cell = function (i, v, cls) { return '<div class="v' + (cls ? ' ' + cls : '') + '"><span class="lab">' + BROWSE_COLS[i] + '</span>' + money(v) + '</div>'; };
+    return '<div class="amt3">' + cell(0, direct) + cell(1, indep) + cell(2, total, 'tot') + '</div>';
+  }
+  function browseColHead() {
+    return '<p class="contrib-note browse-disclose">' + BROWSE_DISCLOSE + '</p>' +
+      '<div class="browse-colhead"><div>Donor</div><div class="amt3">' + BROWSE_COLS.map(function (c) { return '<div>' + c + '</div>'; }).join('') + '</div></div>';
+  }
+
   return {
     styles: styles,
     masthead: masthead, footer: footer,
@@ -3044,7 +3063,8 @@
     // an independently stated oracle (D-21/PS-111, D-22/PS-112). Test hook only — the render
     // paths above are the app's consumers, exactly as data.js exports OFFICE_TYPE for
     // [MUNI/TABLE] without the app ever reading it.
-    _ratified: { browseFraming: BROWSE_FRAMING, raceFilterAll: RACE_FILTER_ALL,
+    _ratified: { browseFraming: BROWSE_FRAMING, browseCols: BROWSE_COLS, browseDisclose: BROWSE_DISCLOSE,
+                 footprintScopeElection: FOOTPRINT_SCOPE_ELECTION, footprintScopeOffice: FOOTPRINT_SCOPE_OFFICE, raceFilterAll: RACE_FILTER_ALL,
                  personElectionNoun: PERSON_ELECTION_NOUN, methodologyOffices: METHODOLOGY_OFFICES },
     tagsHtml: tagsHtml, readableText: readableText,
     donorRow: donorRow, contributorPanel: contributorPanel, iePanel: iePanel,

@@ -2088,6 +2088,90 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: AUDIT-2 M4 ratification package, revision 1 (`audit-2-m4-package-rev1.md`), sha256 `a4d1b688f2f46f1654f6ad8b05611624d57c79ae6916e5e855f13ed882db1bc5`, 17,373 B / 176 L, region R2 (its lines 63–124), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-04 as drafted (“2. ratify”), on his rulings of 2026-10-01 and 2026-10-04. Arises from the numbers audit of 2026-09-29 (finding M4). Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-144`; `PS-145` occurring 0 times before this commit), never carried. Measured basis: AUDIT-2 BR-11 report `a877ea17f34152ee25d5e536cd548d64c477cdebb772214c9b8601d2fbc458bc` and BR-13 report `6968fdc5b499de0aed6af65e2330ce04ad95ce7f6b20cd69c5f89c5a064229d6`.*
 
+### PS-146 — on the elections tool’s donor list an outside-spending group’s funders count only where the group spent on the page’s races in the selected election, and each row states three filed figures
+
+> **What was found.** The numbers audit (finding M1) measured the elections tool’s Browse donors
+> list on `/school-board-elections` and `/city-council`. A donor’s row showed one figure: what the
+> donor gave, inside the selected election’s window, to candidates in the page’s races and to
+> every independent-expenditure committee in scope. Under DESIGN-1c (i) a committee was in scope
+> if it had spent on the page’s office in the selected election or the one before. A committee
+> that had last spent on a page’s races in an earlier election therefore brought every gift made
+> to it in the current window onto that page’s list. The pop-up a row opened used a wider test
+> than the row, that the committee had spent on the page’s office at any date, so a pop-up could
+> list gifts its row left out.
+>
+> **Ruled by Ishan, 2026-10-05.**
+> - **The scope rule, amending DESIGN-1c (i).** On a page of the elections tool, an
+>   independent-expenditure committee’s funders are counted only if the committee spent on that
+>   page’s races inside the selected election’s window. The allowance for the election before is
+>   withdrawn.
+> - **Three figures on each donor row.** The list carries a header row: **Donor** · **To
+>   candidates in these races** · **Via outside-spending groups** · **Total giving**. Each donor
+>   row states all three: what the donor gave candidates in the page’s races, what it gave
+>   independent-expenditure committees in scope, and their sum. The list is ranked by Total
+>   giving, as it was ranked by its one figure. Each figure is the amount filed; no share of a
+>   committee’s money is modelled. A zero is shown as $0.
+> - **An independent-expenditure committee’s own row** keeps its spending figure for the selected
+>   window, under Total giving, marked **spent**. It stays in the one ranking by that figure.
+> - **The disclosure line,** directly above the header row: **Money given to an outside-spending
+>   group counts in full here once that group has spent on these races in this election, whichever
+>   other races it also spent on.**
+> - **The pop-up counts what the row counts, part by part.** A donor’s pop-up applies the same
+>   test as the donor’s row. Its candidates in the page’s races equal the row’s first figure and
+>   its outside-spending groups equal the second. Its own total also covers the donor’s giving to
+>   other offices (DESIGN-1c (ii)) and can be larger than the row’s. The last clause of its note
+>   reads **independent-expenditure committees appear here only where they have spent on this
+>   page's races in this election.** It read "independent-expenditure committees appear here only
+>   where they have spent in this page's office." The apostrophe in both is the plain one, as the
+>   source has it. The rest of the note is unchanged.
+> - **A pop-up opened with no election window** is not changed. One is reached from the person
+>   view, through a committee’s profile. Its test is that the committee has spent on the page’s
+>   races at any date, and its note keeps the clause DESIGN-1c (v) ratified, which is true of that
+>   test.
+> - **On a narrow screen** the header row is not shown and each of a donor’s three figures carries
+>   its own label.
+> - **Every page shows the three figures,** including a page where no committee is in scope and
+>   the second figure is $0 on every row, as `/city-council` is on the data measured here.
+> - **Counting across pages is accepted.** A gift to a committee in scope on two pages counts on
+>   both, and the council voting tool’s list (PS-138) counts money into these committees whichever
+>   races they spent on. A ranking that spans elections or pages counts each gift once; that is a
+>   requirement on the homepage work (HOMEPAGE-1), not a change made here.
+>
+> **What does not change.** DESIGN-1c (iii) and (iv). In DESIGN-1c (ii), the pop-up’s grouping,
+> labels and totals; only the test its outside-spending groups pass changes. DESIGN-1c (v)’s
+> clause, on a pop-up opened with no election window. The council voting tool’s lists (PS-138,
+> PS-139). A committee’s "Who funds this committee" list, which states its own basis (PS-93). The
+> spending figures on every candidate, race and committee. The school-board voting page. No data
+> file moves.
+>
+> **Measured basis.** Measured at AUDIT-2 BR-14 on 2026-10-05, at commit
+> `93d86e4f22688b366356dcd84038de5f7fb0845c`, from `campaign-finance/election-data.json`.
+> `/city-council` counted $9,193,017.72 given to four committees (INCS Action Independent
+> Committee, Illinois REALTORS Fund, HACIA PAC and Areyto Political Action Committee) that had
+> spent $0.00 on council races inside the window and $473,460.43 at every date.
+> `/school-board-elections` for 2026 counted $9,843,742.84 given to four committees that had spent
+> $457,738.88 on its races inside the window; $5,302,772.15 of it was given to INCS Action
+> Independent Committee, which had spent nothing there in the window. For 2024 it counted
+> $3,763,400.00 against $3,039,298.65 spent. On `/city-council` the pop-ups of 354 donors listed
+> $423,647.09 given to two committees that no row counted; nine of those donors had a row in the
+> list, and their rows left out $19,500.00.
+>
+> **With the rule applied to the same data.** `/city-council` lists 8,658 donors, where it listed
+> 8,693, and counts $0.00 through outside-spending groups. `/school-board-elections` for 2026
+> lists 939, where it listed 945, and counts $4,540,970.69, given to Common Ground Collective,
+> Brighter Futures Chicago and Urban Center Action. For 2024 the list is unchanged at 1,324 donors
+> and $3,763,400.00. On every row of the three lists the pop-up’s two parts equal the row’s.
+>
+> **Where it lives.** `campaign-finance/elections/embed/data.js`: `ieActiveForOffice` is the test,
+> `recipInScope` and `browseDonors` apply it to the row, and `donorFootprint` applies it to the
+> pop-up; `priorCycleStart`, which computed the earlier bound, is removed.
+> `campaign-finance/elections/embed/render.js` carries the row and the strings. The gate,
+> `campaign-finance/elections/embed/tools/gate_bundle.js`, reads the rule, the split, the pop-up
+> and the strings in the checks named `[M1/SPLIT]`, `[M1/SCOPE]`, `[M1/POPUP]`, `[M1/RENDER]` and
+> `[M1/REGISTER]`.
+
+*Provenance: AUDIT-2 M1 ratification package, revision 1 (`audit-2-m1-package-rev1.md`), sha256 `9077b578762becc9235f7605887546b61be717d293efa1d780d0e1562f5435b6`, 27,773 B / 201 L, region R1 (its lines 27–105), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Region R2 of the same package (its lines 115–126) is transcribed the same way into the DESIGN-1c entry below, between that entry’s text and its provenance line, and this line is its provenance too. Ratified by Ishan in chat 2026-10-05 as drafted (“1. ratify”, “2. ratify”), on his rulings of the same day; the pop-up opened with no election window was ruled with the ratification (“3. a”). Arises from the numbers audit of 2026-09-29 (finding M1). Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-145`; `PS-146` occurring 0 times before this commit), never carried. Measured basis: AUDIT-2 BR-14 report `963fdbae0aaba73af70ac07ebae2dbf21e2d693d9f17f937a49b696544022deb`.*
+
 ---
 
 ## Rulings ratified without an id
@@ -3069,6 +3153,19 @@ Ruled 2026-09-26 in chat across SB-ROSTER-1's four dispatches and DESIGN-1b; lan
 ### DESIGN-1c — the PAC scoping rule, the cross-office donor footprint and in-kind, as ruled
 
 Ruled 2026-09-26 and 2026-09-27 in chat; landed at commit e8352611575c290d5b92b2a32a3910fe93952466 (2026-09-27), except (v), which lands with HYGIENE-1's code commit. (i) **The PAC scoping rule (a data rule):** a PAC's funders are in an office view only if the PAC spent on that office in the active election cycle or the one before — "the one before" is the preceding tabled window's start, else four years before the active window's start; a null bound is open, so on an open-start window "the one before" is all-time (`priorCycleStart`, `ieActiveForOffice` and `recipInScope` in `campaign-finance/elections/embed/data.js`). (ii) **The donor footprint is cross-office, grouped by the recipient's office:** the page's own office first, its group label suffixed ` · this page`, then the other offices, then `Independent-expenditure committees`, then `Other committees`, each group with a subtotal, the subtotals summing to the footprint's total; the group labels are **City Council**, **School Board**, **Mayor**, **City Clerk**, **City Treasurer**, **Other offices**, **Independent-expenditure committees**, **Other committees**; a footprint with no rows renders **No election giving recorded.** The IE group still excludes committees that never spent in the page's office (open ledger 80; the fixture `campaign-finance/elections/embed/tools/prerender_b2.js` pins it). (iii) **In-kind:** a contributor line whose in-kind share is at least 0.999 carries the chip **in-kind**, one whose share is above zero carries **partly in-kind**; an itemized row that is in-kind carries **in-kind** with the filer's description after ` · ` where one exists. In-kind counts in a candidate's raised figure as cash does (3,177 in-kind rows, $5,493,082.93, at the tip); **ruled 2026-09-27: kept as it is, the chip the disclosure, revisited after partner feedback** (open ledger 84). (iv) **The modal note stands as landed:** "Everything *name* has given within this election window, across every office these tools cover — direct contributions and money into independent-expenditure committees, grouped by the office of the recipient." (v) **Ruled 2026-09-27 (open ledger 80, remedy (b)):** the note gains one clause, appended to that sentence after "recipient" and before its full stop: ` — independent-expenditure committees appear here only where they have spent in this page's office`; the filter stays and no fixture re-pins. The clause is ratified copy that HYGIENE-1's code commit lands in `campaign-finance/elections/embed/render.js` and the three rebuilt bundles.
+
+> **Amendment (2026-10-05, the scoping rule).** Ruled by Ishan 2026-10-05 (AUDIT-2 M1). **Clause
+> (i):** the allowance for the election before is withdrawn. A PAC’s funders count in an office
+> view only where the PAC spent on that office inside the selected election’s window, and
+> `priorCycleStart` is removed from `campaign-finance/elections/embed/data.js`. **Clause (ii), its
+> last sentence:** a pop-up opened with an election window lists, in its independent-expenditure
+> group, only committees that spent in the page’s office inside that window, which is the test the
+> donor’s row uses; opened with no window it excludes committees that never spent in the page’s
+> office, as before. **Clause (v):** the clause it ratifies now renders only on a pop-up opened
+> with no election window; with a window the clause reads as the numbered entry gives it. The rule
+> in force, its strings and its measured basis are in the numbered entry on the elections tool’s
+> donor list, ratified the same day. The text above is not rewritten. Recorded under the PS-93
+> pattern: no id is allocated.
 
 *Provenance (DESIGN-1c): the same package, region §1 R3, transcribed verbatim, text unaltered character for character. Ratified by Ishan in chat 2026-09-27 as drafted. Recorded under the PS-93 pattern: no id is allocated.*
 

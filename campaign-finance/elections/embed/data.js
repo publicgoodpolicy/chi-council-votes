@@ -545,9 +545,9 @@
       if (EXCLUDED_CYCLES[c.cycle]) continue;
       if (win && !inWindow(c.date, win)) continue;
       var cid = c.committee_id, cm = index.committees[cid] || {};
-      // office scope: an IE committee that didn't spend in this office is out of
-      // scope (e.g. a council-only IE PAC must not appear in a school-board view).
-      if (cm.type === 'independent_expenditure' && index.office && !index.inScopeIE[cid]) continue;
+      // office scope: an IE committee is in scope by the SAME test the donor's row uses (M1): it spent
+      // on this office, and inside the click-context window where there is one (ieActiveForOffice).
+      if (cm.type === 'independent_expenditure' && index.office && !(index.inScopeIE[cid] && ieActiveForOffice(index, cid, win))) continue;
       var m = by[cid];
       if (!m) {
         m = by[cid] = { committee_id: cid, total: 0, count: 0, kind: 'other', label: cm.committee_name || cid, rows: [] };
@@ -1101,24 +1101,24 @@
 
   // ---- Election Spend subtabs (office-scoped) ----
 
-  // DESIGN-1c (Ishan, 2026-09-26): an IE committee's funders count toward an office view only if the
-  // committee spent on that office in the ACTIVE election cycle or the one before it — not merely at any
-  // time (the all-time test let school-board-only funders lead the council list). "The one before" is the
-  // preceding window tabled for the office type in ELECTION_WINDOWS; where none is tabled (municipal 2027)
-  // it is the four years before the active window's start. A null lower bound (school_board's open 2024
-  // window) means all-time. ELECTION_WINDOWS itself is untouched: the selector reads it (D-20 / PS-110).
-  function priorCycleStart(office, win) {
-    var t = officeType(office), o = t && ELECTION_WINDOWS[t]; if (!o || !win) return undefined;
-    var ids = Object.keys(o).sort(), i = -1;
-    for (var k = 0; k < ids.length; k++) if (o[ids[k]].start === win.start && o[ids[k]].end === win.end) i = k;
-    if (i > 0) return o[ids[i - 1]].start;   // the tabled prior window; null = open past
-    return win.start ? (String(+win.start.slice(0, 4) - 4) + win.start.slice(4)) : null;
-  }
+  // AUDIT-2 M1 (Ishan, 2026-10-05), amending DESIGN-1c (i): an IE committee's funders count toward an
+  // office view only if the committee spent on that office INSIDE the selected election's window.
+  // DESIGN-1c (i) also admitted the election before it (a lower bound one tabled window, or four years,
+  // earlier). Under that test a committee that last spent on a page's races in an earlier election still
+  // brought every in-window gift made to it onto that page's donor list: the numbers audit measured
+  // $9,193,017.72 of such gifts on /city-council against $0.00 spent on its races in the window, and
+  // $9,843,742.84 against $457,738.88 on /school-board-elections for 2026. The earlier bound and the
+  // function that computed it (priorCycleStart) are removed.
+  // With no window (the windowless openers: the person surface, and a pop-up opened from a row that
+  // carries none) the test stays "spent on this office at any date".
+  //
+  // Two readers call this and must keep calling the SAME test: browseDonors, through recipInScope, and
+  // donorFootprint. A donor's row and the pop-up that row opens therefore count the same committees
+  // (M1, ruling 5). ELECTION_WINDOWS itself is untouched: the selector reads it (D-20 / PS-110).
   function ieActiveForOffice(index, committeeKey, win) {
     var rows = index.iesBySpender[committeeKey] || [];   // office-scoped at build (item 4)
     if (!win) return rows.length > 0;
-    var lo = priorCycleStart(index.office, win);
-    for (var i = 0; i < rows.length; i++) { var d = rows[i].date || ''; if (d && (win.end == null || d <= win.end) && (lo == null || d >= lo)) return true; }
+    for (var i = 0; i < rows.length; i++) if (inWindow(rows[i].date, win)) return true;
     return false;
   }
   // DESIGN-1c: the candidate card's donor lines are aggregates and carried no in-kind marker (the per-gift
@@ -1217,7 +1217,7 @@
       if (!index.parentRollup.hasOwnProperty(pid)) continue;
       var d = index.donors[pid] || {};
       if (!donorMatches(d, d.name || pid, f)) continue;     // E-1 donor filters (parent unit)
-      var pr = index.parentRollup[pid], total = 0, selfAmt = 0, cmset = {}, entset = {}, ncontrib = 0;
+      var pr = index.parentRollup[pid], total = 0, viaIE = 0, selfAmt = 0, cmset = {}, entset = {}, ncontrib = 0;
       var ownGiver = false;
       for (var i = 0; i < pr.rows.length; i++) {
         var c = pr.rows[i];
@@ -1228,14 +1228,14 @@
         if (!keep(c.cycle)) continue;
         if (win && !inWindow(c.date, win)) continue;
         if (!recipInScope(index, c.committee_id, win)) continue;
-        total += c.amount || 0; ncontrib++;
+        total += c.amount || 0; ncontrib++; if ((index.committees[c.committee_id] || {}).type === 'independent_expenditure') viaIE += c.amount || 0;   // M1: the row's split
         if (c.is_self) selfAmt += c.amount || 0;          // FIX-1 (E4): the row's own-money share
         if (c.committee_id) cmset[c.committee_id] = 1;
         if (c.donor_id) entset[c.donor_id] = 1;
       }
       if (total > 0) {
         rows.push({ kind: 'donor', parent_id: pid, name: d.name || pid,
-          industries: d.industries || [], flags: d.flags || [], total: round2(total),
+          industries: d.industries || [], flags: d.flags || [], total: round2(total), direct: round2(total - viaIE), independent: round2(viaIE),
           entities: Object.keys(entset).length, committees: Object.keys(cmset).length, contributions: ncontrib,
           selfShare: selfAmt / total, ownCommitteeGiver: ownGiver });
       }
