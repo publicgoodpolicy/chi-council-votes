@@ -267,8 +267,9 @@ PS-101]: `build_sb_finance.py` applies the dues exclusion in a single place, a b
 `continue` inside `scan_committee_rows()` keyed on the `DUES_TYPE` constant, and the R4a
 counter sits at that same predicate so the figure reports what THIS exclusion removes rather
 than what earlier predicates already dropped. The contribution filters run in a fixed order —
-slug scope, aggregate, excluded cycles, dues, donor resolution, self-funding, window — and the
-order is load-bearing for that counter, not incidental. The exclusion is nevertheless vacuous
+slug scope, aggregate, excluded cycles, dues, other receipts (C5.16: a bare skip through the
+rollup builder's imported test, with no counter), donor resolution, self-funding, window — and
+the order is load-bearing for that counter, not incidental. The exclusion is nevertheless vacuous
 here **by disjointness rather than by luck**: `ie_slice()` reads the spend side
 (independent expenditures) while the dues predicate reads funding-side contributions, so no
 dues row is in the set the slice sums and the excluded total is $0.00 for this dataset. That
@@ -629,6 +630,31 @@ clusters, and nothing yet does the same for a candidate's own donor record.
 The council tool reads the same stamp for its line under the tiles, its chips and the donor
 profile's recipient row. The three display strings are PS-142's.
 
+**A committee's other receipts are in no figure, are stated where its money is shown, and are
+published by magnitude** [C5.16, RULED — see PS-147; sites SOURCED]. A contribution row whose
+filed type is `Other Receipt` and that is not stamped `is_own_committee` is excluded wherever the
+dues transfers are. `build_rollups` tests it with one function, `is_other_receipt`, at the three
+sites of the dues test, and `build_sb_finance` imports that function. Each embed adds the test to
+its one shared exclusion predicate, `cfCountable` in the council embed and `excludedType` in the
+elections embed's `data.js`, so the set still binds as a set (C5.8). The stamp is read with the
+type: a listed own-committee pair's row is counted whatever its filed type (PS-142), and
+`stamp_own_committee` runs at `build()` entry, before any site reads the stamp. The builder emits
+the magnitude as `other_receipts_excluded` in both artifacts at every build;
+`validate_council_data` recounts it under a predicate stated in the validator, and holds every
+`by_parent` entry to a recount that leaves these rows out. The surfaces state what they leave out.
+The council embed's alder profile sets the rows aside before any sum and renders them as a line
+that opens a list of payers. The elections embed's `candidateFigures` returns them beside the
+card's figures, for the card, the person view and a campaign committee's pop-up to render as a
+line. The elections embed's methodology states a figure of its own for each page:
+`otherReceiptsOnPage` sums the lines of the page's cards, each read through `candidateFigures` for
+the card's funding candidacy in its race's own window, because the artifact's field covers every
+office the artifact holds and every date in the subject, and a page would state money none of its
+cards show; the council embed's methodology states its artifact's field. A loan is not in the set:
+it stays counted, and the council embed marks a donor row whose money includes one, summing loans
+over the same rows its totals count. `editor/serve.py`'s cluster preview imports the builder's
+test, so its dry-run figure still equals the rendered rollup (C5.9); the editor's work-queue
+totals and the classification export do not apply it and are not published figures.
+
 **The cycle exclusion is subject scope, applied at every unchosen figure** [C5.8, RULED;
 sites SOURCED]: money dated before the floor of the modeled council eras (the `CYCLES`
 table; the term seated May 2011) is **outside the tool's subject** (PS-93 — the doctrine,
@@ -649,7 +675,8 @@ earliest school-board election window was open-start until FIX-1 set it to 2024-
 window**, asserted at gate. **The exclusion set is larger than cycles, and it
 binds as a set** (PS-94): dues transfers between political committees are excluded from
 every published total while their rows stay in the substrate, typed distinctly (PS-95 —
-the rule's first text of record; it governed as FW-1's rule (c) pre-register), and every
+the rule's first text of record; it governed as FW-1's rule (c) pre-register), a committee's
+other receipts joined the set at AUDIT-2 M2 (C5.16), and every
 row-aggregating consumer applies the **full** set through one shared predicate per embed
 — a repeated condition is how the second gap of this class happened. The exclusion is
 **disclosed by magnitude** at methodology level (PS-95's clause), and a flag that marks an
@@ -729,11 +756,13 @@ render path.
 `city_council` is composed from register text** [C5.13, SOURCED]: `methodologyView()` on the
 elections embed took no office until CNCL-DATA-1 P2.1 — the D-22 / PS-112 gate chose between
 rendering it and rendering coming-soon, and the body behind the gate was a single school-board
-composition. It now takes an office and emits, for `city_council`, the shared frame, six `<p>`
-carrying the ratified strings C1, C2, C5, C3, C4, C6 in that order with no `<h3>` before any of them,
+composition. It now takes an office and emits, for `city_council`, the shared frame, eight `<p>`
+carrying the ratified strings C1, C2, C5, C3, C4, C6, C7, C8 in that order with no `<h3>` before any of them,
 then the verification section. The frame and that section are single expressions used by both
 branches, so their byte-identity across offices holds by construction rather than by a copy kept
-in step; no school-board section is carried across, which `[MUNI/SUBJ]` enforces by requiring each
+in step; so, since AUDIT-2 M2, are C7 and C8, which the school-board branch emits under a heading
+of its own after its itemization paragraph (C5.16). No school-board section is carried across to
+the council branch, which `[MUNI/SUBJ]` enforces by requiring each
 member office's rendered methodology to name its own subject and neither other office's. Three
 gate lines guard the arrangement and they are not interchangeable: `[MUNI/METH]` asserts that only
 an office with a ratified methodology renders one at all, `[MUNI/SUBJ]` that a member office's
@@ -926,30 +955,30 @@ that catch defect classes the existing gates structurally cannot see.
 | S-t1 | `campaign-finance/ingestion/transform_slice1.py` | `5f807b26245ee22173d3903b9b8a3825f224c47c4f2d7ad11042ee87a6ccb68d` |
 | S-ie | `campaign-finance/ingestion/ingest_ie.py` | `69ac0f3a5d1db24a8c6d6ca90424199bffd8fbde0da31926ecb1e5221e8976c6` |
 | S-rep | `campaign-finance/ingestion/repair_clusters.py` | `90cc6912647479510d10d505debb84d18fbd28557bf5996b01a992eb1ddf283c` |
-| S-rol | `campaign-finance/ingestion/build_rollups.py` | `cff75d0d879822f61c1a652c66b1434af7f2bb963fe9ce7b702f65723f39c65a` |
+| S-rol | `campaign-finance/ingestion/build_rollups.py` | `688f95dd6f1342daf47a57bf8cbd11a3505cd0370a7c11aac152e9c84766f323` |
 | S-own | `campaign-finance/ingestion/own-committee-transfers.json` | `341baf4287cacbc2c2d783efaf7f56a6b9335e8d6b96adad9acca7cd046ad4e2` |
 | S-seed | `campaign-finance/elections/build_election_seed.py` | `b4e079602f10625b67cd1df74cc2457bd27d329628939d35a178f122888686ed` |
-| S-vld | `campaign-finance/ingestion/validate_council_data.py` | `ce109efa90d006379e9cfa5ef62da8e4a4d921feeba4964dd22e373c22d716ec` |
+| S-vld | `campaign-finance/ingestion/validate_council_data.py` | `095977689ae8972d726deb9ce48009c0bb1e3711e3c08484006a79493fa6cb3f` |
 | S-sbv | `campaign-finance/ingest_sb_votes.py` | `d4d7f6050b1f7dac07e07d27067fbf35ffe4f29a05e6cee74687412338a110b3` |
 | S-rst | `campaign-finance/ingestion/restamp_committee_linkage.py` | `6ceb82f9bbcffa08fdb21904b8585982a6bff7e3982e0b810937e2958019d06e` |
 | S-cbr | `campaign-finance/ingestion/convert_bulk_receipts.py` | `6062d0dfea8802f17a3434bef8e88097b7ad932bc17811f14d75055dfc3269ce` |
 | S-av | `campaign-finance/sync_allvotes.py` | `489ece598a942f9e2c205e229ce4b97e3e51687dc03313243c893ace41f5c40c` |
-| S-cemb | `campaign-finance/elections/reference/council-embed.html` | `c014a33e400ba7e1027c65f3023644b4eaf17bdfa3c1570d28357690e3784fba` |
+| S-cemb | `campaign-finance/elections/reference/council-embed.html` | `93c50534103789c942c37878f900a1ef1639bc50dbeb00334af30ba26764c2e1` |
 | S-sbemb | `campaign-finance/school-board/school-board-embed.html` | `a80351a91bc51fad203330629e8016ea2a48d1b74827cd4d1e0fb638621402e9` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8e76a38ad11562fe8de5bee1c2ff339ea60251795171bdd37f9aa29da2e0b82a` |
-| S-edat | `campaign-finance/elections/embed/data.js` | `cb993bf1e31b0ab9510510fe836abb1b8a37811ba16d419328a584a31009dafe` |
-| S-eren | `campaign-finance/elections/embed/render.js` | `61ba174ea5755db16e8d0bfce12fe6c9b85e55ed904e7f0bdcc04665daffd996` |
-| S-eapp | `campaign-finance/elections/embed/app.js` | `9add3d7d75e7214af0d90737fdf5db352097a19b77f5d3a424053015ef5305a3` |
-| S-srv | `campaign-finance/editor/serve.py` | `f430f67b2d2367893ab4cb37a1c25ff84d71bb93b53a23b78f253ec17dccaa3a` |
+| S-edat | `campaign-finance/elections/embed/data.js` | `0157d27831f07d24184405f0faaf2e8e8cd5c2b01071b7914d614658bd021414` |
+| S-eren | `campaign-finance/elections/embed/render.js` | `80f20e421a5e7a12160136216b6aade596101275d61606b236dc14e84f6a6159` |
+| S-eapp | `campaign-finance/elections/embed/app.js` | `adaeb1192a4292945cf46feec8cd5fa5426275dc2022603f9d3f928f148d0d37` |
+| S-srv | `campaign-finance/editor/serve.py` | `3adcdf6dca88b969f0a62de7fd696d26def569abe2bd613f60b74ec122720e2b` |
 | S-rec | `campaign-finance/ingestion/reconcile.py` | `363c3c19341508463d6f5563e2fe2defa3fb59e7626b48b3e31b13e0180acb50` |
-| S-egate | `campaign-finance/elections/embed/tools/gate_bundle.js` | `14a8c46861e0a9bca7b389d66d20127c5bec622a3478e57478ad02cff369134e` |
+| S-egate | `campaign-finance/elections/embed/tools/gate_bundle.js` | `a8bfad7c9f6262fe814cdd46572324902dc3219ac8ac92553b2b4f1916bbce8b` |
 | S-chk | `campaign-finance/tools/check_sheet_scopes.py` | `9c980fd7362351a7df8a889ba60dc1a38d4fcee397200903a4f7d1b7bc620e94` |
-| S-sbf | `campaign-finance/ingestion/build_sb_finance.py` | `e49f3dc9c3841016c4cf0345932ff12c01a54d5e58c8bb72c8b57cc126f13cb7` |
+| S-sbf | `campaign-finance/ingestion/build_sb_finance.py` | `0b7e72af86d9588661b9d3bd6caac0ed9aaaf6990cd0d645e9ef400a8e7a70ee` |
 | S-a7 | `campaign-finance/sheets-sync/a7_precheck.py` | `a9d7e4669a4dc7b614d5d85939432a3317e3718d9a91cc9a9f0d50ca9ef73374` |
 | S-iv | `campaign-finance/ingest_votes.py` | `167757809a654effaddaf79f62e3ea82881dfe85e555b9acaa90532eb63b0ef1` |
 | S-bios | `campaign-finance/sheets-sync/sync_bios.py` | `0bce2d545e884fedd07fa814f69381582f7487cc12734c1b8c4152a83d89722a` |
 | S-bemit | `campaign-finance/elections/embed/tools/build_embed.js` | `727955e51eb4739646ea81b6d007135eec13fe16de2acc92c95db904dd6c370e` |
-| S-b2 | `campaign-finance/elections/embed/tools/prerender_b2.js` | `07a7308039e3e5c0dabd4d491aed1bccd2abbd71c41b090072ca125f7b6f9fd2` |
+| S-b2 | `campaign-finance/elections/embed/tools/prerender_b2.js` | `c34259ae687e4db35412e3be9760532bf2bdd5046ad2b7b5d11cb1b28697f4c2` |
 | S-coh | `campaign-finance/ingestion/apply_cash_on_hand.py` | `fc6593ad330c80f611ba6af54fb371aef17324eb8815b850e1f23e34e0e7fc73` |
 | A-probe | `~/probe-sync-2026-07-24/probe-report.md` | `4c678cf0c14dd370f8b52744bf473000340ce16449a5365841b6ac92d8e5f9bb` |
 | A-add | `~/probe-sync-a-2026-07-24/addendum-a-report.md` | `468ba24f4f418f72c2720608353c83e52694c41637cf9ff16a9b267d37e49ed6` |
@@ -971,7 +1000,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.3 | S-syn | 526-537 (sole-restorer writes) |
 | C1.3 | A-ba1g0 | 44-54 (§G0.2 the firing configuration), 56-66 (§G0.3) |
 | C1.4 | S-seed | 57-61 (rollups-last rationale), 63-70 (governing rule) |
-| C1.4 | S-rol | 439-441 (runs-last comment) |
+| C1.4 | S-rol | 461-464 (runs-last comment) |
 | C1.5 | S-ie | 15 (imports rollups), 402 (internal rollup call) |
 | C1.5 | S-seed | 63-65 (must-never-run-without-parent rule) |
 | C1.5 | S-t1 | 10-16 (parent derivation from cluster state) |
@@ -986,19 +1015,19 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.13 | A-l0g0 | §5 (the Supporting/Opposing volume, measured over the expenditures bulk; the archived volumes, measured per collection) |
 | C1.14 | S-cbr | 72-78 (`D2PART_NAME`, the five itemizable codes), 440 and 618 (the selection pass and the reassembly pass, both requiring membership) |
 | C1.14 | A-l0g0 | §5 (the D2Part tally over the receipts bulk: the out-of-map values are field-shifted artifacts, not types) |
-| C1.15 | S-vld | 203-320 (`validate_votes` — VOTES-ROSTER + VOTES-1..8, the single-source assertion at VOTES-5), 145-200 (`ROSTER_FIELDS`, `ROSTER_SCHEMAS` and `_roster` — the parameterization point: absence distinguishable from emptiness, and each shape declaring its position key and optional column contract), 87 (wired into validate) |
+| C1.15 | S-vld | 204-321 (`validate_votes` — VOTES-ROSTER + VOTES-1..8, the single-source assertion at VOTES-5), 146-201 (`ROSTER_FIELDS`, `ROSTER_SCHEMAS` and `_roster` — the parameterization point: absence distinguishable from emptiness, and each shape declaring its position key and optional column contract), 87 (wired into validate) |
 | C1.15 | S-av | 159-161 (the seed map, flip-free), 195-253 (apply_featured: votemeta rebuilt whole, then every per-alder code it no longer carries pruned — the asymmetry the rule named, closed), 256-267 (_prune_positions), 270-340 (self_test — the un-feature fixture across both writers, with its bite) |
-| C1.15 | S-vld | 428-483 (`validate_shard_freshness` — the two-namespace stamp discriminator and the deep total assert), 1685-1688 (the `--shards` opt-in), 1213-1660 (`self_test` — the roster-and-votes fixtures, incl. the undeclared-shape false-green case and MEMBER-1..7), 1664-1667 + 1682-1684 (its pre-argparse handler and the `--self-test` flag) |
+| C1.15 | S-vld | 429-484 (`validate_shard_freshness` — the two-namespace stamp discriminator and the deep total assert), 1812-1815 (the `--shards` opt-in), 1281-1787 (`self_test` — the roster-and-votes fixtures, incl. the undeclared-shape false-green case and MEMBER-1..7), 1791-1794 + 1809-1811 (its pre-argparse handler and the `--self-test` flag) |
 | C1.15 | S-bld | 114 (the validator invoked with `--shards`) |
 | C1.15 | S-iv | 265-285 (populate_featured — positions written set-only from the featured map; the prune downstream in sync_allvotes removes what it leaves) |
 | C1.15 | S-bios | 91-119 (merge_bios — the rebuilt roster carries forward only codes resolving to a votemeta entry) |
-| C1.15 | S-egate | 2663-2671 ([AV/SELF]) |
+| C1.15 | S-egate | 2748-2757 ([AV/SELF]) |
 | C1.16 | S-sbv | whole file (`ingest_sb_votes.py` — the school-board ingest: read-only scope by construction, no write verb anywhere; `mint_member_id` the D-3 slug rule with the four ratified examples as `--self-test` cases; `read_votes` the blank→marker mapping, the fatal unknown-token branch, the structural header contract and the `Outcomes`/`Featured` validation (PS-122, PS-123); `read_cast_by` the optional third tab and its five fatalities (PS-121); `build` the artifact assembly, own-namespace stamps, the `candidacy_ref` carry-through, and the outcome, featured and cast-by carry) |
-| C1.16 | S-vld | 323-425 (`validate_members` — MEMBER-1..7, the roster column contract, deliberately outside `validate_votes`' early return), 88 (wired into validate), 157-179 (`ROSTER_SCHEMAS` — the per-shape declaration the contract hangs on), 180 (`_ISO_DATE`, the date predicate a′ names) |
+| C1.16 | S-vld | 324-426 (`validate_members` — MEMBER-1..7, the roster column contract, deliberately outside `validate_votes`' early return), 88 (wired into validate), 158-179 (`ROSTER_SCHEMAS` — the per-shape declaration the contract hangs on), 181 (`_ISO_DATE`, the date predicate a′ names) |
 | C1.16 | S-chk | `EDITORIAL_TABS` (all three school-board source tabs declared, the third optional at ingest per PS-121) + `ROLES` (`ingest_sb_votes.py` classified `pipeline-reader`) — the pair that makes the read-only property structural rather than promised |
 | C1.17 | S-sbf | 70 (`DUES_TYPE`, the constant the predicate keys on), 289-294 (the single dues-exclusion site — a bare `continue`, with R4a's counter at that same predicate) |
-| C1.17 | S-sbf | 283-304 (the filter order, load-bearing for that counter: slug scope 283, aggregate 285, excluded cycles 287, dues 289, donor 296, self 298, window 302-304) |
-| C1.17 | S-sbf | 399 (`ie_slice` — the spend side, disjoint from the funding-side dues predicate, which is what makes the exclusion vacuous at $0.00) |
+| C1.17 | S-sbf | 283-306 (the filter order, load-bearing for that counter: slug scope 283, aggregate 285, excluded cycles 287, dues 289, other receipts 295, donor 298, self 300, window 304-306) |
+| C1.17 | S-sbf | 401 (`ie_slice` — the spend side, disjoint from the funding-side dues predicate, which is what makes the exclusion vacuous at $0.00) |
 | C1.19 | S-ing | 586 (reads the artifact on disk), 523-528 (replaces that committee's rows), 688-689 (writes it back) |
 | C1.19 | S-seed | 429-435, 447-451 (preserves committees, donors, contributions, independent_expenditures on re-run) |
 | C2.1 | S-ing | 86-127 (rules), 130-141 (classifier), 314-320 (assignment), 504-508 (partial preserve) |
@@ -1031,33 +1060,33 @@ that catch defect classes the existing gates structurally cannot see.
 | C4.3 | A-probe | 152 (banked open-thread naming; mechanism deliberately not characterized here) |
 | C4.4 | S-syn | 546-586 (uniqueness-gated alias; never rewrite) |
 | C4.5 | S-seed | 287, 314, 339 (the three stamp sites), 410-417 (fatal unknown-race-id), 419-427 (mint-time shared check, fatal) |
-| C4.5 | S-vld | 636-702 (the ONE shared implementation: namespace/convention resolvers + election_mismatches), 705-714 (durable INV-ELECT gate), 82 (wired into validate) |
+| C4.5 | S-vld | 637-703 (the ONE shared implementation: namespace/convention resolvers + election_mismatches), 706-715 (durable INV-ELECT gate), 82 (wired into validate) |
 | C4.7 | S-ing | 693-718 (resolve_committee_claimants — the ONE resolver), 597-611 (deterministic linkage build consuming it) |
 | C4.7 | S-rst | whole script (claims-derived re-stamp; ruled-four-fields write; fifth-field fail-loud; idempotent) |
-| C4.7 | S-vld | 735-783 (INV-LINK-1..3), 717-724 (the PS-82-independence rationale and the coverage-limit statement, which live in the block header rather than in the function — the pre-amend row cited only the function while describing both), 83 (wired into validate) |
-| C4.6 | S-rol | 251-256, 270-274 (by_candidate/by_race keyed (id, cycle) — no election), 276-360 (by_candidate_election, the election-keyed variant) |
-| C4.6 | S-vld | 597-602 (INV-PERSON-1 pins by_candidate.all as dedup identity) |
+| C4.7 | S-vld | 736-780 (INV-LINK-1..3), 718-725 (the PS-82-independence rationale and the coverage-limit statement, which live in the block header rather than in the function — the pre-amend row cited only the function while describing both), 83 (wired into validate) |
+| C4.6 | S-rol | 271-276, 290-294 (by_candidate/by_race keyed (id, cycle) — no election), 296-380 (by_candidate_election, the election-keyed variant) |
+| C4.6 | S-vld | 598-604 (INV-PERSON-1 pins by_candidate.all as dedup identity) |
 | C4.8 | S-syn | 67-68 (the artifact list + known-failures path), 606-630 (shrink-only loader: growth and owner-less entries fail in code), 632-657 (`resolvable_donor_ids` — the union across artifacts, disk reads only), 659-685 (`check_tag_continuity` — unresolved ids, and a listed entry that no longer fails), 788-817 (the call site: runs before the write, aborts on failure) |
 | C4.8 | A-esg0 | §3 (the orphan census against the union, and the re-mint signature it caught) |
 | C4.9 | S-syn | 691-713 (`coverage_figure`), 801-809 (the per-artifact report and its stated collection scope) |
 | C4.9 | A-esg0 | §2 (pull-model established from bytes; the coverage gap and its collection scope) |
 | C5.1 | A-fw1 | 7-16 (fix sites exist only in the elections path; artifact layer separate) |
-| C5.2 | S-cemb | 47 (dataUrl at the `refs/heads/main/` form), 48-52 (sharded mode, present-but-commented), 68 (feedback endpoint), 3505+3523 (subject prefix) |
+| C5.2 | S-cemb | 47 (dataUrl at the `refs/heads/main/` form), 48-52 (sharded mode, present-but-commented), 68 (feedback endpoint), 3579+3597 (subject prefix) |
 | C5.2 | S-sbemb | 66-70 (the `refs/heads/main/` rationale in situ, then `dataUrl` and `financeUrl` — TWO artifacts since SBFIN-1, where this row previously named one), 3031+3041 (the two artifact fetches), 81+83 (feedback endpoint + subject prefix), 3011 (the POST) |
-| C5.13 | S-eren | 140 (METHODOLOGY_OFFICES — the D-22 allowlist, city_council enlisted), 1093-1109 (the three shared expressions — the frame, the verification section and the artifact-links paragraph — as single expressions used by both branches), 1111-1153 (methodologyView's council branch: C1/C2/C5/C3/C4 and, since M5, C6, with no `<h3>` before any of them, then the verification section and the links paragraph), 1169-1176 (methodologyView's school-board branch: SB-METH-1's C5 as its own paragraph, bare values, whole or not at all, following the filing-deadline paragraph), 1479 (the call site passing office and the dues figures) |
-| C5.13 | S-egate | 1979-2026 ([MUNI/METH]), 2027-2105 ([MUNI/SUBJ]), 2342-2545 ([METH/REGISTER] — register-derived for the C-strings and R11, sibling-branch-pinned for the links paragraph; normalization stated in situ), 2178-2264 ([COUNCIL/CAND]), 2265-2341 ([COUNCIL/DONOR]) |
+| C5.13 | S-eren | 140 (METHODOLOGY_OFFICES — the D-22 allowlist, city_council enlisted), 1098-1114 (the three shared expressions — the frame, the verification section and the artifact-links paragraph — as single expressions used by both branches), 1133-1175 (methodologyView's council branch: C1/C2/C5/C3/C4, since M5 C6, and since M2 C7 and C8, with no `<h3>` before any of them, then the verification section and the links paragraph), 1194-1201 (methodologyView's school-board branch: SB-METH-1's C5 as its own paragraph, bare values, whole or not at all, following the filing-deadline paragraph), 1507 (the call site passing office, the dues figures and the page's own other-receipts figures) |
+| C5.13 | S-egate | 1981-2027 ([MUNI/METH]), 2029-2106 ([MUNI/SUBJ]), 2344-2619 ([METH/REGISTER] — register-derived for the C-strings, R11 and, since M2, the school-board branch's section; sibling-branch-pinned for the links paragraph; normalization stated in situ), 2180-2265 ([COUNCIL/CAND]), 2267-2342 ([COUNCIL/DONOR]) |
 | C5.2 | S-eapp | 21 (DEFAULT_SRC at the ratified refs/heads/main/ form), 25-27 (ART_BASE + the two verification artifacts), 328 (src resolution: data-src → window.IPG_DATA_URL → baked default) |
 | C5.2 | S-eemb | 17-18 (data-src override documented), 19-24 (artifact + the code-only inlining: data.js/render.js/app.js + styles into one Code Block) |
 | C5.2 | A-ba1g2 | 49 (Rider 2: neither embed renders entity-type / last-editor — a TWO-embed sweep, predating the school-board path; the third was measured at REF-C52 and agrees) |
-| C5.5 | S-edat | 151-155 (selectorOptions — the {year} {body} pattern), 936-947 (officeRaces election scoping via the year-prefix join), 861-863 (the race's window rides the VM), 884-886 (priorElection re-homed to the base VM) |
-| C5.5 | S-eren | 988-996 (selectorNav), 858-865 (the verbatim prior-note; the formerly-cited on_current_record string is DELETED — its retirement is C5.7's affordance clause) |
-| C5.5 | S-eapp | 164-184 (selector state + read-only ?election= boot), 240-249 (scope switch resets the active race — the ruled B6 resolution) |
-| C5.7 | S-edat | 995-1100 (resolvePersonRef 1001 — id-only resolution + durable link; personView 1034 — member sections, window-scoped figures, career total, boolean out-of-window condition, no IE key in any section; ieByElection 1080-1099 — the IE component's own array, one row per member election, PS-141), 784-810 (fundingCandidacy — the M3 funding candidacy, by id through by_person; hasAnyFinance reads it, PS-141), 864-908 (raceView: a borrowed card reads contributions through the funding candidacy and IE through itself, both in the race's window; filedNote; pre-window receipts left on the committee's own card), 1505 (exports) |
-| C5.7 | S-eren | 710-766 (renderPersonModal — per-member sections + ratified strings; the IE component 733-754, PS-141), 768-774 (renderPersonMissing — string 7), 799-809 (facet map with on_current_record retired), 814-819 (personAffordance — string 13 label), 867-871 (the M3 filed-on line, PS-141), 872-875 (card affordance, also on a borrowed card), 898-909 (pendingCard explicit on_current_record branch) |
+| C5.5 | S-edat | 158-162 (selectorOptions — the {year} {body} pattern), 975-986 (officeRaces election scoping via the year-prefix join), 899-901 (the race's window rides the VM), 922-924 (priorElection re-homed to the base VM) |
+| C5.5 | S-eren | 996-1004 (selectorNav), 866-874 (the verbatim prior-note; the formerly-cited on_current_record string is DELETED — its retirement is C5.7's affordance clause) |
+| C5.5 | S-eapp | 164-184 (selector state + read-only ?election= boot), 240-252 (scope switch resets the active race — the ruled B6 resolution) |
+| C5.7 | S-edat | 1034-1140 (resolvePersonRef 1040 — id-only resolution + durable link; personView 1073 — member sections, window-scoped figures, career total, boolean out-of-window condition, no IE key in any section; ieByElection 1120-1139 — the IE component's own array, one row per member election, PS-141), 822-848 (fundingCandidacy — the M3 funding candidacy, by id through by_person; hasAnyFinance reads it, PS-141), 902-947 (raceView: a borrowed card reads contributions through the funding candidacy and IE through itself, both in the race's window; filedNote; pre-window receipts left on the committee's own card), 1545 (exports) |
+| C5.7 | S-eren | 711-768 (renderPersonModal — per-member sections + ratified strings; the IE component 735-756, PS-141), 770-776 (renderPersonMissing — string 7), 801-808 (facet map with on_current_record retired), 813-821 (personAffordance — string 13 label), 875-879 (the M3 filed-on line, PS-141), 880-883 (card affordance, also on a borrowed card), 906-917 (pendingCard explicit on_current_record branch) |
 | C5.7 | S-eapp | 102-106 (openPerson — no window parameter), 118-119 (data-person dispatch, no winFromEl), 309-318 (read-only ?person= boot — the deep-link path) |
-| C5.8 | S-edat | 491-495 (spenderFunders exclusion — the funder-rollup gap closed), 541-545 (donorFootprint exclusion — load-bearing for the windowless opener) |
-| C5.8 | S-eren | 521-522 (iePanel basis label + string-2 empty state), 684-689 (committee-profile basis label, string-2 empty state, structural no-identity-claim) |
-| C5.8 | S-cemb | 1057-1064 (cfInSubject + cfDuesRow + cfCountable — the shared full-set predicates), 1357-1362 (donor-index split: dues out first, then in-subject totals + separate before-May-2011 accumulator), 1450/1509/1529/1636/1705/1942/1982/3203 (full-set call sites: the PS-139 timeframe line, industry, per-alder industry, flags, IE funders, the PS-139 industry headline, industry-detail, correlation index; IE spender sums filtered in situ), 1626-1634 (flag rows seeded from flagged donors — a fully-excluded flag renders zero, never vanishes), 2145-2154 (string 7 on the structural zero), 2682 (string 8, methodology), 1153-1171 (alder-profile in-subject views + curated option + string 4), 1744-1767 (pre2011SubView — strings 3/4, display-only rows), 1827-1829 (strings 5/6 on the ranked list), 3128-3132 (view bindings) |
+| C5.8 | S-edat | 527-531 (spenderFunders exclusion — the funder-rollup gap closed), 577-581 (donorFootprint exclusion — load-bearing for the windowless opener) |
+| C5.8 | S-eren | 522-523 (iePanel basis label + string-2 empty state), 685-690 (committee-profile basis label, string-2 empty state, structural no-identity-claim) |
+| C5.8 | S-cemb | 1083-1096 (cfInSubject + cfDuesRow + cfOtherReceipt + cfCountable — the shared full-set predicates), 1416-1427 (donor-index split: dues and other receipts out first, then in-subject totals + separate before-May-2011 accumulator), 1515/1574/1594/1701/1771/2008/2048/3277 (full-set call sites: the PS-139 timeframe line, industry, per-alder industry, flags, IE funders, the PS-139 industry headline, industry-detail, correlation index; IE spender sums filtered in situ), 1691-1699 (flag rows seeded from flagged donors — a fully-excluded flag renders zero, never vanishes), 2211-2216 (string 7 on the structural zero), 2754 (string 8, methodology), 1195-1213 (alder-profile in-subject views + curated option + string 4), 1810-1832 (pre2011SubView — strings 3/4, display-only rows), 1893-1898 (strings 5/6 on the ranked list), 3202-3206 (view bindings) |
 | C5.3 | A-fw1 | 14-16 (artifact not fused), 60-62 (gates check values, not structure) |
 | C5.4 | A-probe | 152 (banked sizing item: multiple surfaces, per-path render compliance) |
 | C6.1 | A-ba1g0 | 56-66 (dollar/repairability distinctions); A-ba1g2 49 (render-invisibility distinction) |
@@ -1067,7 +1096,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C7.2 | this document §1 (positional definition) + A-probe 42-72 (§P1 usage of record) |
 | C7.3 | A-probe | 74-94 (§P2), 90 (the overload stated) |
 | C7.4 | S-ing | 518-520 (the carry set) |
-| C5.9 | S-rol | 207 (the Aggregate-donor set), 221 (member counts exclude it), 225-232 (the one direct-layer loop: row-flag and donor-set skips governing by_parent/by_industry/by_alder/by_candidate/by_race), 343 (by_candidate_election's row-flag-only skip), 390-397 (by_person's paired skips) |
+| C5.9 | S-rol | 226 (the Aggregate-donor set), 240 (member counts exclude it), 244-252 (the one direct-layer loop: row-flag and donor-set skips governing by_parent/by_industry/by_alder/by_candidate/by_race), 363 (by_candidate_election's row-flag-only skip), 411-419 (by_person's paired skips) |
 | C5.9 | S-t1 | 67-73 (slice1 by_parent paired skips), 90-93 (the [8-check] oracle mirrors both) |
 | C5.9 | S-ing | 530-533 (the retired underscore-prefix marking, comment of record) |
 | C5.10 | S-sbemb | 958-960 (`seatVisible` — the one seat filter every seat-iterating surface shares), 961-977 (PS-127 (i)'s sole exception and its single-caller constraint), 1139-1151 (`seatSelector`, the vacancy present by design at 1142-1145), 1190-1197 (the vacancy card — a seat notice, never a member page) |
@@ -1079,26 +1108,35 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.11 | S-bemit | 34-38 (OFFICES — the enumerated office map), 41-45 (the refusal to emit a bundle for an office outside it) |
 | C5.12 | S-sbemb | 2651-2702 (`methodologyView` — the view the terminal else reaches), 2684-2693 (the SFM fold: heading through f6, with `SF.allElectionsDisclosure` re-emitted at 2686 and the `duesFigure` loading fallback at 2688-2691) |
 | C5.12 | S-sbemb | 674-681 (the SFM string declarations) |
-| C5.9 | S-srv | 471-508 (cluster-preview totals mirror the rollup exclusion set exactly) |
+| C5.9 | S-srv | 470-522 (cluster-preview totals mirror the rollup exclusion set exactly) |
 | C5.9 | S-rec | 40, 208-209 (contribution-type set-aside, excluded from the itemized compare) |
-| C5.9 | S-edat | 449-478 (contributor rollup counts every row; the broader render marking incl. small-dollar), 571 (row-flag carriage into the footprint VM) |
-| C5.9 | S-eren | 450-459 (the labeled, non-clickable pinned aggregate line; rows sum to the headline), 550 (the aggregate-of-N row chip) |
-| C5.9 | S-cemb | 1183-1191 (alder-profile headline counts the tail into totals and stats), 1233-1253 (the restored disclosure line and its superseded HALT-MIG-1 comment of record), 3205 (correlation-index donor-type skip) |
+| C5.9 | S-edat | 485-518 (contributor rollup counts every row; the broader render marking incl. small-dollar), 607 (row-flag carriage into the footprint VM) |
+| C5.9 | S-eren | 448-479 (the labeled, non-clickable pinned aggregate line; rows sum to the headline), 551 (the aggregate-of-N row chip) |
+| C5.9 | S-cemb | 1246-1254 (alder-profile headline counts the tail into totals and stats), 1311-1330 (the restored disclosure line and its superseded HALT-MIG-1 comment of record), 3279 (correlation-index donor-type skip) |
 | P1 | A-fw1 | 60-62 (proposed fused-per-candidate detector, not built) |
 | C5.14 | S-b2 | 2-24 (the header: pure layers, gated as [RENDER/B2], writes nothing), 114, 151 (the coming-soon states), 209 (the footprint modal's kicker, grouping sentence and office groups), 345-346 (the scoped footprint drops an IE committee that never spent in the page's office), 696-697 (the display face) |
-| C5.14 | S-egate | 1818-1832 ([RENDER/B2] — the harness run whole) |
+| C5.14 | S-egate | 1820-1835 ([RENDER/B2] — the harness run whole) |
 | C2.12 | S-coh | 77-110 (compute — the ward committees, the registry's finals, the latest period, the D2Totals join and its refusal), 113-117 (apply — the four fields replaced), 137-218 (self_test) |
 | C2.12 | S-rec | 69-125 (build_filing_registry — the resolution of the final report the step imports) |
 | C2.12 | S-ing | 457-468 (the existing-committee branch: factual fields updated, the rest left) |
-| C2.12 | S-cemb | 1195-1196 (the tile and its investments line), 1302 (statCash) |
-| C2.12 | S-egate | 2674-2682 ([COH/SELF]) |
+| C2.12 | S-cemb | 1258-1259 (the tile and its investments line), 1366 (statCash) |
+| C2.12 | S-egate | 2759-2768 ([COH/SELF]) |
 | C5.15 | S-own | 1-47 (the closed list: six pairs, each a receiving committee's SBE id and a giving donor's id) |
-| C5.15 | S-rol | 70-109 (the list's path, its fail-loud loader and `stamp_own_committee` — set on the listed pairs' rows, removed from every other), 206 (called at build() entry, both artifacts), 321-326 (the `is_self` stamp, election mode only) |
-| C5.15 | S-vld | 1112-1194 (`validate_own_committee` — the four rules, premise first), 92 (wired into validate), 1615-1655 (its self-test cases), 475 (the shard check compares the stamped rows) |
-| C5.15 | S-edat | 385-405 (candidateFigures: own money by `is_self`, other-committee money by `is_own_committee`, other donors the remainder), 475 (the contributor line's other-committee mark), 1226 (the browse row names a listed giver before any scope filter), 569 (the footprint row carries the stamp) |
-| C5.15 | S-eren | 825-831 (ownMoneyLine — the card sentence, OC-E1; the person surface calls it too), 843 (the bar's three segments), 889-895 (the legend and its conditional swatch), 444 (the giver line's chip), 547 (the item chip), 1299 (the browse-row chip) |
-| C5.15 | S-cemb | 872-886 (the three strings and `cfOwnCommittee`, which reads the stamp into a pair set and a giver set), 1203-1205 (OC-V1, the line under the tiles), 894 (aggregateByDonor carries the row flag), 1293 (the alder donor row's chip), 1860 and 2076 (the Browse and industry-list chips), 2350 (the donor profile's recipient row), 845 (the cache reset when contributions arrive), 2664 (the methodology item) |
-| C5.15 | S-egate | 2547-2660 ([OWN/FIGURES], its bite, and [OWN/RENDER]), 575-581 (the [self] group's positive leg, on a card whose own money is stamped) |
+| C5.15 | S-rol | 88-127 (the list's path, its fail-loud loader and `stamp_own_committee` — set on the listed pairs' rows, removed from every other), 225 (called at build() entry, both artifacts), 341-346 (the `is_self` stamp, election mode only) |
+| C5.15 | S-vld | 1178-1262 (`validate_own_committee` — the four rules, premise first), 93 (wired into validate), 1742-1782 (its self-test cases), 476 (the shard check compares the stamped rows) |
+| C5.15 | S-edat | 392-416 (candidateFigures: own money by `is_self`, other-committee money by `is_own_committee`, other donors the remainder; since M2, other receipts set aside and returned beside them), 511 (the contributor line's other-committee mark), 1266 (the browse row names a listed giver before any scope filter), 605 (the footprint row carries the stamp) |
+| C5.15 | S-eren | 833-840 (ownMoneyLine — the card sentence, OC-E1; the person surface calls it too), 851-852 (the bar's three segments), 897-904 (the legend and its conditional swatch), 445 (the giver line's chip), 548 (the item chip), 1327 (the browse-row chip) |
+| C5.15 | S-cemb | 878-893 (the three strings and `cfOwnCommittee`, which reads the stamp into a pair set and a giver set), 1266-1268 (OC-V1, the line under the tiles), 921 (aggregateByDonor carries the row flag), 1357 (the alder donor row's chip), 1926 and 2142 (the Browse and industry-list chips), 2416 (the donor profile's recipient row), 851 (the cache reset when contributions arrive), 2734 (the methodology item) |
+| C5.15 | S-egate | 2621-2746 ([OWN/FIGURES], its bite, and [OWN/RENDER]), 575-580 (the [self] group's positive leg, on a card whose own money is stamped) |
+| C5.16 | S-rol | 45-52 (`OTHER_RECEIPT_TYPE`, the accumulator, `is_other_receipt` and `other_receipts_excluded_total`), 221 (the accumulator cleared at build() entry), 250, 366, 415 (the three skip sites, each directly after the dues site), 469 (the field emitted, at every magnitude, into whichever artifact build() was handed), 25 (`COUNCIL_SCHEMA_VERSION`) |
+| C5.16 | S-sbf | 68 (the import of `is_other_receipt`), 295-296 (the skip, after the dues site and before donor resolution) |
+| C5.16 | S-vld | 793 (`OTHER_RECEIPT_TYPE_CHECK`, stated here rather than imported), 827-847 (`_other_recount`), 1063-1100 (`validate_other_receipts_excluded` — the premise rule, then the value rule), 90 (wired into validate), 1146-1147 (the [IE/SPLIT] recount leaves other receipts off the own-committee list out), 1519-1566 (its self-test cases), 799 (`COUNCIL_SCHEMA_VERSION_CHECK`) |
+| C5.16 | S-edat | 46-48 (`OTHER_RECEIPT_TYPE`, `isOtherReceipt` and `excludedType` — the one predicate), 265/459/494/527/577/782/1112/1172/1267/1431 (its ten call sites: the index's in-scope test, the pre-window figure, the contributor list, the funder rollup, the footprint, the industry breakdown, the out-of-window condition, the in-kind share, Browse donors, Industries by candidate), 418-443 (`otherReceiptsOnPage`: the page's own magnitude, the sum of its cards' lines), 725 (committeeProfile: the committee's other receipts in the pop-up's window), 401 (candidateFigures: set aside after the window test, never counted), 412 (returned as `otherReceipts`) |
+| C5.16 | S-eren | 829-832 (otherReceiptsLine — OR-E1), 891 (the card places it under the bars and the own-money sentence), 727 (the person surface calls it too), 680 (a campaign committee's pop-up, under its raised figure), 1115-1131 (C7 and C8, single expressions used by both branches; C7 whole or not at all), 1169 (the council branch's eight strings), 1207-1209 (the school-board branch's section: its heading, then C7 and C8) |
+| C5.16 | S-eapp | 179 (the page's figure, taken once from `otherReceiptsOnPage` onto the render state), 195 (handed to the render with the dues figures) |
+| C5.16 | S-cemb | 1095 (cfOtherReceipt, inside cfCountable on the next line), 1148-1150 (the alder profile sets the rows aside before any sum), 1216-1234 (the rows of the selected view, and otherLine — OR-V1, the line and the list it opens), 1269 (the line placed under the other-committee line), 897-914 (cfLoanChip and cfLoans — OR-V2, loans summed over the rows the totals count), 1357/1926/2142/2418 (the chip on the alder's donor row, in Browse donors, in an industry's donor list and on a donor profile's recipient row), 1419/1770/3277 (the three row loops that restate the test: the donor index, the IE funders, the correlation index), 1112-1116 (otherReceiptsDisclosure — the artifact's magnitude, whole or not at all), 2735-2736 (the two methodology items, OR-V3), 3100-3101 (the control's binding) |
+| C5.16 | S-egate | 1191-1192 ([DUES/UNIF]'s fixture: one other receipt on each committee type, beside the dues rows), 3029-3400 ([M2/FIGURES], [M2/MAGNITUDE], [M2/LISTS], [M2/RENDER], [M2/REGISTER] and its bite, and [M2/PAGE] through the shipped bundle) |
+| C5.16 | S-srv | 487-493 (`_other_receipt_test` — the builder's test, imported), 515-516 (applied in the cluster preview's one pass) |
 
 **RULED pointers** (`claim-id | ruling | register entry`; ruling text and provenance live in
 `RULINGS.md`, the authority of record per PS-75/PS-87):
@@ -1121,6 +1159,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.7 IE on the person surface; the M3 cards | PS-141 | `RULINGS.md` §PS-141 |
 | C5.15 other-committee transfers | PS-142 | `RULINGS.md` §PS-142 |
 | C5.15 one own-money test | PS-143 | `RULINGS.md` §PS-143 |
+| C5.16 other receipts and the loan mark | PS-147 | `RULINGS.md` §PS-147 |
 | C5.7 career total | PS-91 rev 2 | `RULINGS.md` §PS-91 |
 | C5.7 career-total rule | P1D-PERSON G1/G2 | `RULINGS.md` §P1D-PERSON G1/G2 |
 | C5.7 identity rule | PS-92 | `RULINGS.md` §PS-92 |

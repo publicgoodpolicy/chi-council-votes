@@ -176,7 +176,7 @@
     // artifact this index was built from, so they cannot go missing independently of it —
     // putting them on `verify` would say otherwise. undefined/null flows through to C4 not
     // rendering at all (figure posture (i)).
-    var state = { office: office, duesExcluded: (index && index.duesExcluded) || null,
+    var state = { office: office, duesExcluded: (index && index.duesExcluded) || null, otherExcluded: index ? ElectData.otherReceiptsOnPage(index) : null,
       topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors',
       election: urlSel || (selOpts[0] && selOpts[0].id) || null,
       donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, raceFilter: 'all',
@@ -192,7 +192,7 @@
       var rv = raceId ? ElectData.viewModels.raceView(index, raceId, state.cycle) : null;
       var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.election, state.donorFilters, state.raceFilter, state.expandedCandidateId) : null;
       root.innerHTML = ElectRender.renderPage({
-        office: state.office, duesExcluded: state.duesExcluded,
+        office: state.office, duesExcluded: state.duesExcluded, otherExcluded: state.otherExcluded,
         topView: state.topView, cycles: cycles, cycle: state.cycle,
         officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend,
         selector: { options: selOpts, active: state.election }, verify: state.verify

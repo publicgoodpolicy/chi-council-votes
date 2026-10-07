@@ -1,15 +1,15 @@
 {
   "schema_version": 1.4,
-  "generated_at": "2026-10-03T18:02:41Z",
+  "generated_at": "2026-10-07T02:27:49Z",
   "source": "derived: school-board-data.json (bridge) x election-data.json (rollups)",
   "_sync": {
-    "generated_at": "2026-10-03T18:02:41Z",
+    "generated_at": "2026-10-07T02:27:49Z",
     "inputs": {
       "school-board-data.json": {
         "sha256": "45179604794bf9eeb894cc2d1a6c3030741bf509be5765cecb27e4b123e0212b"
       },
       "election-data.json": {
-        "sha256": "9d27c04eb4643de2d391cfab4fadd3a55a7e60d5c4619cd61c982062bd545862"
+        "sha256": "941a542223d13329782405d5adc90b2b5527c23233c624189cea9b766a703d72"
       }
     },
     "convention": "figures are election-labeled and sourced from rollups.by_candidate_election; by_candidate is resolution-only; the four streams are never summed in this artifact"
@@ -72,10 +72,6 @@
     "self-funding": {
       "label": "Self-Funding / Candidate Loan",
       "color": "#9a8e7e"
-    },
-    "tech": {
-      "label": "Tech",
-      "color": "#3a5fa2"
     },
     "unclassified": {
       "label": "Not Yet Classified",
@@ -3394,8 +3390,8 @@
       "no_record": 4,
       "vacancy": 1
     },
-    "donor_rows": 1330,
-    "itemized_rows": 2054
+    "donor_rows": 1327,
+    "itemized_rows": 2050
   },
   "members": [
     {
@@ -6950,8 +6946,8 @@
         "2026": {
           "label": "2026",
           "direct": {
-            "amount": 2780.92,
-            "count": 16
+            "amount": 2606.26,
+            "count": 14
           },
           "self_funding": {
             "amount": 0.0,
@@ -9066,29 +9062,6 @@
                 "contribution_type": "Individual Contribution"
               }
             ]
-          },
-          {
-            "donor_id": "google",
-            "name": "Google",
-            "type": "Other",
-            "amount": 174.66,
-            "count": 2,
-            "industries": [
-              "tech"
-            ],
-            "industry_class": "substantive",
-            "items": [
-              {
-                "date": "2026-02-17",
-                "amount": 149.52,
-                "contribution_type": "Other Receipt"
-              },
-              {
-                "date": "2026-02-17",
-                "amount": 25.14,
-                "contribution_type": "Other Receipt"
-              }
-            ]
           }
         ]
       },
@@ -9110,19 +9083,19 @@
           "meets_industry_threshold": true
         },
         "2026": {
-          "donor_total": 2780.92,
-          "donor_count": 7,
+          "donor_total": 2606.26,
+          "donor_count": 6,
           "dollars": {
-            "substantive": 174.66,
+            "substantive": 0.0,
             "individual_only": 1239.5,
             "unclassified": 1366.76
           },
           "shares": {
-            "substantive": 0.062806,
-            "individual_only": 0.445716,
-            "unclassified": 0.491478
+            "substantive": 0.0,
+            "individual_only": 0.475586,
+            "unclassified": 0.524414
           },
-          "substantive_share": 0.062806,
+          "substantive_share": 0.0,
           "meets_industry_threshold": false
         }
       },
@@ -13954,8 +13927,8 @@
         "2024": {
           "label": "2024: District 4",
           "direct": {
-            "amount": 228710.8,
-            "count": 188
+            "amount": 228460.8,
+            "count": 187
           },
           "self_funding": {
             "amount": 26900.0,
@@ -13977,8 +13950,8 @@
         "2026": {
           "label": "2026",
           "direct": {
-            "amount": 136369.25,
-            "count": 108
+            "amount": 133435.32,
+            "count": 107
           },
           "self_funding": {
             "amount": 0.0,
@@ -16408,24 +16381,6 @@
             ]
           },
           {
-            "donor_id": "jacky-rosen-victory-fund",
-            "name": "Jacky Rosen Victory Fund",
-            "type": "Other",
-            "amount": 250.0,
-            "count": 1,
-            "industries": [
-              "unclassified"
-            ],
-            "industry_class": "unclassified",
-            "items": [
-              {
-                "date": "2024-10-18",
-                "amount": 250.0,
-                "contribution_type": "Other Receipt"
-              }
-            ]
-          },
-          {
             "donor_id": "janega-james",
             "name": "Janega, James",
             "type": "Individual",
@@ -17311,24 +17266,6 @@
               }
             ],
             "cluster_id": "rollup-476"
-          },
-          {
-            "donor_id": "dover-strategy-group",
-            "name": "Dover Strategy Group",
-            "type": "Other",
-            "amount": 2933.93,
-            "count": 1,
-            "industries": [
-              "unclassified"
-            ],
-            "industry_class": "unclassified",
-            "items": [
-              {
-                "date": "2025-01-14",
-                "amount": 2933.93,
-                "contribution_type": "Other Receipt"
-              }
-            ]
           },
           {
             "donor_id": "book-neil",
@@ -18790,35 +18727,35 @@
       },
       "coverage_by_election": {
         "2024": {
-          "donor_total": 228710.8,
-          "donor_count": 162,
+          "donor_total": 228460.8,
+          "donor_count": 161,
           "dollars": {
             "substantive": 64350.0,
             "individual_only": 85360.0,
-            "unclassified": 79000.8
+            "unclassified": 78750.8
           },
           "shares": {
-            "substantive": 0.28136,
-            "individual_only": 0.373222,
-            "unclassified": 0.345418
+            "substantive": 0.281667,
+            "individual_only": 0.373631,
+            "unclassified": 0.344702
           },
-          "substantive_share": 0.28136,
+          "substantive_share": 0.281667,
           "meets_industry_threshold": false
         },
         "2026": {
-          "donor_total": 136369.25,
-          "donor_count": 89,
+          "donor_total": 133435.32,
+          "donor_count": 88,
           "dollars": {
             "substantive": 39996.32,
             "individual_only": 79688.0,
-            "unclassified": 16684.93
+            "unclassified": 13751.0
           },
           "shares": {
-            "substantive": 0.293294,
-            "individual_only": 0.584355,
-            "unclassified": 0.122351
+            "substantive": 0.299743,
+            "individual_only": 0.597203,
+            "unclassified": 0.103054
           },
-          "substantive_share": 0.293294,
+          "substantive_share": 0.299743,
           "meets_industry_threshold": false
         }
       },

@@ -470,8 +470,8 @@ def search_donor_index(index: list[dict], q: str, cap: int = 100,
 # ============================================================
 # CLUSTER ROLLUP PREVIEW  (HALT-3a) — the dry-run's per-file dollar figure, computed
 # the SAME way the rendered rollup is: build_rollups.by_parent sums each present
-# member's contributions EXCLUDING is_aggregate / EXCLUDED_CYCLES / dues / Aggregate-
-# type donors. We mirror that filter EXACTLY so the dry-run number equals what the
+# member's contributions EXCLUDING is_aggregate / EXCLUDED_CYCLES / dues / other receipts
+# (AUDIT-2 M2) / Aggregate-type donors. We mirror that filter EXACTLY so the dry-run number equals what the
 # build will render, and so the gate-4 hand-sum matches. No union total, ever — each
 # file's figure is that file's present members only.
 # ============================================================
@@ -484,11 +484,21 @@ def _excluded_cycles() -> set:
         return {'pre-2011', 'undated'}
 
 
+def _other_receipt_test():
+    """Single source: build_rollups.is_other_receipt (imported, not duplicated). AUDIT-2 M2."""
+    try:
+        import build_rollups as br
+        return br.is_other_receipt
+    except Exception:
+        return lambda c: c.get('contribution_type') == 'Other Receipt' and not c.get('is_own_committee')
+
+
 def per_file_donor_totals() -> dict:
     """{tool: {donor_id: dues/cycle/aggregate-excluded total}} — one pass per file,
     using build_rollups.by_parent's exact exclusion set so a cluster preview equals
     the rendered rollup."""
     excl = _excluded_cycles()
+    other = _other_receipt_test()
     out = {}
     for tool, path in DATA_FILES.items():
         data = load(path)
@@ -501,6 +511,8 @@ def per_file_donor_totals() -> dict:
             if c.get('cycle') in excl:
                 continue
             if c.get('contribution_type') == 'IE Committee Dues Transfer':
+                continue
+            if other(c):
                 continue
             did = c.get('donor_id')
             if not did or did in agg or did not in donors:
@@ -534,7 +546,7 @@ def cluster_preview(plan: dict, per_file_totals: dict) -> dict:
             'reparented': bool(eff_parent and eff_parent != parent),
         }
     return {'per_file': per_file, 'dues_excluded': True,
-            'basis': 'by_parent filter: excludes IE Committee Dues Transfer, '
+            'basis': 'by_parent filter: excludes IE Committee Dues Transfer, other receipts, '
                      'pre-2011/undated cycles, aggregate rows & Aggregate-type donors; '
                      'present members only, recomputed per file (no union total)'}
 

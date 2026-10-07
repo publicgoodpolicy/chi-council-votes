@@ -75,16 +75,16 @@ ok('neutral order: DeBerry before Leon', page.indexOf('Ebony DeBerry') < page.in
 // district-2a is scoped to the 2026 window. Leon's money is entirely 2024-window, so
 // his honest 2026 card shows $0 (the largest F-2 instance); DeBerry shows her
 // 2026-window rows. The same dollars are pinned at the DATA layer, per window.
-ok('scoped page: Leon renders WITHOUT the 2024-window $620,403 (F-2 pinned)', /Bruce Leon/.test(page) && page.indexOf('$620,403') < 0);
-ok('scoped page: DeBerry 2026-window contributions render ($2,781)', page.indexOf('$2,781') >= 0);
+ok('scoped page: Leon renders WITHOUT the 2024-window $620,025 (F-2 pinned)', /Bruce Leon/.test(page) && page.indexOf('$620,025') < 0);   // M2 repin: $620,403 less one other receipt of $378
+ok('scoped page: DeBerry 2026-window contributions render ($2,606)', page.indexOf('$2,606') >= 0);   // M2 repin: $2,780.92 less two other receipts, $174.66
 // P1-E (PS-140) re-expression: the 2024-window IE now rides the 2024 candidacy it was spent on
 // (leon-sb-2024-d2). The direct money stays on the committee's 2026 candidacy, where the
 // on_current_record receipts are booked; the 2026 candidacy's 2024-window IE is now ZERO, and
 // that zero is asserted, so the move itself is pinned rather than inferred.
-ok('Leon 2024-window figures intact at the data layer ($620,403 / self $620,025 / third $378 on leon-sb-d03; ieS $24,766 on leon-sb-2024-d2, $0 left on leon-sb-d03)',
+ok('Leon 2024-window figures intact at the data layer ($620,025 / self $620,025 / third $0, other receipts $378 in 1, on leon-sb-d03; ieS $24,766 on leon-sb-2024-d2, $0 left on leon-sb-d03)',
   (function () { var f = D.candidateFigures(index, 'leon-sb-d03', null, W24), g = D.candidateFigures(index, 'leon-sb-2024-d2', null, W24);
-    return Math.round(f.contributions.total) === 620403 && Math.round(f.contributions.selfFunded) === 620025 &&
-           Math.round(f.contributions.thirdParty) === 378 && f.independentSupport === 0 &&
+    return Math.round(f.contributions.total) === 620025 && Math.round(f.contributions.selfFunded) === 620025 &&   // M2 repin: the $378 is an other receipt
+           Math.round(f.contributions.thirdParty) === 0 && f.otherReceipts.total === 378 && f.otherReceipts.count === 1 && f.independentSupport === 0 &&
            Math.round(g.independentSupport) === 24766; })());
 // The support half was PORTED from smoke_b1.js at SBE-RERUN-1 G — a THIRD uncovered
 // subject, found while confirming the other 11 before deleting that file. Opposition was
@@ -161,7 +161,7 @@ console.log('\n=== B3 assertions (drill-downs + Sunshine) ===');
 function sumLines(cd) { return Math.round(cd.lines.reduce(function (s, l) { return s + l.total; }, 0)); }
 var leonC = D.candidateContributors(index, 'leon-sb-d03', null);
 var debC = D.candidateContributors(index, 'deberry-sb-d03', null);
-ok('Leon contributor lines sum EXACTLY to $620,403', sumLines(leonC) === 620403 && Math.round(leonC.total) === 620403);
+ok('Leon contributor lines sum EXACTLY to $620,025', sumLines(leonC) === 620025 && Math.round(leonC.total) === 620025);   // M2 repin
 // REPINNED 534950 -> 537306 at SBE-RERUN-1 F, cause identified and ratified: eda9d31
 // (HALT-Q2R, "Q2 recency ingest") added +13 rows / +$2,356.26 to DeBerry — exactly what a
 // recency ingest does. Walked the artifact history to date it: 534,950.12 / 200 rows held
@@ -169,7 +169,7 @@ ok('Leon contributor lines sum EXACTLY to $620,403', sumLines(leonC) === 620403 
 // DeBerry's committee 39821 is UNMOVED across the SBE-RERUN-1 refresh ($537,306.38 both
 // sides), so today's run is not involved. The pin was never updated because nothing ran
 // this harness. Benign and explained — the [EXCL/SEIU] discipline's clean case.
-ok('DeBerry contributor lines sum EXACTLY to $537,306', sumLines(debC) === 537306 && Math.round(debC.total) === 537306);
+ok('DeBerry contributor lines sum EXACTLY to $537,132', sumLines(debC) === 537132 && Math.round(debC.total) === 537132);   // M2 repin: 537,306.38 less two other receipts, $174.66
 ok('Leon contributor list flags a self/loan line', leonC.lines.some(function (l) { return l.isSelf; }));
 ok('contributor list has NO small-dollar aggregate line (every contribution itemized)', leonC.lines.some(function (l) { return l.isAggregate; }) === false && debC.lines.some(function (l) { return l.isAggregate; }) === false);
 
@@ -291,8 +291,8 @@ ok('NO small-dollar aggregate line in the panel (every contribution itemized)',
   debCd2.lines.some(function (l) { return l.isAggregate; }) === false);
 // REPINNED 534950 -> 537306, same cause as :126 above (eda9d31 HALT-Q2R). Same figure
 // reached a second way — through the expanded panel's line set rather than cd.total.
-ok('full set (real + self) sums EXACTLY to the headline ($537,306)',
-  Math.round(debCd2.lines.reduce(function (s, l) { return s + l.total; }, 0)) === 537306);
+ok('full set (real + self) sums EXACTLY to the headline ($537,132)',   // M2 repin, same cause as the contributor-lines pin above
+  Math.round(debCd2.lines.reduce(function (s, l) { return s + l.total; }, 0)) === 537132);
 
 console.log('\n=== B3-REVISE-4 assertions (resolved IE committee names) ===');
 // Real name resolved at the source (enrich), shown primary + funder subtitle.
@@ -471,7 +471,7 @@ ok('available cycles include the data cycle (2027)', cyclesAvail.indexOf('2027')
 var pageCyc = R.renderPage({ office: 'school_board', topView: 'byrace', cycles: cyclesAvail, cycle: null, officeRaces: omVM, activeSlug: 'district-2a', raceView: rv });
 ok('cycle pills REMOVED from election views (election toggle is the sole time control)',
   pageCyc.indexOf('data-cycle') < 0 && pageCyc.indexOf('cycle-bar') < 0 &&
-  Math.round(D.candidateFigures(index, 'leon-sb-d03', null).contributions.total) === 620403);
+  Math.round(D.candidateFigures(index, 'leon-sb-d03', null).contributions.total) === 620025);   // M2 repin
 ok('cycle data functions still accept a cycle arg (data layer intact)', cyclesAvail.indexOf('2027') >= 0);
 ok('cycle filter degrades cleanly (single cycle: 2027 == current)',
   Math.round(D.candidateFigures(index, 'deberry-sb-d03', '2027').contributions.total) === Math.round(D.candidateFigures(index, 'deberry-sb-d03', null).contributions.total));

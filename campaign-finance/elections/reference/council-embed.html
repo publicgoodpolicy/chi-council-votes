@@ -577,6 +577,12 @@ const FEEDBACK_CONFIG = {
 /* M5: the own-committee chip. One self-contained rule, so it reads the same in a list row and in the modal. */
 .ipg-cf-own{display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;letter-spacing:.04em;padding:3px 9px;border-radius:20px;background:#DDEBEA;color:#1F5D5A;line-height:1.4}
 .ipg-cf-ownline{margin:-6px 0 18px;font-size:13.5px;color:#4d4439}
+/* AUDIT-2 M2: the loan chip and the other-receipts line. Self-contained, like the own-committee chip. */
+.ipg-cf-loan{display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;letter-spacing:.04em;padding:3px 9px;border-radius:20px;background:#EBDAC6;color:#342828;line-height:1.4}
+.ipg-cf-otherline{margin:-6px 0 18px;font-size:13.5px;color:#4d4439}
+.ipg-cf-ownline + .ipg-cf-otherline{margin-top:-12px}
+.ipg-cf-otherlist{margin:-8px 0 18px;padding:2px 0 2px 14px;border-left:3px solid #EBDAC6}
+.ipg-cf-otherlist .ipg-cf-meta{display:flex;justify-content:space-between;gap:12px;margin:6px 0}
 .ipg-modal-type{font-weight:600;color:#6a5d4e}
 .ipg-modal-city{color:#9a8e7e}
 .ipg-modal-flags{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
@@ -806,7 +812,7 @@ const FEEDBACK_CONFIG = {
   let _rcIndex = null;
   let state={view:'member',ward:null,tagFilter:'All',rankTag:'All',
              data:null,dataStatus:'idle',dataError:null,
-             cf:null,cfStatus:'idle',cfShowAll:false,cfCycle:'current',
+             cf:null,cfStatus:'idle',cfShowAll:false,cfShowOther:false,cfCycle:'current',
              cfAlderInd:'All',
              cfInclUnclassified:false,cfInclIndividual:false,
              cfLookupSub:'donors',cfSearch:'',cfTypeFilter:'All',cfIndustryFilter:'All',cfFlagFilter:'All',cfShowAllLookup:false,cfPre2011View:false,
@@ -842,7 +848,7 @@ const FEEDBACK_CONFIG = {
             .then(rr=>{ if(!rr.ok) throw new Error('HTTP '+rr.status); return rr.json(); })
             .then(cj=>{
               state.cf.contributions = Array.isArray(cj)?cj:((cj&&cj.contributions)||[]);
-              state._cfDonorIndex=null; state._cfClusterIndex=null; state._cfIESpenders=null; state._cfOwn=null;   // rebuild memoized indexes with real data
+              state._cfDonorIndex=null; state._cfClusterIndex=null; state._cfIESpenders=null; state._cfOwn=null; state._cfLoans=null;   // rebuild memoized indexes with real data
               state.contribStatus='loaded'; renderBody();
             })
             .catch(e=>{ state.contribStatus='error'; console.warn('IPG: contributions shard failed:',e); renderBody(); });
@@ -885,13 +891,35 @@ const FEEDBACK_CONFIG = {
     state._cfOwn={pairs,givers};
     return state._cfOwn;
   }
+  // AUDIT-2 M2 (OR-V2): a loan stays counted and its row is marked. A row whose money is all loans
+  // reads "Loan"; a row that is partly loans states the amount. The sums are over the rows every
+  // total counts (cfCountable), so the chip and the figure beside it read the same rows.
+  function cfLoanChip(loan,total){
+    if(!(loan>0)) return '';
+    return '<span class="ipg-cf-loan">'+(loan>=total-0.005?'Loan':'Includes '+fmtMoney(loan)+' in loans')+'</span>';
+  }
+  function cfLoans(){
+    if(state._cfLoans) return state._cfLoans;
+    const byDonor=new Map(), byParent=new Map(), byPair=new Map();
+    const donors=(state.cf&&state.cf.donors)||{};
+    ((state.cf&&state.cf.contributions)||[]).forEach(c=>{
+      if(!c.is_loan||!cfCountable(c)) return;
+      const d=donors[c.donor_id]; const pid=(d&&d.parent_id)||c.donor_id;
+      byDonor.set(c.donor_id,(byDonor.get(c.donor_id)||0)+c.amount);
+      byParent.set(pid,(byParent.get(pid)||0)+c.amount);
+      const k=c.committee_id+'|'+c.donor_id; byPair.set(k,(byPair.get(k)||0)+c.amount);
+    });
+    state._cfLoans={byDonor,byParent,byPair};
+    return state._cfLoans;
+  }
   // Aggregate by donor for a given list of contributions.
   function aggregateByDonor(contribs){
     const m=new Map();
     contribs.forEach(c=>{
-      const cur=m.get(c.donor_id)||{donor_id:c.donor_id,total:0,count:0,latest:null,earliest:null,own:false};
+      const cur=m.get(c.donor_id)||{donor_id:c.donor_id,total:0,count:0,latest:null,earliest:null,own:false,loan:0};
       cur.total+=c.amount; cur.count++;
       if(c.is_own_committee) cur.own=true;
+      if(c.is_loan) cur.loan+=c.amount;   // M2
       if(!cur.latest||c.date>cur.latest) cur.latest=c.date;
       if(!cur.earliest||c.date<cur.earliest) cur.earliest=c.date;
       m.set(c.donor_id,cur);
@@ -1061,7 +1089,11 @@ const FEEDBACK_CONFIG = {
   // in RULINGS.md). PS-94: the FULL exclusion set binds every row-aggregating consumer,
   // through ONE shared predicate -- a repeated condition is how the last gap happened.
   function cfDuesRow(c){return c.contribution_type==='IE Committee Dues Transfer';}
-  function cfCountable(c){return !cfDuesRow(c)&&cfInSubject(c);}
+  // AUDIT-2 M2: a committee's "other receipts" (the filing's own category for money that is not a
+  // contribution, a transfer in or a loan) leave every published total, with the dues, through the same
+  // shared predicate. A row on the own-committee list keeps its M5 treatment whatever its filed type.
+  function cfOtherReceipt(c){return c.contribution_type==='Other Receipt'&&!c.is_own_committee;}
+  function cfCountable(c){return !cfDuesRow(c)&&!cfOtherReceipt(c)&&cfInSubject(c);}
   function cycleKey(c){var s=String(c),pre=/^pre-?(\d{4})/i.exec(s);if(pre)return (+pre[1])-0.5;var y=/(\d{4})/.exec(s);return y?+y[1]:1e9;}
   function sortCycles(arr){return arr.slice().sort(function(a,b){return cycleKey(a)-cycleKey(b);});}
   function fmtMoneyExact(n){return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
@@ -1075,6 +1107,13 @@ const FEEDBACK_CONFIG = {
   //   * absent or non-numeric field renders NOTHING — no partial sentence, no fallback
   //     literal. A half-rendered disclosure is worse than none, and a fallback literal
   //     would reintroduce exactly the defect this repair removes.
+  // M2: the magnitude of the other-receipts exclusion, from the artifact, on the dues model: it
+  // renders whole or not at all.
+  function otherReceiptsDisclosure(){
+    const d=state.cf&&state.cf.other_receipts_excluded;
+    if(!d||typeof d.amount!=='number'||typeof d.count!=='number') return '';
+    return ' In this dataset they account for '+fmtMoneyExact(d.amount)+' across '+d.count.toLocaleString('en-US')+' receipts.';
+  }
   function duesDisclosure(){
     var d=state.cf&&state.cf.dues_excluded;
     if(!d||typeof d.amount!=='number'||typeof d.count!=='number') return '';
@@ -1105,8 +1144,11 @@ const FEEDBACK_CONFIG = {
         +'Campaign-finance data for Ward '+alder.ward+' has not been ingested yet. '
         +'The IPG team is researching this committee.</div>';
 
-    const allContribs=cfContributionsForCommittee(cm.id);
-    if(!allContribs.length)
+    // AUDIT-2 M2 (OR-V1): other receipts are set aside before anything is counted; they are stated on their own line below.
+    const everyRow=cfContributionsForCommittee(cm.id);
+    const allContribs=everyRow.filter(c=>!cfOtherReceipt(c));
+    const otherRows=everyRow.filter(cfOtherReceipt);
+    if(!everyRow.length)
       return '<div class="ipg-cf-empty">Committee found but no contributions in the current dataset.</div>';
 
     // Cycle filtering. state.cfCycle: 'current' (default), specific cycle key, 'all',
@@ -1170,8 +1212,29 @@ const FEEDBACK_CONFIG = {
     if(effectiveCycle==='pre-2011')
       h+='<div class="ipg-cf-meta">Contributions before the city council term seated in May 2011 are outside the cycles this tool covers.</div>';
 
+    // M2: the other receipts of the same view (the selected cycle, every cycle, or before 2011).
+    const otherView = effectiveCycle==='all'
+      ? otherRows.filter(c=>c.cycle!=='pre-2011'&&c.cycle!=='undated')
+      : otherRows.filter(c=>c.cycle===effectiveCycle);
+    const otherAmt=otherView.reduce((s,c)=>s+c.amount,0);
+    function otherLine(){
+      if(!otherView.length) return '';
+      let o='<p class="ipg-cf-otherline">Other receipts: <strong>'+fmtMoney(otherAmt)+'</strong>, not counted in Raised. '
+        +'<button class="ipg-cf-toggle" id="ipg-cf-other-toggle">'+(state.cfShowOther?'Hide \u2191':'Show the '+otherView.length+(otherView.length===1?' receipt':' receipts')+' \u2193')+'</button></p>';
+      if(state.cfShowOther){
+        o+='<div class="ipg-cf-otherlist">';
+        aggregateByDonor(otherView).forEach(a=>{
+          const d=state.cf.donors[a.donor_id];
+          const when=(a.earliest&&a.latest&&fmtDate(a.earliest)!==fmtDate(a.latest))?fmtDate(a.earliest)+' \u2013 '+fmtDate(a.latest):(a.latest?fmtDate(a.latest):'');
+          o+='<div class="ipg-cf-meta"><span>'+relEsc(d?d.name:a.donor_id)+'</span><span><strong>'+fmtMoney(a.total)+'</strong> &middot; '
+            +a.count+(a.count===1?' receipt':' receipts')+(when?' &middot; '+when:'')+'</span></div>';
+        });
+        o+='</div>';
+      }
+      return o;
+    }
     if(!contribs.length){
-      h+='<div class="ipg-cf-empty">No contributions recorded for this cycle.</div>';
+      h+='<div class="ipg-cf-empty">No contributions recorded for this cycle.</div>'+otherLine();
       return h;
     }
 
@@ -1203,6 +1266,7 @@ const FEEDBACK_CONFIG = {
     // M5 (OC-V1): the other-committee line, in the tiles' whole-dollar form; the money stays in Raised.
     const ownAmt=contribs.reduce((s,c)=>s+(c.is_own_committee?c.amount:0),0);
     if(ownAmt>0) h+='<p class="ipg-cf-ownline">From the candidate\u2019s other committee: <strong>'+fmtMoney(ownAmt)+'</strong>, included in Raised.</p>';
+    h+=otherLine();   // M2
 
     // Per-alder industry breakdown (dollar-bill stacked bar).
     // Skip if no industries (very early data or no real contributions yet).
@@ -1290,7 +1354,7 @@ const FEEDBACK_CONFIG = {
     return '<div class="ipg-cf-row ipg-cf-clickable" data-donor-id="'+a.donor_id+'">'
       +'<div><div class="name">'+d.name+'</div>'
       +'<div class="sub">'+subBits.join(' · ')+'</div>'
-      +'<div class="ipg-cf-tags">'+indChips+flagChips+(a.own?OWN_FROM:'')+'</div>'   // M5 (OC-V2)
+      +'<div class="ipg-cf-tags">'+indChips+flagChips+(a.own?OWN_FROM:'')+cfLoanChip(a.loan,a.total)+'</div>'   // M5 (OC-V2); M2
       +'</div>'
       +'<div class="amount">'+fmtMoney(a.total)+'</div></div>';
   }
@@ -1352,6 +1416,7 @@ const FEEDBACK_CONFIG = {
       // Internal union-dues transfers into a committee's own PAC are funding, not
       // Council spend — excluded from donor totals/rollup aggregates (matches build_rollups).
       if(c.contribution_type==='IE Committee Dues Transfer') return;
+      if(cfOtherReceipt(c)) return;   // M2: before the cycle split, so the before-2011 view follows too
       let e=byDonor.get(c.donor_id);
       if(!e){ e={total:0,contribCount:0,committees:new Set(),cycles:new Set(),pre:0,preCount:0,byCmte:new Map()}; byDonor.set(c.donor_id,e); }
       // PS-93 (EXCL-UNIFORM): out-of-subject rows (pre-2011/undated cycles) never enter
@@ -1702,6 +1767,7 @@ const FEEDBACK_CONFIG = {
     state.cf.contributions.forEach(c=>{
       if(c.committee_id!==committeeId) return;
       if(c.contribution_type==='IE Committee Dues Transfer') return;
+      if(cfOtherReceipt(c)) return;   // M2
       if(!cfInSubject(c)) return;
       let m=by.get(c.donor_id);
       if(!m){ m={donor_id:c.donor_id, donor:state.cf.donors[c.donor_id]||{id:c.donor_id,name:c.donor_id}, total:0, count:0}; by.set(c.donor_id,m); }
@@ -1857,7 +1923,7 @@ const FEEDBACK_CONFIG = {
           +'<div><div class="name">'+x.name
           +(x.members>1?' <span class="ipg-cf-rollup-pill">rollup</span>':'')+'</div>'
           +'<div class="sub">'+sub.join(' \u00b7 ')+'</div>'
-          +'<div class="ipg-cf-tags">'+renderIndustryChips(x.donor,{compact:true})+(cfOwnCommittee().givers.has(x.id)?OWN_GIVER:'')+'</div>'   // M5 (OC-V2)
+          +'<div class="ipg-cf-tags">'+renderIndustryChips(x.donor,{compact:true})+(cfOwnCommittee().givers.has(x.id)?OWN_GIVER:'')+cfLoanChip(cfLoans().byParent.get(x.id)||0,x.total)+'</div>'   // M5 (OC-V2); M2
           +'</div>'
           +cfAmt3(x.direct,x.independent,x.total)+'</div>';
       }
@@ -2073,7 +2139,7 @@ const FEEDBACK_CONFIG = {
         h += '<div class="ipg-cf-row ipg-cf-clickable" data-donor-id="'+donor.id+'">'
           + '<div><div class="name">'+donor.name+'</div>'
           + '<div class="sub">'+count+(count===1?' contribution':' contributions')+'</div>'
-          + '<div class="ipg-cf-tags">'+renderIndustryChips(donor,{compact:true})+(cfOwnCommittee().givers.has(donor.id)?OWN_GIVER:'')+'</div></div>'   // M5 (OC-V2)
+          + '<div class="ipg-cf-tags">'+renderIndustryChips(donor,{compact:true})+(cfOwnCommittee().givers.has(donor.id)?OWN_GIVER:'')+cfLoanChip(cfLoans().byDonor.get(donor.id)||0,total)+'</div></div>'   // M5 (OC-V2); M2
           + '<div class="amount">'+fmtMoney(total)+'</div></div>';
       });
       if(donorTotals.length > 25){
@@ -2347,7 +2413,11 @@ const FEEDBACK_CONFIG = {
           h+='<div class="ipg-cf-row ipg-cf-clickable ipg-cf-recipient" data-ward="'+cm.ward+'">'
             +'<div><div class="name">Ward '+cm.ward+' \u2014 '+relEsc(alderByWard(cm.ward)?.name||cm.alder_name||'')+'</div>'   // D13: roster name first
             +'<div class="sub">'+relEsc(cm.committee_name||'Committee')+' · '+countStr+'</div>'
-            +(cfOwnCommittee().pairs.has(r.committee_id+'|'+donor.id)?'<div class="ipg-cf-tags">'+OWN_ROW+'</div>':'')   // M5 (OC-V3)
+            +(function(){   // M5 (OC-V3); M2: the loan chip, summed over the entities this profile shows
+               const ids=aggregate?_memberIds:[donor.id]; let ln=0; ids.forEach(id=>{ ln+=cfLoans().byPair.get(r.committee_id+'|'+id)||0; });
+               const chips=(cfOwnCommittee().pairs.has(r.committee_id+'|'+donor.id)?OWN_ROW:'')+cfLoanChip(ln,r.total);
+               return chips?'<div class="ipg-cf-tags">'+chips+'</div>':'';
+             })()
             +'</div>'
             +'<div class="amount">'+fmtMoney(r.total)+'</div></div>';
         } else {
@@ -2400,7 +2470,7 @@ const FEEDBACK_CONFIG = {
     ov.querySelectorAll('.ipg-cf-recipient').forEach(r=>r.onclick=()=>{
       const w=parseInt(r.dataset.ward);
       closeFn();
-      state.ward=w; state.view='member'; state.cfShowAll=false; state.cfCycle='current'; render();
+      state.ward=w; state.view='member'; state.cfShowAll=false;state.cfShowOther=false; state.cfCycle='current'; render();
       window.scrollTo({top:0,behavior:'smooth'});
     });
     // PAC / IE-committee recipient rows that bridge to an in-tool donor profile.
@@ -2527,7 +2597,7 @@ const FEEDBACK_CONFIG = {
     // Target rows → that alder's profile
     ov.querySelectorAll('.ipg-cf-ie-target[data-ward]').forEach(r=>r.onclick=()=>{
       const w=parseInt(r.dataset.ward,10); closeFn();
-      state.ward=w; state.view='member'; state.cfShowAll=false; state.cfCycle='current'; render();
+      state.ward=w; state.view='member'; state.cfShowAll=false;state.cfShowOther=false; state.cfCycle='current'; render();
       window.scrollTo({top:0,behavior:'smooth'});
     });
     // Funder rows → that donor's profile (hand off to the donor modal)
@@ -2662,6 +2732,8 @@ function recTagChips(){
         <li>Amounts and dates reflect what was reported in the filings. Filers occasionally amend, misreport, or duplicate entries; see <em>Limitations</em> below.</li>
         <li>This tool also excludes contributions with no usable date. Because their date is unknown, they cannot be placed in any cycle and are not shown in any view.</li>
         <li><strong>Transfers from a candidate&rsquo;s other committee.</strong> Some candidates move money into their campaign committee from another committee of their own, such as a fund for a state or federal office. We count it in the total raised and label it &ldquo;From the candidate&rsquo;s other committee.&rdquo; It is not the candidate&rsquo;s personal money, and it is not a contribution from an outside donor. We mark only committees we have confirmed belong to the same person.</li>
+        <li><strong>Loans.</strong> A loan to a committee is counted in the total raised, as the committee filed it, and the lender&rsquo;s row says so. A loan is money the committee may have to pay back; it is not a gift.</li>
+        <li><strong>Other receipts.</strong> Committees also report money that is not a contribution, a transfer or a loan. The state&rsquo;s form calls these &ldquo;other receipts&rdquo;: refunds, money from selling an asset or an investment, and similar amounts. We do not count them in the total raised or in any donor, industry or flag total. Each alder&rsquo;s page states the amount on its own line and lists who paid it.${otherReceiptsDisclosure()}</li>
       </ul>
 
       <h3 class="ipg-meth-h" id="meth-donors">How we identify and group donors</h3>
@@ -3019,16 +3091,18 @@ function recordView(){
     app.querySelectorAll('.rec-tag[data-rectag]').forEach(b=>b.onclick=()=>{state.recTag=b.dataset.rectag;state.recOpen=null;renderBody()});
     const recExp=document.getElementById('ipg-rec-expand'); if(recExp)recExp.onclick=()=>{state.memberRecOpen=!state.memberRecOpen;renderBody()};
     app.querySelectorAll('.rec-vote[data-id]').forEach(r=>r.onclick=()=>{state.recOpen=(state.recOpen===r.dataset.id?null:r.dataset.id);renderBody()});
-    const ws=document.getElementById('ipg-ward-sel'); if(ws)ws.onchange=()=>{state.ward=parseInt(ws.value);state.cfShowAll=false;state.cfCycle='current';state.cfAlderInd="All";renderBody()};
+    const ws=document.getElementById('ipg-ward-sel'); if(ws)ws.onchange=()=>{state.ward=parseInt(ws.value);state.cfShowAll=false;state.cfShowOther=false;state.cfCycle='current';state.cfAlderInd="All";renderBody()};
     const ts=document.getElementById('ipg-tag-sel'); if(ts)ts.onchange=()=>{state.tagFilter=ts.value;renderBody()};
     const rs=document.getElementById('ipg-rank-sel'); if(rs)rs.onchange=()=>{state.rankTag=rs.value;renderBody()};
     const iu=document.getElementById('ipg-incl-unclass'); if(iu)iu.onchange=()=>{state.cfInclUnclassified=iu.checked;renderBody()};
     const ii=document.getElementById('ipg-incl-indiv'); if(ii)ii.onchange=()=>{state.cfInclIndividual=ii.checked;renderBody()};
-    app.querySelectorAll('.ipg-rank').forEach(r=>r.onclick=()=>{state.ward=parseInt(r.dataset.ward);state.view='member';state.cfShowAll=false;state.cfCycle='current';state.cfAlderInd="All";render()});
+    app.querySelectorAll('.ipg-rank').forEach(r=>r.onclick=()=>{state.ward=parseInt(r.dataset.ward);state.view='member';state.cfShowAll=false;state.cfShowOther=false;state.cfCycle='current';state.cfAlderInd="All";render()});
+    const cfO=document.getElementById('ipg-cf-other-toggle');   // M2
+    if(cfO)cfO.onclick=()=>{state.cfShowOther=!state.cfShowOther;renderBody()};
     const cfT=document.getElementById('ipg-cf-toggle');
     if(cfT)cfT.onclick=()=>{state.cfShowAll=!state.cfShowAll;renderBody()};
     const cfCy=document.getElementById('ipg-cf-cycle-sel');
-    if(cfCy)cfCy.onchange=()=>{state.cfCycle=cfCy.value;state.cfShowAll=false;renderBody()};
+    if(cfCy)cfCy.onchange=()=>{state.cfCycle=cfCy.value;state.cfShowAll=false;state.cfShowOther=false;renderBody()};
 
     // Stage 2: clicks on any donor row anywhere → open modal
     app.querySelectorAll('.ipg-cf-clickable[data-donor-id]').forEach(r=>{
@@ -3089,7 +3163,7 @@ function recordView(){
       r.onclick=()=>{
         state.ward=parseInt(r.dataset.ward);
         state.view='member';
-        state.cfShowAll=false;
+        state.cfShowAll=false;state.cfShowOther=false;
         state.cfCycle='current';
         render();
       };
@@ -3099,7 +3173,7 @@ function recordView(){
       r.onclick=()=>{
         state.ward=parseInt(r.dataset.ward);
         state.view='member';
-        state.cfShowAll=false;
+        state.cfShowAll=false;state.cfShowOther=false;
         state.cfCycle='current';
         render();
       };
@@ -3135,7 +3209,7 @@ function recordView(){
     const spendCyc=document.getElementById('ipg-spend-cycle');
     if(spendCyc)spendCyc.onchange=()=>{ state.cfSpendCycle=spendCyc.value; renderBody(); };
     app.querySelectorAll('.ipg-alder-spend-row[data-ward]').forEach(n=>{
-      n.onclick=()=>{ const w=parseInt(n.dataset.ward,10); state.view='member'; state.ward=w; render(); window.scrollTo({top:0,behavior:'smooth'}); };
+      n.onclick=()=>{ const w=parseInt(n.dataset.ward,10); state.view='member'; state.ward=w; state.cfShowOther=false; render(); window.scrollTo({top:0,behavior:'smooth'}); };
     });
 
     // Stage 3: Follow-the-money view toggle
@@ -3147,7 +3221,7 @@ function recordView(){
     const relDonor=document.getElementById('ipg-rel-donor');
     if(relDonor)relDonor.onchange=()=>{ state.relDonorId=relDonor.value; renderBody(); };
     app.querySelectorAll('.ipg-rel-node[data-relward]').forEach(n=>{
-      n.onclick=()=>{ const w=parseInt(n.dataset.relward,10); state.view='member'; state.ward=w; render(); window.scrollTo({top:0,behavior:'smooth'}); };
+      n.onclick=()=>{ const w=parseInt(n.dataset.relward,10); state.view='member'; state.ward=w; state.cfShowOther=false; render(); window.scrollTo({top:0,behavior:'smooth'}); };
     });
     app.querySelectorAll('.ipg-rel-node[data-reldonor]').forEach(n=>{
       n.onclick=()=>{ state.cfModalDonorId=state.relDonorId; renderBody(); };
@@ -3162,7 +3236,7 @@ function recordView(){
       if(!q){st.textContent='';return}
       st.textContent='Searching…';
       try{const w=await lookupWardByAddress(q);
-        if(alderByWard(w)){state.ward=w;state.cfShowAll=false;state.cfCycle='current';state.cfAlderInd="All";st.textContent='\u2713 Ward '+w+' found.';renderBody();
+        if(alderByWard(w)){state.ward=w;state.cfShowAll=false;state.cfShowOther=false;state.cfCycle='current';state.cfAlderInd="All";st.textContent='\u2713 Ward '+w+' found.';renderBody();
           const ws2=document.getElementById('ipg-ward-sel');if(ws2)ws2.value=w;}
         else st.textContent='Matched Ward '+w+', not in dataset.';
       }catch(err){st.textContent=err.message||'Lookup failed — use the dropdown.'}
@@ -3200,7 +3274,7 @@ function recordView(){
     Object.entries(state.cf.committees).forEach(([cid,c])=>{ cidWard[cid]=c.ward; });
     const byDonor=new Map();
     state.cf.contributions.forEach(c=>{
-      if(!cfInSubject(c)) return;
+      if(!cfInSubject(c)||cfOtherReceipt(c)) return;   // M2
       const w=cidWard[c.committee_id]; if(w==null) return;
       const dn=state.cf.donors[c.donor_id]; if(!dn||dn.type==='Aggregate') return;
       let m=byDonor.get(c.donor_id); if(!m){m=new Map();byDonor.set(c.donor_id,m);}
@@ -3406,7 +3480,7 @@ function recordView(){
     document.addEventListener('keydown',escFn);
     ov.addEventListener('click',e=>{ if(e.target===ov) closeFn(); });
     const cb=document.getElementById('ipg-rel-modal-close'); if(cb) cb.onclick=closeFn;
-    ov.querySelectorAll('.ipg-rel-recipient').forEach(r=>r.onclick=()=>{ const w=parseInt(r.dataset.ward,10); closeFn(); state.ward=w; state.view='member'; state.cfShowAll=false; state.cfCycle='current'; render(); window.scrollTo({top:0,behavior:'smooth'}); });
+    ov.querySelectorAll('.ipg-rel-recipient').forEach(r=>r.onclick=()=>{ const w=parseInt(r.dataset.ward,10); closeFn(); state.ward=w; state.view='member'; state.cfShowAll=false;state.cfShowOther=false; state.cfCycle='current'; render(); window.scrollTo({top:0,behavior:'smooth'}); });
   }
 
   // ============================================================

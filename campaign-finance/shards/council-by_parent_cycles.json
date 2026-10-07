@@ -59,30 +59,16 @@
       "count": 3
     },
     "2019": {
-      "direct": 3600.0,
+      "direct": 3000.0,
       "independent": 0.0,
-      "total": 3600.0,
-      "count": 2
+      "total": 3000.0,
+      "count": 1
     },
     "2023": {
-      "direct": 7003.57,
+      "direct": 6483.57,
       "independent": 0.0,
-      "total": 7003.57,
-      "count": 6
-    },
-    "2027": {
-      "direct": 1600.0,
-      "independent": 0.0,
-      "total": 1600.0,
-      "count": 2
-    }
-  },
-  "lee-lumber": {
-    "2015": {
-      "direct": 419.37,
-      "independent": 0.0,
-      "total": 419.37,
-      "count": 1
+      "total": 6483.57,
+      "count": 5
     }
   },
   "franks-masonry-inc": {
@@ -819,22 +805,16 @@
   },
   "at-t-services-inc-on-behalf-of-at-t-illinois": {
     "2015": {
-      "direct": 6844.09,
+      "direct": 6250.0,
       "independent": 0.0,
-      "total": 6844.09,
-      "count": 9
+      "total": 6250.0,
+      "count": 7
     },
     "2019": {
-      "direct": 5994.31,
+      "direct": 3750.0,
       "independent": 0.0,
-      "total": 5994.31,
-      "count": 9
-    },
-    "2023": {
-      "direct": 298.41,
-      "independent": 0.0,
-      "total": 298.41,
-      "count": 1
+      "total": 3750.0,
+      "count": 7
     }
   },
   "csx-corporation-good-government-fund": {
@@ -1023,10 +1003,10 @@
   },
   "comed": {
     "2015": {
-      "direct": 2400.0,
+      "direct": 2175.0,
       "independent": 0.0,
-      "total": 2400.0,
-      "count": 10
+      "total": 2175.0,
+      "count": 9
     },
     "2019": {
       "direct": 8050.0,
@@ -1035,16 +1015,16 @@
       "count": 16
     },
     "2023": {
-      "direct": 3347.05,
+      "direct": 1700.0,
       "independent": 0.0,
-      "total": 3347.05,
-      "count": 7
+      "total": 1700.0,
+      "count": 5
     },
     "2027": {
-      "direct": 5345.14,
+      "direct": 403.71,
       "independent": 0.0,
-      "total": 5345.14,
-      "count": 5
+      "total": 403.71,
+      "count": 1
     }
   },
   "blair-j-v": {
@@ -1863,10 +1843,10 @@
       "count": 5
     },
     "2027": {
-      "direct": 2510.0,
+      "direct": 2260.0,
       "independent": 0.0,
-      "total": 2510.0,
-      "count": 4
+      "total": 2260.0,
+      "count": 3
     },
     "2023": {
       "direct": 2200.0,
@@ -1976,14 +1956,6 @@
       "direct": 1500.0,
       "independent": 0.0,
       "total": 1500.0,
-      "count": 1
-    }
-  },
-  "state-farm-winfred-walker": {
-    "2015": {
-      "direct": 433.72,
-      "independent": 0.0,
-      "total": 433.72,
       "count": 1
     }
   },
@@ -2109,38 +2081,12 @@
       "count": 2
     }
   },
-  "walmart": {
-    "2015": {
-      "direct": 961.29,
-      "independent": 0.0,
-      "total": 961.29,
-      "count": 2
-    },
-    "2019": {
-      "direct": 3500.0,
-      "independent": 0.0,
-      "total": 3500.0,
-      "count": 3
-    },
-    "2023": {
-      "direct": 3000.0,
-      "independent": 0.0,
-      "total": 3000.0,
-      "count": 3
-    },
-    "2027": {
-      "direct": 3000.0,
-      "independent": 0.0,
-      "total": 3000.0,
-      "count": 3
-    }
-  },
   "comcast": {
     "2015": {
-      "direct": 20817.08,
+      "direct": 20250.0,
       "independent": 0.0,
-      "total": 20817.08,
-      "count": 20
+      "total": 20250.0,
+      "count": 19
     },
     "2023": {
       "direct": 54250.0,
@@ -2149,10 +2095,10 @@
       "count": 39
     },
     "2019": {
-      "direct": 39100.25,
+      "direct": 35350.0,
       "independent": 0.0,
-      "total": 39100.25,
-      "count": 30
+      "total": 35350.0,
+      "count": 29
     },
     "2027": {
       "direct": 53000.0,
@@ -3617,10 +3563,10 @@
       "count": 5
     },
     "2019": {
-      "direct": 26197.74,
+      "direct": 25900.0,
       "independent": 0.0,
-      "total": 26197.74,
-      "count": 63
+      "total": 25900.0,
+      "count": 62
     },
     "2023": {
       "direct": 81019.33,
@@ -5171,10 +5117,10 @@
       "count": 36
     },
     "2027": {
-      "direct": 27733.0,
+      "direct": 24700.0,
       "independent": 0.0,
-      "total": 27733.0,
-      "count": 39
+      "total": 24700.0,
+      "count": 38
     },
     "2015": {
       "direct": 2250.0,
@@ -5797,14 +5743,6 @@
       "count": 1
     }
   },
-  "calumet-township-regular-democratic-organization": {
-    "2019": {
-      "direct": 500.0,
-      "independent": 0.0,
-      "total": 500.0,
-      "count": 1
-    }
-  },
   "jb-for-governor-exploratory-committee": {
     "2019": {
       "direct": 55000.0,
@@ -6005,6 +5943,32 @@
       "count": 2
     }
   },
+  "walmart": {
+    "2019": {
+      "direct": 3500.0,
+      "independent": 0.0,
+      "total": 3500.0,
+      "count": 3
+    },
+    "2023": {
+      "direct": 3000.0,
+      "independent": 0.0,
+      "total": 3000.0,
+      "count": 3
+    },
+    "2027": {
+      "direct": 3000.0,
+      "independent": 0.0,
+      "total": 3000.0,
+      "count": 3
+    },
+    "2015": {
+      "direct": 750.0,
+      "independent": 0.0,
+      "total": 750.0,
+      "count": 1
+    }
+  },
   "anderson-luci": {
     "2019": {
       "direct": 1500.0,
@@ -6127,22 +6091,22 @@
   },
   "jpmorgan-chase-co-pac": {
     "2019": {
-      "direct": 18144.93,
+      "direct": 17500.0,
       "independent": 0.0,
-      "total": 18144.93,
-      "count": 28
+      "total": 17500.0,
+      "count": 16
     },
     "2023": {
-      "direct": 4662.59,
+      "direct": 4000.0,
       "independent": 0.0,
-      "total": 4662.59,
-      "count": 21
+      "total": 4000.0,
+      "count": 9
     },
     "2015": {
-      "direct": 8924.67,
+      "direct": 4500.0,
       "independent": 0.0,
-      "total": 8924.67,
-      "count": 54
+      "total": 4500.0,
+      "count": 6
     },
     "2027": {
       "direct": 7000.0,
@@ -6365,10 +6329,10 @@
       "count": 9
     },
     "2015": {
-      "direct": 7200.0,
+      "direct": 4000.0,
       "independent": 0.0,
-      "total": 7200.0,
-      "count": 3
+      "total": 4000.0,
+      "count": 2
     },
     "2027": {
       "direct": 1000.0,
@@ -6597,14 +6561,6 @@
       "count": 2
     }
   },
-  "victor": {
-    "2023": {
-      "direct": 400.0,
-      "independent": 0.0,
-      "total": 400.0,
-      "count": 1
-    }
-  },
   "bates-fredrick-h": {
     "2023": {
       "direct": 750.0,
@@ -6751,14 +6707,6 @@
       "count": 38
     }
   },
-  "election-expense": {
-    "2023": {
-      "direct": 870.0,
-      "independent": 0.0,
-      "total": 870.0,
-      "count": 1
-    }
-  },
   "fraternal-order-of-police": {
     "2023": {
       "direct": 124530.0,
@@ -6773,10 +6721,10 @@
       "count": 11
     },
     "2019": {
-      "direct": 16055.5,
+      "direct": 15300.0,
       "independent": 0.0,
-      "total": 16055.5,
-      "count": 21
+      "total": 15300.0,
+      "count": 20
     },
     "2027": {
       "direct": 85500.99,
@@ -7377,10 +7325,10 @@
   },
   "musa-ali": {
     "2023": {
-      "direct": 3050.0,
+      "direct": 1500.0,
       "independent": 0.0,
-      "total": 3050.0,
-      "count": 2
+      "total": 1500.0,
+      "count": 1
     }
   },
   "urt-united-road-towing-inc": {
@@ -7585,16 +7533,16 @@
   },
   "amazon": {
     "2023": {
-      "direct": 10848.88,
+      "direct": 10000.0,
       "independent": 0.0,
-      "total": 10848.88,
-      "count": 15
+      "total": 10000.0,
+      "count": 10
     },
     "2027": {
-      "direct": 40574.21,
+      "direct": 40000.0,
       "independent": 0.0,
-      "total": 40574.21,
-      "count": 46
+      "total": 40000.0,
+      "count": 40
     }
   },
   "reynolds-services-company-rai": {
@@ -7711,30 +7659,6 @@
       "count": 3
     }
   },
-  "chi-town-limo-bus": {
-    "2027": {
-      "direct": 498.75,
-      "independent": 0.0,
-      "total": 498.75,
-      "count": 1
-    }
-  },
-  "fifth-third-bank": {
-    "2023": {
-      "direct": 500.0,
-      "independent": 0.0,
-      "total": 500.0,
-      "count": 1
-    }
-  },
-  "gm-financial": {
-    "2027": {
-      "direct": 1078.18,
-      "independent": 0.0,
-      "total": 1078.18,
-      "count": 1
-    }
-  },
   "roseland-youth-center": {
     "2027": {
       "direct": 3500.0,
@@ -7838,14 +7762,6 @@
       "direct": 1000.0,
       "independent": 0.0,
       "total": 1000.0,
-      "count": 1
-    }
-  },
-  "pullman-community-center": {
-    "2027": {
-      "direct": 16500.0,
-      "independent": 0.0,
-      "total": 16500.0,
       "count": 1
     }
   },
@@ -8117,20 +8033,6 @@
       "independent": 0.0,
       "total": 7600.0,
       "count": 8
-    }
-  },
-  "city-of-chicago": {
-    "2027": {
-      "direct": 3710.63,
-      "independent": 0.0,
-      "total": 3710.63,
-      "count": 5
-    },
-    "2019": {
-      "direct": 1128.0,
-      "independent": 0.0,
-      "total": 1128.0,
-      "count": 2
     }
   },
   "save-our-local-businesses": {
@@ -8645,26 +8547,6 @@
       "count": 2
     }
   },
-  "a-t-t": {
-    "2015": {
-      "direct": 1975.52,
-      "independent": 0.0,
-      "total": 1975.52,
-      "count": 2
-    },
-    "2023": {
-      "direct": 162.23,
-      "independent": 0.0,
-      "total": 162.23,
-      "count": 1
-    },
-    "2027": {
-      "direct": 750.0,
-      "independent": 0.0,
-      "total": 750.0,
-      "count": 1
-    }
-  },
   "rohde-edward": {
     "2015": {
       "direct": 1000.0,
@@ -8913,26 +8795,12 @@
       "count": 1
     }
   },
-  "smith-gregory": {
-    "2015": {
-      "direct": 675.0,
-      "independent": 0.0,
-      "total": 675.0,
-      "count": 1
-    },
-    "2023": {
-      "direct": 375.0,
-      "independent": 0.0,
-      "total": 375.0,
-      "count": 1
-    }
-  },
   "the-new-37th-ward-democratic-organization": {
     "2015": {
-      "direct": 600.0,
+      "direct": 500.0,
       "independent": 0.0,
-      "total": 600.0,
-      "count": 2
+      "total": 500.0,
+      "count": 1
     },
     "2023": {
       "direct": 207.12,
@@ -10371,10 +10239,10 @@
   },
   "bmo-harris-bank": {
     "2015": {
-      "direct": 4225.0,
+      "direct": 1500.0,
       "independent": 0.0,
-      "total": 4225.0,
-      "count": 5
+      "total": 1500.0,
+      "count": 2
     }
   },
   "culen-patrick-d": {
@@ -10447,10 +10315,10 @@
       "count": 4
     },
     "2027": {
-      "direct": 200902.0,
+      "direct": 200002.0,
       "independent": 0.0,
-      "total": 200902.0,
-      "count": 3
+      "total": 200002.0,
+      "count": 2
     }
   },
   "rand-timothy": {
@@ -10499,10 +10367,10 @@
       "count": 1
     },
     "2027": {
-      "direct": 1073.0,
+      "direct": 500.0,
       "independent": 0.0,
-      "total": 1073.0,
-      "count": 4
+      "total": 500.0,
+      "count": 2
     },
     "2023": {
       "direct": 8000.0,
@@ -11947,12 +11815,6 @@
       "independent": 0.0,
       "total": 2000.0,
       "count": 2
-    },
-    "2027": {
-      "direct": 1473.0,
-      "independent": 0.0,
-      "total": 1473.0,
-      "count": 3
     }
   },
   "friends-of-luis-arroyo": {
@@ -13345,10 +13207,10 @@
   },
   "new-day-bill-conway": {
     "2027": {
-      "direct": 8018.0,
+      "direct": 7445.0,
       "independent": 0.0,
-      "total": 8018.0,
-      "count": 14
+      "total": 7445.0,
+      "count": 12
     }
   },
   "3737-w-chicago-llc": {
@@ -15618,14 +15480,6 @@
       "direct": 500.0,
       "independent": 0.0,
       "total": 500.0,
-      "count": 1
-    }
-  },
-  "glessner-house-museum": {
-    "2015": {
-      "direct": 400.0,
-      "independent": 0.0,
-      "total": 400.0,
       "count": 1
     }
   },
@@ -19973,10 +19827,10 @@
       "count": 1
     },
     "2015": {
-      "direct": 13750.0,
+      "direct": 250.0,
       "independent": 0.0,
-      "total": 13750.0,
-      "count": 2
+      "total": 250.0,
+      "count": 1
     },
     "2023": {
       "direct": 500.0,
@@ -20764,14 +20618,6 @@
       "direct": 250.0,
       "independent": 0.0,
       "total": 250.0,
-      "count": 1
-    }
-  },
-  "island-party-boat": {
-    "2019": {
-      "direct": 2946.8,
-      "independent": 0.0,
-      "total": 2946.8,
       "count": 1
     }
   },
@@ -32047,26 +31893,6 @@
       "count": 2
     }
   },
-  "breaker-press-co": {
-    "2027": {
-      "direct": 8710.0,
-      "independent": 0.0,
-      "total": 8710.0,
-      "count": 9
-    },
-    "2019": {
-      "direct": 2250.0,
-      "independent": 0.0,
-      "total": 2250.0,
-      "count": 7
-    },
-    "2023": {
-      "direct": 1250.0,
-      "independent": 0.0,
-      "total": 1250.0,
-      "count": 3
-    }
-  },
   "spot-hero": {
     "2027": {
       "direct": 6500.0,
@@ -32231,10 +32057,10 @@
   },
   "second-federal-self-help-credit-union": {
     "2027": {
-      "direct": 6003.01,
+      "direct": 250.0,
       "independent": 0.0,
-      "total": 6003.01,
-      "count": 45
+      "total": 250.0,
+      "count": 1
     }
   },
   "friends-of-nicole-lee": {
@@ -36125,20 +35951,6 @@
       "count": 1
     }
   },
-  "us-treasury": {
-    "2015": {
-      "direct": 1639.15,
-      "independent": 0.0,
-      "total": 1639.15,
-      "count": 1
-    },
-    "2019": {
-      "direct": 382.56,
-      "independent": 0.0,
-      "total": 382.56,
-      "count": 1
-    }
-  },
   "walk-bike-transit": {
     "2015": {
       "direct": 720.0,
@@ -38379,14 +38191,6 @@
       "count": 1
     }
   },
-  "gypalo-adam": {
-    "2015": {
-      "direct": 1440.0,
-      "independent": 0.0,
-      "total": 1440.0,
-      "count": 1
-    }
-  },
   "hard-rock-hotel-chicago": {
     "2015": {
       "direct": 500.0,
@@ -38415,14 +38219,6 @@
       "independent": 0.0,
       "total": 500.0,
       "count": 1
-    }
-  },
-  "allied-national": {
-    "2015": {
-      "direct": 384.37,
-      "independent": 0.0,
-      "total": 384.37,
-      "count": 2
     }
   },
   "beckman-veronica": {
@@ -42895,6 +42691,26 @@
       "independent": 0.0,
       "total": 200.0,
       "count": 1
+    }
+  },
+  "breaker-press-co": {
+    "2019": {
+      "direct": 2250.0,
+      "independent": 0.0,
+      "total": 2250.0,
+      "count": 7
+    },
+    "2023": {
+      "direct": 1250.0,
+      "independent": 0.0,
+      "total": 1250.0,
+      "count": 3
+    },
+    "2027": {
+      "direct": 4710.0,
+      "independent": 0.0,
+      "total": 4710.0,
+      "count": 8
     }
   },
   "hw-lochner-inc": {
@@ -48871,28 +48687,6 @@
       "count": 2
     }
   },
-  "adp-payroll-services": {
-    "2023": {
-      "direct": 324.65,
-      "independent": 0.0,
-      "total": 324.65,
-      "count": 1
-    }
-  },
-  "enterprise-rent-a-car": {
-    "2023": {
-      "direct": 175.76,
-      "independent": 0.0,
-      "total": 175.76,
-      "count": 1
-    },
-    "2027": {
-      "direct": 715.48,
-      "independent": 0.0,
-      "total": 715.48,
-      "count": 2
-    }
-  },
   "alvarez-michael-a": {
     "2023": {
       "direct": 3000.0,
@@ -49335,14 +49129,6 @@
       "count": 19
     }
   },
-  "wework": {
-    "2023": {
-      "direct": 197.01,
-      "independent": 0.0,
-      "total": 197.01,
-      "count": 1
-    }
-  },
   "amt831state-llc": {
     "2023": {
       "direct": 1000.0,
@@ -49699,14 +49485,6 @@
       "count": 2
     }
   },
-  "lamont-robinson-for-alderman": {
-    "2027": {
-      "direct": 573.0,
-      "independent": 2500.0,
-      "total": 3073.0,
-      "count": 3
-    }
-  },
   "brustin-marvin": {
     "2027": {
       "direct": 207.25,
@@ -49853,14 +49631,6 @@
       "independent": 0.0,
       "total": 200.0,
       "count": 1
-    }
-  },
-  "constant-contact": {
-    "2027": {
-      "direct": 545.15,
-      "independent": 0.0,
-      "total": 545.15,
-      "count": 2
     }
   },
   "alia-jenna": {
@@ -50181,20 +49951,6 @@
       "independent": 0.0,
       "total": 3000.0,
       "count": 2
-    }
-  },
-  "mosley-ronnie": {
-    "2027": {
-      "direct": 198.0,
-      "independent": 0.0,
-      "total": 198.0,
-      "count": 1
-    },
-    "2023": {
-      "direct": 900.0,
-      "independent": 0.0,
-      "total": 900.0,
-      "count": 1
     }
   },
   "alia-nimer": {
@@ -51999,14 +51755,6 @@
       "count": 1
     }
   },
-  "r2-message-media-inc": {
-    "2027": {
-      "direct": 4900.0,
-      "independent": 0.0,
-      "total": 4900.0,
-      "count": 1
-    }
-  },
   "1002-n-california-llc": {
     "2027": {
       "direct": 1000.0,
@@ -53238,34 +52986,6 @@
       "direct": 100000.0,
       "independent": 0.0,
       "total": 100000.0,
-      "count": 1
-    }
-  },
-  "office-depot": {
-    "2027": {
-      "direct": 322.57,
-      "independent": 0.0,
-      "total": 322.57,
-      "count": 1
-    },
-    "2019": {
-      "direct": 728.87,
-      "independent": 0.0,
-      "total": 728.87,
-      "count": 4
-    },
-    "2023": {
-      "direct": 326.91,
-      "independent": 0.0,
-      "total": 326.91,
-      "count": 1
-    }
-  },
-  "westfield-insurance": {
-    "2027": {
-      "direct": 206.0,
-      "independent": 0.0,
-      "total": 206.0,
       "count": 1
     }
   },
@@ -54833,10 +54553,10 @@
       "count": 3
     },
     "2027": {
-      "direct": 1666.48,
+      "direct": 1500.0,
       "independent": 0.0,
-      "total": 1666.48,
-      "count": 4
+      "total": 1500.0,
+      "count": 2
     }
   },
   "friends-of-bob-galhotra": {
@@ -56157,12 +55877,6 @@
       "independent": 0.0,
       "total": 1600.0,
       "count": 1
-    },
-    "2023": {
-      "direct": 3000.0,
-      "independent": 0.0,
-      "total": 3000.0,
-      "count": 1
     }
   },
   "jablonowski-james": {
@@ -56227,22 +55941,22 @@
       "count": 3
     },
     "2023": {
-      "direct": 15293.19,
+      "direct": 14547.67,
       "independent": 0.0,
-      "total": 15293.19,
-      "count": 9
-    },
-    "2027": {
-      "direct": 1868.4,
-      "independent": 0.0,
-      "total": 1868.4,
-      "count": 5
+      "total": 14547.67,
+      "count": 7
     },
     "2015": {
       "direct": 500.0,
       "independent": 0.0,
       "total": 500.0,
       "count": 1
+    },
+    "2027": {
+      "direct": 968.4,
+      "independent": 0.0,
+      "total": 968.4,
+      "count": 4
     }
   },
   "tkb-bassi-funeral-services": {
@@ -57033,14 +56747,6 @@
       "count": 1
     }
   },
-  "pimentel-christy": {
-    "2023": {
-      "direct": 2500.0,
-      "independent": 0.0,
-      "total": 2500.0,
-      "count": 2
-    }
-  },
   "kasper-and-nottage-pc": {
     "2023": {
       "direct": 1500.0,
@@ -57145,14 +56851,6 @@
       "independent": 0.0,
       "total": 1500.0,
       "count": 3
-    }
-  },
-  "friends-of-dave-feller": {
-    "2023": {
-      "direct": 6000.0,
-      "independent": 0.0,
-      "total": 6000.0,
-      "count": 1
     }
   },
   "sro-operating-co-llc": {
@@ -57287,12 +56985,6 @@
       "independent": 0.0,
       "total": 10382.31,
       "count": 4
-    },
-    "2027": {
-      "direct": 900.0,
-      "independent": 0.0,
-      "total": 900.0,
-      "count": 1
     }
   },
   "citizens-for-bridget-degnen": {
@@ -57931,6 +57623,14 @@
       "count": 1
     }
   },
+  "pimentel-christy": {
+    "2023": {
+      "direct": 1000.0,
+      "independent": 0.0,
+      "total": 1000.0,
+      "count": 1
+    }
+  },
   "custom-companies-inc": {
     "2023": {
       "direct": 5000.0,
@@ -58126,14 +57826,6 @@
       "direct": 200.0,
       "independent": 0.0,
       "total": 200.0,
-      "count": 1
-    }
-  },
-  "overt-press": {
-    "2027": {
-      "direct": 3200.0,
-      "independent": 0.0,
-      "total": 3200.0,
       "count": 1
     }
   },
@@ -58487,14 +58179,6 @@
       "independent": 0.0,
       "total": 20500.0,
       "count": 5
-    }
-  },
-  "mardi-gras-supplies-dba-europe-s-finest-inc": {
-    "2015": {
-      "direct": 607.28,
-      "independent": 0.0,
-      "total": 607.28,
-      "count": 1
     }
   },
   "four-treys-tavern": {
@@ -62705,14 +62389,6 @@
       "count": 1
     }
   },
-  "amguard-insurance-company": {
-    "2019": {
-      "direct": 9526.39,
-      "independent": 0.0,
-      "total": 9526.39,
-      "count": 1
-    }
-  },
   "elect-judge-mackoff-inc": {
     "2019": {
       "direct": 500.0,
@@ -63001,14 +62677,6 @@
       "independent": 0.0,
       "total": 750.0,
       "count": 2
-    }
-  },
-  "office-max": {
-    "2019": {
-      "direct": 187.41,
-      "independent": 0.0,
-      "total": 187.41,
-      "count": 1
     }
   },
   "gebert-michael": {
@@ -69585,14 +69253,6 @@
       "count": 1
     }
   },
-  "jencare": {
-    "2019": {
-      "direct": 3500.0,
-      "independent": 0.0,
-      "total": 3500.0,
-      "count": 1
-    }
-  },
   "bennett-tanya": {
     "2019": {
       "direct": 200.0,
@@ -69638,12 +69298,6 @@
       "direct": 250.0,
       "independent": 0.0,
       "total": 250.0,
-      "count": 1
-    },
-    "2023": {
-      "direct": 1400.0,
-      "independent": 0.0,
-      "total": 1400.0,
       "count": 1
     }
   },
@@ -69879,14 +69533,6 @@
       "count": 1
     }
   },
-  "7th-ward-democratic-organization": {
-    "2019": {
-      "direct": 825.0,
-      "independent": 0.0,
-      "total": 825.0,
-      "count": 1
-    }
-  },
   "transit-safety-security-solutions-inc": {
     "2019": {
       "direct": 500.0,
@@ -70005,30 +69651,6 @@
       "independent": 0.0,
       "total": 700.0,
       "count": 2
-    }
-  },
-  "city-of-chicago-dept-of-finance": {
-    "2023": {
-      "direct": 5841.57,
-      "independent": 0.0,
-      "total": 5841.57,
-      "count": 5
-    }
-  },
-  "le-penseur-youth-family-services": {
-    "2023": {
-      "direct": 3213.7,
-      "independent": 0.0,
-      "total": 3213.7,
-      "count": 1
-    }
-  },
-  "friends-of-kam-buckner": {
-    "2023": {
-      "direct": 1396.67,
-      "independent": 0.0,
-      "total": 1396.67,
-      "count": 1
     }
   },
   "villa-financial-services-llc": {
@@ -71627,6 +71249,20 @@
       "independent": 0.0,
       "total": 600.0,
       "count": 2
+    }
+  },
+  "a-t-t": {
+    "2015": {
+      "direct": 1500.0,
+      "independent": 0.0,
+      "total": 1500.0,
+      "count": 1
+    },
+    "2027": {
+      "direct": 750.0,
+      "independent": 0.0,
+      "total": 750.0,
+      "count": 1
     }
   },
   "wm": {
@@ -76339,20 +75975,6 @@
       "count": 1
     }
   },
-  "o-shea-matthew": {
-    "2019": {
-      "direct": 1475.0,
-      "independent": 0.0,
-      "total": 1475.0,
-      "count": 2
-    },
-    "2023": {
-      "direct": 250.0,
-      "independent": 0.0,
-      "total": 250.0,
-      "count": 1
-    }
-  },
   "astrazeneca": {
     "2019": {
       "direct": 1000.0,
@@ -76731,10 +76353,10 @@
       "count": 1
     },
     "2027": {
-      "direct": 4014.96,
+      "direct": 3250.0,
       "independent": 0.0,
-      "total": 4014.96,
-      "count": 10
+      "total": 3250.0,
+      "count": 6
     }
   },
   "somerville-luke-donna-m": {
@@ -77737,26 +77359,6 @@
       "count": 1
     }
   },
-  "beverly-bank-trust-company-na": {
-    "2019": {
-      "direct": 55000.0,
-      "independent": 0.0,
-      "total": 55000.0,
-      "count": 4
-    },
-    "2023": {
-      "direct": 76000.0,
-      "independent": 0.0,
-      "total": 76000.0,
-      "count": 5
-    },
-    "2027": {
-      "direct": 15000.0,
-      "independent": 0.0,
-      "total": 15000.0,
-      "count": 1
-    }
-  },
   "pienta-daniel": {
     "2023": {
       "direct": 200.0,
@@ -78099,10 +77701,10 @@
   },
   "19th-ward-democratic-organization": {
     "2023": {
-      "direct": 30300.0,
+      "direct": 10300.0,
       "independent": 0.0,
-      "total": 30300.0,
-      "count": 3
+      "total": 10300.0,
+      "count": 2
     }
   },
   "nardo-anthony-a": {
@@ -78439,14 +78041,6 @@
       "independent": 0.0,
       "total": 500.0,
       "count": 2
-    }
-  },
-  "united-states-treasury": {
-    "2023": {
-      "direct": 281.18,
-      "independent": 0.0,
-      "total": 281.18,
-      "count": 1
     }
   },
   "urban-real-estate": {
@@ -84197,10 +83791,10 @@
   },
   "byline-bank": {
     "2023": {
-      "direct": 417.1,
+      "direct": 200.0,
       "independent": 0.0,
-      "total": 417.1,
-      "count": 3
+      "total": 200.0,
+      "count": 1
     },
     "2015": {
       "direct": 3000.0,
@@ -84728,14 +84322,6 @@
       "direct": 500.0,
       "independent": 0.0,
       "total": 500.0,
-      "count": 1
-    }
-  },
-  "dunkin-donuts": {
-    "2023": {
-      "direct": 330.43,
-      "independent": 0.0,
-      "total": 330.43,
       "count": 1
     }
   },
@@ -86258,14 +85844,6 @@
       "direct": 500.0,
       "independent": 0.0,
       "total": 500.0,
-      "count": 1
-    }
-  },
-  "orange-hat-innovation": {
-    "2027": {
-      "direct": 681.15,
-      "independent": 0.0,
-      "total": 681.15,
       "count": 1
     }
   },
@@ -87929,12 +87507,6 @@
       "independent": 0.0,
       "total": 500.0,
       "count": 1
-    },
-    "2027": {
-      "direct": 900.0,
-      "independent": 0.0,
-      "total": 900.0,
-      "count": 1
     }
   },
   "orejel-hugo": {
@@ -89541,10 +89113,10 @@
       "count": 6
     },
     "2023": {
-      "direct": 1425.0,
+      "direct": 1000.0,
       "independent": 0.0,
-      "total": 1425.0,
-      "count": 2
+      "total": 1000.0,
+      "count": 1
     }
   },
   "committee-to-elect-robert-j-lovero": {
@@ -90177,22 +89749,6 @@
       "independent": 0.0,
       "total": 3535.35,
       "count": 2
-    }
-  },
-  "medvet-chicago": {
-    "2019": {
-      "direct": 213.38,
-      "independent": 0.0,
-      "total": 213.38,
-      "count": 1
-    }
-  },
-  "jkv-strategies-inc": {
-    "2019": {
-      "direct": 4025.0,
-      "independent": 0.0,
-      "total": 4025.0,
-      "count": 1
     }
   },
   "18th-ward-democratic-organization": {
@@ -92851,14 +92407,6 @@
       "count": 3
     }
   },
-  "100-nl-acquisition-llc": {
-    "2027": {
-      "direct": 3500.0,
-      "independent": 0.0,
-      "total": 3500.0,
-      "count": 1
-    }
-  },
   "watson-jack": {
     "2027": {
       "direct": 2000.0,
@@ -93833,22 +93381,16 @@
       "count": 3
     },
     "2019": {
-      "direct": 16128.99,
+      "direct": 10781.98,
       "independent": 0.0,
-      "total": 16128.99,
-      "count": 4
+      "total": 10781.98,
+      "count": 2
     },
     "2023": {
       "direct": 3967.15,
       "independent": 0.0,
       "total": 3967.15,
       "count": 2
-    },
-    "2027": {
-      "direct": 39747.57,
-      "independent": 0.0,
-      "total": 39747.57,
-      "count": 3
     }
   },
   "gas-plus": {
@@ -97353,14 +96895,6 @@
       "count": 1
     }
   },
-  "associated-bank-n-a": {
-    "2027": {
-      "direct": 34033.62,
-      "independent": 0.0,
-      "total": 34033.62,
-      "count": 27
-    }
-  },
   "camex-group-llc": {
     "2027": {
       "direct": 500.0,
@@ -99463,14 +98997,6 @@
       "count": 1
     }
   },
-  "fidelity": {
-    "2027": {
-      "direct": 445835.44,
-      "independent": 0.0,
-      "total": 445835.44,
-      "count": 19
-    }
-  },
   "tlg-series-seven-llc": {
     "2027": {
       "direct": 1500.0,
@@ -99884,14 +99410,6 @@
       "direct": 1500.0,
       "independent": 0.0,
       "total": 1500.0,
-      "count": 1
-    }
-  },
-  "pinstripe": {
-    "2019": {
-      "direct": 7460.0,
-      "independent": 0.0,
-      "total": 7460.0,
       "count": 1
     }
   },
@@ -100887,10 +100405,10 @@
   },
   "actblue-illinois": {
     "2023": {
-      "direct": 13547.79,
+      "direct": 7208.5,
       "independent": 0.0,
-      "total": 13547.79,
-      "count": 13
+      "total": 7208.5,
+      "count": 8
     },
     "2015": {
       "direct": 2915.07,
@@ -102977,94 +102495,12 @@
       "count": 3
     }
   },
-  "buying-time-llc": {
-    "2023": {
-      "direct": 199.04,
-      "independent": 0.0,
-      "total": 199.04,
-      "count": 1
-    }
-  },
   "terrence-m-obrien-as-trustee": {
     "2027": {
       "direct": 1000.0,
       "independent": 0.0,
       "total": 1000.0,
       "count": 1
-    }
-  },
-  "friends-of-peter-chico-inc": {
-    "2027": {
-      "direct": 900.0,
-      "independent": 0.0,
-      "total": 900.0,
-      "count": 1
-    }
-  },
-  "citizens-to-elect-derrick-g-curtis": {
-    "2027": {
-      "direct": 900.0,
-      "independent": 0.0,
-      "total": 900.0,
-      "count": 1
-    },
-    "2023": {
-      "direct": 200.0,
-      "independent": 0.0,
-      "total": 200.0,
-      "count": 1
-    }
-  },
-  "friends-of-tabares-political-action-committee": {
-    "2027": {
-      "direct": 900.0,
-      "independent": 0.0,
-      "total": 900.0,
-      "count": 1
-    }
-  },
-  "citizens-to-elect-felix-cardona-jr-election-comm": {
-    "2027": {
-      "direct": 900.0,
-      "independent": 0.0,
-      "total": 900.0,
-      "count": 1
-    }
-  },
-  "citizens-for-waguespack": {
-    "2027": {
-      "direct": 1150.0,
-      "independent": 0.0,
-      "total": 1150.0,
-      "count": 2
-    }
-  },
-  "citizens-for-monique-scott": {
-    "2027": {
-      "direct": 900.0,
-      "independent": 0.0,
-      "total": 900.0,
-      "count": 1
-    }
-  },
-  "36th-ward-dems": {
-    "2027": {
-      "direct": 115900.0,
-      "independent": 0.0,
-      "total": 115900.0,
-      "count": 5
-    },
-    "2019": {
-      "direct": 48141.0,
-      "independent": 0.0,
-      "total": 48141.0,
-      "count": 3
-    },
-    "2023": {
-      "direct": 95000.0,
-      "independent": 0.0,
-      "total": 95000.0,
-      "count": 3
     }
   },
   "porfirio-for-the-people": {
@@ -103737,12 +103173,6 @@
       "independent": 0.0,
       "total": 300.0,
       "count": 2
-    },
-    "2019": {
-      "direct": 4702.0,
-      "independent": 0.0,
-      "total": 4702.0,
-      "count": 1
     }
   },
   "credit-union-pac-cupac": {
@@ -104725,14 +104155,6 @@
       "count": 1
     }
   },
-  "international-horizon-corporation": {
-    "2019": {
-      "direct": 1000.0,
-      "independent": 0.0,
-      "total": 1000.0,
-      "count": 1
-    }
-  },
   "cook-witter-incorporated": {
     "2019": {
       "direct": 250.0,
@@ -104791,20 +104213,6 @@
       "independent": 0.0,
       "total": 500.0,
       "count": 2
-    }
-  },
-  "ikea": {
-    "2019": {
-      "direct": 337.7,
-      "independent": 0.0,
-      "total": 337.7,
-      "count": 2
-    },
-    "2023": {
-      "direct": 2475.43,
-      "independent": 0.0,
-      "total": 2475.43,
-      "count": 3
     }
   },
   "draftkings-inc": {
@@ -104958,14 +104366,6 @@
       "direct": 500.0,
       "independent": 0.0,
       "total": 500.0,
-      "count": 1
-    }
-  },
-  "villas-downtown-springfield": {
-    "2019": {
-      "direct": 400.0,
-      "independent": 0.0,
-      "total": 400.0,
       "count": 1
     }
   },
@@ -105871,14 +105271,6 @@
       "independent": 0.0,
       "total": 25.0,
       "count": 1
-    }
-  },
-  "apple-store": {
-    "2027": {
-      "direct": 235.08,
-      "independent": 0.0,
-      "total": 235.08,
-      "count": 2
     }
   },
   "garvin-rob-m": {
@@ -107348,14 +106740,6 @@
       "direct": 1500.0,
       "independent": 0.0,
       "total": 1500.0,
-      "count": 1
-    }
-  },
-  "lake-research-partners": {
-    "2015": {
-      "direct": 2782.6,
-      "independent": 0.0,
-      "total": 2782.6,
       "count": 1
     }
   },
@@ -111697,28 +111081,6 @@
       "count": 1
     }
   },
-  "rivera-jose": {
-    "2019": {
-      "direct": 600.0,
-      "independent": 0.0,
-      "total": 600.0,
-      "count": 1
-    },
-    "2027": {
-      "direct": 200.0,
-      "independent": 0.0,
-      "total": 200.0,
-      "count": 1
-    }
-  },
-  "argiris-constantine": {
-    "2019": {
-      "direct": 600.0,
-      "independent": 0.0,
-      "total": 600.0,
-      "count": 1
-    }
-  },
   "western-utility": {
     "2019": {
       "direct": 500.0,
@@ -112466,14 +111828,6 @@
       "direct": 750.0,
       "independent": 0.0,
       "total": 750.0,
-      "count": 1
-    }
-  },
-  "friends-of-alyx-pattison": {
-    "2019": {
-      "direct": 20000.0,
-      "independent": 0.0,
-      "total": 20000.0,
       "count": 1
     }
   },
@@ -115545,6 +114899,14 @@
       "count": 1
     }
   },
+  "rivera-jose": {
+    "2027": {
+      "direct": 200.0,
+      "independent": 0.0,
+      "total": 200.0,
+      "count": 1
+    }
+  },
   "pryce-jan": {
     "2027": {
       "direct": 500.0,
@@ -116336,12 +115698,6 @@
       "direct": 250.0,
       "independent": 0.0,
       "total": 250.0,
-      "count": 1
-    },
-    "2019": {
-      "direct": 475.0,
-      "independent": 0.0,
-      "total": 475.0,
       "count": 1
     }
   },
@@ -117967,10 +117323,10 @@
   },
   "citizens-to-elect-felix-cardona-jr": {
     "2023": {
-      "direct": 6393.12,
+      "direct": 6207.12,
       "independent": 0.0,
-      "total": 6393.12,
-      "count": 4
+      "total": 6207.12,
+      "count": 3
     },
     "2027": {
       "direct": 250.0,
@@ -126285,20 +125641,6 @@
       "count": 2
     }
   },
-  "chicago-city-council-latino-caucus": {
-    "2019": {
-      "direct": 1492.44,
-      "independent": 0.0,
-      "total": 1492.44,
-      "count": 3
-    },
-    "2027": {
-      "direct": 2445.0,
-      "independent": 0.0,
-      "total": 2445.0,
-      "count": 2
-    }
-  },
   "transportation-development-corp": {
     "2019": {
       "direct": 1500.0,
@@ -126665,14 +126007,6 @@
       "count": 1
     }
   },
-  "binny-s-beverage-depot": {
-    "2019": {
-      "direct": 180.0,
-      "independent": 0.0,
-      "total": 180.0,
-      "count": 1
-    }
-  },
   "gecht-robert": {
     "2019": {
       "direct": 3000.0,
@@ -126789,6 +126123,26 @@
       "independent": 0.0,
       "total": 6000.0,
       "count": 3
+    }
+  },
+  "36th-ward-dems": {
+    "2019": {
+      "direct": 48141.0,
+      "independent": 0.0,
+      "total": 48141.0,
+      "count": 3
+    },
+    "2023": {
+      "direct": 95000.0,
+      "independent": 0.0,
+      "total": 95000.0,
+      "count": 3
+    },
+    "2027": {
+      "direct": 115000.0,
+      "independent": 0.0,
+      "total": 115000.0,
+      "count": 4
     }
   },
   "homedi-eyad": {
@@ -127051,20 +126405,6 @@
       "independent": 0.0,
       "total": 1500.0,
       "count": 2
-    }
-  },
-  "stars-and-stripes": {
-    "2019": {
-      "direct": 200.0,
-      "independent": 0.0,
-      "total": 200.0,
-      "count": 1
-    },
-    "2023": {
-      "direct": 175.0,
-      "independent": 0.0,
-      "total": 175.0,
-      "count": 1
     }
   },
   "great-lakes-reyes-bottling": {
@@ -127640,14 +126980,6 @@
       "direct": 1500.0,
       "independent": 0.0,
       "total": 1500.0,
-      "count": 1
-    }
-  },
-  "interpark": {
-    "2023": {
-      "direct": 215.0,
-      "independent": 0.0,
-      "total": 215.0,
       "count": 1
     }
   },
@@ -128307,14 +127639,6 @@
       "independent": 0.0,
       "total": 6000.0,
       "count": 2
-    }
-  },
-  "gordon-food-services": {
-    "2023": {
-      "direct": 212.56,
-      "independent": 0.0,
-      "total": 212.56,
-      "count": 1
     }
   },
   "sustek-lauren": {
@@ -130014,14 +129338,6 @@
       "direct": 500.0,
       "independent": 0.0,
       "total": 500.0,
-      "count": 1
-    }
-  },
-  "acs": {
-    "2027": {
-      "direct": 199.0,
-      "independent": 0.0,
-      "total": 199.0,
       "count": 1
     }
   },
@@ -132203,12 +131519,6 @@
       "independent": 0.0,
       "total": 500.0,
       "count": 1
-    },
-    "2023": {
-      "direct": 250.0,
-      "independent": 0.0,
-      "total": 250.0,
-      "count": 1
     }
   },
   "santangelo-paul": {
@@ -133947,14 +133257,6 @@
       "count": 1
     }
   },
-  "auto-owners-insurance": {
-    "2027": {
-      "direct": 681.44,
-      "independent": 0.0,
-      "total": 681.44,
-      "count": 1
-    }
-  },
   "norwood-wine-and-spirits": {
     "2027": {
       "direct": 11500.0,
@@ -135581,26 +134883,6 @@
       "count": 1
     }
   },
-  "22nd-ward-ipo": {
-    "2019": {
-      "direct": 339.38,
-      "independent": 0.0,
-      "total": 339.38,
-      "count": 1
-    },
-    "2023": {
-      "direct": 5000.0,
-      "independent": 0.0,
-      "total": 5000.0,
-      "count": 1
-    },
-    "2027": {
-      "direct": 5294.97,
-      "independent": 0.0,
-      "total": 5294.97,
-      "count": 4
-    }
-  },
   "villanova-frank": {
     "2019": {
       "direct": 500.0,
@@ -136067,14 +135349,6 @@
       "count": 1
     }
   },
-  "margin-of-era-research-llc": {
-    "2019": {
-      "direct": 3866.0,
-      "independent": 0.0,
-      "total": 3866.0,
-      "count": 1
-    }
-  },
   "garcia-for-congress": {
     "2019": {
       "direct": 500.0,
@@ -136171,10 +135445,10 @@
       "count": 1
     },
     "2023": {
-      "direct": 14087.5,
+      "direct": 13650.0,
       "independent": 0.0,
-      "total": 14087.5,
-      "count": 8
+      "total": 13650.0,
+      "count": 7
     }
   },
   "fregoso-pedro": {
@@ -136271,10 +135545,10 @@
       "count": 1
     },
     "2023": {
-      "direct": 6087.5,
+      "direct": 5650.0,
       "independent": 0.0,
-      "total": 6087.5,
-      "count": 4
+      "total": 5650.0,
+      "count": 3
     },
     "2027": {
       "direct": 1628.8,
@@ -136403,10 +135677,10 @@
       "count": 1
     },
     "2023": {
-      "direct": 24673.35,
+      "direct": 24235.85,
       "independent": 0.0,
-      "total": 24673.35,
-      "count": 15
+      "total": 24235.85,
+      "count": 14
     }
   },
   "fausto-enterprises": {
@@ -136963,6 +136237,20 @@
       "count": 2
     }
   },
+  "22nd-ward-ipo": {
+    "2023": {
+      "direct": 5000.0,
+      "independent": 0.0,
+      "total": 5000.0,
+      "count": 1
+    },
+    "2027": {
+      "direct": 3440.0,
+      "independent": 0.0,
+      "total": 3440.0,
+      "count": 3
+    }
+  },
   "gonzalez-rey": {
     "2023": {
       "direct": 200.0,
@@ -137369,10 +136657,10 @@
   },
   "friends-of-edgar-gonzalez": {
     "2023": {
-      "direct": 6837.5,
+      "direct": 6400.0,
       "independent": 0.0,
-      "total": 6837.5,
-      "count": 5
+      "total": 6400.0,
+      "count": 4
     },
     "2027": {
       "direct": 5128.8,
@@ -137765,14 +137053,6 @@
       "independent": 0.0,
       "total": 500.0,
       "count": 2
-    }
-  },
-  "kombi-llc": {
-    "2023": {
-      "direct": 200.0,
-      "independent": 0.0,
-      "total": 200.0,
-      "count": 1
     }
   },
   "raigoza-rey": {
@@ -138297,28 +137577,6 @@
       "count": 4
     }
   },
-  "friends-of-eira": {
-    "2023": {
-      "direct": 437.5,
-      "independent": 0.0,
-      "total": 437.5,
-      "count": 1
-    }
-  },
-  "friends-of-theresa-mah": {
-    "2023": {
-      "direct": 34937.5,
-      "independent": 0.0,
-      "total": 34937.5,
-      "count": 10
-    },
-    "2027": {
-      "direct": 878.8,
-      "independent": 0.0,
-      "total": 878.8,
-      "count": 2
-    }
-  },
   "guzman-nicolas": {
     "2023": {
       "direct": 500.0,
@@ -138533,10 +137791,10 @@
       "count": 12
     },
     "2027": {
-      "direct": 1610.5,
+      "direct": 1127.5,
       "independent": 0.0,
-      "total": 1610.5,
-      "count": 4
+      "total": 1127.5,
+      "count": 3
     }
   },
   "vargas-micaela": {
@@ -138687,14 +137945,6 @@
       "count": 1
     }
   },
-  "grace-printing-and-mailing": {
-    "2023": {
-      "direct": 5425.94,
-      "independent": 0.0,
-      "total": 5425.94,
-      "count": 1
-    }
-  },
   "tmobile": {
     "2027": {
       "direct": 1750.0,
@@ -138775,6 +138025,20 @@
       "count": 1
     }
   },
+  "friends-of-theresa-mah": {
+    "2027": {
+      "direct": 878.8,
+      "independent": 0.0,
+      "total": 878.8,
+      "count": 2
+    },
+    "2023": {
+      "direct": 34500.0,
+      "independent": 0.0,
+      "total": 34500.0,
+      "count": 9
+    }
+  },
   "cervantes-for-illinois": {
     "2027": {
       "direct": 878.8,
@@ -138808,14 +138072,6 @@
       "direct": 200.0,
       "independent": 0.0,
       "total": 200.0,
-      "count": 1
-    }
-  },
-  "united-states-hispanic-leadership-institute": {
-    "2027": {
-      "direct": 500.0,
-      "independent": 0.0,
-      "total": 500.0,
       "count": 1
     }
   },
@@ -139448,14 +138704,6 @@
       "direct": 3800.0,
       "independent": 0.0,
       "total": 3800.0,
-      "count": 1
-    }
-  },
-  "chicago-latino-caucus-foundation": {
-    "2027": {
-      "direct": 1000.0,
-      "independent": 0.0,
-      "total": 1000.0,
       "count": 1
     }
   },
@@ -141271,14 +140519,6 @@
       "independent": 0.0,
       "total": 6000.0,
       "count": 4
-    }
-  },
-  "ethiopian-diamond-ii": {
-    "2023": {
-      "direct": 800.0,
-      "independent": 0.0,
-      "total": 800.0,
-      "count": 1
     }
   },
   "dieckmann-larry": {
@@ -143681,12 +142921,6 @@
       "independent": 0.0,
       "total": 3000.0,
       "count": 4
-    },
-    "2027": {
-      "direct": 518.18,
-      "independent": 0.0,
-      "total": 518.18,
-      "count": 1
     }
   },
   "bertrau-consulting-llc": {
@@ -143989,6 +143223,14 @@
       "count": 1
     }
   },
+  "smith-gregory": {
+    "2023": {
+      "direct": 375.0,
+      "independent": 0.0,
+      "total": 375.0,
+      "count": 1
+    }
+  },
   "johnson-samone": {
     "2023": {
       "direct": 300.0,
@@ -144137,14 +143379,6 @@
       "count": 1
     }
   },
-  "moore-campaign-llc": {
-    "2023": {
-      "direct": 7614.76,
-      "independent": 0.0,
-      "total": 7614.76,
-      "count": 1
-    }
-  },
   "watkins-kimber": {
     "2023": {
       "direct": 250.0,
@@ -144193,20 +143427,6 @@
       "count": 1
     }
   },
-  "city-of-chicago-department-of-finance": {
-    "2023": {
-      "direct": 455.29,
-      "independent": 0.0,
-      "total": 455.29,
-      "count": 1
-    },
-    "2027": {
-      "direct": 2882.64,
-      "independent": 0.0,
-      "total": 2882.64,
-      "count": 1
-    }
-  },
   "mitchell-barry": {
     "2027": {
       "direct": 250.0,
@@ -144237,14 +143457,6 @@
       "independent": 0.0,
       "total": 200.0,
       "count": 1
-    }
-  },
-  "zoom-us": {
-    "2027": {
-      "direct": 1667.82,
-      "independent": 0.0,
-      "total": 1667.82,
-      "count": 6
     }
   },
   "semer-robin": {
@@ -148681,22 +147893,6 @@
       "count": 1
     }
   },
-  "blue-sun-campaigns": {
-    "2019": {
-      "direct": 5170.0,
-      "independent": 0.0,
-      "total": 5170.0,
-      "count": 2
-    }
-  },
-  "dover-strategy-group": {
-    "2019": {
-      "direct": 20513.98,
-      "independent": 0.0,
-      "total": 20513.98,
-      "count": 1
-    }
-  },
   "desai-raxa": {
     "2019": {
       "direct": 250.0,
@@ -148900,22 +148096,6 @@
       "direct": 500.0,
       "independent": 0.0,
       "total": 500.0,
-      "count": 1
-    }
-  },
-  "ngp-van": {
-    "2023": {
-      "direct": 150.0,
-      "independent": 0.0,
-      "total": 150.0,
-      "count": 1
-    }
-  },
-  "staples": {
-    "2023": {
-      "direct": 226.5,
-      "independent": 0.0,
-      "total": 226.5,
       "count": 1
     }
   },
@@ -149379,14 +148559,6 @@
       "independent": 0.0,
       "total": 2500.0,
       "count": 1
-    }
-  },
-  "zoom": {
-    "2023": {
-      "direct": 392.4,
-      "independent": 0.0,
-      "total": 392.4,
-      "count": 2
     }
   },
   "beacom-john": {
@@ -150321,14 +149493,6 @@
       "independent": 0.0,
       "total": 1000.0,
       "count": 2
-    }
-  },
-  "gusto": {
-    "2023": {
-      "direct": 841.64,
-      "independent": 0.0,
-      "total": 841.64,
-      "count": 1
     }
   },
   "applegate-bennett": {
@@ -152743,14 +151907,6 @@
       "count": 1
     }
   },
-  "emf": {
-    "2023": {
-      "direct": 5700.0,
-      "independent": 0.0,
-      "total": 5700.0,
-      "count": 1
-    }
-  },
   "wright-tarrah": {
     "2023": {
       "direct": 750.0,
@@ -152836,6 +151992,14 @@
       "direct": 150.0,
       "independent": 0.0,
       "total": 150.0,
+      "count": 1
+    }
+  },
+  "citizens-to-elect-derrick-g-curtis": {
+    "2023": {
+      "direct": 200.0,
+      "independent": 0.0,
+      "total": 200.0,
       "count": 1
     }
   },
@@ -154330,14 +153494,6 @@
       "direct": 1000.0,
       "independent": 0.0,
       "total": 1000.0,
-      "count": 1
-    }
-  },
-  "tetter-lonyai": {
-    "2027": {
-      "direct": 850.0,
-      "independent": 0.0,
-      "total": 850.0,
       "count": 1
     }
   },
@@ -157659,14 +156815,6 @@
       "count": 7
     }
   },
-  "home-depot": {
-    "2023": {
-      "direct": 427.33,
-      "independent": 0.0,
-      "total": 427.33,
-      "count": 4
-    }
-  },
   "abrams-ron": {
     "2023": {
       "direct": 500.0,
@@ -159519,14 +158667,6 @@
       "count": 2
     }
   },
-  "libra-labs-llc": {
-    "2027": {
-      "direct": 1500.0,
-      "independent": 0.0,
-      "total": 1500.0,
-      "count": 1
-    }
-  },
   "sanchez-padilla-gerardo": {
     "2027": {
       "direct": 250.0,
@@ -160288,14 +159428,6 @@
       "direct": 250.0,
       "independent": 0.0,
       "total": 250.0,
-      "count": 1
-    }
-  },
-  "withlogos-com": {
-    "2027": {
-      "direct": 211.04,
-      "independent": 0.0,
-      "total": 211.04,
       "count": 1
     }
   },
@@ -161933,6 +161065,20 @@
       "count": 1
     }
   },
+  "o-shea-matthew": {
+    "2019": {
+      "direct": 500.0,
+      "independent": 0.0,
+      "total": 500.0,
+      "count": 1
+    },
+    "2023": {
+      "direct": 250.0,
+      "independent": 0.0,
+      "total": 250.0,
+      "count": 1
+    }
+  },
   "chicago-seafood-city-supermarket": {
     "2019": {
       "direct": 7500.0,
@@ -162290,26 +161436,6 @@
       "direct": 5000.0,
       "independent": 0.0,
       "total": 5000.0,
-      "count": 1
-    }
-  },
-  "lichter-realty": {
-    "2019": {
-      "direct": 1650.0,
-      "independent": 0.0,
-      "total": 1650.0,
-      "count": 1
-    },
-    "2023": {
-      "direct": 1000.0,
-      "independent": 0.0,
-      "total": 1000.0,
-      "count": 1
-    },
-    "2027": {
-      "direct": 2500.0,
-      "independent": 0.0,
-      "total": 2500.0,
       "count": 1
     }
   },
@@ -162792,6 +161918,20 @@
       "direct": 300.0,
       "independent": 0.0,
       "total": 300.0,
+      "count": 1
+    }
+  },
+  "lichter-realty": {
+    "2023": {
+      "direct": 1000.0,
+      "independent": 0.0,
+      "total": 1000.0,
+      "count": 1
+    },
+    "2027": {
+      "direct": 2500.0,
+      "independent": 0.0,
+      "total": 2500.0,
       "count": 1
     }
   },
@@ -164053,14 +163193,6 @@
       "count": 2
     }
   },
-  "apple": {
-    "2027": {
-      "direct": 255.88,
-      "independent": 0.0,
-      "total": 255.88,
-      "count": 1
-    }
-  },
   "nanna-diane": {
     "2027": {
       "direct": 300.0,
@@ -164203,14 +163335,6 @@
       "independent": 0.0,
       "total": 250.0,
       "count": 1
-    }
-  },
-  "c-strategies": {
-    "2027": {
-      "direct": 4000.0,
-      "independent": 0.0,
-      "total": 4000.0,
-      "count": 2
     }
   },
   "alexander-borovicka-o-shea-government-solutions": {
@@ -167355,14 +166479,6 @@
       "independent": 0.0,
       "total": 350.0,
       "count": 2
-    }
-  },
-  "kawa-marek": {
-    "2023": {
-      "direct": 1900.0,
-      "independent": 0.0,
-      "total": 1900.0,
-      "count": 1
     }
   },
   "lazo-s-tacos": {
@@ -172619,14 +171735,6 @@
       "count": 3
     }
   },
-  "usps": {
-    "2023": {
-      "direct": 283.68,
-      "independent": 0.0,
-      "total": 283.68,
-      "count": 1
-    }
-  },
   "schain-banks-kenny-and-schwan": {
     "2023": {
       "direct": 500.0,
@@ -173031,14 +172139,6 @@
       "independent": 0.0,
       "total": 750.0,
       "count": 2
-    }
-  },
-  "gladstone-chamber-of-commerce": {
-    "2023": {
-      "direct": 250.0,
-      "independent": 0.0,
-      "total": 250.0,
-      "count": 1
     }
   },
   "stewart-jack": {
@@ -174495,14 +173595,6 @@
       "count": 1
     }
   },
-  "wintrust-bank": {
-    "2027": {
-      "direct": 93210.82,
-      "independent": 0.0,
-      "total": 93210.82,
-      "count": 14
-    }
-  },
   "halpern-david": {
     "2027": {
       "direct": 1500.0,
@@ -175171,14 +174263,6 @@
       "independent": 0.0,
       "total": 1381.0,
       "count": 17
-    }
-  },
-  "forest-printing": {
-    "2023": {
-      "direct": 257.0,
-      "independent": 0.0,
-      "total": 257.0,
-      "count": 1
     }
   },
   "langston-timothy": {
@@ -176215,14 +175299,6 @@
       "count": 2
     }
   },
-  "iyanze": {
-    "2027": {
-      "direct": 200.0,
-      "independent": 0.0,
-      "total": 200.0,
-      "count": 1
-    }
-  },
   "ferrell-james": {
     "2027": {
       "direct": 2000.0,
@@ -176340,14 +175416,6 @@
       "direct": 500.0,
       "independent": 0.0,
       "total": 500.0,
-      "count": 1
-    }
-  },
-  "fabfun-game-trucks": {
-    "2027": {
-      "direct": 1160.0,
-      "independent": 0.0,
-      "total": 1160.0,
       "count": 1
     }
   },
@@ -177071,14 +176139,6 @@
       "independent": 0.0,
       "total": 250.0,
       "count": 3
-    }
-  },
-  "pnc-bank": {
-    "2023": {
-      "direct": 200.0,
-      "independent": 0.0,
-      "total": 200.0,
-      "count": 1
     }
   },
   "kent-kyle": {
@@ -177910,14 +176970,6 @@
       "direct": 250.0,
       "independent": 0.0,
       "total": 250.0,
-      "count": 1
-    }
-  },
-  "merchant-service-merchant-activity": {
-    "2023": {
-      "direct": 351.01,
-      "independent": 0.0,
-      "total": 351.01,
       "count": 1
     }
   },
@@ -179715,6 +178767,14 @@
       "count": 2
     }
   },
+  "citizens-for-waguespack": {
+    "2027": {
+      "direct": 250.0,
+      "independent": 0.0,
+      "total": 250.0,
+      "count": 1
+    }
+  },
   "gebo-kate": {
     "2027": {
       "direct": 1000.0,
@@ -180473,14 +179533,6 @@
       "count": 1
     }
   },
-  "huang-ai-ping": {
-    "2023": {
-      "direct": 500.0,
-      "independent": 0.0,
-      "total": 500.0,
-      "count": 1
-    }
-  },
   "valencia-anna": {
     "2027": {
       "direct": 250.0,
@@ -180951,10 +180003,10 @@
   },
   "lakeside-bank": {
     "2027": {
-      "direct": 8612.24,
+      "direct": 6500.0,
       "independent": 0.0,
-      "total": 8612.24,
-      "count": 6
+      "total": 6500.0,
+      "count": 3
     }
   },
   "yes-heung-xian-cuisine": {
@@ -182369,14 +181421,6 @@
       "count": 1
     }
   },
-  "half-sour": {
-    "2027": {
-      "direct": 200.0,
-      "independent": 0.0,
-      "total": 200.0,
-      "count": 1
-    }
-  },
   "greenway-resource-recovery-llc": {
     "2027": {
       "direct": 1000.0,
@@ -182527,22 +181571,6 @@
       "independent": 0.0,
       "total": 200.0,
       "count": 1
-    }
-  },
-  "network-solutions": {
-    "2027": {
-      "direct": 176.04,
-      "independent": 0.0,
-      "total": 176.04,
-      "count": 2
-    }
-  },
-  "state-farm-insurance": {
-    "2027": {
-      "direct": 738.92,
-      "independent": 0.0,
-      "total": 738.92,
-      "count": 2
     }
   },
   "mason-jr-james-r": {
@@ -186257,14 +185285,6 @@
       "count": 1
     }
   },
-  "biss-for-congress": {
-    "2027": {
-      "direct": 500.0,
-      "independent": 0.0,
-      "total": 500.0,
-      "count": 1
-    }
-  },
   "szura-joanna": {
     "2027": {
       "direct": 5000.0,
@@ -187535,14 +186555,6 @@
       "count": 1
     }
   },
-  "law-offices-of-michael-dorf": {
-    "2027": {
-      "direct": 1398.31,
-      "independent": 0.0,
-      "total": 1398.31,
-      "count": 1
-    }
-  },
   "mak-william": {
     "2023": {
       "direct": 1000.0,
@@ -187957,20 +186969,6 @@
       "independent": 0.0,
       "total": 250.0,
       "count": 1
-    }
-  },
-  "neighbors-for-andre": {
-    "2027": {
-      "direct": 483.33,
-      "independent": 0.0,
-      "total": 483.33,
-      "count": 1
-    },
-    "2023": {
-      "direct": 500.0,
-      "independent": 0.0,
-      "total": 500.0,
-      "count": 2
     }
   },
   "o-san": {
@@ -189843,14 +188841,6 @@
       "count": 1
     }
   },
-  "illinois-department-of-revenue": {
-    "2027": {
-      "direct": 1430.81,
-      "independent": 0.0,
-      "total": 1430.81,
-      "count": 1
-    }
-  },
   "cherry-myron": {
     "2027": {
       "direct": 1000.0,
@@ -189889,14 +188879,6 @@
       "independent": 0.0,
       "total": 1000.0,
       "count": 1
-    }
-  },
-  "illinois-department-of-employment-security": {
-    "2027": {
-      "direct": 3599.74,
-      "independent": 0.0,
-      "total": 3599.74,
-      "count": 2
     }
   },
   "romanucci-antonio": {
@@ -190662,22 +189644,6 @@
       "direct": 5000.0,
       "independent": 0.0,
       "total": 5000.0,
-      "count": 1
-    }
-  },
-  "burlington-coat-factory": {
-    "2027": {
-      "direct": 273.19,
-      "independent": 0.0,
-      "total": 273.19,
-      "count": 1
-    }
-  },
-  "morris-martin": {
-    "2027": {
-      "direct": 420.0,
-      "independent": 0.0,
-      "total": 420.0,
       "count": 1
     }
   },
@@ -192888,6 +191854,14 @@
       "direct": 1250.0,
       "independent": 0.0,
       "total": 1250.0,
+      "count": 1
+    }
+  },
+  "c-strategies": {
+    "2027": {
+      "direct": 1000.0,
+      "independent": 0.0,
+      "total": 1000.0,
       "count": 1
     }
   },
@@ -195599,6 +194573,14 @@
       "count": 1
     }
   },
+  "mosley-ronnie": {
+    "2023": {
+      "direct": 900.0,
+      "independent": 0.0,
+      "total": 900.0,
+      "count": 1
+    }
+  },
   "robert-emmons-consulting-llc": {
     "2023": {
       "direct": 6000.0,
@@ -196046,14 +195028,6 @@
       "direct": 200.0,
       "independent": 0.0,
       "total": 200.0,
-      "count": 1
-    }
-  },
-  "amanda-s-dependable-services": {
-    "2023": {
-      "direct": 1000.0,
-      "independent": 0.0,
-      "total": 1000.0,
       "count": 1
     }
   },
@@ -197067,14 +196041,6 @@
       "independent": 0.0,
       "total": 1000.0,
       "count": 1
-    }
-  },
-  "cash": {
-    "2023": {
-      "direct": 850.0,
-      "independent": 0.0,
-      "total": 850.0,
-      "count": 3
     }
   },
   "friends-of-theresa-may-theresa": {
@@ -201021,14 +199987,6 @@
       "count": 2
     }
   },
-  "smyser-alexis": {
-    "2027": {
-      "direct": 375.0,
-      "independent": 0.0,
-      "total": 375.0,
-      "count": 1
-    }
-  },
   "anderson-bruce": {
     "2027": {
       "direct": 500.0,
@@ -201109,14 +200067,6 @@
       "count": 1
     }
   },
-  "movimiento-victoria-ciudadana": {
-    "2027": {
-      "direct": 1000.0,
-      "independent": 0.0,
-      "total": 1000.0,
-      "count": 1
-    }
-  },
   "zappone-jeff": {
     "2027": {
       "direct": 6000.0,
@@ -201138,6 +200088,14 @@
       "direct": 250.0,
       "independent": 0.0,
       "total": 250.0,
+      "count": 1
+    }
+  },
+  "chicago-city-council-latino-caucus": {
+    "2027": {
+      "direct": 500.0,
+      "independent": 0.0,
+      "total": 500.0,
       "count": 1
     }
   },
@@ -201402,14 +200360,6 @@
       "direct": 350.0,
       "independent": 0.0,
       "total": 350.0,
-      "count": 1
-    }
-  },
-  "carr-josef": {
-    "2027": {
-      "direct": 300.0,
-      "independent": 0.0,
-      "total": 300.0,
       "count": 1
     }
   },
@@ -203853,14 +202803,6 @@
       "count": 1
     }
   },
-  "quill": {
-    "2027": {
-      "direct": 151.46,
-      "independent": 0.0,
-      "total": 151.46,
-      "count": 2
-    }
-  },
   "acdbe-felix": {
     "2027": {
       "direct": 250.0,
@@ -204050,14 +202992,6 @@
       "direct": 750.0,
       "independent": 0.0,
       "total": 750.0,
-      "count": 1
-    }
-  },
-  "hotel-fraye-nashville": {
-    "2027": {
-      "direct": 224.0,
-      "independent": 0.0,
-      "total": 224.0,
       "count": 1
     }
   },
@@ -204453,14 +203387,6 @@
       "count": 1
     }
   },
-  "american-express": {
-    "2027": {
-      "direct": 209.0,
-      "independent": 0.0,
-      "total": 209.0,
-      "count": 1
-    }
-  },
   "morris-andrews-yondi": {
     "2027": {
       "direct": 500.0,
@@ -204847,6 +203773,14 @@
       "count": 1
     }
   },
+  "neighbors-for-andre": {
+    "2023": {
+      "direct": 500.0,
+      "independent": 0.0,
+      "total": 500.0,
+      "count": 2
+    }
+  },
   "taylor-yuval": {
     "2023": {
       "direct": 200.0,
@@ -205149,14 +204083,6 @@
       "independent": 0.0,
       "total": 1250.0,
       "count": 3
-    }
-  },
-  "caprock-management": {
-    "2027": {
-      "direct": 2000.0,
-      "independent": 0.0,
-      "total": 2000.0,
-      "count": 1
     }
   },
   "chwedyk-christopher": {
@@ -205540,14 +204466,6 @@
       "direct": 750.0,
       "independent": 0.0,
       "total": 750.0,
-      "count": 2
-    }
-  },
-  "uhaul": {
-    "2027": {
-      "direct": 274.06,
-      "independent": 0.0,
-      "total": 274.06,
       "count": 2
     }
   },
@@ -206070,14 +204988,6 @@
       "direct": 1000.0,
       "independent": 0.0,
       "total": 1000.0,
-      "count": 1
-    }
-  },
-  "hutchinson-latasha": {
-    "2023": {
-      "direct": 300.0,
-      "independent": 0.0,
-      "total": 300.0,
       "count": 1
     }
   },
@@ -209538,6 +208448,14 @@
       "direct": 0.0,
       "independent": 6250.0,
       "total": 6250.0,
+      "count": 1
+    }
+  },
+  "lamont-robinson-for-alderman": {
+    "2027": {
+      "direct": 0.0,
+      "independent": 2500.0,
+      "total": 2500.0,
       "count": 1
     }
   },

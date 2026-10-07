@@ -2172,6 +2172,143 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: AUDIT-2 M1 ratification package, revision 1 (`audit-2-m1-package-rev1.md`), sha256 `9077b578762becc9235f7605887546b61be717d293efa1d780d0e1562f5435b6`, 27,773 B / 201 L, region R1 (its lines 27–105), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Region R2 of the same package (its lines 115–126) is transcribed the same way into the DESIGN-1c entry below, between that entry’s text and its provenance line, and this line is its provenance too. Ratified by Ishan in chat 2026-10-05 as drafted (“1. ratify”, “2. ratify”), on his rulings of the same day; the pop-up opened with no election window was ruled with the ratification (“3. a”). Arises from the numbers audit of 2026-09-29 (finding M1). Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-145`; `PS-146` occurring 0 times before this commit), never carried. Measured basis: AUDIT-2 BR-14 report `963fdbae0aaba73af70ac07ebae2dbf21e2d693d9f17f937a49b696544022deb`.*
 
+### PS-147 — a committee’s other receipts are left out of every total and every list and stated on a line of their own; a loan stays counted and its row is marked
+
+> **What was found.** The numbers audit (finding M2) measured two kinds of money that both tools
+> counted as donations. A committee’s filing sorts its itemized receipts into kinds:
+> contributions, transfers in, loans, in-kind contributions, and other receipts. The State Board’s
+> form D-2 describes the last kind as refunds, the liquidation of assets or investments, and
+> receipts not reported as contributions, transfers in or loans. Both tools counted every such row
+> in what a committee raised and listed its payer as a donor. A loan was counted and listed the
+> same way as a gift. The elections tool and the school-board voting page mark a loan on a donor’s
+> itemized rows; the council voting tool did not mark a loan row anywhere.
+>
+> **Ruled by Ishan, 2026-10-06.**
+> - **Other receipts are in no total.** A row filed as an other receipt is left out of every
+>   figure a reader sees and of every list: what a candidate or an alder raised, every donor’s row
+>   and total, every industry and flag total, the before-2011 views, the Follow the money tab, and
+>   the figures on the school-board voting page. The rows stay in the data, typed as filed (the
+>   retention PS-95 states for dues transfers).
+> - **They are stated, not hidden.** On an alder’s page in the council voting tool, and on a
+>   candidate’s card, a person’s view and a campaign committee’s pop-up in the elections tool, the
+>   amount left out is stated on a line of its own, as not counted (the strings below). The ranked
+>   lists (Browse donors, Spend by alder, Spend by candidate, the industry and flag totals) and
+>   the line a school-board card carries for receipts before its first election show counted money
+>   only and carry no such line.
+> - **A listed pair’s rows stay as M5 has them.** A row of a pair on the own-committee list keeps
+>   PS-142’s treatment whatever its filed type: it is counted, and shown on the other-committee
+>   line. Three such rows are filed as other receipts.
+> - **The candidate’s own money follows the filed type.** An other receipt stamped the candidate’s
+>   own money (`is_self`, PS-135 and PS-143) leaves the totals with the rest, and is not counted
+>   as the candidate’s own money.
+> - **One rule on every surface:** `/alder-voting-history`, `/city-council`,
+>   `/school-board-elections` and `/school-board-voting-history`.
+> - **Loans stay counted.** A loan is counted in what a committee raised, as filed, and the lender
+>   keeps its place in every ranking. In the council voting tool a row whose money includes a loan
+>   is marked (the strings below). In the elections tool nothing about loans changes. A lender’s
+>   or a payer’s other gifts stay on its row.
+> - **The test is the filed type.** A row whose filed type is `Other Receipt` is an other receipt,
+>   unless it is stamped `is_own_committee`. The outside-spending committees’ own receipts are
+>   typed `IE Committee Receipt` whatever their kind, and this ruling does not reach them.
+>
+> **Display, council voting tool** (`/alder-voting-history`).
+> - **OR-V1, the alder page.** Under the tiles, and under the other-committee line where there is
+>   one, when the selected view holds other receipts, with the figure in the tiles’ whole-dollar
+>   form: **Other receipts: $X, not counted in Raised.** The line carries a control,
+>   **Show the N receipts ↓** (**Show the 1 receipt ↓** for one), which opens the list of payers
+>   under the line and then reads **Hide ↑**. Each payer’s line gives the payer’s name, the
+>   amount, the number of receipts and the month or months they are dated. A payer’s line is not a
+>   donor row and opens no profile. The line follows the cycle selector, the all-cycles view and
+>   the before-2011 view.
+> - **OR-V2, the loan chip.** A donor row whose money includes a loan carries a chip: **Loan**
+>   where all of the row’s money is loans, **Includes $X in loans** where part of it is, with the
+>   figure in whole dollars. The chip is carried on an alder’s donor list, in Browse donors, in an
+>   industry’s donor list, and on the recipient rows of a donor’s profile. The Follow the money
+>   tab is not marked.
+> - **OR-V3, the methodology.** Two items are added at the end of the list under “What counts as a
+>   contribution shown here”, after the item M5 added. The first has the lead **Loans.** and then
+>   the text L below. The second has the lead **Other receipts.** and then the text O below. When
+>   the data file carries the figure, O is followed by one more sentence, **In this dataset they
+>   account for $A across N receipts.**, with the amount to the cent, from the file’s
+>   `other_receipts_excluded`; without the figure the sentence is left off whole.
+>
+> L reads:
+>
+> A loan to a committee is counted in the total raised, as the committee filed it, and the
+> lender’s row says so. A loan is money the committee may have to pay back; it is not a gift.
+>
+> O reads:
+>
+> Committees also report money that is not a contribution, a transfer or a loan. The state’s form
+> calls these “other receipts”: refunds, money from selling an asset or an investment, and similar
+> amounts. We do not count them in the total raised or in any donor, industry or flag total. Each
+> alder’s page states the amount on its own line and lists who paid it.
+>
+> **Display, elections tool** (`/city-council` and `/school-board-elections`; the same code serves
+> the other office pages).
+> - **OR-E1, the card, the person view and the committee pop-up.** Under a card’s bars and its
+>   own-money sentence (on a race page, and where Spend by candidate opens a card), under a person
+>   view’s figures for an election, and under the raised figure in a campaign committee’s pop-up,
+>   when the window shown holds other receipts, with the figure in whole dollars:
+>   **Other receipts, not counted above: $X** The elections tool states the amount; it does not
+>   list the payers.
+> - **OR-E2, the methodology.** Two paragraphs, C7 and C8, on both pages. Their text and placement
+>   are the amendment of the same date to the entry `### CNCL-DATA-1 P2 — R8 and R9 as applied`.
+>
+> **The magnitude is published.** `build_rollups.py` writes `other_receipts_excluded`, an amount
+> and a count, into `council-data.json` and `election-data.json` at every build, at zero too. The
+> council file’s `schema_version` moves to 2.3. The validator recounts the field under a test of
+> its own. The council voting tool’s methodology states the council file’s figure. Each page of
+> the elections tool states the sum of the lines on its own cards: for each card, the other
+> receipts of the committee the card reads, dated inside that card’s election.
+> `election-data.json` holds every office and every date since May 2011; its one figure would put
+> the council committees’ money on the school-board page, and would state money that no card on
+> either page shows.
+>
+> **The school-board voting page.** Its figures follow the rule through
+> `school-board-finance.json`. No line is added there and the page is not pasted again (ruled
+> 2026-10-06). Its funding methodology (strings F1 to F6) does not state this exclusion.
+>
+> **What does not change.** PS-142. PS-143’s one test for the candidate’s own money, which is
+> applied to the rows that are counted. The dues exclusion (PS-95). Loans in the elections tool.
+> No contribution row is added, removed or changed. Three things that are not published figures
+> still count other receipts: the editor’s three work-queue totals (`editor/serve.py`), the
+> classification export (`ingestion/export_unclassified.py`), and the stored cluster totals
+> `sheets-sync/sync_overrides.py` writes, which no page reads.
+>
+> **Measured basis.** Measured on the data as committed at
+> `90b786ffac21e26b622f02a8bf17c937f0bc49b0`, by a recount of the rows alone
+> (`audit-2-m2-basis.py`). `council-data.json` holds 453 rows filed as other receipts in the
+> tool’s subject, $1,112,710.18. 3 of them, $12,635.26, are rows of listed own-committee pairs and
+> stay counted; 450, $1,100,074.92, leave every total. Those sit on 40 committees. The largest is
+> ward 28’s: $541,663.64 in 53 receipts, $519,616.63 of it in 49 receipts in the current cycle, of
+> which Fidelity paid $445,835. That committee’s Raised tile for the current cycle read $1,025,099
+> and reads $505,482. The tool’s donor list goes from 20,479 donors and $104,079,926.79 to 20,367
+> donors and $102,979,851.87: 112 payers whose every counted row was an other receipt leave it.
+> 349 counted rows are loans, $1,679,489.29; in Browse donors 47 donor rows carry the chip, 12 of
+> them as **Loan**. `election-data.json` holds 464 rows that leave every total, $1,108,826.40:
+> 452, $1,100,567.76, on council candidates’ committees and 12, $8,258.64, on school-board
+> candidates’. `/city-council` shows one election, 2027, whose window opens 2023-05-15: 220 of the
+> council rows, $733,561.44, are dated inside it and are stated on 31 of that page’s 86 cards with
+> a committee, and the page’s methodology states that figure. On `/school-board-elections` all 12
+> fall inside its two elections’ windows, on 9 of 72 cards. 12 of the 464, $53,337.10, are stamped
+> the candidate’s own money. On the school-board voting page two members’ figures move: Ebony
+> DeBerry’s for 2026 by $174.66, and Ellen Rosenfeld’s by $250.00 for 2024 and $2,933.93 for 2026.
+>
+> **Where it lives.** `campaign-finance/ingestion/build_rollups.py`: `is_other_receipt` is the
+> test, applied at the three sites the dues test is applied at, and `build_sb_finance.py` imports
+> it. `campaign-finance/ingestion/validate_council_data.py` recounts the field and holds every
+> donor’s rollup to a recount that leaves other receipts out.
+> `campaign-finance/elections/reference/council-embed.html`: `cfOtherReceipt`, inside
+> `cfCountable`. `campaign-finance/elections/embed/data.js`: `isOtherReceipt`, inside
+> `excludedType`, and `otherReceiptsOnPage` for the methodology’s figure. The gate,
+> `campaign-finance/elections/embed/tools/gate_bundle.js`, reads the rule in `[DUES/UNIF]`,
+> `[M2/FIGURES]`, `[M2/MAGNITUDE]`, `[M2/LISTS]`, `[M2/RENDER]`, `[M2/PAGE]`, `[M2/REGISTER]` and
+> `[METH/REGISTER]`; `campaign-finance/tools/council_render_fixture.js` reads the council voting
+> tool’s line, chips and other tabs in `[M2/OTHER]`, `[M2/LOAN]`, `[M2/OWN]` and `[M2/TABS]`.
+
+*Provenance: AUDIT-2 M2 ratification package, revision 1 (`audit-2-m2-package-rev1.md`), sha256 `8f07140080ac86bcc00e2d52efac91570bf32c8d77d8cd8a46bc1f72c2b10b8f`, 52,796 B / 375 L, region R1 (its lines 30–161), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Region R2 of the same package (its lines 171–198) is transcribed the same way into the entry `### CNCL-DATA-1 P2 — R8 and R9 as applied`, as that entry’s third amendment, and region R3 (its lines 208–214) into the entry `### SB-METH-1 — school-board methodology string C5`, after that entry’s provenance line; each has a provenance line of its own. Ratified by Ishan in chat 2026-10-06 as drafted (“1. ratify” for this region and “2. ratify” for regions R2 and R3; his items 3 to 11 each ruled “a”, and item 12 “ratify”), on his rulings of 2026-10-06. Arises from the numbers audit of 2026-09-29 (finding M2). Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-146`; `PS-147` occurring 0 times before this commit), never carried. Measured basis: `audit-2-m2-basis.py`, sha256 `53f56c5b6f5fbca6ce722b5bb4cb33d36b98c1e8bd5d8f8554452db36364e27e`, run by the planner on the data committed at `90b786ffac21e26b622f02a8bf17c937f0bc49b0`; the AUDIT-2 M2 HALT dispatch (§0) has the executor run it at that commit before anything is applied, and holds unless its output is byte for byte the planner’s, sha256 `59bf58c29c98e55520ab8a4abc8587dd95885cb15410c880a11e8c8e03871580`.*
+
 ---
 
 ## Rulings ratified without an id
@@ -2981,6 +3118,37 @@ The mechanism that materializes C5's `{DATA_THROUGH}` and the exact composition 
 
 *Provenance, amendment (the own-committee paragraph, C6): AUDIT-2 M5 ratification package, revision 1 (`audit-2-m5-package-rev1.md`), sha256 `7ec3e5b1a501875e2e8c94aba807611a423d38b1484741bc97db7c7be87c9292`, 19,149 B / 292 L, region R3 (its lines 214–222), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-02 as drafted. Recorded under the PS-93 pattern: no id is allocated, and the R9 block and the ARC-BOUNDARY-3 amendment stand unaltered above, because an amendment says what now governs rather than editing the superseded reading away. The gate’s `[METH/REGISTER]` reads C6 from this block and compares the rendered paragraph to it.*
 
+> **Amendment (other receipts and loans).** The municipal methodology on `/city-council` gains two
+> paragraphs, C7 and C8, plain paragraphs after C6 and before the verification section. The
+> school-board methodology on `/school-board-elections` gains one section, directly after the
+> paragraph under “Itemization follows the filings”, under the heading
+> **Other receipts and loans**: the same two paragraphs, C7 and then C8, defined once and used by
+> both branches. `methodologyView` takes a fourth argument, the page’s own other-receipts figures:
+> the sum of the lines on the page’s cards, in every election the page shows (for each card, the
+> rows of the committee the card reads that are filed as other receipts, off the own-committee
+> list, and dated inside that card’s election). C7’s `{OTHER_AMOUNT}` is that amount rendered as
+> currency to the cent and `{OTHER_COUNT}` is that count. C7 renders whole or not at all (figure
+> posture (i)). The composition is otherwise as it stands. For the school-board branch this amends
+> three statements of record, which otherwise stand: R9’s, above, that `school_board` takes the
+> existing branch unchanged except the verify sentence; the M5 amendment’s, above, that the
+> school-board methodology is unchanged; and the statement in the entry
+> `### SB-METH-1 — school-board methodology string C5` that the school-board view carries one
+> ratified string. C7 reads:
+>
+> Committees also report money that is not a contribution, a transfer or a loan. The state’s form
+> calls these “other receipts”: refunds, money from selling an asset or an investment, and similar
+> amounts. We do not count them in what a candidate raised or in any donor list. A candidate’s
+> card states the amount on its own line. Across the elections on this page they account for
+> {OTHER_AMOUNT} in {OTHER_COUNT} receipts.
+>
+> C8 reads:
+>
+> A loan to a committee is counted in what the candidate raised, as the committee filed it. A
+> candidate’s own loans are shown with the candidate’s own money. A loan is money the committee
+> may have to pay back; it is not a gift.
+
+*Provenance, amendment (other receipts and loans, C7 and C8): AUDIT-2 M2 ratification package, revision 1 (`audit-2-m2-package-rev1.md`), sha256 `8f07140080ac86bcc00e2d52efac91570bf32c8d77d8cd8a46bc1f72c2b10b8f`, 52,796 B / 375 L, region R2 (its lines 171–198), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-06 as drafted. Recorded under the PS-93 pattern: no id is allocated, and the R9 block and the two amendments above stand unaltered, because an amendment says what now governs rather than editing the superseded reading away. The gate’s `[METH/REGISTER]` reads C7, C8 and the school-board section’s heading from this block and compares the rendered paragraphs to them.*
+
 ### CNCL-DATA-1 P2 — display decisions
 
 The P2 display decisions ratified as a set, transcribed verbatim from addendum A1:
@@ -3083,6 +3251,16 @@ only the pull date.
 > and is checked as such.
 
 *Provenance (SB-METH-1): DATA-UPDATE-1 register ratification package, revision 1 (`data-update-1-register-package-sb-meth-1-rev1.md`), sha256 `d568796b7bb3b28938c121bdf42f68139d7c624d1354282be3838e50353c7336`, 2,724 B / 35 L, region §1, transcribed verbatim from the package's fenced block, text unaltered character for character. Ratified by Ishan in chat 2026-09-15 as drafted. Recorded under the PS-93 pattern: no id is allocated and the council set stands unaltered.*
+
+> **Amendment (AUDIT-2 M2, other receipts and loans).** The school-board methodology view carries
+> two more ratified strings, C7 and C8, under the heading “Other receipts and loans”, directly
+> after the paragraph under “Itemization follows the filings”. Their text, bindings and placement
+> are in the amendment of the same date to the entry `### CNCL-DATA-1 P2 — R8 and R9 as applied`;
+> both are defined once and used by both branches. “Scope of the set: one string” above is read
+> with this: C5 is still the one string this entry ratifies, and C1–C4 and C6 of the council set
+> are still not rendered on the school-board view.
+
+*Provenance, amendment (AUDIT-2 M2): AUDIT-2 M2 ratification package, revision 1 (`audit-2-m2-package-rev1.md`), sha256 `8f07140080ac86bcc00e2d52efac91570bf32c8d77d8cd8a46bc1f72c2b10b8f`, 52,796 B / 375 L, region R3 (its lines 208–214), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-06 as drafted. Recorded under the PS-93 pattern: no id is allocated, and the block above stands unaltered. The strings themselves are in the entry `### CNCL-DATA-1 P2 — R8 and R9 as applied`, where the gate’s `[METH/REGISTER]` reads them.*
 
 ### IE-NAMES-1 — one id per IE funder, as ruled
 

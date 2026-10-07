@@ -65,7 +65,7 @@ from datetime import datetime, timezone
 # build_rollups bucketed the aggregates it reconciles against, and a second copy of
 # `_bucket` is a divergence waiting to happen.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_rollups import EXCLUDED_CYCLES, WINDOWS_PATH, _bucket, _office_type  # noqa: E402
+from build_rollups import EXCLUDED_CYCLES, WINDOWS_PATH, _bucket, _office_type, is_other_receipt  # noqa: E402
 
 DUES_TYPE = "IE Committee Dues Transfer"
 
@@ -248,7 +248,7 @@ def scan_committee_rows(ed, candidacy_ids):
     (election, donor_id) -> list of itemized rows.
 
     The row filters are EXACTLY build_rollups' by_person filters — Aggregate-typed
-    donors, EXCLUDED_CYCLES, dues transfers, unresolvable donors — because these rows are
+    donors, EXCLUDED_CYCLES, dues transfers, other receipts, unresolvable donors — because these rows are
     reconciled cent-for-cent against the aggregates that pass produced. A filter that
     differs by one predicate makes the reconciliation assert a coincidence rather than an
     identity.
@@ -291,6 +291,8 @@ def scan_committee_rows(ed, candidacy_ids):
             # is_aggregate and EXCLUDED_CYCLES filters above — so the figure is what
             # THIS exclusion removes, not what earlier predicates already dropped.
             _DUES_SKIPPED[id(c)] = round(float(c.get("amount") or 0.0), 2)
+            continue
+        if is_other_receipt(c):   # M2: the same predicate build_rollups applies, imported
             continue
         did = c.get("donor_id")
         if did is None or did not in donors or did in aggregate_ids:

@@ -22,7 +22,7 @@ DUES_TYPE='IE Committee Dues Transfer'
 # build(d) directly with no filename in scope), so presence is the only signal available at
 # the point the write must happen. It also preserves R1 (iv)'s "if any" exactly —
 # election-data.json carries no version field, so none is written and none is invented.
-COUNCIL_SCHEMA_VERSION='2.2'   # 2.2 (M5): contribution rows may carry is_own_committee
+COUNCIL_SCHEMA_VERSION='2.3'   # 2.2 (M5): contribution rows may carry is_own_committee; 2.3 (M2): other_receipts_excluded
 # Keyed by id() of the row, NOT appended: the three predicate sites are three passes
 # over the SAME contributions list, so a row excluded by all three must still count
 # once (R1 i). id() is stable for the lifetime of the loaded document, which is the
@@ -33,6 +33,24 @@ COUNCIL_SCHEMA_VERSION='2.2'   # 2.2 (M5): contribution rows may carry is_own_co
 _DUES_SKIPPED={}
 def _dues_record(c):
     _DUES_SKIPPED[id(c)]=round(float(c.get('amount') or 0.0),2)
+# AUDIT-2 M2 — a committee's "other receipts" are excluded from every published total, at the
+# same three sites as the dues transfers, and their magnitude is emitted the same way. They
+# are the rows the State Board's form D-2 itemizes on Schedule A as "other receipts": money
+# a committee takes in that is not a contribution, a transfer in or a loan (a refund, the
+# sale of an asset or an investment, and receipts of no other kind). convert_bulk_receipts
+# types them from the bulk export's D2Part column.
+# ONE predicate (PS-94), imported by build_sb_finance. A row on the own-committee list keeps
+# its M5 treatment whatever its filed type (PS-142, "as filed"): stamp_own_committee runs at
+# build() entry, before any site below reads the stamp.
+OTHER_RECEIPT_TYPE='Other Receipt'
+_OTHER_SKIPPED={}
+def is_other_receipt(c):
+    return c.get('contribution_type')==OTHER_RECEIPT_TYPE and not c.get('is_own_committee')
+def _other_record(c):
+    _OTHER_SKIPPED[id(c)]=round(float(c.get('amount') or 0.0),2)
+def other_receipts_excluded_total():
+    return {'amount':round(float(sum(_OTHER_SKIPPED.values())),2),'count':len(_OTHER_SKIPPED)}
+
 def dues_excluded_total():
     """R1: {amount, count} over every row the dues predicate excluded this build.
 
@@ -200,6 +218,7 @@ def _bucket(date,wins):
     return None
 
 def build(d):
+    _OTHER_SKIPPED.clear()
     _DUES_SKIPPED.clear()   # R1 (i): reset at every build() entry — build() runs more than once per pipeline run
     donors=d['donors']; comms=d['committees']; contribs=d['contributions']
     ies=d.get('independent_expenditures',[])
@@ -228,6 +247,7 @@ def build(d):
         # Internal union-dues transfers into a committee's own PAC fund the PAC; they
         # are not giving/spend on the Council. ingest_ie types them distinctly.
         if c.get('contribution_type')==DUES_TYPE: _dues_record(c); continue
+        if is_other_receipt(c): _other_record(c); continue
         dv=donors.get(c.get('donor_id'))
         if dv is None or c['donor_id'] in agg: continue
         amt=c.get('amount') or 0.0; cyc=c['cycle']
@@ -343,6 +363,7 @@ def build(d):
             if c.get('is_aggregate'): continue
             if c['cycle'] in EXCLUDED_CYCLES: continue
             if c.get('contribution_type')==DUES_TYPE: _dues_record(c); continue
+            if is_other_receipt(c): _other_record(c); continue
             rc=comms.get(c['committee_id'])
             if not (rc and rc.get('candidate_id')): continue
             eb=slot(rc['candidate_id'],c.get('date'))
@@ -391,6 +412,7 @@ def build(d):
                 if c.get('is_aggregate'): continue
                 if c['cycle'] in EXCLUDED_CYCLES: continue
                 if c.get('contribution_type')==DUES_TYPE: _dues_record(c); continue
+                if is_other_receipt(c): _other_record(c); continue
                 slug=c.get('committee_id'); ppid=slug_person.get(slug)
                 if not ppid: continue
                 dv=donors.get(c.get('donor_id'))
@@ -444,6 +466,7 @@ def build(d):
     # ELEC-FIGURE-1 R1 — emitted at every magnitude including zero (R1 ii), per-artifact
     # (R1 iii): this reflects the exclusions from THIS document's substrate, this build.
     d['dues_excluded']=dues_excluded_total()
+    d['other_receipts_excluded']=other_receipts_excluded_total()   # M2: emitted at every magnitude, per artifact
     # ELEC-FIGURE-1 §2 — the version is written here, so it is a build product rather than
     # a hand-carried literal. String type preserved. See COUNCIL_SCHEMA_VERSION above for
     # why this keys off the field's presence rather than the artifact's name.

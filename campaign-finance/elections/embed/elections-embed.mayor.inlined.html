@@ -57,6 +57,13 @@
   // Cycles never shown (out of SBE range / unattributable). Always excluded.
   var EXCLUDED_CYCLES = { 'pre-2011': 1, 'undated': 1 };
   var DUES_TYPE = 'IE Committee Dues Transfer';
+  // AUDIT-2 M2: a committee's "other receipts" (money it takes in that is not a contribution, a
+  // transfer in or a loan) leave every figure and every list, with the dues. ONE predicate for the
+  // exclusion set, read at every site that aggregates rows (PS-94). A row on the own-committee
+  // list keeps its M5 treatment whatever its filed type (PS-142, "as filed").
+  var OTHER_RECEIPT_TYPE = 'Other Receipt';
+  function isOtherReceipt(c) { return c.contribution_type === OTHER_RECEIPT_TYPE && !c.is_own_committee; }
+  function excludedType(c) { return c.contribution_type === DUES_TYPE || isOtherReceipt(c); }
 
   // Election windows — mirrors campaign-finance/elections/election-windows.json (the
   // browser embed can't read that file at runtime). A finance row slices to an election
@@ -273,7 +280,7 @@
       var ck = ct.committee_id;
       var candId = candByCommittee[ck];
       var donor = donors[ct.donor_id];
-      var inScope = !EXCLUDED_CYCLES[ct.cycle] && ct.contribution_type !== DUES_TYPE;
+      var inScope = !EXCLUDED_CYCLES[ct.cycle] && !excludedType(ct);
       if (inScope && ct.cycle) cyclesSeen[ct.cycle] = 1;
 
       if (candId) {
@@ -402,13 +409,14 @@
   // cycle = null -> all-time (all non-excluded cycles); else a specific cycle code.
   function candidateFigures(index, candidateId, cycle, win) {
     var direct = index.directByCandidate[candidateId] || [];
-    var total = 0, self = 0, own = 0, count = 0;
+    var total = 0, self = 0, own = 0, count = 0, other = 0, otherCount = 0;
     for (var i = 0; i < direct.length; i++) {
       var c = direct[i];
       if (EXCLUDED_CYCLES[c.cycle]) continue;
       if (c.contribution_type === DUES_TYPE) continue;
       if (cycle != null && c.cycle !== cycle) continue;
       if (win && !inWindow(c.date, win)) continue;
+      if (isOtherReceipt(c)) { other += c.amount || 0; otherCount++; continue; }   // M2: stated, never counted
       var a = c.amount || 0;
       total += a; count++;
       if (c.is_self) self += a;
@@ -419,9 +427,37 @@
     return {
       contributions: { total: round2(total), selfFunded: round2(self), ownCommittee: round2(own),
                        thirdParty: round2(total - self - own), count: count },
+      otherReceipts: { total: round2(other), count: otherCount },   // M2
       independentSupport: round2(sup.amount), independentSupportCount: sup.count,
       independentOpposition: round2(opp.amount), independentOppositionCount: opp.count
     };
+  }
+
+  // AUDIT-2 M2: C7's two figures, for the page this index serves. Every card on the page's
+  // races, in every election the page shows, reads its other-receipts line from candidateFigures,
+  // through its funding candidacy, in its race's own window (raceView). This sums those same
+  // reads, so the methodology states the total of the lines a reader can open on the page. It is
+  // NOT the artifact's `other_receipts_excluded`: that field covers every office the file holds
+  // and every date since the subject begins, and a page would state money none of its cards show.
+  // A race with no window is skipped here; its card already fails loud (PS-79, B1).
+  function otherReceiptsOnPage(index) {
+    if (index._memo && index._memo.otherOnPage) return index._memo.otherOnPage;
+    var offices = index.office ? (OFFICE_RACE_OFFICES[index.office] || []) : null, amt = 0, cnt = 0;
+    for (var i = 0; i < index.races.length; i++) {
+      var r = index.races[i], w = raceWin(r);
+      if ((offices && offices.indexOf(r.office) < 0) || !raceIsLive(index, r) || !w) continue;
+      var cs = index.candidatesByRace[r.id] || [];
+      for (var j = 0; j < cs.length; j++) {
+        if (cs[j].vacating_for && index.raceById[cs[j].vacating_for]) continue;   // a pointer, not a card
+        var fid = fundingCandidacy(index, cs[j]);
+        if (!fid) continue;
+        var o = candidateFigures(index, fid, null, w).otherReceipts;
+        amt += o.total; cnt += o.count;
+      }
+    }
+    var out = { amount: round2(amt), count: cnt };
+    if (index._memo) index._memo.otherOnPage = out;
+    return out;
   }
 
   // FIX-1 (E1): a candidate's committee receipts dated before the office's earliest window
@@ -438,7 +474,7 @@
     var rows = index.directByCandidate[candidateId] || [], total = 0, count = 0;
     for (var i = 0; i < rows.length; i++) {
       var c = rows[i];
-      if (EXCLUDED_CYCLES[c.cycle] || c.contribution_type === DUES_TYPE) continue;
+      if (EXCLUDED_CYCLES[c.cycle] || excludedType(c)) continue;
       if (!c.date || c.date >= u.start) continue;
       total += c.amount || 0; count++;
     }
@@ -473,7 +509,7 @@
     for (var i = 0; i < rows.length; i++) {
       var c = rows[i];
       if (EXCLUDED_CYCLES[c.cycle]) continue;
-      if (c.contribution_type === DUES_TYPE) continue;
+      if (excludedType(c)) continue;
       if (cycle != null && c.cycle !== cycle) continue;
       if (win && !inWindow(c.date, win)) continue;
       var donor = index.donors[c.donor_id] || {};
@@ -506,7 +542,7 @@
     var by = {};
     for (var i = 0; i < rows.length; i++) {
       var c = rows[i];
-      if (c.contribution_type === DUES_TYPE) continue;        // internal dues transfers are not giving
+      if (excludedType(c)) continue;        // internal dues transfers are not giving
       // PS-93: out-of-subject money (pre-2011/undated cycles) never enters an unchosen
       // figure — this lifetime funder total fed the "Funded primarily by" identity line
       // from money every other surface excluded (EXCL-UNIFORM; the SEIU PAC case).
@@ -556,7 +592,7 @@
     var by = {}, entBy = {}, cyc = {}, kept = 0;
     for (var i = 0; i < rows.length; i++) {
       var c = rows[i];
-      if (c.contribution_type === DUES_TYPE) continue;
+      if (excludedType(c)) continue;
       // PS-93: excluded here too, not only by the click-context window — the windowless
       // opener the person surface's affordance will create (E7) makes this line
       // load-bearing, and the open-start 2024 window admits pre-2011 dates by itself.
@@ -703,10 +739,12 @@
     var cand2 = candId ? (index.candidateById[candId] || {}) : {};
     var race2 = cand2.race_id ? (index.raceById[cand2.race_id] || {}) : {};
     var contrib = candId ? withInKind(index, candId, win, candidateContributors(index, candId, null, win)) : { lines: [], total: 0, count: 0 };
+    // AUDIT-2 M2 (OR-E1): the committee's other receipts in the same window, stated under "raised".
+    var other = candId ? candidateFigures(index, candId, null, win).otherReceipts : { total: 0, count: 0 };
     return {
       committee_id: committeeKey, kind: 'candidate', name: cm.committee_name || committeeKey, win: win || null,
       candidateName: cand2.name || null, raceLabel: race2.label || null, sunshineUrl: sun, isIE: false,
-      raised: contrib.total, funders: contrib.lines, funderTotal: contrib.total, funderCount: contrib.count
+      raised: contrib.total, otherReceipts: other, funders: contrib.lines, funderTotal: contrib.total, funderCount: contrib.count
     };
   }
 
@@ -759,7 +797,7 @@
     var dr = index.directByCandidate[candidateId] || [];
     for (var d = 0; d < dr.length; d++) {
       var c = dr[d];
-      if (EXCLUDED_CYCLES[c.cycle] || c.contribution_type === DUES_TYPE) continue;
+      if (EXCLUDED_CYCLES[c.cycle] || excludedType(c)) continue;
       if (cycle != null && c.cycle !== cycle) continue;
       if (win && !inWindow(c.date, win)) continue;
       var donor = index.donors[c.donor_id] || {}, amt = c.amount || 0;
@@ -914,6 +952,7 @@
           // committee, IE from this candidacy's own rows — never summed (FW-1).
           figures: hasFinance ? {
             contributions: fFund.contributions,
+            otherReceipts: fFund.otherReceipts,   // M2: with the money it sits beside, from the funding candidacy
             independentSupport: fOwn.independentSupport, independentSupportCount: fOwn.independentSupportCount,
             independentOpposition: fOwn.independentOpposition, independentOppositionCount: fOwn.independentOppositionCount
           } : null,
@@ -1076,6 +1115,7 @@
         officeType: officeType(race.office),
         raceLabel: race.district || raceCode(race),
         contributions: contrib,                          // direct only — never an IE stream
+        otherReceipts: f ? f.otherReceipts : { total: 0, count: 0 },   // M2
         qualifier: mc.election_note || ''                // string 5: verbatim from the data
       });
     }
@@ -1087,7 +1127,7 @@
       var rows = index.directByCandidate[ownerId] || [];
       for (var k = 0; k < rows.length && !hasOutOfWindow; k++) {
         var row = rows[k];
-        if (EXCLUDED_CYCLES[row.cycle] || row.contribution_type === DUES_TYPE) continue;
+        if (EXCLUDED_CYCLES[row.cycle] || excludedType(row)) continue;
         var inAny = false;
         for (var w = 0; w < memberWins.length; w++) {
           if (memberWins[w] && inWindow(row.date, memberWins[w])) { inAny = true; break; }
@@ -1147,7 +1187,7 @@
     if (!cd || !cd.lines) return cd;
     var rows = index.directByCandidate[candidateId] || [], ik = {}, tot = {};
     for (var i = 0; i < rows.length; i++) {
-      var c = rows[i]; if (EXCLUDED_CYCLES[c.cycle] || c.contribution_type === DUES_TYPE || (win && !inWindow(c.date, win))) continue;
+      var c = rows[i]; if (EXCLUDED_CYCLES[c.cycle] || excludedType(c) || (win && !inWindow(c.date, win))) continue;
       var d = index.donors[c.donor_id] || {}, pid = d.parent_id || c.donor_id, a = c.amount || 0;
       tot[pid] = (tot[pid] || 0) + a; if (c.is_in_kind) ik[pid] = (ik[pid] || 0) + a;
     }
@@ -1242,7 +1282,7 @@
         // M5: the chip names what the donor IS, so it is read before any scope filter — a
         // listed giver is one whichever of its gifts the active window shows.
         if (c.is_own_committee) ownGiver = true;
-        if (c.contribution_type === DUES_TYPE) continue;
+        if (excludedType(c)) continue;
         if (!keep(c.cycle)) continue;
         if (win && !inWindow(c.date, win)) continue;
         if (!recipInScope(index, c.committee_id, win)) continue;
@@ -1406,7 +1446,7 @@
       var cid = cand.id;
       var dr = index.directByCandidate[cid] || [];
       for (var d = 0; d < dr.length; d++) {
-        var c = dr[d]; if (c.contribution_type === DUES_TYPE || !keep(c.cycle)) continue;
+        var c = dr[d]; if (excludedType(c) || !keep(c.cycle)) continue;
         if (win && !inWindow(c.date, win)) continue;
         var donor = index.donors[c.donor_id] || {}, amt = c.amount || 0;
         var inds = (donor.industries && donor.industries.length) ? donor.industries : ['uncategorized'];
@@ -1513,7 +1553,7 @@
     candidateIE: candidateIE,
     spenderFunders: spenderFunders,
     donorFootprint: donorFootprint,
-    committeeProfile: committeeProfile,
+    committeeProfile: committeeProfile, otherReceiptsOnPage: otherReceiptsOnPage,
     committeeMeta: committeeMeta,
     sunshineUrl: sunshineUrl,
     availableCycles: availableCycles,
@@ -1906,6 +1946,7 @@
       '.ipg-elect .zero{color:#A99B91;font-weight:400;}' +
       '.ipg-elect .selfline{font-size:12px;color:var(--coral);margin:11px 0 0;padding-left:182px;}' +
       '.ipg-elect .selfline b{font-weight:500;}' +
+      '.ipg-elect .otherline{font-size:12px;color:var(--ink-soft);margin:11px 0 0;}.ipg-elect .card .otherline{padding-left:182px;}.ipg-elect .otherline b{font-weight:500;}' +
       '.ipg-elect .caption{font-size:11.5px;color:var(--ink-soft);margin:14px 0 0;padding-top:13px;border-top:1px solid var(--line);}' +
       '.ipg-elect .elec-block{margin:0 0 10px;}' +
       '.ipg-elect .elec-block-h{font-family:var(--display);font-weight:600;font-size:18px;color:var(--teal);margin:0 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line);}' +
@@ -1916,7 +1957,7 @@
       '.ipg-elect footer{margin:34px 0 50px;padding-top:22px;border-top:2px solid var(--line);font-size:12.5px;color:var(--ink-soft);}' +
       '.ipg-elect footer h3{font-family:var(--display);font-weight:600;color:var(--ink);font-size:15px;margin:0 0 8px;}' +
       '.ipg-elect footer p{margin:0 0 12px;}.ipg-elect footer .src{font-size:11.5px;}' +
-      '@media (max-width:560px){.ipg-elect .barrow{grid-template-columns:1fr;gap:4px;}.ipg-elect .barval{text-align:left;}.ipg-elect .selfline{padding-left:0;}}' +
+      '@media (max-width:560px){.ipg-elect .barrow{grid-template-columns:1fr;gap:4px;}.ipg-elect .barval{text-align:left;}.ipg-elect .selfline{padding-left:0;}.ipg-elect .card .otherline{padding-left:0;}}' +
       '.ipg-elect .methodology{max-width:70ch;line-height:1.6;}' +
       '.ipg-elect .methodology h2{font-family:var(--display);font-size:26px;margin:8px 0 12px;}' +
       '.ipg-elect .methodology h3{font-size:15px;font-weight:600;margin:24px 0 6px;}' +
@@ -2207,7 +2248,7 @@
         '<div class="modal-name">' + esc(p.name) + '</div>' +
         '<p class="modal-note">Campaign committee' + (p.candidateName ? ' for <b>' + esc(p.candidateName) + '</b>' : '') +
         (p.raceLabel ? ' — ' + esc(p.raceLabel) : '') + '.' + sun + '</p>';
-      summary = '<div class="modal-summary">' + money(p.raised) + ' raised</div>';
+      summary = '<div class="modal-summary">' + money(p.raised) + ' raised</div>' + otherReceiptsLine(p.otherReceipts);   // M2
     }
     var label = p.isIE
       ? ('Who funds this committee · ' + money(p.funderTotal) + ' from ' + plural(p.funderCount, 'funder', 'funders') + ' (dues excluded)')
@@ -2254,6 +2295,7 @@
       } else {
         body = '<p class="committee person-no-money">No itemized contributions reported for this election.</p>';   // string 3
       }
+      body += otherReceiptsLine(s.otherReceipts);   // M2
       var qual = s.qualifier ? '<p class="committee prior-note">' + esc(s.qualifier) + '</p>' : '';   // string 5: verbatim, no wrapper
       return '<div class="person-member">' + head + body + qual + '</div>';
     }).join('');
@@ -2353,6 +2395,12 @@
   // other-committee money. Those two parts appear only when above zero; "from other donors" is
   // always last and always printed, at $0 if need be. Each figure is rounded on its own. With no
   // other-committee money the sentence is, byte for byte, the one this replaced.
+  // AUDIT-2 M2 (OR-E1): other receipts are stated on their own line under the bars, never inside a
+  // figure. The card, the person surface and a campaign committee's pop-up call this.
+  function otherReceiptsLine(o) {
+    return (o && o.total > 0)
+      ? '<p class="otherline">Other receipts, not counted above: <b>' + money(o.total) + '</b></p>' : '';
+  }
   function ownMoneyLine(c) {
     var own = c.selfFunded || 0, oc = c.ownCommittee || 0, parts = [];
     if (!(own > 0) && !(oc > 0)) return '';
@@ -2411,7 +2459,7 @@
         money(c.preWindow.total) + '</b></p>' : '';
     return '<article class="card" id="cand-' + esc(c.slug) + '">' +
       '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' + chips + '</div>' + resultNote(c) + committeeLine + filedLine + priorLine + personLine +
-      '<div class="bars">' + contribBar + contribPanel + supportBar + supportPanel + opposeBar + opposePanel + '</div>' + selfLine + preLine +
+      '<div class="bars">' + contribBar + contribPanel + supportBar + supportPanel + opposeBar + opposePanel + '</div>' + selfLine + otherReceiptsLine(f.otherReceipts) + preLine +
       '<p class="caption">Independent support and opposition are spending by outside groups, reported by those ' +
       'groups and not coordinated with the campaign. Figures are shown separately, never added together.</p></article>';
   }
@@ -2567,7 +2615,7 @@
   // transport rule and R9's named source intact and departs only from R9's incidental rendering
   // of the signature, so that is what this does — and it is flagged at the HALT rather than
   // quietly chosen.
-  function methodologyView(verify, office, duesExcluded) {
+  function methodologyView(verify, office, duesExcluded, otherExcluded) {
     verify = verify || {};
     var reconUrl = verify.reconUrl || '', gapsUrl = verify.gapsUrl || '';
     var reconLink = reconUrl
@@ -2635,10 +2683,27 @@
       'disclosed divergence with its evidence. This verification covers direct contributions to candidate ' +
       'committees; independent-expenditure filings are ingested from SBE but not yet independently reconciled ' +
       'the same way.</p>';
+    // AUDIT-2 M2: C7, other receipts, and C8, loans. Defined once and used by both branches, like
+    // the three expressions above. The register's bytes, typographic apostrophes and quotation
+    // marks included. C7 binds the page's own two figures (data.js, otherReceiptsOnPage) and renders
+    // WHOLE OR NOT AT ALL (figure posture (i)), like C4.
+    var orX = otherExcluded || null;
+    var orAmt = orX ? moneyCents(orX.amount) : null;
+    var orCnt = (orX && typeof orX.count === 'number' && isFinite(orX.count))
+      ? orX.count.toLocaleString('en-US') : null;
+    var C7 = (orAmt != null && orCnt != null)
+      ? ('Committees also report money that is not a contribution, a transfer or a loan. The state’s form calls ' +
+         'these “other receipts”: refunds, money from selling an asset or an investment, and similar amounts. We do ' +
+         'not count them in what a candidate raised or in any donor list. A candidate’s card states the amount on ' +
+         'its own line. Across the elections on this page they account for ' + orAmt + ' in ' + orCnt + ' receipts.')
+      : null;
+    var C8 = 'A loan to a committee is counted in what the candidate raised, as the committee filed it. A ' +
+      'candidate’s own loans are shown with the candidate’s own money. A loan is money the committee may have to ' +
+      'pay back; it is not a gift.';
 
     if (office === 'city_council') {
-      // R9's composition as amended at M5: the frame, six <p> carrying C1, C2, C5, C3, C4, C6,
-      // then the verification section. NO <h3> precedes any C-string, and no school-board
+      // R9's composition as amended at M5 and M2: the frame, eight <p> carrying C1, C2, C5, C3, C4,
+      // C6, C7, C8, then the verification section. NO <h3> precedes any C-string, and no school-board
       // section is carried across — [MUNI/SUBJ] is the guard that makes the second of those
       // structural rather than careful, since the school-board body names its own subject.
       //
@@ -2672,7 +2737,7 @@
         'such as a fund for a state or federal office. We count it in the total raised and label it ' +
         '“From the candidate’s other committee.” It is not the candidate’s personal money, and it is not a ' +
         'contribution from an outside donor. We mark only committees we have confirmed belong to the same person.';
-      var paras = [C1, C2, C5, C3, C4, C6];
+      var paras = [C1, C2, C5, C3, C4, C6, C7, C8];   // M2: C7 and C8, plain <p>s after C6
       return METH_FRAME_OPEN +
         paras.map(function (t) { return t == null ? '' : '<p>' + t + '</p>'; }).join('') +
         VERIFICATION_SECTION +
@@ -2710,6 +2775,9 @@
       'disclosure boundaries follow the filings themselves. Every contribution a committee itemizes on its ' +
       'Schedule A appears here individually, attributed to the named donor as the committee reported it. We do ' +
       'not add donors SBE doesn’t disclose, and we do not summarize away donors it does.</p>' +
+      // AUDIT-2 M2: the council branch's C7 and C8, under this branch's own heading.
+      '<h3>Other receipts and loans</h3>' +
+      (C7 == null ? '' : '<p>' + C7 + '</p>') + '<p>' + C8 + '</p>' +
       '<h3>The same donor, named two ways</h3>' +
       '<p>Illinois records the same person’s name two ways depending on the form — direct itemized ' +
       'contributions arrive as “Smith, John,” while independent-expenditure committees list funders as ' +
@@ -3007,7 +3075,7 @@
       // subject and sources, so an office with no ratified methodology renders coming-soon
       // on this tab like every other tab, rather than shipping another office's copy.
       inner = METHODOLOGY_OFFICES[state.office]
-        ? methodologyView(state.verify, state.office, state.duesExcluded)
+        ? methodologyView(state.verify, state.office, state.duesExcluded, state.otherExcluded)
         : officeComingSoon(state.office);
       return '<div class="wrap">' + masthead(state.office, state.topView) +
         '<section>' + inner + '</section>' + footer() + '</div>';
@@ -3256,7 +3324,7 @@
     // artifact this index was built from, so they cannot go missing independently of it —
     // putting them on `verify` would say otherwise. undefined/null flows through to C4 not
     // rendering at all (figure posture (i)).
-    var state = { office: office, duesExcluded: (index && index.duesExcluded) || null,
+    var state = { office: office, duesExcluded: (index && index.duesExcluded) || null, otherExcluded: index ? ElectData.otherReceiptsOnPage(index) : null,
       topView: 'byrace', activeSlug: null, cycle: null, spendTab: 'donors',
       election: urlSel || (selOpts[0] && selOpts[0].id) || null,
       donorFilters: { search: '', type: 'All', industry: 'All', flag: 'All' }, raceFilter: 'all',
@@ -3272,7 +3340,7 @@
       var rv = raceId ? ElectData.viewModels.raceView(index, raceId, state.cycle) : null;
       var spend = state.topView === 'spend' ? ElectData.spendSubtab(index, state.office, state.spendTab, state.cycle, state.election, state.donorFilters, state.raceFilter, state.expandedCandidateId) : null;
       root.innerHTML = ElectRender.renderPage({
-        office: state.office, duesExcluded: state.duesExcluded,
+        office: state.office, duesExcluded: state.duesExcluded, otherExcluded: state.otherExcluded,
         topView: state.topView, cycles: cycles, cycle: state.cycle,
         officeRaces: omVM, activeSlug: state.activeSlug, raceView: rv, spend: spend,
         selector: { options: selOpts, active: state.election }, verify: state.verify

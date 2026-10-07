@@ -39,6 +39,13 @@
   // Cycles never shown (out of SBE range / unattributable). Always excluded.
   var EXCLUDED_CYCLES = { 'pre-2011': 1, 'undated': 1 };
   var DUES_TYPE = 'IE Committee Dues Transfer';
+  // AUDIT-2 M2: a committee's "other receipts" (money it takes in that is not a contribution, a
+  // transfer in or a loan) leave every figure and every list, with the dues. ONE predicate for the
+  // exclusion set, read at every site that aggregates rows (PS-94). A row on the own-committee
+  // list keeps its M5 treatment whatever its filed type (PS-142, "as filed").
+  var OTHER_RECEIPT_TYPE = 'Other Receipt';
+  function isOtherReceipt(c) { return c.contribution_type === OTHER_RECEIPT_TYPE && !c.is_own_committee; }
+  function excludedType(c) { return c.contribution_type === DUES_TYPE || isOtherReceipt(c); }
 
   // Election windows — mirrors campaign-finance/elections/election-windows.json (the
   // browser embed can't read that file at runtime). A finance row slices to an election
@@ -255,7 +262,7 @@
       var ck = ct.committee_id;
       var candId = candByCommittee[ck];
       var donor = donors[ct.donor_id];
-      var inScope = !EXCLUDED_CYCLES[ct.cycle] && ct.contribution_type !== DUES_TYPE;
+      var inScope = !EXCLUDED_CYCLES[ct.cycle] && !excludedType(ct);
       if (inScope && ct.cycle) cyclesSeen[ct.cycle] = 1;
 
       if (candId) {
@@ -384,13 +391,14 @@
   // cycle = null -> all-time (all non-excluded cycles); else a specific cycle code.
   function candidateFigures(index, candidateId, cycle, win) {
     var direct = index.directByCandidate[candidateId] || [];
-    var total = 0, self = 0, own = 0, count = 0;
+    var total = 0, self = 0, own = 0, count = 0, other = 0, otherCount = 0;
     for (var i = 0; i < direct.length; i++) {
       var c = direct[i];
       if (EXCLUDED_CYCLES[c.cycle]) continue;
       if (c.contribution_type === DUES_TYPE) continue;
       if (cycle != null && c.cycle !== cycle) continue;
       if (win && !inWindow(c.date, win)) continue;
+      if (isOtherReceipt(c)) { other += c.amount || 0; otherCount++; continue; }   // M2: stated, never counted
       var a = c.amount || 0;
       total += a; count++;
       if (c.is_self) self += a;
@@ -401,9 +409,37 @@
     return {
       contributions: { total: round2(total), selfFunded: round2(self), ownCommittee: round2(own),
                        thirdParty: round2(total - self - own), count: count },
+      otherReceipts: { total: round2(other), count: otherCount },   // M2
       independentSupport: round2(sup.amount), independentSupportCount: sup.count,
       independentOpposition: round2(opp.amount), independentOppositionCount: opp.count
     };
+  }
+
+  // AUDIT-2 M2: C7's two figures, for the page this index serves. Every card on the page's
+  // races, in every election the page shows, reads its other-receipts line from candidateFigures,
+  // through its funding candidacy, in its race's own window (raceView). This sums those same
+  // reads, so the methodology states the total of the lines a reader can open on the page. It is
+  // NOT the artifact's `other_receipts_excluded`: that field covers every office the file holds
+  // and every date since the subject begins, and a page would state money none of its cards show.
+  // A race with no window is skipped here; its card already fails loud (PS-79, B1).
+  function otherReceiptsOnPage(index) {
+    if (index._memo && index._memo.otherOnPage) return index._memo.otherOnPage;
+    var offices = index.office ? (OFFICE_RACE_OFFICES[index.office] || []) : null, amt = 0, cnt = 0;
+    for (var i = 0; i < index.races.length; i++) {
+      var r = index.races[i], w = raceWin(r);
+      if ((offices && offices.indexOf(r.office) < 0) || !raceIsLive(index, r) || !w) continue;
+      var cs = index.candidatesByRace[r.id] || [];
+      for (var j = 0; j < cs.length; j++) {
+        if (cs[j].vacating_for && index.raceById[cs[j].vacating_for]) continue;   // a pointer, not a card
+        var fid = fundingCandidacy(index, cs[j]);
+        if (!fid) continue;
+        var o = candidateFigures(index, fid, null, w).otherReceipts;
+        amt += o.total; cnt += o.count;
+      }
+    }
+    var out = { amount: round2(amt), count: cnt };
+    if (index._memo) index._memo.otherOnPage = out;
+    return out;
   }
 
   // FIX-1 (E1): a candidate's committee receipts dated before the office's earliest window
@@ -420,7 +456,7 @@
     var rows = index.directByCandidate[candidateId] || [], total = 0, count = 0;
     for (var i = 0; i < rows.length; i++) {
       var c = rows[i];
-      if (EXCLUDED_CYCLES[c.cycle] || c.contribution_type === DUES_TYPE) continue;
+      if (EXCLUDED_CYCLES[c.cycle] || excludedType(c)) continue;
       if (!c.date || c.date >= u.start) continue;
       total += c.amount || 0; count++;
     }
@@ -455,7 +491,7 @@
     for (var i = 0; i < rows.length; i++) {
       var c = rows[i];
       if (EXCLUDED_CYCLES[c.cycle]) continue;
-      if (c.contribution_type === DUES_TYPE) continue;
+      if (excludedType(c)) continue;
       if (cycle != null && c.cycle !== cycle) continue;
       if (win && !inWindow(c.date, win)) continue;
       var donor = index.donors[c.donor_id] || {};
@@ -488,7 +524,7 @@
     var by = {};
     for (var i = 0; i < rows.length; i++) {
       var c = rows[i];
-      if (c.contribution_type === DUES_TYPE) continue;        // internal dues transfers are not giving
+      if (excludedType(c)) continue;        // internal dues transfers are not giving
       // PS-93: out-of-subject money (pre-2011/undated cycles) never enters an unchosen
       // figure — this lifetime funder total fed the "Funded primarily by" identity line
       // from money every other surface excluded (EXCL-UNIFORM; the SEIU PAC case).
@@ -538,7 +574,7 @@
     var by = {}, entBy = {}, cyc = {}, kept = 0;
     for (var i = 0; i < rows.length; i++) {
       var c = rows[i];
-      if (c.contribution_type === DUES_TYPE) continue;
+      if (excludedType(c)) continue;
       // PS-93: excluded here too, not only by the click-context window — the windowless
       // opener the person surface's affordance will create (E7) makes this line
       // load-bearing, and the open-start 2024 window admits pre-2011 dates by itself.
@@ -685,10 +721,12 @@
     var cand2 = candId ? (index.candidateById[candId] || {}) : {};
     var race2 = cand2.race_id ? (index.raceById[cand2.race_id] || {}) : {};
     var contrib = candId ? withInKind(index, candId, win, candidateContributors(index, candId, null, win)) : { lines: [], total: 0, count: 0 };
+    // AUDIT-2 M2 (OR-E1): the committee's other receipts in the same window, stated under "raised".
+    var other = candId ? candidateFigures(index, candId, null, win).otherReceipts : { total: 0, count: 0 };
     return {
       committee_id: committeeKey, kind: 'candidate', name: cm.committee_name || committeeKey, win: win || null,
       candidateName: cand2.name || null, raceLabel: race2.label || null, sunshineUrl: sun, isIE: false,
-      raised: contrib.total, funders: contrib.lines, funderTotal: contrib.total, funderCount: contrib.count
+      raised: contrib.total, otherReceipts: other, funders: contrib.lines, funderTotal: contrib.total, funderCount: contrib.count
     };
   }
 
@@ -741,7 +779,7 @@
     var dr = index.directByCandidate[candidateId] || [];
     for (var d = 0; d < dr.length; d++) {
       var c = dr[d];
-      if (EXCLUDED_CYCLES[c.cycle] || c.contribution_type === DUES_TYPE) continue;
+      if (EXCLUDED_CYCLES[c.cycle] || excludedType(c)) continue;
       if (cycle != null && c.cycle !== cycle) continue;
       if (win && !inWindow(c.date, win)) continue;
       var donor = index.donors[c.donor_id] || {}, amt = c.amount || 0;
@@ -896,6 +934,7 @@
           // committee, IE from this candidacy's own rows — never summed (FW-1).
           figures: hasFinance ? {
             contributions: fFund.contributions,
+            otherReceipts: fFund.otherReceipts,   // M2: with the money it sits beside, from the funding candidacy
             independentSupport: fOwn.independentSupport, independentSupportCount: fOwn.independentSupportCount,
             independentOpposition: fOwn.independentOpposition, independentOppositionCount: fOwn.independentOppositionCount
           } : null,
@@ -1058,6 +1097,7 @@
         officeType: officeType(race.office),
         raceLabel: race.district || raceCode(race),
         contributions: contrib,                          // direct only — never an IE stream
+        otherReceipts: f ? f.otherReceipts : { total: 0, count: 0 },   // M2
         qualifier: mc.election_note || ''                // string 5: verbatim from the data
       });
     }
@@ -1069,7 +1109,7 @@
       var rows = index.directByCandidate[ownerId] || [];
       for (var k = 0; k < rows.length && !hasOutOfWindow; k++) {
         var row = rows[k];
-        if (EXCLUDED_CYCLES[row.cycle] || row.contribution_type === DUES_TYPE) continue;
+        if (EXCLUDED_CYCLES[row.cycle] || excludedType(row)) continue;
         var inAny = false;
         for (var w = 0; w < memberWins.length; w++) {
           if (memberWins[w] && inWindow(row.date, memberWins[w])) { inAny = true; break; }
@@ -1129,7 +1169,7 @@
     if (!cd || !cd.lines) return cd;
     var rows = index.directByCandidate[candidateId] || [], ik = {}, tot = {};
     for (var i = 0; i < rows.length; i++) {
-      var c = rows[i]; if (EXCLUDED_CYCLES[c.cycle] || c.contribution_type === DUES_TYPE || (win && !inWindow(c.date, win))) continue;
+      var c = rows[i]; if (EXCLUDED_CYCLES[c.cycle] || excludedType(c) || (win && !inWindow(c.date, win))) continue;
       var d = index.donors[c.donor_id] || {}, pid = d.parent_id || c.donor_id, a = c.amount || 0;
       tot[pid] = (tot[pid] || 0) + a; if (c.is_in_kind) ik[pid] = (ik[pid] || 0) + a;
     }
@@ -1224,7 +1264,7 @@
         // M5: the chip names what the donor IS, so it is read before any scope filter — a
         // listed giver is one whichever of its gifts the active window shows.
         if (c.is_own_committee) ownGiver = true;
-        if (c.contribution_type === DUES_TYPE) continue;
+        if (excludedType(c)) continue;
         if (!keep(c.cycle)) continue;
         if (win && !inWindow(c.date, win)) continue;
         if (!recipInScope(index, c.committee_id, win)) continue;
@@ -1388,7 +1428,7 @@
       var cid = cand.id;
       var dr = index.directByCandidate[cid] || [];
       for (var d = 0; d < dr.length; d++) {
-        var c = dr[d]; if (c.contribution_type === DUES_TYPE || !keep(c.cycle)) continue;
+        var c = dr[d]; if (excludedType(c) || !keep(c.cycle)) continue;
         if (win && !inWindow(c.date, win)) continue;
         var donor = index.donors[c.donor_id] || {}, amt = c.amount || 0;
         var inds = (donor.industries && donor.industries.length) ? donor.industries : ['uncategorized'];
@@ -1495,7 +1535,7 @@
     candidateIE: candidateIE,
     spenderFunders: spenderFunders,
     donorFootprint: donorFootprint,
-    committeeProfile: committeeProfile,
+    committeeProfile: committeeProfile, otherReceiptsOnPage: otherReceiptsOnPage,
     committeeMeta: committeeMeta,
     sunshineUrl: sunshineUrl,
     availableCycles: availableCycles,

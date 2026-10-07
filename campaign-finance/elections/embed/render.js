@@ -375,6 +375,7 @@
       '.ipg-elect .zero{color:#A99B91;font-weight:400;}' +
       '.ipg-elect .selfline{font-size:12px;color:var(--coral);margin:11px 0 0;padding-left:182px;}' +
       '.ipg-elect .selfline b{font-weight:500;}' +
+      '.ipg-elect .otherline{font-size:12px;color:var(--ink-soft);margin:11px 0 0;}.ipg-elect .card .otherline{padding-left:182px;}.ipg-elect .otherline b{font-weight:500;}' +
       '.ipg-elect .caption{font-size:11.5px;color:var(--ink-soft);margin:14px 0 0;padding-top:13px;border-top:1px solid var(--line);}' +
       '.ipg-elect .elec-block{margin:0 0 10px;}' +
       '.ipg-elect .elec-block-h{font-family:var(--display);font-weight:600;font-size:18px;color:var(--teal);margin:0 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line);}' +
@@ -385,7 +386,7 @@
       '.ipg-elect footer{margin:34px 0 50px;padding-top:22px;border-top:2px solid var(--line);font-size:12.5px;color:var(--ink-soft);}' +
       '.ipg-elect footer h3{font-family:var(--display);font-weight:600;color:var(--ink);font-size:15px;margin:0 0 8px;}' +
       '.ipg-elect footer p{margin:0 0 12px;}.ipg-elect footer .src{font-size:11.5px;}' +
-      '@media (max-width:560px){.ipg-elect .barrow{grid-template-columns:1fr;gap:4px;}.ipg-elect .barval{text-align:left;}.ipg-elect .selfline{padding-left:0;}}' +
+      '@media (max-width:560px){.ipg-elect .barrow{grid-template-columns:1fr;gap:4px;}.ipg-elect .barval{text-align:left;}.ipg-elect .selfline{padding-left:0;}.ipg-elect .card .otherline{padding-left:0;}}' +
       '.ipg-elect .methodology{max-width:70ch;line-height:1.6;}' +
       '.ipg-elect .methodology h2{font-family:var(--display);font-size:26px;margin:8px 0 12px;}' +
       '.ipg-elect .methodology h3{font-size:15px;font-weight:600;margin:24px 0 6px;}' +
@@ -676,7 +677,7 @@
         '<div class="modal-name">' + esc(p.name) + '</div>' +
         '<p class="modal-note">Campaign committee' + (p.candidateName ? ' for <b>' + esc(p.candidateName) + '</b>' : '') +
         (p.raceLabel ? ' — ' + esc(p.raceLabel) : '') + '.' + sun + '</p>';
-      summary = '<div class="modal-summary">' + money(p.raised) + ' raised</div>';
+      summary = '<div class="modal-summary">' + money(p.raised) + ' raised</div>' + otherReceiptsLine(p.otherReceipts);   // M2
     }
     var label = p.isIE
       ? ('Who funds this committee · ' + money(p.funderTotal) + ' from ' + plural(p.funderCount, 'funder', 'funders') + ' (dues excluded)')
@@ -723,6 +724,7 @@
       } else {
         body = '<p class="committee person-no-money">No itemized contributions reported for this election.</p>';   // string 3
       }
+      body += otherReceiptsLine(s.otherReceipts);   // M2
       var qual = s.qualifier ? '<p class="committee prior-note">' + esc(s.qualifier) + '</p>' : '';   // string 5: verbatim, no wrapper
       return '<div class="person-member">' + head + body + qual + '</div>';
     }).join('');
@@ -822,6 +824,12 @@
   // other-committee money. Those two parts appear only when above zero; "from other donors" is
   // always last and always printed, at $0 if need be. Each figure is rounded on its own. With no
   // other-committee money the sentence is, byte for byte, the one this replaced.
+  // AUDIT-2 M2 (OR-E1): other receipts are stated on their own line under the bars, never inside a
+  // figure. The card, the person surface and a campaign committee's pop-up call this.
+  function otherReceiptsLine(o) {
+    return (o && o.total > 0)
+      ? '<p class="otherline">Other receipts, not counted above: <b>' + money(o.total) + '</b></p>' : '';
+  }
   function ownMoneyLine(c) {
     var own = c.selfFunded || 0, oc = c.ownCommittee || 0, parts = [];
     if (!(own > 0) && !(oc > 0)) return '';
@@ -880,7 +888,7 @@
         money(c.preWindow.total) + '</b></p>' : '';
     return '<article class="card" id="cand-' + esc(c.slug) + '">' +
       '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' + chips + '</div>' + resultNote(c) + committeeLine + filedLine + priorLine + personLine +
-      '<div class="bars">' + contribBar + contribPanel + supportBar + supportPanel + opposeBar + opposePanel + '</div>' + selfLine + preLine +
+      '<div class="bars">' + contribBar + contribPanel + supportBar + supportPanel + opposeBar + opposePanel + '</div>' + selfLine + otherReceiptsLine(f.otherReceipts) + preLine +
       '<p class="caption">Independent support and opposition are spending by outside groups, reported by those ' +
       'groups and not coordinated with the campaign. Figures are shown separately, never added together.</p></article>';
   }
@@ -1036,7 +1044,7 @@
   // transport rule and R9's named source intact and departs only from R9's incidental rendering
   // of the signature, so that is what this does — and it is flagged at the HALT rather than
   // quietly chosen.
-  function methodologyView(verify, office, duesExcluded) {
+  function methodologyView(verify, office, duesExcluded, otherExcluded) {
     verify = verify || {};
     var reconUrl = verify.reconUrl || '', gapsUrl = verify.gapsUrl || '';
     var reconLink = reconUrl
@@ -1104,10 +1112,27 @@
       'disclosed divergence with its evidence. This verification covers direct contributions to candidate ' +
       'committees; independent-expenditure filings are ingested from SBE but not yet independently reconciled ' +
       'the same way.</p>';
+    // AUDIT-2 M2: C7, other receipts, and C8, loans. Defined once and used by both branches, like
+    // the three expressions above. The register's bytes, typographic apostrophes and quotation
+    // marks included. C7 binds the page's own two figures (data.js, otherReceiptsOnPage) and renders
+    // WHOLE OR NOT AT ALL (figure posture (i)), like C4.
+    var orX = otherExcluded || null;
+    var orAmt = orX ? moneyCents(orX.amount) : null;
+    var orCnt = (orX && typeof orX.count === 'number' && isFinite(orX.count))
+      ? orX.count.toLocaleString('en-US') : null;
+    var C7 = (orAmt != null && orCnt != null)
+      ? ('Committees also report money that is not a contribution, a transfer or a loan. The state’s form calls ' +
+         'these “other receipts”: refunds, money from selling an asset or an investment, and similar amounts. We do ' +
+         'not count them in what a candidate raised or in any donor list. A candidate’s card states the amount on ' +
+         'its own line. Across the elections on this page they account for ' + orAmt + ' in ' + orCnt + ' receipts.')
+      : null;
+    var C8 = 'A loan to a committee is counted in what the candidate raised, as the committee filed it. A ' +
+      'candidate’s own loans are shown with the candidate’s own money. A loan is money the committee may have to ' +
+      'pay back; it is not a gift.';
 
     if (office === 'city_council') {
-      // R9's composition as amended at M5: the frame, six <p> carrying C1, C2, C5, C3, C4, C6,
-      // then the verification section. NO <h3> precedes any C-string, and no school-board
+      // R9's composition as amended at M5 and M2: the frame, eight <p> carrying C1, C2, C5, C3, C4,
+      // C6, C7, C8, then the verification section. NO <h3> precedes any C-string, and no school-board
       // section is carried across — [MUNI/SUBJ] is the guard that makes the second of those
       // structural rather than careful, since the school-board body names its own subject.
       //
@@ -1141,7 +1166,7 @@
         'such as a fund for a state or federal office. We count it in the total raised and label it ' +
         '“From the candidate’s other committee.” It is not the candidate’s personal money, and it is not a ' +
         'contribution from an outside donor. We mark only committees we have confirmed belong to the same person.';
-      var paras = [C1, C2, C5, C3, C4, C6];
+      var paras = [C1, C2, C5, C3, C4, C6, C7, C8];   // M2: C7 and C8, plain <p>s after C6
       return METH_FRAME_OPEN +
         paras.map(function (t) { return t == null ? '' : '<p>' + t + '</p>'; }).join('') +
         VERIFICATION_SECTION +
@@ -1179,6 +1204,9 @@
       'disclosure boundaries follow the filings themselves. Every contribution a committee itemizes on its ' +
       'Schedule A appears here individually, attributed to the named donor as the committee reported it. We do ' +
       'not add donors SBE doesn’t disclose, and we do not summarize away donors it does.</p>' +
+      // AUDIT-2 M2: the council branch's C7 and C8, under this branch's own heading.
+      '<h3>Other receipts and loans</h3>' +
+      (C7 == null ? '' : '<p>' + C7 + '</p>') + '<p>' + C8 + '</p>' +
       '<h3>The same donor, named two ways</h3>' +
       '<p>Illinois records the same person’s name two ways depending on the form — direct itemized ' +
       'contributions arrive as “Smith, John,” while independent-expenditure committees list funders as ' +
@@ -1476,7 +1504,7 @@
       // subject and sources, so an office with no ratified methodology renders coming-soon
       // on this tab like every other tab, rather than shipping another office's copy.
       inner = METHODOLOGY_OFFICES[state.office]
-        ? methodologyView(state.verify, state.office, state.duesExcluded)
+        ? methodologyView(state.verify, state.office, state.duesExcluded, state.otherExcluded)
         : officeComingSoon(state.office);
       return '<div class="wrap">' + masthead(state.office, state.topView) +
         '<section>' + inner + '</section>' + footer() + '</div>';

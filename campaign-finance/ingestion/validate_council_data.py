@@ -87,6 +87,7 @@ def validate(d):
     errors.extend(validate_votes(d))
     errors.extend(validate_members(d))
     errors.extend(validate_dues_excluded(d))
+    errors.extend(validate_other_receipts_excluded(d))
     errors.extend(validate_stream_fusion(d))
     errors.extend(validate_ie_split(d))
     errors.extend(validate_own_committee(d))
@@ -789,12 +790,13 @@ def validate_committee_linkage(d):
 DUES_TYPE_CHECK = 'IE Committee Dues Transfer'
 EXCLUDED_CYCLES_CHECK = {'pre-2011', 'undated'}
 IE_RECEIPT_TYPE_CHECK = 'IE Committee Receipt'   # PS-138; build_rollups' by_parent literal
+OTHER_RECEIPT_TYPE_CHECK = 'Other Receipt'       # AUDIT-2 M2; build_rollups' OTHER_RECEIPT_TYPE
 
 # ELEC-FIGURE-1 §2 — the schema version this lane's shape requires, asserted at the other
 # end of the ownership build_rollups now holds. Stated here rather than imported, for the
 # PS-82 reason the predicate above is stated here. Presence-conditional to match the
 # builder: election-data.json carries no version field and none is invented.
-COUNCIL_SCHEMA_VERSION_CHECK = '2.2'
+COUNCIL_SCHEMA_VERSION_CHECK = '2.3'
 
 
 def _dues_recount(contribs):
@@ -816,6 +818,29 @@ def _dues_recount(contribs):
         if c.get('cycle') in EXCLUDED_CYCLES_CHECK:
             continue
         if c.get('contribution_type') != DUES_TYPE_CHECK:
+            continue
+        amount += round(float(c.get('amount') or 0.0), 2)
+        count += 1
+    return round(float(amount), 2), count
+
+
+def _other_recount(contribs):
+    """AUDIT-2 M2 — independent recount of what the other-receipts predicate excludes.
+
+    Same scope reasoning as `_dues_recount`: the builder's accumulator sits at its predicate,
+    which every rollup pass reaches only after the is_aggregate and excluded-cycle filters. A
+    row on the own-committee list is not an other receipt for this purpose whatever its filed
+    type: PS-142 keeps a listed pair's rows counted, as filed.
+    """
+    amount, count = 0.0, 0
+    for c in contribs:
+        if c.get('is_aggregate'):
+            continue
+        if c.get('cycle') in EXCLUDED_CYCLES_CHECK:
+            continue
+        if c.get('contribution_type') != OTHER_RECEIPT_TYPE_CHECK:
+            continue
+        if c.get('is_own_committee'):
             continue
         amount += round(float(c.get('amount') or 0.0), 2)
         count += 1
@@ -1000,7 +1025,8 @@ def validate_dues_excluded(d):
     if 'schema_version' in d and d['schema_version'] != COUNCIL_SCHEMA_VERSION_CHECK:
         errors.append(f"schema_version {d['schema_version']!r} != "
                       f"{COUNCIL_SCHEMA_VERSION_CHECK!r} — the dues_excluded field's shape "
-                      f"requires it and M5's is_own_committee row field moved it to 2.2; build_rollups writes it")
+                      f"requires it, M5's is_own_committee row field moved it to 2.2 and M2's "
+                      f"other_receipts_excluded field to 2.3; build_rollups writes it")
 
     dx = d.get('dues_excluded')
 
@@ -1034,6 +1060,46 @@ def validate_dues_excluded(d):
     return errors
 
 
+def validate_other_receipts_excluded(d):
+    """AUDIT-2 M2 — the other-receipts exclusion's magnitude: premise rule, then value rule.
+
+    PS-128 declaration: MODE B — live-derived, premise asserted by the check itself. The field
+    is emitted by build_rollups at every magnitude including zero, into both artifacts, so its
+    absence is an error and never a skip. The value is compared to this module's own recount,
+    under a predicate stated here rather than imported (PS-82).
+    """
+    errors = []
+    if 'contributions' not in d:
+        return errors          # not a contributions-bearing artifact; nothing to assert
+    ox = d.get('other_receipts_excluded')
+    if ox is None:
+        errors.append("other_receipts_excluded: field absent — the magnitude of the "
+                      "other-receipts exclusion must be emitted at every magnitude including "
+                      "zero (AUDIT-2 M2)")
+        return errors
+    if not isinstance(ox, dict):
+        errors.append(f"other_receipts_excluded: expected an object, got {type(ox).__name__}")
+        return errors
+    amt, cnt = ox.get('amount'), ox.get('count')
+    if not isinstance(amt, (int, float)) or isinstance(amt, bool):
+        errors.append(f"other_receipts_excluded.amount: expected a number, got {amt!r}")
+    elif amt < 0:
+        errors.append(f"other_receipts_excluded.amount: negative ({amt})")
+    if not isinstance(cnt, int) or isinstance(cnt, bool):
+        errors.append(f"other_receipts_excluded.count: expected an integer, got {cnt!r}")
+    elif cnt < 0:
+        errors.append(f"other_receipts_excluded.count: negative ({cnt})")
+    if errors:
+        return errors
+    exp_amt, exp_cnt = _other_recount(d.get('contributions', []))
+    if round(float(amt), 2) != exp_amt:
+        errors.append(f"other_receipts_excluded.amount {amt} != independent recount {exp_amt} "
+                      f"(to the cent, over this artifact's own contributions)")
+    if cnt != exp_cnt:
+        errors.append(f"other_receipts_excluded.count {cnt} != independent recount {exp_cnt}")
+    return errors
+
+
 def validate_ie_split(d):
     """PS-138 (E2) — money INTO an independent-expenditure committee is `independent`.
 
@@ -1050,8 +1116,8 @@ def validate_ie_split(d):
         is what lets the two readings stay one rule.
     (2) THE SPLIT. Every by_parent entry's `direct` and `independent` equal this check's own
         recount under the builder's exclusion set (is_aggregate, excluded cycles, dues,
-        Aggregate-typed or unknown donors), to the cent, and `direct + independent` equals
-        `total`, to the cent.
+        other receipts off the own-committee list, Aggregate-typed or unknown donors), to the
+        cent, and `direct + independent` equals `total`, to the cent.
     """
     errors = []
     if 'contributions' not in d:
@@ -1077,6 +1143,8 @@ def validate_ie_split(d):
             into_untyped.append(c.get('id'))
         if c.get('is_aggregate') or c.get('cycle') in EXCLUDED_CYCLES_CHECK:
             continue
+        if ctype == OTHER_RECEIPT_TYPE_CHECK and not c.get('is_own_committee'):
+            continue                       # AUDIT-2 M2: an other receipt is in no total
         dv = donors.get(c.get('donor_id'))
         if dv is None or c.get('donor_id') in agg:
             continue
@@ -1442,11 +1510,60 @@ def self_test():
           {'members': []}, None)
     # §2 — the version assertion, both ways.
     dcase("[DUES/SCHEMA] the ruled schema_version passes",
-          {'contributions': [_row], 'schema_version': '2.2',
+          {'contributions': [_row], 'schema_version': '2.3',
            'dues_excluded': {'amount': 100.0, 'count': 1}}, None)
     dcase("[DUES/SCHEMA] a stale schema_version errors",
-          {'contributions': [_row], 'schema_version': '2.1',
-           'dues_excluded': {'amount': 100.0, 'count': 1}}, "schema_version '2.1' !=")
+          {'contributions': [_row], 'schema_version': '2.2',
+           'dues_excluded': {'amount': 100.0, 'count': 1}}, "schema_version '2.2' !=")
+
+    # AUDIT-2 M2 — the other-receipts rules, fired on synthetic fixtures.
+    # PS-128 declaration: MODE A — pinned independently of live repo state. No artifact on
+    # disk is read; each fixture is a literal.
+    def xcase(name, artifact, expect):
+        errs = validate_other_receipts_excluded(artifact)
+        ok = (not errs) if expect is None else any(expect in e for e in errs)
+        results.append((name, ok))
+        print(f"SELF-TEST {'PASS' if ok else 'FAIL'}  {name}")
+        if not ok:
+            print(f"          expected {expect!r}, got: {errs}")
+
+    _orow = {'contribution_type': 'Other Receipt', 'amount': 250.0, 'cycle': '2027'}
+
+    xcase("[OTHER/PREMISE] a contributions-bearing artifact with NO other_receipts_excluded errors",
+          {'contributions': [_orow]}, "field absent")
+    xcase("[OTHER/PREMISE] a non-object other_receipts_excluded errors",
+          {'contributions': [_orow], 'other_receipts_excluded': 250.0}, "expected an object")
+    xcase("[OTHER/PREMISE] a non-numeric amount errors",
+          {'contributions': [_orow], 'other_receipts_excluded': {'amount': '250', 'count': 1}},
+          "expected a number")
+    xcase("[OTHER/PREMISE] a non-integer count errors",
+          {'contributions': [_orow], 'other_receipts_excluded': {'amount': 250.0, 'count': 1.5}},
+          "expected an integer")
+    xcase("[OTHER/VALUE] a mismatched amount errors",
+          {'contributions': [_orow], 'other_receipts_excluded': {'amount': 249.0, 'count': 1}},
+          "!= independent recount")
+    xcase("[OTHER/VALUE] a mismatched count errors",
+          {'contributions': [_orow], 'other_receipts_excluded': {'amount': 250.0, 'count': 2}},
+          "count 2 != independent recount 1")
+    xcase("[OTHER/VALUE] the correct pair passes; a row of another type is not counted",
+          {'contributions': [_orow, _other],
+           'other_receipts_excluded': {'amount': 250.0, 'count': 1}}, None)
+    xcase("[OTHER/VALUE] zero rows with a zero field passes",
+          {'contributions': [_other], 'other_receipts_excluded': {'amount': 0.0, 'count': 0}}, None)
+    xcase("[OTHER/VALUE] an other receipt in an EXCLUDED cycle is not counted",
+          {'contributions': [dict(_orow, cycle='pre-2011')],
+           'other_receipts_excluded': {'amount': 0.0, 'count': 0}}, None)
+    xcase("[OTHER/VALUE] an is_aggregate other receipt is not counted",
+          {'contributions': [dict(_orow, is_aggregate=True)],
+           'other_receipts_excluded': {'amount': 0.0, 'count': 0}}, None)
+    xcase("[OTHER/VALUE] an other receipt on the own-committee list is not counted (PS-142)",
+          {'contributions': [_orow, dict(_orow, is_own_committee=True)],
+           'other_receipts_excluded': {'amount': 250.0, 'count': 1}}, None)
+    xcase("[OTHER/VALUE] counting a listed pair's row errors",
+          {'contributions': [_orow, dict(_orow, is_own_committee=True)],
+           'other_receipts_excluded': {'amount': 500.0, 'count': 2}}, "!= independent recount")
+    xcase("[OTHER/PREMISE] an artifact with no contributions key SKIPS cleanly",
+          {'members': []}, None)
 
     # ELEC-IDENTITY-1 R1 (iii) — the alder-linkage rules on synthetic fixtures.
     # PS-128 declaration: MODE A — pinned independently of live repo state. No artifact
@@ -1607,6 +1724,16 @@ def self_test():
                donors=dict(_dn, agg={'parent_id': 'p', 'type': 'Aggregate'})), None)
     icase("[IE/SPLIT] an IE receipt from a donor absent from donors is not recounted",
           _ia([_gift, _iegift, dict(_iegift, id='g7', donor_id='ghost')], _good), None)
+    _oth = {'id': 'g8', 'donor_id': 'p', 'committee_id': 'cand', 'amount': 7.0,
+            'cycle': '2027', 'contribution_type': 'Other Receipt'}
+    icase("[IE/SPLIT] an other receipt is not recounted (AUDIT-2 M2)",
+          _ia([_gift, _iegift, _oth], _good), None)
+    icase("[IE/SPLIT] an other receipt booked direct errors (the pre-M2 rollup)",
+          _ia([_gift, _iegift, _oth], {'p': {'direct': 107.0, 'independent': 40.0, 'total': 147.0}}),
+          "!= recount")
+    icase("[IE/SPLIT] an other receipt on the own-committee list IS recounted (PS-142)",
+          _ia([_gift, _iegift, dict(_oth, is_own_committee=True)],
+              {'p': {'direct': 107.0, 'independent': 40.0, 'total': 147.0}}), None)
     icase("[IE/SPLIT] a contributions-bearing artifact with no committees map errors (premise)",
           {'donors': _dn, 'contributions': [_gift], 'rollups': {'by_parent': _good}}, "no committees map")
     icase("[IE/SPLIT] an artifact with no contributions key SKIPS cleanly",

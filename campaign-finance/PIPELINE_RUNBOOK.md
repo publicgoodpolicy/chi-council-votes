@@ -255,6 +255,29 @@ Mechanism: `campaign-finance/MECHANISM_REFERENCE.md` §5 (C5.15).
 
 ---
 
+## Other receipts (left out of every total)
+
+`campaign-finance/ingestion/build_rollups.py` leaves a committee's other receipts out of every
+rollup, in both artifacts, at every build, and writes what it left out as
+`other_receipts_excluded`; `campaign-finance/ingestion/build_sb_finance.py` leaves them out of
+the school-board finance file through the same test. Nothing is run by hand, and no step is
+added to either chain. A row is an other receipt when its filed type is `Other Receipt` and it
+is not on the own-committee list above (PS-147).
+
+- **`other_receipts_excluded: field absent`, or a `schema_version` error, from
+  `campaign-finance/ingestion/validate_council_data.py`** — the artifact was not rebuilt by the
+  current builder. Re-run the builder on that artifact, then everything downstream of it.
+- **`other_receipts_excluded.amount` or `.count` differs from the independent recount, or an
+  `[IE/SPLIT]` entry is off its recount** — the builder's test and the validator's have come
+  apart. Stop and report it; do not edit either to make the build pass.
+- **The filed type is assigned at conversion.** `campaign-finance/ingestion/convert_bulk_receipts.py`
+  types each row from the bulk export's `D2Part` column. A change to that mapping changes what
+  this rule leaves out, and is a ruling before it is a code change.
+
+Mechanism: `campaign-finance/MECHANISM_REFERENCE.md` §5 (C5.16).
+
+---
+
 ## Cash on hand (`campaign-finance/ingestion/apply_cash_on_hand.py`)
 
 The council tool's cash-on-hand tile reads each ward committee's `cash_on_hand`, which this
