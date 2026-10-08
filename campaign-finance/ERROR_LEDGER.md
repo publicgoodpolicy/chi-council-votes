@@ -495,6 +495,108 @@ the moment a scope is drafted**; planner session state and memory indexes are no
 
 [Byte-copied from the AUDIT-2 HALT (i) register-side ratification package, revision 2 (`2a0c3acfdfd9489dc0d631fcaedc4ad98203740bfda204d43ec691b73da6b432`, 19,297 B / 184 L), its line 127, span sha256 `db09441bb500aa832b5d9b8c2f40be748a6667fde3e2b6d147f4c62b610863f5` (the line's bytes, no trailing newline). The leading `**190 …**` inside the copied text is the source's own, carried because the copy is byte for byte; the entry's number is this heading's. First text in revision 1 of that package (`1dde8391b959aec594aaa7853aaac578ba6d2cf7b35778d118902146868a94b3`, 17,799 B / 177 L), unchanged in revision 2. Offered as candidate 88 and ratified by Ishan 2026-10-01. Numbered 2026-10-01 at AUDIT-2 HALT (i).]
 
+### 191
+
+**191 (planner; candidate 88)** — HALT (i)'s push relay predicted that the fetch URL and the push URL would be the same string; the fetch URL is HTTPS and the push URL SSH, one repository (stated by the executor, not held). *Defense:* a relay predicts a configuration value only from a capture of it; otherwise it says "state it" and names what would be a hold (another repository, a second line).
+
+[The text after the opener is byte-copied from handover rev AL rev 1 (`fe92f6dc034d3fd331300b1b5d284ce353fccbb06575ed4c8d8d22eca008993b`, 511,829 B / 2,406 L), its line 415 without its first 13 bytes (the list marker, the bold label and the dash after it, with their spaces): 363 bytes, sha256 `0f4cb632d8b227a687231030f5e4dcd68199f13e8128dec36e2170dad14b89cd`, no trailing newline. The opener is the ledger's own. Offered as candidate 88 at handover rev AK rev 1 (`fdd762b8328257d976a6f49cea7dbe539755f085276a1183fdfe987cdc509f52`, 424,550 B / 2,064 L), which rev AL carries, and ratified by Ishan 2026-10-05. Candidate number 88 was given twice: entry 190 was offered and ratified under it on 2026-10-01, and handover rev AK rev 1 gave it again to this candidate on 2026-10-04. The two are different errors. "HALT (i)" in the text is AUDIT-2's. Candidates 88 to 93 are the seventh planner's, and their defenses were proposed by the eighth planner, who wrote rev AK (rev AL's lines 414 and 320). Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
+### 192
+
+**192 (planner; candidate 89)** — the M5 package's first draft carried 27 defects the independent reviewer found, and the BR-12 probe's first draft a guessed `DUES` literal and a skipped 2024 election; all fixed before travel. *Defense:* a literal a probe matches on is read from the code or the data it will run against, and a probe is run by the planner on its own clone over every election the artifact holds before its expected output is written.
+
+[The text after the opener is byte-copied from handover rev AL rev 1 (`fe92f6dc034d3fd331300b1b5d284ce353fccbb06575ed4c8d8d22eca008993b`, 511,829 B / 2,406 L), its line 416 without its first 13 bytes (the list marker, the bold label and the dash after it, with their spaces): 416 bytes, sha256 `da68e66d2ea7280d201dfa33f2cedf6ef81073bbbcdf7aa49d007c42b0f28929`, no trailing newline. The opener is the ledger's own. Offered as candidate 89 at handover rev AK rev 1 (`fdd762b8328257d976a6f49cea7dbe539755f085276a1183fdfe987cdc509f52`, 424,550 B / 2,064 L), which rev AL carries, and ratified by Ishan 2026-10-05. Candidates 88 to 93 are the seventh planner's, and their defenses were proposed by the eighth planner, who wrote rev AK (rev AL's lines 414 and 320). Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
+### 193
+
+**193 (planner; candidate 90)** — the first M5 simulation applied Ishan's cluster edits by editing the artifacts by hand, mis-stating a cluster total and two donor records. *Defense:* the addendum's convention 3 — a simulation runs the pipeline's own routines on the stated edits, then the real tails.
+
+[The text after the opener is byte-copied from handover rev AL rev 1 (`fe92f6dc034d3fd331300b1b5d284ce353fccbb06575ed4c8d8d22eca008993b`, 511,829 B / 2,406 L), its line 417 without its first 13 bytes (the list marker, the bold label and the dash after it, with their spaces): 269 bytes, sha256 `fcf250267e38c76a4e417461ca4351f81b956d424e93b078ba89c19f9e045131`, no trailing newline. The opener is the ledger's own. Offered as candidate 90 at handover rev AK rev 1 (`fdd762b8328257d976a6f49cea7dbe539755f085276a1183fdfe987cdc509f52`, 424,550 B / 2,064 L), which rev AL carries, and ratified by Ishan 2026-10-05. Candidates 88 to 93 are the seventh planner's, and their defenses were proposed by the eighth planner, who wrote rev AK (rev AL's lines 414 and 320). "The addendum" is the rev AK addendum, which rev AL carries; its convention 3 is at rev AL's line 383. Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
+### 194
+
+**194 (planner; candidate 91)** — the paste slip of 2026-10-04: the `/school-board-elections` packet went onto `/school-board-voting-history` (Ishan's hand; restored and corrected within the hour: the two verification reports' reads are 51 minutes apart). *Defense:* a paste dispatch names the cross-paste case and tells Ishan which line of the block already on the page to read before he replaces it (the addendum's convention 5, extended at M4).
+
+[The text after the opener is byte-copied from handover rev AL rev 1 (`fe92f6dc034d3fd331300b1b5d284ce353fccbb06575ed4c8d8d22eca008993b`, 511,829 B / 2,406 L), its line 418 without its first 13 bytes (the list marker, the bold label and the dash after it, with their spaces): 413 bytes, sha256 `86bdcc7ed26d8fcd370798eca1a44fd5cdcd18f290b582a8d62d12cb85f5f6c8`, no trailing newline. The opener is the ledger's own. Offered as candidate 91 at handover rev AK rev 1 (`fdd762b8328257d976a6f49cea7dbe539755f085276a1183fdfe987cdc509f52`, 424,550 B / 2,064 L), which rev AL carries, and ratified by Ishan 2026-10-05. Candidates 88 to 93 are the seventh planner's, and their defenses were proposed by the eighth planner, who wrote rev AK (rev AL's lines 414 and 320). "The addendum" is the rev AK addendum, which rev AL carries; its convention 5 is at rev AL's line 385. Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
+### 195
+
+**195 (planner; candidate 92)** — the M5 paste was re-verified on a chat instruction rather than on a revision of the dispatch (the executor flagged it; Ishan ruled the result satisfies the push premise). *Defense:* a re-check after a NOT VERIFIED or CHANGED verdict is a new revision of the paste dispatch; the M4 paste dispatch says so.
+
+[The text after the opener is byte-copied from handover rev AL rev 1 (`fe92f6dc034d3fd331300b1b5d284ce353fccbb06575ed4c8d8d22eca008993b`, 511,829 B / 2,406 L), its line 419 without its first 13 bytes (the list marker, the bold label and the dash after it, with their spaces): 304 bytes, sha256 `e294ac04bcf77b320fbc1628276669bb4f63a9d47475efc2118185b3cf7f48c4`, no trailing newline. The opener is the ledger's own. Offered as candidate 92 at handover rev AK rev 1 (`fdd762b8328257d976a6f49cea7dbe539755f085276a1183fdfe987cdc509f52`, 424,550 B / 2,064 L), which rev AL carries, and ratified by Ishan 2026-10-05. Candidates 88 to 93 are the seventh planner's, and their defenses were proposed by the eighth planner, who wrote rev AK (rev AL's lines 414 and 320). Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
+### 196
+
+**196 (planner; candidate 93)** — the seventh planner's sandbox refused a rehearsal commit, so the commit object's size was predicted by arithmetic alone (it held). *Defense:* none proposed; recorded as an instrument limit. This planner's sandbox allowed the rehearsal at M4, on a scratch worktree.
+
+[The text after the opener is byte-copied from handover rev AL rev 1 (`fe92f6dc034d3fd331300b1b5d284ce353fccbb06575ed4c8d8d22eca008993b`, 511,829 B / 2,406 L), its line 420 without its first 13 bytes (the list marker, the bold label and the dash after it, with their spaces): 264 bytes, sha256 `2ecfc74f7546440ed260d4dffd62910684798b0a8bca5b7f7f99f2f48d08a8f2`, no trailing newline. The opener is the ledger's own. Offered as candidate 93 at handover rev AK rev 1 (`fdd762b8328257d976a6f49cea7dbe539755f085276a1183fdfe987cdc509f52`, 424,550 B / 2,064 L), which rev AL carries, and ratified by Ishan 2026-10-05. Candidates 88 to 93 are the seventh planner's (rev AL's line 414); "This planner" in the last sentence is the eighth, who wrote rev AK (rev AL's line 320). Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
+### 197
+
+**197 (planner; candidate 94)** — this planner attached the M4 HALT carrier set to the same message that asked Ishan a ruling the set depended on (whether a new fixture check may require both kinds of industry list in the data). He relayed the set without answering; the planner treated that as the recommended answer and asked him to confirm at the HALT, which he did. *Defense:* a carrier is not delivered in the message that asks a ruling it rests on; the ruling is asked and answered first.
+
+[The text after the opener is byte-copied from handover rev AL rev 1 (`fe92f6dc034d3fd331300b1b5d284ce353fccbb06575ed4c8d8d22eca008993b`, 511,829 B / 2,406 L), its line 421 without its first 13 bytes (the list marker, the bold label and the dash after it, with their spaces): 460 bytes, sha256 `7b2fcc4e15cd1ec80d4dffe6bb5422c573c4dcb32213d55ccf202a3c68eb4e77`, no trailing newline. The opener is the ledger's own. Offered as candidate 94 at handover rev AK rev 1 (`fdd762b8328257d976a6f49cea7dbe539755f085276a1183fdfe987cdc509f52`, 424,550 B / 2,064 L), which rev AL carries, and ratified by Ishan 2026-10-05. "This planner" is the eighth, who wrote rev AK (rev AL's line 320). Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
+### 198
+
+**198 (planner; candidate 95)** — The planner reported that the "Who funds this committee" view stated no date basis, when the page already stated it. *Defense:* a statement about what a page shows is made from the rendered page or the render function, never from the view model alone.
+
+[The text after the opener is byte-copied from handover rev AL rev 1 (`fe92f6dc034d3fd331300b1b5d284ce353fccbb06575ed4c8d8d22eca008993b`, 511,829 B / 2,406 L), its line 240 without its first 33 bytes (the list marker and the bold label, with the space after each): 251 bytes, sha256 `9fab7037bc3ab2ebecc00cb6878e4907d54eb7c0bb818a67720fc83724c3b6d4`, no trailing newline. The opener is the ledger's own. Session-open relay 12, revision 1 (`458977de4ab111c49e2ce850e74bfe6fff3786551e84f1a1c0134938c0db6e2a`, 31,845 B / 195 L) numbers it candidate 95, in the part of that relay rev AL carries; ratified by Ishan 2026-10-05. "The planner" is the ninth. Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
+### 199
+
+**199 (planner; candidate 96)** — The planner premised PS-133's free-space floor on the M1 paste's read-only Stage 2 by copying the row from earlier dispatches, and Stage 2 held with the pasted pages live. *Defense:* S.4 item 1.
+
+[The text after the opener is byte-copied from handover rev AL rev 1 (`fe92f6dc034d3fd331300b1b5d284ce353fccbb06575ed4c8d8d22eca008993b`, 511,829 B / 2,406 L), its line 241 without its first 33 bytes (the list marker and the bold label, with the space after each): 194 bytes, sha256 `b70ed5789c3bec0758f40875ade338899ae8a60691886d0d51586e42199ebcab`, no trailing newline. The opener is the ledger's own. Session-open relay 12, revision 1 (`458977de4ab111c49e2ce850e74bfe6fff3786551e84f1a1c0134938c0db6e2a`, 31,845 B / 195 L) numbers it candidate 96, in the part of that relay rev AL carries; ratified by Ishan 2026-10-06. "The planner" is the ninth. "S.4 item 1" is the ruling of 2026-10-06 at rev AL's line 244: PS-133's free-space floor is a premise of a dispatch that directs a material operation, and a carrier that directs none states free space and does not hold on it. Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
+### 200
+
+**200 (planner; candidate 97)** — the planner’s first list of M2 rulings said the elections tool marks a loan on the donor’s row and cited FIX-1’s E4; E4 is PS-136, which marks a candidate’s own money, and the loan mark is an item chip inside the pop-up. The same list described other receipts as "interest, refunds and the like" without having read who paid them; the largest payer is Fidelity. Caught by the planner before the rulings were built on. *Defense:* a rulings list states what a page does today only from its code and the register entry, quoted; and it names the largest rows of any class of money it asks a ruling about.
+
+[The text after the opener is byte-copied from handover rev AL rev 1 (`fe92f6dc034d3fd331300b1b5d284ce353fccbb06575ed4c8d8d22eca008993b`, 511,829 B / 2,406 L), its line 282 without its first 23 bytes (the list marker, the bold label and the dash after it, with their spaces): 608 bytes, sha256 `b855351f2edc56749a66f6b2c654c36932a48c8cb6c4e4b4ba55b2368e427083`, no trailing newline. The opener is the ledger's own. Offered as candidate 97 in §8 of the AUDIT-2 M2 ratification package, revision 1 (`8f07140080ac86bcc00e2d52efac91570bf32c8d77d8cd8a46bc1f72c2b10b8f`, 52,796 B / 375 L), a section rev AL carries, and ratified by Ishan 2026-10-06. "The planner" is the ninth. Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
+### 201
+
+**201 (planner; candidate 98)** — the planner asked whether `/school-board-voting-history` should gain a line without putting PS-95’s disclosure clause beside the question (item 5). *Defense:* before a display question is asked about a rule that removes money from a figure, the register is searched for every ruling on disclosure of an exclusion, and the question quotes what it finds.
+
+[The text after the opener is byte-copied from handover rev AL rev 1 (`fe92f6dc034d3fd331300b1b5d284ce353fccbb06575ed4c8d8d22eca008993b`, 511,829 B / 2,406 L), its line 283 without its first 23 bytes (the list marker, the bold label and the dash after it, with their spaces): 354 bytes, sha256 `1243ff97f8e12daf106b95d0dd923124d01e4e086c3ea084813d6457ae3288ec`, no trailing newline. The opener is the ledger's own. Offered as candidate 98 in §8 of the AUDIT-2 M2 ratification package, revision 1 (`8f07140080ac86bcc00e2d52efac91570bf32c8d77d8cd8a46bc1f72c2b10b8f`, 52,796 B / 375 L), a section rev AL carries, and ratified by Ishan 2026-10-06. "The planner" is the ninth; "item 5" is an item of that package. Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
+### 202
+
+**202 (planner; candidate 99)** — the draft rendered for Ishan stated the data file’s one figure on the school-board page’s methodology, and the planner’s first correction still stated on `/city-council` a third more than that page’s cards show; the first reviewer caught the second (item 3). *Defense:* a figure taken from an artifact is checked against the scope of the page that will state it, in offices and in dates, before it is rendered for a ruling.
+
+[The text after the opener is byte-copied from handover rev AL rev 1 (`fe92f6dc034d3fd331300b1b5d284ce353fccbb06575ed4c8d8d22eca008993b`, 511,829 B / 2,406 L), its line 284 without its first 23 bytes (the list marker, the bold label and the dash after it, with their spaces): 431 bytes, sha256 `5f7af3617eb138cf7b854e91d0f077478d69c3189cc7ac3589290bfea99b3e95`, no trailing newline. The opener is the ledger's own. Offered as candidate 99 in §8 of the AUDIT-2 M2 ratification package, revision 1 (`8f07140080ac86bcc00e2d52efac91570bf32c8d77d8cd8a46bc1f72c2b10b8f`, 52,796 B / 375 L), a section rev AL carries, and ratified by Ishan 2026-10-06. "The planner" is the ninth; "item 3" is an item of that package. Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
+### 203
+
+**203 (planner; candidate 100)** — the planner’s draft of R1 said the amount left out is stated "where a committee’s money is shown" and had not listed where that is; the first reviewer found a pop-up that showed a committee’s money without the line (item 4). *Defense:* a register sentence that says "wherever" or "every" is drafted from a list of the places, and the list is in the entry.
+
+[The text after the opener is byte-copied from handover rev AL rev 1 (`fe92f6dc034d3fd331300b1b5d284ce353fccbb06575ed4c8d8d22eca008993b`, 511,829 B / 2,406 L), its line 285 without its first 24 bytes (the list marker, the bold label and the dash after it, with their spaces): 361 bytes, sha256 `fadb1a69b19e0811ab31b3ede25f72f86966d47b0a32d924ed7641e65113d670`, no trailing newline. The opener is the ledger's own. Offered as candidate 100 in §8 of the AUDIT-2 M2 ratification package, revision 1 (`8f07140080ac86bcc00e2d52efac91570bf32c8d77d8cd8a46bc1f72c2b10b8f`, 52,796 B / 375 L), a section rev AL carries, and ratified by Ishan 2026-10-06. "The planner" is the ninth; "item 4" is an item of that package and "R1" its register entry for M2, which landed as PS-147. Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
+### 204
+
+**204 (planner; candidate 101)** — not this planner’s, found here: commits that re-pinned a file in the mechanism reference moved its coordinates by the commit’s line count without re-deriving them, so coordinates that were already wrong stayed wrong under a current pin (§6.4). *Defense:* a commit that re-stamps a pin re-derives every coordinate into that file by what the row says it points at, and its dispatch states how many were checked and how many were corrected.
+
+[The text after the opener is byte-copied from handover rev AL rev 1 (`fe92f6dc034d3fd331300b1b5d284ce353fccbb06575ed4c8d8d22eca008993b`, 511,829 B / 2,406 L), its line 286 without its first 24 bytes (the list marker, the bold label and the dash after it, with their spaces): 442 bytes, sha256 `ec70d9bcf09cf6d41372890f1aa31b888065184d4be40dd4bafe8b3f90a5ca01`, no trailing newline. The opener is the ledger's own. Offered as candidate 101 in §8 of the AUDIT-2 M2 ratification package, revision 1 (`8f07140080ac86bcc00e2d52efac91570bf32c8d77d8cd8a46bc1f72c2b10b8f`, 52,796 B / 375 L), a section rev AL carries, and ratified by Ishan 2026-10-06. "This planner" is the ninth and "here" is AUDIT-2 M2; "§6.4" is a section of that package. Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
+### 205
+
+**205 (planner; candidate 102)** — the paste dispatch's first draft let Stage 2 read into a folder that could still hold Stage 1's block files. A failed extraction writes nothing, so a stale block would have been compared as the page's. *Defense:* where a tool leaves no output on failure, the dispatch names a new, empty capture folder per stage and has every exit code stated.
+
+[The text after the opener is byte-copied from handover rev AL rev 1 (`fe92f6dc034d3fd331300b1b5d284ce353fccbb06575ed4c8d8d22eca008993b`, 511,829 B / 2,406 L), its line 269 without its first 14 bytes (the list marker, the bold label and the dash after it, with their spaces) and its last 120 bytes (a space and the handover's own bracketed note): 343 bytes, sha256 `b64f2fe493d5a989b69c0593ea7d972b62dd083be70d153b74913cf7c66c66e7`. The opener is the ledger's own. Rev AL numbers it candidate 102; ratified by Ishan 2026-10-07. "The paste dispatch" is AUDIT-2 M2's, the ninth planner's. Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
+### 206
+
+**206 (planner; candidate 103)** — the push relay's first draft told a fresh session to read session-open relay 12 without giving its three values, while the prompt treats a file without matching values as absent. *Defense:* every file a carrier tells the executor to read is named at its three values, and the generator asserts it.
+
+[The text after the opener is byte-copied from handover rev AL rev 1 (`fe92f6dc034d3fd331300b1b5d284ce353fccbb06575ed4c8d8d22eca008993b`, 511,829 B / 2,406 L), its line 270 without its first 14 bytes (the list marker, the bold label and the dash after it, with their spaces) and its last 117 bytes (a space and the handover's own bracketed note): 297 bytes, sha256 `7a4a5feec35c42cfb683db7b6e26041db7dbc239c1fabe008c71be3631739d2f`. The opener is the ledger's own. Rev AL numbers it candidate 103; ratified by Ishan 2026-10-07. "The push relay" is AUDIT-2 M2's, the ninth planner's. Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
+### 207
+
+**207 (planner; candidate 104)** — Handover rev AL rev 1 and the ninth planner's note carry two rulings as unanswered that Ishan had answered in chat on 2026-10-05 ('3. c', the homepage builds on the September data; '4. a', the hex-sweep exemption stands). The planner acknowledged both and lost them at a compaction. *Defense:* a ruling is written to a note in the Project in the turn it is given, and a handover's open questions are checked against those notes and the chat record before it is attested.
+
+[The text after the opener is byte-copied from session-open relay 14, revision 1 (`965813f6c9e2e2b79cdeb3e070babb61d7057e85a96256fefa93a831046a4e52`, 35,884 B / 187 L), its line 103, whole: 470 bytes, sha256 `fd3f263a70f8b59c27abe7f4a019c0f8e344e4cdc63360972d4d9ab5e106d22c`, no trailing newline. That relay's line 99 states that these are the words Ishan ratified, byte-copied from the tenth planner's message to him. The opener is the ledger's own. Offered as candidate 104 in chat and ratified by Ishan 2026-10-07. "The planner" in the entry is the ninth. Numbered 2026-10-07 at the transcription of entries 191 to 207.]
+
 ## Dispositions without a number
 
 Recorded so the findings are not lost; none consumes a number.
@@ -523,4 +625,4 @@ Recorded so the findings are not lost; none consumes a number.
 | open ledger 85 | discharged, reworded (ruled 2026-09-27): the `[COUNCIL/DONOR]` gate lines restate the council donor surface and the captured gate output moves with every rule change, but no §8 pin and no fixture reads those figures, so nothing re-pins; a dispatch states which captured lines it expects to move and does not predict "only the vintage lines" | HYGIENE-1 BR-8 report `bbd3cb0d30b4729f2e1e6bbf5c6cc0224bf0682284bf828be6f980f86ab98c7e`, its finding on item 85 |
 | open ledger 91 | discharged as measured (ruled 2026-10-01): `check_docs` rule 3 counts a backticked directory token with no file extension only where its first segment is a directory at the repository root; the root's raw directory is gitignored, present on the working tree the pipeline runs on and absent from a fresh clone, and fourteen tokens in tracked markdown begin with it, so the two instruments read 308 and 294 on identical bytes | AUDIT-2 BR-11 report `a877ea17f34152ee25d5e536cd548d64c477cdebb772214c9b8601d2fbc458bc`, its section B4 |
 
-Next free number: **191**.
+Next free number: **208**.
