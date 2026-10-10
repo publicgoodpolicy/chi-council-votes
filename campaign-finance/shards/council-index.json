@@ -1,6 +1,6 @@
 {
   "schema_version": "2.3",
-  "generated_at": "2026-10-07T02:27:25Z",
+  "generated_at": "2026-10-10T04:14:10Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "itemization_threshold": 150,
   "cycles": {
@@ -36891,7 +36891,7 @@
     },
     "dyer-major-clear-sandra": {
       "id": "dyer-major-clear-sandra",
-      "name": "Dyer, Major \"Clear\"\" Sandra\"",
+      "name": "Dyer, Major \"Clear\" Sandra",
       "type": "Individual",
       "industries": [
         "individual"
@@ -97723,7 +97723,7 @@
     },
     "knudsen-timothy-timmy": {
       "id": "knudsen-timothy-timmy",
-      "name": "Knudsen, Timothy \"Timmy\"\"\"",
+      "name": "Knudsen, Timothy \"Timmy\"",
       "type": "Candidate",
       "industries": [
         "self-funding"
@@ -104203,7 +104203,7 @@
     },
     "brunsvold-elizabeth-libby": {
       "id": "brunsvold-elizabeth-libby",
-      "name": "Brunsvold, Elizabeth \"Libby\"\"\"",
+      "name": "Brunsvold, Elizabeth \"Libby\"",
       "type": "Individual",
       "industries": [
         "individual"
@@ -107453,8 +107453,6 @@
       "city": "Chicago, IL",
       "parent_id": "sacks-michael",
       "committee_id": null,
-      "entity_type": "individual",
-      "_last_edited_by": "editor-ui",
       "cluster_id": "rollup-472",
       "cluster_name": "Sacks, Michael",
       "cluster_role": "alt-name",
@@ -167253,7 +167251,7 @@
     },
     "welch-emanuel-chris": {
       "id": "welch-emanuel-chris",
-      "name": "Welch, Emanuel \"Chris\"\"\"",
+      "name": "Welch, Emanuel \"Chris\"",
       "type": "Individual",
       "industries": [
         "individual"
@@ -218976,7 +218974,7 @@
     },
     "committee-to-elect-judge-levander-van-smith-jr": {
       "id": "committee-to-elect-judge-levander-van-smith-jr",
-      "name": "Committee to Elect Judge Levander \"Van\"\" Smith Jr\"",
+      "name": "Committee to Elect Judge Levander \"Van\" Smith Jr",
       "type": "PAC",
       "industries": [
         "candidate-account"
@@ -228471,7 +228469,7 @@
       ],
       "flags": [],
       "notes": null,
-      "occupation": "Director, Community Outreach\"\"",
+      "occupation": "Director, Community Outreach\"",
       "employer": "City of Berwyn",
       "city": "Berwyn, IL",
       "parent_id": "hajer-jeanmarie",
@@ -238656,7 +238654,7 @@
     },
     "hall-richard-dave": {
       "id": "hall-richard-dave",
-      "name": "Hall, Richard \"Dave\"\"\"",
+      "name": "Hall, Richard \"Dave\"",
       "type": "Individual",
       "industries": [
         "individual"
@@ -247134,7 +247132,7 @@
     },
     "berger-menachem-mark": {
       "id": "berger-menachem-mark",
-      "name": "Berger, Menachem \"Mark\"\"\"",
+      "name": "Berger, Menachem \"Mark\"",
       "type": "Individual",
       "industries": [
         "individual"
@@ -344877,7 +344875,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34616/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 137168.22,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -344898,7 +344896,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/25653/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 552713.34,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -344919,7 +344917,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/25956/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 1234.93,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -344940,7 +344938,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34611/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 87238.66,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -344961,7 +344959,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/37143/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 16514.2,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -344982,7 +344980,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34524/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 179974.4,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345003,7 +345001,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/19263/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 319004.77,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345024,7 +345022,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34202/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 32101.56,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345045,7 +345043,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/16892/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 63516.16,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345066,7 +345064,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38916/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 49247.51,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345087,7 +345085,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38925/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 74428.22,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345108,7 +345106,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38991/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 3914.01,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345129,7 +345127,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/22816/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 177995.71,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345150,7 +345148,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/20016/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 311997.74,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345171,7 +345169,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/14556/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 116314.63,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345192,7 +345190,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38819/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 425510.79,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345213,7 +345211,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/37399/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 292909.32,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345234,7 +345232,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38809/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 73857.94,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345255,7 +345253,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/23282/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 264265.2,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345276,7 +345274,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38729/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 166118.82,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345297,7 +345295,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/23079/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 178809.01,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345318,7 +345316,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34374/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 286442.55,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345339,7 +345337,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/23127/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 143082.42,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345360,7 +345358,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/26217/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 35325.26,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345381,7 +345379,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/22919/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 217163.93,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345402,7 +345400,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34336/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 143.27,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345423,7 +345421,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38748/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 70745.19,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345444,7 +345442,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/31905/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 222210.68,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345465,7 +345463,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/23775/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 91214.35,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345486,7 +345484,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38561/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 147056.37,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345507,7 +345505,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38831/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 110046.11,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345528,7 +345526,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/40747/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 50549.21,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345549,7 +345547,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/23112/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 410200.36,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345570,7 +345568,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/25937/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 51992.16,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345591,7 +345589,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38706/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 79257.34,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345612,7 +345610,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34692/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 54680.14,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345633,7 +345631,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/19898/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 300485.86,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345654,7 +345652,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38623/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 1138737.35,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345675,7 +345673,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/26023/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 167188.04,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345696,7 +345694,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/15622/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 47728.09,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345717,7 +345715,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/19830/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 142734.8,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345738,7 +345736,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34569/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 380594.61,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345759,7 +345757,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/26028/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 116944.85,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345780,7 +345778,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38596/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 338624.09,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345801,7 +345799,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38699/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 172723.93,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345822,7 +345820,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34894/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 30236.96,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345843,7 +345841,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/35096/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 9851.74,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345864,7 +345862,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34345/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 319415.37,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345885,7 +345883,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38605/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 24894.02,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -345906,7 +345904,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/22982/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-09-14",
+      "last_updated": "2026-10-09",
       "cash_on_hand": 616467.58,
       "cash_on_hand_as_of": "2026-06-30",
       "notes": null,
@@ -365035,11 +365033,11 @@
         "reggio-s-pizza-express-ii-inc": "alt-name"
       },
       "member_totals": {
-        "reggio-s-pizza-express-i-inc": 3850.0,
+        "reggio-s-pizza-express-i-inc": 4850.0,
         "reggio-s-pizza-inc": 1000.0,
         "reggio-s-pizza-express-ii-inc": 1800.0
       },
-      "total": 6650.0
+      "total": 7650.0
     },
     "rollup-191": {
       "name": "Cari Sacks",
@@ -376822,10 +376820,10 @@
         "industries": [
           "restaurant"
         ],
-        "direct": 2350.0,
+        "direct": 3350.0,
         "independent": 0.0,
-        "total": 2350.0,
-        "count": 4,
+        "total": 3350.0,
+        "count": 5,
         "committees": 2,
         "members": 3
       },
@@ -396269,7 +396267,7 @@
         "members": 1
       },
       "dyer-major-clear-sandra": {
-        "name": "Dyer, Major \"Clear\"\" Sandra\"",
+        "name": "Dyer, Major \"Clear\" Sandra",
         "type": "Individual",
         "industries": [
           "individual"
@@ -467238,7 +467236,7 @@
         "members": 1
       },
       "berger-menachem-mark": {
-        "name": "Berger, Menachem \"Mark\"\"\"",
+        "name": "Berger, Menachem \"Mark\"",
         "type": "Individual",
         "industries": [
           "individual"
@@ -527446,7 +527444,7 @@
         "members": 1
       },
       "hall-richard-dave": {
-        "name": "Hall, Richard \"Dave\"\"\"",
+        "name": "Hall, Richard \"Dave\"",
         "type": "Individual",
         "industries": [
           "individual"
@@ -540121,7 +540119,7 @@
         "members": 1
       },
       "welch-emanuel-chris": {
-        "name": "Welch, Emanuel \"Chris\"\"\"",
+        "name": "Welch, Emanuel \"Chris\"",
         "type": "Individual",
         "industries": [
           "individual"
@@ -557749,7 +557747,7 @@
         "members": 1
       },
       "brunsvold-elizabeth-libby": {
-        "name": "Brunsvold, Elizabeth \"Libby\"\"\"",
+        "name": "Brunsvold, Elizabeth \"Libby\"",
         "type": "Individual",
         "industries": [
           "individual"
@@ -562676,7 +562674,7 @@
         "members": 1
       },
       "committee-to-elect-judge-levander-van-smith-jr": {
-        "name": "Committee to Elect Judge Levander \"Van\"\" Smith Jr\"",
+        "name": "Committee to Elect Judge Levander \"Van\" Smith Jr",
         "type": "PAC",
         "industries": [
           "candidate-account"
@@ -598803,7 +598801,7 @@
         "members": 1
       },
       "knudsen-timothy-timmy": {
-        "name": "Knudsen, Timothy \"Timmy\"\"\"",
+        "name": "Knudsen, Timothy \"Timmy\"",
         "type": "Candidate",
         "industries": [
           "self-funding"
@@ -638545,14 +638543,14 @@
       },
       "restaurant": {
         "all": {
-          "direct": 1525990.59
+          "direct": 1526990.59
         },
         "by_cycle": {
           "2015": {
             "direct": 298151.87
           },
           "2019": {
-            "direct": 341104.22
+            "direct": 342104.22
           },
           "2023": {
             "direct": 473563.66
@@ -638801,7 +638799,7 @@
     "by_alder": {
       "9": {
         "all": {
-          "direct": 1373470.72,
+          "direct": 1374470.72,
           "ie_support": 96337.36
         },
         "by_cycle": {
@@ -638810,7 +638808,7 @@
             "ie_support": 28994.62
           },
           "2019": {
-            "direct": 437912.02
+            "direct": 438912.02
           },
           "2023": {
             "direct": 344173.38,

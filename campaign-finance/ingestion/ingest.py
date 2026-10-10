@@ -218,14 +218,14 @@ def parse_receipts_file(path: Path) -> dict:
 
     print(f"  Reading {path.name}…")
 
-    # Try comma-delimited first, fall back to tab-delimited
+    # Comma-delimited, doubled quotes: csv.excel, the form the converter writes (AUDIT-2 C1).
     with open(path, encoding='utf-8') as f:
-        sample = f.read(2048)
+        header = f.readline()
         f.seek(0)
-        try:
-            dialect = csv.Sniffer().sniff(sample, delimiters=',\t')
-        except csv.Error:
-            dialect = csv.excel  # default to comma
+        if '\t' in header and ',' not in header:
+            raise SystemExit(f"{path}: header is tab-delimited; receipts files are read as comma CSV")
+        # No csv.Sniffer: on a sample with no doubled quote it turned doublequote off (BR-19).
+        dialect = csv.excel
         reader = csv.DictReader(f, dialect=dialect)
         rows = [r for r in reader if any(v.strip() for v in r.values() if v)]
 

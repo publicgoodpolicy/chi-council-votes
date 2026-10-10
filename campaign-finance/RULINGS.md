@@ -2309,6 +2309,30 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: AUDIT-2 M2 ratification package, revision 1 (`audit-2-m2-package-rev1.md`), sha256 `8f07140080ac86bcc00e2d52efac91570bf32c8d77d8cd8a46bc1f72c2b10b8f`, 52,796 B / 375 L, region R1 (its lines 30–161), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Region R2 of the same package (its lines 171–198) is transcribed the same way into the entry `### CNCL-DATA-1 P2 — R8 and R9 as applied`, as that entry’s third amendment, and region R3 (its lines 208–214) into the entry `### SB-METH-1 — school-board methodology string C5`, after that entry’s provenance line; each has a provenance line of its own. Ratified by Ishan in chat 2026-10-06 as drafted (“1. ratify” for this region and “2. ratify” for regions R2 and R3; his items 3 to 11 each ruled “a”, and item 12 “ratify”), on his rulings of 2026-10-06. Arises from the numbers audit of 2026-09-29 (finding M2). Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-146`; `PS-147` occurring 0 times before this commit), never carried. Measured basis: `audit-2-m2-basis.py`, sha256 `53f56c5b6f5fbca6ce722b5bb4cb33d36b98c1e8bd5d8f8554452db36364e27e`, run by the planner on the data committed at `90b786ffac21e26b622f02a8bf17c937f0bc49b0`; the AUDIT-2 M2 HALT dispatch (§0) has the executor run it at that commit before anything is applied, and holds unless its output is byte for byte the planner’s, sha256 `59bf58c29c98e55520ab8a4abc8587dd95885cb15410c880a11e8c8e03871580`.*
 
+### PS-148 — the receipts reader reads comma CSV with doubled quotes, and three known-gaps entries that blamed the export for our misreading are removed
+
+> **The reader.** `campaign-finance/ingestion/ingest.py` reads every per-committee receipts
+> file as comma-separated values with doubled quotes (`csv.excel`), the form
+> `convert_bulk_receipts.py` writes. It no longer guesses the format from the first 2,048
+> characters: when that sample held no doubled quote, the guess turned doubled-quote handling
+> off, and a field holding a double quote and then a comma split in two, moving every later
+> field of its row. A file whose header line is tab-delimited stops the build.
+>
+> **What it corrected, on the sealed 2026-09-13 vintage.** In `election-data.json`, two
+> receipts to Friends of Gilbert Villegas (ward 36), from a donor whose employer is filed as
+> `d"Escoto, Inc.`, had read "60611" as their type and now read Individual Contribution. In
+> both artifacts, one receipt to Citizens to Elect Anthony Beale (ward 9) that the reader had
+> dropped is counted, and donor names that carried stray quotes now read as filed. No
+> contribution id changes.
+>
+> **Three known-gaps entries are removed.** The entries for ward 36 (4/1/2015–6/30/2015,
+> −$960.50, and 1/1/2020–3/31/2020, −$1,500.00) and ward 9 (10/1/2017–12/31/2017,
+> −$1,000.00), annotated 2026-08-30, said the State Board's export carried less than the
+> committee swore. The rows were in the export; our reader misread them. With the reader
+> corrected the three periods reconcile, and the ledger holds thirteen entries.
+
+*Provenance: ruled by Ishan 2026-10-09 (AUDIT-2 C1, items 1 to 8), on BR-19's measurement (report `fa50073b669a6a38cbcfd465b3f4eb6a729707ad0d852f5015719c7bb6a5571a`); text ratified 2026-10-09 from this package (`audit-2-c1-package-rev2.md`, sha256 `418d29f552991498875a43e282644d5cf707a65dcb6794291e21b9286225fce4`), which supersedes revision 1 (`audit-2-c1-package-rev1.md`, sha256 `a1cfb44cd3775dfa58c86f1da0e9cd21f81740b236d4567971cc82e01700b2c9`, ratified 2026-10-09 and narrowed at revision 2 before transcription). Id allocated at this transcription against the id measured free at the moment of writing, never carried.*
+
 ---
 
 ## Rulings ratified without an id

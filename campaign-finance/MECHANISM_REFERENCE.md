@@ -949,7 +949,7 @@ that catch defect classes the existing gates structurally cannot see.
 
 | tag | file | sha256 |
 |---|---|---|
-| S-ing | `campaign-finance/ingestion/ingest.py` | `5f84efb279c3d7f37bc7cea4bffb003d0d77f05831b77ced67aa89c308966347` |
+| S-ing | `campaign-finance/ingestion/ingest.py` | `d4bc234b999f195cc8ae046973cf94cd6f7b735282aa22365a1d4075bc5b1e4f` |
 | S-syn | `campaign-finance/sheets-sync/sync_overrides.py` | `0bac13ab7c15a02197822b77b7c1144ad3b12655b37322208476a3b0d3d73913` |
 | S-bld | `campaign-finance/build_all.sh` | `a7b1675cdf0cb34130bd0df6d865d5575ab596d8cff4f816722b12ab55edefe6` |
 | S-t1 | `campaign-finance/ingestion/transform_slice1.py` | `5f807b26245ee22173d3903b9b8a3825f224c47c4f2d7ad11042ee87a6ccb68d` |

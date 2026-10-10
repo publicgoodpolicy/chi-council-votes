@@ -84,33 +84,6 @@
       "annotated": "2026-08-30"
     },
     {
-      "committee": "cand-inc-ward-36",
-      "period_beg": "2020-01-01",
-      "period_end": "2020-03-31",
-      "amount": -1500.00,
-      "reason": "SBE-side: the committee's sworn D-2 cover total for 1/1/2020-3/31/2020 reports $163,250.00 itemized; the itemized Schedule A rows the SBE bulk receipts export carries for that period total $161,750.00, a shortfall of $1,500.00.",
-      "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
-      "annotated": "2026-08-30"
-    },
-    {
-      "committee": "cand-inc-ward-36",
-      "period_beg": "2015-04-01",
-      "period_end": "2015-06-30",
-      "amount": -960.50,
-      "reason": "SBE-side: the committee's sworn D-2 cover total for 4/1/2015-6/30/2015 reports $57,980.87 itemized; the itemized Schedule A rows the SBE bulk receipts export carries for that period total $57,020.37, a shortfall of $960.50.",
-      "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
-      "annotated": "2026-08-30"
-    },
-    {
-      "committee": "cand-inc-ward-09",
-      "period_beg": "2017-10-01",
-      "period_end": "2017-12-31",
-      "amount": -1000.00,
-      "reason": "SBE-side: the committee's sworn D-2 cover total for 10/1/2017-12/31/2017 reports $105,250.00 itemized; the itemized Schedule A rows the SBE bulk receipts export carries for that period total $104,250.00, a shortfall of $1,000.00.",
-      "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
-      "annotated": "2026-08-30"
-    },
-    {
       "committee": "cand-inc-ward-09",
       "period_beg": "2007-01-01",
       "period_end": "2007-06-30",

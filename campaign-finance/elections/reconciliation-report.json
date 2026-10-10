@@ -9,7 +9,7 @@
     "scope": "elections candidate committees (v2): school_board and city_council; IE committees out of reconciliation scope; mayoral lane deferred",
     "inputs": {
       "election-data.json": {
-        "sha256": "941a542223d13329782405d5adc90b2b5527c23233c624189cea9b766a703d72",
+        "sha256": "c34f210991d2d155cb0531e811350c1eb59569a74d302b3ffa231812b37a290e",
         "path": "campaign-finance/election-data.json"
       },
       "d2totals": {
@@ -23,22 +23,22 @@
         "vintage_manifest_sha256": "eaf07872b4b0344b49ff195e5bb74cb6b58ee85ef91dfb4a6501a07ab80ee449"
       },
       "known-gaps.json": {
-        "sha256": "68124bbc5f03ed4999cd42573a8dc3dee806467ab6ef212c15733bc3e6785a3f",
+        "sha256": "4ba569163305d865a8f54fff7ee05c73fd644ef92634c84787abb29746741149",
         "path": "campaign-finance/elections/known-gaps.json"
       }
     }
   },
   "headline": {
     "d2_itemized_total": 75782508.7,
-    "ours_itemized_total": 75697966.45,
-    "residual": -84542.25,
+    "ours_itemized_total": 75701426.95,
+    "residual": -81081.75,
     "dollar_weighted_match_pct": 99.89,
     "committees_candidate": 125,
     "committees_with_sbe_id": 125,
     "committees_no_sbe_id": 0,
     "committees_with_periods": 120,
-    "reconciled": 110,
-    "residual_state": 10,
+    "reconciled": 111,
+    "residual_state": 9,
     "too_new": 5,
     "pending_a1_total": 2707852.66,
     "aggregate_total": 0.0,
@@ -49,7 +49,7 @@
     "join_failures": 0,
     "filings_missing_totals": 4,
     "overlap_superseded": 40,
-    "disclosed": 10,
+    "disclosed": 9,
     "stale_annotations": 0
   },
   "no_sbe_id_committees": [],
@@ -155,13 +155,6 @@
           "residual": 500.0,
           "reason": "SBE-side, third entry class (ratified 2026-08-30): the itemized Schedule A rows the SBE bulk receipts export carries for 7/1/2010-12/31/2010 (Semiannual received 1/20/2011) total $48,450.00; the committee's sworn D-2 cover total for the same period and filing reports $47,950.00 itemized, $500.00 less than the rows it carries.",
           "annotated": "2026-08-30"
-        },
-        {
-          "beg": "2017-10-01",
-          "end": "2017-12-31",
-          "residual": -1000.0,
-          "reason": "SBE-side: the committee's sworn D-2 cover total for 10/1/2017-12/31/2017 reports $105,250.00 itemized; the itemized Schedule A rows the SBE bulk receipts export carries for that period total $104,250.00, a shortfall of $1,000.00.",
-          "annotated": "2026-08-30"
         }
       ]
     },
@@ -192,25 +185,6 @@
           "end": "2014-09-30",
           "residual": -1400.0,
           "reason": "SBE-side: the committee's sworn D-2 cover total for 7/1/2014-9/30/2014 reports $1,400.00 itemized; no itemized Schedule A row for that period appears in the SBE bulk receipts export. Our itemized total for the period is $0.00.",
-          "annotated": "2026-08-30"
-        }
-      ]
-    },
-    {
-      "committee": "cand-inc-ward-36",
-      "periods": [
-        {
-          "beg": "2015-04-01",
-          "end": "2015-06-30",
-          "residual": -960.5,
-          "reason": "SBE-side: the committee's sworn D-2 cover total for 4/1/2015-6/30/2015 reports $57,980.87 itemized; the itemized Schedule A rows the SBE bulk receipts export carries for that period total $57,020.37, a shortfall of $960.50.",
-          "annotated": "2026-08-30"
-        },
-        {
-          "beg": "2020-01-01",
-          "end": "2020-03-31",
-          "residual": -1500.0,
-          "reason": "SBE-side: the committee's sworn D-2 cover total for 1/1/2020-3/31/2020 reports $163,250.00 itemized; the itemized Schedule A rows the SBE bulk receipts export carries for that period total $161,750.00, a shortfall of $1,500.00.",
           "annotated": "2026-08-30"
         }
       ]
@@ -7019,8 +6993,8 @@
       ],
       "periods_count": 86,
       "d2_itemized": 2335360.33,
-      "ours_itemized": 2277385.33,
-      "residual": -57975.0,
+      "ours_itemized": 2278385.33,
+      "residual": -56975.0,
       "d2_inkind": 51359.67,
       "ours_inkind": 48639.67,
       "inkind_delta": -2720.0,
@@ -7549,8 +7523,8 @@
           "beg": "2017-10-01",
           "end": "2017-12-31",
           "d2_itemized": 105250.0,
-          "ours_itemized": 104250.0,
-          "residual": -1000.0,
+          "ours_itemized": 105250.0,
+          "residual": 0.0,
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
@@ -7923,13 +7897,6 @@
           "end": "2010-12-31",
           "residual": 500.0,
           "reason": "SBE-side, third entry class (ratified 2026-08-30): the itemized Schedule A rows the SBE bulk receipts export carries for 7/1/2010-12/31/2010 (Semiannual received 1/20/2011) total $48,450.00; the committee's sworn D-2 cover total for the same period and filing reports $47,950.00 itemized, $500.00 less than the rows it carries.",
-          "annotated": "2026-08-30"
-        },
-        {
-          "beg": "2017-10-01",
-          "end": "2017-12-31",
-          "residual": -1000.0,
-          "reason": "SBE-side: the committee's sworn D-2 cover total for 10/1/2017-12/31/2017 reports $105,250.00 itemized; the itemized Schedule A rows the SBE bulk receipts export carries for that period total $104,250.00, a shortfall of $1,000.00.",
           "annotated": "2026-08-30"
         }
       ]
@@ -17722,16 +17689,14 @@
       "committee_name": "Friends of Gilbert Villegas for Alderman",
       "sbe_committee_id": "26023",
       "superseded_filings": 18,
-      "state": "RESIDUAL",
+      "state": "RECONCILED",
       "flags": [
-        "PENDING-A1",
-        "OVER-THRESHOLD",
-        "DISCLOSED"
+        "PENDING-A1"
       ],
       "periods_count": 48,
       "d2_itemized": 2734194.07,
-      "ours_itemized": 2731733.57,
-      "residual": -2460.5,
+      "ours_itemized": 2734194.07,
+      "residual": 0.0,
       "d2_inkind": 80253.22,
       "ours_inkind": 80253.22,
       "inkind_delta": 0.0,
@@ -17774,8 +17739,8 @@
           "beg": "2015-04-01",
           "end": "2015-06-30",
           "d2_itemized": 57980.87,
-          "ours_itemized": 57020.37,
-          "residual": -960.5,
+          "ours_itemized": 57980.87,
+          "residual": 0.0,
           "d2_inkind": 948.46,
           "ours_inkind": 948.46,
           "coverage_miss": false
@@ -17964,8 +17929,8 @@
           "beg": "2020-01-01",
           "end": "2020-03-31",
           "d2_itemized": 163250.0,
-          "ours_itemized": 161750.0,
-          "residual": -1500.0,
+          "ours_itemized": 163250.0,
+          "residual": 0.0,
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
@@ -18219,22 +18184,6 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
-        }
-      ],
-      "disclosed": [
-        {
-          "beg": "2015-04-01",
-          "end": "2015-06-30",
-          "residual": -960.5,
-          "reason": "SBE-side: the committee's sworn D-2 cover total for 4/1/2015-6/30/2015 reports $57,980.87 itemized; the itemized Schedule A rows the SBE bulk receipts export carries for that period total $57,020.37, a shortfall of $960.50.",
-          "annotated": "2026-08-30"
-        },
-        {
-          "beg": "2020-01-01",
-          "end": "2020-03-31",
-          "residual": -1500.0,
-          "reason": "SBE-side: the committee's sworn D-2 cover total for 1/1/2020-3/31/2020 reports $163,250.00 itemized; the itemized Schedule A rows the SBE bulk receipts export carries for that period total $161,750.00, a shortfall of $1,500.00.",
-          "annotated": "2026-08-30"
         }
       ]
     },
