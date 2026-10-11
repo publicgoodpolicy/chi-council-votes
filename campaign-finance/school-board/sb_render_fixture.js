@@ -48,6 +48,9 @@ var n = 0, fail = 0, POSTED = null;
 // FIN is what the finance fetch resolves for the CURRENT boot; FETCHED records
 // every GET so the fetch count is asserted by observation, not by source-reading.
 var FIN = REALFIN, FETCHED = [];
+// PS-153: what the page handed to the clipboard, recorded so the copied link is asserted
+// by observation.
+var COPIED = [], CLIP_REFUSES = false;   // CLIP_REFUSES: the next boots' clipboard rejects
 function ok(label, cond, detail) {
   n++; if (!cond) fail++;
   console.log((cond ? 'PASS  ' : 'FAIL  ') + label + (cond || !detail ? '' : '\n        ' + detail));
@@ -56,9 +59,9 @@ function ok(label, cond, detail) {
 /* Boot the REAL page: the embed's own script, its own render path, its own fetch call.
  * `mode` drives the fetch shim — 'ok' resolves the given data, 'fail' makes the one
  * fetch reject, which is the only way to exercise the error state honestly. */
-function boot(data, mode) {
+function boot(data, mode, url) {
   return new Promise(function (resolve) {
-    var dom = new JSDOM('<!doctype html><html><body>' + EMBED_HTML + '</body></html>', {
+    var jopts = {
       runScripts: 'dangerously', pretendToBeVisual: true,
       beforeParse: function (w) {
         w.fetch = function (u, opts) {
@@ -84,8 +87,20 @@ function boot(data, mode) {
             : Promise.resolve({ ok: false, status: 404, json: function () { return Promise.resolve({}); } });
         };
         w.scrollTo = function () {};
+        // PS-153: jsdom offers no clipboard. A recording one stands in, so [A2/CARD] reads
+        // the link the page copies rather than trusting that a click copied something.
+        try {
+          Object.defineProperty(w.navigator, 'clipboard', { configurable: true,
+            value: { writeText: function (t) {
+              if (CLIP_REFUSES) return Promise.reject(new Error('NotAllowedError'));
+              COPIED.push(String(t)); return Promise.resolve(); } } });
+        } catch (e) {}
       }
-    });
+    };
+    // PS-153: an address is given only by the boots that test `?vote=`; every other boot
+    // keeps jsdom's default, as before.
+    if (url) jopts.url = url;
+    var dom = new JSDOM('<!doctype html><html><body>' + EMBED_HTML + '</body></html>', jopts);
     setTimeout(function () {
       var doc = dom.window.document, app = doc.getElementById('ipg-sb-app');
       resolve({ dom: dom, doc: doc, app: app,
@@ -745,10 +760,14 @@ function around(tpl, marker) { return String(tpl).split(marker); }
 
   // ---- B.4: the Verified block, WITHOUT a link ----
   var pVer = pick(mv, '4A');
-  ok('[SBF2/VERIFIED] the banner, the filed committee name and the source date render',
+  // PS-152 retired the "Updated <ingest day>" bit of this line: the banner and the filed
+  // name still render, and the ingest day no longer prints anywhere on the member page.
+  ok('[SBF2/VERIFIED] the banner and the filed committee name render, and no ingest date does',
      pVer.text.indexOf('Verified · Illinois State Board of Elections') >= 0
        && pVer.text.indexOf(finBy('4A').committees[0].name) >= 0
-       && pVer.text.indexOf('Updated ' + finBy('4A').committees[0].last_updated) >= 0);
+       && !!finBy('4A').committees[0].last_updated
+       && pVer.text.indexOf(finBy('4A').committees[0].last_updated) < 0
+       && pVer.text.indexOf('Updated ') < 0);
   ok('[SBF2/VERIFIED] NO Sunshine link is shipped, anywhere in the embed (ratification 5)',
      EMBED_HTML.indexOf('illinoissunshine') < 0);
   ok('[SBF2/VERIFIED] the banner is gated on data_quality, not assumed',
@@ -1013,7 +1032,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   ok('[SBF2/INDUSTRY] drilling shows that industry\'s donors AND the members they funded',
      pDrill.text.indexOf('Donors in this industry') >= 0
        && pDrill.text.indexOf('Members they funded') >= 0
-       && pDrill.text.indexOf('these totals are direct contributions only') >= 0);
+       && pDrill.text.indexOf('these are direct contributions only') >= 0);
   ok('[SBF2/INDUSTRY] the drill lists exactly the donors carrying that industry', (function () {
     var want = {};
     boardRows.forEach(function (x) {
@@ -2449,12 +2468,518 @@ function around(tpl, marker) { return String(tpl).split(marker); }
      ['seatSelector', 'matrixView', 'recordView', 'memberView']
        .every(function (fn) { return fullCallers.indexOf(fn) < 0; }),
      JSON.stringify(fullCallers));
-  ok('[C2] visibleRoster()\'s existing callers are unchanged: seatSelector, '
-     + 'memberView, matrixView',
-     visCallers.length === 3
-       && ['seatSelector', 'memberView', 'matrixView']
+  // PS-153 added one caller, deliberately: the vote card lists the seats the All seats view
+  // lists, through the same reader, so PS-125 and PS-127 (ii) govern it by construction.
+  ok('[C2] visibleRoster()\'s callers are seatSelector, memberView, matrixView and, since '
+     + 'PS-153, voteCardHtml — and no other',
+     visCallers.length === 4
+       && ['seatSelector', 'memberView', 'matrixView', 'voteCardHtml']
             .every(function (fn) { return visCallers.indexOf(fn) >= 0; }),
      JSON.stringify(visCallers));
+
+  // ==========================================================================
+  // AUDIT-2 — the school-board page package: PS-151, PS-152 and PS-153.
+  //
+  // Every string is read from its REGISTER entry, as every other string in this fixture
+  // is: the entries carry them in bold, hard-wrapped under the register's `> ` marker, so
+  // an entry is unwrapped and its bold runs are taken in order. A check that carried its
+  // own copy would only prove the copy agrees with itself.
+  // ==========================================================================
+  function psEntry(id) {
+    var parts = REG.split('\n### ' + id + ' — ');
+    return parts.length === 2 ? parts[1].split('\n### ')[0] : null;
+  }
+  function bolds(entryText) {
+    var flat = String(entryText || '').replace(/\n>[ ]?/g, '\n').replace(/\s+/g, ' ');
+    var out = [], re = /\*\*([^*]+)\*\*/g, m;
+    while ((m = re.exec(flat))) out.push(m[1].trim());
+    return out;
+  }
+  function boldStarting(list, prefix) {
+    var hit = list.filter(function (b) { return b.indexOf(prefix) === 0; });
+    return hit.length === 1 ? hit[0] : null;
+  }
+  function count(hay, needle) { return String(hay).split(needle).length - 1; }
+  var B151 = bolds(psEntry('PS-151')), B152 = bolds(psEntry('PS-152')), B153 = bolds(psEntry('PS-153'));
+  var A2 = {
+    browseAll: boldStarting(B151, 'Every donor to a seated Board member’s committee across every'),
+    indIntroAll: boldStarting(B151, 'Industries ranked by total dollars deployed across all Board committees, in every'),
+    barAll1: boldStarting(B151, 'Total deployed across all Board committees in every school board election'),
+    rank: boldStarting(B151, 'Outside-spending groups are ranked'),
+    directNote: boldStarting(B151, 'Independent spending is not included in this list'),
+    currentOnly: boldStarting(B151, 'Independent spending here covers current Board members only.'),
+    once: boldStarting(B151, 'A donor tagged with more than one industry'),
+    width: boldStarting(B151, 'width is its share of all industry rows combined'),
+    barSingle: boldStarting(B151, 'Total deployed across all Board committees in this election: {N}. Each segment'),
+    through: boldStarting(B152, 'Contributions through {quarterly date}'),
+    repeated: boldStarting(B152, 'Some filings list the same gift more than once'),
+    other: boldStarting(B152, 'A committee’s other receipts'),
+    vHead: boldStarting(B153, 'Board vote'),
+    vTally: boldStarting(B153, '{n} Yes'),
+    vSeat: boldStarting(B153, 'Seat {seat}'),
+    vVacant: boldStarting(B153, 'Vacant'),
+    vSource: boldStarting(B153, 'Meeting record at the Chicago Board of Education'),
+    vCopy: boldStarting(B153, 'Copy link to this vote'),
+    vCopied: boldStarting(B153, 'Link copied'),
+    vFoot: boldStarting(B153, 'Press Esc, click outside'),
+    vMissing: boldStarting(B153, 'No vote with the id {id}'),
+    vSeeAll: boldStarting(B153, 'See all votes'),
+    vNotRec: boldStarting(B153, 'Not recorded')
+  };
+  ok('[A2/REGISTER] PS-151, PS-152 and PS-153 each yield their strings, every one exactly once',
+     Object.keys(A2).every(function (k) { return !!A2[k]; }),
+     JSON.stringify(Object.keys(A2).filter(function (k) { return !A2[k]; })));
+  ok('[A2/REGISTER] V4\'s second form is in no entry and not in the page (PS-121, PS-125)',
+     REG.indexOf('Not on the Board at this vote') === REG.lastIndexOf('Not on the Board at this vote')
+       && EMBED_HTML.indexOf('Not on the Board at this vote') < 0,
+     'the phrase may appear once in the register, in PS-153\'s provenance line, and nowhere in the page');
+
+  // ---------- PS-151: the All elections wording, the rank note, the moved note ----------
+  var a2 = await boot(REAL, 'ok');
+  var a2spend = nav(a2, 'spend');
+  var a2don = subtab(a2spend, 'donors');                       // lands on All elections
+  ok('[A2/ALL] Browse donors at All elections carries its own introduction and the rank '
+     + 'note, and not "in this election"',
+     a2don.text.indexOf(A2.browseAll + ' ' + A2.rank) >= 0
+       && a2don.text.indexOf('committee in this election, ranked by total given.') < 0);
+  var a2don1 = setSel(a2don, 'ipg-sb-spend-el', ieEK);
+  ok('[A2/ALL] with one election selected Browse donors keeps its wording, and the rank note '
+     + 'follows it directly',
+     a2don1.text.indexOf('Every donor to a seated Board member’s committee in this election, '
+                         + 'ranked by total given. ' + A2.rank) >= 0
+       && a2don1.text.indexOf(A2.browseAll) < 0);
+  ok('[A2/ALL] the rank note sits before the "Click any row" line in both scopes', (function () {
+    return [a2don1, setSel(a2don1, 'ipg-sb-spend-el', 'all')].every(function (v) {
+      var i = v.text.indexOf(A2.rank), j = v.text.indexOf('Click any row to see that donor’s full footprint.');
+      return i >= 0 && j > i && count(v.text, A2.rank) === 1; });
+  })());
+  var a2ind = subtab(a2spend, 'industries');                   // lands on All elections
+  ok('[A2/ALL] Industry totals at All elections carries its own introduction and bar sentence',
+     a2ind.text.indexOf(A2.indIntroAll) >= 0
+       && a2ind.text.indexOf(A2.barAll1.replace('{N}.', '$')) >= 0
+       && a2ind.text.indexOf('across all Board committees in this election') < 0);
+  var a2ind1 = setSel(a2ind, 'ipg-sb-spend-el', ieEK);
+  ok('[A2/ALL] with one election selected Industry totals keeps PS-145\'s two sentences',
+     a2ind1.text.indexOf('Industries ranked by total dollars deployed across all Board committees in this election.') >= 0
+       && a2ind1.text.indexOf('Total deployed across all Board committees in this election: $') >= 0
+       && a2ind1.text.indexOf('in every school board election this tool covers') < 0);
+  ok('[A2/WIDTH] the bar sentence says what its widths are shares of, in both scopes, and '
+     + '"share of the total" is gone from the page',
+     a2ind1.text.indexOf(A2.width) >= 0
+       && setSel(a2ind1, 'ipg-sb-spend-el', 'all').text.indexOf(A2.width) >= 0
+       && EMBED_HTML.indexOf('share of the total') < 0);
+  ok('[A2/WIDTH] with one election selected the whole sentence is PS-151\'s, figure aside',
+     (function () {
+       var halves = A2.barSingle.split('{N}');
+       var v = setSel(a2ind1, 'ipg-sb-spend-el', ieEK);
+       var i = v.text.indexOf(halves[0]);
+       return halves.length === 2 && i >= 0 && v.text.indexOf(halves[1], i) > i;
+     })());
+  ok('[A2/ONCE] the count-once sentence is IND-MULTI-1\'s, byte for byte, wherever it prints',
+     REG.indexOf('"' + A2.once + '"') >= 0
+       && EMBED_HTML.indexOf('donor’s money once') < 0);
+  var a2drill = (function () {
+    var v = setSel(a2ind1, 'ipg-sb-spend-el', ieEK);
+    var k = (v.html.match(/data-industry-drill="([^"]+)"/g) || []).map(function (x) {
+      return x.split('"')[1]; });
+    // The first industry whose detail lists donors (an industry of spenders only has no
+    // donor list, and so no note to place).
+    for (var i = 0; i < k.length; i++) {
+      var d = fire(v, v.doc.querySelector('[data-industry-drill="' + k[i] + '"]'));
+      if (d.text.indexOf('Donors in this industry') >= 0) return d;
+      fire(d, d.doc.getElementById('ipg-sb-ind-back'));
+    }
+    return null;
+  })();
+  ok('[A2/NOTE] in an industry\'s detail the direct-only note sits under the donor list and '
+     + 'before "Members they funded", and the old sentence is gone', (function () {
+    if (!a2drill) return false;
+    var t = a2drill.text, i = t.indexOf('Donors in this industry'), j = t.indexOf(A2.directNote),
+        k = t.indexOf('Members they funded');
+    return i >= 0 && j > i && k > j && count(t, A2.directNote) === 1
+      && EMBED_HTML.indexOf('these totals are direct contributions only') < 0;
+  })());
+  var a2mem = (function () {
+    // A member page whose industry bar renders: the first seat that clears the threshold
+    // in some election.
+    var seats = REALFIN.members.filter(function (m) {
+      return Object.keys(m.coverage_by_election || {}).some(function (k) {
+        return m.coverage_by_election[k].meets_industry_threshold; }); });
+    if (!seats.length) return null;
+    var v = pick(nav(a2, 'member'), seats[0].seat);
+    var ek = Object.keys(seats[0].coverage_by_election).filter(function (k) {
+      return seats[0].coverage_by_election[k].meets_industry_threshold; })[0];
+    return trySel(v, 'ipg-sb-fin-el', ek);
+  })();
+  ok('[A2/ONCE] a member page\'s industry bar carries the count-once sentence, under its '
+     + 'sub-line and above the bar\'s direct-only note', (function () {
+    if (!a2mem) return false;
+    var t = a2mem.text, i = t.indexOf('Each segment is one industry; width is its share of direct contributions in this view.'),
+        j = t.indexOf(A2.once), k = t.indexOf('this chart is direct contributions only');
+    return i >= 0 && j > i && k > j;
+  })());
+
+  // ---------- PS-152: the data-through line ----------
+  function longDate(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+    return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
+            'October', 'November', 'December'][Number(m[2]) - 1] + ' ' + Number(m[3]) + ', ' + m[1];
+  }
+  var votesMax = REAL.rollcall.votes.map(function (v) { return v.date; }).sort().slice(-1)[0];
+  var DT = REALFIN.data_through || {};
+  var throughWant = A2.through && DT.quarterly && DT.large_gift
+    ? A2.through.replace('{quarterly date}', longDate(DT.quarterly))
+        .replace('{large-gift date}', longDate(DT.large_gift))
+        .replace('{votes date}', longDate(votesMax)) : null;
+  ok('[A2/THROUGH] premise: the finance artifact carries data_through, and the expected line '
+     + 'is built from the two artifacts and the register alone',
+     !!throughWant && /^\d{4}-\d{2}-\d{2}$/.test(DT.quarterly) && /^\d{4}-\d{2}-\d{2}$/.test(DT.large_gift),
+     JSON.stringify(DT));
+  ok('[A2/THROUGH] the line prints once, under the tab strip, on every one of the six views',
+     ['board', 'member', 'record', 'matrix', 'spend', 'methodology'].every(function (vw) {
+       var v = nav(a2, vw), el = v.doc.querySelector('.ipg-sb-through');
+       var tabs = v.doc.querySelector('.ipg-sb-tabs');
+       return !!el && el.textContent === throughWant
+         && v.doc.querySelectorAll('.ipg-sb-through').length === 1
+         && !!tabs && tabs.nextElementSibling === el;
+     }), 'want: ' + throughWant);
+  ok('[A2/THROUGH] no date is written into the page: the source carries the three '
+     + 'placeholders and no month-and-year literal',
+     EMBED_HTML.indexOf('Contributions through {Q} on quarterly reports, and through {A} on reports of large gifts. Votes through {V}.') >= 0
+       && !/(January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, \d{4}/.test(EMBED_HTML));
+  ok('[A2/THROUGH] "Updated {N}" is gone from the page\'s strings',
+     EMBED_HTML.indexOf("'Updated {N}'") < 0);
+  var finNoThrough = JSON.parse(JSON.stringify(REALFIN)); delete finNoThrough.data_through;
+  FIN = finNoThrough;
+  var a2no = await boot(REAL, 'ok');
+  ok('[A2/THROUGH] bite: with data_through absent the line is left off whole, on every view',
+     ['board', 'member', 'record', 'matrix', 'spend', 'methodology'].every(function (vw) {
+       var v = nav(a2no, vw);
+       return !v.doc.querySelector('.ipg-sb-through') && v.text.indexOf('Contributions through') < 0; }));
+  var finHalf = JSON.parse(JSON.stringify(REALFIN)); finHalf.data_through.large_gift = null;
+  FIN = finHalf;
+  var a2half = await boot(REAL, 'ok');
+  ok('[A2/THROUGH] bite: with one date null the line is left off whole, not printed in part',
+     !a2half.doc.querySelector('.ipg-sb-through') && a2half.text.indexOf('Votes through') < 0);
+  FIN = REALFIN;
+  var a2ff = await boot(REAL, 'finfail');
+  ok('[A2/THROUGH] with the finance artifact unreachable the line is left off, and votes still render',
+     !a2ff.doc.querySelector('.ipg-sb-through') && a2ff.html.indexOf('ipg-sb-tabs') >= 0);
+
+  // ---------- PS-152: the two methodology sentences, and the order ----------
+  var a2meth = nav(a2, 'methodology');
+  var ORE = REALFIN.other_receipts_excluded || {};
+  var otherRendered = '$' + Number(ORE.amount).toLocaleString('en-US',
+    { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  ok('[A2/OTHER] premise: the finance artifact emits other_receipts_excluded, an amount and a count',
+     typeof ORE.amount === 'number' && typeof ORE.count === 'number', JSON.stringify(ORE));
+  ok('[A2/OTHER] the methodology states the other-receipts sentence with the artifact\'s figure, to the cent',
+     !!A2.other && a2meth.text.indexOf(A2.other.replace('{figure}', otherRendered)) >= 0,
+     'expected figure ' + otherRendered);
+  ok('[A2/OTHER] the figure is not written into the copy',
+     EMBED_HTML.indexOf('they account for {OTHER}.') >= 0);
+  ok('[A2/REPEAT] the methodology carries the repeated-line-items sentence, with no figure in it',
+     a2meth.text.indexOf(A2.repeated) >= 0 && !/\$|\d/.test(A2.repeated));
+  ok('[A2/ORDER] under "How the money figures work": F1, the All elections disclosure, F3, '
+     + 'current Board members, dues, other receipts, repeated line items, F5, F6', (function () {
+    var t = a2meth.text, at = [FUND_F1, ALL_ELECT_DISC, FUND_F3, A2.currentOnly,
+      around(FUND_F4, '{DUES}')[0], around(A2.other, '{figure}')[0], A2.repeated, FUND_F5, FUND_F6]
+      .map(function (x) { return t.indexOf(x, t.indexOf(FUND_H)); });
+    return at.every(function (i, n2) { return i >= 0 && (n2 === 0 || i > at[n2 - 1]); });
+  })());
+  var finZero = JSON.parse(JSON.stringify(REALFIN));
+  finZero.other_receipts_excluded = { amount: 0.0, count: 0 };
+  FIN = finZero;
+  var a2zero = nav(await boot(REAL, 'ok'), 'methodology');
+  ok('[A2/OTHER] at zero the sentence still prints, with $0.00',
+     a2zero.text.indexOf(A2.other.replace('{figure}', '$0.00')) >= 0);
+  var finNoOther = JSON.parse(JSON.stringify(REALFIN)); delete finNoOther.other_receipts_excluded;
+  FIN = finNoOther;
+  var a2nof = nav(await boot(REAL, 'ok'), 'methodology');
+  ok('[A2/OTHER] bite: with the figure absent the sentence is left off whole, and the '
+     + 'repeated-line-items sentence still prints',
+     a2nof.text.indexOf('other receipts') < 0 && a2nof.text.indexOf(A2.repeated) >= 0);
+  FIN = REALFIN;
+
+  // ---------- PS-153: the address and the card ----------
+  var PAGE = 'https://www.publicgoodpolicy.org/school-board-voting-history';
+  var RC = {}; REAL.rollcall.votes.forEach(function (v) { RC[v.id] = v; });
+  var VM = {}; REAL.votemeta.forEach(function (v) { VM[v.vote_id] = v; });
+  var LABEL = { Affirmative: 'Yes', Oppositional: 'No', Neutral: 'Present', '-': 'Not recorded' };
+  var districtSeats = REAL.members.filter(function (m) { return m.seat !== 'President'; });
+  function cardOf(v) { return v.doc.getElementById('ipg-sb-vote-overlay'); }
+  function cardText(v) { var c = cardOf(v); return c ? (c.textContent || '') : null; }
+  function wantTally(id) {
+    var t = { Affirmative: 0, Oppositional: 0, Neutral: 0, none: 0 };
+    districtSeats.forEach(function (m) {
+      var p = RC[id].positions[m.seat];
+      if (p === 'Affirmative' || p === 'Oppositional' || p === 'Neutral') t[p]++; else t.none++; });
+    return A2.vTally.replace('{n}', t.Affirmative).replace('{n}', t.Oppositional)
+      .replace('{n}', t.Neutral).replace('{n}', t.none);
+  }
+  ok('[A2/CARD] premise: the President holds no recorded position, so the card lists the '
+     + 'twenty district seats (PS-125, PS-127 (ii))',
+     districtSeats.length === 20 && REAL.rollcall.votes.every(function (v) {
+       var p = v.positions.President; return p == null || p === '' || p === '-'; }));
+  ok('[A2/CARD] with no address parameter no card shows, on any view',
+     ['board', 'member', 'record', 'matrix', 'spend', 'methodology'].every(function (vw) {
+       return !cardOf(nav(a2, vw)); }));
+  // A vote whose id holds a space, whose description differs from its title, and which
+  // carries a vote cast by an earlier holder of a seat: the three things the card must get
+  // right at once. Chosen from the data, not named here.
+  var spaced = REAL.votemeta.filter(function (v) { return v.vote_id.indexOf(' ') >= 0; });
+  var vSpace = spaced.filter(function (v) { return v.desc && v.desc !== v.full; })[0] || spaced[0];
+  var vCast = REAL.rollcall.votes.filter(function (v) {
+    return v.cast_by && Object.keys(v.cast_by).length && VM[v.id] && VM[v.id].desc !== VM[v.id].full; })[0];
+  var vSame = REAL.votemeta.filter(function (v) { return v.desc === v.full; })[0];
+  ok('[A2/CARD] premise: the data holds an id with a space, a vote with a cast-by record and '
+     + 'a vote whose description equals its title',
+     !!vSpace && !!vCast && !!vSame,
+     JSON.stringify({ space: !!vSpace, cast: !!vCast, same: !!vSame }));
+  var a2v = await boot(REAL, 'ok', PAGE + '?vote=' + encodeURIComponent(vSpace.vote_id));
+  ok('[A2/ADDR] ?vote=<id>, URL-encoded, opens that vote\'s card over the landing view, with '
+     + 'keyboard focus in it', (function () {
+    var t = cardText(a2v);
+    return !!t && t.indexOf(A2.vHead) >= 0 && t.indexOf(RC[vSpace.vote_id].title) >= 0
+      && a2v.doc.activeElement && a2v.doc.activeElement.id === 'ipg-sb-vote-close'
+      && a2v.doc.querySelector('.ipg-sb-tab.active').getAttribute('data-view') === 'member';
+  })(), 'id ' + vSpace.vote_id);
+  ok('[A2/CARD] under the title: the date as vote rows print it, a middle dot, the description', (function () {
+    var meta = cardOf(a2v).querySelector('.ipg-sb-modal-meta');
+    return !!meta && meta.textContent === RC[vSpace.vote_id].date + ' · ' + vSpace.desc;
+  })());
+  ok('[A2/CARD] the tally is a recount of the positions on the lines shown',
+     cardOf(a2v).querySelector('.ipg-sb-vc-tally').textContent === wantTally(vSpace.vote_id),
+     'want ' + wantTally(vSpace.vote_id));
+  ok('[A2/CARD] one line for each of the twenty district seats, each "Seat · member · position" '
+     + 'in the page\'s four words, and none for the President', (function () {
+    var lines = Array.prototype.slice.call(cardOf(a2v).querySelectorAll('.ipg-sb-vc-seat'));
+    return lines.length === 20 && districtSeats.every(function (m, i) {
+      var p = RC[vSpace.vote_id].positions[m.seat];
+      var want = A2.vSeat.replace('{seat}', m.seat)
+        .replace('{member}', String(m.name || '').trim() ? m.name : A2.vVacant)
+        .replace('{position}', LABEL[(p == null || p === '') ? '-' : p]);
+      return lines[i].textContent.indexOf(want) === 0;
+    }) && !lines.some(function (l) { return l.textContent.indexOf('Seat President') === 0; });
+  })());
+  ok('[A2/CARD] the vacant seat\'s line reads Vacant for the member', (function () {
+    var vac = REAL.members.filter(function (m) { return !String(m.name || '').trim(); })[0];
+    return !!vac && cardText(a2v).indexOf('Seat ' + vac.seat + ' · ' + A2.vVacant + ' · ') >= 0;
+  })());
+  ok('[A2/CARD] the source link carries the ratified words, the vote\'s own address, and opens '
+     + 'in a new tab', (function () {
+    var a = cardOf(a2v).querySelector('.ipg-sb-vc-actions a');
+    return !!a && a.textContent === A2.vSource && a.getAttribute('href') === RC[vSpace.vote_id].source_url
+      && a.getAttribute('target') === '_blank' && a.getAttribute('rel') === 'noopener';
+  })());
+  ok('[A2/CARD] the closing line is the donor pop-up\'s, from its one declaration',
+     cardOf(a2v).querySelector('.ipg-sb-modal-foot').textContent === A2.vFoot
+       && count(EMBED_HTML, A2.vFoot) === 1);
+  var hist0 = a2v.dom.window.history.length, href0 = a2v.dom.window.location.href;
+  COPIED = [];
+  var a2copied = fire(a2v, a2v.doc.getElementById('ipg-sb-vote-copy'));
+  ok('[A2/COPY] the button reads "Copy link to this vote", copies the page\'s own address with '
+     + 'that vote\'s ?vote=, and then reads "Link copied"',
+     a2v.html.indexOf('>' + A2.vCopy + '<') >= 0
+       && COPIED.length === 1 && COPIED[0] === PAGE + '?vote=' + encodeURIComponent(vSpace.vote_id)
+       && a2copied.doc.getElementById('ipg-sb-vote-copy').textContent === A2.vCopied,
+     JSON.stringify(COPIED));
+  var a2closed = fire(a2copied, a2copied.doc.getElementById('ipg-sb-vote-close'));
+  ok('[A2/CLOSE] × closes the card', !cardOf(a2closed));
+  ok('[A2/ADDR] opening, copying and closing wrote nothing: the address and the history are '
+     + 'as they were, and the source holds no history, storage or address write',
+     a2v.dom.window.location.href === href0 && a2v.dom.window.history.length === hist0
+       && !/pushState|replaceState|localStorage|sessionStorage|location\.hash\s*=|location\.search\s*=|location\.assign|location\.replace/.test(EMBED_HTML));
+  // Complete record: a title opens its card; Esc and a click outside close it.
+  var a2rec = nav(a2closed, 'record');
+  var titleBtn = a2rec.doc.querySelector('button.ipg-sb-rec-title[data-vote="' + vCast.id + '"]');
+  ok('[A2/OPEN] in Complete record every vote\'s title is a button naming its vote', (function () {
+    var btns = a2rec.doc.querySelectorAll('.ipg-sb-rec-title');
+    return btns.length >= REAL.rollcall.votes.length && !!titleBtn
+      && Array.prototype.every.call(btns, function (b) {
+        return b.tagName === 'BUTTON' && !!RC[b.getAttribute('data-vote')]; });
+  })());
+  var a2open = fire(a2rec, titleBtn);
+  ok('[A2/OPEN] a real click on a title opens that vote\'s card, with the Copy button fresh',
+     !!cardOf(a2open) && cardText(a2open).indexOf(RC[vCast.id].title) >= 0
+       && a2open.doc.getElementById('ipg-sb-vote-copy').textContent === A2.vCopy);
+  ok('[A2/CARD] a vote cast by an earlier holder carries the page\'s own note on that seat\'s line',
+     Object.keys(RC[vCast.id].cast_by).every(function (seat) {
+       var line = Array.prototype.filter.call(cardOf(a2open).querySelectorAll('.ipg-sb-vc-seat'),
+         function (l) { return l.textContent.indexOf('Seat ' + seat + ' · ') === 0; })[0];
+       return !!line && line.textContent.indexOf(
+         'Vote cast by ' + RC[vCast.id].cast_by[seat] + ', who held this seat at the time.') >= 0; }));
+  a2open.doc.dispatchEvent(new a2open.doc.defaultView.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  ok('[A2/CLOSE] Esc closes the card', !a2open.doc.getElementById('ipg-sb-vote-overlay'));
+  // Count the card's Esc listeners from here on, by observation: every keydown listener
+  // the page adds to the document, less every one it removes.
+  var kd = { added: 0, removed: 0 };
+  (function (d) {
+    var add = d.addEventListener.bind(d), rem = d.removeEventListener.bind(d);
+    d.addEventListener = function (t) { if (t === 'keydown') kd.added++; return add.apply(null, arguments); };
+    d.removeEventListener = function (t) { if (t === 'keydown') kd.removed++; return rem.apply(null, arguments); };
+  })(a2rec.doc);
+  var a2again = fire(a2rec, a2rec.doc.querySelector('button.ipg-sb-rec-title[data-vote="' + vSame.vote_id + '"]'));
+  ok('[A2/CARD] where the description repeats the title the line under the title is the date alone',
+     cardOf(a2again).querySelector('.ipg-sb-modal-meta').textContent === RC[vSame.vote_id].date);
+  fire(a2again, a2again.doc.getElementById('ipg-sb-vote-copy'));   // a re-render with the card open
+  fire(a2again, cardOf(a2again));
+  ok('[A2/CLOSE] a click outside the card closes it', !a2again.doc.getElementById('ipg-sb-vote-overlay'));
+  ok('[A2/CLOSE] the card keeps ONE Esc listener: across an open, a re-render and a close, '
+     + 'every listener added was removed',
+     kd.added >= 2 && kd.added === kd.removed, JSON.stringify(kd));
+  // An id the page does not hold.
+  var a2bad = await boot(REAL, 'ok', PAGE + '?vote=' + encodeURIComponent('NO-SUCH 99'));
+  ok('[A2/MISSING] an unknown id shows the ratified sentence with that id, and no seat lines',
+     (cardText(a2bad) || '').indexOf(A2.vMissing.replace('{id}', 'NO-SUCH 99')) >= 0
+       && cardOf(a2bad).querySelectorAll('.ipg-sb-vc-seat').length === 0);
+  var a2all = fire(a2bad, a2bad.doc.getElementById('ipg-sb-vote-all'));
+  ok('[A2/MISSING] "See all votes" closes the card and opens Complete record',
+     a2bad.html.indexOf('>' + A2.vSeeAll + '<') >= 0 && !cardOf(a2all)
+       && a2all.doc.querySelector('.ipg-sb-tab.active').getAttribute('data-view') === 'record');
+  var a2esc = await boot(REAL, 'ok', PAGE + '?vote=%3Cimg%20src%3Dx%20onerror%3Dalert(1)%3E');
+  ok('[A2/MISSING] an id from the address is printed as text, never as markup',
+     !!cardOf(a2esc) && cardOf(a2esc).querySelectorAll('img').length === 0
+       && cardText(a2esc).indexOf('<img src=x onerror=alert(1)>') >= 0);
+  // The President, once a position is recorded for him: a line, an em dash for his blanks,
+  // and his blanks out of the tally (PS-125).
+  var presArt = JSON.parse(JSON.stringify(REAL));
+  presArt.rollcall.votes[0].positions.President = 'Affirmative';
+  presArt.members.filter(function (m) { return m.seat === 'President'; })[0].votes[presArt.rollcall.votes[0].id] = 'Affirmative';
+  var pv1 = presArt.rollcall.votes[0].id, pv2 = presArt.rollcall.votes[1].id;
+  var a2p1 = await boot(presArt, 'ok', PAGE + '?vote=' + encodeURIComponent(pv1));
+  var a2p2 = await boot(presArt, 'ok', PAGE + '?vote=' + encodeURIComponent(pv2));
+  ok('[A2/PRES] once the President holds a recorded position he has a line and is counted; on '
+     + 'a vote where his cell is blank the line ends in an em dash and is not counted', (function () {
+    function line(v) { return Array.prototype.filter.call(cardOf(v).querySelectorAll('.ipg-sb-vc-seat'),
+      function (l) { return l.textContent.indexOf('Seat President · ') === 0; })[0]; }
+    function nums(v) { return cardOf(v).querySelector('.ipg-sb-vc-tally').textContent.match(/\d+/g).map(Number); }
+    var l1 = line(a2p1), l2 = line(a2p2);
+    var n1 = nums(a2p1), n2 = nums(a2p2);
+    var sum = function (a) { return a.reduce(function (x, y) { return x + y; }, 0); };
+    return !!l1 && !!l2 && /· Yes$/.test(l1.textContent) && /· —$/.test(l2.textContent)
+      && cardOf(a2p1).querySelectorAll('.ipg-sb-vc-seat').length === 21
+      && sum(n1) === 21 && sum(n2) === 20;
+  })());
+
+
+  // ---------- PS-151 / PS-152 / PS-153: second pass, each closing a gap a mutation showed ----------
+  ok('[A2/ALL] at All elections the bar sentence is whole: its own first sentence, then the '
+     + 'rest exactly as with one election, the count-once sentence included', (function () {
+    var v = setSel(subtab(nav(a2, 'spend'), 'industries'), 'ipg-sb-spend-el', 'all');
+    var head = A2.barAll1.split('{N}')[0], tail = A2.barSingle.split('{N}.')[1];
+    var i = v.text.indexOf(head);
+    return !!tail && tail.indexOf(A2.once) > 0 && i >= 0
+      && /^\$[\d,]+\.$/.test(v.text.slice(i + head.length, v.text.indexOf(tail, i)))
+      && v.text.indexOf(tail, i) > i;
+  })());
+  ok('[A2/ONCE] on the member page the count-once sentence is a line of its own', (function () {
+    // The same member page [A2/ONCE] read above, reached again: every view here shares
+    // one document, and it has moved on since.
+    var seat = REALFIN.members.filter(function (m) {
+      return Object.keys(m.coverage_by_election || {}).some(function (k) {
+        return m.coverage_by_election[k].meets_industry_threshold; }); })[0];
+    if (!seat) return false;
+    var ek = Object.keys(seat.coverage_by_election).filter(function (k) {
+      return seat.coverage_by_election[k].meets_industry_threshold; })[0];
+    var v = trySel(pick(nav(a2, 'member'), seat.seat), 'ipg-sb-fin-el', ek);
+    return Array.prototype.some.call(v.doc.querySelectorAll('.ipg-sb-note'),
+      function (el) { return el.textContent === A2.once; });
+  })());
+  var finDay = JSON.parse(JSON.stringify(REALFIN)); finDay.data_through.large_gift = '2026-09-05';
+  FIN = finDay;
+  var a2day = await boot(REAL, 'ok');
+  ok('[A2/THROUGH] a single-digit day prints without a leading zero',
+     (a2day.doc.querySelector('.ipg-sb-through') || {}).textContent ===
+       throughWant.replace(longDate(DT.large_gift), 'September 5, 2026'));
+  FIN = REALFIN;
+  var noDates = JSON.parse(JSON.stringify(REAL));
+  noDates.rollcall.votes.forEach(function (v) { v.date = 'undated'; });
+  var a2nd = await boot(noDates, 'ok');
+  ok('[A2/THROUGH] bite: with no vote carrying a date the line is left off whole',
+     !a2nd.doc.querySelector('.ipg-sb-through'));
+  var oneBad = JSON.parse(JSON.stringify(REAL)); oneBad.rollcall.votes[0].date = '9999-99-99x';
+  var a2ob = await boot(oneBad, 'ok');
+  ok('[A2/THROUGH] a vote date that is not a date is passed over, not printed',
+     (a2ob.doc.querySelector('.ipg-sb-through') || {}).textContent === throughWant);
+  ok('[A2/OPEN] only Complete record carries the way into a card: no other view has one', (function () {
+    var rec = nav(a2, 'record').doc.querySelectorAll('[data-vote]').length;
+    return rec > 0 && ['board', 'matrix', 'spend', 'methodology'].every(function (vw) {
+      return nav(a2, vw).doc.querySelectorAll('[data-vote]').length === 0; })
+      && expandRec(pick(nav(a2, 'member'), districtSeats[0].seat)).doc.querySelectorAll('[data-vote]').length === 0;
+  })());
+  // A vote on which all four tally figures are above zero, so no two can be swapped unseen.
+  var vFour = REAL.rollcall.votes.filter(function (v) {
+    var c = { Affirmative: 0, Oppositional: 0, Neutral: 0, none: 0 };
+    districtSeats.forEach(function (m) { var p = v.positions[m.seat];
+      if (c.hasOwnProperty(p) && p !== 'none') c[p]++; else c.none++; });
+    return c.Affirmative && c.Oppositional && c.Neutral && c.none; })[0];
+  var a2four = vFour ? await boot(REAL, 'ok', PAGE + '?vote=' + encodeURIComponent(vFour.id)) : null;
+  ok('[A2/CARD] the tally is right on a vote where Yes, No, Present and not recorded are all above zero',
+     !!a2four && cardOf(a2four).querySelector('.ipg-sb-vc-tally').textContent === wantTally(vFour.id)
+       && wantTally(vFour.id).match(/\d+/g).every(function (x) { return Number(x) > 0; }),
+     vFour ? wantTally(vFour.id) : 'no such vote in the data');
+  ok('[A2/CARD] the card is a dialog, named by its heading', (function () {
+    var d = cardOf(a2four).querySelector('[role="dialog"]');
+    return !!d && d.getAttribute('aria-modal') === 'true' && d.getAttribute('aria-label') === A2.vHead;
+  })());
+  ok('[A2/ADDR] an empty ?vote= opens nothing',
+     !cardOf(await boot(REAL, 'ok', PAGE + '?vote=')));
+  var a2dollar = await boot(REAL, 'ok', PAGE + '?vote=' + encodeURIComponent("$&-$'"));
+  ok('[A2/MISSING] an id holding "$" is printed as typed, not read as a pattern',
+     (cardText(a2dollar) || '').indexOf(A2.vMissing.split('{id}').join("$&-$'")) >= 0);
+  // Keys, focus, and a copy that does not copy.
+  var a2k = nav(await boot(REAL, 'ok'), 'record');
+  var kBtn = function (id) { return a2k.doc.querySelector('button.ipg-sb-rec-title[data-vote="' + id + '"]'); };
+  fire(a2k, kBtn(vCast.id));
+  ok('[A2/FOCUS] opening a card moves keyboard focus into it',
+     a2k.doc.activeElement && a2k.doc.activeElement.id === 'ipg-sb-vote-close');
+  a2k.doc.dispatchEvent(new a2k.doc.defaultView.KeyboardEvent('keydown', { key: 'a', bubbles: true }));
+  ok('[A2/CLOSE] a key that is not Esc leaves the card open', !!cardOf(a2k));
+  fire(a2k, a2k.doc.getElementById('ipg-sb-vote-copy'));
+  ok('[A2/FOCUS] after a copy, focus is on the button that now reads "Link copied"',
+     a2k.doc.activeElement && a2k.doc.activeElement.id === 'ipg-sb-vote-copy'
+       && a2k.doc.activeElement.textContent === A2.vCopied);
+  fire(a2k, kBtn(vSame.vote_id));                // another card, opened while the first says "copied"
+  ok('[A2/COPY] a card opened after a copy starts with its own button unpressed',
+     cardText(a2k).indexOf(RC[vSame.vote_id].title) >= 0
+       && a2k.doc.getElementById('ipg-sb-vote-copy').textContent === A2.vCopy);
+  fire(a2k, a2k.doc.getElementById('ipg-sb-vote-close'));
+  ok('[A2/FOCUS] closing a card returns focus to the title that opened it',
+     !cardOf(a2k) && a2k.doc.activeElement && a2k.doc.activeElement.getAttribute('data-vote') === vSame.vote_id);
+  // A key vote's title is in Complete record twice. Opened from the SECOND, focus must
+  // return to the second, or closing a card would jump the reader up the page.
+  var twice = (function () {
+    var seen = {}, hit = null;
+    Array.prototype.forEach.call(a2k.doc.querySelectorAll('[data-vote]'), function (b) {
+      var id = b.getAttribute('data-vote'); seen[id] = (seen[id] || 0) + 1;
+      if (seen[id] === 2 && !hit) hit = id; });
+    return hit;
+  })();
+  ok('[A2/FOCUS] a title that appears twice returns focus to the one that was used', (function () {
+    if (!twice) return false;
+    var both = a2k.doc.querySelectorAll('button.ipg-sb-rec-title[data-vote="' + twice + '"]');
+    fire(a2k, both[1]);
+    fire(a2k, a2k.doc.getElementById('ipg-sb-vote-close'));
+    var now = a2k.doc.querySelectorAll('button.ipg-sb-rec-title[data-vote="' + twice + '"]');
+    return now.length === 2 && a2k.doc.activeElement === now[1];
+  })(), 'vote ' + twice);
+  // Another listener on the same key re-renders the page first — what a pop-up's own Esc
+  // listener does. One press must still close the card.
+  a2k.doc.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') a2k.doc.querySelector('[data-view="record"]').click(); });
+  fire(a2k, kBtn(vCast.id));
+  a2k.doc.dispatchEvent(new a2k.doc.defaultView.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  ok('[A2/CLOSE] one Esc closes the card even when another listener re-renders on the same press',
+     !a2k.doc.getElementById('ipg-sb-vote-overlay'));
+  CLIP_REFUSES = true; COPIED = [];
+  var a2ref = await boot(REAL, 'ok', PAGE + '?vote=' + encodeURIComponent(vCast.id));
+  fire(a2ref, a2ref.doc.getElementById('ipg-sb-vote-copy'));
+  await new Promise(function (r) { setTimeout(r, 50); });
+  ok('[A2/COPY] bite: where nothing could be copied the button does not say "Link copied"',
+     COPIED.length === 0 && !!cardOf(a2ref)
+       && a2ref.doc.getElementById('ipg-sb-vote-copy').textContent === A2.vCopy);
+  CLIP_REFUSES = false;
 
   // ---------- no writes ---------------------------------------------------
   ok('[NOWRITE] embed and artifacts are byte-unchanged by this fixture',

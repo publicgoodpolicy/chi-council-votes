@@ -746,7 +746,11 @@ rather than a silent drift. Landed at SBV-BOARD-1 over the SBV-PORT-1 data port.
 record, matrix, spend, board — and its terminal `else` falls through to
 `methodologyView()` rather than throwing. The embed carries no office concept, and its
 President handling is `presidentRenders()` plus `seatVisible()` — a PS-125 filter, not an
-office branch. The throws-on-unknown-office behavior recorded near this surface belongs
+office branch. The address selects no view: the embed reads `?vote=` once at load (PS-153) and,
+when it names a vote, appends that vote's card over whichever view rendered; nothing writes
+the address, the history or any storage. Under the tab strip `dataThroughLine()` states how
+far the data runs (PS-152), from the finance artifact's `data_through` and the latest vote
+date, and prints nothing unless all three dates are there. The throws-on-unknown-office behavior recorded near this surface belongs
 elsewhere: the build-time emitter `campaign-finance/elections/embed/tools/build_embed.js`
 refuses to emit a bundle for an office outside its enumerated map, and the gate's
 `[BUNDLE/VINTAGE:bite]` line asserts that refusal — a build-time guard on neither embed's
@@ -776,7 +780,9 @@ view** [C5.12, SOURCED]: the SFM fold sits inside `methodologyView()`, reached a
 router's terminal else, rendering the SFM strings in their ratified order with the
 all-elections disclosure re-emitted from its own string-table entry and the dues figure
 substituted from `duesFigure()` behind a loading fallback — a data-readiness branch, not
-an office branch. Office-gated methodology rendering is the elections embed's behavior,
+an office branch. PS-151 and PS-152 added three sentences to the fold: current Board members
+after F3, and other receipts (its figure from `otherFigure()`, printed only with the figure)
+and repeated line items after the dues sentence. Office-gated methodology rendering is the elections embed's behavior,
 implemented as the D-22 / PS-112 gate in its own `render.js` and asserted by the gate's
 `[MUNI/METH]` line; no such gate exists on this single-office surface.
 
@@ -964,7 +970,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-cbr | `campaign-finance/ingestion/convert_bulk_receipts.py` | `6062d0dfea8802f17a3434bef8e88097b7ad932bc17811f14d75055dfc3269ce` |
 | S-av | `campaign-finance/sync_allvotes.py` | `489ece598a942f9e2c205e229ce4b97e3e51687dc03313243c893ace41f5c40c` |
 | S-cemb | `campaign-finance/elections/reference/council-embed.html` | `93c50534103789c942c37878f900a1ef1639bc50dbeb00334af30ba26764c2e1` |
-| S-sbemb | `campaign-finance/school-board/school-board-embed.html` | `a80351a91bc51fad203330629e8016ea2a48d1b74827cd4d1e0fb638621402e9` |
+| S-sbemb | `campaign-finance/school-board/school-board-embed.html` | `5f83ab4db158c936623cc19dbbce07eae9424178cafdc81d6359325ca30840e5` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `8e76a38ad11562fe8de5bee1c2ff339ea60251795171bdd37f9aa29da2e0b82a` |
 | S-edat | `campaign-finance/elections/embed/data.js` | `0157d27831f07d24184405f0faaf2e8e8cd5c2b01071b7914d614658bd021414` |
 | S-eren | `campaign-finance/elections/embed/render.js` | `80f20e421a5e7a12160136216b6aade596101275d61606b236dc14e84f6a6159` |
@@ -1072,7 +1078,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C4.9 | A-esg0 | §2 (pull-model established from bytes; the coverage gap and its collection scope) |
 | C5.1 | A-fw1 | 7-16 (fix sites exist only in the elections path; artifact layer separate) |
 | C5.2 | S-cemb | 47 (dataUrl at the `refs/heads/main/` form), 48-52 (sharded mode, present-but-commented), 68 (feedback endpoint), 3579+3597 (subject prefix) |
-| C5.2 | S-sbemb | 66-70 (the `refs/heads/main/` rationale in situ, then `dataUrl` and `financeUrl` — TWO artifacts since SBFIN-1, where this row previously named one), 3031+3041 (the two artifact fetches), 81+83 (feedback endpoint + subject prefix), 3011 (the POST) |
+| C5.2 | S-sbemb | 66-70 (the `refs/heads/main/` rationale in situ, then `dataUrl` and `financeUrl` — TWO artifacts since SBFIN-1, where this row previously named one), 3282+3292 (the two artifact fetches), 81+83 (feedback endpoint + subject prefix), 3262 (the POST) |
 | C5.13 | S-eren | 140 (METHODOLOGY_OFFICES — the D-22 allowlist, city_council enlisted), 1098-1114 (the three shared expressions — the frame, the verification section and the artifact-links paragraph — as single expressions used by both branches), 1133-1175 (methodologyView's council branch: C1/C2/C5/C3/C4, since M5 C6, and since M2 C7 and C8, with no `<h3>` before any of them, then the verification section and the links paragraph), 1194-1201 (methodologyView's school-board branch: SB-METH-1's C5 as its own paragraph, bare values, whole or not at all, following the filing-deadline paragraph), 1507 (the call site passing office, the dues figures and the page's own other-receipts figures) |
 | C5.13 | S-egate | 1981-2027 ([MUNI/METH]), 2029-2106 ([MUNI/SUBJ]), 2344-2619 ([METH/REGISTER] — register-derived for the C-strings, R11 and, since M2, the school-board branch's section; sibling-branch-pinned for the links paragraph; normalization stated in situ), 2180-2265 ([COUNCIL/CAND]), 2267-2342 ([COUNCIL/DONOR]) |
 | C5.2 | S-eapp | 21 (DEFAULT_SRC at the ratified refs/heads/main/ form), 25-27 (ART_BASE + the two verification artifacts), 328 (src resolution: data-src → window.IPG_DATA_URL → baked default) |
@@ -1099,15 +1105,17 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.9 | S-rol | 226 (the Aggregate-donor set), 240 (member counts exclude it), 244-252 (the one direct-layer loop: row-flag and donor-set skips governing by_parent/by_industry/by_alder/by_candidate/by_race), 363 (by_candidate_election's row-flag-only skip), 411-419 (by_person's paired skips) |
 | C5.9 | S-t1 | 67-73 (slice1 by_parent paired skips), 90-93 (the [8-check] oracle mirrors both) |
 | C5.9 | S-ing | 530-533 (the retired underscore-prefix marking, comment of record) |
-| C5.10 | S-sbemb | 958-960 (`seatVisible` — the one seat filter every seat-iterating surface shares), 961-977 (PS-127 (i)'s sole exception and its single-caller constraint), 1139-1151 (`seatSelector`, the vacancy present by design at 1142-1145), 1190-1197 (the vacancy card — a seat notice, never a member page) |
+| C5.10 | S-sbemb | 1023-1025 (`seatVisible` — the one seat filter every seat-iterating surface shares), 1026-1042 (PS-127 (i)'s sole exception and its single-caller constraint), 1240-1252 (`seatSelector`, the vacancy present by design at 1243-1246), 1291-1298 (the vacancy card — a seat notice, never a member page) |
 | C5.10 | S-sbv | 250 (`read_votes` reads `source_url` as a fixed column), 378 + 393 (the carry into the artifact, roster and vote sides) |
-| C5.10 | S-sbemb | 1210 (the per-vote Source link on the meta surface), 1264 (the vote card's Source link) |
+| C5.10 | S-sbemb | 1311 (the per-vote Source link on the meta surface), 1365 (the Source link on a member page's vote card, key votes and the opened record alike), 2945 (the source link on PS-153's vote card) |
 | C5.10 | S-sbemb | 60-64 (the enumerated N=2 fetch statement the gate asserts by count, so a third fetch fails rather than drifting silently) |
-| C5.11 | S-sbemb | 2704-2740 (`render` — the view router; its terminal `else` at 2733 falls through to `methodologyView` rather than throwing) |
-| C5.11 | S-sbemb | 2713-2716 (the member, record, matrix and spend tests), 2732 (the board test — the fifth named view) |
+| C5.11 | S-sbemb | 2822-2859 (`render` — the view router; its terminal `else` at 2851 falls through to `methodologyView` rather than throwing; PS-153's card is appended at 2852, over whichever view rendered) |
+| C5.11 | S-sbemb | 2831-2834 (the member, record, matrix and spend tests), 2850 (the board test — the fifth named view) |
+| C5.11 | S-sbemb | 3302 (PS-153's one read of the address, `?vote=`, at load; nothing writes it), 2902-2950 (`voteCardHtml` — the card, its seats read through `visibleRoster`) |
+| C5.11 | S-sbemb | 1184-1192 (`dataThroughLine` — PS-152's line, left off whole unless both artifacts have loaded and all three dates are there) |
 | C5.11 | S-bemit | 34-38 (OFFICES — the enumerated office map), 41-45 (the refusal to emit a bundle for an office outside it) |
-| C5.12 | S-sbemb | 2651-2702 (`methodologyView` — the view the terminal else reaches), 2684-2693 (the SFM fold: heading through f6, with `SF.allElectionsDisclosure` re-emitted at 2686 and the `duesFigure` loading fallback at 2688-2691) |
-| C5.12 | S-sbemb | 674-681 (the SFM string declarations) |
+| C5.12 | S-sbemb | 2762-2820 (`methodologyView` — the view the terminal else reaches), 2795-2811 (the SFM fold: heading through f6, with `SF.allElectionsDisclosure` re-emitted at 2797, PS-151's sentence on current Board members at 2799, the `duesFigure` loading fallback at 2800-2803, and PS-152's other-receipts and repeated-line-items sentences at 2807-2809) |
+| C5.12 | S-sbemb | 699-713 (the SFM string declarations) |
 | C5.9 | S-srv | 470-522 (cluster-preview totals mirror the rollup exclusion set exactly) |
 | C5.9 | S-rec | 40, 208-209 (contribution-type set-aside, excluded from the itemized compare) |
 | C5.9 | S-edat | 485-518 (contributor rollup counts every row; the broader render marking incl. small-dollar), 607 (row-flag carriage into the footprint VM) |

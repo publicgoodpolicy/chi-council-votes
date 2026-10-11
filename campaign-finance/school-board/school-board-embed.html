@@ -220,6 +220,27 @@ const IPG_SB_FEEDBACK = {
 #ipg-sb-app .ipg-sb-rec-tag{font-size:11px;font-weight:500;padding:2px 8px;border-radius:999px;
   background:var(--tan);color:var(--ink-mid)}
 #ipg-sb-app .ipg-sb-rec-title{font-size:15px;font-weight:500;line-height:1.3;color:var(--ink)}
+/* PS-153: in Complete record a vote's title is the way into its card. A button, so it is
+   reachable by keyboard, dressed as the title it replaces. */
+#ipg-sb-app button.ipg-sb-rec-title{display:block;width:100%;background:none;border:0;padding:0;margin:0;
+  font-family:inherit;text-align:left;cursor:pointer}
+#ipg-sb-app button.ipg-sb-rec-title:hover,#ipg-sb-app button.ipg-sb-rec-title:focus-visible{color:var(--teal);text-decoration:underline}
+/* PS-152: the data-through line, once under the tab strip on every view. */
+#ipg-sb-app .ipg-sb-through{color:var(--ink-mid);font-size:12.5px;line-height:1.45;
+  padding:14px max(30px,calc((100% - var(--content))/2)) 0}
+/* PS-153: the vote card's own rows. */
+#ipg-sb-app .ipg-sb-vc-tally{font-size:14px;font-weight:600;color:var(--ink);margin:4px 0 12px}
+#ipg-sb-app .ipg-sb-vc-seat{border-top:1px solid var(--line);padding:9px 2px;font-size:14px;line-height:1.35;color:var(--ink)}
+#ipg-sb-app .ipg-sb-vc-actions{margin-top:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:13px}
+#ipg-sb-app .ipg-sb-vc-actions{border-top:1px solid var(--line);padding-top:14px}
+#ipg-sb-app .ipg-sb-vc-actions .ipg-sb-more{margin-top:0}
+/* "See all votes" is a link to the reader and a button to the page: it navigates nowhere. */
+#ipg-sb-app .ipg-sb-vc-link{background:none;border:0;padding:0;font:inherit;color:var(--teal);
+  text-decoration:underline;cursor:pointer}
+/* The card is taller than a phone's screen. The shared modal rule stretches a panel to the
+   overlay's height, which leaves a long card's foot outside its own background; the card
+   takes its content's height instead. Scoped to the card: the shared rule is untouched. */
+#ipg-sb-app #ipg-sb-vote-overlay .ipg-sb-modal{align-self:flex-start}
 /* SBV-PORT-1 G4 — the featured marker (PS-123), the cast-by asterisk and its
    attribution (PS-121/R5a), the key-votes section and the outcome group heads
    (PS-124). Box-sizing is inherited from the app reset, not re-declared. */
@@ -544,7 +565,7 @@ const IPG_SB_FEEDBACK = {
 @media(max-width:600px){
   #ipg-sb-app .ipg-sb-barline .lab{flex-basis:110px}
   #ipg-sb-app .ipg-sb-spend-row{flex-wrap:wrap}
-  #ipg-sb-app .ipg-sb-head,#ipg-sb-app .ipg-sb-body{padding-left:18px;padding-right:18px}
+  #ipg-sb-app .ipg-sb-head,#ipg-sb-app .ipg-sb-body,#ipg-sb-app .ipg-sb-through{padding-left:18px;padding-right:18px}
   #ipg-sb-app .ipg-sb-foot{padding-left:18px;padding-right:18px}
   #ipg-sb-app .ipg-sb-rec-vote{grid-template-columns:1fr}
   #ipg-sb-app .ipg-sb-rec-right{justify-self:start}
@@ -574,6 +595,10 @@ const IPG_SB_FEEDBACK = {
   var state = { view:'member', seat:null, tag:'All', memberRecOpen:false, recQuery:'', recTag:'All',
                 status:'loading', error:null,
                 finStatus:'loading', finError:null,
+                // PS-153 — the vote whose card is showing (a vote id, or null), and whether
+                // its link was just copied. Set from the address once at load, or by a click
+                // on a title in Complete record; never written back to the address.
+                voteCard:null, voteCopied:false,
                 finElection:null, finShowAllDonors:false, spendElection:null,
                 finIndustry:'All', finDonor:null,
                 spendSub:'members', spendSearch:'', spendType:'All', spendIndustry:'All',
@@ -675,7 +700,14 @@ const IPG_SB_FEEDBACK = {
     heading: 'How the money figures work',
     f1: 'Campaign finance figures are computed from committee filings with the State Board of Elections.',
     f3: 'Direct contributions to a candidate\'s committee and independent spending supporting or opposing a candidate are different kinds of money. Each is totaled within its own stream, and no combined figure of the two is shown for any member.',
+    // PS-151 (d) — PS-145's sentence, as written there; it follows F3.
+    currentOnly: 'Independent spending here covers current Board members only.',
     f4: 'Transfers of member dues between political committees are excluded from all totals. In this dataset they account for {DUES}.',
+    // PS-152 — other receipts, after F4, on F4's model: {OTHER} is the only figure and it
+    // renders from the artifact's `other_receipts_excluded.amount`, to the cent, at $0.00 too.
+    otherReceipts: 'A committee’s other receipts (refunds, sales of assets and other money its filings don’t report as contributions, transfers or loans) are left out of all totals. For the members on this page they account for {OTHER}.',
+    // PS-152 — the disclosure sentence PS-137 calls for. No figure.
+    repeatedLines: 'Some filings list the same gift more than once: the same donor, date and amount on one report. We keep every line as filed, because the filings can’t tell a repeated gift from a filer’s double entry.',
     f5: 'Industry classification of donors is an editorial layer and is always in progress. Each chart states how much of the money it shows carries a substantive industry tag, and money without itemized donor detail remains in a member\'s totals even where a chart cannot break it down.',
     f6: 'These figures place money and votes side by side. They do not assert that one caused the other.'
   };
@@ -726,7 +758,12 @@ const IPG_SB_FEEDBACK = {
     filterEmpty: 'No donors in this category for this view.',
 
     verified: 'Verified · Illinois State Board of Elections',
-    updated: 'Updated {N}',
+    // PS-152 — the `updated` string (the word Updated and a date) is RETIRED: it printed the day the file was last
+    // ingested, which a reader takes for the day the data runs to. The data-through line
+    // replaces it, once under the tab strip. {Q} and {A} render from the finance artifact's
+    // `data_through`; {V} is the latest vote date in the votes artifact. No date is written
+    // into this string or anywhere else in the page.
+    dataThrough: 'Contributions through {Q} on quarterly reports, and through {A} on reports of large gifts. Votes through {V}.',
 
     profileKicker: 'Donor profile',
     profileFoot: 'Press Esc, click outside, or use × to close.',
@@ -774,6 +811,10 @@ const IPG_SB_FEEDBACK = {
   // ==========================================================
   var SPC = {
     browseIntro: 'Every donor to a seated Board member’s committee in this election, ranked by total given.',
+    // PS-151 (a): All elections has its own wording, in three sentences; (b): the rank note,
+    // directly after the introduction in both scopes.
+    browseIntroAll: 'Every donor to a seated Board member’s committee across every school board election this tool covers, ranked by total given.',
+    rankNote: 'Outside-spending groups are ranked by what they deployed for and against current Board members.',
     browseSub: 'Click any row to see that donor’s full footprint.',
     browseRollupNote: 'Affiliated donors are combined into one group.',
     browseEmpty: 'No donors match these filters.',
@@ -786,10 +827,17 @@ const IPG_SB_FEEDBACK = {
     directOnlyDonors: 'These are direct contributions to members’ own committees. Independent spending is not shown here — it appears in Spend by member, as its own two streams.',
 
     indIntro: 'Industries ranked by total dollars deployed across all Board committees in this election.',
+    indIntroAll: 'Industries ranked by total dollars deployed across all Board committees, in every school board election this tool covers.',
     indSub: 'Click an industry to see who its donors are and which members they funded.',
-    directOnlyIndustries: 'Independent spending is not included here — these totals are direct contributions only.',
+    // PS-151 (c): reworded, and moved from the head of an industry's detail view to directly
+    // under the donor list it describes.
+    directOnlyIndustries: 'Independent spending is not included in this list — these are direct contributions only.',
     indBarHead: 'Where each dollar comes from',
-    indBarSub: 'Total deployed across all Board committees in this election: {N}. Each segment below is one industry; width is its share of the total. A donor tagged with more than one industry is listed under each; the total counts each donor\'s money once.',
+    // PS-151: the old wording called a width a share of the whole, which it is not — the
+    // widths are shares of the industry rows combined. The count-once sentence that closes each is IND-MULTI-1's, in
+    // that entry's own bytes. The All form differs in its first sentence only (PS-151 (a)).
+    indBarSub: 'Total deployed across all Board committees in this election: {N}. Each segment below is one industry; width is its share of all industry rows combined, which list a donor with more than one industry under each. A donor tagged with more than one industry is listed under each; the total counts each donor\'s money once.',
+    indBarSubAll: 'Total deployed across all Board committees in every school board election this tool covers: {N}. Each segment below is one industry; width is its share of all industry rows combined, which list a donor with more than one industry under each. A donor tagged with more than one industry is listed under each; the total counts each donor\'s money once.',
     onceNote: 'A donor tagged with more than one industry is listed under each; the total counts each donor\'s money once.',
     indListHead: 'Industry breakdown',
     indEmpty: 'No industry data yet.',
@@ -835,6 +883,23 @@ const IPG_SB_FEEDBACK = {
     segDirect: 'Direct',
     segSupport: 'Independent support',
     segOppose: 'Independent opposition'
+  };
+
+  // ==========================================================
+  // PS-153 — THE VOTE CARD. Strings V1 to V8 as ratified 2026-10-10 and entered at PS-153;
+  // V4's second form is not carried (PS-121 and PS-125 stand). Editorial text; do not
+  // reword in code. The closing line is the donor pop-up's own (SF.profileFoot), read from
+  // its one declaration rather than retyped.
+  // ==========================================================
+  var SVC = {
+    heading: 'Board vote',
+    tally: '{Y} Yes · {N} No · {P} Present · {R} not recorded',
+    seatLine: 'Seat {SEAT} · {MEMBER} · ',
+    source: 'Meeting record at the Chicago Board of Education',
+    copy: 'Copy link to this vote',
+    copied: 'Link copied',
+    notFound: 'No vote with the id {ID} is in this tool’s records. Vote ids come from the Board’s own records and can change when those records are corrected.',
+    seeAll: 'See all votes'
   };
 
   // Feedback copy — the council's set transcribed verbatim (SBVOTE-2 G1 census),
@@ -1092,6 +1157,39 @@ const IPG_SB_FEEDBACK = {
     var d = F && F.dues_excluded;
     return (d && typeof d.amount === 'number') ? moneyCents(d.amount) : null;
   }
+  // PS-152 — the other-receipts figure, on duesFigure's model: from the artifact, to the cent.
+  function otherFigure(){
+    var d = F && F.other_receipts_excluded;
+    return (d && typeof d.amount === 'number') ? moneyCents(d.amount) : null;
+  }
+  // PS-152 — the data-through line. A date prints as month, day and year. The line prints
+  // once BOTH artifacts have loaded and all three dates are there; with any one missing it
+  // is left off whole — the page holds no date of its own to fall back on.
+  var MONTHS = ['January','February','March','April','May','June','July','August',
+                'September','October','November','December'];
+  function longDate(iso){
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso==null?'':iso));
+    if(!m) return null;
+    var mo = MONTHS[Number(m[2])-1], day = Number(m[3]);
+    if(!mo || day < 1 || day > 31) return null;
+    return mo + ' ' + day + ', ' + m[1];
+  }
+  function votesThrough(){
+    var last = '';
+    (((D && D.rollcall || {}).votes) || []).forEach(function(v){
+      var d = String(v.date || '');
+      if(/^\d{4}-\d{2}-\d{2}$/.test(d) && d > last) last = d; });
+    return last || null;
+  }
+  function dataThroughLine(){
+    if(state.status !== 'ready' || state.finStatus !== 'ready') return '';
+    var dt = F && F.data_through;
+    if(!dt) return '';
+    var q = longDate(dt.quarterly), a = longDate(dt.large_gift), v = longDate(votesThrough());
+    if(!q || !a || !v) return '';
+    return '<div class="ipg-sb-through">'
+      + esc(SF.dataThrough.replace('{Q}', q).replace('{A}', a).replace('{V}', v)) + '</div>';
+  }
   function pct(share){ return Math.round(Number(share||0)*1000)/10; }
   function fill(tpl, n){ return String(tpl).replace('{N}', String(n)); }
   // Election keys, most recent first, for a member's own elections object.
@@ -1115,7 +1213,9 @@ const IPG_SB_FEEDBACK = {
   // leftmost, 2026-08-17, with the incumbents keeping their relative order after
   // it. Order here is presentation only: nothing derives the landing view from
   // this array — `state.view` is initialised to the literal 'member' below, TABS
-  // is never indexed, and the embed has no hash, history or storage routing.
+  // is never indexed, and the embed has no hash, history or storage routing. (PS-153
+  // reads `?vote=` once at load to open a card OVER the landing view; it selects no
+  // view and writes nothing back.)
   // Moving this entry therefore changes the strip and nothing else.
   var TABS = [['board','The Board'],
               ['member','By member'],['record','Complete record'],
@@ -1128,7 +1228,8 @@ const IPG_SB_FEEDBACK = {
       + '<p class="ipg-sb-sub">Recorded votes of the seated Board, by member and by seat.</p></div>'
       + '<div class="ipg-sb-tabs">' + TABS.map(function(p){
           return '<button type="button" class="ipg-sb-tab'+(state.view===p[0]?' active':'')
-               + '" data-view="'+p[0]+'">'+p[1]+'</button>'; }).join('') + '</div>';
+               + '" data-view="'+p[0]+'">'+p[1]+'</button>'; }).join('') + '</div>'
+      + dataThroughLine();
   }
 
   // Empty state at the whole-tool grain — string 1. This is the BORN STATE:
@@ -1674,7 +1775,7 @@ const IPG_SB_FEEDBACK = {
         h += '<div class="ipg-sb-verified">'+esc(SF.verified)+'</div>';
       var bits = [];
       if(cm.name) bits.push('<strong>'+esc(cm.name)+'</strong>');
-      if(cm.last_updated) bits.push(esc(fill(SF.updated, cm.last_updated)));
+      // PS-152: no "Updated" date here — see SF.dataThrough.
       if(bits.length) h += '<div class="ipg-sb-meta">'+bits.join(' &middot; ')+'</div>';
     });
 
@@ -1736,6 +1837,8 @@ const IPG_SB_FEEDBACK = {
         var inds = industryTotals(rows);
         h += '<div class="ipg-sb-fin-sub">'+esc(SF.barHead)+'</div>'
            + '<div class="ipg-sb-meta">'+esc(SF.barSub)+'</div>'
+           // PS-151: IND-MULTI-1's count-once sentence, on a line of its own under the sub-line.
+           + '<div class="ipg-sb-note">'+esc(SPC.onceNote)+'</div>'
            + dollarBar(inds, filter)
            + '<div class="ipg-sb-note">'+esc(SF.barDirectOnly)+'</div>'
            + '<div class="ipg-sb-note">'+esc(fill(SF.barDisclosure, n))+'</div>';
@@ -2225,7 +2328,11 @@ const IPG_SB_FEEDBACK = {
     var rows = browseRows(ek);
     var types = {}; rows.forEach(function(r){ if(r.type) types[r.type] = 1; });
     var inds = {}; rows.forEach(function(r){ r.industryList.forEach(function(i){ inds[i] = 1; }); });
-    var h = '<div class="ipg-sb-meta">' + esc(SPC.browseIntro)
+    // PS-151 (a) and (b): the introduction follows the scope, and the rank note follows the
+    // introduction directly in both scopes.
+    var h = '<div class="ipg-sb-meta">'
+          + esc(ek === ALL_ELECTIONS ? SPC.browseIntroAll : SPC.browseIntro)
+          + ' ' + esc(SPC.rankNote)
           + '<span class="ipg-sb-meta-sub">' + esc(SPC.browseSub) + '</span></div>'
           // The SBFIN-2 C direct-only sentence was REMOVED here: with IE spenders in the
           // list it is false. Its replacement says what the mixed list contains, so a
@@ -2329,7 +2436,8 @@ const IPG_SB_FEEDBACK = {
   // ---- C.2 Industry totals ----------------------------------------------
   function industryTotalsBody(ek){
     var inds = spendIndustryTotals(ek);
-    var h = '<div class="ipg-sb-meta">' + esc(SPC.indIntro)
+    var isAll = (ek === ALL_ELECTIONS);     // PS-151 (a)
+    var h = '<div class="ipg-sb-meta">' + esc(isAll ? SPC.indIntroAll : SPC.indIntro)
           + '<span class="ipg-sb-meta-sub">' + esc(SPC.indSub) + '</span></div>'
           // The SBFIN-2 C direct-only sentence was REPLACED here: this surface now carries
           // independent spending, so it was false. The two-classifier disclosure takes its
@@ -2338,7 +2446,7 @@ const IPG_SB_FEEDBACK = {
     if(!inds.length) return h + '<div class="ipg-sb-empty">' + esc(SPC.indEmpty) + '</div>';
     var grand = spendCountOnceTotal(ek);   // IND-MULTI-1: count once, list under both
     h += '<div class="ipg-sb-fin-sub">' + esc(SPC.indBarHead) + '</div>'
-       + '<div class="ipg-sb-meta">' + esc(fill(SPC.indBarSub, money(grand))) + '</div>'
+       + '<div class="ipg-sb-meta">' + esc(fill(isAll ? SPC.indBarSubAll : SPC.indBarSub, money(grand))) + '</div>'
        + '<div class="ipg-sb-bar-legend ipg-sb-streamkey">'
        + '<span><i style="background:var(--teal)"></i>' + esc(SPI.segDirect) + '</span>'
        + '<span><i style="background:#3f9d78"></i>' + esc(SPI.segSupport) + '</span>'
@@ -2391,7 +2499,6 @@ const IPG_SB_FEEDBACK = {
     if(!rows.length && !sps.length) return h + '<div class="ipg-sb-empty">' + esc(SPC.indEmpty) + '</div>';
 
     if(rows.length){
-      h += '<div class="ipg-sb-note">' + esc(SPC.directOnlyIndustries) + '</div>';
       var byDonor = {}, dorder = [], byMember = {}, morder = [];
       rows.forEach(function(x){
         if(!byDonor[x.d.donor_id]){
@@ -2413,6 +2520,8 @@ const IPG_SB_FEEDBACK = {
              + '<div class="s">' + esc(d.count + (d.count === 1 ? ' contribution' : ' contributions'))
              + '</div></div><div class="a">' + esc(money(d.amount)) + '</div></button>';
         });
+      // PS-151 (c): the direct-only note, directly under the donor list it describes.
+      h += '<div class="ipg-sb-note">' + esc(SPC.directOnlyIndustries) + '</div>';
       h += '<div class="ipg-sb-fin-sub">' + esc(SPC.indMembersHead) + '</div>';
       morder.map(function(k){ return byMember[k]; })
         .sort(function(a, b){ return b.amount - a.amount; })
@@ -2535,7 +2644,9 @@ const IPG_SB_FEEDBACK = {
          + '<div class="ipg-sb-rec-meta">'+(v.date?esc(v.date):'')
          + (tag?'<span class="ipg-sb-rec-tag">'+esc(tag)+'</span>':'')
          + featuredMark(vm)+'</div>'
-         + '<div class="ipg-sb-rec-title">'+esc(v.title||vm.full||v.id)+'</div>'
+         // PS-153: the title is the way into the vote's card.
+         + '<button type="button" class="ipg-sb-rec-title" data-vote="'+esc(v.id)+'">'
+         + esc(v.title||vm.full||v.id)+'</button>'
          + castByNote(cbName)+'</div>'
          + '<div class="ipg-sb-rec-right">'
          + recPosAt(state.seat, p==null||p===''?NOT_RECORDED:p)+castByMark(cbName)+'</div>'
@@ -2685,10 +2796,17 @@ const IPG_SB_FEEDBACK = {
     h += '<p>'+esc(SFM.f1)+'</p>';
     h += '<p>'+esc(SF.allElectionsDisclosure)+'</p>';
     h += '<p>'+esc(SFM.f3)+'</p>';
+    h += '<p>'+esc(SFM.currentOnly)+'</p>';              // PS-151 (d)
     var duesFig = duesFigure();
     h += duesFig
       ? '<p>'+esc(SFM.f4).replace('{DUES}', esc(duesFig))+'</p>'
       : '<p class="ipg-sb-meta">Loading campaign finance data&hellip;</p>';
+    // PS-152: other receipts beside dues, then repeated line items. The other-receipts
+    // sentence carries a figure and prints only with it (at $0.00 too); F4's loading line
+    // above already says the finance data has not arrived.
+    var otherFig = otherFigure();
+    if(otherFig) h += '<p>'+esc(SFM.otherReceipts).replace('{OTHER}', esc(otherFig))+'</p>';
+    h += '<p>'+esc(SFM.repeatedLines)+'</p>';
     h += '<p>'+esc(SFM.f5)+'</p>';
     h += '<p>'+esc(SFM.f6)+'</p>';
     h += '<h3>Seats and members</h3>';
@@ -2731,6 +2849,7 @@ const IPG_SB_FEEDBACK = {
       if(state.spendIE)  h += ieDetailHtml(_ek, _lab);
     } else if(state.view==='board'){     h += boardView();
     } else {                             h += methodologyView(); }
+    h += voteCardHtml();                                   // PS-153
     h += '</div>' + feedbackBarHtml()
        + '<div class="ipg-sb-foot"><strong>Institute for the Public Good</strong> &middot; '
        + 'Vote positions are entered from public Board of Education records.</div>';
@@ -2768,7 +2887,139 @@ const IPG_SB_FEEDBACK = {
       + '</div>';
   }
 
+  // ==========================================================
+  // PS-153 — the vote card. One card over whatever view is showing, for the vote in
+  // `state.voteCard`. Its seats are the All seats view's (visibleRoster, so PS-125 and
+  // PS-127 (ii) govern it: no President line while no President position is recorded); a
+  // position prints through displayAt, the same boundary every vote view uses; a vote cast
+  // by an earlier holder carries the page's own note (PS-121). The tally is counted over the
+  // lines shown, and a President blank — an em dash, never Not recorded — is not counted.
+  // ==========================================================
+  function voteLink(id){
+    var loc = window.location;
+    return String(loc.origin || '') + String(loc.pathname || '') + '?vote=' + encodeURIComponent(id);
+  }
+  function voteCardHtml(){
+    var id = state.voteCard;
+    if(id == null || state.status !== 'ready') return '';
+    var rc = rollcallById(id), vm = metaByVoteId()[id] || {};
+    var h = '<div class="ipg-sb-modal-overlay" id="ipg-sb-vote-overlay">'
+      + '<div class="ipg-sb-modal" role="dialog" aria-modal="true" aria-label="'+esc(SVC.heading)+'">'
+      + '<button class="ipg-sb-modal-close" id="ipg-sb-vote-close" aria-label="Close">×</button>'
+      + '<div class="ipg-sb-modal-head">'
+      + '<div class="ipg-sb-modal-kicker">'+esc(SVC.heading)+'</div>';
+    if(!rc){
+      // split/join, not replace: an id is a reader's text, and `$` in a replacement string
+      // is a pattern.
+      h += '</div><p class="ipg-sb-vc-missing">'+esc(SVC.notFound.split('{ID}').join(String(id)))+'</p>'
+         + '<div class="ipg-sb-vc-actions"><button type="button" class="ipg-sb-vc-link" id="ipg-sb-vote-all">'
+         + esc(SVC.seeAll)+'</button></div>'
+         + '<div class="ipg-sb-modal-foot">'+esc(SF.profileFoot)+'</div></div></div>';
+      return h;
+    }
+    var title = rc.title || vm.full || rc.id, desc = String(vm.desc || '');
+    // Where the description repeats the title, the line under the title is the date alone.
+    var under = [];
+    if(rc.date) under.push(esc(rc.date));
+    if(desc && desc !== title) under.push(esc(desc));
+    h += '<div class="ipg-sb-modal-name serif">'+esc(title)+'</div>'
+       + '<div class="ipg-sb-modal-meta">'+under.join(' · ')+'</div></div>';
+    var tally = { Affirmative:0, Oppositional:0, Neutral:0, none:0 }, lines = '';
+    visibleRoster().forEach(function(m){
+      var p = (rc.positions && rc.positions[String(m.seat)]);
+      var raw = (p==null || p==='') ? NOT_RECORDED : p;
+      var d = displayAt(m.seat, raw), cbName = castByFor(rc.id, m.seat);
+      if(raw === 'Affirmative' || raw === 'Oppositional' || raw === 'Neutral') tally[raw]++;
+      else if(m.seat !== PRESIDENT_SEAT) tally.none++;       // his blanks are never counted
+      lines += '<div class="ipg-sb-vc-seat">'
+            + esc(SVC.seatLine.split('{SEAT}').join(String(m.seat)).split('{MEMBER}').join(memberLabel(m)))
+            + '<span class="ipg-sb-rec-pos '+d.rec+'">'+esc(d.label)+'</span>'+castByMark(cbName)
+            + castByNote(cbName)+'</div>';
+    });
+    h += '<div class="ipg-sb-vc-tally">'
+       + esc(SVC.tally.replace('{Y}', tally.Affirmative).replace('{N}', tally.Oppositional)
+                      .replace('{P}', tally.Neutral).replace('{R}', tally.none))
+       + '</div>' + lines;
+    var src = rc.source_url || vm.source_url;
+    h += '<div class="ipg-sb-vc-actions">'
+       + (src ? '<a href="'+esc(src)+'" target="_blank" rel="noopener">'+esc(SVC.source)+'</a>' : '')
+       + '<button type="button" class="ipg-sb-more" id="ipg-sb-vote-copy">'
+       + esc(state.voteCopied ? SVC.copied : SVC.copy)+'</button></div>'
+       + '<div class="ipg-sb-modal-foot">'+esc(SF.profileFoot)+'</div></div></div>';
+    return h;
+  }
+  // Copies without leaving the page: the Clipboard API where the browser offers it, a
+  // selected off-screen field where it does not or where it refuses. Neither path navigates
+  // or writes the address. `failed` is called when NEITHER copied, so the button never says
+  // a link was copied when none was.
+  function copyText(text, failed){
+    function legacy(){
+      var ta = null, done = false;
+      try {
+        ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed'; ta.style.left = '-9999px';
+        document.body.appendChild(ta); ta.select();
+        done = !!document.execCommand('copy');
+      } catch(e2) { done = false; }
+      try { if(ta && ta.parentNode) ta.parentNode.removeChild(ta); } catch(e3) {}
+      // select() took the focus and the field is gone: hand it back to the button.
+      if(!done) failed(); else focusId('ipg-sb-vote-copy');
+    }
+    try {
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(function(){}, legacy); return; }
+    } catch(e) {}
+    legacy();
+  }
+  var voteEsc = null;     // the card's one Esc listener, replaced rather than stacked
+  // Which title opened the card, by its place among the titles: a key vote's title is in
+  // Complete record twice, and focus must go back to the one that was used, not the first.
+  var voteFrom = -1;
+  // Keyboard focus follows the card: into it when it opens, back to the title that opened
+  // it when it closes. Best-effort — a node that is gone is simply not focused.
+  function focusId(id){ try { var el = document.getElementById(id); if(el) el.focus(); } catch(e) {} }
+  function focusVoteTitle(id){
+    try {
+      var all = app.querySelectorAll('[data-vote]');
+      if(all[voteFrom] && all[voteFrom].getAttribute('data-vote') === id){ all[voteFrom].focus(); return; }
+      for(var i=0;i<all.length;i++){ if(all[i].getAttribute('data-vote') === id){ all[i].focus(); return; } }
+    } catch(e) {}
+  }
+
   function wire(){
+    // PS-153 — the vote card: a title in Complete record opens it; Esc, a click outside
+    // it, or × closes it; "See all votes" closes it and opens Complete record.
+    app.querySelectorAll('[data-vote]').forEach(function(b){
+      b.onclick = function(){ voteFrom = Array.prototype.indexOf.call(app.querySelectorAll('[data-vote]'), b);
+                              state.voteCard = b.getAttribute('data-vote');
+                              state.voteCopied = false; render(); focusId('ipg-sb-vote-close'); }; });
+    // Capture phase, on add and on remove: another pop-up's Esc listener may re-render
+    // during the same key press, and this one must already have run.
+    if(voteEsc){ document.removeEventListener('keydown', voteEsc, true); voteEsc = null; }
+    var vov = document.getElementById('ipg-sb-vote-overlay');
+    if(vov){
+      var vclose = function(){ var was = state.voteCard;
+                               state.voteCard = null; state.voteCopied = false; render();
+                               focusVoteTitle(was); };
+      voteEsc = function(e){ if(e.key === 'Escape') vclose(); };
+      document.addEventListener('keydown', voteEsc, true);
+      vov.onclick = function(e){ if(e.target === vov) vclose(); };
+      var vcb = document.getElementById('ipg-sb-vote-close');
+      if(vcb) vcb.onclick = vclose;
+      var vall = document.getElementById('ipg-sb-vote-all');
+      if(vall) vall.onclick = function(){ state.voteCard = null; state.voteCopied = false;
+                                          state.view = 'record'; render(); };
+      var vcp = document.getElementById('ipg-sb-vote-copy');
+      if(vcp) vcp.onclick = function(){
+        var idc = state.voteCard;
+        state.voteCopied = true; render(); focusId('ipg-sb-vote-copy');
+        copyText(voteLink(idc), function(){
+          // Nothing was copied: take the claim back, if this card is still the one showing.
+          if(state.voteCard === idc && state.voteCopied){
+            state.voteCopied = false; render(); focusId('ipg-sb-vote-copy'); } });
+      };
+    }
     app.querySelectorAll('[data-view]').forEach(function(b){
       b.onclick = function(){ state.view = b.getAttribute('data-view'); render(); }; });
     var sel = document.getElementById('ipg-sb-seat-sel');
@@ -3044,7 +3295,20 @@ const IPG_SB_FEEDBACK = {
       .catch(function(e){ state.finStatus='error'; state.finError=e && e.message || String(e); });
   }
 
+  // PS-153 — the address is read ONCE, here, as the elections tool reads `?person=`. It is
+  // never written: no history call, no assignment to the address, no storage.
+  (function(){
+    try {
+      var v = new URLSearchParams(window.location.search || '').get('vote');
+      if(v != null && String(v) !== '') state.voteCard = String(v);
+    } catch(e) {}
+  })();
+
   render();
-  Promise.all([loadData(), loadFinance()]).then(render);
+  Promise.all([loadData(), loadFinance()]).then(function(){
+    render();
+    // A card opened from the address takes keyboard focus, as one opened from a title does.
+    if(state.voteCard != null) focusId('ipg-sb-vote-close');
+  });
 })();
 </script>
