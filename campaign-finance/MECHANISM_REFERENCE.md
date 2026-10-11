@@ -267,8 +267,8 @@ PS-101]: `build_sb_finance.py` applies the dues exclusion in a single place, a b
 `continue` inside `scan_committee_rows()` keyed on the `DUES_TYPE` constant, and the R4a
 counter sits at that same predicate so the figure reports what THIS exclusion removes rather
 than what earlier predicates already dropped. The contribution filters run in a fixed order —
-slug scope, aggregate, excluded cycles, dues, other receipts (C5.16: a bare skip through the
-rollup builder's imported test, with no counter), donor resolution, self-funding, window — and
+slug scope, aggregate, excluded cycles, dues, other receipts (C5.16: a skip through the
+rollup builder's imported test, with PS-152's counter at that predicate), donor resolution, self-funding, window — and
 the order is load-bearing for that counter, not incidental. The exclusion is nevertheless vacuous
 here **by disjointness rather than by luck**: `ie_slice()` reads the spend side
 (independent expenditures) while the dues predicate reads funding-side contributions, so no
@@ -973,7 +973,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-rec | `campaign-finance/ingestion/reconcile.py` | `363c3c19341508463d6f5563e2fe2defa3fb59e7626b48b3e31b13e0180acb50` |
 | S-egate | `campaign-finance/elections/embed/tools/gate_bundle.js` | `a8bfad7c9f6262fe814cdd46572324902dc3219ac8ac92553b2b4f1916bbce8b` |
 | S-chk | `campaign-finance/tools/check_sheet_scopes.py` | `9c980fd7362351a7df8a889ba60dc1a38d4fcee397200903a4f7d1b7bc620e94` |
-| S-sbf | `campaign-finance/ingestion/build_sb_finance.py` | `0b7e72af86d9588661b9d3bd6caac0ed9aaaf6990cd0d645e9ef400a8e7a70ee` |
+| S-sbf | `campaign-finance/ingestion/build_sb_finance.py` | `607ebc03dea38bd068930b80874cbad94ea5a12e05e7796de8f6fa6063ede37d` |
 | S-a7 | `campaign-finance/sheets-sync/a7_precheck.py` | `a9d7e4669a4dc7b614d5d85939432a3317e3718d9a91cc9a9f0d50ca9ef73374` |
 | S-iv | `campaign-finance/ingest_votes.py` | `167757809a654effaddaf79f62e3ea82881dfe85e555b9acaa90532eb63b0ef1` |
 | S-bios | `campaign-finance/sheets-sync/sync_bios.py` | `0bce2d545e884fedd07fa814f69381582f7487cc12734c1b8c4152a83d89722a` |
@@ -1025,9 +1025,9 @@ that catch defect classes the existing gates structurally cannot see.
 | C1.16 | S-sbv | whole file (`ingest_sb_votes.py` — the school-board ingest: read-only scope by construction, no write verb anywhere; `mint_member_id` the D-3 slug rule with the four ratified examples as `--self-test` cases; `read_votes` the blank→marker mapping, the fatal unknown-token branch, the structural header contract and the `Outcomes`/`Featured` validation (PS-122, PS-123); `read_cast_by` the optional third tab and its five fatalities (PS-121); `build` the artifact assembly, own-namespace stamps, the `candidacy_ref` carry-through, and the outcome, featured and cast-by carry) |
 | C1.16 | S-vld | 324-426 (`validate_members` — MEMBER-1..7, the roster column contract, deliberately outside `validate_votes`' early return), 88 (wired into validate), 158-179 (`ROSTER_SCHEMAS` — the per-shape declaration the contract hangs on), 181 (`_ISO_DATE`, the date predicate a′ names) |
 | C1.16 | S-chk | `EDITORIAL_TABS` (all three school-board source tabs declared, the third optional at ingest per PS-121) + `ROLES` (`ingest_sb_votes.py` classified `pipeline-reader`) — the pair that makes the read-only property structural rather than promised |
-| C1.17 | S-sbf | 70 (`DUES_TYPE`, the constant the predicate keys on), 289-294 (the single dues-exclusion site — a bare `continue`, with R4a's counter at that same predicate) |
-| C1.17 | S-sbf | 283-306 (the filter order, load-bearing for that counter: slug scope 283, aggregate 285, excluded cycles 287, dues 289, other receipts 295, donor 298, self 300, window 304-306) |
-| C1.17 | S-sbf | 401 (`ie_slice` — the spend side, disjoint from the funding-side dues predicate, which is what makes the exclusion vacuous at $0.00) |
+| C1.17 | S-sbf | 70 (`DUES_TYPE`, the constant the predicate keys on), 326-331 (the single dues-exclusion site — a bare `continue`, with R4a's counter at that same predicate) |
+| C1.17 | S-sbf | 320-345 (the filter order, load-bearing for that counter: slug scope 320, aggregate 322, excluded cycles 324, dues 326, other receipts 332, donor 337, self 339, window 343-345) |
+| C1.17 | S-sbf | 440 (`ie_slice` — the spend side, disjoint from the funding-side dues predicate, which is what makes the exclusion vacuous at $0.00) |
 | C1.19 | S-ing | 586 (reads the artifact on disk), 523-528 (replaces that committee's rows), 688-689 (writes it back) |
 | C1.19 | S-seed | 429-435, 447-451 (preserves committees, donors, contributions, independent_expenditures on re-run) |
 | C2.1 | S-ing | 86-127 (rules), 130-141 (classifier), 314-320 (assignment), 504-508 (partial preserve) |
@@ -1129,7 +1129,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.15 | S-cemb | 878-893 (the three strings and `cfOwnCommittee`, which reads the stamp into a pair set and a giver set), 1266-1268 (OC-V1, the line under the tiles), 921 (aggregateByDonor carries the row flag), 1357 (the alder donor row's chip), 1926 and 2142 (the Browse and industry-list chips), 2416 (the donor profile's recipient row), 851 (the cache reset when contributions arrive), 2734 (the methodology item) |
 | C5.15 | S-egate | 2621-2746 ([OWN/FIGURES], its bite, and [OWN/RENDER]), 575-580 (the [self] group's positive leg, on a card whose own money is stamped) |
 | C5.16 | S-rol | 45-52 (`OTHER_RECEIPT_TYPE`, the accumulator, `is_other_receipt` and `other_receipts_excluded_total`), 221 (the accumulator cleared at build() entry), 250, 366, 415 (the three skip sites, each directly after the dues site), 469 (the field emitted, at every magnitude, into whichever artifact build() was handed), 25 (`COUNCIL_SCHEMA_VERSION`) |
-| C5.16 | S-sbf | 68 (the import of `is_other_receipt`), 295-296 (the skip, after the dues site and before donor resolution) |
+| C5.16 | S-sbf | 68 (the import of `is_other_receipt`), 332-335 (the skip, after the dues site and before donor resolution, with PS-152's counter at the same predicate), 105-113 (`_OTHER_SKIPPED` and `other_receipts_excluded_total`, the page-scope magnitude of PS-152), 122-132 (`data_through`), 696 (the accumulator cleared at `build` entry), 749-750 (both fields emitted) |
 | C5.16 | S-vld | 793 (`OTHER_RECEIPT_TYPE_CHECK`, stated here rather than imported), 827-847 (`_other_recount`), 1063-1100 (`validate_other_receipts_excluded` — the premise rule, then the value rule), 90 (wired into validate), 1146-1147 (the [IE/SPLIT] recount leaves other receipts off the own-committee list out), 1519-1566 (its self-test cases), 799 (`COUNCIL_SCHEMA_VERSION_CHECK`) |
 | C5.16 | S-edat | 46-48 (`OTHER_RECEIPT_TYPE`, `isOtherReceipt` and `excludedType` — the one predicate), 265/459/494/527/577/782/1112/1172/1267/1431 (its ten call sites: the index's in-scope test, the pre-window figure, the contributor list, the funder rollup, the footprint, the industry breakdown, the out-of-window condition, the in-kind share, Browse donors, Industries by candidate), 418-443 (`otherReceiptsOnPage`: the page's own magnitude, the sum of its cards' lines), 725 (committeeProfile: the committee's other receipts in the pop-up's window), 401 (candidateFigures: set aside after the window test, never counted), 412 (returned as `otherReceipts`) |
 | C5.16 | S-eren | 829-832 (otherReceiptsLine — OR-E1), 891 (the card places it under the bars and the own-money sentence), 727 (the person surface calls it too), 680 (a campaign committee's pop-up, under its raised figure), 1115-1131 (C7 and C8, single expressions used by both branches; C7 whole or not at all), 1169 (the council branch's eight strings), 1207-1209 (the school-board branch's section: its heading, then C7 and C8) |

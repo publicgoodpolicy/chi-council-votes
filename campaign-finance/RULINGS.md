@@ -2333,6 +2333,292 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: ruled by Ishan 2026-10-09 (AUDIT-2 C1, items 1 to 8), on BR-19's measurement (report `fa50073b669a6a38cbcfd465b3f4eb6a729707ad0d852f5015719c7bb6a5571a`); text ratified 2026-10-09 from this package (`audit-2-c1-package-rev2.md`, sha256 `418d29f552991498875a43e282644d5cf707a65dcb6794291e21b9286225fce4`), which supersedes revision 1 (`audit-2-c1-package-rev1.md`, sha256 `a1cfb44cd3775dfa58c86f1da0e9cd21f81740b236d4567971cc82e01700b2c9`, ratified 2026-10-09 and narrowed at revision 2 before transcription). Id allocated at this transcription against the id measured free at the moment of writing, never carried.*
 
+### PS-149 — on the school-board voting page the review flag on an outside-spending row is never shown
+
+> **The rule.** `campaign-finance/school-board-finance.json` carries, on every
+> independent-expenditure row, the `needs_review` flag and the `match_method` the ingest minted,
+> as `election-data.json` has them. The school-board voting page
+> (`/school-board-voting-history`) shows neither, on any surface: no chip, no mark, no wording
+> that says a match is unreviewed, and no match method.
+>
+> **Where it comes from.** Ishan ruled it at the SBFIN-3 A review. Until this entry its only
+> home was a comment in the page's render fixture, which also records why: the ingest flags
+> every match made by surname plus a given name, so the flag cannot tell a missing middle
+> initial from a real ambiguity between two candidates.
+>
+> **Where a match is reviewed, and where a reader is told.** A flagged match is reviewed in
+> the confirmation file (the entry *a name match of outside spending to a school-board
+> candidacy is confirmed by the filed name and the candidacy, in a tracked file*). A reader is
+> told about a match still awaiting review on the elections tool, which marks the row. This
+> page shows the spending and not the mark.
+>
+> **Where it lives.** `campaign-finance/school-board/sb_render_fixture.js` asserts the rule in
+> the three checks named `[SBF3/NOFLAG]`: the flag is present in the artifact, it reaches no
+> rendered surface, and it is absent at the All elections scope as well.
+>
+> **Measured basis.** At `761a5dd5f9a0a282f9e76053c92dea5ad2e2bcfd`, 38 of the 85 independent-expenditure
+> rows in `school-board-finance.json` carry the flag, $555,081.94.
+
+*Provenance: AUDIT-2 school-board page ratification package, revision 1 (`audit-2-sb-package-rev1.md`), sha256 `9d585d3122cf240cf1c2f66cde7da54ecc080142190b65acbd0bef0380b5593a`, 33,246 B / 378 L, region R1 (its lines 31–53), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-11 as drafted (“ratified”), on his ruling at the SBFIN-3 A review and item 3 of his rulings of 2026-10-07 (AUDIT-2, what remains). Arises from the numbers audit of 2026-09-29 (finding C3). Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-148`; `PS-149` occurring 0 times before this commit), never carried. Measured basis: the planner’s clone at `761a5dd5f9a0a282f9e76053c92dea5ad2e2bcfd`.*
+
+### PS-150 — a name match of outside spending to a school-board candidacy is confirmed by the filed name and the candidacy, in a tracked file
+
+> **What is flagged.** `campaign-finance/ingestion/ingest_ie.py` matches an outside group's
+> expenditure to a candidate by the candidate name the group wrote on its filing. A match made
+> by surname plus a given name, or made on a name that more than one registry entry carries,
+> is flagged `needs_review`. The artifact keeps the flag and not the name as filed.
+>
+> **Ruled by Ishan, 2026-10-07 and 2026-10-10.**
+> - **A flagged match is reviewed at its source.** Ishan confirms or strikes it, and the
+>   record is a tracked file, `campaign-finance/elections/reference/ie-target-confirmations.tsv`.
+> - **A confirmation covers the name as filed, for one candidacy.** Its key is the filed
+>   candidate name, normalised as the ingest normalises it, together with the id of the
+>   candidacy the ingest matched it to. It is not keyed on the candidacy alone, and not on the
+>   single row. Normalised means: put in lower case; every character other than a to z, 0 to 9
+>   and the space becomes a space, an accented letter included; runs of spaces become one; and
+>   spaces at the two ends are dropped.
+> - **What a confirmation does.** A row whose filed name and matched candidacy are a
+>   confirmed pair is no longer flagged. A later row with the same filed name and the same
+>   match arrives unflagged. A filed name that is not in the file, or a filed name matched to
+>   another candidacy, arrives flagged and is put to Ishan.
+> - **This amends PS-140's paragraph headed Review,** which has rows matched by surname plus a
+>   given name “stay flagged”. They stay flagged until their pair is confirmed.
+> - **The elections tool** marks a row only while it is flagged, and its methodology says what
+>   the mark means (wording ratified 2026-10-10; it lands with that tool's own change). **The
+>   school-board voting page** never shows the flag (the entry *on the school-board voting page
+>   the review flag on an outside-spending row is never shown*).
+>
+> **Not ruled.** The file holds confirmed pairs only, because no pair has been struck. What a
+> strike does to a row's attribution is ruled when a pair is first struck. A confirmed row
+> keeps the record of how it was matched (`match_method`); no page shows it for a confirmed row.
+>
+> **The fifteen confirmed pairs.** Ishan confirmed fourteen candidate-and-election groups on
+> 2026-10-10 from his knowledge of each race, and confirmed them again as the fifteen pairs
+> below once the names as filed had been read from the sealed 2026-09-13 expenditures file.
+> The executor that read them judged every name as filed to name the candidate it was matched
+> to, and listed none that did not.
+>
+> | filed name, normalised | as filed (rows) | candidacy | rows | amount |
+> |---|---|---|---|---|
+> | `michelle pierre` | “Michelle Pierre” (27) | Michelle N. Pierre, `pierre-sb-2024-d1` | 27 | $367,780.99 |
+> | `carlos rivas jr` | “Carlos Rivas, Jr” (12); “Carlos Rivas, Jr.” (4); “Carlos Rivas,Jr” (1) | Carlos A. Rivas Jr., `rivas-sb-2024-d3` | 17 | $98,676.17 |
+> | `carlos rivas` | “Carlos Rivas” (12) | Carlos A. Rivas Jr., `rivas-sb-2024-d3` | 12 | $242,063.91 |
+> | `eva villalobos` | “Eva Villalobos” (30) | Eva A. Villalobos, `villalobos-sb-2024-d7` | 30 | $281,196.18 |
+> | `ebony deberry` | “Ebony DeBerry” (3) | Ebony L. DeBerry, `deberry-sb-2024-d2` | 3 | $126,078.00 |
+> | `lanetta thomas` | “Lanetta Thomas” (1) | Lanetta M. Thomas, `thomas-sb-2024-d9` | 1 | $47,317.00 |
+> | `karin norrington reaves` | “Karin Norrington-Reaves” (9) | Karin Norington-Reaves, `norington-reaves-sb-2024-d10` | 9 | $39,900.61 |
+> | `jason dones` | “Jason Dones” (1) | Jason C. Dones, `dones-sb-2024-d3` | 1 | $35,153.00 |
+> | `jessica biggs` | “Jessica Biggs” (1) | Jessica Biggs, `biggs-sb-president` | 1 | $26,460.00 |
+> | `michilla blaise` | “Michilla Blaise” (1) | Michilla "Kyla" Blaise, `blaise-sb-d10` | 1 | $24,950.00 |
+> | `carlos rivas` | “Carlos Rivas” (2) | Carlos A. Rivas Jr., `rivas-sb-d06` | 2 | $24,666.36 |
+> | `jesus ayala` | “Jesus Ayala” (1) | Jesus Ayala Jr, `ayala-sb-d13` | 1 | $12,475.00 |
+> | `jitu brown` | “Jitu Brown” (1) | Aaron "Jitu" Brown, `brown-sb-d09` | 1 | $7,500.00 |
+> | `margie luczak` | “Margie Luczak” (2) | Margie B. Luczak, `cand-luczak-sb-d01` | 2 | $7,135.32 |
+> | `debby pope` | “Debby Pope” (1) | Deborah "Debby" Pope, `pope-sb-d04` | 1 | $4,687.50 |
+>
+> Together they are every flagged row at that vintage: 109 rows, $1,346,040.04, filed by four
+> committees (State Board ids 26066, 39901, 41012 and 41327).
+>
+> **When the flag comes off.** This entry and the file land first. The change to
+> `ingest_ie.py` that reads the file, and the re-run of the outside-spending step on the
+> sealed 2026-09-13 vintage, travel with the elections tool's change (ruled 2026-10-10). Until
+> they land, the artifacts carry the flag on these 109 rows as before and the elections tool
+> marks them.
+>
+> **Three things the names as filed showed, recorded and not acted on here.**
+> - The filer of Karin Norington-Reaves's nine flagged rows spelled the surname
+>   “Norrington-Reaves”.
+> - “Carlos Rivas” is a confirmed name for two candidacies, 2024 and 2026. A row's date decides
+>   which election it belongs to (PS-140's window), before the file is consulted.
+> - The one row for Jessica Biggs was matched on the name alone (`name_fallback`), because the
+>   registry holds two 2026 entries named “Jessica Biggs”: her candidacy for Board President
+>   and an incumbent placeholder for her district seat. The match fell on the first of the two
+>   in the registry, which is the candidacy for President; the filing also names that office.
+>   While both entries stand, a later row filed “Jessica Biggs” in the 2026 window will land on
+>   the candidacy for President unless its office text carries her seat's label (6B), and
+>   where it lands there it will arrive unflagged under this entry.
+>
+> **Measured basis.** AUDIT-2 BR-20, 2026-10-10, at `761a5dd5f9a0a282f9e76053c92dea5ad2e2bcfd`: one
+> read of `expenditures_639249152464024551.txt` in the sealed vintage, joining each flagged
+> row to the bulk rows it was minted from. 89 rows joined to one filed name; 20 share their
+> key with other candidates' rows of the same purchase, and each of those has exactly one
+> filed name carrying the matched candidate's surname; none went unjoined.
+
+*Provenance: AUDIT-2 school-board page ratification package, revision 1 (`audit-2-sb-package-rev1.md`), sha256 `9d585d3122cf240cf1c2f66cde7da54ecc080142190b65acbd0bef0380b5593a`, 33,246 B / 378 L, region R2 (its lines 61–140), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-11 as drafted (“ratified”), on item 3 of his rulings of 2026-10-07, his confirmations of 2026-10-10, and items 1 to 3 of his rulings of 2026-10-10 23:49 EDT. Arises from the numbers audit of 2026-09-29 (finding C3). Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-149`; `PS-150` occurring 0 times before this commit), never carried. Measured basis: AUDIT-2 BR-20 report `7493e67a63cd0afe05c98bc23f48c1248590e54f62a02beb64491e0ffe182330`.*
+
+### PS-151 — on the school-board voting page the All elections view has its own wording, a donor list says how outside groups are ranked, and an industry bar says what its widths are shares of
+
+> **What was open.** PS-145 left one thing as it was: the words “in this election” also show
+> when the election selector reads All elections. Open-ledger item 97 carried it with three
+> more: Browse donors says its list is “ranked by total given” while it also ranks outside
+> groups by what they deployed; an industry's detail view says “Independent spending is not
+> included here” above a list of independent spenders; and the methodology never says that
+> independent spending covers current Board members only. The numbers audit (finding C2) added
+> two: the member page's industry bar has no count-once sentence, and the Industry totals bar
+> calls its widths shares “of the total” when they are shares of the industry rows combined.
+>
+> **Ruled by Ishan, 2026-10-07; wording ratified 2026-10-10.** The page and its fixture change
+> in the commit that follows this entry's.
+> - **(a) All elections has its own wording, in three sentences.** With one election
+>   selected, the three sentences stay as the page has them (two of them are PS-145's). With
+>   All elections selected:
+>   - Browse donors, the introduction: **Every donor to a seated Board member’s committee
+>     across every school board election this tool covers, ranked by total given.**
+>   - Industry totals, the introduction: **Industries ranked by total dollars deployed across
+>     all Board committees, in every school board election this tool covers.**
+>   - Industry totals, the sentence above the bar, its first sentence: **Total deployed across
+>     all Board committees in every school board election this tool covers: {N}.**
+> - **(b) Browse donors says how outside groups are ranked.** Directly after the
+>   introduction, with one election or All elections selected: **Outside-spending groups are
+>   ranked by what they deployed for and against current Board members.**
+> - **(c) The direct-only note sits under the list it describes.** In an industry's detail
+>   view (Industry totals, after clicking an industry), the sentence “Independent spending is
+>   not included here — these totals are direct contributions only.” no longer opens the view.
+>   Under the list headed “Donors in this industry”, and before “Members they funded”, the
+>   view reads: **Independent spending is not included in this list — these are direct
+>   contributions only.**
+> - **(d) The methodology says whom independent spending covers.** Under “How the money
+>   figures work”, after the paragraph on the two kinds of money (F3): **Independent spending
+>   here covers current Board members only.** It is PS-145's sentence, as written there.
+> - **The member page's industry bar** gains IND-MULTI-1's count-once sentence, as that entry
+>   and the page carry it, on a line of its own under the bar's line on what a segment is:
+>   **A donor tagged with more than one industry is listed under each; the total counts each donor's money once.**
+> - **The Industry totals bar.** In the sentence above the bar, “width is its share of the
+>   total” becomes **width is its share of all industry rows combined, which list a donor with
+>   more than one industry under each**. With one election selected the whole sentence then
+>   reads: **Total deployed across all Board committees in this election: {N}. Each segment
+>   below is one industry; width is its share of all industry rows combined, which list a
+>   donor with more than one industry under each. A donor tagged with more than one industry is listed under each; the total counts each donor's money once.**
+>
+> **What does not change.** Every figure. The single-election wording of the three sentences
+> in (a). PS-144's fusion rule and PS-145's other strings. IND-MULTI-1's sentence, wherever
+> the page already prints it. The note on the two classifiers, which already ends with the
+> sentence (d) adds to the methodology.
+>
+> **Where it lives.** `campaign-finance/school-board/school-board-embed.html`; the fixture
+> `campaign-finance/school-board/sb_render_fixture.js` asserts each string on the view and the
+> selector state that owns it.
+
+*Provenance: AUDIT-2 school-board page ratification package, revision 1 (`audit-2-sb-package-rev1.md`), sha256 `9d585d3122cf240cf1c2f66cde7da54ecc080142190b65acbd0bef0380b5593a`, 33,246 B / 378 L, region R3 (its lines 152–201), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-11 as drafted (“ratified”), on items 5 and 8 of his rulings of 2026-10-07 and the wording he ratified 2026-10-10. Arises from the numbers audit of 2026-09-29 (finding C2) and open-ledger item 97. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-150`; `PS-151` occurring 0 times before this commit), never carried. Measured basis: the planner’s clone at `761a5dd5f9a0a282f9e76053c92dea5ad2e2bcfd`.*
+
+### PS-152 — the school-board voting page states how current its data is, that repeated line items are kept, and what its members' committees' other receipts come to
+
+> **Ruled by Ishan, 2026-10-07; wording ratified 2026-10-10.** The page changes in the commit
+> that follows this entry's; the two new fields in `school-board-finance.json` land with this
+> entry.
+>
+> **The data-through line.** Under the tab strip, on every view of the page, one line states
+> how far the data runs: **Contributions through {quarterly date} on quarterly reports, and
+> through {large-gift date} on reports of large gifts. Votes through {votes date}.**
+> - The two contribution dates are the latest dates of a contribution filed on a quarterly
+>   report and of one filed on a report of a large gift (form A-1), across the whole of
+>   `campaign-finance/election-data.json`, the file the page's finance figures are built from
+>   (ruled 2026-10-10). Neither is taken from the page's own members' committees alone, whose
+>   latest dates can be earlier.
+> - `campaign-finance/ingestion/build_sb_finance.py` writes the two dates into
+>   `school-board-finance.json` as `data_through`. The votes date is the latest vote date in
+>   `school-board-data.json`.
+> - Dates print as month, day and year: June 30, 2026.
+> - The line prints once both files have loaded. If a date is missing, the whole line is left
+>   off; the page holds no date of its own to fall back on.
+> - On a member's page the committee line under “Verified · Illinois State Board of
+>   Elections” no longer carries “Updated” and a date. That date was the day the file was
+>   last ingested, which a reader takes for the day the data runs to.
+>
+> **Repeated line items** (the disclosure sentence PS-137 calls for, on this page). In the
+> methodology, under “How the money figures work”: **Some filings list the same gift more than
+> once: the same donor, date and amount on one report. We keep every line as filed, because
+> the filings can’t tell a repeated gift from a filer’s double entry.** No figure is stated.
+>
+> **Other receipts** (PS-147). In the methodology, under “How the money figures work”, after
+> the dues sentence (F4): **A committee’s other receipts (refunds, sales of assets and other
+> money its filings don’t report as contributions, transfers or loans) are left out of all
+> totals. For the members on this page they account for {figure}.**
+> - The figure is the total of the other receipts on the committees of the page's members'
+>   candidacies: the rows PS-147's test leaves out of that page's figures. The builder counts
+>   them at the point where it leaves them out, as it counts dues, and writes the total into
+>   `school-board-finance.json` as `other_receipts_excluded`, an amount and a count, at every
+>   build and at zero too. The file's `schema_version` moves to 1.5.
+> - The figure prints to the cent and at every amount, zero included, as the dues figure does.
+> - This amends PS-147's paragraph headed “The school-board voting page.”, whose last two
+>   sentences read “No line is added there and the page is not pasted again (ruled
+>   2026-10-06).” and “Its funding methodology (strings F1 to F6) does not state this
+>   exclusion.” Still no line is added to a member's page. The methodology now states the
+>   exclusion and its size, and the page is pasted again.
+>
+> **Order under “How the money figures work”,** once the page has changed: F1; the All
+> elections disclosure (F2); F3; the sentence on current Board members; F4, on dues; other
+> receipts; repeated line items; F5; F6.
+>
+> **What does not change.** Every figure on every view. PS-147's rule and PS-137's.
+>
+> **Measured basis.** At `761a5dd5f9a0a282f9e76053c92dea5ad2e2bcfd`: quarterly reports run to
+> 2026-06-30 and reports of large gifts to 2026-09-11 across the elections file (to 2026-09-10
+> among the page's sixteen committees); the elections tool's own statement of how current its
+> contribution data is reads September 11, 2026 at this commit. Votes run to 2026-07-30 (273
+> votes). The page's members' committees hold 4 other receipts, $3,358.59: Ebony DeBerry's
+> committee, $149.52 and $25.14 (2026-02-17); Ellen Rosenfeld's, $250.00 (2024-10-18) and
+> $2,933.93 (2025-01-14). On that data the line reads **Contributions through June 30, 2026 on
+> quarterly reports, and through September 11, 2026 on reports of large gifts. Votes through
+> July 30, 2026.**
+
+*Provenance: AUDIT-2 school-board page ratification package, revision 1 (`audit-2-sb-package-rev1.md`), sha256 `9d585d3122cf240cf1c2f66cde7da54ecc080142190b65acbd0bef0380b5593a`, 33,246 B / 378 L, region R4 (its lines 211–268), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-11 as drafted (“ratified”), on items 4, 6 and 7 of his rulings of 2026-10-07, the wording he ratified 2026-10-10, and item 4 of his rulings of 2026-10-10 23:49 EDT. Arises from the numbers audit of 2026-09-29 (findings S1 and S3) and open-ledger item 105. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-151`; `PS-152` occurring 0 times before this commit), never carried. Measured basis: the planner’s clone at `761a5dd5f9a0a282f9e76053c92dea5ad2e2bcfd`.*
+
+### PS-153 — a school-board vote has an address of its own, and the page opens a card for it
+
+> **Ruled by Ishan, 2026-10-07; wording ratified 2026-10-10.** The page changes in the commit
+> that follows this entry's.
+>
+> **The address.** `/school-board-voting-history?vote=<id>` opens the page with that vote's
+> card showing. The id is the vote's `vote_id` in `campaign-finance/school-board-data.json`,
+> which is the code cell of the project Sheet's votes tab; an id that holds a space is written
+> URL-encoded. The page reads the address once, when it loads, as the elections tool reads
+> `?person=`. It never writes to the address or to the browser's history.
+>
+> **The card.** A small card over the page. It closes the way the donor pop-up does: the Esc
+> key, a click outside it, or its × button.
+> - Heading: **Board vote**
+> - The vote's title, and under it: **{date} · {the Board’s own description of the item}**.
+>   The date prints as the page's vote rows print it. Where a vote's description is the same
+>   as its title, the line is the date alone.
+> - The tally: **{n} Yes · {n} No · {n} Present · {n} not recorded**, counted over the
+>   lines the card shows.
+> - One line for each seat the All seats view lists: **Seat {seat} · {member} ·
+>   {position}**. That is the twenty district seats. A vacant seat's line reads **Vacant** for
+>   the member, and shows whatever position the data records for the seat. The Board President
+>   has a line, and is counted in the tally, only once a President's position is recorded
+>   (PS-125 and PS-127 (ii), which govern this card as they govern every view that lists
+>   votes).
+>   A blank of his, once he has a line, prints an em dash and is not counted under not
+>   recorded (PS-125).
+> - A position prints in the page's four words: Yes, No, Present, Not recorded. A district
+>   seat's blank prints **Not recorded** (PS-125). Where the data records that an earlier holder of the seat
+>   cast the vote, the line carries the page's note saying so (PS-121).
+> - The source link: **Meeting record at the Chicago Board of Education**, to the vote's
+>   source address, in a new tab.
+> - A button, **Copy link to this vote**, which copies the page's own address with that
+>   vote's `?vote=` and then reads **Link copied**.
+> - The closing line is the donor pop-up's: **Press Esc, click outside, or use × to close.**
+>
+> **An id the page does not hold.** The card reads: **No vote with the id {id} is in this
+> tool’s records. Vote ids come from the Board’s own records and can change when those records
+> are corrected.** with a link, **See all votes**, which closes the card and opens Complete
+> record.
+>
+> **Opening a card from the page.** In Complete record, a vote's title opens its card.
+>
+> **What does not change.** Every position, the page's landing view, and every view but
+> Complete record, whose vote titles become the way into a card. PS-121 and PS-125. The page
+> stores nothing and keeps no history.
+>
+> **Measured basis.** At `761a5dd5f9a0a282f9e76053c92dea5ad2e2bcfd`: 273 votes, every id distinct, ten
+> holding a space, each made only of letters, digits, spaces and hyphens. 58 of the 273 have a
+> description equal to the title. The President's position is blank on all 273. Ishan checked
+> by hand on 2026-10-07 that the live site keeps a query string
+> (`/school-board-elections?election=2024` opens on 2024).
+
+*Provenance: AUDIT-2 school-board page ratification package, revision 1 (`audit-2-sb-package-rev1.md`), sha256 `9d585d3122cf240cf1c2f66cde7da54ecc080142190b65acbd0bef0380b5593a`, 33,246 B / 378 L, region R5 (its lines 278–327), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-11 as drafted (“ratified”), on item 11 of his rulings of 2026-10-07 and the wording he ratified 2026-10-10. V4’s second form (“Not on the Board at this vote”), ratified with the wording on 2026-10-10, was put to him as the package’s item 6 against PS-121 and PS-125 and is not carried: the region was drafted without it and ratified so. Arises from that ruling. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-152`; `PS-153` occurring 0 times before this commit), never carried. Measured basis: the planner’s clone at `761a5dd5f9a0a282f9e76053c92dea5ad2e2bcfd`.*
+
 ---
 
 ## Rulings ratified without an id

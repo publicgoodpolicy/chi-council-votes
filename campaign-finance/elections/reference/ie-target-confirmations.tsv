@@ -1,0 +1,20 @@
+# Confirmed matches of outside spending to school-board candidacies (RULINGS.md; AUDIT-2 C3).
+# One line per pair: the candidate name as the spender filed it, normalised as ingest_ie.py's norm() does,
+# and the candidacy the ingest matched it to. A pair listed here was confirmed by Ishan on the date given.
+# seen_as: the spellings filed under the pair at the 2026-09-13 vintage (evidence, not a key).
+filed_name	candidate_id	status	ruled	seen_as
+michelle pierre	pierre-sb-2024-d1	confirmed	2026-10-10	Michelle Pierre
+carlos rivas jr	rivas-sb-2024-d3	confirmed	2026-10-10	Carlos Rivas, Jr | Carlos Rivas, Jr. | Carlos Rivas,Jr
+carlos rivas	rivas-sb-2024-d3	confirmed	2026-10-10	Carlos Rivas
+eva villalobos	villalobos-sb-2024-d7	confirmed	2026-10-10	Eva Villalobos
+ebony deberry	deberry-sb-2024-d2	confirmed	2026-10-10	Ebony DeBerry
+lanetta thomas	thomas-sb-2024-d9	confirmed	2026-10-10	Lanetta Thomas
+karin norrington reaves	norington-reaves-sb-2024-d10	confirmed	2026-10-10	Karin Norrington-Reaves
+jason dones	dones-sb-2024-d3	confirmed	2026-10-10	Jason Dones
+jessica biggs	biggs-sb-president	confirmed	2026-10-10	Jessica Biggs
+michilla blaise	blaise-sb-d10	confirmed	2026-10-10	Michilla Blaise
+carlos rivas	rivas-sb-d06	confirmed	2026-10-10	Carlos Rivas
+jesus ayala	ayala-sb-d13	confirmed	2026-10-10	Jesus Ayala
+jitu brown	brown-sb-d09	confirmed	2026-10-10	Jitu Brown
+margie luczak	cand-luczak-sb-d01	confirmed	2026-10-10	Margie Luczak
+debby pope	pope-sb-d04	confirmed	2026-10-10	Debby Pope

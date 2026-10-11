@@ -96,6 +96,42 @@ def dues_excluded_total():
     return round(float(sum(_DUES_SKIPPED.values())), 2)
 
 
+# PS-152 — the other-receipts magnitude at THIS page's scope (open ledger 105). The same
+# discipline as _DUES_SKIPPED above, for the same reason: the accumulator sits AT the
+# predicate in scan_committee_rows and counts exactly the rows it skips, keyed by row
+# identity so a committee two members share is counted once. election-data.json's own
+# `other_receipts_excluded` is every office's and every date's (PS-147); this one is the
+# committees of the page's members' candidacies and nothing else.
+_OTHER_SKIPPED: dict = {}
+
+
+def other_receipts_excluded_total():
+    """PS-152: {amount, count} over the other receipts this build left out.
+
+    Emitted at every build and at zero too, as dues are (PS-101)."""
+    return {"amount": round(float(sum(_OTHER_SKIPPED.values())), 2),
+            "count": len(_OTHER_SKIPPED)}
+
+
+# PS-152 — how far the data runs. The two contribution dates the page's data-through line
+# prints: the latest date of a row filed on a quarterly report, and of a row filed on a
+# report of a large gift (form A-1), across the WHOLE of election-data.json — ruled
+# 2026-10-10, so that this page and the elections tool state the same dates, and so that a
+# page with few committees does not understate how current the file is. A kind with no
+# dated row is null, and the page then leaves its line off whole.
+DATA_THROUGH_KINDS = (("quarterly", "Quarterly"), ("large_gift", "A-1"))
+
+
+def data_through(ed):
+    out = {}
+    for key, filing in DATA_THROUGH_KINDS:
+        dates = [c.get("date") for c in ed.get("contributions", [])
+                 if c.get("source_filing") == filing
+                 and isinstance(c.get("date"), str) and len(c["date"]) == 10]
+        out[key] = max(dates) if dates else None
+    return out
+
+
 # The tool's existing not-recorded neutral, reused for an industry with no vocabulary entry.
 NEUTRAL_COLOR = "#a9a299"
 
@@ -106,7 +142,8 @@ NEUTRAL_COLOR = "#a9a299"
 # magnitude R4a rules the methodology renders as {DUES}. A shape change under an unchanged
 # version number is a trap, and a REMOVAL is a shape change — an ADDITION is one too, which
 # is why this moves for a purely additive key that no existing reader would have missed.
-SCHEMA_VERSION = 1.4
+# 1.4 -> 1.5 at AUDIT-2 (PS-152): `other_receipts_excluded` and `data_through` added.
+SCHEMA_VERSION = 1.5
 # Tags that carry no interest-group signal. The council's correlation card isolates the
 # complement of this set via its exclude-individual / exclude-unclassified toggles; the
 # ratified >=50% industry-bar gate is computed against 'substantive' below.
@@ -293,6 +330,8 @@ def scan_committee_rows(ed, candidacy_ids):
             _DUES_SKIPPED[id(c)] = round(float(c.get("amount") or 0.0), 2)
             continue
         if is_other_receipt(c):   # M2: the same predicate build_rollups applies, imported
+            # PS-152: counted here, at the predicate that skips it (see _OTHER_SKIPPED).
+            _OTHER_SKIPPED[id(c)] = round(float(c.get("amount") or 0.0), 2)
             continue
         did = c.get("donor_id")
         if did is None or did not in donors or did in aggregate_ids:
@@ -654,6 +693,7 @@ def build(sb, ed, sb_sha, ed_sha, stamp):
     # R4a's accumulator is process-global; cleared here so a second build() in one
     # process (the self-test does exactly that) cannot inherit the first one's rows.
     _DUES_SKIPPED.clear()
+    _OTHER_SKIPPED.clear()
     members = [build_member(m, ed) for m in sb.get("members", [])]
     ies = ie_slice(members, ed)
     labels = election_labels(ed)
@@ -704,6 +744,10 @@ def build(sb, ed, sb_sha, ed_sha, stamp):
         # (PS-101), so the disclosure never depends on the number being interesting.
         "dues_excluded": {"amount": dues_excluded_total(),
                           "count": len(_DUES_SKIPPED)},
+        # PS-152 — the other receipts left out at this page's scope, and how far the
+        # contribution data runs. Both render from here; neither is written into the page.
+        "other_receipts_excluded": other_receipts_excluded_total(),
+        "data_through": data_through(ed),
         "counts": {"members": len(members), "by_finance_state": by_state,
                    "donor_rows": donor_rows, "itemized_rows": itemized_rows},
         "members": members,
@@ -852,6 +896,9 @@ def main():
           f"{c['itemized_rows']} itemized rows")
     print(f"[build_sb_finance] {len(art['industry_tags'])} industry tags · "
           f"{len(art['donor_clusters'])} donor families in scope")
+    o, dt = art["other_receipts_excluded"], art["data_through"]
+    print(f"[build_sb_finance] other receipts left out: {o['amount']:,.2f} in {o['count']} "
+          f"receipt(s) · data through: quarterly {dt['quarterly']} · large gifts {dt['large_gift']}")
     for ek in sorted(art["ie_spenders"], reverse=True):
         sps = art["ie_spenders"][ek]
         nrow = sum(len(t["rows"]) for s2 in sps for t in s2["targets"])

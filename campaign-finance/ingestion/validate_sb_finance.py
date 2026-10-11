@@ -539,6 +539,51 @@ def validate(art, ed=None):
             r.ok(f"SBF-9f seat {m.get('seat')}: recorded self-funder set equals the source",
                  set(m.get("self_funder_donor_ids") or []) == src_self,
                  f"artifact={sorted(m.get('self_funder_donor_ids') or [])} source={sorted(src_self)}")
+    # SBF-20 / SBF-21 — PS-152. The other-receipts magnitude at this page's scope, and the
+    # two dates the data-through line prints. Each is asserted for SHAPE from the artifact
+    # alone and RECOUNTED from the source when the source is given: the builder counts at
+    # its predicate, and a recount under a test of its own is what would notice that
+    # predicate moving (the discipline validate_council_data applies to the same field).
+    ore = art.get("other_receipts_excluded")
+    r.ok("SBF-20a other_receipts_excluded carries a numeric amount and an integer count",
+         isinstance(ore, dict)
+         and isinstance(ore.get("amount"), (int, float)) and not isinstance(ore.get("amount"), bool)
+         and isinstance(ore.get("count"), int) and not isinstance(ore.get("count"), bool)
+         and ore["amount"] >= 0 and ore["count"] >= 0, f"got {ore!r}")
+    dt = art.get("data_through")
+    dt_ok = (isinstance(dt, dict) and set(dt) == {"quarterly", "large_gift"}
+             and all(v is None or (isinstance(v, str) and ISO_DATE.match(v)) for v in dt.values()))
+    r.ok("SBF-21a data_through carries quarterly and large_gift, each an ISO date or null",
+         dt_ok, f"got {dt!r}")
+    built = str(art.get("generated_at") or "")[:10]
+    if dt_ok and ISO_DATE.match(built):
+        # A date later than the build day is a filer's typo on one row, and the page would
+        # print it as how far the data runs. Fail here rather than publish it.
+        r.ok("SBF-21b no data_through date is later than the day the artifact was built",
+             all(v is None or v <= built for v in dt.values()), f"data_through={dt!r} built={built}")
+    if ed and isinstance(ore, dict) and dt_ok:
+        comms = ed.get("committees", {})
+        want = {c for m in members for c in (m.get("candidacies") or [])}
+        slugs = {s for s, cm in comms.items() if cm.get("candidate_id") in want}
+        skipped = [c for c in ed.get("contributions", [])
+                   if c.get("committee_id") in slugs
+                   and not c.get("is_aggregate")
+                   and c.get("cycle") not in ("pre-2011", "undated")
+                   and c.get("contribution_type") != "IE Committee Dues Transfer"
+                   and c.get("contribution_type") == "Other Receipt"
+                   and not c.get("is_own_committee")]
+        amt = round(sum(round(float(c.get("amount") or 0.0), 2) for c in skipped), 2)
+        r.ok("SBF-20b other_receipts_excluded equals a recount from the source",
+             abs(amt - float(ore.get("amount", -1))) < CENT and len(skipped) == ore.get("count"),
+             f"recount={amt} in {len(skipped)} artifact={ore!r}")
+        src = {}
+        for key, filing in (("quarterly", "Quarterly"), ("large_gift", "A-1")):
+            ds = [c.get("date") for c in ed.get("contributions", [])
+                  if c.get("source_filing") == filing
+                  and isinstance(c.get("date"), str) and ISO_DATE.match(c["date"])]
+            src[key] = max(ds) if ds else None
+        r.ok("SBF-21c data_through equals the source's latest quarterly and A-1 dates",
+             src == dt, f"source={src} artifact={dt!r}")
     # SBF-5c — the ban applies to the whole document, not only election records.
     blob = json.dumps(art)
     r.ok("SBF-5c no total-shaped key anywhere in the artifact",
@@ -621,7 +666,10 @@ def sync_verdict(art, paths, sha=_sha256_file):
 def self_test():
     """Each case proves a check BITES — a validator whose failure path never runs is a
     green that means nothing (the validate_votes false-green lesson, SBVOTE-1 HALT-A)."""
-    base = {"industry_threshold": 0.5, "members": [
+    base = {"industry_threshold": 0.5, "generated_at": "2026-10-01T00:00:00Z",
+            "other_receipts_excluded": {"amount": 0.0, "count": 0},
+            "data_through": {"quarterly": "2026-06-30", "large_gift": "2026-09-11"},
+            "members": [
         {"seat": "1A", "name": "X", "candidacy_ref": "a-1", "ref_kind": "candidate",
          "has_donor_detail": False, "donors_by_election": {}, "elections": {
              "2024": {"label": "L", "direct": {"amount": 10.0, "count": 1},
@@ -658,6 +706,21 @@ def self_test():
 
     def run(art):
         return validate(json.loads(json.dumps(art)), ed=None)
+
+    # PS-152's three shape checks, each shown to bite, beside a control that passes.
+    t.append(("SBF-20a/21a/21b pass on the base artifact (control)",
+              not any(not ok and n.startswith(("SBF-20", "SBF-21")) for n, ok, _ in run(base).checks)))
+    t.append(("SBF-20a bites: other_receipts_excluded without a count fails",
+              any(not ok and n.startswith("SBF-20a") for n, ok, _ in
+                  run({**base, "other_receipts_excluded": {"amount": 1.0}}).checks)))
+    t.append(("SBF-21a bites: a data_through date that is not ISO fails",
+              any(not ok and n.startswith("SBF-21a") for n, ok, _ in
+                  run({**base, "data_through": {"quarterly": "June 30, 2026",
+                                                "large_gift": "2026-09-11"}}).checks)))
+    t.append(("SBF-21b bites: a data_through date after the build day fails",
+              any(not ok and n.startswith("SBF-21b") for n, ok, _ in
+                  run({**base, "data_through": {"quarterly": "2026-06-30",
+                                                "large_gift": "2026-12-31"}}).checks)))
 
     t.append(("SBF-5b bites: a field equal to direct+self_funding fails",
               any(not ok and n.startswith("SBF-5b") for n, ok, _ in

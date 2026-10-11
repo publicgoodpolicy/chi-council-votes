@@ -1,9 +1,9 @@
 {
-  "schema_version": 1.4,
-  "generated_at": "2026-10-10T04:18:37Z",
+  "schema_version": 1.5,
+  "generated_at": "2026-10-11T13:32:15Z",
   "source": "derived: school-board-data.json (bridge) x election-data.json (rollups)",
   "_sync": {
-    "generated_at": "2026-10-10T04:18:37Z",
+    "generated_at": "2026-10-11T13:32:15Z",
     "inputs": {
       "school-board-data.json": {
         "sha256": "45179604794bf9eeb894cc2d1a6c3030741bf509be5765cecb27e4b123e0212b"
@@ -3381,6 +3381,14 @@
   "dues_excluded": {
     "amount": 0.0,
     "count": 0
+  },
+  "other_receipts_excluded": {
+    "amount": 3358.59,
+    "count": 4
+  },
+  "data_through": {
+    "quarterly": "2026-06-30",
+    "large_gift": "2026-09-11"
   },
   "counts": {
     "members": 21,
