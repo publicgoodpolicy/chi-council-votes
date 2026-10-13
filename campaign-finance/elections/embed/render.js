@@ -157,7 +157,7 @@
       '.ipg-elect .eyebrow .box::after{content:none;}' +
       '.ipg-elect h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,4.6vw,46px);line-height:1.04;letter-spacing:-.01em;margin:0 0 14px;max-width:20ch;color:var(--cream);}' +
       '.ipg-elect .lede{font-size:15.5px;color:#cfe0dd;max-width:60ch;margin:0 0 24px;}' +
-      '.ipg-elect .lede strong{color:var(--cream);font-weight:500;}' +
+      '.ipg-elect .lede strong{color:var(--cream);font-weight:500;}.ipg-elect .data-through{font-size:13px;color:#cfe0dd;max-width:72ch;margin:-14px 0 24px;}' +
       '.ipg-elect .topnav{display:flex;background:var(--tan);border-radius:0;padding:0 var(--pad);margin:0 calc(-1 * var(--pad));gap:0;border-bottom:1px solid var(--line);overflow-x:auto;}' +
       '.ipg-elect .topnav button{appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);font-size:12.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);padding:16px 22px;border-radius:0;border-bottom:3px solid transparent;flex:0 0 auto;}' +
       '.ipg-elect .topnav button[aria-selected="true"]{background:var(--cream);color:var(--teal);border-bottom-color:var(--sage);}' +
@@ -433,13 +433,13 @@
     var amt = '<div class="amt">' + money(line.total) +
       (line.count ? ' <span class="n">· ' + plural(line.count, 'gift', 'gifts') + '</span>' : '') + '</div>';
     if (line.isSelf) {
-      return '<div class="crow plain"><div class="who">' + esc(line.name) +
+      return '<div class="crow plain"' + namesAttr(line) + '><div class="who">' + esc(line.name) +
         ' <span class="tagchip self">Candidate’s own money / loans</span></div>' + amt + '</div>';
     }
     if (line.isAggregate) {
-      return '<div class="crow plain"><div class="who">' + esc(line.name) + '</div>' + amt + '</div>';
+      return '<div class="crow plain"' + namesAttr(line) + '><div class="who">' + esc(line.name) + '</div>' + amt + '</div>';
     }
-    return '<button class="crow funder-row" type="button" data-funder="' + esc(line.parent_id) + '">' +
+    return '<button class="crow funder-row" type="button" data-funder="' + esc(line.parent_id) + '"' + namesAttr(line) + '>' +
       '<div class="who">' + esc(line.name) + ' ' + tagsHtml(line.industries, line.flags) +
       // M5 (OC-E3, ratified): the giver stays a named, clickable donor and carries the chip.
       (line.ownCommittee ? ' <span class="tagchip owncmte">From the candidate’s other committee</span>' : '') + (line.inKindShare >= 0.999 ? ' <span class="tagchip inkind">in-kind</span>' : (line.inKindShare > 0 ? ' <span class="tagchip inkind">partly in-kind</span>' : '')) + '</div>' + amt + '</button>';
@@ -505,7 +505,7 @@
           '<span class="caret" aria-hidden="true">▸</span> Show all ' + s.funders.length + ' funders</button>' +
           '<div class="contrib tall" id="' + fid + '"><div class="contrib-inner bare">' + moreRows + '</div></div>';
       }
-      var cn = ieNaming(s.committeeName, names);
+      var cn = ieNaming(s.committeeName, s.topFunders.map(function (f) { return f.name; }));   // ruling 10: ieNaming escapes; `names` is already escaped
       return '<div class="ie-cmte"><div class="ie-cmte-head">' +
         '<button class="ie-cmte-toggle" type="button" aria-expanded="false" aria-controls="' + t2 + '">' +
         '<span class="caret" aria-hidden="true">▸</span> <b>' + money(s.amount) + ' ' + verb + '</b> ' + verbing + ' ' +
@@ -628,7 +628,7 @@
     var sun = p.sunshineUrl ? ' <a class="paclink" href="' + esc(p.sunshineUrl) + '" target="_blank" rel="noopener">Illinois Sunshine ↗</a>' : '';
     var head, summary, spent = '';
     if (p.isIE) {
-      var idy = (p.identity && p.identity.length) ? ('Funded primarily by ' + p.identity.join(', ') + '. ') : '';
+      var idy = (p.identity && p.identity.length) ? ('Funded primarily by ' + p.identity.map(esc).join(', ') + '. ') : '';
       head = '<div class="modal-kicker">Independent-expenditure committee · this election</div>' +
         '<div class="modal-name"><span class="ie-pac-tag">IE PAC</span> ' + ieNaming(p.name, p.identity).primary + '</div>' +
         '<p class="modal-note">' + idy + 'Independent spending is made without coordinating with any candidate.' + sun + '</p>';
@@ -1003,11 +1003,11 @@
     }).join('') + '</div>';
   }
 
-  function masthead(office, topView) {
+  function masthead(office, topView, dataThrough) {
     var m = MAST[office] || MAST.school_board;
     var isByrace = topView !== 'spend' && topView !== 'methodology';
     return '<header class="masthead"><p class="eyebrow"><span class="box" aria-hidden="true"></span>' + esc(m.kicker) + '</p>' +
-      '<h1>Who’s running, and who’s funding them</h1><p class="lede">' + m.lede + '</p>' +
+      '<h1>Who’s running, and who’s funding them</h1><p class="lede">' + m.lede + '</p>' + dataThroughLine(office, dataThrough) +
       '<div class="topnav" role="tablist" aria-label="View">' +
       '<button role="tab" data-view="byrace" aria-selected="' + isByrace + '">By race</button>' +
       '<button role="tab" data-view="spend" aria-selected="' + (topView === 'spend') + '">Election spend</button>' +
@@ -1131,8 +1131,8 @@
       'pay back; it is not a gift.';
 
     if (office === 'city_council') {
-      // R9's composition as amended at M5 and M2: the frame, eight <p> carrying C1, C2, C5, C3, C4,
-      // C6, C7, C8, then the verification section. NO <h3> precedes any C-string, and no school-board
+      // R9's composition as amended at M5, M2 and AUDIT-2 (R4): the frame, ten <p> carrying C1, C2, C5, C3, C4,
+      // C6, C7, C8, C9, C10, then the verification section. NO <h3> precedes any C-string, and no school-board
       // section is carried across — [MUNI/SUBJ] is the guard that makes the second of those
       // structural rather than careful, since the school-board body names its own subject.
       //
@@ -1166,7 +1166,7 @@
         'such as a fund for a state or federal office. We count it in the total raised and label it ' +
         '“From the candidate’s other committee.” It is not the candidate’s personal money, and it is not a ' +
         'contribution from an outside donor. We mark only committees we have confirmed belong to the same person.';
-      var paras = [C1, C2, C5, C3, C4, C6, C7, C8];   // M2: C7 and C8, plain <p>s after C6
+      var paras = [C1, C2, C5, C3, C4, C6, C7, C8, METH_C9, METH_C10];   // M2: C7 and C8, plain <p>s after C6; AUDIT-2 (R4): C9 and C10 after C8
       return METH_FRAME_OPEN +
         paras.map(function (t) { return t == null ? '' : '<p>' + t + '</p>'; }).join('') +
         VERIFICATION_SECTION +
@@ -1203,7 +1203,7 @@
       '<p>Contribution data is pulled directly from Illinois State Board of Elections filings; itemization and ' +
       'disclosure boundaries follow the filings themselves. Every contribution a committee itemizes on its ' +
       'Schedule A appears here individually, attributed to the named donor as the committee reported it. We do ' +
-      'not add donors SBE doesn’t disclose, and we do not summarize away donors it does.</p>' +
+      'not add donors SBE doesn’t disclose, and we do not summarize away donors it does.</p>' + '<p>' + METH_C9 + '</p>' +   // AUDIT-2 (R4): C9, a second <p>
       // AUDIT-2 M2: the council branch's C7 and C8, under this branch's own heading.
       '<h3>Other receipts and loans</h3>' +
       (C7 == null ? '' : '<p>' + C7 + '</p>') + '<p>' + C8 + '</p>' +
@@ -1213,7 +1213,7 @@
       '“John Smith.” When a reviewed classification or grouping refers to a donor, we honor it even if the ' +
       'two sources ordered the name differently — but only when the name tokens match exactly one existing ' +
       'donor. When more than one could match, we never guess; the case goes to human review. Original ' +
-      'filings are never altered; both filed spellings remain visible, linked.</p>' +
+      'filings are never altered; both filed spellings remain visible, linked. ' + METH_C10 + '</p>' +   // AUDIT-2 (R4): C10, its last sentence
       '<h3>Three kinds of money, kept separate</h3>' +
       '<p>Campaign money reaches voters through distinct legal channels, and this tool never blends them:</p>' +
       '<ul>' +
@@ -1227,12 +1227,12 @@
       'candidate does not control — and may not even welcome — money spent independently about them, so adding ' +
       'it to their fundraising would assert a relationship the law itself denies. Candidate rankings and totals ' +
       'are direct contributions only. (For the same reason, a candidate’s own committee is never treated as an ' +
-      'independent spender.)</p>' +
-      '<h3>Amendments, timing, and “pending”</h3>' +
+      'independent spender.)</p>' + '<p>' + METH_S1 + '</p>' +   // AUDIT-2 (R4): S1, always rendered
+      '<h3>Amendments and timing</h3>' +
       '<p>Committees amend their filings. When they do, we use the latest version: a later-received filing ' +
-      'supersedes earlier filings covering the same or overlapping periods. Contributions reported on interim ' +
-      'A-1 filings after a committee’s most recent quarterly report are included and marked as pending that ' +
-      'committee’s next quarterly disclosure.</p>' +
+      'supersedes earlier filings covering the same or overlapping periods. ' +
+      // AUDIT-2 (R4): S2 replaces the sentence that said such gifts are "marked as pending"; nothing on the page marks one.
+      METH_S2 + '</p>' +
       VERIFICATION_SECTION +
       ARTIFACT_LINKS +
       '<h3>Industry tags and donor groupings are editorial</h3>' +
@@ -1356,13 +1356,13 @@
   // aggregate is legitimate here because no candidate is in view — support/oppose are NOT split
   // at Level 1; that split appears only on drill into a candidate (Level 3). Click a bar to see
   // that industry's spenders (Level 2). Sorted high-to-low (industryTotals is pre-sorted by total).
-  function industryChart(industries) {
+  function industryChart(industries, streams) {
     var max = 1;
     for (var m = 0; m < industries.length; m++) if (industries[m].total > max) max = industries[m].total;
     var note = '<p class="contrib-note">Total money deployed by industry — direct contributions plus ' +
       'independent support and opposition, shown separately. Largest first. Click an industry to see ' +
       'who gave or spent. A donor tagged with more than one industry is listed under each; ' +
-      'the total counts each donor\'s money once.</p>';
+      IND_ONCE_CLAUSE + '</p>';
     var legend = '<div class="ind-legend" aria-hidden="true"><span><i class="sw third"></i>Direct contributions</span>' +
       '<span><i class="sw support"></i>Independent support</span>' +
       '<span><i class="sw oppose"></i>Independent opposition</span></div>';
@@ -1394,7 +1394,7 @@
         '<div class="bartrack"><div class="barfill" style="width:' + w + '%">' + segs + '</div></div>' +
         '<div class="indbar-breakdown">' + parts.join(' <span class="bd-sep">·</span> ') + '</div></button>';
     }).join('');
-    return note + legend + '<div class="indchart">' + rows + '</div>';
+    return note + legend + '<div class="indchart">' + rows + '</div>' + industryAllLine(streams);
   }
 
   function renderSpend(vm, office) {
@@ -1445,7 +1445,7 @@
             (gy ? '<span class="race-meta"> \u00b7 ' + esc(gy) + ' election</span>' : '') + '</h3>' + rows + '</div>';
         }).join('');
     } else if (tab === 'industries') {
-      body = industryChart(vm.industries);   // E-6 Level 1: sorted-bar chart, click -> spenders (Level 2)
+      body = industryChart(vm.industries, vm.streams);   // E-6 Level 1: sorted-bar chart, click -> spenders (Level 2)
     } else if (tab === 'industry-candidate') {
       body = '<p class="contrib-note">Each candidate’s direct contributions by donor industry. Independent spending is not candidate money and is shown separately. ' +
         'Uncategorized shown as uncategorized.</p>' +
@@ -1506,7 +1506,7 @@
       inner = METHODOLOGY_OFFICES[state.office]
         ? methodologyView(state.verify, state.office, state.duesExcluded, state.otherExcluded)
         : officeComingSoon(state.office);
-      return '<div class="wrap">' + masthead(state.office, state.topView) +
+      return '<div class="wrap">' + masthead(state.office, state.topView, state.dataThrough) +
         '<section>' + inner + '</section>' + footer() + '</div>';
     }
     var ready = state.officeRaces && state.officeRaces.groups.some(function (g) {
@@ -1525,7 +1525,7 @@
       // toggle, which is now the SOLE time selector. (Council still uses cycle pills.)
       inner = content;
     }
-    return '<div class="wrap">' + masthead(state.office, state.topView) +
+    return '<div class="wrap">' + masthead(state.office, state.topView, state.dataThrough) +
       '<section>' + inner + '</section>' + footer() + '</div>';
   }
 
@@ -1546,6 +1546,63 @@
   function browseColHead() {
     return '<p class="contrib-note browse-disclose">' + BROWSE_DISCLOSE + '</p>' +
       '<div class="browse-colhead"><div>Donor</div><div class="amt3">' + BROWSE_COLS.map(function (c) { return '<div>' + c + '</div>'; }).join('') + '</div></div>';
+  }
+
+  // AUDIT-2, the elections-tool package (ratified by Ishan 2026-10-12). Placed here, with the M1 strings
+  // above, for the same reason: nothing the mechanism reference cites into this file moves.
+  //
+  // PS-156: the data-through line, a line of its own under the lede on every view. `through` is the
+  // index's two ISO dates (data.js, noteThrough). It prints whole or not at all: a date that is missing,
+  // or is not a day the calendar holds, counts as missing and leaves the line off. It is not drawn on the mayor's page
+  // (ruled 2026-10-11). It does not follow the election selector, because nothing here reads it.
+  var MONTHS_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+    'September', 'October', 'November', 'December'];
+  // Month, day and year from the ISO text itself: no Date object, so no time zone can move the day.
+  // The day must exist: the month's length, February's in a leap year included, is tabled here.
+  function longDate(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(typeof iso === 'string' ? iso : '');
+    if (!m) return null;
+    var y = +m[1], mo = +m[2], d = +m[3], leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+    if (mo < 1 || mo > 12 || d < 1 || d > [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][mo - 1]) return null;
+    return MONTHS_LONG[+m[2] - 1] + ' ' + (+m[3]) + ', ' + m[1];
+  }
+  function dataThroughLine(office, through) {
+    var q = through ? longDate(through.quarterly) : null, a = through ? longDate(through.largeGift) : null;
+    if (office === 'mayor' || q == null || a == null) return '';
+    return '<p class="data-through">Contributions through ' + q + ' on quarterly reports, and through ' + a +
+      ' on reports of large gifts.</p>';
+  }
+  // PS-155: the names a grouped donor is found by ride its row, so the search box inside a card (app.js)
+  // finds it by the group's name or any member's. A donor in no group has the one name it prints, and
+  // its row is byte for byte what it was.
+  function namesAttr(line) {
+    return (line.searchNames && line.searchNames.length > 1) ? ' data-names="' + esc(line.searchNames.join('\n')) + '"' : '';
+  }
+  // R4 (amendment to CNCL-DATA-1 P2, R8 and R9 as applied): C9, C10, S1 and S2, the register's bytes,
+  // typographic apostrophes and quotation marks included. Defined once each and used by both methodology
+  // branches where they appear; like C1 to C8, never passed through esc().
+  var METH_C9 = 'Some filings list the same gift more than once: the same donor, date and amount on one report. ' +
+    'We keep every line as filed, because the filings can’t tell a repeated gift from a filer’s double entry.';
+  var METH_C10 = 'Where we group a donor’s records, the tool shows the group’s name, and search finds the donor by ' +
+    'the group’s name or by any name as filed.';
+  var METH_S1 = 'Outside groups’ filings name the candidate they spent for or against in their own words, and we ' +
+    'match each filing to a candidate in this tool. When a match needs a person’s check, the spending is marked “⚑ ' +
+    'needs review” until IPG has confirmed it.';
+  var METH_S2 = 'Contributions reported on interim A-1 filings (gifts of $1,000 or more, which committees report ' +
+    'between quarterly reports) after a committee’s most recent quarterly report are included. The line at the top of ' +
+    'the page says how far each kind of report runs.';
+  // IND-MULTI-1 as amended for this tool: the Industry totals tab prints no single total, so clause (ii)'s
+  // last clause is reworded and one line under the bars states the totals it speaks of. The three streams
+  // are data.js streamTotals: each gift and each expenditure once, side by side, never added together.
+  // A stream at zero is left out with its separator, as the bars leave it out; all three at zero, no line.
+  var IND_ONCE_CLAUSE = 'the totals below count each donor’s money once.';
+  function industryAllLine(s) {
+    var parts = [];
+    if (s && s.direct > 0) parts.push(money(s.direct) + ' in direct contributions');
+    if (s && s.support > 0) parts.push(money(s.support) + ' in independent support');
+    if (s && s.oppose > 0) parts.push(money(s.oppose) + ' in independent opposition');
+    return parts.length
+      ? '<p class="contrib-note ind-all">All industries together, each donor counted once: ' + parts.join(' · ') + '.</p>' : '';
   }
 
   return {

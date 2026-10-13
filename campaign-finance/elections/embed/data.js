@@ -253,12 +253,12 @@
     var industryByCandidate = {};  // candidate_id -> { industry -> {direct, support, oppose} }  (B4)
     var flagByCandidate = {};      // candidate_id -> { flagType -> {amount, count} }            (B4)
     var cyclesSeen = {};
-    var stats = { contributionRowsVisited: 0, ieRowsVisited: 0 };
+    var stats = { contributionRowsVisited: 0, ieRowsVisited: 0 }, through = { quarterly: null, largeGift: null };
 
     // ---- single pass over contributions ----
     for (var k = 0; k < contributions.length; k++) {
       stats.contributionRowsVisited++;
-      var ct = contributions[k];
+      var ct = contributions[k]; noteThrough(through, ct);   // AUDIT-2 (PS-156): every row, before any scope test
       var ck = ct.committee_id;
       var candId = candByCommittee[ck];
       var donor = donors[ct.donor_id];
@@ -367,7 +367,7 @@
       raceById: raceById, candidateById: candidateById, candidatesByRace: candidatesByRace,
       candByCommittee: candByCommittee, committeeKeyByCandidate: committeeKeyByCandidate,
       directByCandidate: directByCandidate, ieByCandidate: ieByCandidate, iesBySpender: iesBySpender,
-      inScopeIE: inScopeIE, office: opts.office || null,
+      inScopeIE: inScopeIE, office: opts.office || null, dataThrough: through,   // AUDIT-2 (PS-156)
       fundersBySpender: fundersBySpender, parentRollup: parentRollup,
       industryByCandidate: industryByCandidate, flagByCandidate: flagByCandidate,
       raceBySlug: raceBySlug, candidateBySlug: candidateBySlug,
@@ -497,7 +497,7 @@
       var donor = index.donors[c.donor_id] || {};
       var pid = donor.parent_id || c.donor_id;
       var parent = index.donors[pid] || donor;
-      var m = by[pid] || (by[pid] = { parent_id: pid, name: parent.name || pid,
+      var m = by[pid] || (by[pid] = { parent_id: pid, name: donorName(index, pid, parent), searchNames: donorSearchNames(index, pid, parent),
         industries: parent.industries || [], flags: parent.flags || [],
         total: 0, count: 0, isSelf: false, ownCommittee: false, isAggregate: false });
       m.total = round2(m.total + (c.amount || 0)); m.count++;
@@ -532,7 +532,7 @@
       var donor = index.donors[c.donor_id] || {};
       var pid = donor.parent_id || c.donor_id;
       var parent = index.donors[pid] || donor;
-      var m = by[pid] || (by[pid] = { parent_id: pid, name: parent.name || pid,
+      var m = by[pid] || (by[pid] = { parent_id: pid, name: donorName(index, pid, parent),
         industries: parent.industries || [], flags: parent.flags || [], total: 0, count: 0 });
       m.total = round2(m.total + (c.amount || 0)); m.count++;
     }
@@ -644,7 +644,7 @@
         total: round2(total), members: members, entities: members.length };
     }
     return {
-      parent_id: parentId, name: parent.name || parentId, win: win || null,
+      parent_id: parentId, name: donorName(index, parentId, parent), win: win || null,
       industries: parent.industries || [], flags: parent.flags || [],
       committees: committees, total: round2(total), count: committees.length,
       contributionsCount: kept, cycles: sortCycles(Object.keys(cyc)), rollup: rollup,
@@ -1211,7 +1211,7 @@
       var ft = (donor.flags || []).map(function (x) { return (x && x.type) || x; });
       if (ft.indexOf(f.flag) < 0) return false;
     }
-    if (f.search && String(name || '').toLowerCase().indexOf(String(f.search).toLowerCase()) < 0) return false;
+    if (f.search && !nameHit(name, f.search)) return false;   // PS-155: `name` is every name the donor is found by
     return true;
   }
 
@@ -1256,7 +1256,7 @@
     for (var pid in index.parentRollup) {
       if (!index.parentRollup.hasOwnProperty(pid)) continue;
       var d = index.donors[pid] || {};
-      if (!donorMatches(d, d.name || pid, f)) continue;     // E-1 donor filters (parent unit)
+      if (!donorMatches(d, donorSearchNames(index, pid, d), f)) continue;     // E-1 donor filters (parent unit); PS-155: any name of the group
       var pr = index.parentRollup[pid], total = 0, viaIE = 0, selfAmt = 0, cmset = {}, entset = {}, ncontrib = 0;
       var ownGiver = false;
       for (var i = 0; i < pr.rows.length; i++) {
@@ -1274,7 +1274,7 @@
         if (c.donor_id) entset[c.donor_id] = 1;
       }
       if (total > 0) {
-        rows.push({ kind: 'donor', parent_id: pid, name: d.name || pid,
+        rows.push({ kind: 'donor', parent_id: pid, name: donorName(index, pid, d),
           industries: d.industries || [], flags: d.flags || [], total: round2(total), direct: round2(total - viaIE), independent: round2(viaIE),
           entities: Object.keys(entset).length, committees: Object.keys(cmset).length, contributions: ncontrib,
           selfShare: selfAmt / total, ownCommitteeGiver: ownGiver });
@@ -1417,7 +1417,7 @@
   function spendAgg(index, office, cycle, win) {
     var offs = OFFICE_RACE_OFFICES[office] || [];
     var keep = function (cyc) { return !EXCLUDED_CYCLES[cyc] && (cycle == null || cyc === cycle); };
-    var byCand = {}, flags = {};
+    var byCand = {}, flags = {}, streams = { direct: 0, support: 0, oppose: 0 };   // AUDIT-2 (IND-MULTI-1 amendment)
     function ind(map, key, tag) {
       var m = map[key] || (map[key] = {});
       return m[tag] || (m[tag] = { direct: 0, support: 0, oppose: 0 });
@@ -1430,7 +1430,7 @@
       for (var d = 0; d < dr.length; d++) {
         var c = dr[d]; if (excludedType(c) || !keep(c.cycle)) continue;
         if (win && !inWindow(c.date, win)) continue;
-        var donor = index.donors[c.donor_id] || {}, amt = c.amount || 0;
+        var donor = index.donors[c.donor_id] || {}, amt = c.amount || 0; streams.direct += amt;   // once, whatever industries follow
         var inds = (donor.industries && donor.industries.length) ? donor.industries : ['uncategorized'];
         for (var a = 0; a < inds.length; a++) ind(byCand, cid, inds[a]).direct = round2(ind(byCand, cid, inds[a]).direct + amt);
         var fl = donor.flags || [];
@@ -1444,12 +1444,12 @@
         ieB[field].forEach(function (ie) {
           if (!keep(ie.cycle)) return;
           if (win && !inWindow(ie.date, win)) return;
-          var sp = index.committees[ie.spender_committee_id] || {}, tags = (sp.industry_tags && sp.industry_tags.length) ? sp.industry_tags : ['uncategorized'], amt2 = ie.amount || 0;
+          var sp = index.committees[ie.spender_committee_id] || {}, tags = (sp.industry_tags && sp.industry_tags.length) ? sp.industry_tags : ['uncategorized'], amt2 = ie.amount || 0; streams[field] += amt2;
           for (var t = 0; t < tags.length; t++) ind(byCand, cid, tags[t])[field] = round2(ind(byCand, cid, tags[t])[field] + amt2);
         });
       });
     }
-    return { byCand: byCand, flags: flags };
+    return { byCand: byCand, flags: flags, streams: streams };
   }
 
   // 3) Industry totals — office-scoped, cycle-aware (sum the cross-tab).
@@ -1502,7 +1502,7 @@
       var rf = raceFilter || 'all', g = spendByCandidateGrouped(index, office, cycle, win, sel, rf, expandedId);
       return { tab: tab, election: sel, win: win, groups: g.groups, raceOptions: g.raceOptions, raceFilter: rf };
     }
-    if (tab === 'industries') return { tab: tab, election: sel, win: win, industries: industryTotals(index, office, cycle, win) };
+    if (tab === 'industries') return { tab: tab, election: sel, win: win, industries: industryTotals(index, office, cycle, win), streams: streamTotals(index, office, cycle, win) };
     if (tab === 'industry-candidate') return { tab: tab, election: sel, win: win, rows: industriesByCandidate(index, office, cycle, win) };
     if (tab === 'flags') return { tab: tab, election: sel, win: win, flags: flagTotals(index, office, cycle, win) };
     var df = filters || { search: '', type: 'All', industry: 'All', flag: 'All' };
@@ -1511,6 +1511,67 @@
     return { tab: 'donors', election: sel, win: win, rows: browse,
              donorFilters: df, facets: browseDonorFacets(index), ieCount: ieCount,
              industryTags: index.industryTags };   // default
+  }
+
+  // Placed after spendSubtab so that no line the mechanism reference cites into this file moves
+  // (function declarations hoist; render.js does the same after renderPage).
+
+  // AUDIT-2 (PS-155): ONE resolver for the name a donor is printed under. Where IPG has grouped
+  // the donor's records (the Sheet's Donor Clusters tab), that is the group's name as the tab has
+  // it, unrewritten; a donor in no group prints the name the data holds, as before. `pid` is the
+  // rolled-up (parent) id every list is keyed by, `rec` the record the caller already resolved
+  // for it. Read at every site that names a donor for print: a Browse donors row, a candidate's
+  // contributor line (the own-money line included), an outside-spending group's funder line and
+  // the names after "Funded primarily by" (all through spenderFunders), and the pop-up's title.
+  // NOT the pop-up's member rows: each member keeps its own stored name (donorFootprint).
+  function donorName(index, pid, rec) {
+    var cl = index.clusterByParent && index.clusterByParent[pid];
+    return (cl && cl.name) || (rec && rec.name) || pid;
+  }
+  // PS-155, search: every name a donor is found by. A grouped donor: the group's name and the
+  // stored name of every member the data file holds, whether or not that member gave in the
+  // scope on screen (placement Q). The data holds one name per member record; a spelling the
+  // ingest read as the same record is not kept apart. A donor in no group: its one printed name.
+  function donorSearchNames(index, pid, rec) {
+    var cl = index.clusterByParent && index.clusterByParent[pid], out = [donorName(index, pid, rec)];
+    var ms = (cl && cl.members) || [];
+    for (var i = 0; i < ms.length; i++) {
+      var nm = (index.donors[ms[i]] || {}).name;
+      if (nm && out.indexOf(nm) < 0) out.push(nm);
+    }
+    return out;
+  }
+  // Placement O: a case-blind match of the typed text anywhere in any one of the names.
+  function nameHit(names, q) {
+    var list = Array.isArray(names) ? names : [names], needle = String(q).toLowerCase();
+    for (var i = 0; i < list.length; i++) if (String(list[i] || '').toLowerCase().indexOf(needle) >= 0) return true;
+    return false;
+  }
+
+  // AUDIT-2 (PS-156): how far the contribution data runs. The latest date of a row filed on a
+  // quarterly report and of one filed on a report of a large gift (form A-1), over EVERY
+  // contribution the file holds: no office, election, window, cycle or type test, so both tools
+  // state the same two dates. The rule is build_sb_finance.data_through()'s (PS-152): the filing
+  // kind exactly, a date that is a ten-character string, the greatest. A kind with no such row
+  // stays null and the page leaves its line off whole (render.js, dataThroughLine).
+  var THROUGH_KINDS = { 'Quarterly': 'quarterly', 'A-1': 'largeGift' };
+  function noteThrough(through, c) {
+    var k = THROUGH_KINDS.hasOwnProperty(c.source_filing) ? THROUGH_KINDS[c.source_filing] : null;
+    if (k && typeof c.date === 'string' && c.date.length === 10 && (through[k] == null || c.date > through[k])) through[k] = c.date;
+  }
+
+  // AUDIT-2 (IND-MULTI-1 amendment, the elections tool's Industry totals): what the page's
+  // candidates were given directly, and what outside groups spent for and against them, in the
+  // selected election, each row counted once. Summed in spendAgg's own walk, beside the
+  // per-industry slots, so the scope tests are the bars' and cannot drift from them; never the
+  // sum of the bars, which list a multi-industry donor under each industry. Each of the three is
+  // the sum of that figure over every row of the Spend by candidate tab for the selected election,
+  // that tab's sections for the other election's races that carry money in the window included
+  // ([IND/ALL]); the By race cards of the selected election can sum lower. Stated side by side,
+  // never added.
+  function streamTotals(index, office, cycle, win) {
+    var s = spendAgg(index, office, cycle, win).streams;
+    return { direct: round2(s.direct), support: round2(s.support), oppose: round2(s.oppose) };
   }
 
   return {
@@ -1542,7 +1603,7 @@
     browseDonors: browseDonors, spendByCandidate: spendByCandidate,
     industryTotals: industryTotals, industriesByCandidate: industriesByCandidate,
     flagTotals: flagTotals, spendSubtab: spendSubtab,
-    resolvePersonRef: resolvePersonRef, personView: personView, fundingCandidacy: fundingCandidacy,
+    resolvePersonRef: resolvePersonRef, personView: personView, fundingCandidacy: fundingCandidacy, donorName: donorName, donorSearchNames: donorSearchNames,
     kebab: kebab, raceSlug: raceSlug, candidateSlug: candidateSlug, raceCode: raceCode,
     selectorOptions: selectorOptions,
     viewModels: { raceBrowse: raceBrowse, raceView: raceView, officeRaces: officeRaces }

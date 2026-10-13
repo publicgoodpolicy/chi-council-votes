@@ -24,7 +24,7 @@ Host: `https://www.publicgoodpolicy.org`.
 
 The payload is byte-identical across the three; they differ only in the baked
 `data-office` and in the paste instruction naming their page. Each file names its
-page in the comment at the top — check it before pasting, because three ~211 KB
+page in the comment at the top — check it before pasting, because three ~250 KB
 files that differ in two lines are easy to confuse.
 
 ## The three pages

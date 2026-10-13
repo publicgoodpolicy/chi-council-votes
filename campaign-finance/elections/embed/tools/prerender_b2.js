@@ -696,5 +696,49 @@ function d25Independent(cand) {
 ok('DESIGN-1: no @font-face and no Recoleta in the elections styles; the display face is Georgia (D1, ratified 2026-09-25)',
   !/@font-face/.test(R.styles()) && !/Recoleta/.test(R.styles()) && /--display:Georgia,ui-serif,serif;/.test(R.styles()));
 
+// AUDIT-2, the elections-tool package (PS-155, PS-156, the IND-MULTI-1 amendment). The pure-layer
+// halves only; the register's words, the recounts and the real clicks are gate_bundle.js's
+// ([THROUGH/*], [IND/*], [GROUP/*]). Placed last so that no line cited into this file moves.
+console.log('\n=== AUDIT-2 elections package (data-through line, Industry totals line, group names) ===');
+(function () {
+  var iso = /^\d{4}-\d{2}-\d{2}$/, th = index.dataThrough || {};
+  ok('PS-156: loadData notes both through-dates in the one pass it already makes (' + th.quarterly + ', ' + th.largeGift + ')',
+    iso.test(th.quarterly || '') && iso.test(th.largeGift || '') && index._stats.contributionRowsVisited === json.contributions.length);
+  var st = function (office, through) {
+    return { office: office, topView: 'byrace', officeRaces: omVM, activeSlug: 'district-2a', raceView: rv,
+      selector: { options: D.selectorOptions(OFFICE), active: '2026' }, dataThrough: through };
+  };
+  var line = /<p class="lede">.*?<\/p><p class="data-through">Contributions through [A-Z][a-z]+ \d{1,2}, \d{4} on quarterly reports, and through [A-Z][a-z]+ \d{1,2}, \d{4} on reports of large gifts\.<\/p><div class="topnav"/;
+  ok('PS-156: with the dates on the render state the header carries the line, a paragraph of its own between the lede and the tabs',
+    line.test(R.renderPage(st(OFFICE, th))) && line.test(R.renderPage(st('city_council', th))));
+  ok('PS-156: no line without the dates, with one of them, with one malformed, or on the mayor page',
+    page.indexOf('data-through') < 0 && [st(OFFICE, null), st(OFFICE, { quarterly: th.quarterly }), st(OFFICE, { quarterly: th.quarterly, largeGift: '2026-9-11' }),
+      st(OFFICE, { quarterly: '2026-00-10', largeGift: th.largeGift }), st('mayor', th)].every(function (s) { return R.renderPage(s).indexOf('data-through') < 0; }));
+  // IND-MULTI-1 amendment: each of the tab's three streams is that figure summed over every row of the
+  // Spend by candidate tab for the same election (out-of-frame sections with money included), each gift once.
+  var sum = { direct: 0, support: 0, oppose: 0 };
+  candsVM.groups.forEach(function (g) { g.candidates.forEach(function (c) {
+    sum.direct += Math.round(c.figures.contributions.total * 100); sum.support += Math.round(c.figures.independentSupport * 100); sum.oppose += Math.round(c.figures.independentOpposition * 100);
+  }); });
+  var s = indsVM.streams || {}, bars = indsVM.industries.reduce(function (a, x) { return a + Math.round(x.direct * 100); }, 0);
+  ok('IND-MULTI-1: Industry totals carries the three streams, each equal to the cent to that figure summed over the Spend by candidate tab\'s rows, and not the bars\' sum',
+    Math.round(s.direct * 100) === sum.direct && Math.round(s.support * 100) === sum.support && Math.round(s.oppose * 100) === sum.oppose && sum.direct > 0 && bars >= sum.direct);
+  var indHtml = R.renderSpend(indsVM, OFFICE);
+  ok('IND-MULTI-1: the line is the last thing on the tab, under the bars, and the note speaks of "the totals below"',
+    /<\/div><p class="contrib-note ind-all">All industries together, each donor counted once: \$[\d,]+ in direct contributions[^<]*\.<\/p><\/div><\/div>$/.test(indHtml) &&
+    indHtml.indexOf('the totals below count each donor’s money once.</p>') >= 0 && indHtml.indexOf('the total counts each donor') < 0);
+  // PS-155: the one resolver. A grouped donor prints its group's name; a donor in no group its stored name.
+  var grouped = Object.keys(json.donor_clusters).map(function (k) { return json.donor_clusters[k]; })
+    .filter(function (c) { return json.donors[c.canonical_id] && c.name !== json.donors[c.canonical_id].name; })[0];
+  var loose = Object.keys(json.donors).filter(function (id) { return !json.donors[id].cluster_name; })[0];
+  ok('PS-155: donorName gives a grouped donor its group\'s name and a donor in no group its stored name',
+    !!grouped && !!loose && D.donorName(index, grouped.canonical_id, json.donors[grouped.canonical_id]) === grouped.name &&
+    D.donorName(index, loose, json.donors[loose]) === json.donors[loose].name && D.donorName(index, 'zz-no-such-donor', null) === 'zz-no-such-donor');
+  ok('PS-155: donorSearchNames holds the group\'s name and every member\'s stored name; one name for a donor in no group',
+    !!grouped && grouped.members.every(function (m) { return D.donorSearchNames(index, grouped.canonical_id, json.donors[grouped.canonical_id]).indexOf(json.donors[m].name) >= 0; }) &&
+    D.donorSearchNames(index, grouped.canonical_id, json.donors[grouped.canonical_id])[0] === grouped.name &&
+    D.donorSearchNames(index, loose, json.donors[loose]).length === 1);
+})();
+
 console.log('\n' + (fails ? (fails + ' ASSERTION(S) FAILED') : 'ALL ASSERTIONS PASSED'));
 process.exit(fails ? 1 : 0);

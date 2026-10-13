@@ -2444,6 +2444,17 @@ async function assertPersonSurface(T, ctx, fx) {
     }
     var C7 = readsAfter('C7'), C8 = readsAfter('C8');
     var sbHead = c6Entry ? ((/under the heading \*\*([^*]+)\*\*/.exec(c6Entry.replace(/\s+/g, ' ')) || [])[1] || null) : null;
+    // AUDIT-2 (R4): C9, C10, S1 and S2 are ratified as a fourth amendment inside the same entry and
+    // are read in C6's form. Three more things are read from that amendment's own words: the
+    // reworded heading (the bold phrase after "becomes") and the heading it replaces (in the
+    // register's backticks before it); the sentence C10 follows; and the words of the sentence S2
+    // replaces. Nothing about the new composition is stated in this file that the register states.
+    var C9 = readsAfter('C9'), C10 = readsAfter('C10'), S1 = readsAfter('S1'), S2 = readsAfter('S2');
+    var r4 = c6Entry ? c6Entry.replace(/\s+/g, ' ') : '';
+    var r4head = /the heading that reads `([^`]+)` becomes \*\*([^*]+)\*\*/.exec(r4) || [];
+    var oldHead = r4head[1] || null, newHead = r4head[2] || null;
+    var c10After = (/gains C10 as its last sentence, after \u201c([^\u201d]+)\u201d;/.exec(r4) || [])[1] || null;
+    var oldPending = (/filings are \u201c([^\u201d]+)\u201d, is replaced by S2\./.exec(r4) || [])[1] || null;
 
     var bad = [];
     // --- premise 1: both entries resolve by heading, and neither is empty
@@ -2454,6 +2465,10 @@ async function assertPersonSurface(T, ctx, fx) {
     if (!C7) bad.push('C7 not found in the R8/R9 composition entry\'s third amendment');
     if (!C8) bad.push('C8 not found in the R8/R9 composition entry\'s third amendment');
     if (!sbHead) bad.push('the school-board section\'s heading not found in the third amendment');
+    [['C9', C9], ['C10', C10], ['S1', S1], ['S2', S2], ['the reworded heading', newHead], ['the heading it replaces', oldHead],
+     ['the sentence C10 follows', c10After], ['the words S2 replaces', oldPending]].forEach(function (x) {
+      if (!x[1]) bad.push(x[0] + ' not found in the R8/R9 composition entry\'s fourth amendment');
+    });
     var C = {};
     if (cEntry) {
       [1, 2, 3, 4, 5].forEach(function (n) {
@@ -2552,12 +2567,12 @@ async function assertPersonSurface(T, ctx, fx) {
     }
     function check(html) {
       var p = paras(html), fails = [];
-      var want = [bind(C[1]), bind(C[2]), bind(C[5]), bind(C[3]), bind(C[4]), C6, bindOther(C7, 'city_council'), C8];   // M5 (R3): C6 after C4; M2: C7 and C8 after C6
-      // --- premise 3: the page rendered the eight C-paragraphs (C6 added at M5, C7 and C8 at M2), the verification
+      var want = [bind(C[1]), bind(C[2]), bind(C[5]), bind(C[3]), bind(C[4]), C6, bindOther(C7, 'city_council'), C8, C9, C10];   // M5 (R3): C6 after C4; M2: C7 and C8 after C6; AUDIT-2 (R4): C9 and C10 after C8
+      // --- premise 3: the page rendered the ten C-paragraphs (C6 added at M5, C7 and C8 at M2, C9 and C10 at R4), the verification
       // paragraph, and the artifact-links paragraph (D3). The count is asserted, not assumed, because every
       // comparison below is positional: a page one paragraph short would otherwise compare C4
       // against the verification text and report a difference that is really a shape change.
-      if (p.length !== 10) { fails.push('rendered ' + p.length + ' <p>, expected 10'); return fails; }
+      if (p.length !== 12) { fails.push('rendered ' + p.length + ' <p>, expected 12'); return fails; }
       want.forEach(function (w, i) {
         if (p[i] !== w) fails.push('C-paragraph ' + (i + 1) + ' differs from the register');
       });
@@ -2566,7 +2581,7 @@ async function assertPersonSurface(T, ctx, fx) {
       var block = rEntry.split('\n**Bindings**')[0].split('\n');
       var start = block.findIndex(function (l) { return l.indexOf('Every data update') === 0; });
       var sentence = block.slice(start).join(' ').replace(/\s+/g, ' ').trim();
-      if (p[8] !== bindR11(sentence)) fails.push('the verify paragraph differs from the register');
+      if (p[10] !== bindR11(sentence)) fails.push('the verify paragraph differs from the register');
       return fails;
     }
 
@@ -2584,15 +2599,31 @@ async function assertPersonSurface(T, ctx, fx) {
     // AUDIT-2 M2: it also carries one section, the register's heading and then C7 and C8, directly
     // after the "Itemization follows the filings" paragraph (its fifth), with C7's two figures
     // bound for the school-board page.
+    // AUDIT-2 (R4): seventeen <p>. C9 is the sixth, directly after the itemization paragraph and
+    // directly before the section's heading (the M2 adjacency, as that amendment is amended); C10
+    // is the end of the ninth, after the sentence the register names and one space; S1 is the
+    // twelfth, the last <p> before the reworded heading; S2 is the end of the thirteenth, under
+    // that heading. The heading it replaces and the words S2 replaces are on the page nowhere.
     function sbCheck(h) {
       var sp = paras(h), f = [];
-      if (sp.length !== 15) { f.push('the school-board branch rendered ' + sp.length + ' <p>, expected 15'); return f; }
+      if (sp.length !== 17) { f.push('the school-board branch rendered ' + sp.length + ' <p>, expected 17'); return f; }
       if (SBC5 == null) f.push('SB C5 was not extracted, so the school-board paragraph cannot be compared');
       else if (sp[3] !== bind(SBC5)) f.push('the school-board C5 paragraph differs from the register');
-      if (sp[5] !== bindOther(C7, 'school_board') || sp[6] !== C8) f.push('the school-board C7 or C8 differs from the register');
-      if (sbHead == null || h.indexOf('summarize away donors it does.</p><h3>' + sbHead + '</h3><p>' + bindOther(C7, 'school_board') + '</p><p>' + C8 + '</p><h3>') < 0) {
-        f.push('the school-board section is not the register\'s heading, C7 and C8 directly after the itemization paragraph');
+      if (sp[6] !== bindOther(C7, 'school_board') || sp[7] !== C8) f.push('the school-board C7 or C8 differs from the register');
+      if (sp[5] !== C9) f.push('the school-board C9 differs from the register');
+      if (sbHead == null || h.indexOf('summarize away donors it does.</p><p>' + C9 + '</p><h3>' + sbHead + '</h3><p>' + bindOther(C7, 'school_board') + '</p><p>' + C8 + '</p><h3>') < 0) {
+        f.push('the school-board section is not C9 directly after the itemization paragraph, then the register\'s heading, C7 and C8');
       }
+      var tail10 = c10After + ' ' + C10;
+      if (!c10After || !C10 || sp[8].slice(-tail10.length) !== tail10) f.push('the named-two-ways paragraph does not end with the register\'s sentence, one space and C10');
+      if (sp[11] !== S1 || h.indexOf('<p>' + S1 + '</p><h3>' + newHead + '</h3><p>') < 0) f.push('S1 is not the last paragraph before the reworded heading, in the register\'s words');
+      if (!newHead || h.split('<h3>' + newHead + '</h3>').length !== 2) f.push('the reworded heading is not rendered exactly once');
+      if (!S2 || sp[12].slice(-(S2.length + 2)) !== '. ' + S2 || h.indexOf(S2 + '</p><h3>') < 0) f.push('the paragraph under the reworded heading does not end with S2');
+      if (!oldHead || h.indexOf(oldHead) >= 0) f.push('the heading the register replaced is still rendered');
+      if (!oldPending || h.indexOf(oldPending) >= 0) f.push('the sentence S2 replaced is still rendered');
+      [C9, C10, S1, S2].forEach(function (x, i) {
+        if (x && h.split(x).length !== 2) f.push(['C9', 'C10', 'S1', 'S2'][i] + ' is not rendered exactly once on the school-board branch');
+      });
       return f;
     }
     bad = bad.concat(sbCheck(sbHtml));
@@ -2604,8 +2635,8 @@ async function assertPersonSurface(T, ctx, fx) {
     }
     T.ok('[METH/REGISTER] every rendered council methodology paragraph equals the register\'s ' +
       'ratified text — ' + (bad.length ? bad.join('; ')
-        : '8 C-strings + R11 on the council branch; SB-METH-1\'s C5 and the section "' + sbHead +
-          '" (C7, C8) on the school-board branch; extracted by heading from RULINGS.md, ' +
+        : '10 C-strings + R11 on the council branch; SB-METH-1\'s C5, C9, the section "' + sbHead +
+          '" (C7, C8), C10, S1 and, under "' + newHead + '", S2 on the school-board branch; extracted by heading from RULINGS.md, ' +
           'character-identical, C7 bound per page to ' + R._moneyCents(otherFor('city_council').amount) + ' / ' +
           otherFor('city_council').count + ' and ' + R._moneyCents(otherFor('school_board').amount) + ' / ' +
           otherFor('school_board').count + '; the artifact-links paragraph byte-identical across the two branches'),
@@ -2639,6 +2670,29 @@ async function assertPersonSurface(T, ctx, fx) {
       'branch, and the school-board heading altered each make the check fire',
       mutC7 !== html && check(mutC7).length > 0 && mutC8 !== sbHtml && sbCheck(mutC8).length > 0 &&
       mutH !== sbHtml && sbCheck(mutH).length > 0 && sbCheck(sbHtml).length === 0);
+    // AUDIT-2 (R4): one bite per string the amendment added, each one character, each on every
+    // branch that carries it; then the reworded heading altered, the two things the register
+    // removed put back, and C9 moved. `fires` requires the unmutated page to be clean and the
+    // mutated one to report the named failure, so a bite cannot pass on some other difference.
+    var cut = function (h, x) { return x ? h.split(x).join(x.slice(0, -1)) : h; };
+    var fires = function (fn, h0, h1, re) {
+      return h1 !== h0 && fn(h0).length === 0 && fn(h1).some(function (x) { return re.test(x); });
+    };
+    T.ok('[METH/REGISTER:bite] C9 with its last character removed makes the check fire, on the council branch and on the school-board branch',
+      fires(check, html, cut(html, C9), /C-paragraph 9 /) && fires(sbCheck, sbHtml, cut(sbHtml, C9), /C9 differs/));
+    T.ok('[METH/REGISTER:bite] C10 with its last character removed makes the check fire, on the council branch and on the school-board branch',
+      fires(check, html, cut(html, C10), /C-paragraph 10 /) && fires(sbCheck, sbHtml, cut(sbHtml, C10), /one space and C10/));
+    T.ok('[METH/REGISTER:bite] S1 with its last character removed makes the school-board check fire',
+      fires(sbCheck, sbHtml, cut(sbHtml, S1), /S1 is not the last paragraph/));
+    T.ok('[METH/REGISTER:bite] S2 with its last character removed makes the school-board check fire',
+      fires(sbCheck, sbHtml, cut(sbHtml, S2), /does not end with S2/));
+    T.ok('[METH/REGISTER:bite] the reworded heading altered, the heading it replaced put back, the sentence S2 replaced put ' +
+      'back, and C9 moved below the section\'s heading each make the school-board check fire',
+      !!newHead && !!oldHead && !!oldPending && !!sbHead &&
+      fires(sbCheck, sbHtml, sbHtml.replace('<h3>' + newHead + '</h3>', '<h3>' + newHead + 's</h3>'), /reworded heading is not rendered exactly once/) &&
+      fires(sbCheck, sbHtml, sbHtml.replace(/<\/div>$/, '<h3>' + oldHead + '</h3></div>'), /heading the register replaced is still rendered/) &&
+      fires(sbCheck, sbHtml, sbHtml.replace('<h3>What it covers</h3><p>', '<h3>What it covers</h3><p>' + oldPending + ' '), /sentence S2 replaced is still rendered/) &&
+      fires(sbCheck, sbHtml, sbHtml.replace('<p>' + C9 + '</p><h3>' + sbHead + '</h3>', '<h3>' + sbHead + '</h3><p>' + C9 + '</p>'), /C9 directly after the itemization paragraph/));
   })();
 
   // [OWN/FIGURES] + [OWN/RENDER] — M5 (PS-142, PS-143).
@@ -3420,6 +3474,872 @@ async function assertPersonSurface(T, ctx, fx) {
       'the Methodology tab carries the section with this page\'s own figure, the sum of its cards\' lines — ' +
       (probs.length ? probs.join('; ') : pick.slug + ', ' + pick.cards.length + ' card(s); ' + R._moneyCents(a / 100) + ' in ' + n + ' receipts'),
       n > 0 && probs.length === 0);
+  })();
+
+  // [THROUGH/*], [IND/*], [GROUP/*], [ESC/NAME], [REVIEW/CHIP] — AUDIT-2, the elections-tool package:
+  // PS-156 (the data-through line), the IND-MULTI-1 amendment (the Industry totals line), PS-155 (a
+  // grouped donor prints the group's name, and search finds it by any member's), ruling 10 (names are
+  // escaped once) and the review mark on the two surfaces [spend.C] does not read.
+  //
+  // PS-128 DERIVATION MODES.
+  // [THROUGH/REGISTER] and the strings of [IND/ALL] are **register-derived**, as [METH/REGISTER]
+  // is: the line's words are the bold text of one register entry, read with the `> ` marker
+  // stripped and the line-wrap collapsed, nothing else altered. No copy of them is kept here.
+  // [THROUGH/LINE] is **A**: the two dates are recounted HERE from the artifact's rows by
+  // build_sb_finance.data_through()'s rule, restated below, and compared besides with the field
+  // that builder wrote into school-board-finance.json. It calls neither data.js's noteThrough nor
+  // render.js's longDate. [THROUGH/MISSING] is **E** (live host, constructed axis): the artifact
+  // with one kind of report removed, or one row with a constructed date added, in a shallow
+  // in-memory copy.
+  // [IND/ALL] is **A**: three readers must agree to the cent, the streams the Industry totals tab
+  // is given (data.js streamTotals), the sum of each figure over every row of the Spend by
+  // candidate tab for the same election (candidateFigures; that tab's sections for the other
+  // election's races that carry money in the window are rows of it, so the By race cards of the
+  // selected election can sum lower), and a recount of the artifact's rows in this block's own
+  // code. Its zero-stream half, [IND/ZERO], is **B**: every combination of zero and non-zero
+  // streams, stated here, on constructed view-models; no live list is required to hold a zero.
+  // No check here reads git history. That this change moved printed names and no figure, row or
+  // order, against the data.js it replaced, is a landing proof run once outside this gate.
+  // The bites of [GROUP/NAME], [GROUP/SEARCH] and [GROUP/OWN] put the page back as it read before
+  // in memory: the same index with the table the name resolver reads emptied (`blind`).
+  // [GROUP/NAME] is **A** with an oracle the subject does not read: the page takes the group's
+  // name from `donor_clusters[*].name`; the expectation here is `donors[*].cluster_name`, the
+  // artifact's other carrier of it, and a group's members are found by `parent_id`, not by the
+  // cluster's own member list. [GROUP/OWN] and [ESC/NAME] are **E**: one constructed group name
+  // on a live host, since no live own-money line carries a group whose name differs from its
+  // record's, and no live name carries markup. [ESC/NAME]'s host is also where a group's name
+  // after "Funded primarily by" is asserted, so that no live funder need be a renamed group.
+  // [REVIEW/CHIP] is **E** in [spend.C]'s manner: constructed, the document (the registry alone,
+  // one outside-spending row, no contribution) and the row's flag; live, the row itself.
+  // [GROUP/SEARCH] is **A**; the queries are chosen from the artifact by rule, not pinned.
+  // The :PAGE checks drive the SHIPPED bundles by real clicks, through app.js, which is what
+  // carries the index's dates to the header and tests a card's rows against its search box.
+  //
+  // WHY THEY EXIST: the numbers audit found a tool that did not say how current it was (S3), an
+  // Industry totals note that spoke of a total the tab did not print, and grouped donors printed
+  // under one member's filed spelling and findable by no other (C4).
+  await (async function () {
+    var R = require(path.join(__dirname, '..', 'render.js'));
+    var D = require(path.join(__dirname, '..', 'data.js'));
+    var ROOT = path.join(__dirname, '..', '..', '..');
+    var json = JSON.parse(fs.readFileSync(path.join(ROOT, 'election-data.json'), 'utf8'));
+    var LISTS = [['school_board', '2026'], ['school_board', '2024'], ['city_council', '2027']];
+    var VIEWS = ['byrace', 'spend', 'methodology'];
+    var cents = function (x) { return Math.round((x || 0) * 100); };
+    var money0 = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
+    var count = function (hay, needle) { return needle ? hay.split(needle).length - 1 : -1; };
+    var escH = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); };
+    // markup parsed into a detached element of ONE scratch document: a document per parse is never
+    // collected, and these checks parse some thousand fragments
+    var scratch = new JSDOM('<!doctype html><body></body>').window.document;
+    var parse = function (html) { var d = scratch.createElement('div'); d.innerHTML = html; return d; };
+    var all = function (node, sel) { return [].slice.call(node.querySelectorAll(sel)); };
+    var byId = function (node, id) { return node.querySelector('[id="' + id + '"]'); };
+    // the name a row prints: the text of its `.who` before the first chip
+    var printed = function (row) { var w = row.querySelector('.who'), t = w && w.firstChild; return (t && t.nodeType === 3) ? t.nodeValue.trim() : null; };
+    var idxOf = {}; ['school_board', 'city_council', 'mayor'].forEach(function (o) { idxOf[o] = D.loadData(json, { office: o }); });
+    // One page as app.js draws it, for a view and an election.
+    function pageOf(Dx, idx, office, view, el, tab) {
+      var om = Dx.viewModels.officeRaces(idx, office, el), slug = null;
+      om.groups.forEach(function (g) { g.races.forEach(function (r) { if (slug === null && r.hasFinance) slug = r.slug; }); });
+      return R.renderPage({ office: office, duesExcluded: idx.duesExcluded, otherExcluded: Dx.otherReceiptsOnPage(idx), dataThrough: idx.dataThrough,
+        topView: view, cycles: Dx.availableCycles(idx), cycle: null, officeRaces: om, activeSlug: slug,
+        raceView: slug ? Dx.viewModels.raceView(idx, idx.raceBySlug[slug], null) : null,
+        spend: view === 'spend' ? Dx.spendSubtab(idx, office, tab || 'donors', null, el, null, 'all', null) : null,
+        selector: { options: Dx.selectorOptions(office), active: el }, verify: { reconUrl: 'x', gapsUrl: 'y' } });
+    }
+    // A shipped bundle booted on a given artifact, as the preview boots school board's: the bundle's
+    // own three scripts, with fetch answering every URL with the data (so `verify` stays empty).
+    async function boot(office, data) {
+      var dom = new JSDOM(fs.readFileSync(BUNDLE_MOD.outFor(office), 'utf8'), { runScripts: 'dangerously', pretendToBeVisual: true, url: 'http://localhost/',
+        beforeParse: function (w) { w.fetch = function () { return Promise.resolve({ ok: true, status: 200, json: function () { return Promise.resolve(data); } }); }; } });
+      var c = makeCtx(dom.window);
+      for (var i = 0; i < 100 && !c.root().querySelector('.masthead'); i++) await c.wait(50);
+      return c;
+    }
+
+    // ---- the register ----
+    var regRaw = fs.readFileSync(path.join(ROOT, 'RULINGS.md'), 'utf8');
+    var sections = regRaw.split(/\n(?=##+ )/).map(function (sec) {
+      return sec.split('\n').map(function (ln) { return ln.replace(/^> ?/, ''); }).join(' ').replace(/\s+/g, ' ');
+    });
+    var bolds = function (sec) { var out = [], re = /\*\*([^*]+)\*\*/g, m; while ((m = re.exec(sec))) out.push(m[1]); return out; };
+    var holding = function (test) { return sections.filter(function (sec) { return bolds(sec).some(test); }); };
+
+    // ================= PS-156: the data-through line =================
+    // [THROUGH/REGISTER] The line is the one bold string, in one numbered entry, that carries the
+    // two date placeholders and nothing after "large gifts." (PS-152's line for the school-board
+    // voting page carries a third date and is a different string).
+    var isThrough = function (b) { return /^Contributions through \{quarterly date\} .*\{large-gift date\}.* large gifts\.$/.test(b); };
+    // Exactly once in the entry headed `### PS-156 `; a later entry may quote the line, so the
+    // register as a whole is not asked to hold it once.
+    var tSecs = sections.filter(function (sec) { return sec.indexOf('### PS-156 ') === 0; });
+    var tHits = tSecs.length === 1 ? bolds(tSecs[0]).filter(isThrough) : [];
+    var tTpl = tHits.length === 1 ? tHits[0] : null;
+    T.ok('[THROUGH/REGISTER] the data-through line is in bold exactly once in the register entry headed PS-156 — ' +
+      (tTpl ? JSON.stringify(tTpl) : tHits.length + ' bold strings in ' + tSecs.length + ' entries'),
+      !!tTpl && count(tTpl, '{quarterly date}') === 1 && count(tTpl, '{large-gift date}') === 1);
+
+    // the two dates, recounted: the filing kind exactly, a date that is a ten-character string, the greatest
+    function throughOf(js) {
+      var out = {};
+      [['quarterly', 'Quarterly'], ['large_gift', 'A-1']].forEach(function (k) {
+        var best = null;
+        (js.contributions || []).forEach(function (c) {
+          if (c.source_filing === k[1] && typeof c.date === 'string' && c.date.length === 10 && (best === null || c.date > best)) best = c.date;
+        });
+        out[k[0]] = best;
+      });
+      return out;
+    }
+    var MONTH = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    // a day the calendar holds, or null: an impossible date counts as missing (PS-156 as built)
+    function mdy(iso) {
+      var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+      if (!m || !MONTH[+m[2] - 1]) return null;
+      var y = +m[1], feb = (y % 4 === 0 && (y % 100 !== 0 || y % 400 === 0)) ? 29 : 28;
+      var len = { 1: 31, 2: feb, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31 }[+m[2]];
+      return (+m[3] >= 1 && +m[3] <= len) ? MONTH[+m[2] - 1] + ' ' + String(+m[3]) + ', ' + m[1] : null;
+    }
+    var tLive = throughOf(json);
+    var sbf = JSON.parse(fs.readFileSync(path.join(ROOT, 'school-board-finance.json'), 'utf8')).data_through || {};
+    var tWant = (tTpl && mdy(tLive.quarterly) && mdy(tLive.large_gift))
+      ? tTpl.replace('{quarterly date}', mdy(tLive.quarterly)).replace('{large-gift date}', mdy(tLive.large_gift)) : null;
+    // The header's part of a page, and what is wrong with it against the line it should carry
+    // (`want` a string) or should not carry (`want` null).
+    var mastOf = function (html) { return html.slice(html.indexOf('<header class="masthead">'), html.indexOf('</header>')); };
+    function mastProblems(html, want) {
+      var m = mastOf(html), f = [];
+      if (count(html, '<header class="masthead">') !== 1 || !m) return ['no header'];
+      if (count(html, 'class="data-through"') !== (want ? 1 : 0)) f.push('the line is drawn ' + count(html, 'class="data-through"') + ' times');
+      if (want) {
+        var at = /<p class="lede">(?:(?!<\/p>)[\s\S])*<\/p><p class="data-through">([^<]*)<\/p><div class="topnav"/.exec(m);
+        if (!at) f.push('the line is not a paragraph of its own between the lede and the tabs');
+        else if (at[1] !== want) f.push('the line reads ' + JSON.stringify(at[1]));
+      } else if (m.indexOf('on quarterly reports') >= 0 || m.indexOf('Contributions through') >= 0) f.push('part of the line is drawn');
+      return f;
+    }
+    var tProbs = [], tPages = 0, tMayor = 0, tText = {};
+    if (!tWant) tProbs.push('premise: the artifact holds no dated row of one kind, or the register line was not read');
+    LISTS.forEach(function (L) {
+      VIEWS.forEach(function (v) {
+        var html = pageOf(D, idxOf[L[0]], L[0], v, L[1]);
+        mastProblems(html, tWant).forEach(function (p) { tProbs.push(L.join(' ') + ' ' + v + ': ' + p); });
+        tText[(/<p class="data-through">([^<]*)<\/p>/.exec(html) || [])[1]] = 1; tPages++;
+      });
+    });
+    VIEWS.forEach(function (v) {
+      mastProblems(pageOf(D, idxOf.mayor, 'mayor', v, '2027'), null).forEach(function (p) { tProbs.push('mayor ' + v + ': ' + p); });
+      tMayor++;
+    });
+    // The day does not depend on the machine's time zone. Rendered again with the zone set west of
+    // Greenwich, where a date read as an instant falls on the day before; set here, so that this
+    // bites whatever zone the gate is run in, and put back.
+    (function () {
+      var had = Object.prototype.hasOwnProperty.call(process.env, 'TZ'), tz0 = process.env.TZ;
+      try {
+        ['America/Chicago', 'Pacific/Pago_Pago'].forEach(function (z) {
+          process.env.TZ = z;
+          mastProblems(pageOf(D, idxOf.school_board, 'school_board', 'byrace', '2026'), tWant).forEach(function (p) { tProbs.push('with the zone set to ' + z + ': ' + p); });
+        });
+      } finally { if (had) process.env.TZ = tz0; else delete process.env.TZ; }
+    })();
+    T.ok('[THROUGH/LINE] on every top view of /school-board-elections (both elections) and /city-council the header carries the ' +
+      'register\'s line once, directly under the lede, with the latest date of a contribution filed on a quarterly report and of one ' +
+      'filed on a report of a large gift across the whole artifact, recounted here by build_sb_finance\'s rule and equal to the ' +
+      'dates that builder wrote; it reads the same on every election and in a time zone west of Greenwich; the mayor\'s page carries none — ' +
+      (tProbs.length ? tProbs.slice(0, 5).join('; ') : JSON.stringify(tWant) + ' (' + tLive.quarterly + ', ' + tLive.large_gift + ') on ' + tPages + ' pages; absent on ' + tMayor + ' mayor pages'),
+      !!tWant && tProbs.length === 0 && Object.keys(tText).length === 1 &&
+      sbf.quarterly === tLive.quarterly && sbf.large_gift === tLive.large_gift);
+
+    // [THROUGH/MISSING] the line prints whole or not at all.
+    var without = function (kind) { return Object.assign({}, json, { contributions: json.contributions.filter(function (c) { return c.source_filing !== kind; }) }); };
+    var plus = function (row) { return Object.assign({}, json, { contributions: json.contributions.concat([row]) }); };
+    var host = json.contributions.filter(function (c) { return c.source_filing === 'A-1' && c.date === tLive.large_gift; })[0] || {};
+    var mProbs = [], liveMast = {};
+    ['school_board', 'city_council'].forEach(function (o) { liveMast[o] = mastOf(pageOf(D, idxOf[o], o, 'byrace', D.selectorOptions(o)[0].id)); });
+    [['no row filed on a report of a large gift', without('A-1'), null],
+     ['no row filed on a quarterly report', without('Quarterly'), null],
+     ['a large-gift row dated 2026-13-01, later than every other and not a date', plus(Object.assign({}, host, { date: '2026-13-01' })), null],
+     ['a large-gift row dated 9999-12-3, not ten characters (the rule passes over it)', plus(Object.assign({}, host, { date: '9999-12-3' })), tWant],
+     ['a later row of another kind of report (the kind is matched exactly)', plus(Object.assign({}, host, { date: '2099-01-01', source_filing: 'Quarterly A-1' })), tWant],
+     // a day the calendar does not hold counts as missing; a leap day in a leap year is a day
+     ['a large-gift row dated 2027-02-31, the latest and no day', plus(Object.assign({}, host, { date: '2027-02-31' })), null],
+     ['a large-gift row dated 2027-02-29, the latest and no day (2027 is no leap year)', plus(Object.assign({}, host, { date: '2027-02-29' })), null],
+     ['a large-gift row dated 2028-02-29, the latest and a day', plus(Object.assign({}, host, { date: '2028-02-29' })),
+       tTpl && mdy(tLive.quarterly) ? tTpl.replace('{quarterly date}', mdy(tLive.quarterly)).replace('{large-gift date}', 'February 29, 2028') : null]
+    ].forEach(function (c, ci) {
+      if (ci === 7 && !c[2]) mProbs.push('premise: the leap-day expectation was not built');
+      ['school_board', 'city_council'].forEach(function (o) {
+        var ix = D.loadData(c[1], { office: o }), el = D.selectorOptions(o)[0].id;
+        VIEWS.forEach(function (v) {
+          var html = pageOf(D, ix, o, v, el);
+          mastProblems(html, c[2]).forEach(function (p) { mProbs.push(c[0] + ', ' + o + ' ' + v + ': ' + p); });
+        });
+        // nothing else in the header moves: it is the live header with the line taken out, or with the line expected in its place
+        var m0 = mastOf(pageOf(D, ix, o, 'byrace', el));
+        if (m0 !== liveMast[o].replace('<p class="data-through">' + tWant + '</p>', c[2] ? '<p class="data-through">' + c[2] + '</p>' : '')) mProbs.push(c[0] + ', ' + o + ': the rest of the header changed');
+      });
+    });
+    T.ok('[THROUGH/MISSING] with either date missing, or the latest one not a day the calendar holds (a thirteenth month, ' +
+      '2027-02-31, 2027-02-29), the whole line is left off every view and the rest of the header stands; a date that is not ten ' +
+      'characters and a later row of another kind do not move it; and 2028-02-29 prints as February 29, 2028 — ' +
+      (mProbs.length ? mProbs.slice(0, 4).join('; ') : '8 constructed artifacts, two pages, three views each'),
+      !!tWant && !!host.date && mProbs.length === 0 && mdy('2028-02-29') === 'February 29, 2028' && mdy('2027-02-29') === null && mdy('2100-02-29') === null && mdy('2000-02-29') !== null);
+    // BITES, in memory, on a live page: a date a day out; the line below the tabs; the line where none is wanted; none where one is.
+    var tPage = pageOf(D, idxOf.school_board, 'school_board', 'byrace', '2026');
+    var tLineHtml = '<p class="data-through">' + tWant + '</p>';
+    var tDay = mdy(tLive.large_gift) || '', tDayOut = tDay.replace(/\d+,/, function (d) { return (parseInt(d, 10) === 1 ? 2 : parseInt(d, 10) - 1) + ','; });
+    var tBites = [
+      mastProblems(tPage.replace(tDay, tDayOut), tWant),
+      mastProblems(tPage.replace(tLineHtml, '').replace('</header>', tLineHtml + '</header>'), tWant),
+      mastProblems(tPage, null),
+      mastProblems(tPage.replace(tLineHtml, ''), tWant),
+      mastProblems(tPage.replace(tLineHtml, '<p class="lede">' + tWant + '</p>'), tWant)];
+    T.ok('[THROUGH/LINE:bite] a date one day out, the line moved below the tabs, the line drawn where none is wanted, the line ' +
+      'missing where one is, and its words set inside a second lede each make the check fire — ' +
+      tBites.filter(function (b) { return b.length > 0; }).length + ' of ' + tBites.length,
+      !!tWant && mastProblems(tPage, tWant).length === 0 && tBites.every(function (b) { return b.length > 0; }));
+
+    // ================= IND-MULTI-1 amendment: the Industry totals line =================
+    var isAllTpl = function (b) { return b.indexOf('{direct}') >= 0 && b.indexOf('{support}') >= 0 && b.indexOf('{oppose}') >= 0; };
+    var iSecs = holding(isAllTpl);
+    var iTpl = iSecs.length === 1 ? bolds(iSecs[0]).filter(isAllTpl)[0] : null;
+    var iNote = iSecs.length === 1 ? (bolds(iSecs[0]).filter(function (b) { return /^A donor tagged with more than one industry is listed under each; /.test(b); })[0] || null) : null;
+    var iEntry = iSecs.length === 1 && iSecs[0].indexOf('### IND-MULTI-1 — count once, list under both, as ruled') === 0;
+    // the sentence the amendment rewords, as clause (ii) of the same entry quotes it
+    var iOld = iSecs.length === 1 ? ((/renders this sentence beside its total: "([^"]+)"/.exec(iSecs[0]) || [])[1] || null) : null;
+    // the template's four pieces: its opening, and one part per stream, joined by the register's own separator
+    var iHead = iTpl ? iTpl.slice(0, iTpl.indexOf('{direct}')) : '', iParts = iTpl ? iTpl.slice(iHead.length).replace(/\.$/, '').split(' · ') : [];
+    function allLine(s) {
+      var keys = ['direct', 'support', 'oppose'], out = [];
+      keys.forEach(function (k, i) { if (s[k] > 0) out.push(iParts[i].replace('{' + k + '}', money0(s[k]))); });
+      return out.length ? iHead + out.join(' · ') + '.' : null;
+    }
+    // what is wrong with a rendered Industry totals tab against the streams it should state
+    function indProblems(html, s) {
+      var f = [], want = allLine(s), note = (/<p class="contrib-note">((?:(?!<\/p>)[\s\S])*)<\/p><div class="ind-legend"/.exec(html) || [])[1];
+      if (!note || note.slice(-(iNote.length + 1)) !== ' ' + iNote) f.push('the note above the bars does not end with the register\'s sentence');
+      if (iOld && html.indexOf(iOld.slice(iOld.indexOf('; ') + 2)) >= 0) f.push('the clause the amendment reworded is still printed');
+      if (count(html, 'All industries together') !== (want ? 1 : 0)) f.push('the line is drawn ' + count(html, 'All industries together') + ' times');
+      if (want) {
+        var at = /<\/button><\/div><p class="contrib-note ind-all">([^<]*)<\/p><\/div><\/div>$/.exec(html) || /<div class="indchart"><\/div><p class="contrib-note ind-all">([^<]*)<\/p><\/div><\/div>$/.exec(html);
+        if (!at) f.push('the line is not the one paragraph directly under the bars');
+        else if (at[1] !== want) f.push('the line reads ' + JSON.stringify(at[1]) + ', not ' + JSON.stringify(want));
+      }
+      return f;
+    }
+    var iProbs = [], iSeen = [];
+    if (!iTpl || !iNote || !iEntry || !iOld || iParts.length !== 3) iProbs.push('premise: the amendment\'s two strings were not read from the IND-MULTI-1 entry (' + iSecs.length + ' entries hold the line)');
+    else LISTS.forEach(function (L) {
+      var off = L[0], el = L[1], idx = idxOf[off], tag = L.join(' ');
+      var vm = D.spendSubtab(idx, off, 'industries', null, el, null, 'all', null), s = vm.streams || {}, win = vm.win;
+      // reader 2: the figures on the Spend-by-candidate rows, summed
+      var cards = { direct: 0, support: 0, oppose: 0 }, nCards = 0;
+      D.spendSubtab(idx, off, 'candidates', null, el, null, 'all', null).groups.forEach(function (g) { g.candidates.forEach(function (c) {
+        cards.direct += cents(c.figures.contributions.total); cards.support += cents(c.figures.independentSupport); cards.oppose += cents(c.figures.independentOpposition); nCards++;
+      }); });
+      // reader 3: the artifact's rows, in this block's own code. A candidate of the page's races that is
+      // not a pointer to another race; its committee's contributions that are not dues, not other
+      // receipts off the own-committee list and not in an out-of-subject cycle, dated in the window;
+      // and the spending aimed at it by a committee that is no candidate's own.
+      var offs = D.OFFICE_RACE_OFFICES[off], ro = {}, on = {}, own = {}, rows = { direct: 0, support: 0, oppose: 0 };
+      json.races.forEach(function (r) { ro[r.id] = r.office; });
+      json.candidates.forEach(function (c) { if (offs.indexOf(ro[c.race_id]) >= 0 && !c.vacating_for) on[c.id] = 1; });
+      Object.keys(json.committees).forEach(function (k) { if (json.committees[k].candidate_id) own[k] = json.committees[k].candidate_id; });
+      var inW = function (d) { return !!d && (win.start == null || d >= win.start) && (win.end == null || d <= win.end); };
+      var cyc = function (c) { return c.cycle !== 'pre-2011' && c.cycle !== 'undated'; };
+      json.contributions.forEach(function (c) {
+        if (!on[own[c.committee_id]] || !cyc(c) || !inW(c.date)) return;
+        if (c.contribution_type === 'IE Committee Dues Transfer' || (c.contribution_type === 'Other Receipt' && !c.is_own_committee)) return;
+        rows.direct += cents(c.amount);
+      });
+      json.independent_expenditures.forEach(function (ie) {
+        if (own[ie.spender_committee_id] || !on[ie.target_candidate_id] || !cyc(ie) || !inW(ie.date)) return;
+        rows[ie.stance === 'oppose' ? 'oppose' : 'support'] += cents(ie.amount);
+      });
+      ['direct', 'support', 'oppose'].forEach(function (k) {
+        if (cents(s[k]) !== cards[k] || cents(s[k]) !== rows[k]) iProbs.push(tag + ': ' + k + ' is ' + cents(s[k]) + ' cents on the tab, ' + cards[k] + ' over the Spend by candidate tab\'s rows, ' + rows[k] + ' recounted');
+      });
+      var bars = vm.industries.reduce(function (a, x) { return a + cents(x.direct); }, 0);
+      if (bars < cents(s.direct)) iProbs.push(tag + ': the bars\' direct amounts sum to less than the direct total');
+      var html = R.renderSpend(vm, off);
+      indProblems(html, s).forEach(function (p) { iProbs.push(tag + ': ' + p); });
+      if (count(pageOf(D, idx, off, 'spend', el, 'industries'), '<p class="contrib-note ind-all">' + allLine(s) + '</p>') !== 1) iProbs.push(tag + ': the page does not carry the line');
+      iSeen.push(tag + ' ' + ['direct', 'support', 'oppose'].map(function (k) { return money0(s[k]); }).join(' / ') + ' on ' + nCards + ' rows (bars\' direct ' + money0((bars - cents(s.direct)) / 100) + ' more)');
+    });
+    T.ok('[IND/ALL] the Industry totals note ends with the register\'s sentence and one line directly under the bars states, in ' +
+      'the register\'s words and whole dollars, what the page\'s candidates were given directly and what outside groups spent for ' +
+      'and against them; each of the three equals, to the cent, that figure summed over every row of the Spend by candidate tab ' +
+      'for the same election (its sections for the other election\'s races included) and a recount of the artifact\'s rows, on ' +
+      'every election of both pages; a stream that is zero on a list is left out with its separator — ' +
+      (iProbs.length ? iProbs.slice(0, 4).join('; ') : iSeen.join('; ')),
+      iProbs.length === 0 && iSeen.length === LISTS.length);
+    // The zero half, stated on constructed view-models: every combination of the three streams at zero
+    // or not, with no bar and with one. No page's money is a premise of it.
+    var zProbs = [], zN = 0;
+    if (iTpl && iNote && iParts.length === 3) {
+      [[], [{ industry: 'zz-constructed', direct: 1, support: 0, oppose: 0, total: 1 }]].forEach(function (barsVm) {
+        [0, 1].forEach(function (a) { [0, 1].forEach(function (b) { [0, 1].forEach(function (c) {
+          var s = { direct: a * 1234.4, support: b * 56.5, oppose: c * 7 }, html = R.renderSpend({ tab: 'industries', industries: barsVm, streams: s }, 'school_board');
+          var n = a + b + c, want = allLine(s), tag = [a, b, c].join('') + (barsVm.length ? ' under a bar' : ''); zN++;
+          if ((n === 0) !== (want === null) || (want && count(want, ' \u00b7 ') !== n - 1)) zProbs.push('the expectation for ' + tag + ' is malformed');
+          indProblems(html, s).forEach(function (p) { zProbs.push(tag + ': ' + p); });
+          if (/\$0 in /.test(html)) zProbs.push(tag + ': a zero stream is printed');
+          if (n === 0 && html.indexOf('ind-all') >= 0) zProbs.push(tag + ': a line is drawn with all three at zero');
+        }); }); });
+      });
+    }
+    T.ok('[IND/ZERO] a stream at zero is left out together with its separator, in every one of the eight combinations, with no ' +
+      'bar above the line and with one, and with all three at zero no line is drawn — ' +
+      (zProbs.length ? zProbs.slice(0, 4).join('; ') : zN + ' constructed view-models'), zN === 16 && zProbs.length === 0);
+    (function () {
+      if (!iTpl || !iNote) { T.ok('[IND/ALL:bite] (the strings were not read)', false); return; }
+      // on the first list's own bars, with three constructed streams, so that no live list need carry all three
+      var L = LISTS[0], vm = { tab: 'industries', industries: D.spendSubtab(idxOf[L[0]], L[0], 'industries', null, L[1]).industries, streams: { direct: 1234.4, support: 56.5, oppose: 7 } };
+      var s = vm.streams, html = R.renderSpend(vm, L[0]);
+      var line = '<p class="contrib-note ind-all">' + allLine(s) + '</p>';
+      var bites = [
+        html.replace(line, line.replace(money0(s.support), money0(s.support + 1))),                       // one figure a dollar out
+        html.replace(line, line.replace(' · ' + iParts[2].replace('{oppose}', money0(s.oppose)), '')), // a stream left out that is not zero
+        html.replace(line, '').replace('<div class="indchart">', line + '<div class="indchart">'),          // the line above the bars
+        html.replace(line, ''),                                                                              // no line
+        html.replace('donor’s money once.</p>', 'donor\'s money once.</p>'),                         // the straight apostrophe
+        html.replace(iNote, iOld.slice(0, -1) + '.')                                                         // the sentence as it read before
+      ].map(function (h) { return h !== html && indProblems(h, s).length > 0; });
+      var zeroPrinted = indProblems(R.renderSpend({ tab: 'industries', industries: [], streams: { direct: 5, support: 0, oppose: 0 } }, 'school_board')
+        .replace('in direct contributions.', 'in direct contributions · $0 in independent support.'), { direct: 5, support: 0, oppose: 0 }).length > 0;
+      T.ok('[IND/ALL:bite] one figure a dollar out, a stream left out, the line above the bars, no line, the clause with a straight ' +
+        'apostrophe, the sentence as it read before, and a zero stream printed each make the check fire — ' +
+        (bites.filter(Boolean).length + (zeroPrinted ? 1 : 0)) + ' of ' + (bites.length + 1),
+        !!L && indProblems(html, s).length === 0 && bites.every(Boolean) && zeroPrinted);
+    })();
+
+    // ================= PS-155: group names =================
+    // The expectation, from the artifact's other carrier of the group's name.
+    var dn = json.donors || {};
+    var stored = function (pid) { return (dn[pid] && dn[pid].name) || pid; };
+    var groupName = function (pid) { return (dn[pid] && dn[pid].cluster_name) || null; };
+    var expName = function (pid) { return groupName(pid) || stored(pid); };
+    var kids = {};   // rolled-up id -> every record the artifact holds under it
+    Object.keys(dn).forEach(function (id) { var p = dn[id].parent_id || id; (kids[p] || (kids[p] = [])).push(id); });
+    // every name a donor is found by: a grouped donor's group and its members' stored names; else its own
+    var namesOf = function (pid) {
+      var out = [expName(pid)];
+      if (groupName(pid)) (kids[pid] || []).forEach(function (m) { if (out.indexOf(stored(m)) < 0) out.push(stored(m)); });
+      return out;
+    };
+    var sameSet = function (a, b) { return a.length === b.length && a.slice().sort().join('\n') === b.slice().sort().join('\n'); };
+
+    // The page as it read before PS-155, for the bites: the same index with the table the name resolver
+    // reads emptied, in a shallow copy. Rows still roll up by parent_id; the group's name and its
+    // members' names are out of the page's reach, as they were.
+    var blindOf = function (idx) { return Object.assign({}, idx, { clusterByParent: {} }); };
+    // The view-models of one list: the five Election spend tabs, every race view, and the pop-ups of
+    // every grouped donor row, every twentieth other row and every outside-spending group's row.
+    function vmsOf(Dx, idx, L) {
+      var off = L[0], el = L[1], o = { races: {}, pop: {}, cmte: {} };
+      ['donors', 'candidates', 'industries', 'industry-candidate', 'flags'].forEach(function (t) { o[t] = Dx.spendSubtab(idx, off, t, null, el, null, 'all', null); });
+      Dx.viewModels.officeRaces(idx, off, el).groups.forEach(function (g) { g.races.forEach(function (r) { o.races[r.slug] = Dx.viewModels.raceView(idx, idx.raceBySlug[r.slug], null); }); });
+      o.donors.rows.forEach(function (r, i) {
+        if (r.kind === 'ie') o.cmte[r.committee_id] = Dx.committeeProfile(idx, r.committee_id, o.donors.win);
+        else if (groupName(r.parent_id) || i % 20 === 0) o.pop[r.parent_id] = Dx.donorFootprint(idx, r.parent_id, o.donors.win);
+      });
+      return o;
+    }
+    function named(v, out) {   // every object that names a donor, in order
+      if (Array.isArray(v)) v.forEach(function (x) { named(x, out); });
+      else if (v && typeof v === 'object') { if ('parent_id' in v && 'name' in v) out.push(v); Object.keys(v).forEach(function (k) { named(v[k], out); }); }
+      return out;
+    }
+    // [GROUP/NAME] every printed donor name, in the view-models and in the markup rendered from them.
+    var newStat = function () { return { rows: 0, lines: 0, own: 0, funders: 0, primarily: 0, pops: 0, members: 0, renamed: 0, memberDiffers: 0, primarilyRenamed: 0, attrs: 0 }; };
+    var nProbs = [], nStat = newStat(), nBite = [];
+    var note = function (p) { if (nProbs.length < 8) nProbs.push(p); };
+    var primarilyOf = function (funders) { return funders.slice(0, 3).map(function (f) { return expName(f.parent_id); }); };
+    function nameProblems(L, vm, say, nStat) {
+      var tag = L.join(' ');
+      // the view-models: every object that names a donor
+      named(vm, []).forEach(function (x) { if (x.name !== expName(x.parent_id)) say(tag + ': the view-model names ' + x.parent_id + ' ' + JSON.stringify(x.name) + ', not ' + JSON.stringify(expName(x.parent_id))); });
+      // Browse donors
+      var bdoc = parse(R.renderSpend(vm.donors, L[0])), brow = all(bdoc, '.spend-body button[data-funder]'), irow = all(bdoc, '.spend-body button[data-committee]');
+      var drows = vm.donors.rows.filter(function (r) { return r.kind === 'donor'; }), irows = vm.donors.rows.filter(function (r) { return r.kind === 'ie'; });
+      if (brow.length !== drows.length || irow.length !== irows.length) say(tag + ': Browse donors renders ' + brow.length + ' donor rows for ' + drows.length);
+      else {
+        brow.forEach(function (el, k) {
+          var pid = el.getAttribute('data-funder'); nStat.rows++;
+          if (pid !== drows[k].parent_id || printed(el) !== expName(pid)) say(tag + ': Browse donors prints ' + JSON.stringify(printed(el)) + ' for ' + pid);
+          if (expName(pid) !== stored(pid)) nStat.renamed++;
+        });
+        irow.forEach(function (el, k) {
+          var want = primarilyOf(D.spenderFunders(idxOf[L[0]], irows[k].committee_id).funders), sub = el.querySelector('.who .sub');
+          if (want.length && (!sub || sub.textContent !== 'Funded primarily by ' + want.join(', '))) say(tag + ': the group row ' + irows[k].committee_id + ' reads ' + JSON.stringify(sub && sub.textContent));
+          if (want.length) { nStat.primarily++; if (want.some(function (n, j) { return n !== stored(D.spenderFunders(idxOf[L[0]], irows[k].committee_id).funders[j].parent_id); })) nStat.primarilyRenamed++; }
+        });
+      }
+      // every race view: a card's contributor lines (its own-money line among them), and its outside-spending groups' funders
+      Object.keys(vm.races).forEach(function (slug) {
+        var rv = vm.races[slug], doc = parse(R.renderRaceView(rv));
+        (rv.candidates || []).forEach(function (c) {
+          if (!c.hasFinance) return;
+          var panel = byId(doc, 'd-' + c.slug + '-c'), lines = c.contributors.lines;
+          var clickable = lines.filter(function (l) { return !l.isSelf && !l.isAggregate; }), plain = lines.filter(function (l) { return l.isSelf || l.isAggregate; });
+          var got = panel ? all(panel, 'button.crow[data-funder]') : [], gotPlain = panel ? all(panel, '.crow.plain') : [];
+          if (got.length !== clickable.length || gotPlain.length !== plain.length) { say(tag + ' ' + c.id + ': the card does not render one row per contributor line'); return; }
+          got.forEach(function (el, k) {
+            var pid = el.getAttribute('data-funder'), attr = el.getAttribute('data-names'); nStat.lines++;
+            if (pid !== clickable[k].parent_id || printed(el) !== expName(pid)) say(tag + ' ' + c.id + ': the contributor line of ' + pid + ' prints ' + JSON.stringify(printed(el)));
+            // the names the card's search box reads: every name of a grouped donor, and nothing on a donor in no group
+            if (namesOf(pid).length > 1) { nStat.attrs++; if (attr == null || !sameSet(attr.split('\n'), namesOf(pid))) say(tag + ' ' + c.id + ': the line of ' + pid + ' does not carry its group\'s names'); }
+            else if (attr != null) say(tag + ' ' + c.id + ': the line of ' + pid + ', in no group, carries names');
+          });
+          if (!sameSet(gotPlain.map(printed), plain.map(function (l) { return expName(l.parent_id); }))) say(tag + ' ' + c.id + ': an own-money or small-dollar line prints another name');
+          nStat.own += plain.filter(function (l) { return l.isSelf; }).length;
+          [['s', c.ieSupportDetail], ['o', c.ieOpposeDetail]].forEach(function (d) {
+            ((d[1] || {}).spenders || []).forEach(function (sp, n) {
+              var t2 = byId(doc, 'd-' + c.slug + '-' + d[0] + '-' + n), lead = t2 && t2.querySelector('.ie-lead'), want = primarilyOf(sp.funders);
+              if (!t2) { say(tag + ' ' + c.id + ': no funder list for ' + sp.spender_committee_id); return; }
+              if (want.length && (!lead || lead.textContent !== 'Funded primarily by ' + want.join(', ') + '.')) say(tag + ' ' + c.id + ': ' + sp.spender_committee_id + ' reads ' + JSON.stringify(lead && lead.textContent));
+              var fr = all(t2, 'button.crow[data-funder]');
+              if (fr.length !== sp.funders.length) say(tag + ' ' + c.id + ': ' + sp.spender_committee_id + ' renders ' + fr.length + ' funder rows for ' + sp.funders.length);
+              else fr.forEach(function (el, k) { nStat.funders++; if (el.getAttribute('data-funder') !== sp.funders[k].parent_id || printed(el) !== expName(sp.funders[k].parent_id)) say(tag + ' ' + c.id + ': a funder line of ' + sp.spender_committee_id + ' prints ' + JSON.stringify(printed(el))); });
+            });
+          });
+        });
+      });
+      // the donor's pop-up: its title, the sentence under it, and its members under their own names
+      Object.keys(vm.pop).forEach(function (pid) {
+        var fp = vm.pop[pid], doc = parse(R.renderFunderModal(fp)), title = doc.querySelector('.modal-name'), b = doc.querySelector('.modal-note b'); nStat.pops++;
+        if (!title || title.textContent !== expName(pid) || !b || b.textContent !== expName(pid)) say(tag + ': the pop-up of ' + pid + ' is titled ' + JSON.stringify(title && title.textContent));
+        var mem = all(doc, '.elect-rollup-name').map(function (e) { return e.textContent; }), wantMem = fp.rollup ? fp.rollup.members.map(function (m) { return stored(m.id); }) : [];
+        if (mem.join('\n') !== wantMem.join('\n')) say(tag + ': the pop-up of ' + pid + ' does not list its members under their stored names');
+        nStat.members += mem.length; if (mem.some(function (n) { return n !== expName(pid); })) nStat.memberDiffers++;
+        all(doc, 'button[data-committee] .who .sub').forEach(function (sub) {
+          var key = sub.parentNode.parentNode.getAttribute('data-committee'), want = primarilyOf(D.spenderFunders(idxOf[L[0]], key).funders);
+          if (sub.textContent !== 'Funded primarily by ' + want.join(', ')) say(tag + ': in the pop-up of ' + pid + ', ' + key + ' reads ' + JSON.stringify(sub.textContent));
+        });
+      });
+      // an outside-spending group's pop-up: the names after "Funded primarily by", and its funders' lines
+      Object.keys(vm.cmte).forEach(function (key) {
+        var p = vm.cmte[key], doc = parse(R.renderCommitteeProfile(p)), noteEl = doc.querySelector('.modal-note'), want = primarilyOf(p.funders);
+        var lead = 'Funded primarily by ' + want.join(', ') + '. ';
+        if (want.length && (!noteEl || noteEl.textContent.slice(0, lead.length) !== lead)) say(tag + ': the pop-up of ' + key + ' reads ' + JSON.stringify(noteEl && noteEl.textContent.slice(0, 90)));
+        all(doc, 'button.crow[data-funder]').forEach(function (el, k) { nStat.funders++; if (el.getAttribute('data-funder') !== p.funders[k].parent_id || printed(el) !== expName(p.funders[k].parent_id)) say(tag + ': a funder line of ' + key + ' prints ' + JSON.stringify(printed(el))); });
+      });
+    }
+    var NOF = { search: '', type: 'All', industry: 'All', flag: 'All' };
+    var sProbs = [], sSeen = [], sOldMiss = 0, sOldAsked = 0;
+    var found = function (Dx, idx, L, q) { return Dx.spendSubtab(idx, L[0], 'donors', null, L[1], Object.assign({}, NOF, { search: q }), 'all', null).rows.map(function (r) { return r.parent_id || r.committee_id; }); };
+    function searchOf(L, donorsVm, blind) {
+      var tag = L.join(' '), U = donorsVm.rows, win = donorsVm.win, idx = idxOf[L[0]];
+      var has = function (hay, q) { return String(hay || '').toLowerCase().indexOf(q.toLowerCase()) >= 0; };
+      var want = function (q) { return U.filter(function (r) { return r.kind === 'ie' ? has(r.name, q) : namesOf(r.parent_id).some(function (n) { return has(n, q); }); }).map(function (r) { return r.parent_id || r.committee_id; }); };
+      var inWin = {}; json.contributions.forEach(function (c) { if (c.date && c.date >= win.start && c.date <= win.end) inWin[c.donor_id] = 1; });
+      var grouped = U.filter(function (r) { return r.kind === 'donor' && groupName(r.parent_id); });
+      // a member's stored name that is found in neither the printed name nor the canonical record's name
+      var foreign = function (r, test) { return (kids[r.parent_id] || []).filter(function (m) { return m !== r.parent_id && !has(r.name, stored(m)) && !has(stored(r.parent_id), stored(m)) && (!test || test(m)); })[0]; };
+      var a = grouped.filter(function (r) { return r.name !== stored(r.parent_id) && !has(stored(r.parent_id), r.name); })[0];
+      var b = grouped.filter(function (r) { return foreign(r); })[0];
+      var c = grouped.filter(function (r) { return foreign(r, function (m) { return !inWin[m]; }); })[0];
+      var plainRow = U.filter(function (r) { return r.kind === 'donor' && !groupName(r.parent_id); })[0];
+      if (!a || !b || !c || !plainRow) { sProbs.push(tag + ': premise: the list offers no grouped row for one of the three kinds of name, or no row in no group'); return; }
+      var cases = [
+        ['the group\'s name', a.name.toUpperCase(), a.parent_id, true],
+        ['a member\'s stored name', stored(foreign(b)).toLowerCase(), b.parent_id, true],
+        ['the stored name of a member with no gift in the election', stored(foreign(c, function (m) { return !inWin[m]; })).toUpperCase(), c.parent_id, true],
+        ['a donor in no group, by its name', plainRow.name.toLowerCase(), plainRow.parent_id, false],
+        ['the printed text of a row, in part', a.name.slice(1, 7), a.parent_id, null],
+        ['"frank"', 'frank', null, null],
+        ['a text no name holds', 'zz-no-such-donor-zz', null, null]];
+      cases.forEach(function (k) {
+        var got = found(D, idx, L, k[1]), exp = want(k[1]);
+        if (got.join('\n') !== exp.join('\n')) sProbs.push(tag + ': ' + k[0] + ' ' + JSON.stringify(k[1]) + ' returns ' + got.length + ' rows, expected ' + exp.length);
+        if (k[2] && got.indexOf(k[2]) < 0) sProbs.push(tag + ': ' + k[0] + ' ' + JSON.stringify(k[1]) + ' does not find ' + k[2]);
+        // BITE, and the control beside it: the blind page does not find the donor in the three group cases;
+        // and for every text the rows it finds that are not grouped donors are the rows found now (a donor
+        // in no group, and an outside-spending group, are found as before)
+        var was = found(D, blind, L, k[1]);
+        if (k[3] === true) { sOldAsked++; if (was.indexOf(k[2]) < 0) sOldMiss++; }
+        if (was.filter(function (id) { return !groupName(id); }).join('\n') !== got.filter(function (id) { return !groupName(id); }).join('\n')) sProbs.push(tag + ': ' + k[0] + ': the rows found that are not grouped donors changed');
+      });
+      // Constructed (mode E), on the first grouped row: a member the artifact holds with no row of its own
+      // (the ingest prunes such records today, so no live group has one) is still a name the group is
+      // found by: a group's members are all the members the data file holds for it. Only the member's
+      // record and its place in the group's list are added, in a shallow copy.
+      var g0 = grouped[0], g0cid = (dn[g0.parent_id] || {}).cluster_id, ghost = 'zz-gate-member-with-no-row', ghostName = 'Zz Gate Member With No Row';
+      var gd = Object.assign({}, json.donors), gc = Object.assign({}, json.donor_clusters);
+      gd[ghost] = Object.assign({}, dn[g0.parent_id], { id: ghost, name: ghostName, parent_id: g0.parent_id });
+      gc[g0cid] = Object.assign({}, gc[g0cid], { members: ((gc[g0cid] || {}).members || []).concat([ghost]) });
+      var gx = D.loadData(Object.assign({}, json, { donors: gd, donor_clusters: gc }), { office: L[0] });
+      var gGot = found(D, gx, L, ghostName.toLowerCase());
+      if (!g0cid || gGot.length !== 1 || gGot[0] !== g0.parent_id) sProbs.push(tag + ': a member with no row of its own does not find its group (' + gGot.length + ' rows)');
+      sOldAsked++; if (found(D, blindOf(gx), L, ghostName.toLowerCase()).length === 0) sOldMiss++;
+      if (L[0] === 'school_board' && !found(D, idx, L, 'frank').length) sProbs.push(tag + ': "frank" finds nothing');
+      if (found(D, idx, L, 'zz-no-such-donor-zz').length) sProbs.push(tag + ': a text no name holds finds a row');
+      sSeen.push(tag + ': ' + cases.slice(0, 3).map(function (k) { return JSON.stringify(k[1]) + ' → ' + JSON.stringify(expName(k[2])); }).join(', ') + '; "frank" ' + found(D, idx, L, 'frank').length + ' rows');
+    }
+    // One list at a time, and nothing kept of it: the three lists' view-models, twice over, are more
+    // than this gate should hold at once. The hosts of the constructed checks below are noted as the
+    // lists go by.
+    var ownHost = null, escHost = null;
+    LISTS.forEach(function (L) {
+      var b = vmsOf(D, idxOf[L[0]], L), blind = blindOf(idxOf[L[0]]);
+      nameProblems(L, b, note, nStat);
+      searchOf(L, b.donors, blind);
+      // [GROUP/OWN]'s host: the card, lowest by candidate id, that has an own-money line
+      Object.keys(b.races).forEach(function (slug) { (b.races[slug].candidates || []).forEach(function (c) {
+        var l = c.hasFinance ? c.contributors.lines.filter(function (x) { return x.isSelf; })[0] : null;
+        if (l && (!ownHost || c.id < ownHost.id)) ownHost = { L: L, slug: slug, id: c.id, cslug: c.slug, pid: l.parent_id };
+      }); });
+      // [ESC/NAME]'s host: the first outside-spending group's row whose leading funder has a row on the same list
+      if (!escHost) b.donors.rows.forEach(function (x) {
+        var f = (!escHost && x.kind === 'ie') ? D.spenderFunders(idxOf[L[0]], x.committee_id).funders[0] : null;
+        if (f && b.donors.rows.some(function (y) { return y.kind === 'donor' && y.parent_id === f.parent_id; })) escHost = { L: L, key: x.committee_id, pid: f.parent_id };
+      });
+      // [GROUP/NAME]'s bite: the blind page's view-models, read the same way
+      b = null;
+      var n = 0; nameProblems(L, vmsOf(D, blind, L), function () { n++; }, newStat()); nBite.push(n);
+    });
+    T.ok('[GROUP/NAME] wherever the tool prints a donor, a donor IPG has grouped prints the group\'s name as the artifact carries it ' +
+      'on the donor\'s own record, and a donor in no group prints its stored name: Browse donors rows, candidates\' contributor ' +
+      'lines (own-money and small-dollar lines among them), outside-spending groups\' funder lines and the names after "Funded ' +
+      'primarily by", the donor pop-up\'s title and sentence; the pop-up\'s member rows keep each member\'s stored name; a grouped ' +
+      'donor\'s line on a card carries every name of the group, and no other line carries any — ' +
+      (nProbs.length ? nProbs.join('; ') : nStat.rows + ' donor rows (' + nStat.renamed + ' under a group\'s name that is not the record\'s), ' + nStat.lines +
+        ' contributor lines (' + nStat.attrs + ' carrying names), ' + nStat.own + ' own-money lines, ' + nStat.funders + ' funder lines, ' + nStat.primarily +
+        ' "Funded primarily by" (' + nStat.primarilyRenamed + ' naming a group; the constructed case is [ESC/NAME]\'s), ' + nStat.pops + ' pop-ups, ' + nStat.members + ' member rows (' +
+        nStat.memberDiffers + ' pop-ups with a member named otherwise than the title)'),
+      nProbs.length === 0 && nStat.renamed > 0 && nStat.attrs > 0 && nStat.memberDiffers > 0 && nStat.pops > 0);
+    // BITE: the same reading of the page as it read before (the resolver's table emptied) must report, on every list.
+    T.ok('[GROUP/NAME:bite] read the same way, the page with the groups\' names out of its reach, as it read before, is reported ' +
+      'on every list — ' + nBite.join(', ') + ' findings',
+      nBite.length === LISTS.length && nBite.every(function (n) { return n > 0; }));
+
+    T.ok('[GROUP/SEARCH] the Browse donors box finds a grouped donor by the group\'s name, by a member\'s stored name, by the ' +
+      'name of a member that gave nothing in the election on screen and (constructed) by the name of a member with no row at all, ' +
+      'whatever the capitals; a donor in no group is found as ' +
+      'before; and for every text tried the rows returned are exactly the rows one of whose names holds it — ' +
+      (sProbs.length ? sProbs.slice(0, 4).join('; ') : sSeen.join('; ')), sProbs.length === 0 && sSeen.length === LISTS.length);
+    T.ok('[GROUP/SEARCH:bite] asked the same, the page with the groups\' names out of its reach, as it read before, does not find ' +
+      'the grouped donor in any of the group cases — ' + sOldMiss + ' of ' + sOldAsked + ' not found', sOldAsked === 4 * LISTS.length && sOldMiss === sOldAsked);
+
+    // A constructed group name on a live host. `renamed(js, pid, name)` is the artifact with the donor's
+    // group renamed (or, for a donor in no group, a group of one made for it), on both carriers of the
+    // name, in a shallow copy: only the name moves.
+    var MARK = 'Zed <i data-gate-esc="1">&amp; & Sons</i> "Group"';
+    function renamed(js, pid, name) {
+      var dc = Object.assign({}, js.donor_clusters), dd = Object.assign({}, js.donors), cid = (js.donors[pid] || {}).cluster_id || 'rollup-gate';
+      dc[cid] = Object.assign({ canonical_id: pid, members: [pid], roles: {}, relationship: 'affiliated entities' }, dc[cid] || {}, { name: name });
+      (dc[cid].members || []).forEach(function (m) { if (dd[m]) dd[m] = Object.assign({}, dd[m], { cluster_id: cid, cluster_name: name }); });
+      return Object.assign({}, js, { donor_clusters: dc, donors: dd });
+    }
+    // markup made from the name, anywhere in a document, and the name as text in a node
+    var marked = function (doc) { return doc.querySelectorAll('[data-gate-esc]').length; };
+    var reads = function (node) { return !!node && node.textContent.indexOf(MARK) >= 0; };
+
+    // [GROUP/OWN] the candidate's own-money line: the card, lowest by candidate id, of either page that
+    // has one (noted above), its donor's group given a name of its own.
+    (function () {
+      var hostC = ownHost;
+      if (!hostC) { T.ok('[GROUP/OWN] (premise: no card of either page has an own-money line)', false); T.ok('[GROUP/OWN:bite] (no host)', false); return; }
+      var ix = D.loadData(renamed(json, hostC.pid, MARK), { office: hostC.L[0] });
+      var rv = D.viewModels.raceView(ix, ix.raceBySlug[hostC.slug], null), doc = parse(R.renderRaceView(rv));
+      var lx = idxOf[hostC.L[0]], cardEl = byId(doc, 'cand-' + hostC.cslug), live = byId(parse(R.renderRaceView(D.viewModels.raceView(lx, lx.raceBySlug[hostC.slug], null))), 'cand-' + hostC.cslug);
+      var line = cardEl ? all(cardEl, '.crow.plain').filter(function (el) { return !!el.querySelector('.tagchip.self'); })[0] : null;
+      var liveLine = live ? all(live, '.crow.plain').filter(function (el) { return !!el.querySelector('.tagchip.self'); })[0] : null;
+      T.ok('[GROUP/OWN] the line for a candidate\'s own money prints the donor\'s group\'s name, as text, with its chip and its ' +
+        'figure unchanged — ' + hostC.id + ' (' + hostC.L.join(' ') + '), donor ' + hostC.pid + ', live ' + JSON.stringify(liveLine && printed(liveLine)),
+        !!line && !!liveLine && printed(line) === MARK && printed(liveLine) === expName(hostC.pid) && marked(doc) === 0 &&
+        line.querySelector('.amt').textContent === liveLine.querySelector('.amt').textContent &&
+        cardEl.querySelector('.selfline').textContent === live.querySelector('.selfline').textContent);
+      // BITE: the same card from the same constructed artifact, on the page as it read before.
+      var ox = blindOf(ix);
+      var oCard = byId(parse(R.renderRaceView(D.viewModels.raceView(ox, ox.raceBySlug[hostC.slug], null))), 'cand-' + hostC.cslug);
+      var oLine = oCard ? all(oCard, '.crow.plain').filter(function (el) { return !!el.querySelector('.tagchip.self'); })[0] : null;
+      T.ok('[GROUP/OWN:bite] from the same constructed artifact, the page with the groups\' names out of its reach prints the ' +
+        'record\'s stored name on that line, not the group\'s', !!oLine && printed(oLine) === stored(hostC.pid) && printed(oLine) !== MARK);
+    })();
+
+    // [ESC/NAME] (ruling 10): a name that carries markup prints as text. The host is the leading funder
+    // of the first outside-spending group's row whose leading funder has a row on the same list; the name is set on its
+    // group, so it reaches every place a funder is named. Each surface is rendered, parsed, and must
+    // hold no element made from the name and must read the name itself, character for character
+    // (which a name escaped twice does not).
+    (function () {
+      if (!escHost) { T.ok('[ESC/NAME] (premise: no outside-spending group\'s row has a leading funder with a row of its own)', false); T.ok('[ESC/NAME:bite] (no host)', false); return; }
+      var L = escHost.L, key = escHost.key, pid = escHost.pid;
+      var surfaces = function (js) {
+        var ix = D.loadData(js, { office: L[0] }), vm = D.spendSubtab(ix, L[0], 'donors', null, L[1], null, 'all', null), win = vm.win, out = [];
+        var bdoc = parse(R.renderSpend(vm, L[0]));
+        out.push(['the group\'s row on Browse donors', bdoc, bdoc.querySelector('button[data-committee="' + key + '"] .who')]);
+        out.push(['the funder\'s row on Browse donors', bdoc, bdoc.querySelector('button[data-funder="' + pid + '"] .who')]);
+        var prof = D.committeeProfile(ix, key, win), pdoc = parse(R.renderCommitteeProfile(prof));
+        out.push(['the group\'s pop-up, after "Funded primarily by"', pdoc, pdoc.querySelector('.modal-note')]);
+        out.push(['the group\'s pop-up, its title', pdoc, pdoc.querySelector('.modal-name')]);
+        out.push(['the group\'s pop-up, the funder\'s line', pdoc, pdoc.querySelector('button[data-funder="' + pid + '"] .who')]);
+        var fdoc = parse(R.renderFunderModal(D.donorFootprint(ix, pid, win)));
+        out.push(['the funder\'s pop-up, its title', fdoc, fdoc.querySelector('.modal-name')]);
+        out.push(['the funder\'s pop-up, its sentence', fdoc, fdoc.querySelector('.modal-note b')]);
+        out.push(['the funder\'s pop-up, the group\'s row', fdoc, fdoc.querySelector('button[data-committee="' + key + '"] .who')]);
+        var t = prof.targets.filter(function (x) { return !!x.candidate_id; })[0], cand = t ? ix.candidateById[t.candidate_id] : null;
+        var d = cand ? D.candidateIE(ix, cand.id, t.support > 0 ? 'support' : 'oppose', null, win) : null;
+        var idoc = d ? parse(R.iePanel(d, cand.name, 'gate')) : null, n = d ? d.spenders.map(function (s) { return s.spender_committee_id; }).indexOf(key) : -1;
+        out.push(['a card\'s outside-spending panel, the group\'s head', idoc, idoc && n >= 0 ? all(idoc, '.ie-cmte-toggle')[n] : null]);
+        out.push(['a card\'s outside-spending panel, after "Funded primarily by"', idoc, idoc && n >= 0 ? idoc.querySelector('#gate-' + n + ' .ie-lead') : null]);
+        out.push(['a card\'s outside-spending panel, the funder\'s line', idoc, idoc && n >= 0 ? idoc.querySelector('#gate-' + n + ' button[data-funder="' + pid + '"] .who') : null]);
+        return out;
+      };
+      // twice: the group under its own name, and with no name resolved for it, where the funders' names stand in its place
+      var named1 = renamed(json, pid, MARK);
+      var anon = Object.assign({}, named1, { committees: Object.assign({}, named1.committees) });
+      anon.committees[key] = Object.assign({}, anon.committees[key], { committee_name: 'IE committee 1' });
+      var eProbs = [], eN = 0;
+      // in which of these the name is expected: wherever the funder is named. Under its own name the group's
+      // title and head name the group only; with no name resolved they carry the funders' names instead.
+      [['named', named1, { 'the group\'s pop-up, its title': 0, 'a card\'s outside-spending panel, the group\'s head': 0 }], ['with no name resolved', anon, {}]].forEach(function (c) {
+        surfaces(c[1]).forEach(function (s) {
+          eN++;
+          if (!s[1] || !s[2]) { eProbs.push(c[0] + ': ' + s[0] + ' was not rendered'); return; }
+          if (marked(s[1])) eProbs.push(c[0] + ': ' + s[0] + ' is in a document where the name became markup');
+          if ((c[2][s[0]] !== 0) && !reads(s[2])) eProbs.push(c[0] + ': ' + s[0] + ' does not read the name as text (' + JSON.stringify(s[2].textContent.slice(0, 70)) + ')');
+        });
+      });
+      // BITE, on the rendered pop-up: the name put in unescaped, as the line read before; and the name escaped twice.
+      var ixb = D.loadData(named1, { office: L[0] }), ph = R.renderCommitteeProfile(D.committeeProfile(ixb, key, D.spendSubtab(ixb, L[0], 'donors', null, L[1]).win));
+      var rawDoc = parse(ph.split(escH(MARK)).join(MARK)), twiceDoc = parse(ph.split(escH(MARK)).join(escH(escH(MARK))));
+      T.ok('[ESC/NAME] a funder\'s group, given a constructed name that carries <, &, quotation marks and an entity, prints under ' +
+        'that name, as text and once escaped, wherever a funder is named, the names after "Funded primarily by" among them: on Browse donors, in the outside-spending group\'s pop-up and after its "Funded primarily by", in the ' +
+        'funder\'s own pop-up, and in a card\'s outside-spending panel; with the group named and with no name resolved for it — ' +
+        (eProbs.length ? eProbs.slice(0, 4).join('; ') : eN + ' surfaces, ' + key + ' and its funder ' + pid + ' (' + L.join(' ') + ')'),
+        eN === 22 && eProbs.length === 0 && count(ph, escH(MARK)) >= 2);
+      T.ok('[ESC/NAME:bite] the pop-up with the name put in unescaped holds markup made from it, and with the name escaped twice ' +
+        'does not read it',
+        marked(parse(ph)) === 0 && reads(parse(ph).querySelector('.modal-note')) && marked(rawDoc) > 0 && !reads(twiceDoc.querySelector('.modal-note')));
+    })();
+
+    // [GROUP/SEARCH] the Browse donors box. For a typed text, the rows the list returns are exactly the
+    // rows of the unfiltered list that the text is found in, case-blind: for a donor, any one of its
+    // names (namesOf); for an outside-spending group, its own name. The texts are taken from the list
+    // itself by rule: the first row, by rank, that offers each kind.
+    // [REVIEW/CHIP] the review mark on the two surfaces [spend.C] does not read: an outside-spending
+    // group's head on its candidate's card (render.js, iePanel) and the group's row in the person
+    // pop-up. In [spend.C]'s manner, PS-128 mode E. Constructed: the document (a deep copy of the
+    // registry alone, holding one outside-spending row and no contribution) and the row's flag.
+    // Live: the row, which is the first in the artifact's order, aimed at a school-board candidate
+    // with a committee, that the page draws in both places. Premise asserted: the group's head and
+    // its person-pop-up row render in both variants. Each variant is the other's control.
+    (function () {
+      var office = 'school_board', CHIP = '⚑ needs review';
+      var offs = D.OFFICE_RACE_OFFICES[office], ro = {}, cById = {};
+      json.races.forEach(function (r) { ro[r.id] = r.office; });
+      json.candidates.forEach(function (c) { cById[c.id] = c; });
+      var seeds = (json.independent_expenditures || []).filter(function (x) {
+        var c = cById[x.target_candidate_id];
+        return !!c && !!c.committee_id && !c.vacating_for && offs.indexOf(ro[c.race_id]) >= 0 &&
+          !(json.committees[x.spender_committee_id] || {}).candidate_id && !D.EXCLUDED_CYCLES[x.cycle];
+      });
+      function variant(seed, flagged) {
+        var cp = JSON.parse(JSON.stringify({ races: json.races, candidates: json.candidates, committees: json.committees, donors: {}, contributions: [],
+          rollups: { by_candidate_election: (json.rollups || {}).by_candidate_election, by_person: (json.rollups || {}).by_person }, independent_expenditures: [seed] }));
+        var row = cp.independent_expenditures[0];
+        row.id = 'zz-review-chip'; row.match_method = 'surname_plus_given'; row.needs_review = flagged;
+        var ix = D.loadData(cp, { office: office }), cand = ix.candidateById[seed.target_candidate_id];
+        var rvw = D.viewModels.raceView(ix, cand.race_id, null), raceHtml = R.renderRaceView(rvw);
+        var vmc = rvw.candidates.filter(function (c) { return c.id === cand.id; })[0];
+        var cardEl = vmc ? byId(parse(raceHtml), 'cand-' + vmc.slug) : null, heads = cardEl ? all(cardEl, '.ie-cmte-toggle') : [];
+        var pv = D.personView(ix, cand.id), personHtml = pv ? R.renderPersonModal(pv) : '';
+        var prow = all(parse(personHtml), 'button.person-ie-cmte[data-committee="' + seed.spender_committee_id + '"]');
+        var chips = function (els) { return els.reduce(function (n, e) { return n + all(e, '.tagchip.flag').filter(function (t) { return t.textContent === CHIP; }).length; }, 0); };
+        return { rendered: heads.length === 1 && prow.length === 1, card: chips(heads), person: chips(prow), whole: count(raceHtml, CHIP) + count(personHtml, CHIP) };
+      }
+      var seed = null, off = { rendered: false, card: -1, person: -1, whole: -1 }, on = off;
+      for (var k = 0; k < seeds.length && !seed; k++) { var v = variant(seeds[k], false); if (v.rendered) { seed = seeds[k]; off = v; } }
+      if (seed) on = variant(seed, true);
+      T.ok('[REVIEW/CHIP] a flagged outside-spending row shows ⚑ needs review on its group\'s head on the candidate\'s card and on ' +
+        'the group\'s row in the person pop-up, once each and nowhere else (constructed; ' + on.card + ' and ' + on.person + ' chips' +
+        (seed ? '; ' + seed.spender_committee_id + ' on ' + seed.target_candidate_id : '; premise: no row is drawn in both places') + ')',
+        !!seed && on.rendered && on.card === 1 && on.person === 1 && on.whole === 2);
+      T.ok('[REVIEW/CHIP] the same row unflagged, as a confirmed pair arrives, renders in both places and shows no chip (' +
+        off.card + ' and ' + off.person + ' chips)', !!seed && off.rendered && off.card === 0 && off.person === 0 && off.whole === 0);
+    })();
+
+    // ================= the shipped bundles, by real clicks =================
+    // What a booted page shows, view by view and election by election.
+    async function clickThrough(c, office, want, probs) {
+      var els = D.selectorOptions(office).map(function (o) { return o.id; }), n = 0;
+      for (var v = 0; v < VIEWS.length; v++) {
+        for (var e = 0; e < els.length; e++) {
+          c.click(c.doc.querySelector('[data-view="' + VIEWS[v] + '"]')); await c.wait(60);
+          c.selectElection(els[e]); await c.wait(60);
+          var line = all(c.root(), '.data-through'), mast = c.root().querySelector('.masthead'); n++;
+          if (!mast) { probs.push(office + ' ' + VIEWS[v] + ' ' + els[e] + ': no header'); continue; }
+          if (!want) { if (line.length || /Contributions through/.test(mast.textContent)) probs.push(office + ' ' + VIEWS[v] + ' ' + els[e] + ': the line is drawn'); continue; }
+          if (line.length !== 1 || line[0].textContent !== want || line[0].tagName !== 'P' || line[0].children.length !== 0 ||
+              !line[0].previousElementSibling || !line[0].previousElementSibling.classList.contains('lede') ||
+              !line[0].nextElementSibling || !line[0].nextElementSibling.classList.contains('topnav')) {
+            probs.push(office + ' ' + VIEWS[v] + ' ' + els[e] + ': the header does not carry the line once, as plain text, between the lede and the tabs');
+          }
+        }
+      }
+      c.click(c.doc.querySelector('[data-view="byrace"]')); await c.wait(40);
+      return n;
+    }
+    // the Industry totals tab of a booted page, for each of its elections
+    async function clickIndustries(c, office, probs, adjust) {
+      var els = D.selectorOptions(office).map(function (o) { return o.id; }), n = 0;
+      for (var e = 0; e < els.length; e++) {
+        c.selectElection(els[e]); await c.wait(60);
+        await c.spend(); c.click(c.root().querySelector('[data-spendtab="industries"]')); await c.wait(80);
+        var st = D.spendSubtab(idxOf[office], office, 'industries', null, els[e]).streams;
+        var want = allLine(adjust ? adjust(st) : st), got = all(c.root(), '.spend-body .ind-all'); n++;
+        if (got.length !== 1 || got[0].textContent !== want || got[0].children.length !== 0 || !got[0].previousElementSibling || !got[0].previousElementSibling.classList.contains('indchart') || got[0].nextElementSibling) {
+          probs.push(office + ' ' + els[e] + ': the tab does not end with the line ' + JSON.stringify(want));
+        }
+      }
+      c.click(c.root().querySelector('[data-spendtab="donors"]')); await c.wait(40);
+      c.selectElection(els[0]); await c.wait(40);
+      c.click(c.doc.querySelector('[data-view="byrace"]')); await c.wait(40);
+      return n;
+    }
+    await ctx.closeModal();
+    var pProbs = [], pN = 0, iPageProbs = [], iN = 0;
+    pN += await clickThrough(ctx, 'school_board', tWant, pProbs);
+    iN += await clickIndustries(ctx, 'school_board', iPageProbs);
+    var cc = await boot('city_council', json);
+    pN += await clickThrough(cc, 'city_council', tWant, pProbs);
+    iN += await clickIndustries(cc, 'city_council', iPageProbs);
+    cc.window.close();
+    var my = await boot('mayor', json);
+    var myN = await clickThrough(my, 'mayor', null, pProbs);
+    my.window.close();
+    // and the school-board bundle on an artifact with no row filed on a report of a large gift
+    var bare = await boot('school_board', without('A-1'));
+    var bareN = await clickThrough(bare, 'school_board', null, pProbs);
+    if (!bare.root().querySelector('.masthead .lede') || !bare.root().querySelector('article.card')) pProbs.push('the page without a date did not draw its header and cards');
+    bare.window.close();
+    T.ok('[THROUGH/PAGE] in the shipped bundles, by real clicks: the school-board and city-council pages carry the line on By ' +
+      'race, Election spend and Methodology, the same on every election; the mayor bundle carries none; and the school-board ' +
+      'bundle on an artifact with no large-gift row draws its page with the line left off — ' +
+      (pProbs.length ? pProbs.slice(0, 4).join('; ') : pN + ' views with the line, ' + myN + ' mayor views and ' + bareN + ' views of the constructed page without'),
+      !!tWant && pProbs.length === 0 && pN === 9 && myN === 3 && bareN === 6);
+    T.ok('[IND/PAGE] in the shipped bundles, by real clicks, the Industry totals tab ends with the line for the election on ' +
+      'screen, on every election of both pages — ' + (iPageProbs.length ? iPageProbs.join('; ') : iN + ' tabs'),
+      !!iTpl && iPageProbs.length === 0 && iN === 3);
+    // BITES, on the live school-board page: the same clicks, held to a line a day out and to no line; and the
+    // Industry totals tab held to a direct figure a dollar out and to a support figure a dollar out.
+    var b1 = [], b2 = [], b3 = [], b4 = [];
+    var bN = await clickThrough(ctx, 'school_board', tWant ? tWant.replace(tDay, tDayOut) : null, b1);
+    await clickThrough(ctx, 'school_board', null, b2);
+    var bI = await clickIndustries(ctx, 'school_board', b3, function (st) { return { direct: st.direct + 1, support: st.support, oppose: st.oppose }; });
+    await clickIndustries(ctx, 'school_board', b4, function (st) { return { direct: st.direct, support: st.support + 1, oppose: st.oppose }; });
+    T.ok('[THROUGH/PAGE:bite] held to a date one day out, and to no line, the clicked-through school-board page is reported on ' +
+      'every view — ' + b1.length + ' and ' + b2.length + ' findings on ' + bN + ' views',
+      !!tWant && tDayOut !== tDay && bN === 6 && b1.length === bN && b2.length === bN);
+    T.ok('[IND/PAGE:bite] held to a direct figure a dollar out, and to a support figure a dollar out, the clicked-through Industry ' +
+      'totals tab is reported on every election — ' + b3.length + ' and ' + b4.length + ' findings on ' + bI + ' tabs',
+      bI === 2 && b3.length === bI && b4.length === bI);
+
+    // [GROUP/PAGE] the two search boxes and the pop-up, in the school-board bundle. The subjects are
+    // chosen from PREVIEW_DATA by the same rules as above, in the default election.
+    await (async function () {
+      var el = D.selectorOptions('school_board')[0].id, sx = idxOf.school_board, vm = { donors: D.spendSubtab(sx, 'school_board', 'donors', null, el, null, 'all', null), races: {} };
+      D.viewModels.officeRaces(sx, 'school_board', el).groups.forEach(function (g) { g.races.forEach(function (r) { vm.races[r.slug] = D.viewModels.raceView(sx, sx.raceBySlug[r.slug], null); }); });
+      var has = function (hay, q) { return String(hay || '').toLowerCase().indexOf(q.toLowerCase()) >= 0; };
+      var gProbs = [], seen = [];
+      var type = async function (input, val, ms) { input.value = val; input.dispatchEvent(new ctx.window.Event('input', { bubbles: true })); await ctx.wait(ms); };
+      // (a) Browse donors: a grouped row with more than one giving member, found by the stored name of a
+      // member that is in neither the printed name nor the canonical record's name
+      var subj = null;
+      vm.donors.rows.forEach(function (r) {
+        if (subj || r.kind !== 'donor' || !groupName(r.parent_id) || !(r.entities > 1)) return;
+        var m = (kids[r.parent_id] || []).filter(function (x) { return x !== r.parent_id && !has(r.name, stored(x)) && !has(stored(r.parent_id), stored(x)); })[0];
+        if (m) subj = { row: r, q: stored(m).toLowerCase() };
+      });
+      await ctx.closeModal();
+      ctx.selectElection(el); await ctx.wait(60); await ctx.spend();
+      ctx.click(ctx.root().querySelector('[data-spendtab="donors"]')); await ctx.wait(60);
+      if (!subj) gProbs.push('premise: no grouped row with two giving members and a member named otherwise');
+      else {
+        await type(ctx.root().querySelector('[data-browse-search]'), subj.q, 280);
+        var hit = ctx.root().querySelector('.spend-body button[data-funder="' + subj.row.parent_id + '"]');
+        var wantIds = vm.donors.rows.filter(function (r) { return r.kind === 'ie' ? has(r.name, subj.q) : namesOf(r.parent_id).some(function (n) { return has(n, subj.q); }); }).length;
+        var shown = all(ctx.root(), '.spend-body button[data-funder], .spend-body button[data-committee]').length;
+        if (!hit || printed(hit) !== expName(subj.row.parent_id) || shown !== wantIds) gProbs.push('Browse donors, searched for ' + JSON.stringify(subj.q) + ', shows ' + shown + ' rows (expected ' + wantIds + ') and ' + (hit ? 'prints ' + JSON.stringify(printed(hit)) : 'not the group\'s row'));
+        else {
+          ctx.click(hit); await ctx.wait(80);
+          var md = ctx.modal(), title = md && md.querySelector('.modal-name'), b = md && md.querySelector('.modal-note b');
+          var mem = md ? all(md, '.elect-rollup-name').map(function (e) { return e.textContent; }) : [];
+          var fp = D.donorFootprint(idxOf.school_board, subj.row.parent_id, vm.donors.win);
+          if (!title || title.textContent !== expName(subj.row.parent_id) || !b || b.textContent !== expName(subj.row.parent_id)) gProbs.push('the pop-up is titled ' + JSON.stringify(title && title.textContent));
+          if (!fp.rollup || mem.join('\n') !== fp.rollup.members.map(function (m) { return stored(m.id); }).join('\n')) gProbs.push('the pop-up does not list the members under their stored names');
+          seen.push('Browse donors ' + JSON.stringify(subj.q) + ' → ' + JSON.stringify(expName(subj.row.parent_id)) + ' (' + mem.length + ' member rows)');
+          await ctx.closeModal();
+        }
+        var clr = ctx.root().querySelector('[data-clear-filters]'); if (clr) { ctx.click(clr); await ctx.wait(60); }
+      }
+      // (b) the search box inside a card: the first race, in the page's order, with a card that has the box
+      // and a grouped contributor one of whose members is named otherwise and gave this candidate nothing
+      var cardSubj = null;
+      Object.keys(vm.races).forEach(function (slug) {
+        (vm.races[slug].candidates || []).forEach(function (c) {
+          if (cardSubj || !c.hasFinance) return;
+          var lines = c.contributors.lines, real = lines.filter(function (l) { return !l.isAggregate && !l.isSelf; });
+          if (real.length <= 8) return;
+          var ck = idxOf.school_board.committeeKeyByCandidate[c.fundingId], gave = {};
+          json.contributions.forEach(function (x) { if (x.committee_id === ck) gave[x.donor_id] = 1; });
+          real.forEach(function (l) {
+            if (cardSubj || !groupName(l.parent_id)) return;
+            var m = (kids[l.parent_id] || []).filter(function (x) { return !gave[x] && !has(l.name, stored(x)); })[0];
+            var other = real.filter(function (o) { return o !== l && !groupName(o.parent_id) && !namesOf(l.parent_id).some(function (n) { return has(n, o.name); }); })[0];
+            if (m && other) cardSubj = { slug: slug, c: c, pid: l.parent_id, q: stored(m).toLowerCase(), other: other };
+          });
+        });
+      });
+      var bitten = false;
+      if (!cardSubj) gProbs.push('premise: no card with a search box holds a grouped contributor with a member named otherwise that did not give to it');
+      else {
+        ctx.click(ctx.doc.querySelector('[data-view="byrace"]')); await ctx.wait(60);
+        ctx.nav(cardSubj.slug); await ctx.wait(80);
+        var panel = ctx.doc.getElementById('d-' + cardSubj.c.slug + '-c'), box = panel && panel.querySelector('[data-donor-search]');
+        var rows = panel ? all(panel, '.crow') : [];
+        var vis = function () { return rows.filter(function (r) { return r.style.display !== 'none'; }); };
+        var rowOf = function (pid) { return rows.filter(function (r) { return r.getAttribute('data-funder') === pid; })[0]; };
+        // the rows a text should leave: those whose printed text, or one of whose carried names, holds it
+        var should = function (q) { return rows.filter(function (r) { var pid = r.getAttribute('data-funder'); return has(r.textContent, q) || (pid && namesOf(pid).some(function (n) { return has(n, q); })); }); };
+        var same = function (a, b) { return a.length === b.length && a.every(function (x, k) { return x === b[k]; }); };
+        if (!box || !rowOf(cardSubj.pid) || !rowOf(cardSubj.other.parent_id)) gProbs.push('the card of ' + cardSubj.c.id + ' has no search box or not its rows');
+        else {
+          var target = rowOf(cardSubj.pid), steps = [
+            ['a member\'s stored name, of a member that did not give to this candidate', cardSubj.q, target],
+            ['the group\'s name', expName(cardSubj.pid).toUpperCase(), target],
+            ['the printed text of a donor in no group', cardSubj.other.name.toLowerCase(), rowOf(cardSubj.other.parent_id)]];
+          for (var s = 0; s < steps.length; s++) {
+            await type(box, steps[s][1], 30);
+            var v1 = vis();
+            if (v1.indexOf(steps[s][2]) < 0 || !same(v1, should(steps[s][1])) || v1.length === rows.length) gProbs.push('in the card of ' + cardSubj.c.id + ', ' + steps[s][0] + ' ' + JSON.stringify(steps[s][1]) + ' leaves ' + v1.length + ' of ' + rows.length + ' rows, expected ' + should(steps[s][1]).length);
+          }
+          await type(box, 'zz-no-such-donor-zz', 30);
+          if (vis().length !== 0) gProbs.push('a text no name holds leaves rows');
+          await type(box, '', 30);
+          if (vis().length !== rows.length) gProbs.push('an empty box does not show every row');
+          // BITE: without the names it carries, the row is not found by the member's name (the box as it was)
+          var kept = target.getAttribute('data-names'); target.removeAttribute('data-names');
+          await type(box, cardSubj.q, 30);
+          bitten = !!kept && vis().indexOf(target) < 0;
+          target.setAttribute('data-names', kept); await type(box, '', 30);
+          bitten = bitten && vis().length === rows.length;
+          seen.push('the card of ' + cardSubj.c.id + ' ' + JSON.stringify(cardSubj.q) + ' → ' + JSON.stringify(expName(cardSubj.pid)) + ' among ' + rows.length + ' rows');
+        }
+      }
+      ctx.click(ctx.doc.querySelector('[data-view="byrace"]')); await ctx.wait(40);
+      T.ok('[GROUP/PAGE:bite] with the names its row carries taken off, the card\'s search box no longer finds the grouped donor by ' +
+        'its member\'s name', bitten);
+      T.ok('[GROUP/PAGE] in the shipped bundle, by real clicks: the Browse donors box finds a grouped donor by a member\'s stored ' +
+        'name and prints the group\'s name on its row; the pop-up it opens is titled with the group\'s name and lists the members ' +
+        'under their own; the search box inside a card finds a grouped donor by the name of a member that did not give to that ' +
+        'candidate and by the group\'s name, still finds a donor by its printed text, and leaves exactly the rows that hold the ' +
+        'text typed — ' + (gProbs.length ? gProbs.join('; ') : seen.join('; ')), gProbs.length === 0 && seen.length === 2);
+    })();
   })();
 
   console.log('\n' + T.n + ' checks · ' + (T.fail ? ('FAILED ' + T.fail) : 'ALL PASS'));
