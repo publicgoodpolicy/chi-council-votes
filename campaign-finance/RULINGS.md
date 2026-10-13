@@ -2619,6 +2619,144 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: AUDIT-2 school-board page ratification package, revision 1 (`audit-2-sb-package-rev1.md`), sha256 `9d585d3122cf240cf1c2f66cde7da54ecc080142190b65acbd0bef0380b5593a`, 33,246 B / 378 L, region R5 (its lines 278–327), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-11 as drafted (“ratified”), on item 11 of his rulings of 2026-10-07 and the wording he ratified 2026-10-10. V4’s second form (“Not on the Board at this vote”), ratified with the wording on 2026-10-10, was put to him as the package’s item 6 against PS-121 and PS-125 and is not carried: the region was drafted without it and ratified so. Arises from that ruling. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-152`; `PS-153` occurring 0 times before this commit), never carried. Measured basis: the planner’s clone at `761a5dd5f9a0a282f9e76053c92dea5ad2e2bcfd`.*
 
+### PS-154 — the outside-spending ingest reads the confirmation file, and each row keeps the candidate name as filed
+
+> **Ruled by Ishan, 2026-10-10 and 2026-10-11.** This is the change PS-150 names under “When
+> the flag comes off”.
+>
+> **The lookup.** `campaign-finance/ingestion/ingest_ie.py` reads
+> `campaign-finance/elections/reference/ie-target-confirmations.tsv` before it matches a row,
+> in the run that builds `election-data.json`. The run that builds `council-data.json` does not
+> read it: that file's rows carry no review flag. When a row has been matched to a candidacy,
+> the ingest forms the pair PS-150 defines: the
+> candidate name as filed, normalised by the ingest's own `norm`, and the id of the candidacy
+> the row was matched to. Where the file holds that pair as `confirmed`, the row is written
+> with `needs_review` false. Every other row keeps the flag the matcher gave it.
+>
+> **The file changes the flag and nothing else.** Which candidacy a row is matched to, its
+> `match_method`, its id and its place in the file are what they would be without the file. A
+> pair in the file that no row carries does nothing.
+>
+> **A file that cannot be trusted stops the run.** Lines that begin with `#` are comments. The
+> ingest stops before it writes anything if the file is missing or unreadable; if its header is
+> not the five columns the file states; if a row has another number of fields; if a row's filed
+> name is not already in the ingest's normalised form, so that it could never match; if a pair
+> appears twice; or if a row carries a status other than `confirmed`. The file holds confirmed
+> pairs only; what another status does is ruled when a pair is first struck.
+>
+> **The name as filed is kept.** Each independent-expenditure row in
+> `campaign-finance/election-data.json` carries a field, `filed_candidate_name`: the candidate's
+> name as the spender's filing wrote it, unchanged but for the removal of space at either end
+> (the field ruled 2026-10-11). It is there so that a flagged match can be reviewed from the
+> published file. **This amends PS-150's sentence** “The artifact keeps the flag and not the
+> name as filed”, for `election-data.json`. No page prints it. `campaign-finance/school-board-finance.json` does not carry it, and
+> the rows of `campaign-finance/council-data.json`, which carry no review flag, do not either.
+>
+> **What the ingest reports.** Its summary states the rows the file confirmed beside the rows
+> still flagged.
+>
+> **The run.** The change lands with a re-run of the outside-spending step on the sealed
+> 2026-09-13 vintage, in both chains, each from that step to its end (ruled 2026-10-11). In the
+> elections file the 109 rows of the fifteen confirmed pairs lose the flag and every row gains
+> the field; in `school-board-finance.json` the 38 of those rows it carries lose the flag. The
+> elections tool then marks no row, because none is flagged. The council file's
+> independent-expenditure rows do not change. The page-side changes of this package follow in
+> the next commit.
+>
+> **Measured basis.** At `3209983b083273e080f041e90f3739fad0427a01`, `election-data.json` holds 451
+> independent-expenditure rows, $4,925,604.49; 109 are flagged, $1,346,040.04, on 14
+> candidacies, in the fifteen pairs of the confirmation file. The filed text of those 109 rows
+> (BR-20), put through the matcher as it stands, reproduces each row's candidacy and method, and
+> each of the 109 pairs is in the file. The sealed vintage is read at the HALT, not before.
+
+*Provenance: AUDIT-2 elections-tool ratification package, revision 2 (`audit-2-elections-package-rev2.md`), sha256 `91884078932153ee17fdbd6a2111efdf5f82f38186f0993f8ec7ce0bf85c61d0`, 34,756 B / 418 L, region R1 (its lines 47–93), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-12 as drafted (“ratified”), on item 3 of his rulings of 2026-10-07 (AUDIT-2, what remains), item 3 of his rulings of 2026-10-10 23:49 EDT, and items 1, 3, 7 and 11 of his rulings of 2026-10-11. Revision 1 of the package (sha256 `286a02692d17fdd40fbe57637b9aa51b95499266f065c3042fe677439e89d2e9`), ratified earlier the same day, differed in one sentence of region R5 and is not transcribed. Arises from the numbers audit of 2026-09-29 (finding C3). Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-153`; `PS-154` occurring 0 times before this commit), never carried. Measured basis: the planner’s clone at `3209983b083273e080f041e90f3739fad0427a01`.*
+
+### PS-155 — on the elections tool a grouped donor prints the group's name, and search finds it by the group's name or a member's
+
+> **Ruled by Ishan, 2026-10-07 and 2026-10-11.** The page changes in the commit that follows
+> this entry's.
+>
+> **The rule.** Where IPG has grouped a donor's records (the Sheet's Donor Clusters tab), the
+> elections tool prints the group's name, as the tab's `cluster_name` column has it, wherever
+> it prints that donor:
+> - a row of Browse donors;
+> - a line in a candidate's list of contributors, the line for the candidate's own money
+>   included;
+> - a line in an outside-spending group's list of funders, and the names after “Funded
+>   primarily by”;
+> - the title of the donor's pop-up, and the sentence under it that names the donor.
+>
+> A donor in no group prints the name the data holds for it, as before.
+>
+> **A group's members keep their own names.** In the donor's pop-up, the rows that list the
+> group's members print each member's name as the data holds it.
+>
+> **Search.** The search box on Browse donors and the search box inside a candidate's card find
+> a grouped donor by the group's name or by the name of any member of the group, whether or not
+> that member gave in the election on screen. The data holds one name for each member record;
+> a spelling the ingest read as the same record is not kept apart, and is not searched for on
+> its own.
+>
+> **The name is printed as the tab has it.** Nothing rewrites it. A name that reads wrong is
+> corrected in the Sheet.
+>
+> **Which chips a merged row shows is not changed here.** On the elections tool a merged row
+> shows the industry chips and the type of the group's parent record, as it did before this
+> entry (ruled 2026-10-12; the difference from the school-board voting page, which shows every
+> member's chips, is an open item).
+>
+> **The council tool** prints the group's name in its donor list already. Its search, and the
+> other places it prints a donor, are taken up with that tool's own change.
+>
+> **The Sheet edit made with this change.** Printing the group's name would have put one name
+> on two rows of one list in six cases: a group, and a donor outside it whose own name is the
+> group's. Before the run that lands this entry, Ishan adds 29 rows to the Donor Clusters tab
+> and renames one group (ruled 2026-10-10, 2026-10-11 and 2026-10-12): 19 rows join donors to
+> 13 existing groups, 10 rows make five new groups, and rollup-458 is renamed INCS Action. The
+> rows are the file `donor-clusters-rows.tsv` of this entry's package.
+>
+> **Measured basis.** At `3209983b083273e080f041e90f3739fad0427a01`, `election-data.json` holds 529
+> groups; in 82 the group's name is not the parent record's name, and in 68 of those the two
+> differ only in capitals or punctuation. Rows of Browse donors that print a different name
+> under this rule, before the Sheet edit: 13 on `/school-board-elections` in each of its two
+> elections, 55 on `/city-council`. With the Sheet edit simulated, no two donor rows of any
+> list share a name, and no total moves. One name is still printed twice on Browse donors on
+> `/school-board-elections`: Common Ground Collective is both a family of donors and the
+> outside-spending group they fund, whose own row carries the IE PAC tag.
+
+*Provenance: AUDIT-2 elections-tool ratification package, revision 2 (`audit-2-elections-package-rev2.md`), sha256 `91884078932153ee17fdbd6a2111efdf5f82f38186f0993f8ec7ce0bf85c61d0`, 34,756 B / 418 L, region R2 (its lines 101–150), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-12 as drafted (“ratified”), on item 9 of his rulings of 2026-10-07, items 2, 6 and 12 of his rulings of 2026-10-11, items 13 to 15 of his rulings of 2026-10-12, and the package’s items 8 and 9 (“8. a”, “9. a”). Revision 1 of the package (sha256 `286a02692d17fdd40fbe57637b9aa51b95499266f065c3042fe677439e89d2e9`), ratified earlier the same day, differed in one sentence of region R5 and is not transcribed. Arises from the numbers audit of 2026-09-29 (finding C4). Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-154`; `PS-155` occurring 0 times before this commit), never carried. Measured basis: the planner’s clone at `3209983b083273e080f041e90f3739fad0427a01`.*
+
+### PS-156 — the elections tool states how far its contribution data runs
+
+> **Ruled by Ishan, 2026-10-07; wording ratified 2026-10-10; scope ruled 2026-10-11.** The page
+> changes in the commit that follows this entry's.
+>
+> **The line.** In the page's header, under the lede, on every view: **Contributions through
+> {quarterly date} on quarterly reports, and through {large-gift date} on reports of large
+> gifts.**
+> - The two dates are the latest dates of a contribution filed on a quarterly report and of
+>   one filed on a report of a large gift (form A-1), across the whole of
+>   `campaign-finance/election-data.json`. This is the rule the school-board voting page
+>   follows (PS-152), so the two tools state the same dates. **It amends the wording ruling of 2026-10-10,**
+>   which had each page compute the dates from its own committees.
+> - The page computes the dates from the file it loads. No field is added to the file.
+> - The line does not follow the election selector: it reads the same on every election.
+> - Dates print as month, day and year: June 30, 2026.
+> - If either date is missing, the whole line is left off. It is not drawn before the data has
+>   loaded, and it is not drawn on the mayor's page (ruled 2026-10-11).
+>
+> **What stands beside it.** The methodology's sentence “Contribution data is current through
+> …, from the Illinois State Board of Elections bulk export of ….” stays on both methodology
+> pages. It names the export; the line names the two kinds of report.
+>
+> **Measured basis.** At `3209983b083273e080f041e90f3739fad0427a01` the line reads **Contributions
+> through June 30, 2026 on quarterly reports, and through September 11, 2026 on reports of
+> large gifts.** The file holds 69,256 contributions filed on quarterly reports and 860 filed
+> on reports of large gifts. The school-board committees alone, and the city-council
+> committees alone, give the same two dates today.
+
+*Provenance: AUDIT-2 elections-tool ratification package, revision 2 (`audit-2-elections-package-rev2.md`), sha256 `91884078932153ee17fdbd6a2111efdf5f82f38186f0993f8ec7ce0bf85c61d0`, 34,756 B / 418 L, region R3 (its lines 158–183), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-12 as drafted (“ratified”), on item 7 of his rulings of 2026-10-07, the wording he ratified 2026-10-10 (W2) and item 4 of his rulings of 2026-10-11. Revision 1 of the package (sha256 `286a02692d17fdd40fbe57637b9aa51b95499266f065c3042fe677439e89d2e9`), ratified earlier the same day, differed in one sentence of region R5 and is not transcribed. Arises from the numbers audit of 2026-09-29 (finding S3). Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-155`; `PS-156` occurring 0 times before this commit), never carried. Measured basis: the planner’s clone at `3209983b083273e080f041e90f3739fad0427a01`.*
+
 ---
 
 ## Rulings ratified without an id
@@ -3459,6 +3597,50 @@ The mechanism that materializes C5's `{DATA_THROUGH}` and the exact composition 
 
 *Provenance, amendment (other receipts and loans, C7 and C8): AUDIT-2 M2 ratification package, revision 1 (`audit-2-m2-package-rev1.md`), sha256 `8f07140080ac86bcc00e2d52efac91570bf32c8d77d8cd8a46bc1f72c2b10b8f`, 52,796 B / 375 L, region R2 (its lines 171–198), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-06 as drafted. Recorded under the PS-93 pattern: no id is allocated, and the R9 block and the two amendments above stand unaltered, because an amendment says what now governs rather than editing the superseded reading away. The gate’s `[METH/REGISTER]` reads C7, C8 and the school-board section’s heading from this block and compares the rendered paragraphs to them.*
 
+> **Amendment (repeated gifts, grouped names, the review mark, amendments and timing).** The
+> pages change in the commit that follows this amendment's. The municipal methodology on `/city-council` gains two paragraphs, C9 and C10, plain paragraphs
+> after C8 and before the verification section. The school-board methodology on
+> `/school-board-elections` changes in four places:
+> - under “Itemization follows the filings”, C9 is a second paragraph, after the one that
+>   stands there. The section “Other receipts and loans” follows it directly; this amends the
+>   M2 amendment, above, which put that section directly after the one paragraph;
+> - the paragraph under “The same donor, named two ways” gains C10 as its last sentence, after
+>   “both filed spellings remain visible, linked.”;
+> - under “Three kinds of money, kept separate”, S1 is a last paragraph. It renders whether or
+>   not a mark is on screen;
+> - the heading that reads `Amendments, timing, and “pending”` becomes
+>   **Amendments and timing**, and the
+>   last sentence of its paragraph, which said that contributions from interim A-1 filings are
+>   “marked as pending that committee’s next quarterly disclosure”, is replaced by S2. Nothing
+>   on the page marks a contribution as pending.
+>
+> C9, C10 and S2 are defined once each and used wherever they appear. The composition is
+> otherwise as it stands. C9 is the disclosure sentence PS-137 calls for, on this tool.
+> C9 reads:
+>
+> Some filings list the same gift more than once: the same donor, date and amount on one
+> report. We keep every line as filed, because the filings can’t tell a repeated gift from a
+> filer’s double entry.
+>
+> C10 reads:
+>
+> Where we group a donor’s records, the tool shows the group’s name, and search finds the donor
+> by the group’s name or by any name as filed.
+>
+> S1 reads:
+>
+> Outside groups’ filings name the candidate they spent for or against in their own words, and
+> we match each filing to a candidate in this tool. When a match needs a person’s check, the
+> spending is marked “⚑ needs review” until IPG has confirmed it.
+>
+> S2 reads:
+>
+> Contributions reported on interim A-1 filings (gifts of $1,000 or more, which committees
+> report between quarterly reports) after a committee’s most recent quarterly report are
+> included. The line at the top of the page says how far each kind of report runs.
+
+*Provenance, amendment (repeated gifts, grouped names, the review mark, amendments and timing; C9, C10, S1 and S2): AUDIT-2 elections-tool ratification package, revision 2 (`audit-2-elections-package-rev2.md`), sha256 `91884078932153ee17fdbd6a2111efdf5f82f38186f0993f8ec7ce0bf85c61d0`, 34,756 B / 418 L, region R4 (its lines 193–233), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-12 as drafted (“ratified”). Revision 1 of the package (sha256 `286a02692d17fdd40fbe57637b9aa51b95499266f065c3042fe677439e89d2e9`), ratified earlier the same day, differed in one sentence of region R5 and is not transcribed. Recorded under the PS-93 pattern: no id is allocated, and the text above stands unaltered, because an amendment says what now governs rather than editing the superseded reading away. The gate’s `[METH/REGISTER]` reads C9, C10, S1, S2 and the reworded heading from this block and compares the rendered pages with them.*
+
 ### CNCL-DATA-1 P2 — display decisions
 
 The P2 display decisions ratified as a set, transcribed verbatim from addendum A1:
@@ -3572,6 +3754,16 @@ only the pull date.
 
 *Provenance, amendment (AUDIT-2 M2): AUDIT-2 M2 ratification package, revision 1 (`audit-2-m2-package-rev1.md`), sha256 `8f07140080ac86bcc00e2d52efac91570bf32c8d77d8cd8a46bc1f72c2b10b8f`, 52,796 B / 375 L, region R3 (its lines 208–214), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-06 as drafted. Recorded under the PS-93 pattern: no id is allocated, and the block above stands unaltered. The strings themselves are in the entry `### CNCL-DATA-1 P2 — R8 and R9 as applied`, where the gate’s `[METH/REGISTER]` reads them.*
 
+> **Amendment (AUDIT-2, repeated gifts, grouped names, the review mark, amendments and
+> timing).** The school-board methodology view carries four more ratified strings, C9, C10, S1
+> and S2, and a reworded heading. Their text and placement are in the
+> amendment of the same date to the entry `### CNCL-DATA-1 P2 — R8 and R9 as applied`. With C9
+> in place, the section “Other receipts and loans” sits directly after the two paragraphs
+> under “Itemization follows the filings”; this amends the M2 amendment, above, which had one.
+> C5 is still the one string this entry ratifies.
+
+*Provenance, amendment (AUDIT-2, repeated gifts, grouped names, the review mark, amendments and timing): AUDIT-2 elections-tool ratification package, revision 2 (`audit-2-elections-package-rev2.md`), sha256 `91884078932153ee17fdbd6a2111efdf5f82f38186f0993f8ec7ce0bf85c61d0`, 34,756 B / 418 L, region R4b (its lines 239–245), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-12 as drafted (“ratified”). Revision 1 of the package (sha256 `286a02692d17fdd40fbe57637b9aa51b95499266f065c3042fe677439e89d2e9`), ratified earlier the same day, differed in one sentence of region R5 and is not transcribed. Recorded under the PS-93 pattern: no id is allocated, and the text above stands unaltered, because an amendment says what now governs rather than editing the superseded reading away.*
+
 ### IE-NAMES-1 — one id per IE funder, as ruled
 
 Ruled 2026-09-17 to 2026-09-21 in chat, five clauses, landed at commit d30adfbed4bba721eb308517a0b537a2bc2e35d0 (2026-09-22). (i) An IE funder's donor name is built by the receipts ingest's own name builder — the function in `campaign-finance/ingestion/convert_bulk_receipts.py` that assembles "Last, First" from SBE's LastOnlyName and FirstName — and handed to the shared slug, so one filed person yields one donor id on both ingest paths; `campaign-finance/ingestion/ingest_ie.py` imports that function rather than carrying a second name rule, so the two paths cannot diverge again. Organizational filers (empty FirstName) are unaffected by construction. (ii) After `campaign-finance/ingestion/ingest_ie.py` clears and re-adds its own rows, it prunes every donor left with zero contribution rows and reports the count as donors_pruned_rowless; the referenced set is over all contributions, so a donor with a receipts row is never pruned. The only prior donor prune, in `campaign-finance/ingestion/ingest.py`, runs upstream of this step and cannot see the ids this step retires. (iii) The landing is a change of minting rule regenerated through the chain, never a rewrite of ids in place: C4.4's alias-not-rewrite ruling and PS-97's no-merge ruling stand. Because neither canonical chain rebuilds its artifact from the vintage, the regeneration is the IE layer and everything downstream of it, run on the artifacts at the previous commit. (iv) The editorial Sheet is reconciled by Ishan's hand before the run, from an executor-produced list keyed by id — re-points, additions and deletions — verified by a readonly reading against an offline application of the same list to a pre-edit export taken from the Sheet's version history; the pipeline never writes the Sheet. Two filers whose name parts SBE filed in the wrong columns (michael-sacks, molina-luis-alejandro) keep their receipts-side record and are unified editorially in Donor Clusters, not by a code rule for mis-columned filings. (v) A donor carrying two industries after a merge is a display question for the school-board industry tab, ruled for its own lane, IND-MULTI-1, as "count once, list under both"; for this commit the additional_industries value finance was cleared on Donor Overrides rows finnegan-paul and sacks-michael-j and is restored when that lane lands.
@@ -3587,6 +3779,36 @@ Measured at the landing: 573 donor ids moved (elections 528 of 987 IE funder ids
 Ruled 2026-09-21 (the display) and 2026-09-24 (scope, disclosure, fixture, data and commit shape) in chat, five clauses; the register text lands at IND-MULTI-1 (i) before the display ships at IND-MULTI-1 (ii). (i) Scope: both renderers that build an industry table — the school-board industry tab (`campaign-finance/school-board/school-board-embed.html`, spendIndustryTotals and industryTotalsBody) and the shared finance view model (`campaign-finance/elections/embed/data.js`, spendAgg and industryTotals) that serves the school-board-elections, city-council and mayor tools. Today each adds a donor's full amount to every industry the donor carries and sums the industry rows into the grand total, so a donor tagged with two industries is counted twice; the population is the 36 to 38 donors per artifact carrying more than one industry, and the school-board 2024 election renders $13,800.00 more than its donor rows sum to. (ii) Display: a donor tagged with more than one industry is listed under each industry it carries, at the donor's full amount in each row; the grand total counts each donor's money once — it is the sum over donor rows, plus the IE carve where the view carries one — and the per-industry rows are therefore not expected to sum to it. Every surface that carries an industry table renders this sentence beside its total: "A donor tagged with more than one industry is listed under each; the total counts each donor's money once." (iii) Fixture: `[SBF2/INDUSTRY]` in `campaign-finance/school-board/sb_render_fixture.js` retires the `multi === 0` conjunct; the totals conjunct runs over every election key in the fixture's universe, not only the newest; and a positive control requires at least one election whose donor rows carry a multi-industry donor, so the count-once rule is exercised rather than vacuously true. The elections harness pins on an industry total, if any, move under the same rule in the same commit. Each re-pin is a display decision, ratified. (iv) Data: the `additional_industries` value finance is restored on Donor Overrides rows finnegan-paul and sacks-michael-j by Ishan's hand before IND-MULTI-1 (ii) runs, and lands in that commit under the pins-move-with-data convention; no further clearing of tags is made to satisfy a fixture. (v) Commit shape: IND-MULTI-1 (i) is this register text alone, pushed on ratification, moving no bundle; IND-MULTI-1 (ii) is the code, the fixture, the rebuilt bundles and the data in one commit, pushed after the pre-release paste with the design lane's commit so that paste, verification and push keep R12's order.
 
 *Provenance (IND-MULTI-1): IND-MULTI-1 register package, revision 1 (`ind-multi-1-register-package-rev1.md`), sha256 `8365f4630484fde47376e93f19d8ea37535f844854d936a736eff9d80739f10a`, 9,015 B / 45 L, region §1 (its lines 7 and 9), transcribed verbatim, text unaltered character for character. Ratified by Ishan in chat 2026-09-24 as drafted. Recorded under the PS-93 pattern: no id is allocated.*
+
+> **Amendment (the elections tool's Industry totals).** The page changes in the commit that
+> follows this amendment's. On the elections tool, under Election
+> spend, the Industry totals tab prints no single total, so the sentence of clause (ii) is
+> printed there with its last clause reworded, and a line under the bars states the totals it
+> speaks of. The note above the bars ends: **A donor tagged with more than one industry is
+> listed under each; the totals below count each donor’s money once.** Under the bars, one
+> line: **All industries together, each donor counted once: {direct} in direct contributions ·
+> {support} in independent support · {oppose} in independent opposition.**
+> - {direct} is what the page's candidates were given directly in the selected election, each
+>   gift counted once whatever industries its donor carries. {support} and {oppose} are what
+>   outside groups spent for and against those candidates. The second and third are the groups'
+>   spending, not gifts to the groups.
+> - Each is the sum of that figure over the rows of the Spend by candidate tab for the selected
+>   election. The By race cards can sum to less: the tab also counts money dated in the
+>   election's window that went to a candidate of the page's other election, and spending on a
+>   candidate whose card shows no finance yet. The three are stated side by side and not added
+>   together.
+> - Each prints in whole dollars. A stream that is zero is left out, with its separator, as
+>   the bars leave it out (ruled 2026-10-11); if all three are zero the line is left off.
+> - The school-board voting page keeps clause (ii)'s sentence as it stands.
+>
+> **Measured basis.** At `3209983b083273e080f041e90f3739fad0427a01`: on `/school-board-elections`,
+> 2026, $3,239,416 in direct contributions, $318,164 in independent support and $139,575 in
+> independent opposition, where the bars' direct amounts sum to $65,700 more; in 2024,
+> $5,666,339, $2,484,975 and $554,324, the bars summing to $20,700 more. On `/city-council` the
+> line reads **All industries together, each donor counted once: $24,312,066 in direct
+> contributions.**, the bars summing to $253,800 more.
+
+*Provenance, amendment (the elections tool’s Industry totals): AUDIT-2 elections-tool ratification package, revision 2 (`audit-2-elections-package-rev2.md`), sha256 `91884078932153ee17fdbd6a2111efdf5f82f38186f0993f8ec7ce0bf85c61d0`, 34,756 B / 418 L, region R5 (its lines 255–281), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-12 as drafted (“ratified”). Revision 1 of the package (sha256 `286a02692d17fdd40fbe57637b9aa51b95499266f065c3042fe677439e89d2e9`), ratified earlier the same day, differed in one sentence of region R5 and is not transcribed. Recorded under the PS-93 pattern: no id is allocated, and the text above stands unaltered, because an amendment says what now governs rather than editing the superseded reading away.*
 
 ### DESIGN-1 — the council voting tool's visual language on all four tools, as ruled
 

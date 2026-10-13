@@ -55,7 +55,7 @@ TOBON-1). The council data arc (PS-105 arc 2) closed at ARC-BOUNDARY-3. Open aga
 per-office `dues_excluded` and per-election reconcile scoping (open ledger 49); the
 `cand-tobon-ward-01` re-mint at the next full ingest (58) and the ward-encoding id scheme
 note (59); the `[data-election]` selector probe (57); the funder-of-funders surface (33)
-and 41217's linkage (34), both behind the petition roster; IE `needs_review` 29 (45).
+and 41217's linkage (34), both behind the petition roster.
 Updates: the next data update runs the full ingest chain on a new sealed vintage, with
 `run.data_through` re-derived and `CHI_VINTAGE_ROOT` resolution exercised on a second
 vintage.

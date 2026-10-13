@@ -99,6 +99,10 @@ governing rule below). Export `$REPO`; paths are relative to the repo root.
 5.  ingest_ie.py --council campaign-finance/election-data.json \
         --expenditures <SBE Expenditures> --receipts <SBE Receipts> \
         --out campaign-finance/election-data.json            # IE layer; internal build_rollups now safe
+                                                            #   The elections run of this step also reads
+                                                            #   campaign-finance/elections/reference/ie-target-confirmations.tsv
+                                                            #   from a path fixed in the script, and a file that
+                                                            #   cannot be trusted stops the run (PS-154).
 5b. enrich_committee_names.py --council campaign-finance/election-data.json \
         --committees campaign-finance/elections/reference/ie-committee-names.tsv --out campaign-finance/election-data.json
                                                             # resolve IE spender ids -> real names

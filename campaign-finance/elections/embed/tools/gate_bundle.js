@@ -645,7 +645,30 @@ async function assertSpendTabFeatures(T, ctx, fx) {
   T.ok('[spend.C] streams SEPARATE (for/against shown, never a summed "funded" total)',
     spentSection.indexOf(' for') >= 0 && spentSection.indexOf(' against') >= 0 && spentSection.indexOf('funded') < 0);
   T.ok('[spend.C] firewall note present (separate streams + election label)', M.indexOf('never summed') >= 0);
-  T.ok('[spend.C] IE provenance ⚑ needs review surfaces on a line', /needs review/.test(spentSection));
+  // The review chip, on a CONSTRUCTED row (PS-154): once the ingest reads the confirmation file no
+  // live row need be flagged, so a live chip is not there to find. PS-128 mode E — constructed: the
+  // document (a deep copy of the registry alone, holding one outside-spending row and no
+  // contribution) and the row's flag; live: the committee, and the row's target and date (a live
+  // INCS row inside the window is the seed) — premise asserted: the seed exists and the row's own
+  // purpose text renders in both variants. Each variant is the other's control.
+  var chip = function (flagged) {
+    var W = ctx.window, RAW = W.PREVIEW_DATA, w = fx.windows[fx.incs.scope];
+    var seed = (RAW.independent_expenditures || []).filter(function (x) {
+      return x.spender_committee_id === fx.incs.committee && !W.ElectData.EXCLUDED_CYCLES[x.cycle] && x.date >= w.start && x.date <= w.end; })[0];
+    if (!seed) return { rendered: false, chips: -1 };
+    var cp = JSON.parse(JSON.stringify({ races: RAW.races, candidates: RAW.candidates, committees: RAW.committees, donors: {}, contributions: [],
+      rollups: { by_candidate_election: (RAW.rollups || {}).by_candidate_election }, independent_expenditures: [seed] }));
+    var row = cp.independent_expenditures[0];
+    row.id = 'zz-spendC-chip'; row.purpose = 'ZZ spend.C chip fixture'; row.match_method = 'surname_plus_given'; row.needs_review = flagged;
+    var html = W.ElectRender.renderCommitteeProfile(W.ElectData.committeeProfile(W.ElectData.loadData(cp, { office: fx.office }), fx.incs.committee, w));
+    var sec = (html.split('What it spent on')[1] || '').split('Who funds this committee')[0];
+    return { rendered: sec.indexOf('ZZ spend.C chip fixture') >= 0, chips: sec.split('⚑ needs review').length - 1 };
+  };
+  var chipOn = chip(true), chipOff = chip(false);
+  T.ok('[spend.C] IE provenance: a flagged row shows ⚑ needs review on its candidate line and on its own row (constructed; ' + chipOn.chips + ' chips)',
+    chipOn.rendered && chipOn.chips === 2);
+  T.ok('[spend.C] IE provenance: the same row unflagged, as a confirmed pair arrives, renders and shows no chip (' + chipOff.chips + ' chips)',
+    chipOff.rendered && chipOff.chips === 0);
   // (E-3) IE summary boxes: support + oppose render as SEPARATE stat cards (firewall, box level).
   var ieHead = M.split('What it spent on')[0];
   T.ok('[spend.E3] IE summary boxes — support + oppose SEPARATE cards (+ total + targeted), never fused',
@@ -1585,19 +1608,19 @@ async function assertPersonSurface(T, ctx, fx) {
     T.ok('[REF/PINS-SELF] check_ref_pins self-test green — ' + tail, res.status === 0);
   })();
 
-  // [IE/DIST] the ingest_ie ward-absent/district-present collision cases (IE-DIST-1).
-  // Its own docstring: "These are non-optional precisely BECAUSE the fix is dormant on
-  // live data" — no real expenditure resolves into a same-name school-board cohort, so
-  // the full-dataset run proves the fix changes NOTHING, and these synthetic fixtures are
-  // the only proof the ACTIVE path behaves when a collision does exist. Nothing in the
-  // repo ran them. A dormant guard with no exercised test is a guard nobody has checked
-  // still works. Plain stdlib, no pytest, reads no artifact. 26 cases, green at adoption.
+  // [IE/DIST] ingest_ie's unit cases: the ward-absent/district-present collision (IE-DIST-1),
+  // PS-140's date routing, and PS-154's confirmation file and lookup. The collision cases'
+  // own docstring: "These are non-optional precisely BECAUSE the fix is dormant on live data"
+  // — a dormant guard with no exercised test is a guard nobody has checked still works.
+  // Plain stdlib, no pytest. The registry, rows and confirmation files are constructed; it
+  // reads no data artifact, and three tracked files: election-windows.json, the confirmation
+  // file (one case: the loader accepts it) and, where a case runs ingest() whole, own-committee-transfers.json.
   (function () {
     var res = require('child_process').spawnSync('python3',
       [path.join(__dirname, '..', '..', '..', 'ingestion', 'test_ingest_ie_district.py')],
       { encoding: 'utf8' });
     var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
-    T.ok('[IE/DIST] ingest_ie district-collision cases green — ' + tail, res.status === 0);
+    T.ok('[IE/DIST] ingest_ie district-collision, date-routing and confirmation-file cases green — ' + tail, res.status === 0);
   })();
 
   // [VOTES/SELF] the votes-family self-test (SBVOTE-1/A.4), third invoker of the same

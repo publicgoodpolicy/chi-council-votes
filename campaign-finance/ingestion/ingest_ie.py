@@ -1,12 +1,12 @@
 """ingest_ie.py — add independent expenditures + IE-committee funding from the
-Illinois SBE bulk Expenditures/Receipts .txt files. Tab-delimited, latin-1, \\r\\n.
+Illinois SBE bulk Expenditures/Receipts .txt files. Tab-delimited, cp1252, \\r\\n.
 
 Scoping decisions baked in (flag to change):
   * Only expenditures with Supporting/Opposing flag are IEs.
   * Archived rows are amendments/superseded -> dropped.
-  * Targets are matched by CANDIDATE NAME to the current 50 alders (ward used to
-    disambiguate). IEs naming a *former* alder of a ward are out of scope, just
-    like pre-2011 contributions.
+  * Council run: targets are matched by CANDIDATE NAME to the current 50 alders (ward
+    disambiguates; a *former* alder is out of scope). Election run: to the candidate registry;
+    a doubtful match is flagged needs_review until the confirmation file holds its pair (PS-154).
   * Exact-duplicate rows (same committee+payee+candidate+amount+date+purpose) are
     collapsed once -> handles the 8x-dupe artifact and B-1/quarterly re-reports.
 """
@@ -185,8 +185,8 @@ def _tgt(e,method,needs_review):
             'target_race_id':e['race_id'],'target_ward':e['ward'],
             'match_method':method,'needs_review':needs_review}
 def _resolve(hits,office,cand,method):
-    # one hit = identity-grade (needs_review False); a same-name COLLISION broken by
-    # ward/district/Office is flagged for review; an unresolved collision -> name_fallback.
+    # one hit = identity-grade (needs_review False); a same-name COLLISION broken by ward/district/
+    # Office is flagged; an unresolved collision -> name_fallback. ingest() lifts a confirmed flag.
     if len(hits)==1: return _tgt(hits[0],method,False)
     blob=(office or '')+' '+(cand or '')
     ward=extract_ward(blob)
@@ -237,6 +237,43 @@ def match_target_registry(row,by_committee,by_name,by_folded,by_surname,date=Non
     if len(o)==1: return _tgt(o[0],'surname_plus_office',True)
     return None
 
+# ---- ELECTION review flag: the confirmed (filed name, candidacy) pairs (PS-150, PS-154) ----
+# The path is fixed here, relative to this script, as build_rollups fixes WINDOWS_PATH: the
+# file is part of the tree the run is made from, never an argument a run can forget or vary.
+CONFIRMATIONS_PATH=os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','elections','reference','ie-target-confirmations.tsv')
+CONFIRMATIONS_HEADER=['filed_name','candidate_id','status','ruled','seen_as']
+def load_confirmations(path=None):
+    """PS-154: the file's confirmed pairs, as {(filed_name, candidate_id)}. A file that cannot
+    be trusted is an ERROR, never an empty set: each refusal names the file and the line, and
+    ingest() calls this before it matches a row, so a refused run has written nothing."""
+    path=path or CONFIRMATIONS_PATH
+    def stop(why):
+        raise SystemExit(f"FATAL [PS-154] IE target confirmations at {path}: {why}\n"
+                         f"  Refusing to ingest with a confirmation file that cannot be trusted.")
+    try:
+        with open(path,encoding='utf-8') as f: lines=f.read().split('\n')
+    except (OSError,UnicodeDecodeError) as e: stop(f"missing or unreadable: {e}")
+    if lines[-1]=='': lines.pop()   # the last line's own newline; any other empty line is a row
+    pairs=set(); header=False
+    for n,line in enumerate(lines,1):
+        if line.startswith('#'): continue
+        # split on tabs, NOT the csv module: a seen_as may carry a double quote, which csv would eat
+        c=line.split('\t')
+        if not header:
+            if c!=CONFIRMATIONS_HEADER: stop(f"line {n}: the header is {line!r}, not the five tab-separated columns {' '.join(CONFIRMATIONS_HEADER)}")
+            header=True; continue
+        if len(c)!=len(CONFIRMATIONS_HEADER): stop(f"line {n}: {len(c)} tab-separated field(s), not {len(CONFIRMATIONS_HEADER)}: {line!r}")
+        name,cid,status=c[:3]
+        if name!=norm(name): stop(f"line {n}: filed_name {name!r} is not in norm()'s form ({norm(name)!r}), so it could never match")
+        if status!='confirmed': stop(f"line {n}: status {status!r} is not 'confirmed'; what another status does is not ruled (PS-154)")
+        if (name,cid) in pairs: stop(f"line {n}: the pair ({name!r}, {cid!r}) appears twice")
+        pairs.add((name,cid))
+    if not header: stop("no header line")
+    return pairs
+def confirmed(pairs,filed_name,candidate_id):
+    # PS-150's key: the candidate name AS FILED, through norm(), with the candidacy the row matched.
+    return (norm(filed_name),candidate_id) in pairs
+
 def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
     cycles=d['cycles']; comms=d['committees']; donors=d['donors']
     # Election mode (races[]+candidates[] present) resolves IE targets against the
@@ -244,6 +281,7 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
     election_mode=bool(d.get('races')) and bool(d.get('candidates'))
     if election_mode:
         by_committee,by_name,by_folded,by_surname=build_target_index(d)
+        confirmed_pairs=load_confirmations()   # PS-154: election run only; stops here, before any row
         sb_races={r['id'] for r in d.get('races',[]) if (r.get('office') or '').startswith('school_board')}
     else:
         alders=build_matcher(comms)
@@ -281,7 +319,7 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
         return did
 
     F=FIELD_MAP['exp']; seen={}; raw=0; matched=0; dups=0; unmatched=0; spenders={}; cand_spender_skipped=0
-    method_counts=defaultdict(int); review_n=0; sb_outside=0; sb_outside_amt=0.0
+    method_counts=defaultdict(int); review_n=0; confirmed_n=0; sb_outside=0; sb_outside_amt=0.0
     ies=[]
     for i,row in enumerate(read_tsv(exp_path)):
         if progress and i%500000==0 and i: sys.stderr.write(f'  ..exp {i:,}\n')
@@ -318,6 +356,10 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
         if dk in seen: dups+=1; continue
         seen[dk]=1; matched+=1
         method_counts[tgt['match_method']]+=1
+        # PS-154: a flagged match whose pair the file confirms is written unflagged. The file moves
+        # the flag and nothing else: the match, its method, the id and the row's place stand.
+        if election_mode and tgt['needs_review'] and confirmed(confirmed_pairs,row.get(F['candidate']),tgt['target_candidate_id']):
+            tgt['needs_review']=False; confirmed_n+=1
         if tgt['needs_review']: review_n+=1
         spenders.setdefault(sbe,0); spenders[sbe]+=amt
         if not dry_run:
@@ -328,7 +370,9 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
                 base.update({'target_committee_id':tgt['target_committee_id'],
                     'target_candidate_id':tgt['target_candidate_id'],
                     'target_race_id':tgt['target_race_id'],'target_ward':tgt['target_ward'],
-                    'match_method':tgt['match_method'],'needs_review':tgt['needs_review']})
+                    'match_method':tgt['match_method'],'needs_review':tgt['needs_review'],
+                    # PS-154: the name as filed, ends trimmed, so a flagged match can be reviewed from the file
+                    'filed_candidate_name':(row.get(F['candidate']) or '').strip()})
             else:
                 # council shape unchanged: target_ward + target_committee_id only
                 base.update({'target_ward':tgt['target_ward'],
@@ -345,7 +389,7 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
             'matched_by_committee_id':method_counts.get('committee_id',0),
             'matched_by_registry_name':method_counts.get('registry_name',0),
             'matched_by_name_fallback':method_counts.get('name_fallback',0),
-            'flagged_needs_review':review_n,
+            'confirmed_by_file':confirmed_n,'flagged_needs_review':review_n,
             'sb_outside_window':sb_outside,'sb_outside_window_total':round(sb_outside_amt,2)})
     if dry_run: return stats
 

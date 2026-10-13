@@ -1,6 +1,6 @@
 {
   "schema_version": "2.3",
-  "generated_at": "2026-10-10T04:14:10Z",
+  "generated_at": "2026-10-13T13:15:24Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "itemization_threshold": 150,
   "cycles": {
@@ -64581,7 +64581,7 @@
       "parent_id": "incs-action-pac",
       "committee_id": null,
       "cluster_id": "rollup-458",
-      "cluster_name": "INCS Action PAC",
+      "cluster_name": "INCS Action",
       "cluster_role": "parent",
       "cluster_is_parent": true
     },
@@ -98622,7 +98622,11 @@
       "employer": "Linden Capital Partners",
       "city": "Chicago, IL",
       "parent_id": "miller-brian",
-      "committee_id": null
+      "committee_id": null,
+      "cluster_id": "rollup-546",
+      "cluster_name": "Brian Miller",
+      "cluster_role": "parent",
+      "cluster_is_parent": true
     },
     "miller-brianna": {
       "id": "miller-brianna",
@@ -177861,8 +177865,12 @@
       "occupation": "Financial",
       "employer": "Madison Dearborn",
       "city": "Chicago, IL",
-      "parent_id": "perry-jim",
-      "committee_id": null
+      "parent_id": "perry-james",
+      "committee_id": null,
+      "cluster_id": "rollup-544",
+      "cluster_name": "James Perry",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "personal-pac": {
       "id": "personal-pac",
@@ -188490,8 +188498,12 @@
       "occupation": "Chairman",
       "employer": "Madison Dearborn Partners",
       "city": "Inverness, IL",
-      "parent_id": "canning-jr-john",
-      "committee_id": null
+      "parent_id": "canning-john",
+      "committee_id": null,
+      "cluster_id": "rollup-545",
+      "cluster_name": "John Canning",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "canning-rita": {
       "id": "canning-rita",
@@ -191485,7 +191497,11 @@
       "employer": "Madison Dearborn Partners",
       "city": "Chicago, IL",
       "parent_id": "perry-james",
-      "committee_id": null
+      "committee_id": null,
+      "cluster_id": "rollup-544",
+      "cluster_name": "James Perry",
+      "cluster_role": "parent",
+      "cluster_is_parent": true
     },
     "perry-mary": {
       "id": "perry-mary",
@@ -249733,7 +249749,7 @@
       "parent_id": "incs-action-pac",
       "committee_id": null,
       "cluster_id": "rollup-458",
-      "cluster_name": "INCS Action PAC",
+      "cluster_name": "INCS Action",
       "cluster_role": "affiliated-pac",
       "cluster_is_parent": false
     },
@@ -301999,8 +302015,12 @@
       "occupation": "Co-Founder and Partner",
       "employer": "Linden Capital Partners",
       "city": "Chicago, IL",
-      "parent_id": "miller-brian-c",
-      "committee_id": null
+      "parent_id": "miller-brian",
+      "committee_id": null,
+      "cluster_id": "rollup-546",
+      "cluster_name": "Brian Miller",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "miller-jake": {
       "id": "miller-jake",
@@ -314058,10 +314078,14 @@
       "flags": [],
       "notes": null,
       "city": null,
-      "parent_id": "incs-action",
+      "parent_id": "incs-action-pac",
       "committee_id": null,
       "entity_type": "political-organization",
-      "_last_edited_by": "editor-ui"
+      "_last_edited_by": "editor-ui",
+      "cluster_id": "rollup-458",
+      "cluster_name": "INCS Action",
+      "cluster_role": "related",
+      "cluster_is_parent": false
     },
     "surepayroll": {
       "id": "surepayroll",
@@ -316398,8 +316422,12 @@
       "flags": [],
       "notes": null,
       "city": "Springfield, IL",
-      "parent_id": "afscme-illinois-council-no-31",
-      "committee_id": null
+      "parent_id": "afscme-council-31",
+      "committee_id": null,
+      "cluster_id": "rollup-483",
+      "cluster_name": "AFSCME Illinois Council No. 31",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "flood-carla": {
       "id": "flood-carla",
@@ -316489,8 +316517,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "jb-for-governor-exploratory-committee",
-      "committee_id": null
+      "parent_id": "jb-for-governor",
+      "committee_id": null,
+      "cluster_id": "rollup-482",
+      "cluster_name": "JB for Governor",
+      "cluster_role": "related",
+      "cluster_is_parent": false
     },
     "blachman-gary": {
       "id": "blachman-gary",
@@ -316634,8 +316666,12 @@
       "flags": [],
       "notes": null,
       "city": "Springfield, IL",
-      "parent_id": "illinois-hotel-motel-political-action-committee",
-      "committee_id": null
+      "parent_id": "illinois-hotel-motel-pac",
+      "committee_id": null,
+      "cluster_id": "rollup-484",
+      "cluster_name": "Illinois Hotel Motel PAC",
+      "cluster_role": "affiliated-pac",
+      "cluster_is_parent": false
     },
     "anheuser-busch-companies": {
       "id": "anheuser-busch-companies",
@@ -316660,8 +316696,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "seiu-local-73-b-pac",
-      "committee_id": null
+      "parent_id": "seiu-local-73",
+      "committee_id": null,
+      "cluster_id": "rollup-489",
+      "cluster_name": "SEIU Local 73",
+      "cluster_role": "affiliated-pac",
+      "cluster_is_parent": false
     },
     "pierce-bettye": {
       "id": "pierce-bettye",
@@ -316802,8 +316842,12 @@
       "flags": [],
       "notes": null,
       "city": "Burr Ridge, IL",
-      "parent_id": "liuna-chicago-laborers-district-council",
-      "committee_id": null
+      "parent_id": "liuna-chicago-laborers-district-council-pac",
+      "committee_id": null,
+      "cluster_id": "rollup-478",
+      "cluster_name": "LiUNA Chicago Laborers District Council",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "mcfarland-rhonda-r": {
       "id": "mcfarland-rhonda-r",
@@ -317178,8 +317222,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "fraternal-order-of-police-chicago-lodge-7",
-      "committee_id": null
+      "parent_id": "fraternal-order-of-police",
+      "committee_id": null,
+      "cluster_id": "rollup-480",
+      "cluster_name": "Fraternal Order of Police",
+      "cluster_role": "related",
+      "cluster_is_parent": false
     },
     "fuchs-david": {
       "id": "fuchs-david",
@@ -317256,8 +317304,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "fraternal-order-of-police-chicago-lodge-7-pac",
-      "committee_id": null
+      "parent_id": "fraternal-order-of-police",
+      "committee_id": null,
+      "cluster_id": "rollup-480",
+      "cluster_name": "Fraternal Order of Police",
+      "cluster_role": "affiliated-pac",
+      "cluster_is_parent": false
     },
     "martinez-alan": {
       "id": "martinez-alan",
@@ -317648,8 +317700,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "chicago-regional-council-of-carpenters",
-      "committee_id": null
+      "parent_id": "chicago-regional-council-of-carpenters-pac",
+      "committee_id": null,
+      "cluster_id": "rollup-487",
+      "cluster_name": "Chicago Regional Council of Carpenters",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "mid-america-carpenters-regional-council": {
       "id": "mid-america-carpenters-regional-council",
@@ -317661,8 +317717,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "mid-america-carpenters-regional-council",
-      "committee_id": null
+      "parent_id": "mid-america-carpenters-regional-council-pac",
+      "committee_id": null,
+      "cluster_id": "rollup-479",
+      "cluster_name": "Mid-America Carpenters Regional Council",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "howerton-terry": {
       "id": "howerton-terry",
@@ -318024,8 +318084,12 @@
       "flags": [],
       "notes": null,
       "city": "Springfield, IL",
-      "parent_id": "afscme-illinois-council-no-31-pac",
-      "committee_id": null
+      "parent_id": "afscme-council-31",
+      "committee_id": null,
+      "cluster_id": "rollup-483",
+      "cluster_name": "AFSCME Illinois Council No. 31",
+      "cluster_role": "affiliated-pac",
+      "cluster_is_parent": false
     },
     "tjd-member-llc": {
       "id": "tjd-member-llc",
@@ -318076,8 +318140,12 @@
       "flags": [],
       "notes": null,
       "city": "Burr Ridge, IL",
-      "parent_id": "liuna-chicago-laborers-district-council-political-action-committee",
-      "committee_id": null
+      "parent_id": "liuna-chicago-laborers-district-council-pac",
+      "committee_id": null,
+      "cluster_id": "rollup-478",
+      "cluster_name": "LiUNA Chicago Laborers District Council",
+      "cluster_role": "affiliated-pac",
+      "cluster_is_parent": false
     },
     "illinois-hotel-motel-pac-ihmpac": {
       "id": "illinois-hotel-motel-pac-ihmpac",
@@ -324928,8 +324996,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "seiu-il-council-pac",
-      "committee_id": null
+      "parent_id": "seiu-il-council",
+      "committee_id": null,
+      "cluster_id": "rollup-372",
+      "cluster_name": "SEIU Illinois State Council",
+      "cluster_role": "affiliated-pac",
+      "cluster_is_parent": false
     },
     "mccarroll-lester": {
       "id": "mccarroll-lester",
@@ -325446,8 +325518,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "chicago-firefighters-union-local-2-political-commitee-fund",
-      "committee_id": null
+      "parent_id": "chicago-firefighters-union-local-2",
+      "committee_id": null,
+      "cluster_id": "rollup-486",
+      "cluster_name": "Chicago Firefighters Union Local 2",
+      "cluster_role": "affiliated-pac",
+      "cluster_is_parent": false
     },
     "fraternal-order-of-police-chicago-lodge-no-7-pac": {
       "id": "fraternal-order-of-police-chicago-lodge-no-7-pac",
@@ -325459,8 +325535,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "fraternal-order-of-police-chicago-lodge-no-7-pac",
-      "committee_id": null
+      "parent_id": "fraternal-order-of-police",
+      "committee_id": null,
+      "cluster_id": "rollup-480",
+      "cluster_name": "Fraternal Order of Police",
+      "cluster_role": "affiliated-pac",
+      "cluster_is_parent": false
     },
     "reno-michael": {
       "id": "reno-michael",
@@ -325511,8 +325591,12 @@
       "flags": [],
       "notes": null,
       "city": "Countryside, IL",
-      "parent_id": "chicago-land-operators-joint-labor",
-      "committee_id": null
+      "parent_id": "chicago-land-operators-joint-labor-management-pac",
+      "committee_id": null,
+      "cluster_id": "rollup-476",
+      "cluster_name": "Chicago Land Operators Joint Labor",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "seiu-council-pac-fund": {
       "id": "seiu-council-pac-fund",
@@ -325524,8 +325608,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "seiu-council-pac-fund",
-      "committee_id": null
+      "parent_id": "seiu-il-council",
+      "committee_id": null,
+      "cluster_id": "rollup-372",
+      "cluster_name": "SEIU Illinois State Council",
+      "cluster_role": "affiliated-pac",
+      "cluster_is_parent": false
     },
     "paez-mario": {
       "id": "paez-mario",
@@ -326369,8 +326457,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "seiu-illinois-state-council",
-      "committee_id": null
+      "parent_id": "seiu-il-council",
+      "committee_id": null,
+      "cluster_id": "rollup-372",
+      "cluster_name": "SEIU Illinois State Council",
+      "cluster_role": "alt-name",
+      "cluster_is_parent": false
     },
     "hoffman-edbird": {
       "id": "hoffman-edbird",
@@ -327101,8 +327193,12 @@
       "flags": [],
       "notes": null,
       "city": "Chicago, IL",
-      "parent_id": "seiu-healthcare-il-in-hcii-pac",
-      "committee_id": null
+      "parent_id": "seiu-healthcare-il-in-pac",
+      "committee_id": null,
+      "cluster_id": "rollup-475",
+      "cluster_name": "SEIU Healthcare IL IN PAC",
+      "cluster_role": "affiliated-pac",
+      "cluster_is_parent": false
     },
     "roberts-kirstin": {
       "id": "roberts-kirstin",
@@ -343573,7 +343669,11 @@
       "notes": null,
       "city": null,
       "parent_id": "canning-john",
-      "committee_id": null
+      "committee_id": null,
+      "cluster_id": "rollup-545",
+      "cluster_name": "John Canning",
+      "cluster_role": "parent",
+      "cluster_is_parent": true
     },
     "griffin-kenneth": {
       "id": "griffin-kenneth",
@@ -1100979,7 +1101079,10 @@
         "seiu-state-council",
         "s-e-i-u-illinois-council-pac",
         "service-employees-international-union-member-contributions",
-        "s-e-i-u-international-union"
+        "s-e-i-u-international-union",
+        "seiu-illinois-state-council",
+        "seiu-il-council-pac",
+        "seiu-council-pac-fund"
       ],
       "roles": {
         "seiu-il-council": "parent",
@@ -1100995,7 +1101098,10 @@
         "seiu-state-council": "alt-name",
         "s-e-i-u-illinois-council-pac": "affiliated-pac",
         "service-employees-international-union-member-contributions": "alt-name",
-        "s-e-i-u-international-union": "alt-name"
+        "s-e-i-u-international-union": "alt-name",
+        "seiu-illinois-state-council": "alt-name",
+        "seiu-il-council-pac": "affiliated-pac",
+        "seiu-council-pac-fund": "affiliated-pac"
       },
       "member_totals": {
         "seiu-il-council": 5780844.29,
@@ -1101011,9 +1101117,12 @@
         "seiu-state-council": 547500.0,
         "s-e-i-u-illinois-council-pac": 6412.25,
         "service-employees-international-union-member-contributions": 0.0,
-        "s-e-i-u-international-union": 902675.12
+        "s-e-i-u-international-union": 902675.12,
+        "seiu-illinois-state-council": 21000.0,
+        "seiu-il-council-pac": 101000.0,
+        "seiu-council-pac-fund": 65438.8
       },
-      "total": 13269667.09
+      "total": 13457105.89
     },
     "rollup-373": {
       "name": "Foley & Lardner LLP",
@@ -1102957,22 +1103066,25 @@
       "total": 59637.57
     },
     "rollup-458": {
-      "name": "INCS Action PAC",
+      "name": "INCS Action",
       "relationship": "affiliated entities",
       "canonical_id": "incs-action-pac",
       "members": [
         "incs-action-pac",
-        "incs-actions-pac"
+        "incs-actions-pac",
+        "incs-action"
       ],
       "roles": {
         "incs-action-pac": "parent",
-        "incs-actions-pac": "affiliated-pac"
+        "incs-actions-pac": "affiliated-pac",
+        "incs-action": "related"
       },
       "member_totals": {
         "incs-action-pac": 45750.0,
-        "incs-actions-pac": 3500.0
+        "incs-actions-pac": 3500.0,
+        "incs-action": 28660.35
       },
-      "total": 49250.0
+      "total": 77910.35
     },
     "rollup-459": {
       "name": "Friends of Gilbert Villegas for Alderman",
@@ -1103527,7 +1103639,8 @@
         "seiu-health-care-il-in-pac",
         "seiu-healthcare-illinois-indiana-pac",
         "illinois-in-pac-hcii-pac",
-        "seiu-local-hcii"
+        "seiu-local-hcii",
+        "seiu-healthcare-il-in-hcii-pac"
       ],
       "roles": {
         "seiu-healthcare-il-in-pac": "parent",
@@ -1103535,7 +1103648,8 @@
         "seiu-health-care-il-in-pac": "affiliated-pac",
         "seiu-healthcare-illinois-indiana-pac": "affiliated-pac",
         "illinois-in-pac-hcii-pac": "affiliated-pac",
-        "seiu-local-hcii": "alt-name"
+        "seiu-local-hcii": "alt-name",
+        "seiu-healthcare-il-in-hcii-pac": "affiliated-pac"
       },
       "member_totals": {
         "seiu-healthcare-il-in-pac": 739173.1300000004,
@@ -1103543,9 +1103657,10 @@
         "seiu-health-care-il-in-pac": 55074.869999999995,
         "seiu-healthcare-illinois-indiana-pac": 33939.759999999995,
         "illinois-in-pac-hcii-pac": 5000.0,
-        "seiu-local-hcii": 25000.0
+        "seiu-local-hcii": 25000.0,
+        "seiu-healthcare-il-in-hcii-pac": 89783.29
       },
-      "total": 874412.76
+      "total": 964196.05
     },
     "rollup-476": {
       "name": "Chicago Land Operators Joint Labor",
@@ -1103565,7 +1103680,8 @@
         "chicagoland-operators-joint-labor-management-pac",
         "chicagoland-operators",
         "chicago-land-operators-joint-mangmnt",
-        "chicago-land-operator"
+        "chicago-land-operator",
+        "chicago-land-operators-joint-labor"
       ],
       "roles": {
         "chicago-land-operators-joint-labor-management-pac": "parent",
@@ -1103581,7 +1103697,8 @@
         "chicagoland-operators-joint-labor-management-pac": "affiliated-pac",
         "chicagoland-operators": "alt-name",
         "chicago-land-operators-joint-mangmnt": "alt-name",
-        "chicago-land-operator": "alt-name"
+        "chicago-land-operator": "alt-name",
+        "chicago-land-operators-joint-labor": "alt-name"
       },
       "member_totals": {
         "chicago-land-operators-joint-labor-management-pac": 860335.5,
@@ -1103597,9 +1103714,10 @@
         "chicagoland-operators-joint-labor-management-pac": 130883.75,
         "chicagoland-operators": 1000.0,
         "chicago-land-operators-joint-mangmnt": 12950.0,
-        "chicago-land-operator": 5000.0
+        "chicago-land-operator": 5000.0,
+        "chicago-land-operators-joint-labor": 27500.0
       },
-      "total": 1178476.75
+      "total": 1205976.75
     },
     "rollup-477": {
       "name": "Chicago Teachers Union",
@@ -1103677,7 +1103795,9 @@
         "construction-and-general-laborers-dc-of-chicago-vicinity-laborers-pa",
         "liuna",
         "liuna-chicago-labors-district-counil-pac",
-        "liuna-chicago-labors-district-counil"
+        "liuna-chicago-labors-district-counil",
+        "liuna-chicago-laborers-district-council-political-action-committee",
+        "liuna-chicago-laborers-district-council"
       ],
       "roles": {
         "liuna-chicago-laborers-district-council-pac": "parent",
@@ -1103706,7 +1103826,9 @@
         "construction-and-general-laborers-dc-of-chicago-vicinity-laborers-pa": "alt-name",
         "liuna": "alt-name",
         "liuna-chicago-labors-district-counil-pac": "affiliated-pac",
-        "liuna-chicago-labors-district-counil": "alt-name"
+        "liuna-chicago-labors-district-counil": "alt-name",
+        "liuna-chicago-laborers-district-council-political-action-committee": "affiliated-pac",
+        "liuna-chicago-laborers-district-council": "alt-name"
       },
       "member_totals": {
         "liuna-chicago-laborers-district-council-pac": 764200.0,
@@ -1103735,9 +1103857,11 @@
         "construction-and-general-laborers-dc-of-chicago-vicinity-laborers-pa": 2800.0,
         "liuna": 4500.0,
         "liuna-chicago-labors-district-counil-pac": 7000.0,
-        "liuna-chicago-labors-district-counil": 1000.0
+        "liuna-chicago-labors-district-counil": 1000.0,
+        "liuna-chicago-laborers-district-council-political-action-committee": 91000.0,
+        "liuna-chicago-laborers-district-council": 63500.0
       },
-      "total": 1060925.0
+      "total": 1215425.0
     },
     "rollup-479": {
       "name": "Mid-America Carpenters Regional Council",
@@ -1103749,7 +1103873,8 @@
         "mid-america-carpenters-reg-coun-pac",
         "mid-american-carpenters-regional-council-pac",
         "mid-america-carpentersregional-council-pac",
-        "mid-america-carpenter-regional"
+        "mid-america-carpenter-regional",
+        "mid-america-carpenters-regional-council"
       ],
       "roles": {
         "mid-america-carpenters-regional-council-pac": "parent",
@@ -1103757,7 +1103882,8 @@
         "mid-america-carpenters-reg-coun-pac": "affiliated-pac",
         "mid-american-carpenters-regional-council-pac": "affiliated-pac",
         "mid-america-carpentersregional-council-pac": "affiliated-pac",
-        "mid-america-carpenter-regional": "alt-name"
+        "mid-america-carpenter-regional": "alt-name",
+        "mid-america-carpenters-regional-council": "alt-name"
       },
       "member_totals": {
         "mid-america-carpenters-regional-council-pac": 227000.0,
@@ -1103765,9 +1103891,10 @@
         "mid-america-carpenters-reg-coun-pac": 3500.0,
         "mid-american-carpenters-regional-council-pac": 8500.0,
         "mid-america-carpentersregional-council-pac": 1500.0,
-        "mid-america-carpenter-regional": 2000.0
+        "mid-america-carpenter-regional": 2000.0,
+        "mid-america-carpenters-regional-council": 69000.0
       },
-      "total": 272500.0
+      "total": 341500.0
     },
     "rollup-480": {
       "name": "Fraternal Order of Police",
@@ -1103779,7 +1103906,10 @@
         "fraternal-order-of-police-7",
         "fraternal-order-of-police-lodge-7",
         "fop-chicago-lodge-7",
-        "chicago-fop-lodge-7"
+        "chicago-fop-lodge-7",
+        "fraternal-order-of-police-chicago-lodge-7",
+        "fraternal-order-of-police-chicago-lodge-7-pac",
+        "fraternal-order-of-police-chicago-lodge-no-7-pac"
       ],
       "roles": {
         "fraternal-order-of-police": "parent",
@@ -1103787,7 +1103917,10 @@
         "fraternal-order-of-police-7": "alt-name",
         "fraternal-order-of-police-lodge-7": "alt-name",
         "fop-chicago-lodge-7": "alt-name",
-        "chicago-fop-lodge-7": "alt-name"
+        "chicago-fop-lodge-7": "alt-name",
+        "fraternal-order-of-police-chicago-lodge-7": "related",
+        "fraternal-order-of-police-chicago-lodge-7-pac": "affiliated-pac",
+        "fraternal-order-of-police-chicago-lodge-no-7-pac": "affiliated-pac"
       },
       "member_totals": {
         "fraternal-order-of-police": 133067.99,
@@ -1103795,9 +1103928,12 @@
         "fraternal-order-of-police-7": 15700.0,
         "fraternal-order-of-police-lodge-7": 200.0,
         "fop-chicago-lodge-7": 5000.0,
-        "chicago-fop-lodge-7": 1500.0
+        "chicago-fop-lodge-7": 1500.0,
+        "fraternal-order-of-police-chicago-lodge-7": 143020.0,
+        "fraternal-order-of-police-chicago-lodge-7-pac": 100000.0,
+        "fraternal-order-of-police-chicago-lodge-no-7-pac": 95425.0
       },
-      "total": 237073.49
+      "total": 575518.49
     },
     "rollup-481": {
       "name": "36th Ward Dems",
@@ -1103826,23 +1103962,26 @@
         "jb-for-governor-exploration-committee",
         "jb-for-govenor-exploratory-committee",
         "jb-for-governor-exploratory-comm",
-        "jb-for-gov"
+        "jb-for-gov",
+        "jb-for-governor-exploratory-committee"
       ],
       "roles": {
         "jb-for-governor": "parent",
         "jb-for-governor-exploration-committee": "affiliated-pac",
         "jb-for-govenor-exploratory-committee": "affiliated-pac",
         "jb-for-governor-exploratory-comm": "alt-name",
-        "jb-for-gov": "alt-name"
+        "jb-for-gov": "alt-name",
+        "jb-for-governor-exploratory-committee": "related"
       },
       "member_totals": {
         "jb-for-governor": 271400.0,
         "jb-for-governor-exploration-committee": 2500.0,
         "jb-for-govenor-exploratory-committee": 5000.0,
         "jb-for-governor-exploratory-comm": 10000.0,
-        "jb-for-gov": 16500.0
+        "jb-for-gov": 16500.0,
+        "jb-for-governor-exploratory-committee": 70000.0
       },
-      "total": 305400.0
+      "total": 375400.0
     },
     "rollup-483": {
       "name": "AFSCME Illinois Council No. 31",
@@ -1103861,7 +1104000,9 @@
         "afscme-illinois-political-contribution",
         "afscme-illinois-political-account",
         "afscme-illinois-council-no-31-political-contribution-committee",
-        "afscme-international"
+        "afscme-international",
+        "afscme-illinois-council-no-31-pac",
+        "afscme-illinois-council-no-31"
       ],
       "roles": {
         "afscme-council-31": "parent",
@@ -1103876,7 +1104017,9 @@
         "afscme-illinois-political-contribution": "alt-name",
         "afscme-illinois-political-account": "alt-name",
         "afscme-illinois-council-no-31-political-contribution-committee": "affiliated-pac",
-        "afscme-international": "alt-name"
+        "afscme-international": "alt-name",
+        "afscme-illinois-council-no-31-pac": "affiliated-pac",
+        "afscme-illinois-council-no-31": "alt-name"
       },
       "member_totals": {
         "afscme-council-31": 43506.29,
@@ -1103891,9 +1104034,11 @@
         "afscme-illinois-political-contribution": 4507500.0,
         "afscme-illinois-political-account": 1310000.0,
         "afscme-illinois-council-no-31-political-contribution-committee": 15000.0,
-        "afscme-international": 25000.0
+        "afscme-international": 25000.0,
+        "afscme-illinois-council-no-31-pac": 152720.16,
+        "afscme-illinois-council-no-31": 74492.09
       },
-      "total": 5972874.75
+      "total": 6200087.0
     },
     "rollup-484": {
       "name": "Illinois Hotel Motel PAC",
@@ -1103904,23 +1104049,26 @@
         "illinois-hotel-motel-political-action-committe",
         "illinois-hotel-motel-political-action",
         "illiois-hotel-motel-political-action-committee",
-        "il-hotel-motel-pac"
+        "il-hotel-motel-pac",
+        "illinois-hotel-motel-political-action-committee"
       ],
       "roles": {
         "illinois-hotel-motel-pac": "parent",
         "illinois-hotel-motel-political-action-committe": "affiliated-pac",
         "illinois-hotel-motel-political-action": "affiliated-pac",
         "illiois-hotel-motel-political-action-committee": "affiliated-pac",
-        "il-hotel-motel-pac": "affiliated-pac"
+        "il-hotel-motel-pac": "affiliated-pac",
+        "illinois-hotel-motel-political-action-committee": "affiliated-pac"
       },
       "member_totals": {
         "illinois-hotel-motel-pac": 152250.0,
         "illinois-hotel-motel-political-action-committe": 6000.0,
         "illinois-hotel-motel-political-action": 1000.0,
         "illiois-hotel-motel-political-action-committee": 500.0,
-        "il-hotel-motel-pac": 3000.0
+        "il-hotel-motel-pac": 3000.0,
+        "illinois-hotel-motel-political-action-committee": 72900.0
       },
-      "total": 162750.0
+      "total": 235650.0
     },
     "rollup-485": {
       "name": "Realtor Political Action Committee",
@@ -1103968,7 +1104116,8 @@
         "chicago-fire-fighters-union-local-2",
         "chicago-fire-fighters-union-local-2-political-committee-fund",
         "chicago-fire-fighters-union-local-2-pcf",
-        "chicago-fire-fighters-local-2"
+        "chicago-fire-fighters-local-2",
+        "chicago-firefighters-union-local-2-political-commitee-fund"
       ],
       "roles": {
         "chicago-firefighters-union-local-2": "parent",
@@ -1103982,7 +1104131,8 @@
         "chicago-fire-fighters-union-local-2": "alt-name",
         "chicago-fire-fighters-union-local-2-political-committee-fund": "affiliated-pac",
         "chicago-fire-fighters-union-local-2-pcf": "alt-name",
-        "chicago-fire-fighters-local-2": "alt-name"
+        "chicago-fire-fighters-local-2": "alt-name",
+        "chicago-firefighters-union-local-2-political-commitee-fund": "affiliated-pac"
       },
       "member_totals": {
         "chicago-firefighters-union-local-2": 114212.7,
@@ -1103996,9 +1104146,10 @@
         "chicago-fire-fighters-union-local-2": 46300.0,
         "chicago-fire-fighters-union-local-2-political-committee-fund": 30770.0,
         "chicago-fire-fighters-union-local-2-pcf": 3500.0,
-        "chicago-fire-fighters-local-2": 2750.0
+        "chicago-fire-fighters-local-2": 2750.0,
+        "chicago-firefighters-union-local-2-political-commitee-fund": 73638.5
       },
-      "total": 320632.7
+      "total": 394271.2
     },
     "rollup-487": {
       "name": "Chicago Regional Council of Carpenters",
@@ -1104008,21 +1104159,24 @@
         "chicago-regional-council-of-carpenters-pac",
         "chicago-regional-council-of-carpenters-political-action-committee",
         "chicago-regional-council-carpenters",
-        "chicago-northeast-illinois-district-council-of-carpenters-pac"
+        "chicago-northeast-illinois-district-council-of-carpenters-pac",
+        "chicago-regional-council-of-carpenters"
       ],
       "roles": {
         "chicago-regional-council-of-carpenters-pac": "parent",
         "chicago-regional-council-of-carpenters-political-action-committee": "affiliated-pac",
         "chicago-regional-council-carpenters": "alt-name",
-        "chicago-northeast-illinois-district-council-of-carpenters-pac": "affiliated-pac"
+        "chicago-northeast-illinois-district-council-of-carpenters-pac": "affiliated-pac",
+        "chicago-regional-council-of-carpenters": "alt-name"
       },
       "member_totals": {
         "chicago-regional-council-of-carpenters-pac": 168550.0,
         "chicago-regional-council-of-carpenters-political-action-committee": 20100.0,
         "chicago-regional-council-carpenters": 8000.0,
-        "chicago-northeast-illinois-district-council-of-carpenters-pac": 3200.0
+        "chicago-northeast-illinois-district-council-of-carpenters-pac": 3200.0,
+        "chicago-regional-council-of-carpenters": 13200.0
       },
-      "total": 199850.0
+      "total": 213050.0
     },
     "rollup-488": {
       "name": "Cook County College Teachers Union",
@@ -1104060,23 +1104214,26 @@
         "s-e-i-u-local-73-b-pac",
         "local-73-seiu-b-pac-account",
         "s-e-i-u-local-73-b-pac-account",
-        "seiu-73"
+        "seiu-73",
+        "seiu-local-73-b-pac"
       ],
       "roles": {
         "seiu-local-73": "parent",
         "s-e-i-u-local-73-b-pac": "affiliated-pac",
         "local-73-seiu-b-pac-account": "affiliated-pac",
         "s-e-i-u-local-73-b-pac-account": "affiliated-pac",
-        "seiu-73": "alt-name"
+        "seiu-73": "alt-name",
+        "seiu-local-73-b-pac": "affiliated-pac"
       },
       "member_totals": {
         "seiu-local-73": 116599.25,
         "s-e-i-u-local-73-b-pac": 10000.0,
         "local-73-seiu-b-pac-account": 200.0,
         "s-e-i-u-local-73-b-pac-account": 27549.260000000006,
-        "seiu-73": 6000.0
+        "seiu-73": 6000.0,
+        "seiu-local-73-b-pac": 82354.77999999998
       },
-      "total": 160348.51
+      "total": 242703.29
     },
     "rollup-490": {
       "name": "Chicagoland Chamber of Commerce",
@@ -1105946,6 +1106103,60 @@
         "heat-and-frost-insulators-allied-workers-local-17-pac": 1000.0
       },
       "total": 35820.0
+    },
+    "rollup-544": {
+      "name": "James Perry",
+      "relationship": "affiliated entities",
+      "canonical_id": "perry-james",
+      "members": [
+        "perry-james",
+        "perry-jim"
+      ],
+      "roles": {
+        "perry-james": "parent",
+        "perry-jim": "alt-name"
+      },
+      "member_totals": {
+        "perry-james": 21000.0,
+        "perry-jim": 180000.0
+      },
+      "total": 201000.0
+    },
+    "rollup-545": {
+      "name": "John Canning",
+      "relationship": "affiliated entities",
+      "canonical_id": "canning-john",
+      "members": [
+        "canning-john",
+        "canning-jr-john"
+      ],
+      "roles": {
+        "canning-john": "parent",
+        "canning-jr-john": "alt-name"
+      },
+      "member_totals": {
+        "canning-john": 100000.0,
+        "canning-jr-john": 66000.0
+      },
+      "total": 166000.0
+    },
+    "rollup-546": {
+      "name": "Brian Miller",
+      "relationship": "affiliated entities",
+      "canonical_id": "miller-brian",
+      "members": [
+        "miller-brian",
+        "miller-brian-c"
+      ],
+      "roles": {
+        "miller-brian": "parent",
+        "miller-brian-c": "alt-name"
+      },
+      "member_totals": {
+        "miller-brian": 6900.0,
+        "miller-brian-c": 50000.0
+      },
+      "total": 56900.0
     }
   },
   "default_cycle": "all",
@@ -1114414,30 +1114625,30 @@
         "industries": [
           "labor-trades"
         ],
-        "direct": 751225.0,
+        "direct": 905725.0,
         "independent": 300000.0,
-        "total": 1051225.0,
-        "count": 229,
-        "committees": 33,
-        "members": 27,
+        "total": 1205725.0,
+        "count": 286,
+        "committees": 46,
+        "members": 29,
         "by_cycle": {
           "2019": {
-            "direct": 146650.0,
+            "direct": 168650.0,
             "independent": 0.0,
-            "total": 146650.0,
-            "count": 68
+            "total": 168650.0,
+            "count": 75
           },
           "2023": {
-            "direct": 386950.0,
+            "direct": 458950.0,
             "independent": 300000.0,
-            "total": 686950.0,
-            "count": 56
+            "total": 758950.0,
+            "count": 75
           },
           "2027": {
-            "direct": 186000.0,
+            "direct": 246500.0,
             "independent": 0.0,
-            "total": 186000.0,
-            "count": 79
+            "total": 246500.0,
+            "count": 110
           },
           "2015": {
             "direct": 31625.0,
@@ -1114918,18 +1115129,18 @@
         "industries": [
           "labor-trades"
         ],
-        "direct": 1178476.75,
+        "direct": 1205976.75,
         "independent": 0.0,
-        "total": 1178476.75,
-        "count": 343,
+        "total": 1205976.75,
+        "count": 345,
         "committees": 43,
-        "members": 14,
+        "members": 15,
         "by_cycle": {
           "2019": {
-            "direct": 318428.75,
+            "direct": 320928.75,
             "independent": 0.0,
-            "total": 318428.75,
-            "count": 96
+            "total": 320928.75,
+            "count": 97
           },
           "2023": {
             "direct": 407858.0,
@@ -1114938,10 +1115149,10 @@
             "count": 113
           },
           "2027": {
-            "direct": 432190.0,
+            "direct": 457190.0,
             "independent": 0.0,
-            "total": 432190.0,
-            "count": 130
+            "total": 457190.0,
+            "count": 131
           },
           "2015": {
             "direct": 20000.0,
@@ -1115341,41 +1115552,41 @@
           }
         }
       },
-      "afscme-illinois-council-no-31": {
+      "afscme-council-31": {
         "name": "AFSCME Illinois Council No. 31",
         "type": "PAC",
         "industries": [
           "labor-public"
         ],
-        "direct": 71992.09,
-        "independent": 0.0,
-        "total": 71992.09,
-        "count": 51,
-        "committees": 14,
-        "members": 1,
+        "direct": 319587.0,
+        "independent": 130000.0,
+        "total": 449587.0,
+        "count": 192,
+        "committees": 38,
+        "members": 15,
         "by_cycle": {
           "2019": {
-            "direct": 34050.0,
+            "direct": 164750.0,
             "independent": 0.0,
-            "total": 34050.0,
-            "count": 18
-          },
-          "2015": {
-            "direct": 8500.0,
-            "independent": 0.0,
-            "total": 8500.0,
-            "count": 4
+            "total": 164750.0,
+            "count": 53
           },
           "2023": {
-            "direct": 20192.09,
-            "independent": 0.0,
-            "total": 20192.09,
-            "count": 16
+            "direct": 93587.0,
+            "independent": 25000.0,
+            "total": 118587.0,
+            "count": 74
           },
           "2027": {
-            "direct": 9250.0,
+            "direct": 36750.0,
             "independent": 0.0,
-            "total": 9250.0,
+            "total": 36750.0,
+            "count": 52
+          },
+          "2015": {
+            "direct": 24500.0,
+            "independent": 105000.0,
+            "total": 129500.0,
             "count": 13
           }
         }
@@ -1115440,24 +1115651,24 @@
         "industries": [
           "labor-trades"
         ],
-        "direct": 191650.0,
+        "direct": 204850.0,
         "independent": 0.0,
-        "total": 191650.0,
-        "count": 105,
-        "committees": 20,
-        "members": 4,
+        "total": 204850.0,
+        "count": 125,
+        "committees": 27,
+        "members": 5,
         "by_cycle": {
           "2019": {
-            "direct": 106000.0,
+            "direct": 111750.0,
             "independent": 0.0,
-            "total": 106000.0,
-            "count": 54
+            "total": 111750.0,
+            "count": 58
           },
           "2023": {
-            "direct": 72200.0,
+            "direct": 79650.0,
             "independent": 0.0,
-            "total": 72200.0,
-            "count": 29
+            "total": 79650.0,
+            "count": 45
           },
           "2015": {
             "direct": 13450.0,
@@ -1115581,36 +1115792,36 @@
         "industries": [
           "establishment-pol"
         ],
-        "direct": 152500.0,
+        "direct": 223400.0,
         "independent": 0.0,
-        "total": 152500.0,
-        "count": 79,
-        "committees": 18,
-        "members": 5,
+        "total": 223400.0,
+        "count": 125,
+        "committees": 24,
+        "members": 6,
         "by_cycle": {
           "2019": {
-            "direct": 66750.0,
+            "direct": 92800.0,
             "independent": 0.0,
-            "total": 66750.0,
-            "count": 30
+            "total": 92800.0,
+            "count": 54
           },
           "2023": {
-            "direct": 46000.0,
+            "direct": 58000.0,
             "independent": 0.0,
-            "total": 46000.0,
-            "count": 24
-          },
-          "2027": {
-            "direct": 8500.0,
-            "independent": 0.0,
-            "total": 8500.0,
-            "count": 7
+            "total": 58000.0,
+            "count": 31
           },
           "2015": {
-            "direct": 31250.0,
+            "direct": 58100.0,
             "independent": 0.0,
-            "total": 31250.0,
-            "count": 18
+            "total": 58100.0,
+            "count": 29
+          },
+          "2027": {
+            "direct": 14500.0,
+            "independent": 0.0,
+            "total": 14500.0,
+            "count": 11
           }
         }
       },
@@ -1117051,30 +1117262,36 @@
           }
         }
       },
-      "jb-for-governor-exploratory-committee": {
-        "name": "JB For Governor Exploratory Committee",
+      "jb-for-governor": {
+        "name": "JB for Governor",
         "type": "PAC",
         "industries": [
-          "unclassified"
+          "candidate-account"
         ],
-        "direct": 70000.0,
+        "direct": 375400.0,
         "independent": 0.0,
-        "total": 70000.0,
-        "count": 14,
-        "committees": 6,
-        "members": 1,
+        "total": 375400.0,
+        "count": 61,
+        "committees": 22,
+        "members": 6,
         "by_cycle": {
           "2019": {
-            "direct": 55000.0,
+            "direct": 173500.0,
             "independent": 0.0,
-            "total": 55000.0,
-            "count": 11
+            "total": 173500.0,
+            "count": 33
           },
           "2023": {
-            "direct": 15000.0,
+            "direct": 194400.0,
             "independent": 0.0,
-            "total": 15000.0,
-            "count": 3
+            "total": 194400.0,
+            "count": 26
+          },
+          "2027": {
+            "direct": 7500.0,
+            "independent": 0.0,
+            "total": 7500.0,
+            "count": 2
           }
         }
       },
@@ -1118944,18 +1119161,18 @@
         "industries": [
           "labor-trades"
         ],
-        "direct": 307632.7,
+        "direct": 381271.2,
         "independent": 0.0,
-        "total": 307632.7,
-        "count": 177,
+        "total": 381271.2,
+        "count": 196,
         "committees": 29,
-        "members": 12,
+        "members": 13,
         "by_cycle": {
           "2023": {
-            "direct": 119662.7,
+            "direct": 147901.2,
             "independent": 0.0,
-            "total": 119662.7,
-            "count": 71
+            "total": 147901.2,
+            "count": 78
           },
           "2015": {
             "direct": 52750.0,
@@ -1118964,16 +1119181,16 @@
             "count": 27
           },
           "2019": {
-            "direct": 56700.0,
+            "direct": 82100.0,
             "independent": 0.0,
-            "total": 56700.0,
-            "count": 41
+            "total": 82100.0,
+            "count": 49
           },
           "2027": {
-            "direct": 78520.0,
+            "direct": 98520.0,
             "independent": 0.0,
-            "total": 78520.0,
-            "count": 38
+            "total": 98520.0,
+            "count": 42
           }
         }
       },
@@ -1118983,36 +1119200,36 @@
         "industries": [
           "police-fop"
         ],
-        "direct": 233867.99,
+        "direct": 572312.99,
         "independent": 0.0,
-        "total": 233867.99,
-        "count": 54,
-        "committees": 10,
-        "members": 6,
+        "total": 572312.99,
+        "count": 82,
+        "committees": 14,
+        "members": 9,
         "by_cycle": {
           "2023": {
-            "direct": 124530.0,
+            "direct": 270675.0,
             "independent": 0.0,
-            "total": 124530.0,
-            "count": 13
-          },
-          "2015": {
-            "direct": 8537.0,
-            "independent": 0.0,
-            "total": 8537.0,
-            "count": 11
+            "total": 270675.0,
+            "count": 23
           },
           "2019": {
-            "direct": 15300.0,
+            "direct": 16000.0,
             "independent": 0.0,
-            "total": 15300.0,
-            "count": 20
+            "total": 16000.0,
+            "count": 23
           },
           "2027": {
-            "direct": 85500.99,
+            "direct": 275900.99,
             "independent": 0.0,
-            "total": 85500.99,
-            "count": 10
+            "total": 275900.99,
+            "count": 22
+          },
+          "2015": {
+            "direct": 9737.0,
+            "independent": 0.0,
+            "total": 9737.0,
+            "count": 14
           }
         }
       },
@@ -1119193,24 +1119410,24 @@
         "industries": [
           "labor-trades"
         ],
-        "direct": 272500.0,
+        "direct": 341500.0,
         "independent": 0.0,
-        "total": 272500.0,
-        "count": 132,
-        "committees": 37,
-        "members": 6,
+        "total": 341500.0,
+        "count": 189,
+        "committees": 48,
+        "members": 7,
         "by_cycle": {
           "2023": {
-            "direct": 116500.0,
+            "direct": 147500.0,
             "independent": 0.0,
-            "total": 116500.0,
-            "count": 50
+            "total": 147500.0,
+            "count": 70
           },
           "2027": {
-            "direct": 156000.0,
+            "direct": 194000.0,
             "independent": 0.0,
-            "total": 156000.0,
-            "count": 82
+            "total": 194000.0,
+            "count": 119
           }
         }
       },
@@ -1120346,18 +1120563,18 @@
         "industries": [
           "labor-service"
         ],
-        "direct": 750448.21,
+        "direct": 937887.01,
         "independent": 781137.25,
-        "total": 1531585.46,
-        "count": 108,
-        "committees": 36,
-        "members": 14,
+        "total": 1719024.26,
+        "count": 127,
+        "committees": 42,
+        "members": 17,
         "by_cycle": {
           "2023": {
-            "direct": 510006.15,
+            "direct": 667694.95,
             "independent": 777500.0,
-            "total": 1287506.15,
-            "count": 58
+            "total": 1445194.95,
+            "count": 70
           },
           "2015": {
             "direct": 87492.06,
@@ -1120366,16 +1120583,16 @@
             "count": 14
           },
           "2027": {
-            "direct": 66750.0,
+            "direct": 86500.0,
             "independent": 0.0,
-            "total": 66750.0,
-            "count": 22
+            "total": 86500.0,
+            "count": 28
           },
           "2019": {
-            "direct": 86200.0,
+            "direct": 96200.0,
             "independent": 0.0,
-            "total": 86200.0,
-            "count": 14
+            "total": 96200.0,
+            "count": 15
           }
         }
       },
@@ -1122005,24 +1122222,30 @@
           }
         }
       },
-      "perry-jim": {
-        "name": "Perry, Jim",
+      "perry-james": {
+        "name": "James Perry",
         "type": "Individual",
         "industries": [
           "individual"
         ],
-        "direct": 180000.0,
+        "direct": 201000.0,
         "independent": 0.0,
-        "total": 180000.0,
-        "count": 5,
-        "committees": 3,
-        "members": 1,
+        "total": 201000.0,
+        "count": 8,
+        "committees": 4,
+        "members": 2,
         "by_cycle": {
           "2027": {
-            "direct": 180000.0,
+            "direct": 195000.0,
             "independent": 0.0,
-            "total": 180000.0,
-            "count": 5
+            "total": 195000.0,
+            "count": 7
+          },
+          "2023": {
+            "direct": 6000.0,
+            "independent": 0.0,
+            "total": 6000.0,
+            "count": 1
           }
         }
       },
@@ -1124285,45 +1124508,6 @@
           }
         }
       },
-      "illinois-hotel-motel-political-action-committee": {
-        "name": "Illinois Hotel-Motel Political Action Committee",
-        "type": "PAC",
-        "industries": [
-          "unclassified"
-        ],
-        "direct": 70900.0,
-        "independent": 0.0,
-        "total": 70900.0,
-        "count": 46,
-        "committees": 7,
-        "members": 1,
-        "by_cycle": {
-          "2015": {
-            "direct": 26850.0,
-            "independent": 0.0,
-            "total": 26850.0,
-            "count": 11
-          },
-          "2019": {
-            "direct": 26050.0,
-            "independent": 0.0,
-            "total": 26050.0,
-            "count": 24
-          },
-          "2023": {
-            "direct": 12000.0,
-            "independent": 0.0,
-            "total": 12000.0,
-            "count": 7
-          },
-          "2027": {
-            "direct": 6000.0,
-            "independent": 0.0,
-            "total": 6000.0,
-            "count": 4
-          }
-        }
-      },
       "advanced-on-site-concrete": {
         "name": "Advanced On Site Concrete",
         "type": "Individual",
@@ -1124865,29 +1125049,29 @@
         }
       },
       "incs-action-pac": {
-        "name": "INCS Action PAC",
+        "name": "INCS Action",
         "type": "PAC",
         "industries": [
           "establishment-pol"
         ],
         "direct": 49250.0,
-        "independent": 0.0,
-        "total": 49250.0,
-        "count": 31,
-        "committees": 15,
-        "members": 2,
+        "independent": 28660.35,
+        "total": 77910.35,
+        "count": 33,
+        "committees": 16,
+        "members": 3,
         "by_cycle": {
           "2015": {
             "direct": 5000.0,
-            "independent": 0.0,
-            "total": 5000.0,
-            "count": 2
+            "independent": 22000.0,
+            "total": 27000.0,
+            "count": 3
           },
           "2019": {
             "direct": 11250.0,
-            "independent": 0.0,
-            "total": 11250.0,
-            "count": 7
+            "independent": 6660.35,
+            "total": 17910.35,
+            "count": 8
           },
           "2023": {
             "direct": 29500.0,
@@ -1128483,45 +1128667,6 @@
           }
         }
       },
-      "afscme-council-31": {
-        "name": "AFSCME Illinois Council No. 31",
-        "type": "PAC",
-        "industries": [
-          "labor-public"
-        ],
-        "direct": 97374.75,
-        "independent": 130000.0,
-        "total": 227374.75,
-        "count": 88,
-        "committees": 17,
-        "members": 13,
-        "by_cycle": {
-          "2019": {
-            "direct": 17000.0,
-            "independent": 0.0,
-            "total": 17000.0,
-            "count": 17
-          },
-          "2023": {
-            "direct": 46874.75,
-            "independent": 25000.0,
-            "total": 71874.75,
-            "count": 37
-          },
-          "2027": {
-            "direct": 17500.0,
-            "independent": 0.0,
-            "total": 17500.0,
-            "count": 25
-          },
-          "2015": {
-            "direct": 16000.0,
-            "independent": 105000.0,
-            "total": 121000.0,
-            "count": 9
-          }
-        }
-      },
       "blitzlake": {
         "name": "Blitzlake",
         "type": "Individual",
@@ -1128671,30 +1128816,30 @@
           "labor-service",
           "labor-trades"
         ],
-        "direct": 135148.51,
+        "direct": 217503.29,
         "independent": 0.0,
-        "total": 135148.51,
-        "count": 82,
-        "committees": 22,
-        "members": 5,
+        "total": 217503.29,
+        "count": 140,
+        "committees": 26,
+        "members": 6,
         "by_cycle": {
           "2019": {
-            "direct": 50271.76,
+            "direct": 98378.2,
             "independent": 0.0,
-            "total": 50271.76,
-            "count": 38
+            "total": 98378.2,
+            "count": 79
           },
           "2023": {
-            "direct": 72876.75,
+            "direct": 103125.09,
             "independent": 0.0,
-            "total": 72876.75,
-            "count": 36
+            "total": 103125.09,
+            "count": 51
           },
           "2027": {
-            "direct": 12000.0,
+            "direct": 16000.0,
             "independent": 0.0,
-            "total": 12000.0,
-            "count": 8
+            "total": 16000.0,
+            "count": 10
           }
         }
       },
@@ -1128956,39 +1129101,6 @@
             "independent": 0.0,
             "total": 350.0,
             "count": 1
-          }
-        }
-      },
-      "seiu-local-73-b-pac": {
-        "name": "SEIU Local 73 B-PAC",
-        "type": "PAC",
-        "industries": [
-          "labor-service"
-        ],
-        "direct": 82354.78,
-        "independent": 0.0,
-        "total": 82354.78,
-        "count": 58,
-        "committees": 5,
-        "members": 1,
-        "by_cycle": {
-          "2019": {
-            "direct": 48106.44,
-            "independent": 0.0,
-            "total": 48106.44,
-            "count": 41
-          },
-          "2023": {
-            "direct": 30248.34,
-            "independent": 0.0,
-            "total": 30248.34,
-            "count": 15
-          },
-          "2027": {
-            "direct": 4000.0,
-            "independent": 0.0,
-            "total": 4000.0,
-            "count": 2
           }
         }
       },
@@ -1129964,24 +1130076,24 @@
         "industries": [
           "labor-service"
         ],
-        "direct": 776577.43,
+        "direct": 866360.72,
         "independent": 34000.0,
-        "total": 810577.43,
-        "count": 273,
-        "committees": 34,
-        "members": 6,
+        "total": 900360.72,
+        "count": 307,
+        "committees": 35,
+        "members": 7,
         "by_cycle": {
           "2023": {
-            "direct": 544046.4,
+            "direct": 576571.18,
             "independent": 0.0,
-            "total": 544046.4,
-            "count": 153
+            "total": 576571.18,
+            "count": 170
           },
           "2027": {
-            "direct": 59750.0,
+            "direct": 60750.0,
             "independent": 0.0,
-            "total": 59750.0,
-            "count": 61
+            "total": 60750.0,
+            "count": 62
           },
           "2015": {
             "direct": 32248.47,
@@ -1129990,10 +1130102,10 @@
             "count": 15
           },
           "2019": {
-            "direct": 140532.56,
+            "direct": 196791.07,
             "independent": 0.0,
-            "total": 140532.56,
-            "count": 44
+            "total": 196791.07,
+            "count": 60
           }
         }
       },
@@ -1131404,39 +1131516,6 @@
             "independent": 0.0,
             "total": 1000.0,
             "count": 1
-          }
-        }
-      },
-      "jb-for-governor": {
-        "name": "JB for Governor",
-        "type": "PAC",
-        "industries": [
-          "candidate-account"
-        ],
-        "direct": 305400.0,
-        "independent": 0.0,
-        "total": 305400.0,
-        "count": 47,
-        "committees": 20,
-        "members": 5,
-        "by_cycle": {
-          "2023": {
-            "direct": 179400.0,
-            "independent": 0.0,
-            "total": 179400.0,
-            "count": 23
-          },
-          "2019": {
-            "direct": 118500.0,
-            "independent": 0.0,
-            "total": 118500.0,
-            "count": 22
-          },
-          "2027": {
-            "direct": 7500.0,
-            "independent": 0.0,
-            "total": 7500.0,
-            "count": 2
           }
         }
       },
@@ -1164308,39 +1164387,6 @@
           }
         }
       },
-      "liuna-chicago-laborers-district-council": {
-        "name": "LIUNA Chicago Laborers' District Council",
-        "type": "PAC",
-        "industries": [
-          "labor-trades"
-        ],
-        "direct": 63500.0,
-        "independent": 0.0,
-        "total": 63500.0,
-        "count": 32,
-        "committees": 11,
-        "members": 1,
-        "by_cycle": {
-          "2023": {
-            "direct": 21000.0,
-            "independent": 0.0,
-            "total": 21000.0,
-            "count": 10
-          },
-          "2027": {
-            "direct": 41500.0,
-            "independent": 0.0,
-            "total": 41500.0,
-            "count": 21
-          },
-          "2019": {
-            "direct": 1000.0,
-            "independent": 0.0,
-            "total": 1000.0,
-            "count": 1
-          }
-        }
-      },
       "white-brad": {
         "name": "White, Brad",
         "type": "Individual",
@@ -1196258,45 +1196304,6 @@
           }
         }
       },
-      "fraternal-order-of-police-chicago-lodge-7": {
-        "name": "Fraternal Order of Police Chicago Lodge 7",
-        "type": "Other",
-        "industries": [
-          "police-fop"
-        ],
-        "direct": 143020.0,
-        "independent": 0.0,
-        "total": 143020.0,
-        "count": 20,
-        "committees": 4,
-        "members": 1,
-        "by_cycle": {
-          "2019": {
-            "direct": 700.0,
-            "independent": 0.0,
-            "total": 700.0,
-            "count": 3
-          },
-          "2015": {
-            "direct": 1200.0,
-            "independent": 0.0,
-            "total": 1200.0,
-            "count": 3
-          },
-          "2023": {
-            "direct": 106420.0,
-            "independent": 0.0,
-            "total": 106420.0,
-            "count": 6
-          },
-          "2027": {
-            "direct": 34700.0,
-            "independent": 0.0,
-            "total": 34700.0,
-            "count": 8
-          }
-        }
-      },
       "105-madison-opco-inc": {
         "name": "105 Madison OPCO, Inc",
         "type": "Individual",
@@ -1217746,23 +1217753,29 @@
           }
         }
       },
-      "miller-brian-c": {
-        "name": "Miller, Brian C.",
+      "miller-brian": {
+        "name": "Brian Miller",
         "type": "Individual",
         "industries": [
           "individual"
         ],
-        "direct": 50000.0,
+        "direct": 56900.0,
         "independent": 0.0,
-        "total": 50000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1,
+        "total": 56900.0,
+        "count": 2,
+        "committees": 2,
+        "members": 2,
         "by_cycle": {
           "2027": {
             "direct": 50000.0,
             "independent": 0.0,
             "total": 50000.0,
+            "count": 1
+          },
+          "2023": {
+            "direct": 6900.0,
+            "independent": 0.0,
+            "total": 6900.0,
             "count": 1
           }
         }
@@ -1218735,27 +1218748,6 @@
             "direct": 2500.0,
             "independent": 0.0,
             "total": 2500.0,
-            "count": 1
-          }
-        }
-      },
-      "fraternal-order-of-police-chicago-lodge-7-pac": {
-        "name": "Fraternal Order of Police Chicago Lodge 7 PAC",
-        "type": "PAC",
-        "industries": [
-          "police-fop"
-        ],
-        "direct": 100000.0,
-        "independent": 0.0,
-        "total": 100000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1,
-        "by_cycle": {
-          "2027": {
-            "direct": 100000.0,
-            "independent": 0.0,
-            "total": 100000.0,
             "count": 1
           }
         }
@@ -1238302,33 +1238294,6 @@
           }
         }
       },
-      "chicago-regional-council-of-carpenters": {
-        "name": "Chicago Regional Council of Carpenters",
-        "type": "PAC",
-        "industries": [
-          "labor-trades"
-        ],
-        "direct": 13200.0,
-        "independent": 0.0,
-        "total": 13200.0,
-        "count": 20,
-        "committees": 10,
-        "members": 1,
-        "by_cycle": {
-          "2019": {
-            "direct": 5750.0,
-            "independent": 0.0,
-            "total": 5750.0,
-            "count": 4
-          },
-          "2023": {
-            "direct": 7450.0,
-            "independent": 0.0,
-            "total": 7450.0,
-            "count": 16
-          }
-        }
-      },
       "levitas-gary": {
         "name": "Levitas, Gary",
         "type": "Individual",
@@ -1241869,33 +1241834,6 @@
             "independent": 0.0,
             "total": 500.0,
             "count": 1
-          }
-        }
-      },
-      "mid-america-carpenters-regional-council": {
-        "name": "Mid-America Carpenters Regional Council",
-        "type": "PAC",
-        "industries": [
-          "labor-trades"
-        ],
-        "direct": 69000.0,
-        "independent": 0.0,
-        "total": 69000.0,
-        "count": 57,
-        "committees": 12,
-        "members": 1,
-        "by_cycle": {
-          "2023": {
-            "direct": 31000.0,
-            "independent": 0.0,
-            "total": 31000.0,
-            "count": 20
-          },
-          "2027": {
-            "direct": 38000.0,
-            "independent": 0.0,
-            "total": 38000.0,
-            "count": 37
           }
         }
       },
@@ -1292364,39 +1292302,6 @@
           }
         }
       },
-      "afscme-illinois-council-no-31-pac": {
-        "name": "AFSCME Illinois Council No. 31 PAC",
-        "type": "Individual",
-        "industries": [
-          "labor-public"
-        ],
-        "direct": 150220.16,
-        "independent": 0.0,
-        "total": 150220.16,
-        "count": 53,
-        "committees": 10,
-        "members": 1,
-        "by_cycle": {
-          "2027": {
-            "direct": 10000.0,
-            "independent": 0.0,
-            "total": 10000.0,
-            "count": 14
-          },
-          "2019": {
-            "direct": 113700.0,
-            "independent": 0.0,
-            "total": 113700.0,
-            "count": 18
-          },
-          "2023": {
-            "direct": 26520.16,
-            "independent": 0.0,
-            "total": 26520.16,
-            "count": 21
-          }
-        }
-      },
       "cohen-barry": {
         "name": "Cohen, Barry",
         "type": "Individual",
@@ -1299273,39 +1299178,6 @@
             "independent": 0.0,
             "total": 2500.0,
             "count": 1
-          }
-        }
-      },
-      "liuna-chicago-laborers-district-council-political-action-committee": {
-        "name": "LIUNA Chicago Laborers' District Council Political Action Committee",
-        "type": "Individual",
-        "industries": [
-          "labor-trades"
-        ],
-        "direct": 91000.0,
-        "independent": 0.0,
-        "total": 91000.0,
-        "count": 25,
-        "committees": 5,
-        "members": 1,
-        "by_cycle": {
-          "2019": {
-            "direct": 21000.0,
-            "independent": 0.0,
-            "total": 21000.0,
-            "count": 6
-          },
-          "2023": {
-            "direct": 51000.0,
-            "independent": 0.0,
-            "total": 51000.0,
-            "count": 9
-          },
-          "2027": {
-            "direct": 19000.0,
-            "independent": 0.0,
-            "total": 19000.0,
-            "count": 10
           }
         }
       },
@@ -1325451,33 +1325323,6 @@
             "independent": 0.0,
             "total": 1500.0,
             "count": 1
-          }
-        }
-      },
-      "seiu-il-council-pac": {
-        "name": "SEIU IL Council PAC",
-        "type": "PAC",
-        "industries": [
-          "labor-service"
-        ],
-        "direct": 101000.0,
-        "independent": 0.0,
-        "total": 101000.0,
-        "count": 7,
-        "committees": 3,
-        "members": 1,
-        "by_cycle": {
-          "2023": {
-            "direct": 92500.0,
-            "independent": 0.0,
-            "total": 92500.0,
-            "count": 5
-          },
-          "2027": {
-            "direct": 8500.0,
-            "independent": 0.0,
-            "total": 8500.0,
-            "count": 2
           }
         }
       },
@@ -1392519,39 +1392364,6 @@
           }
         }
       },
-      "chicago-firefighters-union-local-2-political-commitee-fund": {
-        "name": "Chicago Firefighters Union Local 2 Political Commitee Fund",
-        "type": "PAC",
-        "industries": [
-          "labor-trades"
-        ],
-        "direct": 73638.5,
-        "independent": 0.0,
-        "total": 73638.5,
-        "count": 19,
-        "committees": 1,
-        "members": 1,
-        "by_cycle": {
-          "2019": {
-            "direct": 25400.0,
-            "independent": 0.0,
-            "total": 25400.0,
-            "count": 8
-          },
-          "2023": {
-            "direct": 28238.5,
-            "independent": 0.0,
-            "total": 28238.5,
-            "count": 7
-          },
-          "2027": {
-            "direct": 20000.0,
-            "independent": 0.0,
-            "total": 20000.0,
-            "count": 4
-          }
-        }
-      },
       "labaj-adam": {
         "name": "Labaj, Adam",
         "type": "Individual",
@@ -1398171,33 +1397983,6 @@
           }
         }
       },
-      "fraternal-order-of-police-chicago-lodge-no-7-pac": {
-        "name": "Fraternal Order of Police Chicago Lodge No. 7 PAC",
-        "type": "PAC",
-        "industries": [
-          "police-fop"
-        ],
-        "direct": 95425.0,
-        "independent": 0.0,
-        "total": 95425.0,
-        "count": 7,
-        "committees": 1,
-        "members": 1,
-        "by_cycle": {
-          "2023": {
-            "direct": 39725.0,
-            "independent": 0.0,
-            "total": 39725.0,
-            "count": 4
-          },
-          "2027": {
-            "direct": 55700.0,
-            "independent": 0.0,
-            "total": 55700.0,
-            "count": 3
-          }
-        }
-      },
       "utility-worker-union-of-america": {
         "name": "Utility Worker Union of america",
         "type": "PAC",
@@ -1401060,33 +1400845,6 @@
           }
         }
       },
-      "chicago-land-operators-joint-labor": {
-        "name": "Chicago Land Operators Joint Labor",
-        "type": "Individual",
-        "industries": [
-          "labor-trades"
-        ],
-        "direct": 27500.0,
-        "independent": 0.0,
-        "total": 27500.0,
-        "count": 2,
-        "committees": 1,
-        "members": 1,
-        "by_cycle": {
-          "2019": {
-            "direct": 2500.0,
-            "independent": 0.0,
-            "total": 2500.0,
-            "count": 1
-          },
-          "2027": {
-            "direct": 25000.0,
-            "independent": 0.0,
-            "total": 25000.0,
-            "count": 1
-          }
-        }
-      },
       "leye-corporate": {
         "name": "Leye Corporate",
         "type": "Individual",
@@ -1401252,33 +1401010,6 @@
             "independent": 0.0,
             "total": 2971.96,
             "count": 1
-          }
-        }
-      },
-      "seiu-council-pac-fund": {
-        "name": "SEIU Council PAC Fund",
-        "type": "PAC",
-        "industries": [
-          "labor-service"
-        ],
-        "direct": 65438.8,
-        "independent": 0.0,
-        "total": 65438.8,
-        "count": 8,
-        "committees": 3,
-        "members": 1,
-        "by_cycle": {
-          "2023": {
-            "direct": 61688.8,
-            "independent": 0.0,
-            "total": 61688.8,
-            "count": 5
-          },
-          "2027": {
-            "direct": 3750.0,
-            "independent": 0.0,
-            "total": 3750.0,
-            "count": 3
           }
         }
       },
@@ -1431857,39 +1431588,6 @@
             "direct": 250.0,
             "independent": 0.0,
             "total": 250.0,
-            "count": 1
-          }
-        }
-      },
-      "seiu-illinois-state-council": {
-        "name": "SEIU Illinois State Council",
-        "type": "PAC",
-        "industries": [
-          "labor-service"
-        ],
-        "direct": 21000.0,
-        "independent": 0.0,
-        "total": 21000.0,
-        "count": 4,
-        "committees": 1,
-        "members": 1,
-        "by_cycle": {
-          "2019": {
-            "direct": 10000.0,
-            "independent": 0.0,
-            "total": 10000.0,
-            "count": 1
-          },
-          "2023": {
-            "direct": 3500.0,
-            "independent": 0.0,
-            "total": 3500.0,
-            "count": 2
-          },
-          "2027": {
-            "direct": 7500.0,
-            "independent": 0.0,
-            "total": 7500.0,
             "count": 1
           }
         }
@@ -1468973,39 +1468671,6 @@
             "direct": 250.0,
             "independent": 0.0,
             "total": 250.0,
-            "count": 1
-          }
-        }
-      },
-      "seiu-healthcare-il-in-hcii-pac": {
-        "name": "SEIU HealthCare IL IN HCII PAC",
-        "type": "Individual",
-        "industries": [
-          "labor-service"
-        ],
-        "direct": 89783.29,
-        "independent": 0.0,
-        "total": 89783.29,
-        "count": 34,
-        "committees": 1,
-        "members": 1,
-        "by_cycle": {
-          "2019": {
-            "direct": 56258.51,
-            "independent": 0.0,
-            "total": 56258.51,
-            "count": 16
-          },
-          "2023": {
-            "direct": 32524.78,
-            "independent": 0.0,
-            "total": 32524.78,
-            "count": 17
-          },
-          "2027": {
-            "direct": 1000.0,
-            "independent": 0.0,
-            "total": 1000.0,
             "count": 1
           }
         }
@@ -1517715,27 +1517380,6 @@
           }
         }
       },
-      "miller-brian": {
-        "name": "Miller, Brian",
-        "type": "Individual",
-        "industries": [
-          "individual"
-        ],
-        "direct": 6900.0,
-        "independent": 0.0,
-        "total": 6900.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1,
-        "by_cycle": {
-          "2023": {
-            "direct": 6900.0,
-            "independent": 0.0,
-            "total": 6900.0,
-            "count": 1
-          }
-        }
-      },
       "miller-catharon": {
         "name": "Miller, Catharon",
         "type": "Individual",
@@ -1525959,18 +1525603,19 @@
           }
         }
       },
-      "canning-jr-john": {
-        "name": "Canning, Jr., John",
-        "type": "Individual",
+      "canning-john": {
+        "name": "John Canning",
+        "type": "Other",
         "industries": [
-          "individual"
+          "individual",
+          "finance"
         ],
         "direct": 66000.0,
-        "independent": 0.0,
-        "total": 66000.0,
-        "count": 4,
-        "committees": 1,
-        "members": 1,
+        "independent": 100000.0,
+        "total": 166000.0,
+        "count": 5,
+        "committees": 2,
+        "members": 2,
         "by_cycle": {
           "2023": {
             "direct": 6000.0,
@@ -1525983,6 +1525628,12 @@
             "independent": 0.0,
             "total": 60000.0,
             "count": 3
+          },
+          "2015": {
+            "direct": 0.0,
+            "independent": 100000.0,
+            "total": 100000.0,
+            "count": 1
           }
         }
       },
@@ -1527225,33 +1526876,6 @@
             "independent": 0.0,
             "total": 2500.0,
             "count": 1
-          }
-        }
-      },
-      "perry-james": {
-        "name": "Perry, James",
-        "type": "Individual",
-        "industries": [
-          "individual"
-        ],
-        "direct": 21000.0,
-        "independent": 0.0,
-        "total": 21000.0,
-        "count": 3,
-        "committees": 1,
-        "members": 1,
-        "by_cycle": {
-          "2023": {
-            "direct": 6000.0,
-            "independent": 0.0,
-            "total": 6000.0,
-            "count": 1
-          },
-          "2027": {
-            "direct": 15000.0,
-            "independent": 0.0,
-            "total": 15000.0,
-            "count": 2
           }
         }
       },
@@ -1574111,28 +1573735,6 @@
           }
         }
       },
-      "canning-john": {
-        "name": "Canning, John",
-        "type": "Other",
-        "industries": [
-          "individual",
-          "finance"
-        ],
-        "direct": 0.0,
-        "independent": 100000.0,
-        "total": 100000.0,
-        "count": 1,
-        "committees": 1,
-        "members": 1,
-        "by_cycle": {
-          "2015": {
-            "direct": 0.0,
-            "independent": 100000.0,
-            "total": 100000.0,
-            "count": 1
-          }
-        }
-      },
       "griffin-kenneth-c": {
         "name": "Kenneth C. Griffin",
         "type": "Other",
@@ -1574814,33 +1574416,6 @@
             "independent": 700.0,
             "total": 700.0,
             "count": 2
-          }
-        }
-      },
-      "incs-action": {
-        "name": "INCS ACTION",
-        "type": "Other",
-        "industries": [
-          "charter-schools"
-        ],
-        "direct": 0.0,
-        "independent": 28660.35,
-        "total": 28660.35,
-        "count": 2,
-        "committees": 1,
-        "members": 1,
-        "by_cycle": {
-          "2015": {
-            "direct": 0.0,
-            "independent": 22000.0,
-            "total": 22000.0,
-            "count": 1
-          },
-          "2019": {
-            "direct": 0.0,
-            "independent": 6660.35,
-            "total": 6660.35,
-            "count": 1
           }
         }
       },

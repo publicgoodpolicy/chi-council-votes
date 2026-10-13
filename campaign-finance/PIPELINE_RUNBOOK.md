@@ -342,6 +342,8 @@ transform_slice2.py       council-data.json
 ingest_ie.py              --council … --expenditures <seal>/expenditures_*.txt --receipts <seal>/receipts_*.txt
                           # re-applies the IE layer: it clears only its own prior IE rows and reassigns
                           # independent_expenditures; a direct re-ingest does NOT strip it (see above)
+                          # (the elections run of this same script also reads
+                          # campaign-finance/elections/reference/ie-target-confirmations.tsv; the council run does not: PS-154)
 enrich_committee_names.py --council … --committees campaign-finance/elections/reference/ie-committee-names.tsv
                           # the curated map of record (ENRICH-1); NEVER the SBE Committees bulk — that substitution is SBE-RERUN-1's live defect
 a7_precheck.py            --sheet-id <sheet id> --creds-file <creds> --ids-file campaign-finance/sheets-sync/a7_ids_harris-1.txt --ids-sha256 <fixture sha256 at HEAD> --out <log>

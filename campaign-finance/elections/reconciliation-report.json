@@ -9,7 +9,7 @@
     "scope": "elections candidate committees (v2): school_board and city_council; IE committees out of reconciliation scope; mayoral lane deferred",
     "inputs": {
       "election-data.json": {
-        "sha256": "c34f210991d2d155cb0531e811350c1eb59569a74d302b3ffa231812b37a290e",
+        "sha256": "934443fbc8aaf19fc6c3c46a9601f2fd2d3dca90137714e9edcdea52decb9fd3",
         "path": "campaign-finance/election-data.json"
       },
       "d2totals": {
