@@ -1,6 +1,8 @@
-# IE committee SBE id -> name, 19 rows: 12 from council-data.json; 4 added since (530, 38670, 41012, 41327); 3 (539, 36936, 39901)
+# IE committee SBE id -> name, 24 rows: 12 from council-data.json; 4 added since (530, 38670, 41012, 41327); 3 (539, 36936, 39901)
 # pulled from Illinois Sunshine (illinoissunshine.org/committees/<id>/) since they are
-# school-board-only spenders absent from the council artifact. Feed to
+# school-board-only spenders absent from the council artifact; 5 (35268, 36220, 38631, 38861, 39315)
+# added at MAYOR-1 (ruled 2026-10-13), each the Name column of the sealed vintage bulk-2026-09-13's
+# Committees export, as spenders on the mayor race absent from both artifacts. Feed to
 # enrich_committee_names.py (header ID<TAB>Name) so election IE names are reproducible.
 ID	Name
 539	Illinois Farm Bureau ACTIVATOR
@@ -22,3 +24,8 @@ ID	Name
 38670	People For Rogers Park
 41012	Common Ground Collective
 41327	Brighter Futures Chicago
+35268	Illinois Policy PAC
+36220	Law and Order
+38631	Noonan for 19
+38861	The 77 Committee
+39315	Priorities Chicago PAC

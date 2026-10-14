@@ -22,6 +22,12 @@ CLI:
     --out campaign-finance/elections/reconciliation-report.json \
     --pulled 2026-07-06 --threshold 500
 
+MAYOR-1 (PS-157): with --receipt-floors (the converter's floor file,
+campaign-finance/elections/reference/receipt-floors.tsv), a listed committee's periods that
+begin before its floor are left out of the compare -- the converter wrote no receipt dated
+before the floor, so those periods would read as our gap when they are our scope. They are
+listed per committee under `before_floor`, with their sworn totals, so nothing is hidden.
+
 Exit codes: 0 = clean (no committee over threshold, no coverage miss);
 1 = threshold exceedance or coverage-miss flag; 2 = structural failure
 (missing files, malformed --pulled, or FiledDocID join failures).
@@ -284,7 +290,7 @@ def _sha256_file(path, _chunk=1 << 20):
 
 
 def build_inputs_map(data_path, d2totals_path, fileddocs_path, known_gaps_path=None,
-                     sha=_sha256_file):
+                     sha=_sha256_file, receipt_floors_path=None):
     """RECONCILE-2 / D-10 — the provenance stamp, keyed by content.
 
     Four of five derived artifacts in this repo already carry provenance in their own body;
@@ -328,6 +334,10 @@ def build_inputs_map(data_path, d2totals_path, fileddocs_path, known_gaps_path=N
              ('fileddocs', fileddocs_path)]
     if known_gaps_path:
         named.append(('known-gaps.json', known_gaps_path))
+    # MAYOR-1 (PS-157): the floor file changes the output (it removes periods from the compare),
+    # so it is stamped like known-gaps, for the same reason.
+    if receipt_floors_path:
+        named.append(('receipt-floors.tsv', receipt_floors_path))
     # PATHS-1: out-of-repo inputs are published vintage-relative, never absolute. The test is
     # `os.path.isabs`, not a check for a particular home directory — a rule written against
     # `/Users/` would pass on Linux and be no rule at all. Repo-relative paths fall through
@@ -376,7 +386,8 @@ def data_through_of(contributions):
     return best
 
 
-def run(data_path, d2totals_path, fileddocs_path, pulled, threshold, known_gaps_path=None):
+def run(data_path, d2totals_path, fileddocs_path, pulled, threshold, known_gaps_path=None,
+        receipt_floors_path=None):
     data = json.load(open(data_path))
     committees = data.get('committees', {})
     contributions = data.get('contributions', [])
@@ -397,6 +408,14 @@ def run(data_path, d2totals_path, fileddocs_path, pulled, threshold, known_gaps_
         else:
             no_sbe_id.append(k)
     sbe_ids = set(sbe_to_internal)
+
+    # MAYOR-1 (PS-157): the converter's floor file, read by the converter's own loader (one
+    # reader, one set of checks; imported here, not at module top, because the converter
+    # imports this module). A listed id that is not a candidate committee here stops the run.
+    floors = {}
+    if receipt_floors_path:
+        from convert_bulk_receipts import load_receipt_floors
+        floors = load_receipt_floors(receipt_floors_path, sbe_ids)
 
     # 2-3. Filing registry (exact-tuple amendment dedupe, then overlap-supersede).
     finals, superseded, all_doc_ids, overlap_superseded = build_filing_registry(
@@ -426,6 +445,14 @@ def run(data_path, d2totals_path, fileddocs_path, pulled, threshold, known_gaps_
     for sbe, internal in sorted(sbe_to_internal.items(), key=lambda kv: kv[1]):
         meta = cand[internal]
         periods = sorted(finals.get(sbe, {}).keys())
+        left_out = []
+        if sbe in floors and periods:
+            fl = floors[sbe]
+            left_out = [p for p in periods if p[0] < fl]
+            periods = [p for p in periods if p[0] >= fl]
+            if not periods:
+                raise SystemExit(f'FATAL [PS-157] committee {sbe} ({internal}): every filed period '
+                                 f'begins before its floor {fl}; nothing would be compared')
         block = {
             'committee_name': meta.get('committee_name'),
             'sbe_committee_id': sbe,
@@ -433,6 +460,20 @@ def run(data_path, d2totals_path, fileddocs_path, pulled, threshold, known_gaps_
         }
         if sbe in overlap_superseded:
             block['overlap_superseded'] = overlap_superseded[sbe]
+        if left_out:
+            inp = [c for c in contribs_by_committee[internal] if c.get('date')
+                   and any(b <= c['date'] <= e for b, e in left_out)]
+            block['before_floor'] = {
+                'floor': floors[sbe],
+                'periods': [{'beg': b, 'end': e,
+                             'd2_itemized': round(d2_item.get(sbe, {}).get((b, e), 0.0), 2),
+                             'd2_inkind': round(d2_ink.get(sbe, {}).get((b, e), 0.0), 2)}
+                            for b, e in left_out],
+                # receipts we hold that fall inside a left-out period (on or after the floor, in
+                # the period the floor cuts through); stated, not compared
+                'ours_in_left_out_periods': round(sum(c.get('amount') or 0.0 for c in inp), 2),
+                'ours_in_left_out_periods_count': len(inp),
+            }
         if not periods:
             block['state'] = 'TOO-NEW'
             block['flags'] = []
@@ -507,10 +548,13 @@ def run(data_path, d2totals_path, fileddocs_path, pulled, threshold, known_gaps_
             # never authored ahead of it. The v1 string said the council lane was deferred while
             # 67 of the map's 120 committees were already council — true when written, false at
             # the data commit, and stamped on an artifact the methodology page links readers to.
-            'scope': 'elections candidate committees (v2): school_board and city_council; '
-                     'IE committees out of reconciliation scope; mayoral lane deferred',
+            # MAYOR-1 (PS-157): re-stamped from measured coverage, as R8 (iii) requires.
+            'scope': 'elections candidate committees (v2): school_board, city_council and mayor; '
+                     'a committee listed in receipt-floors.tsv is compared from its floor; '
+                     'IE committees out of reconciliation scope',
             'inputs': build_inputs_map(data_path, d2totals_path, fileddocs_path,
-                                       known_gaps_path),
+                                       known_gaps_path,
+                                       receipt_floors_path=receipt_floors_path),
         },
         'headline': {
             'd2_itemized_total': tot_d2,
@@ -535,6 +579,7 @@ def run(data_path, d2totals_path, fileddocs_path, pulled, threshold, known_gaps_
             'overlap_superseded': sum(len(v) for v in overlap_superseded.values()),
             'disclosed': len(disclosed_committees),
             'stale_annotations': len(stale_annotations),
+            'before_floor_committees': sum(1 for b in committees_out.values() if 'before_floor' in b),
         },
         'no_sbe_id_committees': sorted(no_sbe_id),
         'join_failures': join_failures,
@@ -621,6 +666,9 @@ def main():
     ap.add_argument('--known-gaps', default=None,
                     help='optional known-gaps ledger JSON; matched SBE-side gaps become '
                          'DISCLOSED (excluded from exit triggers); stale entries fail loudly')
+    ap.add_argument('--receipt-floors', default=None,
+                    help='MAYOR-1 (PS-157): the converter\'s floor file; a listed committee\'s '
+                         'periods beginning before its floor are left out and listed')
     args = ap.parse_args()
 
     try:
@@ -631,7 +679,7 @@ def main():
 
     try:
         report = run(args.data, args.d2totals, args.fileddocs, args.pulled, args.threshold,
-                     args.known_gaps)
+                     args.known_gaps, receipt_floors_path=args.receipt_floors)
     except FileNotFoundError as e:
         print(f"error: missing input file: {e}", file=sys.stderr)
         sys.exit(2)

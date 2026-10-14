@@ -337,6 +337,206 @@
       "bio": {
         "source": "SBE committee 41119 'Committee to Elect Emma Lozano' (SBE committee search; Ishan, 2026-09-26). Candidacy declared on the committee's D-1 Statement of Organization, SBE FiledDocID 1001823, filed 2026-03-11 (Ishan, 2026-09-26). Supersedes incumbent_stubs.inc-sb-d13 by the incumbent_races skip (the 39873 precedent)."
       }
+    },
+    "6051": {
+      "candidate_id": "mayor-pappas-6051",
+      "name": "Maria Pappas",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 6051 'Committee to Elect Maria Pappas', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "17290": {
+      "candidate_id": "mayor-cardenas-17290",
+      "name": "George Cardenas",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 17290 'Friends of George A. Cardenas', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "18308": {
+      "candidate_id": "mayor-mendoza-18308",
+      "name": "Susana Mendoza",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 18308 'Susana For Chicago', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "19323": {
+      "candidate_id": "mayor-giannoulias-19323",
+      "name": "Alexi Giannoulias",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 19323 'Citizens for Giannoulias', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "27245": {
+      "candidate_id": "mayor-wilson-27245",
+      "name": "Willie Wilson",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 27245 'Friends of Willie Wilson', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "34198": {
+      "candidate_id": "mayor-johnson-34198",
+      "name": "Brandon Johnson",
+      "race_id": "mayor",
+      "incumbent": true,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 34198 'Friends of Brandon Johnson', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "34509": {
+      "candidate_id": "mayor-wilson-34509",
+      "name": "Willie Wilson",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 34509 'Willie Wilson for Mayor', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "34953": {
+      "candidate_id": "mayor-mendoza-34953",
+      "name": "Susana Mendoza",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 34953 'Susana Mendoza For Mayor', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "36920": {
+      "candidate_id": "mayor-cardenas-36920",
+      "name": "George Cardenas",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 36920 'Cardenas For Cook', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "37381": {
+      "candidate_id": "mayor-quigley-37381",
+      "name": "Mike Quigley",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 37381 'Quigley for Chicago', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "40800": {
+      "candidate_id": "mayor-quigley-40800",
+      "name": "Mike Quigley",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 40800 'Friends of Mike Quigley', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "40876": {
+      "candidate_id": "mayor-holberg-40876",
+      "name": "Joe Holberg",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 40876 'Joe For Chicago', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "40942": {
+      "candidate_id": "mayor-kelly-40942",
+      "name": "John Kelly",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 40942 'Citizens for John Kelly', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "40971": {
+      "candidate_id": "mayor-stanton-40971",
+      "name": "Liam Stanton",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "withdrawn",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 40971 'Friends of Stanton', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "41128": {
+      "candidate_id": "mayor-brooks-41128",
+      "name": "Toni Brooks",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 41128 'Brooks for Chicago', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "41169": {
+      "candidate_id": "mayor-cardenas-41169",
+      "name": "George Cardenas",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 41169 'CARDENAS4CHICAGO', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "41192": {
+      "candidate_id": "mayor-wilson-41192",
+      "name": "Willie Wilson",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 41192 'Willie Wilson for Mayor 2027', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "41198": {
+      "candidate_id": "mayor-ma-41198",
+      "name": "Zoe Ma",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 41198 'Friends of Zoe Ma for Mayor', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "41238": {
+      "candidate_id": "mayor-brewer-41238",
+      "name": "Matthew Brewer",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 41238 'Brewer for Chicago', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
+    },
+    "41265": {
+      "candidate_id": "mayor-nee-41265",
+      "name": "Lisa Nee",
+      "race_id": "mayor",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 41265 'Lisa Nee for Chicago', one of the committees of this candidate in the table of IPG's mayoral report (\"Who is funding Chicago's 2027 Mayoral Race\"); every committee of each candidate is carried, whatever office it was formed for (HOMEPAGE-1 ruling 3a, 2026-10-07; MAYOR-1 ruling 1a, 2026-10-13)"
+      }
     }
   },
   "incumbent_stubs": {
@@ -2806,6 +3006,17 @@
       "status": "declared",
       "bio": {
         "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
+      }
+    },
+    "mayor-carterwalters": {
+      "candidate_id": "mayor-carterwalters",
+      "name": "Danielle Carter-Walters",
+      "race_id": "mayor",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "MAYOR-1 (2026-10-13): committee 41177 'Friends For Danni C' is in the mayoral report's table and has no receipts of record at the 2026-09-13 vintage; linked when receipts appear, so the card does not read $0 (SB-ROSTER-1 precedent)"
       }
     }
   }

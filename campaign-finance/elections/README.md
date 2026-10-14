@@ -86,9 +86,15 @@ governing rule below). Export `$REPO`; paths are relative to the repo root.
 1.  build_election_seed.py                                   # seed: races/candidates + dict-shaped
                                                             #   finance keys + a cycles block
 1b. convert_bulk_receipts.py --format export26 --bulk <SBE Receipts> --fileddocs <SBE FiledDocs> \
-        --committee-ids campaign-finance/elections/reference/elections-committee-ids.txt --out-dir <scratch dir>
+        --committees <SBE Committees> \
+        --committee-ids campaign-finance/elections/reference/elections-committee-ids.txt \
+        --receipt-floors campaign-finance/elections/reference/receipt-floors.tsv --out-dir <scratch dir>
                                                             # elections selection of record: bare id per line;
-                                                            #   state the list's sha256 in the run report. Then
+                                                            #   state the list's sha256 in the run report.
+                                                            #   --committees is the name join export26 requires.
+                                                            #   --receipt-floors withholds a listed committee's
+                                                            #   receipts dated before its floor (PS-157); the
+                                                            #   converter prints the file's sha256. Then
                                                             #   stage EVERY CSV written into raw/receipts-elections/
                                                             #   (no ward filter). A list id with no receipts is
                                                             #   skipped silently by the converter.
@@ -103,14 +109,16 @@ governing rule below). Export `$REPO`; paths are relative to the repo root.
                                                             #   campaign-finance/elections/reference/ie-target-confirmations.tsv
                                                             #   from a path fixed in the script, and a file that
                                                             #   cannot be trusted stops the run (PS-154).
+                                                            #   A mayoral candidacy is matched only by a row
+                                                            #   whose filed Office names the mayor (PS-157).
 5b. enrich_committee_names.py --council campaign-finance/election-data.json \
         --committees campaign-finance/elections/reference/ie-committee-names.tsv --out campaign-finance/election-data.json
                                                             # resolve IE spender ids -> real names
                                                             #   (ingest_ie only knows the id). Same step
-                                                            #   council runs. The curated map holds all 17
-                                                            #   (12 from council-data.json + 3 from Illinois
-                                                            #   Sunshine + 2 added at ENRICH-1). NEVER pass the
-                                                            #   SBE Committees bulk here (SBE-RERUN-1's defect).
+                                                            #   council runs. The curated map's header states
+                                                            #   how many names it holds and where each came
+                                                            #   from (24 at MAYOR-1). NEVER pass the SBE
+                                                            #   Committees bulk here (SBE-RERUN-1's defect).
 6.  sync_overrides.py    --data-file campaign-finance/election-data.json \
         --sheet-id <ID> --creds-file <path>                  # shared classification + clusters
                                                             #   + IE-committee industry tags
@@ -125,7 +133,11 @@ governing rule below). Export `$REPO`; paths are relative to the repo root.
 9.  reconcile.py --data campaign-finance/election-data.json \
         --d2totals <SBE D2Totals> --fileddocs <SBE FiledDocs> --pulled <pull date, YYYY-MM-DD> \
         --known-gaps campaign-finance/elections/known-gaps.json \
+        --receipt-floors campaign-finance/elections/reference/receipt-floors.tsv \
         --out campaign-finance/elections/reconciliation-report.json
+                                                            # --receipt-floors: the converter's floor file; a
+                                                            #   listed committee's periods that begin before its
+                                                            #   floor are left out and listed (PS-157).
                                                             # LAST: reads the finished artifact; stamps
                                                             #   vintage_manifest_sha256 from the seal's MANIFEST.md.
                                                             #   --pulled is operator-typed and unchecked (open ledger 72).

@@ -204,18 +204,27 @@ def _resolve(hits,office,cand,method):
         dd=[e for e in hits if _district_key(e.get('district'))==dk]
         if len(dd)==1: return _tgt(dd[0],method,True)
     return _tgt(hits[0],'name_fallback',True)
+# MAYOR-1 (ruled 2026-10-13): a mayoral candidacy is an IE target only for a row whose filed
+# Office names the mayor (the word "mayor", any case). The same people's other offices --
+# Secretary of State, Comptroller, County Board, Alderman -- are outside the subject, as a former
+# officeholder's IEs are. Race `mayor` only; every other candidacy is untouched.
+_MAYOR_OFFICE=re.compile(r'\bmayor\b',re.I)
+def _office_scope(entries,office):
+    if _MAYOR_OFFICE.search(office or ''): return entries
+    return [e for e in entries if e.get('race_id')!='mayor']
 def match_target_registry(row,by_committee,by_name,by_folded,by_surname,date=None):
     # PS-140: every rung sees only the entries eligible for the row's date (_eligible).
+    # MAYOR-1: and, for the mayor race, only for a row filed against that office (_office_scope).
     F=FIELD_MAP['exp']
+    cand=row.get(F['candidate']); office=row.get(F['office'])
     # 0) defensive committee-id (SBE exp rows carry only the SPENDER id today)
     tcid=row.get('CandidateID') or row.get('TargetCommitteeID')
     if tcid and str(tcid) in by_committee:
-        ce=_eligible(by_committee[str(tcid)],date)
+        ce=_office_scope(_eligible(by_committee[str(tcid)],date),office)
         if len(ce)==1: return _tgt(ce[0],'exact',False)
-    cand=row.get(F['candidate']); office=row.get(F['office'])
     if not norm(cand): return None
     # Rung 0 — exact normalized full name (identity-grade)
-    hits=_eligible(by_name.get(norm(cand),[]),date)
+    hits=_office_scope(_eligible(by_name.get(norm(cand),[]),date),office)
     if hits: return _resolve(hits,office,cand,'exact')
     # Rung 1 — equal after accent-folding (differed only by accents; identity-grade)
     fhits=_eligible(by_folded.get(_foldnorm(cand),[]),date)
@@ -424,7 +433,7 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
         if sbe not in want: continue
         if truthy(row.get(G['archived'])): continue
         # IE-NAMES-1 (open ledger 73): build the funder name in the receipts ingest's
-        # form -- convert_bulk_receipts._contributed_by (convert_bulk_receipts.py:323)
+        # form -- convert_bulk_receipts._contributed_by (convert_bulk_receipts.py:328)
         # is the SAME function that builds 'ContributedBy', which ingest.py:292 hands
         # to the shared slug. One function, so the two paths cannot diverge again.
         nm=_contributed_by(row.get(G['last']) or '', row.get(G['first']) or '')

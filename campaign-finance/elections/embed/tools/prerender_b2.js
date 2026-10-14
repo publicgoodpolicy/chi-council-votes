@@ -327,7 +327,8 @@ console.log('\n=== B3-REVISE-5 assertions (school-board scope + spender guard + 
 function ieCount(idx) { var n = 0; for (var c in idx.ieByCandidate) n += idx.ieByCandidate[c].support.length + idx.ieByCandidate[c].oppose.length; return n; }
 ok('unscoped index keeps all IEs incl. council (' + ieCount(indexAll) + ' = ' + json.independent_expenditures.length + ')', ieCount(indexAll) === json.independent_expenditures.length);
 // P1-E (PS-140) re-pin: 145 + the 87 rows now matched to 2024-only candidacies = 232; council 219, unchanged.
-ok('school-board scope keeps ONLY school-board IEs (232), drops council (219)', ieCount(index) === 232 && ieCount(indexAll) - ieCount(index) === 219);
+// MAYOR-1 (PS-157) re-pin: the dropped set gains the 17 mayoral rows (filed Office names the mayor): 219 + 17 = 236.
+ok('school-board scope keeps ONLY school-board IEs (232), drops council and mayor (236 = 219 + 17)', ieCount(index) === 232 && ieCount(indexAll) - ieCount(index) === 236);
 var councilTarget = false;
 for (var cc in index.ieByCandidate) { var r5 = index.raceById[(index.candidateById[cc] || {}).race_id] || {}; if (r5.office === 'alderperson' || r5.office === 'mayor') councilTarget = true; }
 ok('no council/municipal IE target survives school-board scope', !councilTarget);
@@ -524,15 +525,25 @@ ok('S1(ii): every alderperson candidacy carries a derived committee id (' +
    alderWithId + ' of ' + alderCands.length + ', full coverage absolute; floor 50)',
   alderWithId === alderCands.length && alderCands.length >= 50);
 
-// S1 (ii) — absence where it is NOT defined. Vacuously true while those offices carry no
-// candidacies at all; the assertion exists for the day one lands, so a mayoral row
-// arriving with a committee id is revisited by the lane that lands it.
-var nonAlderWithId = muniCands.filter(function (c) {
-  return raceOfficeById[c.race_id] !== 'alderperson' && c.committee_id != null; });
-ok('S1(ii): no municipal candidacy outside alderperson carries a committee id (' +
-   nonAlderWithId.length + ' found) — the derivation\'s scope boundary; a mayoral or ' +
-   'clerk/treasurer row arriving with one must be revisited by the lane that lands it',
-  nonAlderWithId.length === 0);
+// S1 (ii) — the boundary, revisited by the lane that landed mayoral rows (MAYOR-1, PS-157).
+// The alderperson derivation is unchanged. Mayoral candidacies carry the committee id the race
+// map states for each (one committee per candidacy, ruled 2026-10-13), not a derived one; the
+// one candidacy with no committee (a stub) carries none. Clerk and treasurer carry none: the
+// assertion still exists for the day one of those lands.
+var mayorCands = muniCands.filter(function (c) { return raceOfficeById[c.race_id] === 'mayor'; });
+var mapIds = {};
+var raceMapMappings = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'race-map.json'), 'utf8')).mappings || {};
+Object.keys(raceMapMappings).forEach(function (sbe) {   // keyed by SBE committee id, one candidacy each
+  if (raceMapMappings[sbe].race_id === 'mayor') mapIds[raceMapMappings[sbe].candidate_id] = sbe; });
+var mayorMatches = mayorCands.filter(function (c) {
+  return c.committee_id != null && mapIds[c.id] === String(c.committee_id); }).length;
+var mayorNoId = mayorCands.filter(function (c) { return c.committee_id == null; }).length;
+var otherWithId = muniCands.filter(function (c) {
+  var o = raceOfficeById[c.race_id]; return o !== 'alderperson' && o !== 'mayor' && c.committee_id != null; });
+ok('S1(ii): every mayoral candidacy with a committee carries the race map\'s id (' + mayorMatches +
+   ' of ' + (mayorCands.length - mayorNoId) + '; ' + mayorNoId + ' stub without one), and no clerk/treasurer ' +
+   'candidacy carries a committee id (' + otherWithId.length + ' found)',
+  mayorMatches === 20 && mayorCands.length - mayorNoId === 20 && otherWithId.length === 0);
 
 // S1 (i) — THE TRIPWIRE. Windowed on DATES, never on the cycle-2027 label (which spans
 // 2023-05-15 onward and would count 2023-2026 money as 2027's). The window literal mirrors
@@ -602,15 +613,17 @@ ok('S1(i) FLOOR: windowed municipal direct money >= $23,769,132.31 (' +
   seen > 0 && resolved === seen && worst > 0);
 })();
 
-// S1 (i) — mayor: readiness FALSE, coming-soon still rendered. The absence side of (ii),
-// visible in the render layer.
+// S1 (i) — mayor: readiness TRUE since MAYOR-1 (PS-157) landed the money; the by-race listing
+// renders, not coming-soon. Pinned as the measured present: the mayor bundle is mounted nowhere
+// (DEPLOY.md), so no display outcome is ratified by this assertion.
 (function () {
   var oi = D.loadData(json, { office: 'mayor' });
   var om = D.viewModels.officeRaces(oi, 'mayor');
   var pg = R.renderPage({ office: 'mayor', topView: 'byrace', cycles: D.availableCycles(oi), cycle: null, officeRaces: om, activeSlug: null, raceView: null });
   var ready = om.groups.some(function (g) { return g.races.some(function (r) { return r.hasFinance; }); });
-  ok('S1(i): mayor readiness is FALSE and a clean coming-soon renders (no crash, full page)',
-    ready === false && /coming soon/i.test(pg) && pg.indexOf('<div class="wrap">') >= 0 && pg.length > 600);
+  ok('S1(i): mayor readiness is TRUE and the by-race listing renders, not coming-soon (no crash, full page) — ' +
+     'pinned as the measured present; the mayor bundle is mounted nowhere',
+    ready === true && !/coming soon/i.test(pg) && pg.indexOf('<div class="wrap">') >= 0 && pg.length > 600);
 })();
 // ---- MUNI-ENABLE-1 G6 ----
 // D-24 (PS-114): the grouped view's comparator and the nav's must order the municipal race set

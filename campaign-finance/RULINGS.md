@@ -2757,6 +2757,105 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: AUDIT-2 elections-tool ratification package, revision 2 (`audit-2-elections-package-rev2.md`), sha256 `91884078932153ee17fdbd6a2111efdf5f82f38186f0993f8ec7ce0bf85c61d0`, 34,756 B / 418 L, region R3 (its lines 158–183), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-12 as drafted (“ratified”), on item 7 of his rulings of 2026-10-07, the wording he ratified 2026-10-10 (W2) and item 4 of his rulings of 2026-10-11. Revision 1 of the package (sha256 `286a02692d17fdd40fbe57637b9aa51b95499266f065c3042fe677439e89d2e9`), ratified earlier the same day, differed in one sentence of region R5 and is not transcribed. Arises from the numbers audit of 2026-09-29 (finding S3). Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-155`; `PS-156` occurring 0 times before this commit), never carried. Measured basis: the planner’s clone at `3209983b083273e080f041e90f3739fad0427a01`.*
 
+
+### PS-157 — the elections data carries the 2027 mayoral race: a candidacy for each committee, receipts from the cycle floor, outside spending by office
+
+> **Ruled by Ishan, 2026-10-13** (MAYOR-1), under HOMEPAGE-1's ruling 3a of 2026-10-07: the
+> mayoral report's candidates, and every committee of each, whatever office it was formed for.
+>
+> **The candidacies.** `campaign-finance/elections/race-map.json` maps twenty committees of record
+> to the race `mayor`, one candidacy each, with the id `mayor-<candidate key>-<committee id>`. A
+> candidate with several committees has several candidacies, and they share the candidate key.
+> How the homepage reads them as one person is ruled with the homepage (HOMEPAGE-1); the Sheet's
+> Person Links tab is not used for them. Brandon Johnson's candidacy is marked the incumbent's.
+> Liam Stanton's is marked withdrawn, and its receipts are counted. Danielle Carter-Walters is a
+> candidate stub with no committee linked: her committee, 41177, has no receipts in the vintage,
+> and it is linked when it has some. The twenty committee ids are added to the elections
+> selection, `campaign-finance/elections/reference/elections-committee-ids.txt`. Alexi
+> Giannoulias's Secretary of State committee, 19323, is one of them, and its receipts are counted.
+>
+> **The receipt floor.** These committees reach back decades, and the tools show cycles from
+> 2011-05-17. `campaign-finance/elections/reference/receipt-floors.tsv` lists each of the twenty
+> with the floor 2011-05-17. `campaign-finance/ingestion/convert_bulk_receipts.py`, given
+> `--receipt-floors`, does not write a listed committee's receipt dated before its floor. The floor
+> acts at emission only: the `Archived` selection and the registry cross-check still see every
+> receipt. The converter states the file's sha256 and, per committee, how many receipts it
+> withheld and how many it wrote. A floor that is not `YYYY-MM-DD`, a committee listed twice, or
+> a committee outside the selection stops the run before the bulk's rows are parsed.
+>
+> **Outside spending by office.** An independent expenditure attaches to a mayoral candidacy only
+> when the Office its filer wrote names the mayor — the word "mayor", in any case. Spending for or
+> against the same people in their other races (Secretary of State, Comptroller, the County Board,
+> an aldermanic seat) stays out of the race, as spending on a former officeholder does. The rule
+> is in `campaign-finance/ingestion/ingest_ie.py`, and it applies to the race `mayor` and to no
+> other candidacy. A filing that names two candidates in one field matches neither, as before.
+> The spenders the rule brings in are named in
+> `campaign-finance/elections/reference/ie-committee-names.tsv`, each as the sealed vintage's
+> Committees export spells it, and the name map's header says so. One of them, Noonan for 19, is a
+> candidate committee that filed its spending as independent; it is kept as filed.
+>
+> **Money from a candidate's other committee.** Seven pairs are added to PS-142's closed list,
+> `campaign-finance/ingestion/own-committee-transfers.json`, on Ishan's confirmation that each
+> giver is that candidate's own committee:
+>
+> | recipient (State Board id) | giver | rows | all years | since 2023-05-15 |
+> |---|---|---|---|---|
+> | Friends of George A. Cardenas (17290) | Cardenas for Cook | 1 | $1,542.59 | $1,542.59 |
+> | Cardenas For Cook (36920) | Friends of George A Cardenas | 1 | $10,000.00 | $0.00 |
+> | Susana For Chicago (18308) | Susana Mendoza for Mayor | 1 | $200.41 | $200.41 |
+> | Susana Mendoza For Mayor (34953) | Friends for Susana Mendoza For Comptroller | 1 | $37,800.00 | $0.00 |
+> | Quigley for Chicago (37381) | Quigley for Congress | 2 | $106,600.00 | $0.00 |
+> | Friends of Mike Quigley (40800) | Quigley for Congress | 4 | $170,800.00 | $170,800.00 |
+> | Friends of Mike Quigley (40800) | Mike Quigley for Congress | 1 | $25,000.00 | $25,000.00 |
+>
+> Quigley for Congress and Mike Quigley for Congress are federal committees, not in State Board
+> data. The eighth pair, Friends for Susana Mendoza to Susana Mendoza For Mayor ($500,000.00), is
+> not listed: that giver heads a Sheet donor cluster, and a listed giver must stand alone.
+> These transfers are marked, not removed: each stays
+> in the receiving committee's raised, as PS-142 rules, and in the race's direct total.
+> **This amends PS-142's validator rule on a stale pair:** each artifact is held to the pairs whose
+> receiving committee it carries as a candidate committee, and `election-data.json` must carry
+> every listed recipient. A ward pair is held by both artifacts, as before. A mayoral pair is held
+> by `election-data.json` alone, the only artifact carrying its recipient. A recipient that no
+> longer matches, or was mistyped, still stops the build.
+>
+> **Reconciliation from the floor.** `campaign-finance/ingestion/reconcile.py`, given the same
+> floor file, reads it through the converter's own loader and leaves out each listed committee's
+> report periods that begin before its floor, the period the floor falls inside included. Those
+> periods are listed in the committee's `before_floor` block, each with its sworn itemized and
+> in-kind totals, together with the receipts we hold inside them, which are stated and not
+> compared. A listed committee that is not a candidate committee in the artifact, or a listed
+> committee whose every filed period begins before its floor, stops the run. The report states
+> the file in `run.inputs`, and its `scope` names the mayor race.
+>
+> **What a reader sees, accepted.**
+> - The data file grows to about 60 MB.
+> - On the elections pages, a donor's footprint gains a Mayor group, from the push onward,
+>   without a paste.
+> - A donor already in the data takes its name, employer, occupation, city and type from the
+>   latest filing, as every refresh does. That includes donors whose latest filing is now a
+>   mayoral one. One such type change shows on the school-board page, and the fix to how a donor's
+>   type is set stays after the launch.
+> - The mayor page stays a pointer page; the mayor bundle is mounted nowhere.
+>
+> **Measured basis.** The draft was run against the sealed 2026-09-13 vintage. Its control run
+> reproduced `election-data.json` at `8bfcf71e053c583f67b94dfd3e1bdde1f662d517` exactly but for
+> timestamps.
+> - **Receipts.** The converter wrote 17,670 receipts for the twenty committees, $84,583,354.55,
+>   and withheld 6,775 by the floor. The race's direct total, which leaves out other receipts, is
+>   $83,854,085.53. Against the report's own extract, every committee present in both matches to
+>   the row and the cent.
+> - **Outside spending.** Seventeen rows reach the race, $1,765,180.41, all on Brandon Johnson's
+>   2023 campaign and all matched exactly. One more mayoral-office row ($45,073.20, naming
+>   Johnson and Willie Wilson together) matches neither.
+> - **Reconciliation.** From the floor on, every mayoral committee that has filed a report period
+>   reconciles on itemized contributions. Lisa Nee's committee has filed none yet. One committee
+>   differs on in-kind: Quigley for Chicago, where we hold two rows of $53,300.00 against a sworn
+>   $53,300.00. That difference is left to the known-gaps review. The report's headline residual is unchanged at
+>   −$81,081.75.
+
+*Provenance: MAYOR-1 ratification package, revision 3 (`mayor-1-package-rev3.md`), sha256 `c917a0ebbf8cc1799e42b13edc1e95af1fd34ac581c04ba33b7f09bd1fef4c71`, 24,016 B / 282 L, region R1 (its lines 51–145), transcribed verbatim from the marked ruling region in the form the package’s §1 states: the heading bare, one bare empty line, then each line of the body with `> ` added and each empty line of the body a lone `>`. Ratified by Ishan in chat 2026-10-13 22:57 CDT (“r1 ratified”), on his MAYOR-1 rulings of 2026-10-13 (items 1–4 at 19:20, 1–4 at 20:24, 5 at 20:54, 6 and 7 at 21:27, 8 to 12 at 22:38, and 13 at 22:57), under HOMEPAGE-1’s ruling 3a of 2026-10-07. Revisions 1 and 2 of the package were reviewed and not sent for ratification. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-156`; `PS-157` occurring 0 times before this commit), never carried. Measured basis: the planner’s clone at `835919d419e0f229f0c2ba207b769de5d6cb4be6` and its simulation on the sealed 2026-09-13 vintage.*
+
 ---
 
 ## Rulings ratified without an id

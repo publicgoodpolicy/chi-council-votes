@@ -42,6 +42,55 @@
       "donor_id": "gardiner-for-ward-committeeman",
       "donor_name": "Gardiner for Ward Committeeman",
       "basis": "State Board committee 35902, his ward-committeeman committee"
+    },
+    {
+      "recipient_sbe_committee_id": "17290",
+      "recipient_committee": "Friends of George A. Cardenas",
+      "donor_id": "cardenas-for-cook",
+      "donor_name": "Cardenas for Cook",
+      "basis": "State Board committee 36920, his Cook County Board of Review committee; listed on Ishan's confirmation of 2026-10-13 (MAYOR-1, PS-157)"
+    },
+    {
+      "recipient_sbe_committee_id": "36920",
+      "recipient_committee": "Cardenas For Cook",
+      "donor_id": "friends-of-george-a-cardenas",
+      "donor_name": "Friends of George A Cardenas",
+      "basis": "State Board committee 17290, his other candidate committee (a loan); listed on Ishan's confirmation of 2026-10-13 (MAYOR-1, PS-157)"
+    },
+    {
+      "recipient_sbe_committee_id": "18308",
+      "recipient_committee": "Susana For Chicago",
+      "donor_id": "susana-mendoza-for-mayor",
+      "donor_name": "Susana Mendoza for Mayor",
+      "basis": "State Board committee 34953, her earlier mayoral committee; listed on Ishan's confirmation of 2026-10-13 (MAYOR-1, PS-157)"
+    },
+    {
+      "recipient_sbe_committee_id": "34953",
+      "recipient_committee": "Susana Mendoza For Mayor",
+      "donor_id": "friends-for-susana-mendoza-for-comptroller",
+      "donor_name": "Friends for Susana Mendoza For Comptroller",
+      "basis": "her comptroller committee, as filed; listed on Ishan's confirmation of 2026-10-13 (MAYOR-1, PS-157)"
+    },
+    {
+      "recipient_sbe_committee_id": "37381",
+      "recipient_committee": "Quigley for Chicago",
+      "donor_id": "quigley-for-congress",
+      "donor_name": "Quigley for Congress",
+      "basis": "his federal congressional committee; not in State Board data; listed on Ishan's confirmation of 2026-10-13 (MAYOR-1, PS-157)"
+    },
+    {
+      "recipient_sbe_committee_id": "40800",
+      "recipient_committee": "Friends of Mike Quigley",
+      "donor_id": "quigley-for-congress",
+      "donor_name": "Quigley for Congress",
+      "basis": "his federal congressional committee; not in State Board data; listed on Ishan's confirmation of 2026-10-13 (MAYOR-1, PS-157)"
+    },
+    {
+      "recipient_sbe_committee_id": "40800",
+      "recipient_committee": "Friends of Mike Quigley",
+      "donor_id": "mike-quigley-for-congress",
+      "donor_name": "Mike Quigley for Congress",
+      "basis": "his federal congressional committee, as filed under this name; listed on Ishan's confirmation of 2026-10-13 (MAYOR-1, PS-157)"
     }
   ]
 }

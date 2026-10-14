@@ -157,8 +157,15 @@ python3 campaign-finance/ingestion/reconcile.py \
   --d2totals raw/sbe-summary/'D2Totals - <date>.txt' \
   --fileddocs raw/sbe-summary/'FiledDocs - <date>.txt' \
   --out campaign-finance/elections/reconciliation-report.json \
-  --pulled YYYY-MM-DD --threshold 500
+  --pulled YYYY-MM-DD --threshold 500 \
+  --known-gaps campaign-finance/elections/known-gaps.json \
+  --receipt-floors campaign-finance/elections/reference/receipt-floors.tsv
 ```
+
+**`--receipt-floors`** (PS-157) is the converter's floor file. A listed committee's report
+periods that begin before its floor are left out of the compare — the converter wrote no
+receipt dated before the floor — and are listed in that committee's `before_floor` block with
+their sworn totals and the receipts we hold inside them. The file is stamped in `run.inputs`.
 
 **The two raw inputs** are SBE bulk exports (`D2Totals`, `FiledDocs`) downloaded
 from the Illinois State Board of Elections. Pull them after the quarterly filing
@@ -244,8 +251,8 @@ aborts the build with an `[OWN/COMMITTEE]` error in four cases, and each has one
 
 - **a listed giver shares a donor cluster** — take the giver out of the Sheet's Donor Clusters
   tab and re-run; a listed giver stands alone.
-- **a listed pair matches no row** — the giver's donor id or the committee changed, so the
-  list is stale. Stop and bring it for a ruling; do not edit the list to make the build pass.
+- **a listed pair matches no row, or names a recipient the elections artifact does not carry**
+  — the giver's donor id or the committee changed (or was mistyped), so the list is stale. Stop and bring it for a ruling; do not edit the list to make the build pass.
 - **a row of a listed pair lacks the stamp, or a stamp sits outside the list** — the artifact
   was not rebuilt after the list or the code changed. Re-run the builder named above.
 - **a row carries both `is_own_committee` and `is_self`** — the list names a donor that the

@@ -48,6 +48,11 @@ Committee set (COUNCIL MODE is now the tracked artifact, CNCL-DATA-1 P1.2):
   --committee-map council-data.json (the older council derivation; unchanged, still
                   available, mutually exclusive with --council-list).
   --committee-ids <file> (explicit id list, one per line; export26/elections).
+  --receipt-floors <file> (MAYOR-1, ruled 2026-10-13): a tracked TSV `committee_id<TAB>floor<TAB>note`
+                  with a header; a listed committee's receipts dated before its floor (YYYY-MM-DD)
+                  are not written. The floor applies at emission only: the Archived selection and
+                  the registry cross-check above still see every receipt. A listed id that is not
+                  selected, a repeated id, or a date that is not YYYY-MM-DD stops the run.
   Names for export26 come from --committees (the committees bulk, committees.Name).
 
 REVIEW QUEUE (--queue-since YYYY-MM-DD, D3): each run can report the Chicago committees of
@@ -525,6 +530,33 @@ def _tsv_safe(v):
     return ' '.join((v or '').split('\t'))[:300].replace('\r', ' ').replace('\n', ' ').strip()
 
 
+def load_receipt_floors(path, selected):
+    """MAYOR-1: read the tracked receipt-floor TSV -> {committee_id: 'YYYY-MM-DD'}. Fails loud."""
+    import hashlib, re
+    raw = open(path, 'rb').read()
+    print('receipt floors: %s' % path)
+    print('  sha256 %s' % hashlib.sha256(raw).hexdigest())
+    lines = raw.decode('utf-8').split('\n')
+    if lines and lines[-1] == '':
+        lines = lines[:-1]
+    if not lines or lines[0].split('\t')[:2] != ['committee_id', 'floor']:
+        raise SystemExit('FATAL: %s: header must begin committee_id<TAB>floor' % path)
+    out = {}
+    for n, ln in enumerate(lines[1:], start=2):
+        if not ln.strip() or ln.startswith('#'):
+            continue
+        f = ln.split('\t')
+        cid, floor = f[0].strip(), (f[1].strip() if len(f) > 1 else '')
+        if not re.fullmatch(r'\d{4}-\d{2}-\d{2}', floor):
+            raise SystemExit('FATAL: %s line %d: floor %r is not YYYY-MM-DD' % (path, n, floor))
+        if cid in out:
+            raise SystemExit('FATAL: %s line %d: committee %s listed twice' % (path, n, cid))
+        if cid not in selected:
+            raise SystemExit('FATAL: %s line %d: committee %s is not in the selection' % (path, n, cid))
+        out[cid] = floor
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -542,6 +574,8 @@ def main():
                     'requires --committees')
     ap.add_argument('--committee-ids', help='explicit committee-id list, one per line; export26/elections')
     ap.add_argument('--committees', help='SBE committees bulk .txt for the export26 name join')
+    ap.add_argument('--receipt-floors', help='MAYOR-1: tracked TSV committee_id/floor/note; receipts '
+                    'dated before a listed committee\'s floor are not written (emission only)')
     ap.add_argument('--out-dir', default='raw/receipts-council',
                     help='output dir for per-committee CSVs')
     ap.add_argument('--verify-against', help='a same-day committee-search export CSV; re-derive '
@@ -594,6 +628,8 @@ def main():
     if args.queue_since and not args.committees:
         raise SystemExit('--queue-since requires --committees (the committees bulk) for City/type')
 
+    floors = load_receipt_floors(args.receipt_floors, ids) if args.receipt_floors else {}
+
     # Registry metadata (cross-check trip-wire + export26 FiledDocs join).
     final_docids, last_end, a1, docmeta = registry_meta(args.fileddocs, ids)
 
@@ -611,6 +647,7 @@ def main():
     os.makedirs(args.out_dir, exist_ok=True)
     disagreements = []
     totals = {}
+    floored = {}
     written = 0
     emit = emit_export26 if args.format == 'export26' else emit_ingest13
     columns = OUT26 if args.format == 'export26' else OUT13
@@ -629,6 +666,9 @@ def main():
                 sel_ids.add(rid)
             if registry_keep:
                 reg_ids.add(rid)
+            if archived_keep and c in floors and dt < floors[c]:
+                floored[c] = floored.get(c, 0) + 1
+                continue
             if archived_keep:
                 if args.format == 'export26':
                     out_rows.append(emit_export26(r, name_map.get(c), docmeta))
@@ -661,6 +701,13 @@ def main():
                   % (d['committee'], d['archived_only'], d['registry_only']), file=sys.stderr)
     else:
         print('registry cross-check: 0 disagreements (Archived == registry on all requested committees)')
+
+    if floors:
+        print('receipt floors: %d committee(s) listed; %d receipt(s) dated before their floor not written'
+              % (len(floors), sum(floored.values())))
+        for c in sorted(floors, key=lambda s: (len(s), s)):
+            print('    committee %s: floor %s, %d not written, %d written'
+                  % (c, floors[c], floored.get(c, 0), totals.get(c, (0, 0))[0]))
 
     field = round(sum(t[1] for t in totals.values()), 2)
     print('=== convert_bulk_receipts (%s): %d committees, %d CSVs -> %s ==='

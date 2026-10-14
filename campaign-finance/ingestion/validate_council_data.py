@@ -1189,12 +1189,17 @@ def validate_own_committee(d, pairs=None):
     than passing with nothing to compare.
 
     Four rules, all errors, on any artifact that carries contributions and committees. Each
-    artifact is held to the whole list: both council-data.json and election-data.json carry
-    every ward committee, so a pair that matches nothing in either is a stale list.
+    artifact is held to the pairs whose receiving committee it carries as a candidate
+    committee: both council-data.json and election-data.json carry every ward committee, so a
+    ward pair that matches nothing in either is a stale list; a mayoral pair (MAYOR-1, PS-157)
+    is held by election-data.json alone, which is the only artifact carrying its recipient.
     (1) THE STAMP IS THE LIST. A row carries is_own_committee exactly when its recipient is
         the committee typed `candidate` with a listed SBE id and its donor is that pair's
         donor. A stamp on any other row, or a listed pair's row without the stamp, errors.
-    (2) NO STALE PAIR. Every listed pair matches at least one row.
+    (2) NO STALE PAIR. Every listed pair whose recipient this artifact carries matches at
+        least one row. election-data.json, which carries every candidate committee the list
+        can name, must carry every listed recipient: a pair it does not carry errors there, so
+        a mistyped or dropped recipient cannot pass both artifacts unchecked.
     (3) A LISTED GIVER STANDS ALONE. A listed giver is its own parent, no other donor names
         it as parent, and no donor cluster holds it with another member, so a donor line that
         carries the chip holds only that giver's rows.
@@ -1237,7 +1242,16 @@ def validate_own_committee(d, pairs=None):
     if stray:
         errs.append(f"[OWN/COMMITTEE] {len(stray)} row(s) carry is_own_committee outside the "
                     f"list (first: {stray[:3]})")
-    stale = sorted(p for p, n in seen.items() if n == 0)
+    carried = {str(v.get('sbe_committee_id') or '') for v in comms.values()
+               if (v or {}).get('type') == 'candidate'}
+    stale = sorted(p for p, n in seen.items() if n == 0 and p[0] in carried)
+    if d.get('candidates') is not None:          # the elections artifact
+        uncarried = sorted(p for p in pairs if p[0] not in carried)
+        if uncarried:
+            errs.append(f"[OWN/COMMITTEE] {len(uncarried)} listed pair(s) name a recipient this "
+                        f"elections artifact does not carry as a candidate committee (first: "
+                        f"{uncarried[:3]}) — the list is stale or mistyped; an addition or removal "
+                        f"is a new ruling")
     if stale:
         errs.append(f"[OWN/COMMITTEE] {len(stale)} listed pair(s) match no row (first: "
                     f"{stale[:3]}) — the list is stale; an addition or removal is a new ruling")
@@ -1764,6 +1778,10 @@ def self_test():
           _oa([_own, dict(_own, id='o5', committee_id='ie1')]), "outside the list")
     ocase("[OWN/COMMITTEE] a listed pair with no row errors (stale list)",
           _oa([_oth]), "match no row")
+    ocase("[OWN/COMMITTEE] a listed pair whose recipient this artifact does not carry is out of its scope (MAYOR-1)",
+          _oa([_own]), None, pairs={('100', 'giver'), ('999', 'giver')})
+    ocase("[OWN/COMMITTEE] the elections artifact must carry every listed recipient (MAYOR-1)",
+          dict(_oa([_own]), candidates=[]), "does not carry", pairs={('100', 'giver'), ('999', 'giver')})
     ocase("[OWN/COMMITTEE] a row carrying both stamps errors",
           _oa([dict(_own, is_self=True)]), "both is_own_committee and is_self")
     ocase("[OWN/COMMITTEE] a listed giver under another parent errors",
