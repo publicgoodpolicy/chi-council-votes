@@ -71,6 +71,12 @@ elections-canonical:
   (build_sb_finance also requires ingest_sb_votes: it reads the school-board
    roster's candidacy_ref bridge as well as rollups.*, and hashes both inputs)
 
+homepage:
+  build_homepage_data -> validate_homepage_data
+  (runs after both canonical chains and ingest_sb_votes: it reads
+   election-data.json, council-data.json and school-board-data.json, and
+   stamps the sha256 of each; any commit that moves one of them rebuilds it)
+
 build_all.sh (votes builder; finance section conforms to council-canonical,
 omitting by design: convert_bulk_receipts, repair_clusters, ingest_ie,
 enrich_committee_names, apply_cash_on_hand):

@@ -2856,6 +2856,29 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: MAYOR-1 ratification package, revision 3 (`mayor-1-package-rev3.md`), sha256 `c917a0ebbf8cc1799e42b13edc1e95af1fd34ac581c04ba33b7f09bd1fef4c71`, 24,016 B / 282 L, region R1 (its lines 51–145), transcribed verbatim from the marked ruling region in the form the package’s §1 states: the heading bare, one bare empty line, then each line of the body with `> ` added and each empty line of the body a lone `>`. Ratified by Ishan in chat 2026-10-13 22:57 CDT (“r1 ratified”), on his MAYOR-1 rulings of 2026-10-13 (items 1–4 at 19:20, 1–4 at 20:24, 5 at 20:54, 6 and 7 at 21:27, 8 to 12 at 22:38, and 13 at 22:57), under HOMEPAGE-1’s ruling 3a of 2026-10-07. Revisions 1 and 2 of the package were reviewed and not sent for ratification. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-156`; `PS-157` occurring 0 times before this commit), never carried. Measured basis: the planner’s clone at `835919d419e0f229f0c2ba207b769de5d6cb4be6` and its simulation on the sealed 2026-09-13 vintage.*
 
+
+### PS-158 — the homepage has its own data file, built from the finance and votes artifacts, which counts each gift once across council, school board and mayor
+
+> **Ruled by Ishan, 2026-10-07 and 2026-10-14** (HOMEPAGE-1). The homepage reads one small file, `campaign-finance/homepage-data.json`, and never the elections or council artifacts. `campaign-finance/ingestion/build_homepage_data.py` writes it from `campaign-finance/election-data.json`, `campaign-finance/council-data.json` and `campaign-finance/school-board-data.json`, and reads nothing else. `campaign-finance/ingestion/validate_homepage_data.py` recounts it from the same three files and fails on any difference.
+>
+> **Who is listed.** Every donor whose counted giving since the start of the earliest cycle (2011-05-17) is $1,000 or more, under its group's name where its record is grouped (PS-155). Each donor's giving is split by cycle and by where it went: council candidates, school-board candidates, the 2027 mayoral candidates' committees (whatever office each was formed for, PS-157), outside-spending groups. A donor at $50,000 or more carries its itemized gifts. The list is ranked by total giving.
+>
+> **What counts.** As on the tools:
+> - a gift to an outside-spending group counts in full, whatever that group then spent on (PS-138);
+> - a row filed as an other receipt or a dues transfer is in no figure (PS-147, PS-95), except a row of a listed own-committee pair, which is counted (PS-142);
+> - in-kind gifts and loans are counted; a loan, the candidate's own money (PS-136) and a candidate's other committee (PS-142) are each marked;
+> - an outside-spending group's own row carries what it spent, marked spent (the file lists the groups on their own; the page places them in the one ranking); its spending is read from both artifacts and merged by content (spender, date, amount and filed document), never by id.
+>
+> **Each gift once.** A gift is one row of the filings. Candidate-committee rows are read from `campaign-finance/election-data.json`, which carries every council candidate-committee row. Outside-spending groups' receipts are read from both artifacts and merged by their content (committee, donor, date, amount and type), never by id, because the two artifacts number those rows independently. A donor grouped under another in either artifact is grouped here.
+>
+> **A mayoral candidate is one person.** The committees of one mayoral candidate are tied together by the candidate key in their candidacy ids, `mayor-<candidate key>-<committee id>` (PS-157). Each gift stays under its own committee's name, so Alexi Giannoulias's Secretary of State committee is named on each gift to it. Council and school-board candidates keep the person links the elections data already carries, and the file adds none of its own.
+>
+> **The votes feed.** The ten newest votes, from both bodies, that are a key vote, or a split vote that carries a tag. A council vote is split when at least three members voted yes and at least three voted no; a school-board vote is split when its outcome reads Split. A vote carries a tag when the `tag` column of the Sheet's All Votes tab (council) or SB Votes tab (school board) holds a value for it, so a procedural motion left untagged does not enter. A school-board item links to that vote's own address (PS-153); a council item links to `/alder-voting-history` and to the vote's record.
+>
+> **Stamps.** The file records the sha256 of each of its three inputs, and its validator refuses a stale stamp, so the file is rebuilt in any commit that moves any of them, as `campaign-finance/school-board-finance.json` is (SHEET-1 (iv)).
+
+*Provenance: HOMEPAGE-1 data ratification package, revision 4 (`homepage-1-data-package-rev4.md`), sha256 `77288203af7ae48ed85b9a5dc4236a08e97dd0c0925575a5a035a4ffc1e43454`, 11,516 B / 91 L, region R1 (its lines 41–59), transcribed verbatim in the form PS-157's provenance states: the heading bare, one bare empty line, then each line of the body with `> ` added and each empty line as `>`. Ratified by Ishan in chat 2026-10-14 ("12. ratify"), on the rulings of 2026-10-07 (1a–11a) and 2026-10-14 (1a–9a, 11b). Measured basis: the package's §2, on the artifacts at `2c0c89de62f681d4adc9fd4beac86ee67c420e00`. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-157`; `PS-158` occurring 0 times before this commit), never carried.*
+
 ---
 
 ## Rulings ratified without an id

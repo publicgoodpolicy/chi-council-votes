@@ -307,6 +307,25 @@ preserves what it writes, so a rebuild between refreshes keeps the figures. The 
 
 ---
 
+## The homepage data file (after both chains)
+
+`campaign-finance/homepage-data.json` is the homepage's own data file (PS-158). It is built from `campaign-finance/election-data.json`, `campaign-finance/council-data.json` and `campaign-finance/school-board-data.json` after both canonical chains, and then recounted. From the repository root:
+
+```
+python3 -B campaign-finance/ingestion/build_homepage_data.py \
+    --elections campaign-finance/election-data.json \
+    --council campaign-finance/council-data.json \
+    --school-board campaign-finance/school-board-data.json \
+    --out campaign-finance/homepage-data.json
+python3 -B campaign-finance/ingestion/validate_homepage_data.py \
+    --elections campaign-finance/election-data.json \
+    --council campaign-finance/council-data.json \
+    --school-board campaign-finance/school-board-data.json \
+    --data campaign-finance/homepage-data.json
+```
+
+Run it in every commit that moves `campaign-finance/election-data.json`, `campaign-finance/council-data.json` or `campaign-finance/school-board-data.json`; the validator refuses a stale stamp.
+
 ## Council contribution source: SBE bulk migration (`convert_bulk_receipts.py`)
 
 Council contributions are sourced from the **SBE bulk Receipts export**, not the
