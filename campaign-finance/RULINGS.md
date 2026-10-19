@@ -2879,6 +2879,22 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: HOMEPAGE-1 data ratification package, revision 4 (`homepage-1-data-package-rev4.md`), sha256 `77288203af7ae48ed85b9a5dc4236a08e97dd0c0925575a5a035a4ffc1e43454`, 11,516 B / 91 L, region R1 (its lines 41–59), transcribed verbatim in the form PS-157's provenance states: the heading bare, one bare empty line, then each line of the body with `> ` added and each empty line as `>`. Ratified by Ishan in chat 2026-10-14 ("12. ratify"), on the rulings of 2026-10-07 (1a–11a) and 2026-10-14 (1a–9a, 11b). Measured basis: the package's §2, on the artifacts at `2c0c89de62f681d4adc9fd4beac86ee67c420e00`. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-157`; `PS-158` occurring 0 times before this commit), never carried.*
 
+
+### PS-159 — the finance tools show no donor flags until they are ruled back on
+
+> **Ruled by Ishan, 2026-10-15 and 2026-10-16** (rulings 45b, 49a and 64a–67a). Until Ishan rules otherwise, the finance tools show no donor flags:
+> - On the elections tool's pages no donor carries a flag chip, and the Flag totals tab and the Flag filter in Browse donors are gone.
+> - On the alder voting page the Flag totals tab and the Flag filter are gone, and its methodology no longer describes flags.
+> - The school-board voting page showed none already.
+>
+> **What stays.**
+> - The flag data stays in the published data files, as the Sheet's Donor Overrides tab writes it. Only the pages stop showing it.
+> - The "needs review" mark on outside spending whose match to a candidate awaits IPG's check is not a donor flag, and it stays.
+>
+> **Turning them back on** is a new ruling. It needs one switch in each page's code, and the checks that now confirm flags are absent change with it.
+
+*Provenance: page-lane flags register package, revision 1 (`page-lane-flags-register-package-rev1.md`), sha256 `a3f92825592bb29254747bae4a91ebeff8309e65490ce593a6ffc57b5ef61802`, 2,057 B / 34 L, region R1 (its lines 18–29), transcribed verbatim in the form PS-157's provenance states: the heading bare, one bare empty line, then each line of the body with `> ` added and each empty line as `>`. Ratified by Ishan in chat 2026-10-18 09:44 EDT ("Ratified"), on rulings 45b and 49a of 2026-10-15 and 64a–68 and 69a of 2026-10-16. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-158`; `PS-159` occurring 0 times before this commit), never carried.*
+
 ---
 
 ## Rulings ratified without an id

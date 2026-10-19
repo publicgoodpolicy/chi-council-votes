@@ -45,7 +45,7 @@
     if (n == null || typeof n !== 'number' || !isFinite(n)) return null;
     return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
-  function prettyTag(s) { return String(s).replace(/-/g, ' '); }
+  function prettyTag(s) { return String(s).replace(/-/g, ' '); }  var FLAGS_ON = false;   // donor flags not rendered (launch ruling); Sheet flags column unaffected
 
   // A real IE name shows as the primary label with "funded primarily by …" as a
   // subtitle; only a genuine placeholder (no name resolved) falls back to the
@@ -85,7 +85,7 @@
       var style = (meta && meta.color) ? ' style="background:' + esc(meta.color) + ';color:' + readableText(meta.color) + '"' : '';
       out += '<span class="tagchip ind"' + style + '>' + esc(label) + '</span>';
     }
-    var fl = flags || [];
+    var fl = FLAGS_ON ? (flags || []) : [];
     for (var j = 0; j < fl.length; j++) {
       var ft = (fl[j] && fl[j].type) || fl[j];
       if (ft) out += '<span class="tagchip flag">⚑ ' + esc(prettyTag(ft)) + '</span>';
@@ -1255,7 +1255,7 @@
 
   // ---- Election Spend subtabs (vm computed by the data layer; render is pure) ----
   var SPEND_TABS = [['donors', 'Browse donors'], ['candidates', 'Spend by candidate'],
-    ['industries', 'Industry totals'], ['industry-candidate', 'Industries by candidate'], ['flags', 'Flag totals']];
+    ['industries', 'Industry totals'], ['industry-candidate', 'Industries by candidate']].concat(FLAGS_ON ? [['flags', 'Flag totals']] : []);
 
   function spendNav(active) {
     return '<div class="subnav" role="tablist" aria-label="Election spend">' + SPEND_TABS.map(function (t) {
@@ -1281,7 +1281,7 @@
         '<input type="search" data-browse-search placeholder="e.g. Realtors, CTU, Frank" autocomplete="off" value="' + esc(df.search || '') + '"></div>' +
       '<div class="elect-field"><label>Donor type</label>' + typeSel + '</div>' +
       '<div class="elect-field"><label>Industry</label>' + indSel + '</div>' +
-      '<div class="elect-field"><label>Flag</label>' + flagSel + '</div>' +
+      (FLAGS_ON ? '<div class="elect-field"><label>Flag</label>' + flagSel + '</div>' : '') +
       '</div>';
   }
 

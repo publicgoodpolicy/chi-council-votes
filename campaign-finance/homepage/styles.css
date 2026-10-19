@@ -1,0 +1,61 @@
+/* IPG civic tools homepage. Tokens from the elections embed (DESIGN-1): Georgia display
+   face, Poppins body, cream / ink / teal / coral. Scoped under #ipg-home-root. */
+#ipg-home-root{--cream:#F6EFE9;--paper:#FFFFFF;--ink:#342828;--ink-soft:#6a5d4e;--ink-muted:#7d7264;--tan:#EBDAC6;--line:#dcd2c4;--teal:#044147;--coral:#B0553A;--display:Georgia,ui-serif,serif;--body:Poppins,system-ui,-apple-system,sans-serif;--r:12px;
+  font-family:var(--body);color:var(--ink);background:var(--cream);line-height:1.5;font-size:16px;max-width:1080px;margin:0 auto;padding:32px 16px 48px;box-sizing:border-box}
+#ipg-home-root *{box-sizing:border-box}
+#ipg-home-root h1,#ipg-home-root h2{font-family:var(--display);font-weight:400;color:var(--teal);margin:0 0 8px}
+#ipg-home-root h1{font-size:clamp(28px,5vw,42px);line-height:1.15}
+#ipg-home-root h2{font-size:clamp(22px,3.5vw,30px)}
+#ipg-home-root a{color:var(--teal)}
+.hp-lede{color:var(--ink-soft);margin:0 0 16px}
+.hp-small{font-size:14px;color:var(--ink-muted);margin:8px 0}
+.hp-sub{display:block;font-size:12px;color:var(--ink-muted)}
+.hp-note{font-size:14px;color:var(--ink-soft);margin:12px 0 0}
+.hp-sec{margin-top:40px}
+.hp-status{padding:20px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r)}
+.hp-tools{list-style:none;padding:0;margin:24px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.hp-tools a{display:block;height:100%;padding:14px 16px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);text-decoration:none;color:var(--ink)}
+.hp-tools a:hover,.hp-tools a:focus-visible{border-color:var(--teal)}
+.hp-tools b{display:block;color:var(--teal);font-weight:600}
+.hp-tools span{font-size:14px;color:var(--ink-soft)}
+.hp-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.hp-field{display:flex;flex-direction:column;font-size:13px;color:var(--ink-muted);gap:4px}
+.hp-grow{flex:1 1 240px}
+.hp-field select,.hp-field input{font:inherit;font-size:15px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);min-height:40px}
+.hp-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);margin-top:8px}
+.hp-table{width:100%;border-collapse:collapse;font-size:14px}
+.hp-narrow{max-width:640px}
+.hp-table th,.hp-table td,.hp-items th,.hp-items td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.hp-table th{font-size:12px;font-weight:600;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.03em}
+.hp-num{text-align:right!important;white-space:nowrap;font-variant-numeric:tabular-nums}
+.hp-rank{width:2.5em;color:var(--ink-muted)}
+.hp-total{font-weight:600}
+.hp-toggle{all:unset;cursor:pointer;color:var(--ink);font-weight:500;border-bottom:1px dotted var(--ink-muted)}
+.hp-toggle:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.hp-donor.is-open .hp-toggle{color:var(--teal)}
+.hp-chip{display:inline-block;font-size:11px;line-height:1.6;padding:0 8px;margin:4px 6px 0 0;border-radius:999px;background:var(--tan);color:var(--ink)}
+.hp-own{background:#f1e1dc;color:#7a3523}
+.hp-key{background:var(--teal);color:#fff}
+.hp-detail{padding:4px 0 8px}
+.hp-detail .hp-scroll{max-height:420px;overflow:auto}
+.hp-items{width:100%;border-collapse:collapse;font-size:13px}
+.hp-split{list-style:none;padding:0;margin:0;max-width:420px}
+.hp-split li{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--line)}
+.hp-more,.hp-retry{font:inherit;font-weight:500;margin-top:12px;padding:8px 16px;border-radius:999px;border:1px solid var(--teal);background:var(--paper);color:var(--teal);cursor:pointer}
+.hp-more:hover,.hp-retry:hover{background:var(--teal);color:#fff}
+.hp-votes{list-style:none;padding:0;margin:0}
+.hp-vote{padding:14px 0;border-bottom:1px solid var(--line)}
+.hp-meta{font-size:13px;color:var(--ink-muted);margin:0}
+.hp-vtitle{margin:4px 0;font-weight:500;max-width:80ch}
+.hp-foot{margin-top:40px;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){
+  .hp-table > thead{display:none}
+  .hp-table > tbody > tr.hp-donor{display:grid;grid-template-columns:2.5em 1fr auto;padding:8px 0;border-bottom:1px solid var(--line)}
+  .hp-table > tbody > tr.hp-donor > td{border:0;padding:4px 8px}
+  .hp-table > tbody > tr.hp-donor > td[data-label]:not(.hp-total){grid-column:2 / 4;display:flex;justify-content:space-between;font-size:13px;color:var(--ink-soft);padding:0 8px}
+  .hp-table > tbody > tr.hp-donor > td[data-label]:not(.hp-total)::before{content:attr(data-label)}
+  .hp-table > tbody > tr.hp-detail-row{display:block}
+  .hp-table > tbody > tr.hp-detail-row > td{display:block;padding:0 8px}
+  .hp-table > tbody > tr.hp-detail-row > td:first-child{display:none}
+  .hp-items th,.hp-items td{padding:6px 8px}
+}

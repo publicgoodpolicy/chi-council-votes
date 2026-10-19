@@ -1806,9 +1806,9 @@ const IPG_SB_FEEDBACK = {
     // with a number that would silently mean something else. Under All elections it is the
     // DISTINCT donor count, not the sum of the per-election counts.
     if(scope.coverage) h += statTile(String(scope.coverage.donor_count), 'Donors');
-    h += statTile(money(avg), 'Avg. gift');
+    h += statTile(money(avg), 'Avg. itemized gift');   // ruling 73a
     h += statTile(String(ncontrib), 'Contributions');
-    h += '</div>';
+    h += '</div><div class="ipg-sb-note">Itemized gifts only. Illinois reports a donor\u2019s gifts by name once they pass $150 in a reporting period; smaller gifts are reported as one total.</div>';   // ruling 73a
 
     // Self-funding: its OWN tile, never folded into Raised (ratification 8), and never a
     // donor row (SBFIN-2 A dropped those donors upstream, which is why the two figures

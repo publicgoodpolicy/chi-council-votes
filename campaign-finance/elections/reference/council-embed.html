@@ -809,7 +809,7 @@ const FEEDBACK_CONFIG = {
   // store; D is kept as a name-compatible alias so existing code paths still read.
   let D = null;
   let tagList = [];
-  let _rcIndex = null;
+  let _rcIndex = null; const FLAGS_ON = false;   // donor flags not rendered (launch ruling); Sheet flags column unaffected
   let state={view:'member',ward:null,tagFilter:'All',rankTag:'All',
              data:null,dataStatus:'idle',dataError:null,
              cf:null,cfStatus:'idle',cfShowAll:false,cfShowOther:false,cfCycle:'current',
@@ -1260,9 +1260,9 @@ const FEEDBACK_CONFIG = {
     }
     h+=stat(fmtMoney(total),'Raised',true);
     h+=stat(totalDonors.toLocaleString(),'Donors');
-    h+=stat(fmtMoney(avgGift),'Avg. gift',true);
+    h+=stat(fmtMoney(avgGift),'Avg. itemized gift',true);   // ruling 73a
     h+=stat(totalContribs.toLocaleString(),'Contributions');
-    h+='</div>';
+    h+='</div><p class="ipg-cf-meta ipg-cf-avgnote">Itemized gifts only. Illinois reports a donor\u2019s gifts by name once they pass $150 in a reporting period; smaller gifts are reported as one total.</p>';   // ruling 73a
     // M5 (OC-V1): the other-committee line, in the tiles' whole-dollar form; the money stays in Raised.
     const ownAmt=contribs.reduce((s,c)=>s+(c.is_own_committee?c.amount:0),0);
     if(ownAmt>0) h+='<p class="ipg-cf-ownline">From the candidate\u2019s other committee: <strong>'+fmtMoney(ownAmt)+'</strong>, included in Raised.</p>';
@@ -1336,7 +1336,7 @@ const FEEDBACK_CONFIG = {
     const d=state.cf.donors[a.donor_id];
     if(!d) return '';
     const indChips=renderIndustryChips(d);
-    const flagChips=(d.flags||[]).map(f=>{
+    const flagChips=(FLAGS_ON?(d.flags||[]):[]).map(f=>{
       const ft=state.cf.flag_types[f.type];
       if(!ft) return '';
       const inner=f.source_url
@@ -1795,14 +1795,14 @@ const FEEDBACK_CONFIG = {
       +'<button class="ipg-sub-tab'+(state.cfLookupSub==='alder-spend'?' active':'')+'" data-sub="alder-spend">Spend by alder</button>'
       +'<button class="ipg-sub-tab'+(state.cfLookupSub==='industries'?' active':'')+'" data-sub="industries">Industry totals</button>'
       +'<button class="ipg-sub-tab'+(state.cfLookupSub==='alder-mix'?' active':'')+'" data-sub="alder-mix">Industries by alder</button>'
-      +'<button class="ipg-sub-tab'+(state.cfLookupSub==='flags'?' active':'')+'" data-sub="flags">Flag totals</button>'
+      +(FLAGS_ON?'<button class="ipg-sub-tab'+(state.cfLookupSub==='flags'?' active':'')+'" data-sub="flags">Flag totals</button>':'')
       +'</div>';
 
     if(state.cfLookupSub==='industries') h+=industriesSubView();
     else if(state.cfLookupSub==='industry-detail') h+=industryDetailView();
     else if(state.cfLookupSub==='alder-spend') h+=alderSpendSubView();
     else if(state.cfLookupSub==='alder-mix') h+=alderMixSubView();
-    else if(state.cfLookupSub==='flags') h+=flagsSubView();
+    else if(FLAGS_ON&&state.cfLookupSub==='flags') h+=flagsSubView();
     else h+=donorsSubView();
     return h;
   }
@@ -1851,12 +1851,12 @@ const FEEDBACK_CONFIG = {
       h+='<option value="'+t+'"'+(state.cfIndustryFilter===t?' selected':'')+'>'+lbl+'</option>';
     });
     h+='</select></div>';
-    h+='<div class="ipg-field"><label>Flag</label><select id="ipg-cf-flag-sel">';
+    if(FLAGS_ON){h+='<div class="ipg-field"><label>Flag</label><select id="ipg-cf-flag-sel">';
     flagTypes.forEach(t=>{
       const lbl=t==='All'?'All flags':(state.cf.flag_types[t]?state.cf.flag_types[t].label:t);
       h+='<option value="'+t+'"'+(state.cfFlagFilter===t?' selected':'')+'>'+lbl+'</option>';
     });
-    h+='</select></div>';
+    h+='</select></div>';}
     h+='</div>';
 
     const list=cfAllParents({search:state.cfSearch,type:state.cfTypeFilter,industry:state.cfIndustryFilter,flag:state.cfFlagFilter});
@@ -2367,7 +2367,7 @@ const FEEDBACK_CONFIG = {
       +'</div>';
 
     // Flags if any
-    if(donor.flags && donor.flags.length){
+    if(FLAGS_ON&&donor.flags && donor.flags.length){
       h+='<div class="ipg-modal-flags">';
       donor.flags.forEach(f=>{
         const ft=state.cf.flag_types[f.type]; if(!ft) return;
@@ -2739,13 +2739,13 @@ function recTagChips(){
       <h3 class="ipg-meth-h" id="meth-donors">How we identify and group donors</h3>
       <p>Raw campaign-finance data is messy: the same union, firm, or person can appear under a dozen slightly different names. To make donor totals meaningful, we do careful, editor-reviewed <strong>entity resolution</strong>. We use exactly three operations, and the distinction between them is central to our integrity:</p>
       <ul>
-        <li><strong>Tagging</strong> &mdash; we attach an industry classification, an optional flag, and editorial notes to a donor. This adds context; it changes no totals.</li>
+        <li><strong>Tagging</strong> &mdash; we attach an industry classification and editorial notes to a donor. This adds context; it changes no totals.</li>
         <li><strong>Merging</strong> &mdash; used <strong>only</strong> when two records are genuinely the <em>same</em> filing recorded twice (a re-ingested report, a trailing space, an encoding artifact). In that narrow case we combine them into one record. This is the only operation that removes a record, and it is reserved for true duplicates.</li>
         <li><strong>Rolling up</strong> &mdash; used to group an organization's <em>related</em> entities &mdash; for example, a union and its political action committee, or a company and its affiliated PAC &mdash; under a single parent for display. <strong>A rollup never deletes anything.</strong> Every underlying record stays in the data, individually traceable to its original SBE filing. The parent shows an aggregate total, and that total can always be expanded to the role-tagged breakdown of the members that compose it.</li>
       </ul>
       <p>When we show that an organization &ldquo;gave $X,&rdquo; that figure is <strong>auditable, not asserted</strong>: you can open it and see the specific SBE-sourced records that sum to it, each labeled by its role (the organization itself, an affiliated PAC, a subsidiary, an alternate name, or a related entity). We chose this design precisely <em>because</em> it keeps the receipts.</p>
-      <h4 class="ipg-meth-sub">Industry classifications and flags</h4>
-      <p>Donors are classified into industry categories (for example, real estate, labor, finance, healthcare) drawn from a <strong>controlled, published vocabulary</strong> maintained by our editors. Some donors also carry <strong>flags</strong> that note something a reader might want to weigh (for example, an entity under indictment, or a donor tied to a specific zoning or policy interest). Classifications and flags are <strong>editorial judgments</strong>, applied by hand against a fixed vocabulary; reasonable people may disagree with a given call, and we welcome correction (see below).</p>
+      <h4 class="ipg-meth-sub">Industry classifications</h4>
+      <p>Donors are classified into industry categories (for example, real estate, labor, finance, healthcare) drawn from a <strong>controlled, published vocabulary</strong> maintained by our editors. Classifications are <strong>editorial judgments</strong>, applied by hand against a fixed vocabulary; reasonable people may disagree with a given call, and we welcome correction (see below).</p>
 
       <h3 class="ipg-meth-h" id="meth-ie">Independent expenditures and who funds them</h3>
       <p>Not all political money flows directly to a candidate's campaign. A significant share is spent <em>independently</em> &mdash; by committees that support or oppose a candidate without coordinating with them. This tool surfaces that money too, and because it behaves differently from a direct contribution, we handle and label it with particular care.</p>
@@ -2783,7 +2783,7 @@ function recTagChips(){
         <li><strong>Reported data inherits its source's errors.</strong> SBE filings can be late, amended, duplicated, or misreported by the filer; roll-call records can contain clerical errors. We correct what we catch, but we cannot guarantee the source was perfect.</li>
         <li><strong>Entity resolution involves judgment.</strong> Deciding that two differently-named records are the same organization, or that a PAC should roll up under a parent, is an editorial call. We err toward keeping records distinct and traceable, but reasonable people may group them differently.</li>
         <li><strong>Independent expenditures are matched and classified by hand.</strong> Tying an IE to the right current alder is a name-and-ward match against the filings, and deciding that a transfer into a committee is an organization's own self-funding (and so excluded from totals) is an editorial judgment against how the filing is labeled. We keep every underlying record traceable, but these calls are open to good-faith disagreement.</li>
-        <li><strong>Industry tags, flags, and key-vote designations are editorial.</strong> They reflect our classification and prominence judgments, applied by people, and are open to good-faith disagreement.</li>
+        <li><strong>Industry tags and key-vote designations are editorial.</strong> They reflect our classification and prominence judgments, applied by people, and are open to good-faith disagreement.</li>
         <li><strong>Address lookup is approximate</strong> (see above).</li>
         <li><strong>Timing.</strong> There is a lag between when a filing or vote occurs and when it appears here.</li>
       </ul>

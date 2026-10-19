@@ -461,10 +461,10 @@ ok('industries-by-candidate surfaces uncategorized (never blank/folded)',
   /uncategorized/.test(ixcHtml) && ixcVM.rows.every(function (r) { return r.industries.length > 0; }));
 // subtab nav present + the spend view replaces the placeholder
 var spendPage = R.renderPage({ office: 'school_board', topView: 'spend', officeRaces: omVM, activeSlug: 'district-2a', raceView: rv, spend: donorsVM });
-ok('spend view renders the subtab nav (5 tabs) instead of coming-soon',
+ok('spend view renders the subtab nav (4 tabs, no Flag totals: flags off, rulings 45b, 67a) instead of coming-soon',
   /data-spendtab="donors"/.test(spendPage) && /data-spendtab="candidates"/.test(spendPage) &&
   /data-spendtab="industries"/.test(spendPage) && /data-spendtab="industry-candidate"/.test(spendPage) &&
-  /data-spendtab="flags"/.test(spendPage) && spendPage.indexOf('Election spend — coming soon') < 0);
+  !/data-spendtab="flags"/.test(spendPage) && spendPage.indexOf('Election spend — coming soon') < 0);
 
 console.log('\n=== B5 assertions (year filter + office param + Recoleta) ===');
 var cyclesAvail = D.availableCycles(index);

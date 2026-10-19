@@ -218,9 +218,12 @@ function withSynthetic(base, opts) {
   var headReal = await boot(embedHead, JSON.parse(baseRaw), { showAll: true });
   T.ok('[E1.2] on real data the line renders NOTHING — no node, no empty row, no $0 line',
     lineNode(real) === null && !/Small-dollar and un-itemized contributions/.test(real.text));
-  T.ok('[E1.2/E7] the ward profile is BYTE-IDENTICAL to the pre-restore embed at HEAD on real data',
-    real.html === headReal.html,
-    real.html === headReal.html ? 'profile innerHTML sha ' + crypto.createHash('sha256').update(real.html).digest('hex').slice(0, 16)
+  // ruling 73a (2026-10-18): the average tile is relabelled and a note follows the tiles; both are
+  // normalised away on each side so the comparison still bites on any OTHER change to the profile.
+  var norm73 = function (h) { return h.replace(/<p class="ipg-cf-meta ipg-cf-avgnote">[^<]*<\/p>/g, '').replace(/Avg\. itemized gift/g, 'Avg. gift'); };
+  T.ok('[E1.2/E7] the ward profile is BYTE-IDENTICAL to the pre-restore embed at HEAD on real data (ruling 73a\u2019s label and note normalised)',
+    norm73(real.html) === norm73(headReal.html),
+    norm73(real.html) === norm73(headReal.html) ? 'profile innerHTML sha ' + crypto.createHash('sha256').update(real.html).digest('hex').slice(0, 16)
       : 'DIFFERS: post ' + real.html.length + ' chars vs pre ' + headReal.html.length);
 
   // ---- assert 5 (E5) — undated renders in no view; curated total == pre-2011 subset ----
@@ -393,7 +396,7 @@ function withSynthetic(base, opts) {
     o.raised = money((r.app.textContent.match(/\$([\d,]+)\s*Raised/) || [])[1]);
     o.line = lineOf(r); o.rowForX = !!r.app.querySelector('.ipg-cf-row[data-donor-id="' + X + '"]');
     q('.ipg-tab[data-v="lookup"]').onclick(); await wait(r, 60);
-    for (var s of ['industries', 'flags', 'alder-mix']) { q('.ipg-sub-tab[data-sub="' + s + '"]').onclick(); await wait(r, 60); o[s] = r.app.textContent; }
+    o.flagsTab = !!q('.ipg-sub-tab[data-sub="flags"]'); for (var s of ['industries', 'alder-mix']) { q('.ipg-sub-tab[data-sub="' + s + '"]').onclick(); await wait(r, 60); o[s] = r.app.textContent; }   // no flags sub-tab: flags off (rulings 45b, 67a)
     q('.ipg-tab[data-v="relationship"]').onclick(); await wait(r, 200);
     var rd = q('#ipg-rel-donor'); if (rd) { rd.value = X; rd.onchange(); await wait(r, 200); }
     o.relPicked = !!q('#ipg-rel-donor') && q('#ipg-rel-donor').value === X; o.relationship = r.app.textContent;
@@ -405,18 +408,18 @@ function withSynthetic(base, opts) {
     var mod = q('#ipg-modal-overlay .ipg-modal'); o.modal = mod ? mod.textContent : '(no profile)';
     return o;
   }
-  var tReal = null, tOther = null, tGift = null, SURF = ['industries', 'flags', 'alder-mix', 'relationship', 'modal'];
+  var tReal = null, tOther = null, tGift = null, SURF = ['industries', 'alder-mix', 'relationship', 'modal'];
   if (X) {
     var bOther = await boot(embedNow, withRow('Other Receipt'), { showAll: true }), bGift = await boot(embedNow, withRow('Individual Contribution'), { showAll: true });
     tOther = await tour(bOther); tGift = await tour(bGift); tReal = await tour(real);   // `real` is not read again above this point
   }
   var movedByOther = X ? SURF.filter(function (k) { return tOther[k] !== tReal[k]; }) : SURF;
   var movedByGift = X ? SURF.filter(function (k) { return tGift[k] !== tReal[k]; }) : [];
-  T.ok('[M2/TABS] a constructed other receipt from a real donor moves the alder\u2019s line and nothing else: Raised, Industry totals, Flag totals, Industries by alder, Follow the money and the donor\u2019s own profile read as on the real data',
-    !!X && tReal.modal !== '(no profile)' && tReal.relPicked && tOther.relPicked && movedByOther.length === 0 && tOther.raised === tReal.raised && !tOther.rowForX &&
+  T.ok('[M2/TABS] a constructed other receipt from a real donor moves the alder\u2019s line and nothing else: Raised, Industry totals, Industries by alder, Follow the money and the donor\u2019s own profile read as on the real data; no Flag totals sub-tab renders (flags off)',
+    !!X && !tReal.flagsTab && tReal.modal !== '(no profile)' && tReal.relPicked && tOther.relPicked && movedByOther.length === 0 && tOther.raised === tReal.raised && !tOther.rowForX &&
     tOther.line !== tReal.line && /^Other receipts: \$/.test(tOther.line),
     X ? ('donor ' + X + ' (ward ' + W2 + '); moved: ' + (movedByOther.join(', ') || 'none') + ' | ' + tOther.line) : 'premise: no donor fits the rule');
-  T.ok('[M2/TABS:bite] the same row filed as a contribution moves Raised, Industry totals, Industries by alder, Follow the money and the donor\u2019s profile (Flag totals move only for a flagged donor)',
+  T.ok('[M2/TABS:bite] the same row filed as a contribution moves Raised, Industry totals, Industries by alder, Follow the money and the donor\u2019s profile',
     !!X && tGift.raised === Math.round(mCountedReal + X_AMT) && tGift.rowForX &&
     ['industries', 'alder-mix', 'relationship', 'modal'].every(function (k) { return movedByGift.indexOf(k) >= 0; }),
     X ? ('Raised ' + tReal.raised + ' -> ' + tGift.raised + '; moved: ' + movedByGift.join(', ')) : 'premise: no donor fits the rule');

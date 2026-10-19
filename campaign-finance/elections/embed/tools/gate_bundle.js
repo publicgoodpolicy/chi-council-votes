@@ -297,7 +297,7 @@ var FIXTURES = {
     office: 'school_board',
     presidentSlug: 'school-board-president',
     minRaces: 11,                       // President + the sb-d04..d12 district cohort (districts split a/b)
-    subtabs: ['donors', 'candidates', 'industries', 'industry-candidate', 'flags'],
+    subtabs: ['donors', 'candidates', 'industries', 'industry-candidate'],   // 'flags' retired: flags off (rulings 45b, 67a)
     // SCOPE-UI: the GLOBAL election selector (ratified {year} {body} labels). The former
     // per-spend-tab This/Last/All filter and the per-race toggle are retired; 'all' (the
     // union window) is not resolvable from any UI surface.
@@ -606,7 +606,7 @@ async function assertSpendTabFeatures(T, ctx, fx) {
   ctx.click(ctx.root().querySelector('[data-spendtab="donors"]')); await ctx.wait(50);
   var R = ctx.root().innerHTML;
   T.ok('[spend.A] NO per-tab election filter (global selector governs; data-spendelection retired)', R.indexOf('data-spendelection') < 0);
-  fx.subtabs.forEach(function (t) { T.ok('[spend.A] subtab present: ' + t, R.indexOf('data-spendtab="' + t + '"') >= 0); });
+  fx.subtabs.forEach(function (t) { T.ok('[spend.A] subtab present: ' + t, R.indexOf('data-spendtab="' + t + '"') >= 0); }); T.ok('[spend.A] no Flag totals subtab (flags off, rulings 45b, 67a)', R.indexOf('data-spendtab="flags"') < 0 && R.indexOf('Flag totals') < 0);
   T.ok('[spend.A] browse list renders donor rows under the default (2026) scope', /data-funder/.test(R));
   // (the 'IE PAC' STRING legitimately remains in the stable facet dropdown; the assert is on ROWS)
   T.ok('[spend.A] IE-committee ROWS under 2026 equal the spenders with 2026 school-board IE (3; 09-13 vintage)',
@@ -746,9 +746,11 @@ async function assertBrowseFilters(T, ctx, fx) {
   var ieRows = function () { return ctx.root().querySelectorAll('.spend-body [data-committee]').length; };
   var setSel = function (sel, val) { var e = ctx.root().querySelector(sel); e.value = val; e.dispatchEvent(new ctx.window.Event('change', { bubbles: true })); };
   var typeSearch = async function (val) { var s = ctx.root().querySelector('[data-browse-search]'); s.value = val; s.dispatchEvent(new ctx.window.Event('input', { bubbles: true })); await ctx.wait(260); };
-  T.ok('[filters] 4 controls present (search + type/industry/flag)',
+  T.ok('[filters] 3 controls present (search + type/industry) and no flag filter (flags off, rulings 45b, 67a)',
     !!ctx.root().querySelector('[data-browse-search]') && !!ctx.root().querySelector('[data-donor-type]') &&
-    !!ctx.root().querySelector('[data-donor-industry]') && !!ctx.root().querySelector('[data-donor-flag]'));
+    !!ctx.root().querySelector('[data-donor-industry]') && !ctx.root().querySelector('[data-donor-flag]'));
+  T.ok('[filters] no donor-flag chip renders in the donor list (flags off, rulings 45b, 67a)',
+    !/\u2691 (Outside Chicago|Out of state|funded trump ballroom|pac_dues_funding)/.test(ctx.root().querySelector('.spend-body').textContent));
   var base = donorRows();
   await typeSearch(bf.search);
   var afterSearch = donorRows();
@@ -764,10 +766,8 @@ async function assertBrowseFilters(T, ctx, fx) {
   await typeSearch(bf.search);
   T.ok('[filters] compose type + search = AND (subset of type-only)', donorRows() > 0 && donorRows() <= afterType);
   ctx.click(ctx.root().querySelector('[data-clear-filters]')); await ctx.wait(50);
-  var flagOpt = [].slice.call(ctx.root().querySelector('[data-donor-flag]').options).filter(function (o) { return o.value !== 'All'; })[0];
-  if (flagOpt) { setSel('[data-donor-flag]', flagOpt.value); await ctx.wait(50);
-    T.ok('[filters] flag filter applies AND excludes IE rows (IE carry no donor flags)', ieRows() === 0);
-    ctx.click(ctx.root().querySelector('[data-clear-filters]')); await ctx.wait(50); }
+  // (the flag-filter leg retired with the flag filter: flags off, rulings 45b, 67a;
+  //  the two lines above assert the filter and the donor-flag chips are absent)
   var hasUncat = [].slice.call(ctx.root().querySelector('[data-donor-industry]').options).some(function (o) { return o.value === 'uncategorized'; });
   T.ok('[filters] industry offers "uncategorized" (firewall: unclassified filterable)', hasUncat);
   if (hasUncat) { setSel('[data-donor-industry]', 'uncategorized'); await ctx.wait(50);
