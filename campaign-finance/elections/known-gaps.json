@@ -127,6 +127,33 @@
       "reason": "SBE-side: the committee's Q3 2026 Quarterly D-2 (filing 1024906, received 2026-10-13) swears IndivContribI $850.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The committee's only itemized row is the $500.00 receipt on its Q1 filing 1007397.",
       "evidence": "Ruling 79a (2026-10-20). Bulk pulls of 2026-10-16, 2026-10-17 and 2026-10-20 carry 0 receipt rows for FiledDocID 1024906 (2026-10-20 receipts_639280307458756287 sha256 4e23f88d71b4819bea37338a3e8215cfc2f16ffd168ee9a3863ab96bda45d8ff); D2Totals row 596293 IndivContribI 850 (d2totals_639280769856560778 sha256 ec29bd70a825659905a58d0576bf7a02e9f86db96bf931074ee3e596121c34a5); FiledDocs row 1024906, Quarterly 2026-07-01..2026-09-30, received 2026-10-13 10:36:28 (fileddocs_639280802059206833 sha256 416d99a3e1a45ac66b1326100b1cba0a4ce25a04939c997c5c88e81999791403).",
       "annotated": "2026-10-20"
+    },
+    {
+      "committee": "cand-bean-ward-34",
+      "period_beg": "2022-07-01",
+      "period_end": "2022-09-30",
+      "amount": -880.00,
+      "reason": "SBE-side: the committee's Quarterly D-2 (filing 858046, received 2022-10-05) swears IndivContribI $880.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The period is the committee's 2022-23 run, before its 2026 re-registration. Our itemized total for the period is $0.00.",
+      "evidence": "Ruling 103a (2026-10-21). Bulk pulls of 2026-10-16 and 2026-10-20 carry 0 receipt rows for FiledDocID 858046 (2026-10-20 receipts_639280307458756287 sha256 4e23f88d71b4819bea37338a3e8215cfc2f16ffd168ee9a3863ab96bda45d8ff; 2026-10-16 receipts_639277341339768223 sha256 c89ae1399e9cf1c6f6196ff4d0ecee02868b9576bb205eb42301ee5c572500af); D2Totals row 497780 IndivContribI 880.00 (d2totals_639280769856560778 sha256 ec29bd70a825659905a58d0576bf7a02e9f86db96bf931074ee3e596121c34a5); FiledDocs row 858046, Quarterly 2022-07-01..2022-09-30, received 2022-10-05 10:37:01 (fileddocs_639280802059206833 sha256 416d99a3e1a45ac66b1326100b1cba0a4ce25a04939c997c5c88e81999791403).",
+      "annotated": "2026-10-21"
+    },
+    {
+      "committee": "cand-bean-ward-34",
+      "period_beg": "2022-10-01",
+      "period_end": "2022-12-31",
+      "amount": -1670.00,
+      "reason": "SBE-side: the committee's Quarterly D-2 (filing 873651, received 2023-01-17) swears IndivContribI $1,670.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The period is the committee's 2022-23 run, before its 2026 re-registration. Our itemized total for the period is $0.00.",
+      "evidence": "Ruling 103a (2026-10-21). Bulk pulls of 2026-10-16 and 2026-10-20 carry 0 receipt rows for FiledDocID 873651 (2026-10-20 receipts_639280307458756287 sha256 4e23f88d71b4819bea37338a3e8215cfc2f16ffd168ee9a3863ab96bda45d8ff; 2026-10-16 receipts_639277341339768223 sha256 c89ae1399e9cf1c6f6196ff4d0ecee02868b9576bb205eb42301ee5c572500af); D2Totals row 507784 IndivContribI 1670.00 (d2totals_639280769856560778 sha256 ec29bd70a825659905a58d0576bf7a02e9f86db96bf931074ee3e596121c34a5); FiledDocs row 873651, Quarterly 2022-10-01..2022-12-31, received 2023-01-17 09:24:08 (fileddocs_639280802059206833 sha256 416d99a3e1a45ac66b1326100b1cba0a4ce25a04939c997c5c88e81999791403).",
+      "annotated": "2026-10-21"
+    },
+    {
+      "committee": "cand-bean-ward-34",
+      "period_beg": "2023-01-01",
+      "period_end": "2023-03-31",
+      "amount": -490.00,
+      "reason": "SBE-side: the committee's Final D-2 (filing 885430, received 2023-04-17) swears IndivContribI $490.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The period is the committee's 2022-23 run, before its 2026 re-registration. Our itemized total for the period is $0.00.",
+      "evidence": "Ruling 103a (2026-10-21). Bulk pulls of 2026-10-16 and 2026-10-20 carry 0 receipt rows for FiledDocID 885430 (2026-10-20 receipts_639280307458756287 sha256 4e23f88d71b4819bea37338a3e8215cfc2f16ffd168ee9a3863ab96bda45d8ff; 2026-10-16 receipts_639277341339768223 sha256 c89ae1399e9cf1c6f6196ff4d0ecee02868b9576bb205eb42301ee5c572500af); D2Totals row 513593 IndivContribI 490.00 (d2totals_639280769856560778 sha256 ec29bd70a825659905a58d0576bf7a02e9f86db96bf931074ee3e596121c34a5); FiledDocs row 885430, Final 2023-01-01..2023-03-31, received 2023-04-17 09:36:13 (fileddocs_639280802059206833 sha256 416d99a3e1a45ac66b1326100b1cba0a4ce25a04939c997c5c88e81999791403).",
+      "annotated": "2026-10-21"
     }
   ]
 }

@@ -3018,6 +3018,94 @@
       "bio": {
         "source": "MAYOR-1 (2026-10-13): committee 41177 'Friends For Danni C' is in the mayoral report's table and has no receipts of record at the 2026-09-13 vintage; linked when receipts appear, so the card does not read $0 (SB-ROSTER-1 precedent)"
       }
+    },
+    "cand-bean-ward-34": {
+      "candidate_id": "cand-bean-ward-34",
+      "name": "Nathan Bean",
+      "race_id": "ward-34",
+      "committee_id": "38804",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee added on Ishan's attestation of the ward (ruling 101-1, 2026-10-21); candidacy not confirmed"
+      }
+    },
+    "cand-egeston-ward-20": {
+      "candidate_id": "cand-egeston-ward-20",
+      "name": "Jarquetta Egeston",
+      "race_id": "ward-20",
+      "committee_id": "41382",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee added on Ishan's attestation of the ward (ruling 101-1, 2026-10-21); candidacy not confirmed"
+      }
+    },
+    "cand-greenleaf-ward-17": {
+      "candidate_id": "cand-greenleaf-ward-17",
+      "name": "Raynetta Greenleaf",
+      "race_id": "ward-17",
+      "committee_id": "35006",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee added on Ishan's attestation of the ward (ruling 101-1, 2026-10-21); candidacy not confirmed"
+      }
+    },
+    "cand-logan-ward-01": {
+      "candidate_id": "cand-logan-ward-01",
+      "name": "Laurie Logan",
+      "race_id": "ward-01",
+      "committee_id": "41336",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee added on Ishan's attestation of the ward (ruling 101-1, 2026-10-21); candidacy not confirmed"
+      }
+    },
+    "cand-mack-ward-08": {
+      "candidate_id": "cand-mack-ward-08",
+      "name": "Yolonda Mack",
+      "race_id": "ward-08",
+      "committee_id": "41348",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee added on Ishan's attestation of the ward (ruling 101-1, 2026-10-21); candidacy not confirmed"
+      }
+    },
+    "cand-moore-ward-08": {
+      "candidate_id": "cand-moore-ward-08",
+      "name": "Ruthie Moore",
+      "race_id": "ward-08",
+      "committee_id": "41338",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee added on Ishan's attestation of the ward (ruling 101-1, 2026-10-21); candidacy not confirmed"
+      }
+    },
+    "cand-rojasbanda-ward-23": {
+      "candidate_id": "cand-rojasbanda-ward-23",
+      "name": "Leonardo Rojas-Banda",
+      "race_id": "ward-23",
+      "committee_id": "41359",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee added on Ishan's attestation of the ward (ruling 101-1, 2026-10-21); candidacy not confirmed"
+      }
+    },
+    "cand-ross-ward-19": {
+      "candidate_id": "cand-ross-ward-19",
+      "name": "Erin Ross",
+      "race_id": "ward-19",
+      "committee_id": "41425",
+      "incumbent": false,
+      "status": "declared",
+      "bio": {
+        "source": "SBE committee added on Ishan's attestation of the ward (ruling 101-1, 2026-10-21); candidacy not confirmed"
+      }
     }
   }
 }

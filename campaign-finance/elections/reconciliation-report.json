@@ -9,7 +9,7 @@
     "scope": "elections candidate committees (v2): school_board, city_council and mayor; a committee listed in receipt-floors.tsv is compared from its floor; IE committees out of reconciliation scope",
     "inputs": {
       "election-data.json": {
-        "sha256": "0b5cb764b7134e00088dfa740da7a78872f08dd98d7f55e33ed14eb27c594f3a",
+        "sha256": "d5b2f713e085d3f9ce9046689af9e1dbae3db9be13a717f7a2848f764d008e0b",
         "path": "campaign-finance/election-data.json"
       },
       "d2totals": {
@@ -23,7 +23,7 @@
         "vintage_manifest_sha256": "2f52feb199fe66873b43b9af0dfb2ee774cf6817834667e7116d75a250252e92"
       },
       "known-gaps.json": {
-        "sha256": "027cfd7c28d1c111a1953a5914c38a2cd60c81269b300ae2c9dbac2a06d72ade",
+        "sha256": "77ef586fecf689870626fb12a62935d8612976a0d77d703824234182427792d8",
         "path": "campaign-finance/elections/known-gaps.json"
       },
       "receipt-floors.tsv": {
@@ -33,27 +33,27 @@
     }
   },
   "headline": {
-    "d2_itemized_total": 167062650.82,
-    "ours_itemized_total": 166980719.07,
-    "residual": -81931.75,
+    "d2_itemized_total": 167311637.37,
+    "ours_itemized_total": 167226665.62,
+    "residual": -84971.75,
     "dollar_weighted_match_pct": 99.95,
-    "committees_candidate": 152,
-    "committees_with_sbe_id": 152,
+    "committees_candidate": 157,
+    "committees_with_sbe_id": 157,
     "committees_no_sbe_id": 0,
-    "committees_with_periods": 152,
-    "reconciled": 141,
-    "residual_state": 11,
+    "committees_with_periods": 157,
+    "reconciled": 145,
+    "residual_state": 12,
     "too_new": 0,
-    "pending_a1_total": 2193199.4,
+    "pending_a1_total": 2201699.4,
     "aggregate_total": 0.0,
-    "inkind_d2_total": 8485615.74,
-    "inkind_ours_total": 8524651.99,
+    "inkind_d2_total": 8493074.75,
+    "inkind_ours_total": 8532111.0,
     "over_threshold": [],
     "coverage_miss_committees": [],
     "join_failures": 0,
     "filings_missing_totals": 6,
     "overlap_superseded": 71,
-    "disclosed": 10,
+    "disclosed": 11,
     "stale_annotations": 0,
     "before_floor_committees": 4
   },
@@ -110,6 +110,32 @@
     }
   ],
   "disclosed": [
+    {
+      "committee": "cand-bean-ward-34",
+      "periods": [
+        {
+          "beg": "2022-07-01",
+          "end": "2022-09-30",
+          "residual": -880.0,
+          "reason": "SBE-side: the committee's Quarterly D-2 (filing 858046, received 2022-10-05) swears IndivContribI $880.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The period is the committee's 2022-23 run, before its 2026 re-registration. Our itemized total for the period is $0.00.",
+          "annotated": "2026-10-21"
+        },
+        {
+          "beg": "2022-10-01",
+          "end": "2022-12-31",
+          "residual": -1670.0,
+          "reason": "SBE-side: the committee's Quarterly D-2 (filing 873651, received 2023-01-17) swears IndivContribI $1,670.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The period is the committee's 2022-23 run, before its 2026 re-registration. Our itemized total for the period is $0.00.",
+          "annotated": "2026-10-21"
+        },
+        {
+          "beg": "2023-01-01",
+          "end": "2023-03-31",
+          "residual": -490.0,
+          "reason": "SBE-side: the committee's Final D-2 (filing 885430, received 2023-04-17) swears IndivContribI $490.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The period is the committee's 2022-23 run, before its 2026 re-registration. Our itemized total for the period is $0.00.",
+          "annotated": "2026-10-21"
+        }
+      ]
+    },
     {
       "committee": "cand-dones-sb-d06",
       "periods": [
@@ -674,6 +700,109 @@
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
           "coverage_miss": false
+        }
+      ]
+    },
+    "cand-bean-ward-34": {
+      "committee_name": "Friends of Nathan Bean",
+      "sbe_committee_id": "38804",
+      "superseded_filings": 0,
+      "state": "RESIDUAL",
+      "flags": [
+        "OVER-THRESHOLD",
+        "COVERAGE-MISS",
+        "DISCLOSED"
+      ],
+      "periods_count": 4,
+      "d2_itemized": 17890.0,
+      "ours_itemized": 14850.0,
+      "residual": -3040.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [
+        {
+          "beg": "2022-07-01",
+          "end": "2022-09-30",
+          "d2_itemized": 880.0
+        },
+        {
+          "beg": "2022-10-01",
+          "end": "2022-12-31",
+          "d2_itemized": 1670.0
+        },
+        {
+          "beg": "2023-01-01",
+          "end": "2023-03-31",
+          "d2_itemized": 490.0
+        }
+      ],
+      "per_period": [
+        {
+          "beg": "2022-07-01",
+          "end": "2022-09-30",
+          "d2_itemized": 880.0,
+          "ours_itemized": 0.0,
+          "residual": -880.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": true
+        },
+        {
+          "beg": "2022-10-01",
+          "end": "2022-12-31",
+          "d2_itemized": 1670.0,
+          "ours_itemized": 0.0,
+          "residual": -1670.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": true
+        },
+        {
+          "beg": "2023-01-01",
+          "end": "2023-03-31",
+          "d2_itemized": 490.0,
+          "ours_itemized": 0.0,
+          "residual": -490.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": true
+        },
+        {
+          "beg": "2026-08-04",
+          "end": "2026-09-30",
+          "d2_itemized": 14850.0,
+          "ours_itemized": 14850.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ],
+      "disclosed": [
+        {
+          "beg": "2022-07-01",
+          "end": "2022-09-30",
+          "residual": -880.0,
+          "reason": "SBE-side: the committee's Quarterly D-2 (filing 858046, received 2022-10-05) swears IndivContribI $880.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The period is the committee's 2022-23 run, before its 2026 re-registration. Our itemized total for the period is $0.00.",
+          "annotated": "2026-10-21"
+        },
+        {
+          "beg": "2022-10-01",
+          "end": "2022-12-31",
+          "residual": -1670.0,
+          "reason": "SBE-side: the committee's Quarterly D-2 (filing 873651, received 2023-01-17) swears IndivContribI $1,670.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The period is the committee's 2022-23 run, before its 2026 re-registration. Our itemized total for the period is $0.00.",
+          "annotated": "2026-10-21"
+        },
+        {
+          "beg": "2023-01-01",
+          "end": "2023-03-31",
+          "residual": -490.0,
+          "reason": "SBE-side: the committee's Final D-2 (filing 885430, received 2023-04-17) swears IndivContribI $490.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The period is the committee's 2022-23 run, before its 2026 re-registration. Our itemized total for the period is $0.00.",
+          "annotated": "2026-10-21"
         }
       ]
     },
@@ -2466,6 +2595,38 @@
           "residual": 0.0,
           "d2_inkind": 38838.14,
           "ours_inkind": 38838.14,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-egeston-ward-20": {
+      "committee_name": "Friends of Jarquetta Egeston",
+      "sbe_committee_id": "41382",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [
+        "PENDING-A1"
+      ],
+      "periods_count": 1,
+      "d2_itemized": 60950.0,
+      "ours_itemized": 60950.0,
+      "residual": 0.0,
+      "d2_inkind": 6319.38,
+      "ours_inkind": 6319.38,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 2500.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-08-17",
+          "end": "2026-09-30",
+          "d2_itemized": 60950.0,
+          "ours_itemized": 60950.0,
+          "residual": 0.0,
+          "d2_inkind": 6319.38,
+          "ours_inkind": 6319.38,
           "coverage_miss": false
         }
       ]
@@ -25803,6 +25964,36 @@
         }
       ]
     },
+    "cand-logan-ward-01": {
+      "committee_name": "Neighbors for Logan Laurie",
+      "sbe_committee_id": "41336",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 1,
+      "d2_itemized": 600.0,
+      "ours_itemized": 600.0,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-07-26",
+          "end": "2026-09-30",
+          "d2_itemized": 600.0,
+          "ours_itemized": 600.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
     "cand-lopez-sb-d14": {
       "committee_name": "Friends of Yesenia Lopez",
       "sbe_committee_id": "39844",
@@ -31079,6 +31270,36 @@
         }
       ]
     },
+    "cand-moore-ward-08": {
+      "committee_name": "Friends of Ruthie Moore",
+      "sbe_committee_id": "41338",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 1,
+      "d2_itemized": 4596.55,
+      "ours_itemized": 4596.55,
+      "residual": 0.0,
+      "d2_inkind": 1139.63,
+      "ours_inkind": 1139.63,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-08-03",
+          "end": "2026-09-30",
+          "d2_itemized": 4596.55,
+          "ours_itemized": 4596.55,
+          "residual": 0.0,
+          "d2_inkind": 1139.63,
+          "ours_inkind": 1139.63,
+          "coverage_miss": false
+        }
+      ]
+    },
     "cand-norington-reaves-sb-2024-d10": {
       "committee_name": "Karin for Kids",
       "sbe_committee_id": "39876",
@@ -32302,6 +32523,38 @@
           "residual": 0.0,
           "d2_inkind": 1396.32,
           "ours_inkind": 1396.32,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-ross-ward-19": {
+      "committee_name": "Friends of Erin Ross",
+      "sbe_committee_id": "41425",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [
+        "PENDING-A1"
+      ],
+      "periods_count": 1,
+      "d2_itemized": 164950.0,
+      "ours_itemized": 164950.0,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 6000.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-09-10",
+          "end": "2026-09-30",
+          "d2_itemized": 164950.0,
+          "ours_itemized": 164950.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
           "coverage_miss": false
         }
       ]
