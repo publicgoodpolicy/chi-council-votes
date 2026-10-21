@@ -577,6 +577,11 @@ const FEEDBACK_CONFIG = {
 /* M5: the own-committee chip. One self-contained rule, so it reads the same in a list row and in the modal. */
 .ipg-cf-own{display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;letter-spacing:.04em;padding:3px 9px;border-radius:20px;background:#DDEBEA;color:#1F5D5A;line-height:1.4}
 .ipg-cf-ownline{margin:-6px 0 18px;font-size:13.5px;color:#4d4439}
+#ipg-council-app .ipg-cf-smallgifts{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 18px;padding:10px 14px;border-radius:10px;background:#F7EBD3;border-left:4px solid #D4A24C}
+#ipg-council-app .ipg-cf-smallgifts .k{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6a5d4e}
+#ipg-council-app .ipg-cf-smallgifts .v{font-family:Georgia,ui-serif,serif;font-size:20px;font-weight:700;color:#342828}
+#ipg-council-app .ipg-cf-smallgifts .s{font-size:13px;color:#6a5d4e}
+#ipg-council-app .ipg-cf-smallgifts .n{flex-basis:100%;font-size:11.5px;color:#7d7264}
 /* AUDIT-2 M2: the loan chip and the other-receipts line. Self-contained, like the own-committee chip. */
 .ipg-cf-loan{display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;letter-spacing:.04em;padding:3px 9px;border-radius:20px;background:#EBDAC6;color:#342828;line-height:1.4}
 .ipg-cf-otherline{margin:-6px 0 18px;font-size:13.5px;color:#4d4439}
@@ -1251,14 +1256,23 @@ const FEEDBACK_CONFIG = {
     const itemizedContribCount = contribs.filter(c=>!c.is_aggregate).length;
     const totalDonors = itemized.length + aggDonorTotal;
     const totalContribs = itemizedContribCount + aggContribTotal;
-    const avgGift = totalContribs ? total / totalContribs : 0;
+    const avgGift = totalContribs ? total / totalContribs : 0;   // itemized only (73a): small gifts stay out
+    // Rulings 74a, 76b, 82a, 83a: small gifts (unitemized), counted in Raised as their own line,
+    // never a donor (PS-96). Each report's figure belongs to the cycle its period ends in (82a).
+    const sgPeriods=cfSmallGiftPeriods(cm, cycleDefs);
+    const sgInView=sgPeriods.filter(p=> effectiveCycle==='all' ? (p.cycle!=='pre-2011'&&p.cycle!=='undated')
+      : (effectiveCycle==='pre-2011' ? p.cycle==='pre-2011' : p.cycle===effectiveCycle));
+    const sgAmt=sgInView.reduce((s,p)=>s+p.amount,0);
+    const indivItemized=contribs.reduce((s,c)=>{ if(c.is_self||c.is_own_committee) return s;
+      const d=state.cf.donors[c.donor_id]; return s+((d&&d.type==='Individual')?c.amount:0); },0);
+    const sgShare=(indivItemized+sgAmt)>0 ? sgAmt/(indivItemized+sgAmt) : null;
 
     // Summary stats — cash on hand gets a special tile when available
     h+='<div class="ipg-cf-summary">';
     if(cm.cash_on_hand!=null){
       h+=statCash(fmtMoney(cm.cash_on_hand),'Cash on hand', cm.cash_on_hand_as_of?'as of '+fmtDateLong(cm.cash_on_hand_as_of):null, cm.cash_on_hand_investments>0?'plus '+fmtMoney(cm.cash_on_hand_investments)+' in investments':null);
     }
-    h+=stat(fmtMoney(total),'Raised',true);
+    h+=stat(fmtMoney(total+sgAmt),'Raised',true);   // 74a: small gifts counted in Raised
     h+=stat(totalDonors.toLocaleString(),'Donors');
     h+=stat(fmtMoney(avgGift),'Avg. itemized gift',true);   // ruling 73a
     h+=stat(totalContribs.toLocaleString(),'Contributions');
@@ -1266,11 +1280,20 @@ const FEEDBACK_CONFIG = {
     // M5 (OC-V1): the other-committee line, in the tiles' whole-dollar form; the money stays in Raised.
     const ownAmt=contribs.reduce((s,c)=>s+(c.is_own_committee?c.amount:0),0);
     if(ownAmt>0) h+='<p class="ipg-cf-ownline">From the candidate\u2019s other committee: <strong>'+fmtMoney(ownAmt)+'</strong>, included in Raised.</p>';
+    h+=smallGiftsTile(sgAmt, sgShare);   // 76b (1)
     h+=otherLine();   // M2
 
     // Per-alder industry breakdown (dollar-bill stacked bar).
     // Skip if no industries (very early data or no real contributions yet).
     const alderInds = cfIndustryTotalsForCommittee(cm.id);
+    // 76b (2): the small-gifts segment, on the bar's own scope (every in-subject row of the
+    // committee, so every in-subject report's small gifts).
+    const sgAll=sgPeriods.filter(p=>p.cycle!=='pre-2011'&&p.cycle!=='undated').reduce((s,p)=>s+p.amount,0);
+    if(alderInds.length && sgAll>0){
+      alderInds.push({industry:'_small-gifts', total:sgAll, static:true, note:SMALL_GIFTS_NOTE,
+                      meta:{label:'Small gifts (unitemized)', color:'#D4A24C'}});
+      alderInds.sort((a,b)=>b.total-a.total);
+    }
     if(alderInds.length){
       h+='<div class="ipg-cf-meta" style="margin:18px 0 6px;color:var(--ink);font-weight:600">Where this alder\u2019s money comes from</div>'
         +'<div class="ipg-cf-meta" style="margin:0 0 12px;color:#7d7264;font-size:12.5px">Each segment is one industry; width is its share of total raised. Click a segment to filter the donor list below.</div>';
@@ -1361,6 +1384,28 @@ const FEEDBACK_CONFIG = {
   function bioCell(k,v){
     const val=(v===null||v===undefined||v==='')?'<span class="v empty">Not yet added</span>':'<span class="v">'+v+'</span>';
     return '<div class="ipg-bio-cell"><div class="k">'+k+'</div>'+val+'</div>';
+  }
+  // Rulings 74a/76b: small gifts (unitemized). The committee carries one figure per final D-2
+  // report (apply_unitemized.py); 82a assigns each to the cycle its period ends in.
+  const SMALL_GIFTS_NOTE='Gifts of $150 or less in a reporting period, which Illinois reports as one total, not by donor.';
+  function cfCycleOfDate(defs, date){
+    if(!date) return 'undated';
+    let earliest=null;
+    for(const code of Object.keys(defs||{})){
+      const cy=defs[code]||{};
+      if(cy.start && (earliest==null || cy.start<earliest)) earliest=cy.start;
+      if((cy.start==null || date>=cy.start) && (cy.end==null || date<=cy.end)) return code;
+    }
+    return (earliest!=null && date<earliest) ? 'pre-2011' : 'undated';
+  }
+  function cfSmallGiftPeriods(cm, defs){
+    return (cm && cm.unitemized_periods || []).map(p=>({end:p.end, amount:Number(p.amount||0), cycle:cfCycleOfDate(defs,p.end)}));
+  }
+  function smallGiftsTile(amt, share){
+    return '<div class="ipg-cf-smallgifts"><span class="k">Small gifts (unitemized)</span>'
+      +'<span class="v">'+fmtMoney(amt)+'</span>'
+      +(share!=null?'<span class="s">\u00b7 '+Math.round(share*100)+'% of individual giving</span>':'')
+      +'<span class="n">'+SMALL_GIFTS_NOTE+' Counted in Raised.</span></div>';
   }
   function stat(n,l,ser){return '<div class="ipg-stat"><div class="num'+(ser?' serif':'')+'">'+n+'</div><div class="lab">'+l+'</div></div>'}
   function statCash(n,l,sub,sub2){return '<div class="ipg-stat ipg-stat-cash"><div class="num serif">'+n+'</div><div class="lab">'+l+'</div>'+(sub?'<div class="ipg-stat-sub">'+sub+'</div>':'')+(sub2?'<div class="ipg-stat-sub">'+sub2+'</div>':'')+'</div>'}
@@ -1620,7 +1665,7 @@ const FEEDBACK_CONFIG = {
     // The bar
     let h = '<div class="ipg-dollarbar">';
     inds.forEach(x=>{
-      const meta = state.cf.industry_tags[x.industry] || {label:x.industry, color:'#cfc5b5'};
+      const meta = x.meta || state.cf.industry_tags[x.industry] || {label:x.industry, color:'#cfc5b5'};
       const pct = (x.total / grandTotal) * 100;
       if(pct < minPct) return;
       const showLabel = pct >= inlinePct;
@@ -1636,14 +1681,16 @@ const FEEDBACK_CONFIG = {
         cls = 'ipg-dollarbar-seg ipg-dollarbar-static';
         dataAttr = '';
       }
+      // 76b: a segment that is not a donor class (small gifts) is static: no click, no filter.
+      if(x.static){ cls = 'ipg-dollarbar-seg ipg-dollarbar-static'; dataAttr = ''; }
       // Dim segments not matching the active filter
       const isActive = opts.activeFilter && opts.activeFilter !== 'All';
       const isMe = opts.activeFilter === x.industry;
       const dimStyle = isActive && !isMe ? ';opacity:.32' : '';
-      const tag = action === 'none' ? 'div' : 'button';
+      const tag = (action === 'none' || x.static) ? 'div' : 'button';
       h += '<'+tag+' class="'+cls+'"'+dataAttr+' '
         + 'style="background:'+meta.color+';flex:'+pct+' 0 0'+dimStyle+';" '
-        + 'title="'+meta.label+' \u2014 '+fmtMoney(x.total)+' ('+pctStr+'). '+(action==='filter-alder'?'Click to filter donors below.':'Click to drill in.')+'">'
+        + 'title="'+meta.label+' \u2014 '+fmtMoney(x.total)+' ('+pctStr+'). '+(x.static?(x.note||''):(action==='filter-alder'?'Click to filter donors below.':'Click to drill in.'))+'">'
         + (showLabel ? '<span class="ipg-dollarbar-label">'+meta.label+'</span><span class="ipg-dollarbar-pct">'+pctStr+'</span>' : '')
         + '</'+tag+'>';
     });
@@ -1653,7 +1700,7 @@ const FEEDBACK_CONFIG = {
       h += '<div class="ipg-dollarbar-legend">';
       inds.forEach(x=>{
         if(x.total <= 0) return;
-        const meta = state.cf.industry_tags[x.industry] || {label:x.industry, color:'#cfc5b5'};
+        const meta = x.meta || state.cf.industry_tags[x.industry] || {label:x.industry, color:'#cfc5b5'};
         const pct = (x.total / grandTotal) * 100;
         const pctStr = pct >= 10 ? Math.round(pct)+'%' : pct.toFixed(1)+'%';
         const isActive = opts.activeFilter && opts.activeFilter !== 'All';
@@ -1669,6 +1716,7 @@ const FEEDBACK_CONFIG = {
         } else {
           tag = 'div'; cls = 'ipg-dollarbar-legend-item'+dimCls; dataAttr = '';
         }
+        if(x.static){ tag = 'div'; cls = 'ipg-dollarbar-legend-item'+dimCls; dataAttr = ''; }   // 76b
         h += '<'+tag+' class="'+cls+'"'+dataAttr+'>'
           + '<span class="ipg-dollarbar-legend-swatch" style="background:'+meta.color+'"></span>'
           + '<span class="ipg-dollarbar-legend-label">'+meta.label+'</span>'
@@ -2732,6 +2780,7 @@ function recTagChips(){
         <li>Amounts and dates reflect what was reported in the filings. Filers occasionally amend, misreport, or duplicate entries; see <em>Limitations</em> below.</li>
         <li>This tool also excludes contributions with no usable date. Because their date is unknown, they cannot be placed in any cycle and are not shown in any view.</li>
         <li><strong>Transfers from a candidate&rsquo;s other committee.</strong> Some candidates move money into their campaign committee from another committee of their own, such as a fund for a state or federal office. We count it in the total raised and label it &ldquo;From the candidate&rsquo;s other committee.&rdquo; It is not the candidate&rsquo;s personal money, and it is not a contribution from an outside donor. We mark only committees we have confirmed belong to the same person.</li>
+        <li><strong>Small gifts.</strong> Illinois reports a donor&rsquo;s gifts by name once they pass $150 in a reporting period. Smaller gifts are reported as one total for each report, with no donor named. We count that total in the total raised and show it as &ldquo;Small gifts (unitemized),&rdquo; never as a donor. Each report&rsquo;s total belongs to the cycle its reporting period ends in.</li>
         <li><strong>Loans.</strong> A loan to a committee is counted in the total raised, as the committee filed it, and the lender&rsquo;s row says so. A loan is money the committee may have to pay back; it is not a gift.</li>
         <li><strong>Other receipts.</strong> Committees also report money that is not a contribution, a transfer or a loan. The state&rsquo;s form calls these &ldquo;other receipts&rdquo;: refunds, money from selling an asset or an investment, and similar amounts. We do not count them in the total raised or in any donor, industry or flag total. Each alder&rsquo;s page states the amount on its own line and lists who paid it.${otherReceiptsDisclosure()}</li>
       </ul>

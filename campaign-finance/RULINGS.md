@@ -2895,6 +2895,69 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: page-lane flags register package, revision 1 (`page-lane-flags-register-package-rev1.md`), sha256 `a3f92825592bb29254747bae4a91ebeff8309e65490ce593a6ffc57b5ef61802`, 2,057 B / 34 L, region R1 (its lines 18–29), transcribed verbatim in the form PS-157's provenance states: the heading bare, one bare empty line, then each line of the body with `> ` added and each empty line as `>`. Ratified by Ishan in chat 2026-10-18 09:44 EDT ("Ratified"), on rulings 45b and 49a of 2026-10-15 and 64a–68 and 69a of 2026-10-16. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-158`; `PS-159` occurring 0 times before this commit), never carried.*
 
+
+### PS-160 — affiliated committees are counted as one donor family, and on the homepage a family's gifts to its own outside-spending committee are not counted as gifts
+
+> **Ruled by Ishan, 2026-10-14** (HOMEPAGE-1, rulings 27b–35-i b). The finance tools and the homepage count a union's or association's affiliated committees as one donor, a family, so a reader sees what the organization gave in all.
+>
+> **The families.** Twenty families, each a group in the Sheet's Donor Clusters tab under a short name: SEIU; Realtors; Chicago Teachers Union; LiUNA (Laborers); Operating Engineers (IUOE); AFT; IBEW (Electrical Workers); Carpenters; Plumbers & Pipefitters (UA); Teamsters; AFSCME; UFCW; Democratic Party of Illinois; Ironworkers; Working Families; Firefighters (IAFF); AFL-CIO; IPACE; Cook County College Teachers Union; JMB Realty. Each family reached $250,000 or more on the homepage's count. National and international affiliates join their family; the Chicago Teachers Union and the Cook County College Teachers Union stand apart from AFT; a building-trades council stands apart from its member unions; the Working Families Party stands apart from United Working Families. People are never joined into a family by surname or household. Under PS-155 every member of a family prints the family's name, and keeps its own name inside the pop-up.
+>
+> **The edit of record.** The tab was replaced by one import of `homepage-1-donor-clusters-post-edit.csv` (`1b77c54d26e82718a4a4ed7ab89e1a4d02b6cfbd4de63cc000aa7d91142f7f52`), verified by a re-download identical to it; rollup-192's two rows were then deleted. A family is changed in the tab, never in code.
+>
+> **On the homepage, a family's own committee.** Where the data links an outside-spending committee to a family (the committee record names the family's donor, or a family donor's record names the committee), the committee's own gifts are counted under the family; the homepage therefore leaves out the family's gifts to that committee, so each dollar is counted once. Two different donors (by parent) linked to one committee stop the build. Where no link exists, the family's gifts to a committee are gifts to an outside-spending group (PS-138). The rule reaches only the twenty families, named in the homepage's generator and validator by each family's canonical donor; Common Ground Collective is counted as before. The council and school-board tools are unchanged by this paragraph.
+
+*Provenance: HOMEPAGE-1 families and own-committee ratification package, revision 3 (`homepage-1-families-data-package-rev3.md`), sha256 `4ee82ac9f54cdfd7d3cc4ab372de74ee3e5e86d52ec8c14f1e2f8b363d785a94`, 10,708 B / 74 L, region R1 (its lines 45–53), transcribed verbatim in the form PS-157's provenance states: the heading bare, one bare empty line, then each line of the body with `> ` added and each empty line as `>`. Ratified by Ishan in chat 2026-10-14 17:53 ("1. ratified"), on HOMEPAGE-1's rulings 27b–35-i b and 38a. Measured basis: the package's §2. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-159`; `PS-160` occurring 0 times before this commit), never carried.*
+
+
+### PS-161 — small gifts: unitemized individual contributions count at candidate grain, as their own line
+
+> Illinois reports a donor’s gifts by name once they pass $150 in a reporting period. Smaller
+> gifts are reported on each D-2 report as one figure, `IndivContribNI`, with no donor named.
+> Rulings 74a, 76b as amended, 82a, 83a and 84a as amended bring that money onto the tools.
+>
+> - **What it is.** Each candidate committee carries `unitemized_periods`, one amount per final
+>   D-2 report, and `unitemized_total`. Both are written by `apply_unitemized.py` from the
+>   sealed pull. A report is final as `reconcile.build_filing_registry` resolves it. A final
+>   report with no D2Totals row counts $0, as the reconciliation counts it.
+> - **What it is not.** It is never a contribution row and never a donor. PS-96 governs it as
+>   un-keyed money: figures at candidate or committee grain count it, and figures grouped on
+>   donor identity do not. The AGG/PS-96 assertions still find no aggregate row or donor.
+> - **Where it counts.** In Raised, on every surface, as its own line: on the elections tool,
+>   the card's contributors bar and contributor total, the race ranking and the committee
+>   pop-up; on the alder page and the school-board page, the Raised tile. It is never in
+>   “Avg. itemized gift”, which stays itemized gifts over the itemized count (73a).
+> - **Which election.** A report’s figure belongs to the election window and the cycle its
+>   reporting period ends in (82a).
+> - **How it shows** (76b as amended). A tile on every candidate: “Small gifts (unitemized):
+>   $X · N% of individual giving”. A Small gifts segment in the where-the-money-comes-from bar,
+>   which is never a filter. On the elections tool only, a comparison of the candidates in one
+>   contest by the dollars of their small gifts, never by share and never across contests
+>   (84a as amended). Each carries the note: “Gifts of $150 or less in a reporting period,
+>   which Illinois reports as one total, not by donor.”
+> - **The share** (83a). Small gifts divided by itemized gifts from individual donors plus small
+>   gifts, in the same scope. The candidate’s own money and the candidate’s other committee are
+>   outside it.
+> - **The words on the pages.** The elections tool carries C11, the fifth amendment to the
+>   R8/R9 composition. The alder page and the school-board voting page carry the copy below.
+>
+> **The alder page.** Under “What counts as a contribution shown here”, a list item before
+> “Loans” reads:
+>
+> **Small gifts.** Illinois reports a donor’s gifts by name once they pass $150 in a reporting
+> period. Smaller gifts are reported as one total for each report, with no donor named. We count
+> that total in the total raised and show it as “Small gifts (unitemized),” never as a donor.
+> Each report’s total belongs to the cycle its reporting period ends in.
+>
+> **The school-board voting page.** In “How the money figures work”, a paragraph after the
+> sentence on repeated lines reads:
+>
+> Illinois reports a donor’s gifts by name once they pass $150 in a reporting period. Smaller
+> gifts are reported as one total for each report, with no donor named. We count that total in
+> Raised and show it as “Small gifts (unitemized),” never as a donor. Each report’s total
+> belongs to the election whose window its reporting period ends in.
+
+*Provenance: refresh small-gifts ratification package, revision 1 (`refresh-small-gifts-register-package-rev1.md`), sha256 `3b2aac07fcc334c186154784257c2b60be6f9b3f21084caec666313820e2e863`, 5,364 B / 71 L, region R2 (its lines 25–70), transcribed verbatim in the form PS-157's provenance states: the heading bare, one bare empty line, then each line of the body with `> ` added and each empty line as `>`. Ratified by Ishan in chat 2026-10-20 19:04 EDT ("85 ratify"), on rulings 74a and 76b of 2026-10-18 and 76b as amended, 82a, 83a and 84a as amended of 2026-10-20. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-160`; `PS-161` occurring 0 times before this commit), never carried.*
+
 ---
 
 ## Rulings ratified without an id
@@ -3778,6 +3841,20 @@ The mechanism that materializes C5's `{DATA_THROUGH}` and the exact composition 
 > included. The line at the top of the page says how far each kind of report runs.
 
 *Provenance, amendment (repeated gifts, grouped names, the review mark, amendments and timing; C9, C10, S1 and S2): AUDIT-2 elections-tool ratification package, revision 2 (`audit-2-elections-package-rev2.md`), sha256 `91884078932153ee17fdbd6a2111efdf5f82f38186f0993f8ec7ce0bf85c61d0`, 34,756 B / 418 L, region R4 (its lines 193–233), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-12 as drafted (“ratified”). Revision 1 of the package (sha256 `286a02692d17fdd40fbe57637b9aa51b95499266f065c3042fe677439e89d2e9`), ratified earlier the same day, differed in one sentence of region R5 and is not transcribed. Recorded under the PS-93 pattern: no id is allocated, and the text above stands unaltered, because an amendment says what now governs rather than editing the superseded reading away. The gate’s `[METH/REGISTER]` reads C9, C10, S1, S2 and the reworded heading from this block and compares the rendered pages with them.*
+
+> **Amendment (small gifts; C11).** Rulings 74a, 76b and 82a. On the council branch, C11 is a
+> plain paragraph after C8 and before C9. On the school-board branch, a section headed
+> **Small gifts** follows the section “Other receipts and loans”, and C11 is its one
+> paragraph. C11 is defined once and used on both branches. The composition is otherwise as it
+> stands.
+> C11 reads:
+>
+> Illinois reports a donor’s gifts by name once they pass $150 in a reporting period. Smaller
+> gifts are reported as one total for each report, with no donor named. We count that total in
+> what a candidate raised and show it as “Small gifts (unitemized),” never as a donor. Each
+> report’s total belongs to the election whose window its reporting period ends in.
+
+*Provenance, amendment (small gifts; C11): refresh small-gifts ratification package, revision 1 (`refresh-small-gifts-register-package-rev1.md`), sha256 `3b2aac07fcc334c186154784257c2b60be6f9b3f21084caec666313820e2e863`, 5,364 B / 71 L, region R1 (its lines 11–21), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-20 19:04 EDT ("85 ratify"). Recorded under the PS-93 pattern: no id is allocated, and the text above stands unaltered. The gate’s `[METH/REGISTER]` reads C11 and the section heading from this block and compares the rendered pages with them.*
 
 ### CNCL-DATA-1 P2 — display decisions
 

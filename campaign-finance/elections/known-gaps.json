@@ -118,6 +118,15 @@
       "reason": "Comparison-window artifact, fourth entry class (ratified 2026-08-30): the committee's sworn D-2 cover total for the Pre-election period 1/27/2003-3/2/2003 reports $6,500.75 itemized; the rows dated within that window in the SBE bulk receipts export total $8,000.00, carried by the Semiannual received 7/14/2004 covering 1/1/2003-6/30/2003. Our reconciliation buckets rows to a period by date, so this cover total is compared against rows the committee reported on the covering filing. The divergence is a property of our comparison, not of the source filings.",
       "evidence": "CNCL-DATA-1 P1.4 reconcile over the sealed 2026-08-20 SBE bulk vintage (committees d0db126e…, receipts b1d735fc…, d2totals 8419861f…, fileddocs 85c7ea3c…); per-period residual from campaign-finance/elections/reconciliation-report.json",
       "annotated": "2026-08-30"
+    },
+    {
+      "committee": "cand-olas-ward-27",
+      "period_beg": "2026-07-01",
+      "period_end": "2026-09-30",
+      "amount": -850.00,
+      "reason": "SBE-side: the committee's Q3 2026 Quarterly D-2 (filing 1024906, received 2026-10-13) swears IndivContribI $850.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The committee's only itemized row is the $500.00 receipt on its Q1 filing 1007397.",
+      "evidence": "Ruling 79a (2026-10-20). Bulk pulls of 2026-10-16, 2026-10-17 and 2026-10-20 carry 0 receipt rows for FiledDocID 1024906 (2026-10-20 receipts_639280307458756287 sha256 4e23f88d71b4819bea37338a3e8215cfc2f16ffd168ee9a3863ab96bda45d8ff); D2Totals row 596293 IndivContribI 850 (d2totals_639280769856560778 sha256 ec29bd70a825659905a58d0576bf7a02e9f86db96bf931074ee3e596121c34a5); FiledDocs row 1024906, Quarterly 2026-07-01..2026-09-30, received 2026-10-13 10:36:28 (fileddocs_639280802059206833 sha256 416d99a3e1a45ac66b1326100b1cba0a4ce25a04939c997c5c88e81999791403).",
+      "annotated": "2026-10-20"
     }
   ]
 }

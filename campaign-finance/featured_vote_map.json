@@ -1,4 +1,22 @@
 {
+  "Parking Meter": {
+    "vote_id": "ocd-vote/cc021baf-331e-4d78-92c1-3648f9931b4c",
+    "bill": "SO2026-0025407",
+    "title": "Authorization to approve ownership transfer of Chicago Parking Meters LLC membership interests to Stonepeak Partners LP pursuant to Amended Chicago Metered Parking System Concession Agreement",
+    "date": "2026-09-29",
+    "divided": true,
+    "confirmed": "sheet",
+    "matched_on": "all-votes-tab"
+  },
+  "Debt Control": {
+    "vote_id": "ocd-vote/ee2963e1-6731-4447-a39e-d70b43b0a97b",
+    "bill": "O2026-0026270",
+    "title": "Amendment of Municipal Code Chapter 2-8 by adding new Section 2-8-036 regarding ordinance requirements for issuance of bonds and other indebtedness including approval by three-fifths affirmative vote of alderpersons for ordinances authorizing debt issuance",
+    "date": "2026-09-29",
+    "divided": true,
+    "confirmed": "sheet",
+    "matched_on": "all-votes-tab"
+  },
   "Gambling Ban": {
     "vote_id": "ocd-vote/070905df-c1ce-4cff-8a4a-69536e3f1c6e",
     "bill": "SO2026-0024076",
@@ -40,6 +58,15 @@
     "bill": "SO2025-0015560",
     "title": "Amendment of Municipal Code Chapter 2-44 by adding new Section 2-44-170 establishing not-for-profit residential investment corporation with the City's participation in the financing structure, acquisition, ownership, and on-going operations of affordable, mixed-income, environmentally sustainable housing",
     "date": "2025-05-07",
+    "divided": true,
+    "confirmed": "sheet",
+    "matched_on": "all-votes-tab"
+  },
+  "Jan 6 Attendees": {
+    "vote_id": "ocd-vote/c02e65f7-69b1-4c01-b100-2e4ac3607385",
+    "bill": "SR2025-0015310",
+    "title": "Call for Commissioner of Human Resources to reject or disqualify any applicant for City employment convicted of crimes related to participation of January 6, 2021 riot at U.S. Capitol for engaging in any conduct prohibited under state or federal law",
+    "date": "2025-04-16",
     "divided": true,
     "confirmed": "sheet",
     "matched_on": "all-votes-tab"

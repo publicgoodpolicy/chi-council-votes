@@ -76,7 +76,7 @@ ok('neutral order: DeBerry before Leon', page.indexOf('Ebony DeBerry') < page.in
 // his honest 2026 card shows $0 (the largest F-2 instance); DeBerry shows her
 // 2026-window rows. The same dollars are pinned at the DATA layer, per window.
 ok('scoped page: Leon renders WITHOUT the 2024-window $620,025 (F-2 pinned)', /Bruce Leon/.test(page) && page.indexOf('$620,025') < 0);   // M2 repin: $620,403 less one other receipt of $378
-ok('scoped page: DeBerry 2026-window contributions render ($2,606)', page.indexOf('$2,606') >= 0);   // M2 repin: $2,780.92 less two other receipts, $174.66
+ok('scoped page: DeBerry 2026-window figure renders ($13,462: $10,053 itemized + $3,409 small gifts, 74a)', page.indexOf('$13,462') >= 0);   // re-pinned on the 2026-10-20 pull   // M2 repin: $2,780.92 less two other receipts, $174.66
 // P1-E (PS-140) re-expression: the 2024-window IE now rides the 2024 candidacy it was spent on
 // (leon-sb-2024-d2). The direct money stays on the committee's 2026 candidacy, where the
 // on_current_record receipts are booked; the 2026 candidacy's 2024-window IE is now ZERO, and
@@ -169,7 +169,7 @@ ok('Leon contributor lines sum EXACTLY to $620,025', sumLines(leonC) === 620025 
 // DeBerry's committee 39821 is UNMOVED across the SBE-RERUN-1 refresh ($537,306.38 both
 // sides), so today's run is not involved. The pin was never updated because nothing ran
 // this harness. Benign and explained — the [EXCL/SEIU] discipline's clean case.
-ok('DeBerry contributor lines sum EXACTLY to $537,132', sumLines(debC) === 537132 && Math.round(debC.total) === 537132);   // M2 repin: 537,306.38 less two other receipts, $174.66
+ok('DeBerry contributor lines sum EXACTLY to $544,579', sumLines(debC) === 544579 && Math.round(debC.total) === 544579);   // re-pinned on the 2026-10-20 pull   // M2 repin: 537,306.38 less two other receipts, $174.66
 ok('Leon contributor list flags a self/loan line', leonC.lines.some(function (l) { return l.isSelf; }));
 ok('contributor list has NO small-dollar aggregate line (every contribution itemized)', leonC.lines.some(function (l) { return l.isAggregate; }) === false && debC.lines.some(function (l) { return l.isAggregate; }) === false);
 
@@ -291,8 +291,8 @@ ok('NO small-dollar aggregate line in the panel (every contribution itemized)',
   debCd2.lines.some(function (l) { return l.isAggregate; }) === false);
 // REPINNED 534950 -> 537306, same cause as :126 above (eda9d31 HALT-Q2R). Same figure
 // reached a second way — through the expanded panel's line set rather than cd.total.
-ok('full set (real + self) sums EXACTLY to the headline ($537,132)',   // M2 repin, same cause as the contributor-lines pin above
-  Math.round(debCd2.lines.reduce(function (s, l) { return s + l.total; }, 0)) === 537132);
+ok('full set (real + self) sums EXACTLY to the headline ($544,579)',   // re-pinned on the 2026-10-20 pull   // M2 repin, same cause as the contributor-lines pin above
+  Math.round(debCd2.lines.reduce(function (s, l) { return s + l.total; }, 0)) === 544579);
 
 console.log('\n=== B3-REVISE-4 assertions (resolved IE committee names) ===');
 // Real name resolved at the source (enrich), shown primary + funder subtitle.
@@ -328,7 +328,8 @@ function ieCount(idx) { var n = 0; for (var c in idx.ieByCandidate) n += idx.ieB
 ok('unscoped index keeps all IEs incl. council (' + ieCount(indexAll) + ' = ' + json.independent_expenditures.length + ')', ieCount(indexAll) === json.independent_expenditures.length);
 // P1-E (PS-140) re-pin: 145 + the 87 rows now matched to 2024-only candidacies = 232; council 219, unchanged.
 // MAYOR-1 (PS-157) re-pin: the dropped set gains the 17 mayoral rows (filed Office names the mayor): 219 + 17 = 236.
-ok('school-board scope keeps ONLY school-board IEs (232), drops council and mayor (236 = 219 + 17)', ieCount(index) === 232 && ieCount(indexAll) - ieCount(index) === 236);
+// Re-pinned on the 2026-10-20 pull: the school-board scope holds 439 rows; the dropped set is unchanged.
+ok('school-board scope keeps ONLY school-board IEs (439), drops council and mayor (236 = 219 + 17)', ieCount(index) === 439 && ieCount(indexAll) - ieCount(index) === 236);
 var councilTarget = false;
 for (var cc in index.ieByCandidate) { var r5 = index.raceById[(index.candidateById[cc] || {}).race_id] || {}; if (r5.office === 'alderperson' || r5.office === 'mayor') councilTarget = true; }
 ok('no council/municipal IE target survives school-board scope', !councilTarget);

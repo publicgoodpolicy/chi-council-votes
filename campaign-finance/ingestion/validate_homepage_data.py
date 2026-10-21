@@ -26,6 +26,8 @@ Checks (HP-n):
         person is mayor-<key>, the key read from its candidacy id
   HP-7  each group's spent figure equals the recount of independent
         expenditures from the floor
+  HP-9  money a donor family gives its own outside-spending committee (35b, 35-i b) is
+        left out, and the file's excluded.to_own_group equals the recount
   HP-8  the feed is the ten newest qualifying votes under the stated rule,
         newest first, and each school-board link carries its vote's id
 """
@@ -38,6 +40,28 @@ import sys
 import urllib.parse
 
 NOT_COUNTED = ("Other Receipt", "IE Committee Dues Transfer")
+FAMILIES = set([
+    "afscme-council-31",
+    "american-federation-of-teachers-cope-voluntary-a-c",
+    "carpentry-advancement-pac",
+    "chicago-federation-of-labor-and-industrial-union-council-pac",
+    "chicago-firefighters-union-local-2",
+    "chicago-land-operators-joint-labor-management-pac",
+    "chicago-teachers-union",
+    "cook-county-college-teachers-union",
+    "democratic-party-of-illinois",
+    "ibew-local-134",
+    "illinois-association-of-realtors",
+    "ipace",
+    "ironworkers-local-union-1",
+    "jmb-realty",
+    "liuna-chicago-laborers-district-council-pac",
+    "seiu-il-council",
+    "teamsters-volunteers-in-politics",
+    "ua-union-plumbers-pipefitters-vote-pac",
+    "ufcw-local-881",
+    "united-working-families-pac",
+])  # 35-i b
 STREAM = {"alderperson": 0, "school_board_member": 1, "school_board_president": 1, "mayor": 2}
 
 
@@ -79,6 +103,17 @@ def recount(e, c, sb):
     def key(r):
         return (r["committee_id"], r["donor_id"], r["date"], round(r["amount"], 2), r["contribution_type"])
 
+    # 35b: an outside-spending committee's own donor, by parent (independent path)
+    owner = {}
+    for art in (e, c):
+        for k, v in art["committees"].items():
+            if k in ie and v.get("donor_id"):
+                owner.setdefault(k, set()).add(par(v["donor_id"]))
+        for did, d in art["donors"].items():
+            if d.get("committee_id") in ie:
+                owner.setdefault(d["committee_id"], set()).add(par(did))
+    own_amt = [0.0]
+
     ce = collections.Counter(key(r) for r in e["contributions"] if r["committee_id"] in ie)
     cc = collections.Counter(key(r) for r in c["contributions"] if r["committee_id"] in ie)
     extra = cc - ce
@@ -94,6 +129,9 @@ def recount(e, c, sb):
         if date < floor:
             return
         if typ in NOT_COUNTED and not is_own:
+            return
+        if comm in owner and owner[comm] == {par(did)} and par(did) in FAMILIES:
+            own_amt[0] += amt
             return
         s = 3 if comm in ie else STREAM[office[comm]]
         v = vec[par(did)][cy(date)]
@@ -122,7 +160,7 @@ def recount(e, c, sb):
     for k, n in (xe + (xc - xe)).items():
         if k[1] >= floor:
             spent[k[0]] += k[2] * n
-    return floor, vec, total_by_stream, spent
+    return floor, vec, total_by_stream, spent, own_amt[0]
 
 
 def feed_expected(c, sb):
@@ -152,7 +190,10 @@ def check(h, e, c, sb, shas):
         if h.get("_inputs", {}).get(name) != s:
             f("HP-1", "%s sha256 differs from the stamp" % name)
 
-    floor, vec, tbs, spent = recount(e, c, sb)
+    floor, vec, tbs, spent, own_amt = recount(e, c, sb)
+    got_own = (h.get("excluded", {}).get("to_own_group") or {}).get("amount")
+    if got_own is None or abs(got_own - r2(own_amt)) > 0.005:
+        f("HP-9", "to_own_group %s != recount %s" % (got_own, r2(own_amt)))
     names = ["council", "school_board", "mayor", "groups"]
     for i, n in enumerate(names):
         got = h["counted_all_donors"]["by_stream"].get(n)
@@ -252,6 +293,7 @@ def self_test(h, e, c, sb, shas):
     bite("link", lambda g: [r.__setitem__("person", "x") for r in g["recipients"].values() if str(r.get("person", "")).startswith("person-")][:1], "HP-6")
     bite("spent", lambda g: g["groups"][0].__setitem__("spent_total", 0.0), "HP-7")
     bite("feed order", lambda g: g["feed"].reverse(), "HP-8")
+    bite("own group", lambda g: g["excluded"]["to_own_group"].__setitem__("amount", 0.0), "HP-9")
     for name, code, ok in bites:
         print("  bite %-11s %s %s" % (name, code, "caught" if ok else "NOT CAUGHT"))
     n = sum(1 for b in bites if b[2])

@@ -185,7 +185,7 @@
       '.ipg-elect .legend{display:flex;flex-wrap:wrap;gap:14px 20px;margin:6px 0 0;font-size:12px;color:var(--ink-soft);}' +
       '.ipg-elect .legend span{display:flex;align-items:center;gap:7px;}' +
       '.ipg-elect .sw{width:15px;height:13px;border-radius:3px;flex:none;}' +
-      '.ipg-elect .sw.owncmte{background:#8DB7B4;}' +
+      '.ipg-elect .sw.owncmte{background:#8DB7B4;}.ipg-elect .sw.small{background:#D4A24C;}' +
       '.ipg-elect .sw.third{background:var(--teal);}.ipg-elect .sw.self{background:repeating-linear-gradient(135deg,#3E6B53 0 4px,#9DBBA9 4px 8px);}' +
       '.ipg-elect .sw.support{background:var(--sage);}.ipg-elect .sw.oppose{background:var(--coral);}' +
       '.ipg-elect .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:17px 18px;margin:0 0 12px;}' +
@@ -343,6 +343,7 @@
       '.ipg-elect .seg{height:100%;}' +
       '.ipg-elect .seg.third{background:var(--teal);}' +
       '.ipg-elect .seg.owncmte{background:#8DB7B4;}' +
+      '.ipg-elect .seg.small{background:#D4A24C;}' +   // ruling 76b: small gifts (unitemized)
       '.ipg-elect .seg.self{background:repeating-linear-gradient(135deg,#3E6B53 0 5px,#9DBBA9 5px 10px);}' +
       '.ipg-elect .seg.support{background:var(--sage);}.ipg-elect .seg.oppose{background:var(--coral);}' +
       '.ipg-elect .seg.indep{background:var(--sage);}' +
@@ -375,6 +376,19 @@
       '.ipg-elect .zero{color:#A99B91;font-weight:400;}' +
       '.ipg-elect .selfline{font-size:12px;color:var(--coral);margin:11px 0 0;padding-left:182px;}' +
       '.ipg-elect .selfline b{font-weight:500;}' +
+      // Ruling 76b: the small-gifts tile on every card, and the within-race comparison (84a, by dollars).
+      '.ipg-elect .sgline{font-size:12px;color:var(--ink-soft);margin:6px 0 0;}.ipg-elect .sgline b{font-weight:500;}' +
+      '.ipg-elect .smallgifts{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:12px 0 0 182px;padding:10px 14px;border-radius:10px;background:#F7EBD3;border-left:4px solid #D4A24C;}' +
+      '.ipg-elect .smallgifts .sg-k{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}' +
+      '.ipg-elect .smallgifts .sg-v{font-family:var(--display);font-size:20px;font-weight:700;color:var(--ink);}' +
+      '.ipg-elect .smallgifts .sg-s{font-size:13px;color:var(--ink-soft);}' +
+      '.ipg-elect .smallgifts .sg-note,.ipg-elect .sg-compare .sg-note{flex-basis:100%;font-size:11.5px;color:var(--ink-label);margin:2px 0 0;}' +
+      '.ipg-elect .sg-compare{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:0 0 22px;}' +
+      '.ipg-elect .sg-compare h3{font-family:var(--display);font-size:17px;margin:0 0 10px;color:var(--teal);}' +
+      '.ipg-elect .sg-row{display:grid;grid-template-columns:170px 1fr 110px;gap:12px;align-items:center;margin:6px 0;font-size:13px;}' +
+      '.ipg-elect .sg-row .sg-track{height:12px;background:var(--tan);border-radius:6px;overflow:hidden;}' +
+      '.ipg-elect .sg-row .sg-fill{height:100%;background:#D4A24C;}' +
+      '.ipg-elect .sg-row .sg-amt{text-align:right;font-weight:500;}' +
       '.ipg-elect .otherline{font-size:12px;color:var(--ink-soft);margin:11px 0 0;}.ipg-elect .card .otherline{padding-left:182px;}.ipg-elect .otherline b{font-weight:500;}' +
       '.ipg-elect .caption{font-size:11.5px;color:var(--ink-soft);margin:14px 0 0;padding-top:13px;border-top:1px solid var(--line);}' +
       '.ipg-elect .elec-block{margin:0 0 10px;}' +
@@ -386,7 +400,7 @@
       '.ipg-elect footer{margin:34px 0 50px;padding-top:22px;border-top:2px solid var(--line);font-size:12.5px;color:var(--ink-soft);}' +
       '.ipg-elect footer h3{font-family:var(--display);font-weight:600;color:var(--ink);font-size:15px;margin:0 0 8px;}' +
       '.ipg-elect footer p{margin:0 0 12px;}.ipg-elect footer .src{font-size:11.5px;}' +
-      '@media (max-width:560px){.ipg-elect .barrow{grid-template-columns:1fr;gap:4px;}.ipg-elect .barval{text-align:left;}.ipg-elect .selfline{padding-left:0;}.ipg-elect .card .otherline{padding-left:0;}}' +
+      '@media (max-width:560px){.ipg-elect .smallgifts{margin-left:0;}.ipg-elect .sg-row{grid-template-columns:1fr 90px;}.ipg-elect .sg-row .sg-track{grid-column:1 / -1;grid-row:2;}.ipg-elect .barrow{grid-template-columns:1fr;gap:4px;}.ipg-elect .barval{text-align:left;}.ipg-elect .selfline{padding-left:0;}.ipg-elect .card .otherline{padding-left:0;}}' +
       '.ipg-elect .methodology{max-width:70ch;line-height:1.6;}' +
       '.ipg-elect .methodology h2{font-family:var(--display);font-size:26px;margin:8px 0 12px;}' +
       '.ipg-elect .methodology h3{font-size:15px;font-weight:600;margin:24px 0 6px;}' +
@@ -451,7 +465,16 @@
   // a real, clickable donorRow. The small-dollar aggregate is a labeled,
   // non-clickable line pinned at the bottom. All rows (top + remainder + aggregate
   // + self) are in the DOM, so they sum EXACTLY to the contributions headline.
-  function contributorPanel(cd, id) {
+  // Ruling 74a/76b: small gifts are not a donor (PS-96). The panel states them as one labelled,
+  // non-clickable line pinned at the bottom, and its total counts them, so the lines still sum to
+  // the bar's figure.
+  var SMALL_GIFTS_NOTE = 'Gifts of $150 or less in a reporting period, which Illinois reports as one total, not by donor.';
+  function smallGiftsRow(sg) {
+    return '<div class="crow plain smallgift"><div class="who">Small gifts (unitemized) ' +
+      '<span class="tagchip">' + plural(sg.reports, 'report', 'reports') + '</span></div>' +
+      '<div class="amt">' + money(sg.total) + '</div></div>';
+  }
+  function contributorPanel(cd, id, sg) {
     var rest = [], agg = [], realCount = 0, t;   // N counts REAL donors only (excl. self + small-dollar)
     for (t = 0; t < cd.lines.length; t++) {
       var l = cd.lines[t];
@@ -471,11 +494,12 @@
     }
     var aggHtml = ''; for (t = 0; t < agg.length; t++) aggHtml += donorRow(agg[t]);
     return '<div class="contrib" id="' + id + '"><div class="contrib-inner">' +
-      '<p class="contrib-h">Who gave to this campaign · ' + money(cd.total) + ' total</p>' +
+      '<p class="contrib-h">Who gave to this campaign · ' + money(round2r(cd.total + (sg && sg.total > 0 ? sg.total : 0))) + ' total</p>' +
       (realCount > 8 ? '<input class="donor-search" type="search" placeholder="Search donors…" aria-label="Search donors" data-donor-search>' : '') +
-      top + moreHtml + aggHtml +
+      top + moreHtml + aggHtml + (sg && sg.total > 0 ? smallGiftsRow(sg) : '') +
       '<p class="contrib-note">Rolled up by affiliation; lines sum to the contributions figure. Click a donor to see ' +
-      'their full footprint. Every itemized contribution in the SBE filings is listed individually.</p></div></div>';
+      'their full footprint. Every itemized contribution in the SBE filings is listed individually.' +
+      (sg && sg.total > 0 ? ' Small gifts: ' + SMALL_GIFTS_NOTE : '') + '</p></div></div>';
   }
 
   // IE drill-down — THREE explicit tiers so a funder never reads as a direct
@@ -677,7 +701,8 @@
         '<div class="modal-name">' + esc(p.name) + '</div>' +
         '<p class="modal-note">Campaign committee' + (p.candidateName ? ' for <b>' + esc(p.candidateName) + '</b>' : '') +
         (p.raceLabel ? ' — ' + esc(p.raceLabel) : '') + '.' + sun + '</p>';
-      summary = '<div class="modal-summary">' + money(p.raised) + ' raised</div>' + otherReceiptsLine(p.otherReceipts);   // M2
+      summary = '<div class="modal-summary">' + money(p.raised) + ' raised</div>' + otherReceiptsLine(p.otherReceipts) +   // M2
+        (p.smallGifts && p.smallGifts.total > 0 ? '<p class="sgline">Raised includes small gifts (unitemized): <b>' + money(p.smallGifts.total) + '</b></p>' : '');   // 74a
     }
     var label = p.isIE
       ? ('Who funds this committee · ' + money(p.funderTotal) + ' from ' + plural(p.funderCount, 'funder', 'funders') + ' (dues excluded)')
@@ -839,9 +864,20 @@
     return '<p class="selfline">' + parts.join(' · ') + '</p>';
   }
 
+  function round2r(x) { return Math.round(x * 100) / 100; }
+  // Ruling 76b (1): the small-gifts tile, on every card with finance data.
+  function smallGiftsTile(sg) {
+    var s = sg || { total: 0, share: null };
+    var share = (s.share != null) ? ' · ' + Math.round(s.share * 100) + '% of individual giving' : '';
+    return '<p class="smallgifts"><span class="sg-k">Small gifts (unitemized)</span>' +
+      '<span class="sg-v">' + money(s.total || 0) + '</span><span class="sg-s">' + share + '</span>' +
+      '<span class="sg-note">' + SMALL_GIFTS_NOTE + '</span></p>';
+  }
   function card(c, scale, idPrefix) {
     var f = c.figures;
-    var mostlySelf = f.contributions.total > 0 && (f.contributions.selfFunded / f.contributions.total) >= 0.5;
+    var sg = f.smallGifts || { total: 0, reports: 0, share: null };
+    var raisedAll = (f.raised != null) ? f.raised : f.contributions.total;   // 74a: Raised counts small gifts
+    var mostlySelf = raisedAll > 0 && (f.contributions.selfFunded / raisedAll) >= 0.5;
     var chips = (c.incumbent ? '<span class="chip-inc">Incumbent</span>' : '') +
       statusPill(c) +
       (mostlySelf ? '<span class="chip-self">Mostly self-funded</span>' : '');
@@ -849,9 +885,10 @@
     var hasSup = f.independentSupport > 0, hasOpp = f.independentOpposition > 0;
     var contribBar = bar('From contributors',
       [{ cls: 'third', v: f.contributions.thirdParty }, { cls: 'owncmte', v: f.contributions.ownCommittee || 0 },
-       { cls: 'self', v: f.contributions.selfFunded }],   // M5 (OC-E2): the other-committee segment sits between
-      plural(f.contributions.count, 'contribution', 'contributions'), scale, base + '-c');
-    var contribPanel = contributorPanel(c.contributors, base + '-c');
+       { cls: 'self', v: f.contributions.selfFunded },   // M5 (OC-E2): the other-committee segment sits between
+       { cls: 'small', v: sg.total || 0 }],   // 76b: small gifts last, so PS-142's order stands
+      plural(f.contributions.count, 'contribution', 'contributions') + (sg.total > 0 ? ' + small gifts' : ''), scale, base + '-c');
+    var contribPanel = contributorPanel(c.contributors, base + '-c', sg);
     var supportBar = bar('Independent support', [{ cls: 'support', v: f.independentSupport }],
       f.independentSupportCount ? plural(f.independentSupportCount, 'expenditure', 'expenditures') : '', scale, hasSup ? base + '-s' : null);
     var supportPanel = hasSup ? iePanel(c.ieSupportDetail, c.name, base + '-s') : '';
@@ -888,15 +925,16 @@
         money(c.preWindow.total) + '</b></p>' : '';
     return '<article class="card" id="cand-' + esc(c.slug) + '">' +
       '<div class="card-top"><h3 class="cand-name">' + esc(c.name) + '</h3>' + chips + '</div>' + resultNote(c) + committeeLine + filedLine + priorLine + personLine +
-      '<div class="bars">' + contribBar + contribPanel + supportBar + supportPanel + opposeBar + opposePanel + '</div>' + selfLine + otherReceiptsLine(f.otherReceipts) + preLine +
+      '<div class="bars">' + contribBar + contribPanel + smallGiftsTile(sg) + supportBar + supportPanel + opposeBar + opposePanel + '</div>' + selfLine + otherReceiptsLine(f.otherReceipts) + preLine +
       '<p class="caption">Independent support and opposition are spending by outside groups, reported by those ' +
       'groups and not coordinated with the campaign. Figures are shown separately, never added together.</p></article>';
   }
 
   // M5 (OC-E2): the other-committee swatch shows only on a race view where a card has such money.
-  function legend(withOwnCommittee) {
+  function legend(withOwnCommittee, withSmall) {
     return '<div class="legend" aria-hidden="true">' +
       '<span><i class="sw third"></i>From other donors</span>' +
+      (withSmall ? '<span><i class="sw small"></i>Small gifts (unitemized)</span>' : '') +
       (withOwnCommittee ? '<span><i class="sw owncmte"></i>From the candidate’s other committee</span>' : '') +
       '<span><i class="sw self"></i>Candidate’s own money / loans</span>' +
       '<span><i class="sw support"></i>Independent support</span>' +
@@ -944,7 +982,7 @@
     var scale = 1;
     for (var i = 0; i < vm.candidates.length; i++) {
       var f = vm.candidates[i].figures; if (!f) continue;
-      scale = Math.max(scale, f.contributions.total, f.independentSupport, f.independentOpposition);
+      scale = Math.max(scale, f.contributions.total + ((f.smallGifts && f.smallGifts.total) || 0), f.independentSupport, f.independentOpposition);
     }
     var anyPending = vm.candidates.some(function (c) { return !c.hasFinance; });
     var cards = vm.candidates.map(function (c) { return c.hasFinance ? card(c, scale) : pendingCard(c); }).join('');
@@ -959,9 +997,36 @@
       (anyPending && vm.race.election_id !== '2024-school-board'
         ? '<p class="field-note">▸ <span><b>Field still being added.</b> Candidates with registered ' +
           'committees are shown; others appear as they file and finance is processed.</span></p>' : '') +
+      smallGiftsCompare(live) +
       legend(vm.candidates.some(function (c) {
         return !!(c.figures && c.figures.contributions && c.figures.contributions.ownCommittee > 0);
-      })) + '<div style="height:18px"></div>' + cards + '</div>';
+      }), live.some(function (c) { return !!(c.figures && c.figures.smallGifts && c.figures.smallGifts.total > 0); })) +
+      '<div style="height:18px"></div>' + cards + '</div>';
+  }
+
+  // Ruling 76b (3), as amended, and 84a (amended): within one contest only — the candidates on this
+  // race view — and by DOLLARS of small gifts, largest first. Never across races, never a share.
+  function smallGiftsCompare(live) {
+    if (!live || live.length < 2) return '';
+    // One row per person: a person with more than one committee card in the race (the mayoral
+    // field) is one row, the sum of their cards, keyed on the card slug the person's cards share.
+    var bySlug = {}, rows = [];
+    live.forEach(function (c) {
+      var v = (c.figures && c.figures.smallGifts && c.figures.smallGifts.total) || 0;
+      if (bySlug[c.slug]) { bySlug[c.slug].v += v; return; }
+      rows.push(bySlug[c.slug] = { name: c.name, v: v });
+    });
+    if (rows.length < 2) return '';
+    rows.sort(function (a, b) { return (b.v - a.v) || (a.name < b.name ? -1 : a.name > b.name ? 1 : 0); });
+    var max = 0; rows.forEach(function (r) { if (r.v > max) max = r.v; });
+    if (!(max > 0)) return '';
+    return '<section class="sg-compare" aria-label="Small gifts in this race"><h3>Small gifts in this race</h3>' +
+      rows.map(function (r) {
+        return '<div class="sg-row"><span class="sg-name">' + esc(r.name) + '</span>' +
+          '<div class="sg-track"><div class="sg-fill" style="width:' + (r.v / max * 100) + '%"></div></div>' +
+          '<span class="sg-amt">' + money(r.v) + '</span></div>';
+      }).join('') +
+      '<p class="sg-note">' + SMALL_GIFTS_NOTE + ' Shown for this election’s window.</p></section>';
   }
 
   function renderComingSoon(label) {
@@ -1166,7 +1231,7 @@
         'such as a fund for a state or federal office. We count it in the total raised and label it ' +
         '“From the candidate’s other committee.” It is not the candidate’s personal money, and it is not a ' +
         'contribution from an outside donor. We mark only committees we have confirmed belong to the same person.';
-      var paras = [C1, C2, C5, C3, C4, C6, C7, C8, METH_C9, METH_C10];   // M2: C7 and C8, plain <p>s after C6; AUDIT-2 (R4): C9 and C10 after C8
+      var paras = [C1, C2, C5, C3, C4, C6, C7, C8, METH_C11, METH_C9, METH_C10];   // 74a/76b: C11 after C8   // M2: C7 and C8, plain <p>s after C6; AUDIT-2 (R4): C9 and C10 after C8
       return METH_FRAME_OPEN +
         paras.map(function (t) { return t == null ? '' : '<p>' + t + '</p>'; }).join('') +
         VERIFICATION_SECTION +
@@ -1207,6 +1272,7 @@
       // AUDIT-2 M2: the council branch's C7 and C8, under this branch's own heading.
       '<h3>Other receipts and loans</h3>' +
       (C7 == null ? '' : '<p>' + C7 + '</p>') + '<p>' + C8 + '</p>' +
+      '<h3>Small gifts</h3><p>' + METH_C11 + '</p>' +   // 74a/76b
       '<h3>The same donor, named two ways</h3>' +
       '<p>Illinois records the same person’s name two ways depending on the form — direct itemized ' +
       'contributions arrive as “Smith, John,” while independent-expenditure committees list funders as ' +
@@ -1404,7 +1470,7 @@
       // contributions.total (direct raised, single-stream). The three figures stay SEPARATE.
       body = candidateRaceFilter(vm.raceOptions, vm.raceFilter, office) +
         '<p class="contrib-note">Candidates grouped by race, ranked within each race by money raised (direct ' +
-        'contributions). The three figures — raised, independent support, independent opposition — are shown ' +
+        'contributions, including small gifts reported as one total). The three figures — raised, independent support, independent opposition — are shown ' +
         'separately and never added together.</p>' +
         vm.groups.map(function (g) {
           var rows;
@@ -1418,7 +1484,7 @@
               var inner = (c.hasCommittee ? '<span class="caret" aria-hidden="true">▸</span> ' : '') + esc(c.name) +
                 (c.incumbent ? ' <span class="chip-inc">Incumbent</span>' : '') +
                 (c.hasCommittee ? '' : ' <span class="badge">no committee registered</span>') +
-                '<div class="rankfig">' + money(f.contributions.total) + ' <span class="n">raised</span></div>' +
+                '<div class="rankfig">' + money(f.raised) + ' <span class="n">raised</span></div>' +
                 '<div class="figrow">' + threeFig(f) + '</div>';
               // Expand affordance: its OWN element carrying ONLY data-expand-cand + aria-expanded.
               // No aria-controls (that's a dispatch attr caught by an earlier handler; the expand
@@ -1585,6 +1651,11 @@
     'We keep every line as filed, because the filings can’t tell a repeated gift from a filer’s double entry.';
   var METH_C10 = 'Where we group a donor’s records, the tool shows the group’s name, and search finds the donor by ' +
     'the group’s name or by any name as filed.';
+  // Rulings 74a, 76b and 82a: C11, small gifts. Draft text pending ratification as register text.
+  var METH_C11 = 'Illinois reports a donor’s gifts by name once they pass $150 in a reporting period. Smaller gifts ' +
+    'are reported as one total for each report, with no donor named. We count that total in what a candidate raised ' +
+    'and show it as “Small gifts (unitemized),” never as a donor. Each report’s total belongs to the election whose ' +
+    'window its reporting period ends in.';
   var METH_S1 = 'Outside groups’ filings name the candidate they spent for or against in their own words, and we ' +
     'match each filing to a candidate in this tool. When a match needs a person’s check, the spending is marked “⚑ ' +
     'needs review” until IPG has confirmed it.';

@@ -96,6 +96,20 @@
   function inWindow(date, win) {
     return !!win && !!date && (win.start == null || date >= win.start) && (win.end == null || date <= win.end);
   }
+  // Ruling 82a: the cycle a dated figure belongs to, from the artifact's own cycle table
+  // ({code: {start, end}}). A date before every cycle reads 'pre-2011' (an EXCLUDED cycle), and
+  // a date in no cycle reads 'undated', so the figure stays out of every in-subject sum.
+  function cycleOfDate(table, date) {
+    if (!date) return 'undated';
+    var earliest = null;
+    for (var code in table) {
+      if (!table.hasOwnProperty(code)) continue;
+      var cy = table[code] || {};
+      if (cy.start && (earliest == null || cy.start < earliest)) earliest = cy.start;
+      if ((cy.start == null || date >= cy.start) && (cy.end == null || date <= cy.end)) return code;
+    }
+    return (earliest != null && date < earliest) ? 'pre-2011' : 'undated';
+  }
   // Which election a dated row belongs to (office-aware). Returns the election id or null.
   function electionOf(office, date) {
     var t = officeType(office), o = t && ELECTION_WINDOWS[t];
@@ -246,6 +260,21 @@
       var cid = committees[key].candidate_id;
       if (cid) { candByCommittee[key] = cid; committeeKeyByCandidate[cid] = key; }
     }
+    // Ruling 74a (display 76b): unitemized individual contributions, one figure per final D-2
+    // report on the committee (apply_unitemized.py). Committee grain only — never a donor or a
+    // row (PS-96). Ruling 82a: a report's figure belongs to the window and cycle its period END
+    // falls in.
+    var cycleTable = json.cycles || {};
+    var smallGiftsByCandidate = {};   // candidate_id -> [{ end, amount, cycle }]
+    for (var skey in committees) {
+      if (!committees.hasOwnProperty(skey)) continue;
+      var scid = committees[skey].candidate_id, sper = committees[skey].unitemized_periods;
+      if (!scid || !sper || !sper.length) continue;
+      var slist = smallGiftsByCandidate[scid] || (smallGiftsByCandidate[scid] = []);
+      for (var sp = 0; sp < sper.length; sp++) {
+        slist.push({ end: sper[sp].end, amount: sper[sp].amount || 0, cycle: cycleOfDate(cycleTable, sper[sp].end) });
+      }
+    }
 
     var directByCandidate = {};    // candidate_id -> [contrib rows]
     var fundersBySpender = {};     // spender committee key -> [contrib rows]  (second hop)
@@ -366,6 +395,7 @@
       duesExcluded: json.dues_excluded || null,
       raceById: raceById, candidateById: candidateById, candidatesByRace: candidatesByRace,
       candByCommittee: candByCommittee, committeeKeyByCandidate: committeeKeyByCandidate,
+      smallGiftsByCandidate: smallGiftsByCandidate,
       directByCandidate: directByCandidate, ieByCandidate: ieByCandidate, iesBySpender: iesBySpender,
       inScopeIE: inScopeIE, office: opts.office || null, dataThrough: through,   // AUDIT-2 (PS-156)
       fundersBySpender: fundersBySpender, parentRollup: parentRollup,
@@ -391,7 +421,7 @@
   // cycle = null -> all-time (all non-excluded cycles); else a specific cycle code.
   function candidateFigures(index, candidateId, cycle, win) {
     var direct = index.directByCandidate[candidateId] || [];
-    var total = 0, self = 0, own = 0, count = 0, other = 0, otherCount = 0;
+    var total = 0, self = 0, own = 0, count = 0, other = 0, otherCount = 0, indiv = 0;
     for (var i = 0; i < direct.length; i++) {
       var c = direct[i];
       if (EXCLUDED_CYCLES[c.cycle]) continue;
@@ -403,12 +433,29 @@
       total += a; count++;
       if (c.is_self) self += a;
       else if (c.is_own_committee) own += a;
+      else { var dn = index.donors && index.donors[c.donor_id]; if (dn && dn.type === 'Individual') indiv += a; }
+    }
+    // Ruling 74a/82a: small gifts in the same scope, by period end. Ruling 83a: their share is of
+    // individual giving = itemized gifts from individual donors (not the candidate's own money,
+    // not the candidate's other committee) + small gifts.
+    var sg = index.smallGiftsByCandidate ? (index.smallGiftsByCandidate[candidateId] || []) : [];
+    var small = 0, reports = 0;
+    for (var j = 0; j < sg.length; j++) {
+      if (EXCLUDED_CYCLES[sg[j].cycle]) continue;
+      if (cycle != null && sg[j].cycle !== cycle) continue;
+      if (win && !inWindow(sg[j].end, win)) continue;
+      small += sg[j].amount; reports++;
     }
     var ieB = index.ieByCandidate[candidateId] || { support: [], oppose: [] };
     var sup = sumIE(ieB.support, cycle, win), opp = sumIE(ieB.oppose, cycle, win);
     return {
       contributions: { total: round2(total), selfFunded: round2(self), ownCommittee: round2(own),
                        thirdParty: round2(total - self - own), count: count },
+      // 74a: counted in the raised figure as its own line; contributions.total stays the itemized
+      // rows (every row-recount invariant reads it). raised = contributions.total + smallGifts.total.
+      smallGifts: { total: round2(small), reports: reports, individualItemized: round2(indiv),
+                    share: (indiv + small) > 0 ? small / (indiv + small) : null },
+      raised: round2(total + small),
       otherReceipts: { total: round2(other), count: otherCount },   // M2
       independentSupport: round2(sup.amount), independentSupportCount: sup.count,
       independentOpposition: round2(opp.amount), independentOppositionCount: opp.count
@@ -722,11 +769,14 @@
     var race2 = cand2.race_id ? (index.raceById[cand2.race_id] || {}) : {};
     var contrib = candId ? withInKind(index, candId, win, candidateContributors(index, candId, null, win)) : { lines: [], total: 0, count: 0 };
     // AUDIT-2 M2 (OR-E1): the committee's other receipts in the same window, stated under "raised".
-    var other = candId ? candidateFigures(index, candId, null, win).otherReceipts : { total: 0, count: 0 };
+    var cf2 = candId ? candidateFigures(index, candId, null, win) : null;
+    var other = cf2 ? cf2.otherReceipts : { total: 0, count: 0 };
+    var small2 = cf2 ? cf2.smallGifts : { total: 0, reports: 0, share: null };   // 74a: counted in raised
     return {
       committee_id: committeeKey, kind: 'candidate', name: cm.committee_name || committeeKey, win: win || null,
       candidateName: cand2.name || null, raceLabel: race2.label || null, sunshineUrl: sun, isIE: false,
-      raised: contrib.total, otherReceipts: other, funders: contrib.lines, funderTotal: contrib.total, funderCount: contrib.count
+      raised: round2(contrib.total + small2.total), smallGifts: small2, otherReceipts: other,
+      funders: contrib.lines, funderTotal: contrib.total, funderCount: contrib.count
     };
   }
 
@@ -935,6 +985,7 @@
           figures: hasFinance ? {
             contributions: fFund.contributions,
             otherReceipts: fFund.otherReceipts,   // M2: with the money it sits beside, from the funding candidacy
+            smallGifts: fFund.smallGifts, raised: fFund.raised,   // 74a/76b: from the funding candidacy, like the contributions
             independentSupport: fOwn.independentSupport, independentSupportCount: fOwn.independentSupportCount,
             independentOpposition: fOwn.independentOpposition, independentOppositionCount: fOwn.independentOppositionCount
           } : null,
@@ -1392,18 +1443,18 @@
             }
             return entry;
           });
-        cands.sort(function (a, b) { return b.figures.contributions.total - a.figures.contributions.total; });
+        cands.sort(function (a, b) { return b.figures.raised - a.figures.raised; });   // 74a: raised counts small gifts
         // Per-group scale = race-wide max across these candidates' figures (raceView's formula,
         // render.js:833-837). Drives the inline card's bar fill so a 2026 row is comparable
         // within its own race, not against a global maximum.
         var groupScale = 1;
         for (var s = 0; s < cands.length; s++) {
           var gf = cands[s].figures; if (!gf) continue;
-          groupScale = Math.max(groupScale, gf.contributions.total, gf.independentSupport, gf.independentOpposition);
+          groupScale = Math.max(groupScale, gf.raised, gf.independentSupport, gf.independentOpposition);
         }
         var hasMoney = cands.some(function (c) {
           var f = c.figures;
-          return f && (f.contributions.total > 0 || f.independentSupport > 0 || f.independentOpposition > 0);
+          return f && (f.raised > 0 || f.independentSupport > 0 || f.independentOpposition > 0);
         });
         return { race: { id: r.id, label: r.label, office: r.office, election_id: r.election_id },
                  inFrame: inFrame(r), hasMoney: hasMoney, candidates: cands, scale: groupScale };

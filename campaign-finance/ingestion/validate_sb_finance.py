@@ -452,10 +452,11 @@ def validate(art, ed=None):
     # unexplained change in these figures is the stop, not the update (PS-85). Keyed on the
     # SBE id so a slug rename does not silently disarm it.
     RATIFIED_IE = {
-        "26066": {"support": 444453.78, "oppose": 366064.00, "rows": 28},
-        "39901": {"support": 377284.32, "oppose": 0.00, "rows": 50},
-        "41012": {"support": 22500.00, "oppose": 73337.50, "rows": 6},
-        "41327": {"support": 26460.00, "oppose": 0.00, "rows": 1},
+        # Re-pinned on the 2026-10-20 pull (refresh; ratified by Ishan as the re-pin list).
+        "26066": {"support": 652791.78, "oppose": 455392.00, "rows": 36},
+        "39901": {"support": 383488.25, "oppose": 0.00, "rows": 53},
+        "41012": {"support": 102100.00, "oppose": 492736.26, "rows": 39},
+        "41327": {"support": 559082.41, "oppose": 0.00, "rows": 25},
     }
     if ie:
         seen_ie = {}
@@ -479,8 +480,8 @@ def validate(art, ed=None):
                  got["rows"] == want["rows"], f"got={got['rows']} ratified={want['rows']}")
         grand = round(sum(v["support"] + v["oppose"] for v in seen_ie.values()), 2)
         grows = sum(v["rows"] for v in seen_ie.values())
-        r.ok("SBF-17e the whole IE slice equals the ratified $1,310,099.60 over 85 rows",
-             abs(grand - 1310099.60) < CENT and grows == 85,
+        r.ok("SBF-17e the whole IE slice equals the ratified $2,645,590.70 over 153 rows",
+             abs(grand - 2645590.70) < CENT and grows == 153,
              f"got ${grand} over {grows} rows")
 
     # SBF-18 — the election-wide label (A.3) and the bug it fixes.

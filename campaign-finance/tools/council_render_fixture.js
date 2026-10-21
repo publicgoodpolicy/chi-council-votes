@@ -138,6 +138,29 @@ function withSynthetic(base, opts) {
 
   console.log('council_render_fixture (REPAIR-AGG-1 / R4) — ward ' + WARD + ', committee ' + TARGET + '\n');
 
+  // Rulings 74a/76b/82a: small gifts (unitemized) count in Raised as their own line. The oracle
+  // restates 82a here, independently of the embed: a report's figure belongs to the cycle its
+  // period END falls in, read from the artifact's own cycle table; before every cycle is
+  // 'pre-2011', in no cycle is 'undated'.
+  function sgCycleOf(cycles, date) {
+    var earliest = null, code;
+    for (code in cycles) {
+      var c = cycles[code] || {};
+      if (c.start && (earliest === null || c.start < earliest)) earliest = c.start;
+      if ((c.start == null || date >= c.start) && (c.end == null || date <= c.end)) return code;
+    }
+    return (earliest !== null && date < earliest) ? 'pre-2011' : 'undated';
+  }
+  function sgIn(d, view) {   // view: a cycle code, 'all' (in-subject) or 'pre-2011'
+    var cm = (d.committees || {})[TARGET] || {};
+    return (cm.unitemized_periods || []).reduce(function (s, p) {
+      var c = sgCycleOf(d.cycles || {}, p.end);
+      var inView = view === 'all' ? (c !== 'pre-2011' && c !== 'undated') : c === view;
+      return s + (inView ? Number(p.amount || 0) : 0);
+    }, 0);
+  }
+  var SG_CUR = sgIn(JSON.parse(baseRaw), JSON.parse(baseRaw).current_cycle);
+
   // ---- assert 1 (E1.1) + assert 3 (E1.3) --------------------------------------------
   var real = await boot(embedNow, JSON.parse(baseRaw), { showAll: true });
   var synth = await boot(embedNow, withSynthetic(baseRaw), { showAll: true });
@@ -200,8 +223,8 @@ function withSynthetic(base, opts) {
     'itemized ' + oracleItemized.toFixed(2) + ' + line ' + oracleAgg.toFixed(2) +
     ' == total ' + oracleTotal.toFixed(2));
   T.ok('[E1.1] the rendered line equals the oracle residual, and the visible list reconciles to the headline within the display-rounding band',
-    lineAmt === Math.round(oracleAgg) && Math.abs(reconciled - synthRaised) <= band,
-    'rendered rows ' + rs.sum + ' + line ' + lineAmt + ' = ' + reconciled +
+    lineAmt === Math.round(oracleAgg) && Math.abs(reconciled + SG_CUR - synthRaised) <= band + 1,
+    'rendered rows ' + rs.sum + ' + line ' + lineAmt + ' + small gifts ' + Math.round(SG_CUR) + ' = ' + Math.round(reconciled + SG_CUR) +
     ' vs headline ' + synthRaised + ' (band +/-' + band + ' over ' + (rs.n + 1) + ' rounded rows)');
 
   // AUDIT-2 M2: restated on the oracle. The assert compared the two rounded headlines' difference
@@ -209,10 +232,34 @@ function withSynthetic(base, opts) {
   // way before and after the amount is added; it held at every vintage until other receipts left
   // the total. Each headline is now compared to the oracle's own sum, rounded as the page rounds.
   T.ok('[E1.3] the headline moves by exactly the synthetic amount — disclosure, not counting',
-    synthRaised === Math.round(oracleTotal) && realRaised === Math.round(oracleTotal - oracleAgg) &&
+    synthRaised === Math.round(oracleTotal + SG_CUR) && realRaised === Math.round(oracleTotal - oracleAgg + SG_CUR) &&
     Math.abs(oracleAgg - SYNTH) < 0.005,
     realRaised + ' -> ' + synthRaised + ' (oracle ' + (oracleTotal - oracleAgg).toFixed(2) + ' -> ' + oracleTotal.toFixed(2) +
     ', synthetic ' + SYNTH + ')');
+
+  // ---- 74a/76b/83a: the small-gifts tile, its share, the bar segment, and a bite --------------
+  var SG_NOTE = 'Gifts of $150 or less in a reporting period, which Illinois reports as one total, not by donor.';
+  var rd0 = JSON.parse(baseRaw), indiv0 = rd0.contributions.filter(function (c) {
+    var dn = rd0.donors[c.donor_id];
+    return c.committee_id === TARGET && c.cycle === rd0.current_cycle && !isOther(c) && !c.is_own_committee && !c.is_self && dn && dn.type === 'Individual';
+  }).reduce(function (s, c) { return s + (c.amount || 0); }, 0);
+  var tileNode = real.doc.querySelector('.ipg-cf-smallgifts');
+  var wantShare = (indiv0 + SG_CUR) > 0 ? Math.round(SG_CUR / (indiv0 + SG_CUR) * 100) + '% of individual giving' : null;
+  T.ok('[SG/ALDER] the small-gifts tile states the current cycle\u2019s small gifts, their share of individual giving and the ruled note',
+    !!tileNode && tileNode.textContent.indexOf('$' + Math.round(SG_CUR).toLocaleString('en-US')) >= 0 &&
+    (!wantShare || tileNode.textContent.indexOf(wantShare) >= 0) && tileNode.textContent.indexOf(SG_NOTE) >= 0,
+    tileNode ? tileNode.textContent.slice(0, 120) : 'no tile');
+  var sgSeg = real.doc.querySelector('.ipg-dollarbar-static[title^="Small gifts (unitemized)"]');
+  T.ok('[SG/ALDER] the bar carries a static Small gifts segment (no click, no filter) when the committee has small gifts',
+    sgIn(rd0, 'all') > 0 ? (!!sgSeg && sgSeg.tagName === 'DIV' && !sgSeg.getAttribute('data-industry')) : !sgSeg);
+  var sgBite = JSON.parse(baseRaw);
+  sgBite.committees[TARGET].unitemized_periods = (sgBite.committees[TARGET].unitemized_periods || []).concat([
+    { beg: '2026-01-01', end: (sgBite.cycles[sgBite.current_cycle] || {}).start || '2026-03-31', amount: 1000, d2_doc: 'fixture' }]);
+  var bSg = await boot(embedNow, sgBite, { showAll: true });
+  var bSgRaised = money((bSg.text.match(/\$([\d,]+)\s*Raised/) || [])[1]);
+  T.ok('[SG/BITE] a constructed $1,000 small-gifts report in the current cycle moves Raised by exactly $1,000 and adds no donor row',
+    bSgRaised === realRaised + 1000 && bSg.doc.querySelectorAll('.ipg-cf-row').length === real.doc.querySelectorAll('.ipg-cf-row').length,
+    realRaised + ' -> ' + bSgRaised);
 
   // ---- assert 2 (E1.2) — real data: no line, and byte-identical to the pre-restore embed
   var headReal = await boot(embedHead, JSON.parse(baseRaw), { showAll: true });
@@ -220,7 +267,17 @@ function withSynthetic(base, opts) {
     lineNode(real) === null && !/Small-dollar and un-itemized contributions/.test(real.text));
   // ruling 73a (2026-10-18): the average tile is relabelled and a note follows the tiles; both are
   // normalised away on each side so the comparison still bites on any OTHER change to the profile.
-  var norm73 = function (h) { return h.replace(/<p class="ipg-cf-meta ipg-cf-avgnote">[^<]*<\/p>/g, '').replace(/Avg\. itemized gift/g, 'Avg. gift'); };
+  // Rulings 74a/76b (2026-10-20): the small-gifts tile, the Raised figure that now counts them, and
+  // the bar's small-gifts segment and legend row are normalised away too; the bar's other segments
+  // are compared with their widths stripped, since the new segment rescales them.
+  var norm73 = function (h) {
+    return h.replace(/<p class="ipg-cf-meta ipg-cf-avgnote">[^<]*<\/p>/g, '').replace(/Avg\. itemized gift/g, 'Avg. gift')
+      .replace(/<div class="ipg-cf-smallgifts">.*?<\/span><\/div>/g, '')
+      .replace(/<div class="num serif">\$[\d,]+<\/div><div class="lab">Raised<\/div>/g, '<div class="num serif">RAISED</div><div class="lab">Raised</div>')
+      .replace(/<div class="ipg-dollarbar-seg ipg-dollarbar-static"[^>]*title="Small gifts \(unitemized\)[^"]*">.*?<\/div>/g, '')
+      .replace(/<div class="ipg-dollarbar-legend-item"><span class="ipg-dollarbar-legend-swatch" style="background:#D4A24C"><\/span><span class="ipg-dollarbar-legend-label">Small gifts \(unitemized\)<\/span>.*?<\/span><\/div>/g, '')
+      .replace(/flex:[\d.e+-]+ 0 0/g, 'flex:W').replace(/\(\d+(\.\d)?%\)/g, '(P)').replace(/<span class="ipg-dollarbar-(?:legend-)?pct">[^<]*<\/span>/g, '');
+  };
   T.ok('[E1.2/E7] the ward profile is BYTE-IDENTICAL to the pre-restore embed at HEAD on real data (ruling 73a\u2019s label and note normalised)',
     norm73(real.html) === norm73(headReal.html),
     norm73(real.html) === norm73(headReal.html) ? 'profile innerHTML sha ' + crypto.createHash('sha256').update(real.html).digest('hex').slice(0, 16)
@@ -240,7 +297,7 @@ function withSynthetic(base, opts) {
   }).reduce(function (s, c) { return s + (c.amount || 0); }, 0);
   var curatedRaised = money((uPre.text.match(/\$([\d,]+)\s*Raised/) || [])[1]);
   T.ok('[E5] the curated view total equals the pre-2011 subset EXACTLY (undated excluded)',
-    curatedRaised === Math.round(preSubset),
+    curatedRaised === Math.round(preSubset + sgIn(u, 'pre-2011')),
     'curated headline ' + curatedRaised + ' vs pre-2011 subset ' + preSubset.toFixed(2) +
     ' (the undated $' + SYNTH_UNDATED + ' is in neither collection)');
 
@@ -322,7 +379,7 @@ function withSynthetic(base, opts) {
   var list2 = m2.app.querySelector('.ipg-cf-otherlist'), listText = list2 ? list2.textContent : '';
   var payers = {}; mOther.forEach(function (c) { payers[c.donor_id] = 1; });
   T.ok('[M2/OTHER] the line states the cycle\u2019s other receipts and their count, Raised leaves them out, and a payer is in no donor row and in the list the line opens',
-    oText === oWant && m2Raised === Math.round(mRaised) && !payerRow && !!list2 &&
+    oText === oWant && m2Raised === Math.round(mRaised + SG_CUR) && !payerRow && !!list2 &&
     list2.querySelectorAll('.ipg-cf-meta').length === Object.keys(payers).length &&
     listText.indexOf('Other-receipt payer (fixture)$' + Math.round(M2_OTHER).toLocaleString() + ' \u00b7 1 receipt') >= 0 &&
     list2.querySelectorAll('.ipg-cf-clickable, [data-donor-id]').length === 0 &&
@@ -420,7 +477,7 @@ function withSynthetic(base, opts) {
     tOther.line !== tReal.line && /^Other receipts: \$/.test(tOther.line),
     X ? ('donor ' + X + ' (ward ' + W2 + '); moved: ' + (movedByOther.join(', ') || 'none') + ' | ' + tOther.line) : 'premise: no donor fits the rule');
   T.ok('[M2/TABS:bite] the same row filed as a contribution moves Raised, Industry totals, Industries by alder, Follow the money and the donor\u2019s profile',
-    !!X && tGift.raised === Math.round(mCountedReal + X_AMT) && tGift.rowForX &&
+    !!X && tGift.raised === Math.round(mCountedReal + X_AMT + SG_CUR) && tGift.rowForX &&
     ['industries', 'alder-mix', 'relationship', 'modal'].every(function (k) { return movedByGift.indexOf(k) >= 0; }),
     X ? ('Raised ' + tReal.raised + ' -> ' + tGift.raised + '; moved: ' + movedByGift.join(', ')) : 'premise: no donor fits the rule');
 

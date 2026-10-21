@@ -484,17 +484,22 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   // ---- the four member-page populations ---------------------------------
   // One page per ratified finance_state, so a regression in any one is visible.
   var mv = nav(mxv, 'member');
+  // Rulings 74a/76b: Raised is the direct stream plus the election's small gifts (unitemized),
+  // counted as their own line; the donor rows still sum to the direct stream alone.
+  function raisedOf(e) {
+    return Math.round((Number((e.direct || {}).amount || 0) + Number((e.unitemized || {}).amount || 0)) * 100) / 100;
+  }
   var pFull = pick(mv, '4A');                                  // person-anchored, 13
   ok('[SBF/STATE] full: donor detail renders with tiles',
      pFull.html.indexOf('ipg-sb-stats') >= 0 && pFull.html.indexOf('ipg-sb-donor') >= 0);
   ok('[SBF/STATE] full: Raised equals the artifact direct amount for the DEFAULT election',
-     pFull.text.indexOf(money(finBy('4A').elections['2026'].direct.amount)) >= 0);
+     pFull.text.indexOf(money(raisedOf(finBy('4A').elections['2026']))) >= 0);
   // The election filter is the ratified election-labeled control: driving it must
   // move every figure to that election's own numbers, unrecomputed.
   var pFull24 = setSel(pFull, 'ipg-sb-fin-el', '2024');
   ok('[SBF/ELECT] the election filter re-keys the figures to the chosen election',
-     pFull24.text.indexOf(money(finBy('4A').elections['2024'].direct.amount)) >= 0
-       && pFull24.text.indexOf(money(finBy('4A').elections['2026'].direct.amount)) < 0);
+     pFull24.text.indexOf(money(raisedOf(finBy('4A').elections['2024']))) >= 0
+       && pFull24.text.indexOf(money(raisedOf(finBy('4A').elections['2026']))) < 0);
   ok('[SBF/SELF] self-funding renders in its OWN tile, not folded into Raised',
      pFull24.text.indexOf('Self-funding') >= 0
        && pFull24.text.indexOf(money(finBy('4A').elections['2024'].self_funding.amount)) >= 0
@@ -584,7 +589,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
         if (Math.abs(sum - direct) > 0.005) { bad.push(m.seat + ' ' + k + ' artifact'); return; }
         // Raised renders, and the F1 basis (direct + self_funding) does NOT.
         var self = Number(m.elections[k].self_funding.amount || 0);
-        if (pg.text.indexOf(money(direct)) < 0) bad.push(m.seat + ' ' + k + ' no-raised');
+        if (pg.text.indexOf(money(raisedOf(m.elections[k]))) < 0) bad.push(m.seat + ' ' + k + ' no-raised');
         if (self > 0 && pg.text.indexOf(money(direct + self)) >= 0)
           bad.push(m.seat + ' ' + k + ' F1-basis-rendered');
       });
@@ -607,6 +612,29 @@ function around(tpl, marker) { return String(tpl).split(marker); }
     return bad.length === 0;
   })());
 
+  // Rulings 74a/76b/83a: the small-gifts tile on every member page with finance figures, with the
+  // election's amount, its share of individual giving, and the ruled note.
+  var SG_NOTE = 'Gifts of $150 or less in a reporting period, which Illinois reports as one total, not by donor.';
+  ok('[SG/TILE] every member page with figures renders the small-gifts tile, its amount, share and note', (function () {
+    var bad = [];
+    REALFIN.members.forEach(function (m) {
+      if (m.finance_state !== 'full' && m.finance_state !== 'totals_only') return;
+      Object.keys(m.elections || {}).forEach(function (k) {
+        var pp = pick(mv, m.seat);
+        var pg = pp.doc.getElementById('ipg-sb-fin-el') ? setSel(pp, 'ipg-sb-fin-el', k) : pp;   // one election: no control
+        var u = m.elections[k].unitemized || {};
+        var amt = Number(u.amount || 0), ind = Number(u.individual_itemized || 0);
+        if (pg.html.indexOf('ipg-sb-smallgifts') < 0) { bad.push(m.seat + ' ' + k + ' no-tile'); return; }
+        if (pg.text.indexOf('Small gifts (unitemized)' + money(amt)) < 0) bad.push(m.seat + ' ' + k + ' amount');
+        var share = (ind + amt) > 0 ? Math.round(amt / (ind + amt) * 100) + '% of individual giving' : null;
+        if (share && pg.text.indexOf(share) < 0) bad.push(m.seat + ' ' + k + ' share');
+        if (pg.text.indexOf(SG_NOTE) < 0) bad.push(m.seat + ' ' + k + ' note');
+      });
+    });
+    if (bad.length) console.log('    ' + bad.slice(0, 6).join(', '));
+    return bad.length === 0;
+  })());
+
   // The three census-named cases, by name, so a regression names itself.
   ok('[SBF2/F1] the three census cases render Raised, not Raised+self-funding', (function () {
     var cases = [['9A', 'Boyle'], ['5A', 'Blaise'], ['10A', 'Smith']];
@@ -619,8 +647,9 @@ function around(tpl, marker) { return String(tpl).split(marker); }
       var d = Number(e.direct.amount || 0), sf = Number(e.self_funding.amount || 0);
       var rows = m.donors_by_election['2024'] || [];
       var sum = rows.reduce(function (a, r) { return a + Number(r.amount || 0); }, 0);
-      return pg.text.indexOf(money(d)) >= 0
+      return pg.text.indexOf(money(raisedOf(e))) >= 0
           && pg.text.indexOf(money(d + sf)) < 0
+          && pg.text.indexOf(money(raisedOf(e) + sf)) < 0
           && Math.abs(sum - d) < 0.005;
     });
   })());
@@ -661,7 +690,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
      (function () {
        var labels = (pBar.html.match(/<span class="l">([^<]+)<\/span>/g) || []);
        var vocab = Object.keys(REALFIN.industry_tags || {}).map(function (k) {
-         return REALFIN.industry_tags[k].label; });
+         return REALFIN.industry_tags[k].label; }).concat(['Small gifts (unitemized)']);   // 76b: the one non-vocabulary segment
        return labels.length > 0 && labels.every(function (x) {
          return vocab.indexOf(x.replace(/<[^>]+>/g, '')) >= 0; });
      })());
@@ -697,7 +726,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
      (function () {
        var fm = finBy('4A');
        var d = Object.keys(fm.elections).reduce(function (a, k) {
-         return a + Number(fm.elections[k].direct.amount || 0); }, 0);
+         return a + raisedOf(fm.elections[k]); }, 0);
        return pAll.text.indexOf(money(d)) >= 0;
      })());
   ok('[SBF2/ALL] the Donors tile is DISTINCT donors, not the sum of per-election counts',

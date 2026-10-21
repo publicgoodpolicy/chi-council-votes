@@ -520,6 +520,12 @@ const IPG_SB_FEEDBACK = {
   font-variant-numeric:tabular-nums}
 #ipg-sb-app .ipg-sb-stat .l{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
   color:var(--ink-mid);margin-top:3px}
+#ipg-sb-app .ipg-sb-smallgifts{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:4px 0 16px;padding:10px 14px;border-radius:10px;background:#F7EBD3;border-left:4px solid #D4A24C}
+#ipg-sb-app .ipg-sb-smallgifts .k{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6a5d4e}
+#ipg-sb-app .ipg-sb-smallgifts .v{font-family:Georgia,ui-serif,serif;font-size:20px;font-weight:700;color:#342828}
+#ipg-sb-app .ipg-sb-smallgifts .s{font-size:13px;color:#6a5d4e}
+#ipg-sb-app .ipg-sb-smallgifts .n{flex-basis:100%;font-size:11.5px;color:#7d7264}
+#ipg-sb-app .ipg-sb-bar-static{cursor:default;color:#fff;padding:0 6px}
 #ipg-sb-app .ipg-sb-selffund{display:flex;gap:12px;align-items:center;flex-wrap:wrap;
   margin:12px 0 0;padding:10px 12px;background:var(--cream);border:1px dashed var(--line);
   border-radius:10px}
@@ -708,6 +714,8 @@ const IPG_SB_FEEDBACK = {
     otherReceipts: 'A committee’s other receipts (refunds, sales of assets and other money its filings don’t report as contributions, transfers or loans) are left out of all totals. For the members on this page they account for {OTHER}.',
     // PS-152 — the disclosure sentence PS-137 calls for. No figure.
     repeatedLines: 'Some filings list the same gift more than once: the same donor, date and amount on one report. We keep every line as filed, because the filings can’t tell a repeated gift from a filer’s double entry.',
+    // Rulings 74a, 76b, 82a (draft text pending ratification): small gifts.
+    smallGifts: 'Illinois reports a donor’s gifts by name once they pass $150 in a reporting period. Smaller gifts are reported as one total for each report, with no donor named. We count that total in Raised and show it as “Small gifts (unitemized),” never as a donor. Each report’s total belongs to the election whose window its reporting period ends in.',
     f5: 'Industry classification of donors is an editorial layer and is always in progress. Each chart states how much of the money it shows carries a substantive industry tag, and money without itemized donor detail remains in a member\'s totals even where a chart cannot break it down.',
     f6: 'These figures place money and votes side by side. They do not assert that one caused the other.'
   };
@@ -1474,6 +1482,14 @@ const IPG_SB_FEEDBACK = {
           acc[s].count += Number(v.count||0);
         });
       });
+      // 74a/76b: small gifts summed across the elections, like the streams (never a stream).
+      acc.unitemized = { amount:0, reports:0, individual_itemized:0 };
+      finElections(fm).forEach(function(k){
+        var u = ((fm.elections||{})[k] || {}).unitemized || {};
+        acc.unitemized.amount = round2(acc.unitemized.amount + Number(u.amount||0));
+        acc.unitemized.reports += Number(u.reports||0);
+        acc.unitemized.individual_itemized = round2(acc.unitemized.individual_itemized + Number(u.individual_itemized||0));
+      });
       var rows = mergeDonorRows(fm.donors_by_election);
       acc.key = ALL_ELECTIONS; acc.isAll = true; acc.label = SF.allElections;
       acc.donors = rows; acc.coverage = rows.length ? coverageFrom(rows) : null;
@@ -1485,6 +1501,7 @@ const IPG_SB_FEEDBACK = {
                 donors: ((fm.donors_by_election||{})[key]) || [],
                 coverage: ((fm.coverage_by_election||{})[key]) || null };
     STREAM_KEYS.forEach(function(s){ out[s] = e2[s] || { amount:0, count:0 }; });
+    out.unitemized = e2.unitemized || { amount:0, reports:0, individual_itemized:0 };   // 74a/76b
     return out;
   }
 
@@ -1495,7 +1512,9 @@ const IPG_SB_FEEDBACK = {
   // per industry, segment AND legend row both clickable on the same data-industry,
   // toggle-to-clear, dimming, and filtering IN PLACE — no scroll, no navigation.
   // ==========================================================
+  var SMALL_GIFTS_NOTE = 'Gifts of $150 or less in a reporting period, which Illinois reports as one total, not by donor.';
   function indMeta(key){
+    if(key === '_small-gifts') return { label:'Small gifts (unitemized)', color:'#D4A24C' };   // 76b
     var t = (F && F.industry_tags || {})[key];
     return t || { label:key, color:'#a9a299' };
   }
@@ -1525,11 +1544,11 @@ const IPG_SB_FEEDBACK = {
       if(p < 0.3) return;
       var pstr = p >= 10 ? Math.round(p)+'%' : p.toFixed(1)+'%';
       var dim = (isFiltered && active !== x.industry) ? ';opacity:.32' : '';
-      h += '<button type="button" class="ipg-sb-bar-seg" data-industry="'+esc(x.industry)+'"'
+      h += (x.static ? '<div class="ipg-sb-bar-seg ipg-sb-bar-static"' : '<button type="button" class="ipg-sb-bar-seg" data-industry="'+esc(x.industry)+'"')
          + ' style="flex:'+p+' 0 0;background:'+esc(meta.color)+dim+'"'
-         + ' title="'+esc(meta.label+' — '+money(x.amount)+' ('+pstr+'). '+SF.barSegmentHint)+'">'
+         + ' title="'+esc(meta.label+' — '+money(x.amount)+' ('+pstr+'). '+(x.static ? SMALL_GIFTS_NOTE : SF.barSegmentHint))+'">'
          + (p >= 8 ? '<span class="l">'+esc(meta.label)+'</span><span class="p">'+esc(pstr)+'</span>' : '')
-         + '</button>';
+         + (x.static ? '</div>' : '</button>');
     });
     h += '</div><div class="ipg-sb-bar-legend">';
     inds.forEach(function(x){
@@ -1538,11 +1557,11 @@ const IPG_SB_FEEDBACK = {
       var p = (x.amount / grand) * 100;
       var pstr = p >= 10 ? Math.round(p)+'%' : p.toFixed(1)+'%';
       var dim = (isFiltered && active !== x.industry) ? ' dim' : '';
-      h += '<button type="button" class="ipg-sb-legend-item'+dim+'" data-industry="'+esc(x.industry)+'">'
+      h += (x.static ? '<div class="ipg-sb-legend-item'+dim+'">' : '<button type="button" class="ipg-sb-legend-item'+dim+'" data-industry="'+esc(x.industry)+'">')
          + '<i style="background:'+esc(meta.color)+'"></i>'
          + '<span class="l">'+esc(meta.label)+'</span>'
          + '<span class="p">'+esc(pstr)+'</span>'
-         + '<span class="a">'+esc(money(x.amount))+'</span></button>';
+         + '<span class="a">'+esc(money(x.amount))+'</span>' + (x.static ? '</div>' : '</button>');
     });
     return h + '</div>';
   }
@@ -1797,10 +1816,15 @@ const IPG_SB_FEEDBACK = {
     // ---- Stat tiles. Every one reads the SAME scope object as the donor list below it,
     // which is the whole of F1's repair. Avg. gift is the only derived figure and is a
     // ratio of two displayed numbers, never a sum of streams.
-    var raised = Number(scope.direct.amount||0), ncontrib = Number(scope.direct.count||0);
-    var avg = ncontrib ? raised/ncontrib : 0;
+    var direct = Number(scope.direct.amount||0), ncontrib = Number(scope.direct.count||0);
+    // Rulings 74a/76b: small gifts (unitemized) are counted in Raised as their own line, never a
+    // donor (PS-96); Avg. itemized gift stays the itemized stream alone (73a).
+    var sgU = scope.unitemized || { amount:0, individual_itemized:0 };
+    var sgAmt = Number(sgU.amount||0), sgInd = Number(sgU.individual_itemized||0);
+    var sgShare = (sgInd + sgAmt) > 0 ? sgAmt/(sgInd + sgAmt) : null;
+    var avg = ncontrib ? direct/ncontrib : 0;
     h += '<div class="ipg-sb-stats">';
-    h += statTile(money(raised), 'Raised');
+    h += statTile(money(round2(direct + sgAmt)), 'Raised');
     // Donor count is knowable only where donor detail exists. For a totals-only member it
     // is NOT derivable from contribution counts, so the tile is omitted rather than filled
     // with a number that would silently mean something else. Under All elections it is the
@@ -1809,6 +1833,11 @@ const IPG_SB_FEEDBACK = {
     h += statTile(money(avg), 'Avg. itemized gift');   // ruling 73a
     h += statTile(String(ncontrib), 'Contributions');
     h += '</div><div class="ipg-sb-note">Itemized gifts only. Illinois reports a donor\u2019s gifts by name once they pass $150 in a reporting period; smaller gifts are reported as one total.</div>';   // ruling 73a
+    // 76b (1): the small-gifts tile.
+    h += '<div class="ipg-sb-smallgifts"><span class="k">Small gifts (unitemized)</span>'
+       + '<span class="v">'+esc(money(sgAmt))+'</span>'
+       + (sgShare!=null ? '<span class="s">\u00b7 '+Math.round(sgShare*100)+'% of individual giving</span>' : '')
+       + '<span class="n">'+esc(SMALL_GIFTS_NOTE)+' Counted in Raised.</span></div>';
 
     // Self-funding: its OWN tile, never folded into Raised (ratification 8), and never a
     // donor row (SBFIN-2 A dropped those donors upstream, which is why the two figures
@@ -1835,6 +1864,11 @@ const IPG_SB_FEEDBACK = {
       var n = pct(scope.coverage.substantive_share);
       if(scope.coverage.meets_industry_threshold){
         var inds = industryTotals(rows);
+        // 76b (2): the small-gifts segment — static, not a donor class, never a filter.
+        if(sgAmt > 0){
+          inds.push({ industry:'_small-gifts', amount:sgAmt, static:true });
+          inds.sort(function(a,b){ return b.amount - a.amount || a.industry.localeCompare(b.industry); });
+        }
         h += '<div class="ipg-sb-fin-sub">'+esc(SF.barHead)+'</div>'
            + '<div class="ipg-sb-meta">'+esc(SF.barSub)+'</div>'
            // PS-151: IND-MULTI-1's count-once sentence, on a line of its own under the sub-line.
@@ -2807,6 +2841,7 @@ const IPG_SB_FEEDBACK = {
     var otherFig = otherFigure();
     if(otherFig) h += '<p>'+esc(SFM.otherReceipts).replace('{OTHER}', esc(otherFig))+'</p>';
     h += '<p>'+esc(SFM.repeatedLines)+'</p>';
+    h += '<p>'+esc(SFM.smallGifts)+'</p>';   // 74a/76b
     h += '<p>'+esc(SFM.f5)+'</p>';
     h += '<p>'+esc(SFM.f6)+'</p>';
     h += '<h3>Seats and members</h3>';

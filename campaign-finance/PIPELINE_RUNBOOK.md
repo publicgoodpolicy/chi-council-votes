@@ -37,8 +37,8 @@ does **not** commit — it prints the commands and stops, on purpose.
 
 ### What is *not* in `build_all.sh`, by design
 
-`convert_bulk_receipts`, `repair_clusters`, `ingest_ie`, `enrich_committee_names` and
-`apply_cash_on_hand` are omitted — they need the SBE bulk files of a sealed pull and run
+`convert_bulk_receipts`, `repair_clusters`, `ingest_ie`, `enrich_committee_names`,
+`apply_cash_on_hand` and `apply_unitemized` are omitted — they need the SBE bulk files of a sealed pull and run
 quarterly. The script conforms
 to the reference's chain block with exactly those omissions.
 
@@ -304,6 +304,28 @@ as-of date — then run it without `--dry-run`, then
 nothing when a final report has no D2Totals row. `campaign-finance/ingestion/ingest.py`
 preserves what it writes, so a rebuild between refreshes keeps the figures. The rule is
 `campaign-finance/MECHANISM_REFERENCE.md` §2 (C2.12).
+
+---
+
+## Small gifts (`campaign-finance/ingestion/apply_unitemized.py`)
+
+Each candidate committee's unitemized individual contributions (rulings 74a, 76b and 82a): the
+D-2 cover's `IndivContribNI` on every final report, written as the committee fields
+`unitemized_periods` and `unitemized_total`. It is never a contribution row or a donor (PS-96).
+Run it on **both** artifacts with the same pull's `D2Totals` and `FiledDocs`: on
+`campaign-finance/council-data.json` after `apply_cash_on_hand.py` and before
+`campaign-finance/ingestion/build_shards.py`, and on `campaign-finance/election-data.json` after
+`build_rollups.py` and before `campaign-finance/ingestion/build_sb_finance.py`:
+
+```
+python3 campaign-finance/ingestion/apply_unitemized.py campaign-finance/election-data.json \
+  --fileddocs <pull>/FiledDocs.txt --d2totals <pull>/D2Totals.txt --dry-run
+```
+
+Read the dry run, then run it without `--dry-run`. A final report with no D2Totals row counts $0
+and is printed as filed-but-empty, as the reconciliation reports it. Which report is final is
+`reconcile.build_filing_registry`. The pages assign each report's figure to the election window
+and cycle its period ends in (82a).
 
 ---
 

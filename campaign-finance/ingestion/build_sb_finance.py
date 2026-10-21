@@ -387,6 +387,83 @@ def donor_detail_by_election(person, donors, elections, items, self_ids):
     return rows_out, cov_out
 
 
+def small_gifts_for(candidacy_ids, ed, election_keys):
+    """Rulings 74a, 76b, 82a and 83a: each election's unitemized individual contributions.
+
+    The figure is the committee field `unitemized_periods` (apply_unitemized.py), one amount per
+    final D-2 report, assigned to the window its period END falls in (82a). It is never a donor
+    or a row (PS-96); the page counts it in Raised as its own line. `individual_itemized` is the
+    83a denominator's other half: itemized gifts from Individual donors in the same window,
+    through the same exclusions as the direct stream (aggregate, excluded cycles, dues, other
+    receipts), not the candidate's own money and not the candidate's other committee.
+
+    Returns {election: {"amount", "reports", "individual_itemized"}} for every election key the
+    member's figures carry; a window with small gifts but no figures entry is returned under
+    `_unplaced` so the builder can refuse it rather than invent an election."""
+    comms = ed.get("committees", {})
+    cands = {c["id"]: c for c in ed.get("candidates", [])}
+    race_office = {r["id"]: r.get("office") for r in ed.get("races", [])}
+    donors = ed.get("donors", {})
+    try:
+        windows = json.load(open(WINDOWS_PATH))
+    except (OSError, json.JSONDecodeError):
+        windows = {}
+    wanted = set(candidacy_ids)
+    slug_wins = {}
+    for slug, cm in comms.items():
+        cid = cm.get("candidate_id")
+        if cid not in wanted:
+            continue
+        ot = _office_type(race_office.get((cands.get(cid) or {}).get("race_id")))
+        slug_wins[slug] = windows.get(ot) if ot else None
+    out = {e: {"amount": 0.0, "reports": 0, "individual_itemized": 0.0} for e in election_keys}
+    unplaced = {}
+    for slug, wins in slug_wins.items():
+        for p in (comms[slug].get("unitemized_periods") or []):
+            wb = _bucket(p.get("end"), wins) if wins else None
+            if wb is None:
+                continue
+            w = wb["id"]
+            if w not in out:
+                unplaced[w] = round(unplaced.get(w, 0.0) + float(p.get("amount") or 0.0), 2)
+                continue
+            out[w]["amount"] += float(p.get("amount") or 0.0)
+            out[w]["reports"] += 1
+    for c in ed.get("contributions", []):
+        slug = c.get("committee_id")
+        if slug not in slug_wins or c.get("is_aggregate") or c.get("cycle") in EXCLUDED_CYCLES:
+            continue
+        if c.get("contribution_type") == DUES_TYPE or is_other_receipt(c):
+            continue
+        if c.get("is_self") or c.get("is_own_committee"):
+            continue
+        dn = donors.get(c.get("donor_id")) or {}
+        if dn.get("type") != "Individual":
+            continue
+        wins = slug_wins.get(slug)
+        wb = _bucket(c.get("date"), wins) if wins else None
+        w = wb["id"] if wb else None
+        if w in out:
+            out[w]["individual_itemized"] += float(c.get("amount") or 0.0)
+    for v in out.values():
+        v["amount"] = round(v["amount"], 2)
+        v["individual_itemized"] = round(v["individual_itemized"], 2)
+    if unplaced:
+        out["_unplaced"] = unplaced
+    return out
+
+
+def attach_small_gifts(out_member, ed):
+    sg = small_gifts_for(out_member["candidacies"], ed, list(out_member["elections"].keys()))
+    unplaced = sg.pop("_unplaced", None)
+    if unplaced:
+        raise SystemExit(f"[build_sb_finance] FATAL: small gifts in window(s) {unplaced} that the "
+                         f"member's figures carry no election for (candidacies "
+                         f"{out_member['candidacies']}); an election is never invented")
+    for e, v in sg.items():
+        out_member["elections"][e]["unitemized"] = v
+
+
 def committees_for(candidacy_ids, ed):
     """The member's own committee records, for the Verified / ISBE block (B.4).
 
@@ -664,6 +741,7 @@ def build_member(m, ed):
         # Elections first: the donor lists are keyed by them, and a donor election that
         # the figures do not know about is a defect, not a key to invent (SBF-9c).
         out["elections"] = elections_for(out["candidacies"], bce, cand_elections(ed))
+        attach_small_gifts(out, ed)   # 74a/76b
         out["committees"] = committees_for(out["candidacies"], ed)
         items, self_ids, mixed = scan_committee_rows(ed, out["candidacies"])
         if mixed:
@@ -685,6 +763,7 @@ def build_member(m, ed):
     out["resolves_in_by_candidate"] = ref in bc
     out["finance_state"] = "totals_only"
     out["elections"] = elections_for(out["candidacies"], bce, cand_elections(ed))
+    attach_small_gifts(out, ed)   # 74a/76b
     out["committees"] = committees_for(out["candidacies"], ed)
     return out
 

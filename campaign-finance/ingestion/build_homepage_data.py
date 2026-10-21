@@ -66,6 +66,31 @@ COUNCIL_SPLIT_MIN = 3
 NOT_COUNTED = {"Other Receipt", "IE Committee Dues Transfer"}
 IE_RECEIPT_TYPES = {"IE Committee Receipt"}
 LOAN_TYPE = "Loan Received"
+# Ruling 35-i b (2026-10-14): the own-committee rule applies only to the twenty donor
+# families ratified 2026-10-14 (rulings 27b-34a), by each family's canonical donor id.
+FAMILY_PARENTS = frozenset((
+    "afscme-council-31",
+    "american-federation-of-teachers-cope-voluntary-a-c",
+    "carpentry-advancement-pac",
+    "chicago-federation-of-labor-and-industrial-union-council-pac",
+    "chicago-firefighters-union-local-2",
+    "chicago-land-operators-joint-labor-management-pac",
+    "chicago-teachers-union",
+    "cook-county-college-teachers-union",
+    "democratic-party-of-illinois",
+    "ibew-local-134",
+    "illinois-association-of-realtors",
+    "ipace",
+    "ironworkers-local-union-1",
+    "jmb-realty",
+    "liuna-chicago-laborers-district-council-pac",
+    "seiu-il-council",
+    "teamsters-volunteers-in-politics",
+    "ua-union-plumbers-pipefitters-vote-pac",
+    "ufcw-local-881",
+    "united-working-families-pac",
+))
+
 TYPE_CODE = {
     "Individual Contribution": "C",
     "Transfer In": "T",
@@ -130,6 +155,12 @@ def parent_map(e, c):
             out[did] = pc
         elif pc == did:
             out[did] = pe
+        elif ((e["donors"].get(did) or {}).get("cluster_id")
+              and (e["donors"][did].get("cluster_id")
+                   == (c["donors"].get(did) or {}).get("cluster_id"))):
+            # one Sheet group in both artifacts, whose canonical donor the council
+            # artifact does not carry: the elections artifact's parent is the group's
+            out[did] = pe
         else:
             stop("donor %s has parent %s in election-data.json and %s in council-data.json"
                  % (did, pe, pc))
@@ -148,6 +179,28 @@ def cluster_names(e, c):
             if cid and cl.get("name"):
                 names[cid] = cl["name"]
     return names
+
+
+def own_groups(e, c, ie_ids, parent):
+    """Each outside-spending committee's own donor, by its parent: the donor the committee
+    record names (donor_id), or a donor whose record names the committee (committee_id).
+    Two different parents for one committee stop the build."""
+    out = {}
+    for k in sorted(ie_ids):
+        links = set()
+        for art in (e, c):
+            com = art["committees"].get(k) or {}
+            if com.get("donor_id"):
+                links.add(com["donor_id"])
+            for did, d in art["donors"].items():
+                if d.get("committee_id") == k:
+                    links.add(did)
+        pars = {parent.get(d, d) for d in links}
+        if len(pars) > 1:
+            stop("outside-spending committee %s belongs to more than one donor: %s" % (k, sorted(pars)))
+        if pars:
+            out[k] = pars.pop()
+    return out
 
 
 def own_pairs(e):
@@ -210,7 +263,8 @@ def build(e, c, sb, inputs):
     counted_rows = 0
     items = collections.defaultdict(list)
     used_committees = set()
-    excluded = {"before_floor": [0, 0.0], "not_counted_type": [0, 0.0]}
+    excluded = {"before_floor": [0, 0.0], "not_counted_type": [0, 0.0], "to_own_group": [0, 0.0]}
+    own_group = own_groups(e, c, ie_ids, parent)
     latest = ""
     for r in rows:
         amt = r["amount"]
@@ -222,6 +276,14 @@ def build(e, c, sb, inputs):
         if typ in NOT_COUNTED and not r.get("is_own_committee"):
             excluded["not_counted_type"][0] += 1
             excluded["not_counted_type"][1] += amt
+            continue
+        # Rulings 35b and 35-i b (2026-10-14): money a donor family moves to its own
+        # outside-spending committee is not a gift; it is counted where it leaves (the
+        # committee's own gifts, and its spending in the groups section).
+        if (r["committee_id"] in own_group and own_group[r["committee_id"]] in FAMILY_PARENTS
+                and own_group[r["committee_id"]] == parent.get(r["donor_id"], r["donor_id"])):
+            excluded["to_own_group"][0] += 1
+            excluded["to_own_group"][1] += amt
             continue
         cy = cycle_of(cyc, r["date"])
         if cy is None:
