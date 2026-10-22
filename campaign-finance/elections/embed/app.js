@@ -6,20 +6,18 @@
  *
  * OFFICE is set per Squarespace Code Block via data-office on the mount node
  * (school_board | city_council | mayor); default school_board. data-src can
- * override the data URL (default = GitHub raw CDN, same pattern as the council
+ * override the data URL (default = GitHub Pages, ruling 123, same host as the council
  * embed).
  */
 (function () {
   'use strict';
   var ROOT_ID = 'ipg-elect-root';
-  // D-5's refs/heads/main/ form, carried here at D-26 (MUNI-ENABLE-1 G7b, discharging open
-  // ledger 8): "main" is a fragment GitHub resolves against branches AND tags, so a future tag
-  // named "main" would silently repoint every fetch below; refs/heads/main/ is structurally
-  // unambiguous. This was the last embed on the bare form — council and school board already
-  // carry refs/heads/. Taken now because one paste is already owed this lane and the pasted
-  // surfaces triple after it, so this is the cheapest moment the form will have.
-  var DEFAULT_SRC = 'https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/refs/heads/main/campaign-finance/election-data.json';
-  // Verification artifacts, fetched at runtime from the same raw-CDN base as the data, so
+  // The data host is GitHub Pages (ruling 123, 2026-10-22), which serves main as deployed. It
+  // replaces GitHub's raw-file address, which is not built for site traffic: short
+  // caching and per-IP throttling. Pages has no branch fragment, so D-5's tag-ambiguity
+  // hazard, which refs/heads/main/ answered, does not arise; ruling 123 supersedes that form.
+  var DEFAULT_SRC = 'https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/election-data.json';
+  // Verification artifacts, fetched at runtime from the same Pages base as the data, so
   // the methodology page's numbers can never drift from the artifacts it cites (they deploy
   // together on push, paste-free). URLs are baked; they don't drift.
   var ART_BASE = DEFAULT_SRC.replace(/election-data\.json$/, 'elections/');

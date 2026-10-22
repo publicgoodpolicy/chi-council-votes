@@ -16,7 +16,7 @@
 
   Setup steps:
     1. Push council-data.json to a public GitHub repo
-    2. Paste the "raw" URL into IPG_CONFIG.dataUrl below
+    2. Paste its GitHub Pages URL (ruling 123) into IPG_CONFIG.dataUrl below
     3. Set up the Google Sheet using the template in
        campaign-finance/sheets-sync/sheet-template.md
     4. Configure the GitHub Action to sync the sheet nightly
@@ -39,16 +39,16 @@
 // CONFIG — edit these when you publish your data file
 // ============================================================
 const IPG_CONFIG = {
-  // URL to council-data.json. After pushing the file to a public GitHub repo,
-  // paste the "raw" URL here. Until then, leave as null — the embed will show
-  // a "Configure data source" message.
-  // Example:
-  //   dataUrl: 'https://raw.githubusercontent.com/publicgoodpolicy/ipg-data/main/council-data.json',
-  dataUrl: "https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/refs/heads/main/campaign-finance/council-data.json",
+  // URL to council-data.json. Left null, the embed shows a "Configure data source" message.
+  // The data host is GitHub Pages (ruling 123, 2026-10-22), which serves main as deployed. It
+  // replaces GitHub's raw-file address, which is not built for site traffic: short
+  // caching and per-IP throttling. Pages has no branch fragment, so D-5's tag-ambiguity
+  // hazard, which refs/heads/main/ answered, does not arise; ruling 123 supersedes that form.
+  dataUrl: "https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/council-data.json",
   // SHARDED MODE (optional, recommended for faster first paint): if indexUrl is
   // set, the embed loads the small index first and streams contributions after.
   // Leave both null to use the single dataUrl monolith above (backward compatible).
-  //   indexUrl: 'https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/refs/heads/main/campaign-finance/shards/council-index.json',
+  //   indexUrl: 'https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/shards/council-index.json',
   //   contributionsUrl: '.../shards/council-contributions.json',
   indexUrl: null,
   contributionsUrl: null,
@@ -133,6 +133,9 @@ const FEEDBACK_CONFIG = {
   font-weight:700;font-size:15px;letter-spacing:.16em;line-height:1.05;text-transform:uppercase;
 }
 #ipg-council-app .ipg-brand .wm small{display:block;font-size:11px;letter-spacing:.22em;opacity:.85;font-weight:500}
+#ipg-council-app .ipg-track{display:flex;align-items:center;gap:8px;margin:0 0 14px;font-family:Georgia,ui-serif,serif;font-size:18px;line-height:1;color:#F6EFE9;letter-spacing:0;text-transform:none}
+#ipg-council-app .ipg-track b{font-weight:700}
+#ipg-council-app .ipg-track svg{flex:none;width:22px;height:22px}
 #ipg-council-app h1.ipg-title{
   font-size:clamp(28px,4.6vw,46px); line-height:1.04; max-width:20ch; color:var(--cream);
 }
@@ -975,7 +978,9 @@ const FEEDBACK_CONFIG = {
   const alderByWard=w=>D.alders.find(a=>a.ward===w);
 
   function render(){
+    // 120b, 121b (2026-10-22): the VoteTrack mark above the title, drawn for the teal header.
     let h='<div class="ipg-head">'
+      +'<p class="ipg-track"><svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" focusable="false"><rect x="4.5" y="8" width="20" height="20" rx="4" fill="none" stroke="#EBDAC6" stroke-width="3.2"/><path d="M10 17 L14.5 21.5 L27 6" fill="none" stroke="#044147" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 17 L14.5 21.5 L27 6" fill="none" stroke="#F6EFE9" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Vote</b>Track</span></p>'
       +'<h1 class="ipg-title serif">How is your Chicago City Council member voting?</h1>'
       +'<p class="ipg-sub">Find your alder by ward or address, see how they voted on key ordinances and why each vote mattered, '
       +'and compare how the whole Council voted, by issue area.</p></div>';
@@ -986,7 +991,7 @@ const FEEDBACK_CONFIG = {
         h+='<div class="ipg-cf-empty" style="text-align:center;padding:60px 20px"><strong style="display:block;color:var(--sage);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px">Loading</strong>Fetching the latest Council data…</div>';
       } else if(state.dataStatus==='unconfigured'){
         h+='<div class="ipg-placeholder"><strong>Configure data source</strong>'
-          +'This embed is not yet pointed at a data file. Edit <code>IPG_CONFIG.dataUrl</code> at the top of the embed and paste the raw URL to your <code>council-data.json</code> file. '
+          +'This embed is not yet pointed at a data file. Edit <code>IPG_CONFIG.dataUrl</code> at the top of the embed and paste the GitHub Pages URL of your <code>council-data.json</code> file. '
           +'See the data pipeline README for setup instructions.</div>';
       } else if(state.dataStatus==='error'){
         h+='<div class="ipg-cf-empty">Could not load Council data ('+(state.dataError||'unknown error')+'). '

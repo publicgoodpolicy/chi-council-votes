@@ -154,6 +154,9 @@
       '.ipg-elect .masthead{background:var(--teal);color:var(--cream);margin:0 calc(-1 * var(--pad));padding:38px var(--pad) 0;position:relative;overflow:hidden;}' +
       '.ipg-elect .eyebrow{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:#cfe0dd;font-weight:600;margin:0 0 12px;display:flex;align-items:center;gap:10px;}' +
       '.ipg-elect .eyebrow .box{display:none;}' +
+      '.ipg-elect .track{display:flex;align-items:center;gap:8px;margin:0 0 14px;font-family:Georgia,ui-serif,serif;font-size:18px;line-height:1;color:#F6EFE9;letter-spacing:0;text-transform:none;}' +
+      '.ipg-elect .track b{font-weight:700;}' +
+      '.ipg-elect .track svg{flex:none;width:22px;height:22px;}' +
       '.ipg-elect .eyebrow .box::after{content:none;}' +
       '.ipg-elect h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,4.6vw,46px);line-height:1.04;letter-spacing:-.01em;margin:0 0 14px;max-width:20ch;color:var(--cream);}' +
       '.ipg-elect .lede{font-size:15.5px;color:#cfe0dd;max-width:60ch;margin:0 0 24px;}' +
@@ -1071,7 +1074,8 @@
   function masthead(office, topView, dataThrough) {
     var m = MAST[office] || MAST.school_board;
     var isByrace = topView !== 'spend' && topView !== 'methodology';
-    return '<header class="masthead"><p class="eyebrow"><span class="box" aria-hidden="true"></span>' + esc(m.kicker) + '</p>' +
+    // 120b, 121b (2026-10-22): the FinTrack mark above the title, drawn for the teal masthead.
+    return '<header class="masthead"><p class="track"><svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" focusable="false"><circle cx="16" cy="16" r="10.5" fill="none" stroke="#EBDAC6" stroke-width="3.2"/><path d="M8.5 21.5 L12.5 16.5 L16.5 19.5 L27 6" fill="none" stroke="#044147" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 21.5 L12.5 16.5 L16.5 19.5 L27 6" fill="none" stroke="#F6EFE9" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Fin</b>Track</span></p><p class="eyebrow"><span class="box" aria-hidden="true"></span>' + esc(m.kicker) + '</p>' +
       '<h1>Who’s running, and who’s funding them</h1><p class="lede">' + m.lede + '</p>' + dataThroughLine(office, dataThrough) +
       '<div class="topnav" role="tablist" aria-label="View">' +
       '<button role="tab" data-view="byrace" aria-selected="' + isByrace + '">By race</button>' +

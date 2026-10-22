@@ -270,15 +270,21 @@ function withSynthetic(base, opts) {
   // Rulings 74a/76b (2026-10-20): the small-gifts tile, the Raised figure that now counts them, and
   // the bar's small-gifts segment and legend row are normalised away too; the bar's other segments
   // are compared with their widths stripped, since the new segment rescales them.
+  // Rulings 120b/121b (2026-10-22): the VoteTrack mark above the title is normalised away too,
+  // and asserted present exactly once on its own, below, so the normalisation cannot hide its loss.
+  var TRACK = /<p class="ipg-track"><svg [^>]*aria-hidden="true"[^>]*>.*?<\/svg><span><b>Vote<\/b>Track<\/span><\/p>/g;
   var norm73 = function (h) {
-    return h.replace(/<p class="ipg-cf-meta ipg-cf-avgnote">[^<]*<\/p>/g, '').replace(/Avg\. itemized gift/g, 'Avg. gift')
+    return h.replace(TRACK, '').replace(/<p class="ipg-cf-meta ipg-cf-avgnote">[^<]*<\/p>/g, '').replace(/Avg\. itemized gift/g, 'Avg. gift')
       .replace(/<div class="ipg-cf-smallgifts">.*?<\/span><\/div>/g, '')
       .replace(/<div class="num serif">\$[\d,]+<\/div><div class="lab">Raised<\/div>/g, '<div class="num serif">RAISED</div><div class="lab">Raised</div>')
       .replace(/<div class="ipg-dollarbar-seg ipg-dollarbar-static"[^>]*title="Small gifts \(unitemized\)[^"]*">.*?<\/div>/g, '')
       .replace(/<div class="ipg-dollarbar-legend-item"><span class="ipg-dollarbar-legend-swatch" style="background:#D4A24C"><\/span><span class="ipg-dollarbar-legend-label">Small gifts \(unitemized\)<\/span>.*?<\/span><\/div>/g, '')
       .replace(/flex:[\d.e+-]+ 0 0/g, 'flex:W').replace(/\(\d+(\.\d)?%\)/g, '(P)').replace(/<span class="ipg-dollarbar-(?:legend-)?pct">[^<]*<\/span>/g, '');
   };
-  T.ok('[E1.2/E7] the ward profile is BYTE-IDENTICAL to the pre-restore embed at HEAD on real data (ruling 73a\u2019s label and note normalised)',
+  T.ok('[BRAND/MARK] the VoteTrack mark renders exactly once, above the title, decorative (120b, 121b)',
+    (real.html.match(TRACK) || []).length === 1 && real.html.search(TRACK) < real.html.indexOf('ipg-title'),
+    'marks ' + (real.html.match(TRACK) || []).length);
+  T.ok('[E1.2/E7] the ward profile is BYTE-IDENTICAL to the pre-restore embed at HEAD on real data (ruling 73a\u2019s label and note and the 120b mark normalised)',
     norm73(real.html) === norm73(headReal.html),
     norm73(real.html) === norm73(headReal.html) ? 'profile innerHTML sha ' + crypto.createHash('sha256').update(real.html).digest('hex').slice(0, 16)
       : 'DIFFERS: post ' + real.html.length + ' chars vs pre ' + headReal.html.length);

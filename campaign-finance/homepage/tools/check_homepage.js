@@ -37,6 +37,16 @@ check(!/\b(Pass|Fail|Split)\b/.test(votes), 'no result word printed for any vote
 check(data.feed.every(function (f) { return h.indexOf('href="' + f.link.replace(/&/g, '&amp;') + '"') >= 0; }), 'every vote links to its tool page');
 check((h.match(/<tr><td class="hp-rank">/g) || []).length === data.groups.length, 'groups table shows all ' + data.groups.length + ' groups');
 check(R.TOOLS.length === 5 && R.TOOLS.every(function (t) { return h.indexOf('href="' + t.href + '"') > 0; }), 'five tool links');
+// Rulings of 2026-10-22: 118a, 119a, 120b, 121b.
+check(R.STR.intro.indexOf('Tools from the Institute for the Public Good follow the money') === 0 && !/\b(five|free)\b/i.test(R.STR.intro), 'intro carries no count and no "free" (118a)');
+check(R.TOOLS.some(function (t) { return t.href === '/who-is-funding-the-27-mayoral-race' && t.name === 'Who is funding the 2027 mayoral race'; }) && h.indexOf('href="/mayor"') < 0, 'mayor box links to the published report, not /mayor (119a)');
+check(R.GROUPS.map(function (g) { return g.brand; }).join() === 'FinTrack,VoteTrack' &&
+  R.TOOLS.map(function (t) { return t.group; }).join() === 'fin,fin,fin,vote,vote' &&
+  (function () { var a = h.indexOf('<b>FinTrack</b>'), b = h.indexOf('<b>VoteTrack</b>'), c = h.indexOf('href="/alder-voting-history"'), d = h.indexOf('href="/who-is-funding-the-27-mayoral-race"'); return a > 0 && a < d && d < b && b < c; })(),
+  'tools grouped: FinTrack (council, school board, mayoral report), then VoteTrack (council votes, school board votes) (120b)');
+check((h.match(/<svg class="hp-mark"[^>]*aria-hidden="true"/g) || []).length === 2, 'two brand marks, both decorative (121b)');
+var EMB = fs.readFileSync(build.OUT, 'utf8');
+check(EMB.indexOf("'https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/homepage-data.json'") > 0 && EMB.indexOf('raw.githubusercontent') < 0, 'the embed fetches from the ruled GitHub Pages host, and no raw.githubusercontent URL remains (123)');
 
 // top donor, own money marks (25a)
 var top = all[0];
@@ -89,7 +99,7 @@ check(text(R.loading()).indexOf('Loading campaign-finance data') >= 0, 'loading 
 check(text(R.failed()).indexOf(R.STR.failed) >= 0 && R.STR.failed.replace(/\u2019/g, "'") === "The data didn't load. Try again, or use the tools below."  && R.failed().indexOf('hp-tools') > 0, 'failure string, with the tool links (26a)');
 var bundle = build.render();
 check(bundle.indexOf('homepage-data.json') > 0 && (bundle.match(/https?:\/\/[^\s'"<>)]+/g) || []).every(function (u) {
-  return /^https:\/\/(raw\.githubusercontent\.com\/publicgoodpolicy\/chi-council-votes\/refs\/heads\/main\/campaign-finance\/homepage-data\.json|fonts\.googleapis\.com|fonts\.gstatic\.com)/.test(u);
+  return /^https:\/\/(publicgoodpolicy\.github\.io\/chi-council-votes\/campaign-finance\/homepage-data\.json|fonts\.googleapis\.com|fonts\.gstatic\.com)/.test(u);
 }), 'bundle reaches only the data file and the font host');
 check(!/localStorage|sessionStorage|document\.cookie|eval\(|new Function/.test(bundle), 'bundle uses no storage, cookies or eval');
 console.log(fails ? 'CHECK: FAIL (' + fails + ')' : 'CHECK: PASS');

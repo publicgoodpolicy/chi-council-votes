@@ -18,6 +18,11 @@
 .hp-tools a:hover,.hp-tools a:focus-visible{border-color:var(--teal)}
 .hp-tools b{display:block;color:var(--teal);font-weight:600}
 .hp-tools span{font-size:14px;color:var(--ink-soft)}
+.hp-group+.hp-group{margin-top:28px}
+.hp-brand{display:flex;align-items:center;gap:10px;font-size:22px;line-height:1.2}
+.hp-brand b{font-weight:700}
+.hp-mark{flex:none;width:28px;height:28px}
+.hp-group .hp-tools{margin-top:12px}
 .hp-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
 .hp-field{display:flex;flex-direction:column;font-size:13px;color:var(--ink-muted);gap:4px}
 .hp-grow{flex:1 1 240px}

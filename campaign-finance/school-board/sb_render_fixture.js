@@ -334,11 +334,18 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   // both school-board-family. The claim is updated, not weakened: the count is still
   // asserted exactly, and [SBF/FETCH] additionally asserts it by observed GETs.
   var fetchTargets = (EMBED_HTML.match(/fetch\(([A-Za-z_.]+)/g) || []);
-  ok('[MAP] both DATA fetches use the ratified refs/heads/main/ URL form',
-     EMBED_HTML.indexOf('refs/heads/main/campaign-finance/school-board-data.json') >= 0
-       && EMBED_HTML.indexOf('refs/heads/main/campaign-finance/school-board-finance.json') >= 0
+  // Ruling 123 (2026-10-22): the data host is GitHub Pages; it supersedes D-5's
+  // refs/heads/main/ form, and no raw.githubusercontent URL may remain.
+  ok('[MAP] both DATA fetches use the ruled GitHub Pages host (123), and no raw.githubusercontent URL remains',
+     EMBED_HTML.indexOf('"https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/school-board-data.json"') >= 0
+       && EMBED_HTML.indexOf('"https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/school-board-finance.json"') >= 0
+       && EMBED_HTML.indexOf('raw.githubusercontent') < 0
        && (EMBED_HTML.match(/IPG_SB_CONFIG\.dataUrl/g) || []).length === 1
        && (EMBED_HTML.match(/IPG_SB_CONFIG\.financeUrl/g) || []).length === 1);
+  // Rulings 120b and 121b (2026-10-22): the VoteTrack mark above the title, once, decorative,
+  // the brand name as text. Presence is asserted, so its loss fails.
+  ok('[BRAND/MARK] the VoteTrack mark sits once in the header, before the title, decorative (120b, 121b)',
+     (EMBED_HTML.match(/<p class="ipg-sb-track"><svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" focusable="false">.*?<\/svg><span><b>Vote<\/b>Track<\/span><\/p>'\n      \+ '<h1 class="ipg-sb-title serif">/g) || []).length === 1);
   ok('[MAP] exactly three fetch call-sites: two data + the feedback endpoint',
      fetchTargets.length === 3
        && fetchTargets.filter(function (f) { return f.indexOf('IPG_SB_CONFIG') >= 0; }).length === 2
@@ -458,7 +465,7 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   // below so the widened branch cannot go hollow.
   var RATIFIED_ELECTIONS_URL = 'https://www.publicgoodpolicy.org/school-board-elections';
   var externals = (EMBED_HTML.match(/https:\/\/[^"' ]+/g) || [])
-    .filter(function (u) { return u.indexOf('raw.githubusercontent') < 0
+    .filter(function (u) { return u.indexOf('https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/') !== 0
                                && u.indexOf('fonts.googleapis') < 0
                                && u.indexOf('fonts.gstatic') < 0
                                && /^https:\/\/[a-z0-9.-]+\.[a-z]{2,}/i.test(u); });

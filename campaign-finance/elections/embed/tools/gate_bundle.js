@@ -1893,52 +1893,58 @@ async function assertPersonSurface(T, ctx, fx) {
   // invariant "municipal finance never renders without a window table". What it still catches
   // is an edit that drops municipal windows while municipal ids exist, which self-test bite 5
   // pins by removing the window table in memory and requiring the injected id to fail again.
-  // [ELECT/URL] the D-26 ratified raw-CDN URL form, asserted on EVERY EMITTED FILE rather than
-  // on app.js. What ships is what gets pasted, and after G7 there are three pasted surfaces
-  // carrying this string — checking the source would leave a stale emission able to carry the
-  // old form silently. Mirrors sb_render_fixture's [MAP] check for the school-board embed,
-  // which is where the precedent and the ratified form both come from (D-5).
+  // [ELECT/URL] the data host, asserted on EVERY EMITTED FILE rather than on app.js: what ships
+  // is what gets pasted, and there are three pasted surfaces. Ruling 123 (2026-10-22) moved the
+  // data from raw.githubusercontent.com, D-26's refs/heads/main/ form, to GitHub Pages; this check
+  // carried D-26 and now carries 123. Mirrors sb_render_fixture's [MAP] for the school-board
+  // embed and check_homepage's host check.
   //
-  // Both directions, because only one of them is the actual hazard: every raw.githubusercontent
-  // URL must carry refs/heads/main/, AND none may carry the bare `.../chi-council-votes/main/`
-  // fragment. A one-sided check would pass a file that had gained a second, bare-form URL
-  // alongside a correct one.
+  // Both directions: every emission must carry the Pages election-data URL, AND none may carry a
+  // raw.githubusercontent URL at all. A one-sided check would pass a file that kept an old-host
+  // URL beside the new one, and the old host is the one ruling 123 retired for load.
+  //
+  // DEPLOY.md stays in scope (CNCL-DATA-1 P2.1 W10, R13 (a)): it is the deploy instruction a human
+  // follows, so an old-host URL in it is one a paster will copy. Its presence assertion stands, so
+  // deleting the URLs or the file fails rather than passing an empty sweep.
   (function () {
-    var BARE = /chi-council-votes\/main\//;
-    var GOOD = /chi-council-votes\/refs\/heads\/main\//;
+    var PAGES = 'https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/election-data.json';
+    var OLD = /raw\.githubusercontent\.com/;
     var bad = [];
     Object.keys(BUNDLE_MOD.OFFICES).forEach(function (office) {
       var out = BUNDLE_MOD.outFor(office);
       if (!fs.existsSync(out)) { bad.push(office + ': emission missing'); return; }
       var html = fs.readFileSync(out, 'utf8');
-      var urls = (html.match(/https:\/\/raw\.githubusercontent\.com[^"'\s]+/g) || []);
-      if (!urls.length) { bad.push(office + ': no raw-CDN URL found at all (check went vacuous)'); return; }
-      urls.forEach(function (u) {
-        if (!GOOD.test(u)) bad.push(office + ': not on refs/heads/main/ — ' + u);
-      });
-      if (BARE.test(html)) bad.push(office + ': still carries the bare main/ fragment somewhere');
+      if (html.indexOf("'" + PAGES + "'") < 0) bad.push(office + ': the Pages election-data URL is absent (check went vacuous)');
+      if (OLD.test(html)) bad.push(office + ': still carries a raw.githubusercontent URL');
     });
-    // CNCL-DATA-1 P2.1 W10, R13 (a) — WIDENED, and the widening is stated rather than slipped in.
-    // The permitted set is exactly ONE further file, DEPLOY.md, enumerated here by name and not by
-    // glob: it is the deploy instruction a human follows, so a bare-form URL in it is a bare-form
-    // URL a paster will copy. G0 measured both of its URLs on the retired form precisely because
-    // this check's scope was emissions and nothing swept the prose. A PRESENCE ASSERTION comes
-    // with the widening so the new branch cannot go hollow — the file must exist and must carry
-    // at least one refs/heads/main/ URL, so deleting the URLs (or the file) fails rather than
-    // passing an empty sweep.
     var DEPLOY = path.join(__dirname, '..', 'DEPLOY.md');
     if (!fs.existsSync(DEPLOY)) {
       bad.push('DEPLOY.md: absent — the widened branch has nothing to sweep');
     } else {
       var dtext = fs.readFileSync(DEPLOY, 'utf8');
-      var dgood = (dtext.match(GOOD) || []).length;
-      if (dgood === 0) bad.push('DEPLOY.md: no refs/heads/main/ URL present (sweep went hollow)');
-      if (BARE.test(dtext)) bad.push('DEPLOY.md: carries the bare main/ fragment');
+      if (dtext.indexOf(PAGES) < 0) bad.push('DEPLOY.md: no Pages URL present (sweep went hollow)');
+      if (OLD.test(dtext)) bad.push('DEPLOY.md: carries a raw.githubusercontent URL');
     }
-    T.ok('[ELECT/URL] every emission AND DEPLOY.md fetch on the ratified refs/heads/main/ form ' +
-      'and none carries the bare main/ fragment — ' +
+    T.ok('[ELECT/URL] every emission AND DEPLOY.md fetch from the ruled GitHub Pages host (123) ' +
+      'and none carries a raw.githubusercontent URL — ' +
       (bad.length ? bad.join('; ') : Object.keys(BUNDLE_MOD.OFFICES).length +
         ' emissions + DEPLOY.md clean'),
+      bad.length === 0);
+  })();
+  // [BRAND/MARK] rulings 120b and 121b (2026-10-22): the FinTrack mark above the masthead title, on
+  // EVERY EMITTED FILE, exactly once each, decorative (aria-hidden) with the brand name as text.
+  // Presence is asserted, so losing the mark from a pasted surface fails rather than passing.
+  (function () {
+    var MARK = /<p class="track"><svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" focusable="false">.*?<\/svg><span><b>Fin<\/b>Track<\/span><\/p><p class="eyebrow">/g;
+    var bad = [];
+    Object.keys(BUNDLE_MOD.OFFICES).forEach(function (office) {
+      var out = BUNDLE_MOD.outFor(office);
+      if (!fs.existsSync(out)) { bad.push(office + ': emission missing'); return; }
+      var n = (fs.readFileSync(out, 'utf8').match(MARK) || []).length;
+      if (n !== 1) bad.push(office + ': ' + n + ' FinTrack marks');
+    });
+    T.ok('[BRAND/MARK] every emission carries the FinTrack mark exactly once, before the eyebrow, decorative (120b, 121b) — ' +
+      (bad.length ? bad.join('; ') : Object.keys(BUNDLE_MOD.OFFICES).length + ' emissions, one mark each'),
       bad.length === 0);
   })();
 

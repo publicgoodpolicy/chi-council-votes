@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Build the paste-ready Squarespace Code Block for /chi-civic-tools: styles.css,
  * homepage-render.js and homepage-app.js inlined into ONE self-contained file. The page fetches
- * homepage-data.json from the GitHub raw address at runtime; nothing else is fetched
+ * homepage-data.json from GitHub Pages (ruling 123) at runtime; nothing else is fetched
  * but the Poppins stylesheet. Run from campaign-finance/homepage/:
  *   node tools/build_homepage_embed.js
  */
@@ -26,7 +26,7 @@ function render(overrides) {
     '     IPG civic tools homepage — paste this ENTIRE block into the\n' +
     '     /chi-civic-tools page\'s Squarespace Code Block.\n' +
     '     Nothing here is edited by hand. Data is fetched at runtime from the\n' +
-    '     GitHub raw CDN (homepage-data.json).\n' +
+    '     GitHub Pages (homepage-data.json).\n' +
     '     ============================================================ -->\n' +
     '<style>\n' + src('styles.css') + '</style>\n' +
     '<div id="ipg-home-root"></div>\n' +

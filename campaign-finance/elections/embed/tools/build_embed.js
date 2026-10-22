@@ -2,7 +2,7 @@
 /* Build the self-contained, paste-ready Squarespace Code Blocks: inline the pure
  * data.js + render.js + app.js (+ Poppins link; the display face is Georgia, D1 — no
  * @font-face) into ONE HTML FILE PER OFFICE. The embed fetches election-data.json
- * from the GitHub raw CDN at runtime. Run from embed/:  node tools/build_embed.js
+ * from GitHub Pages (ruling 123) at runtime. Run from embed/:  node tools/build_embed.js
  *
  * D-16 (PS-106), MUNI-ENABLE-1 G7: page topology is three pages, one per election, each
  * with its own URL — so this tool emits three files rather than one file whose mount
@@ -62,7 +62,7 @@ function render(office, overrides) {
   '     IPG Elections embed — paste this ENTIRE block into the ' + o.page + ' page\'s\n' +
   '     Squarespace Code Block. One file per page; data-office is already set below,\n' +
   '     so nothing here is edited by hand.\n' +
-  '     Data is fetched at runtime from the GitHub raw CDN (election-data.json).\n' +
+  '     Data is fetched at runtime from GitHub Pages (election-data.json).\n' +
   '     ============================================================ -->\n' +
   '<div id="ipg-elect-root" data-office="' + office + '"></div>\n' +
   '<script>\n' + src('data.js') + '\n</script>\n' +

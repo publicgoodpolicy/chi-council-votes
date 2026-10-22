@@ -4,7 +4,11 @@
  */
 (function () {
   'use strict';
-  var SRC = 'https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/refs/heads/main/campaign-finance/homepage-data.json';
+  // The data host is GitHub Pages (ruling 123, 2026-10-22), which serves main as deployed. It
+  // replaces GitHub's raw-file address, which is not built for site traffic: short
+  // caching and per-IP throttling. Pages has no branch fragment, so D-5's tag-ambiguity
+  // hazard, which refs/heads/main/ answered, does not arise; ruling 123 supersedes that form.
+  var SRC = 'https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/homepage-data.json';
   var R = window.IPGHome;
   var root = document.getElementById('ipg-home-root');
   if (!root || !R) return;

@@ -86,14 +86,14 @@ fetching the served artifact and comparing its sha256 to HEAD's, never by elapse
 
 ## Data dependency (the CDN)
 
-The embed fetches `election-data.json` at runtime from the GitHub raw CDN:
+The embed fetches `election-data.json` at runtime from GitHub Pages (ruling 123):
 
 ```
-https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/refs/heads/main/campaign-finance/election-data.json
+https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/election-data.json
 ```
 
 That file **must be committed and pushed** (it is, as of the "publish" commit) for
-the CDN to serve it. To refresh the data: re-run the election build (see
+Pages to serve it (Pages redeploys main within a few minutes of a push). To refresh the data: re-run the election build (see
 `campaign-finance/elections/README.md` run order), commit + push `election-data.json`, and the live embeds
 pick it up on next load (no re-paste needed).
 
@@ -106,5 +106,5 @@ Override the source for testing with `data-src="..."` on the mount div, or
 cd campaign-finance/elections/embed
 node tools/prerender_b2.js                       # data+render assertions (pure layers)
 # live data reachable:
-curl -sI https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/refs/heads/main/campaign-finance/election-data.json | head -1
+curl -sI https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/election-data.json | head -1
 ```

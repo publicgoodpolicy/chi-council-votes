@@ -22,7 +22,7 @@
 
   var STR = {
     title: 'Who funds Chicago politics, and how they vote',
-    intro: 'Five free tools from the Institute for the Public Good follow the money in Chicago ' +
+    intro: 'Tools from the Institute for the Public Good follow the money in Chicago ' +
       'elections and the votes cast by the City Council and the Board of Education. This page ' +
       'brings the largest donors, the outside-spending groups and the latest votes together.',
     loading: 'Loading campaign-finance data…',
@@ -38,13 +38,32 @@
     allCycles: 'All cycles since 2011'
   };
 
-  var TOOLS = [
-    { href: '/city-council', name: 'City Council elections', text: 'Who funds each alderperson and candidate.' },
-    { href: '/school-board-elections', name: 'School board elections', text: 'Who funds each Board of Education candidate.' },
-    { href: '/mayor', name: 'The 2027 mayoral race', text: 'Who is funding the candidates for mayor.' },
-    { href: '/alder-voting-history', name: 'City Council votes', text: 'How each alderperson has voted.' },
-    { href: '/school-board-voting-history', name: 'School board votes', text: 'How each board member has voted.' }
+  // Rulings of 2026-10-22: 118a (the intro drops its count), 119a (the mayor box links to the
+  // published mayoral report; the mayoral tool is held), 120b (the tools are grouped under the
+  // FinTrack and VoteTrack brands), 121b (the marks: a ring with a rising line for FinTrack, a
+  // ballot square with a check for VoteTrack; inline SVG, decorative, the brand name is text).
+  var GROUPS = [
+    { key: 'fin', brand: 'FinTrack', tag: 'who funds Chicago politics' },
+    { key: 'vote', brand: 'VoteTrack', tag: 'how they vote' }
   ];
+  var TOOLS = [
+    { group: 'fin', href: '/city-council', name: 'City Council elections', text: 'Who funds each alderperson and candidate.' },
+    { group: 'fin', href: '/school-board-elections', name: 'School board elections', text: 'Who funds each Board of Education candidate.' },
+    { group: 'fin', href: '/who-is-funding-the-27-mayoral-race', name: 'Who is funding the 2027 mayoral race', text: 'Our report on the candidates\u2019 funders, and where else they give.' },
+    { group: 'vote', href: '/alder-voting-history', name: 'City Council votes', text: 'How each alderperson has voted.' },
+    { group: 'vote', href: '/school-board-voting-history', name: 'School board votes', text: 'How each board member has voted.' }
+  ];
+  // The marks, drawn on a 32-unit grid for the page's cream ground. The halo stroke is that cream
+  // (--cream), so the line reads as passing over the ring or box.
+  var MARK = {
+    fin: '<circle cx="16" cy="16" r="10.5" fill="none" stroke="#044147" stroke-width="3"/>' +
+      '<path d="M8.5 21.5 L12.5 16.5 L16.5 19.5 L27 6" fill="none" stroke="#F6EFE9" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="M8.5 21.5 L12.5 16.5 L16.5 19.5 L27 6" fill="none" stroke="#B0553A" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>',
+    vote: '<rect x="4.5" y="8" width="20" height="20" rx="4" fill="none" stroke="#B0553A" stroke-width="3"/>' +
+      '<path d="M10 17 L14.5 21.5 L27 6" fill="none" stroke="#F6EFE9" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="M10 17 L14.5 21.5 L27 6" fill="none" stroke="#044147" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>'
+  };
+  function mark(k) { return '<svg class="hp-mark" viewBox="0 0 32 32" width="28" height="28" aria-hidden="true" focusable="false">' + MARK[k] + '</svg>'; }
 
   var TYPE_LABEL = { C: 'Contribution', T: 'Transfer', K: 'In-kind', L: 'Loan', G: 'Gift to an outside group', O: 'Other' };
   var OFFICE_LABEL = { council: 'City Council', school_board: 'School board', mayor: 'Mayor', group: 'Outside-spending group' };
@@ -286,9 +305,12 @@
   }
 
   function toolsSection() {
-    return '<section class="hp-sec" id="hp-tools"><ul class="hp-tools">' + TOOLS.map(function (t) {
-      return '<li><a href="' + esc(t.href) + '"><b>' + esc(t.name) + '</b><span>' + esc(t.text) + '</span></a></li>';
-    }).join('') + '</ul></section>';
+    return '<section class="hp-sec" id="hp-tools">' + GROUPS.map(function (g) {
+      return '<div class="hp-group"><h2 class="hp-brand">' + mark(g.key) + '<span><b>' + esc(g.brand) + '</b>: ' + esc(g.tag) + '</span></h2>' +
+        '<ul class="hp-tools">' + TOOLS.filter(function (t) { return t.group === g.key; }).map(function (t) {
+          return '<li><a href="' + esc(t.href) + '"><b>' + esc(t.name) + '</b><span>' + esc(t.text) + '</span></a></li>';
+        }).join('') + '</ul></div>';
+    }).join('') + '</section>';
   }
 
   function header() {
@@ -311,7 +333,7 @@
   }
 
   var api = { page: page, loading: loading, failed: failed, ranking: ranking, cap: cap, vec: vec,
-              total: total, money: money, short: short, STR: STR, TOOLS: TOOLS, PAGE: PAGE };
+              total: total, money: money, short: short, STR: STR, TOOLS: TOOLS, GROUPS: GROUPS, PAGE: PAGE };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.IPGHome = api;
 })(this);

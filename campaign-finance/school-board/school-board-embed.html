@@ -63,11 +63,12 @@ const IPG_SB_CONFIG = {
   // target this embed has, and it is a POST the user initiates. [SBF/FETCH] asserts
   // the count, so adding a third is a gate failure and not a silent drift.
   //
-  // D-5's refs/heads/main/ form stands for both: "main" is a fragment GitHub resolves
-  // against branches AND tags, so a future tag named "main" would silently repoint it;
-  // refs/heads/main/ is structurally unambiguous.
-  dataUrl: "https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/refs/heads/main/campaign-finance/school-board-data.json",
-  financeUrl: "https://raw.githubusercontent.com/publicgoodpolicy/chi-council-votes/refs/heads/main/campaign-finance/school-board-finance.json",
+  // Both are served by GitHub Pages (ruling 123, 2026-10-22), which serves main as deployed. It
+  // replaces GitHub's raw-file address, which is not built for site traffic: short
+  // caching and per-IP throttling. Pages has no branch fragment, so D-5's tag-ambiguity
+  // hazard, which refs/heads/main/ answered, does not arise; ruling 123 supersedes that form.
+  dataUrl: "https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/school-board-data.json",
+  financeUrl: "https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/school-board-finance.json",
 };
 
 // Corrections inbox — the SAME mechanism the council tool uses, joined
@@ -136,6 +137,9 @@ const IPG_SB_FEEDBACK = {
   content:''; position:absolute; left:0; right:0; bottom:0; height:10px;
   background:linear-gradient(90deg,var(--sage) 0 62%,var(--tan) 62% 100%);
 }
+#ipg-sb-app .ipg-sb-track{display:flex;align-items:center;gap:8px;margin:0 0 14px;font-family:Georgia,ui-serif,serif;font-size:18px;line-height:1;color:#F6EFE9;letter-spacing:0;text-transform:none}
+#ipg-sb-app .ipg-sb-track b{font-weight:700}
+#ipg-sb-app .ipg-sb-track svg{flex:none;width:22px;height:22px}
 #ipg-sb-app h1.ipg-sb-title{
   font-size:clamp(28px,4.6vw,46px); line-height:1.04; max-width:20ch; color:var(--cream);
 }
@@ -1231,7 +1235,9 @@ const IPG_SB_FEEDBACK = {
               ['methodology','Methodology']];
 
   function head(){
+    // 120b, 121b (2026-10-22): the VoteTrack mark above the title, drawn for the teal header.
     return '<div class="ipg-sb-head">'
+      + '<p class="ipg-sb-track"><svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" focusable="false"><rect x="4.5" y="8" width="20" height="20" rx="4" fill="none" stroke="#EBDAC6" stroke-width="3.2"/><path d="M10 17 L14.5 21.5 L27 6" fill="none" stroke="#044147" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 17 L14.5 21.5 L27 6" fill="none" stroke="#F6EFE9" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Vote</b>Track</span></p>'
       + '<h1 class="ipg-sb-title serif">How is your Chicago Board of Education member voting?</h1>'
       + '<p class="ipg-sb-sub">Recorded votes of the seated Board, by member and by seat.</p></div>'
       + '<div class="ipg-sb-tabs">' + TABS.map(function(p){
