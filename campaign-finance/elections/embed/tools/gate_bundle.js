@@ -2832,6 +2832,37 @@ async function assertPersonSurface(T, ctx, fx) {
       fires(sbCheck, sbHtml, sbHtml.replace(/<\/div>$/, '<h3>' + oldHead + '</h3></div>'), /heading the register replaced is still rendered/) &&
       fires(sbCheck, sbHtml, sbHtml.replace('<h3>What it covers</h3><p>', '<h3>What it covers</h3><p>' + oldPending + ' '), /sentence S2 replaced is still rendered/) &&
       fires(sbCheck, sbHtml, sbHtml.replace('<p>' + C9 + '</p><h3>' + sbHead + '</h3>', '<h3>' + sbHead + '</h3><p>' + C9 + '</p>'), /C9 directly after the itemization paragraph/));
+    // [METH/CREDIT] PS-162 (rulings 143a to 148a): the design credit. Register-derived, like the
+    // check above: the sentence is the quoted line of PS-162's entry, extracted by heading, its
+    // quotation marks taken off. It must be the LAST paragraph of the methodology on both offices'
+    // branches (directly before the frame's closing </div>), carry the class that keeps it out of the
+    // positional <p> counts above, and occur exactly once on each branch. A credit paragraph that is
+    // not a plain <p> is invisible to paras(), so these counts stay 13 and 18 by construction.
+    var pEntry = (function () {
+      for (var q = 0; q < reg.length; q++) if (/^### PS-\d+ — each tool's methodology ends with who designed and built it$/.test(reg[q])) return entry(reg[q]);
+      return null;
+    })();
+    var CREDIT = pEntry ? ((/^"(Designed [^"]+)"$/m.exec(pEntry) || [])[1] || null) : null;
+    function creditCheck(h, label) {
+      var f = [];
+      if (!CREDIT) { f.push('the credit sentence not found in the register\'s PS-162 entry'); return f; }
+      var want = '<p class="meth-credit">' + CREDIT + '</p></div>';
+      if (h.slice(-want.length) !== want) f.push('the ' + label + ' methodology does not end with the register\'s credit paragraph');
+      if (h.split(CREDIT).length !== 2) f.push('the credit is not rendered exactly once on the ' + label + ' branch');
+      return f;
+    }
+    var credBad = creditCheck(html, 'council').concat(creditCheck(sbHtml, 'school-board'));
+    T.ok('[METH/CREDIT] each office\'s methodology ends with PS-162\'s sentence, extracted by heading from RULINGS.md, ' +
+      'character-identical, once, as the last paragraph — ' + (credBad.length ? credBad.join('; ') : JSON.stringify(CREDIT)),
+      credBad.length === 0);
+    var credMoved = CREDIT ? sbHtml.replace('<p class="meth-credit">' + CREDIT + '</p></div>', '</div>')
+      .replace('<h3>Correlation, not causation</h3>', '<p class="meth-credit">' + CREDIT + '</p><h3>Correlation, not causation</h3>') : sbHtml;
+    T.ok('[METH/CREDIT:bite] the credit with its last character removed makes the check fire on both branches, and the credit moved above the school-board branch\'s last section makes it fire there',
+      !!CREDIT && creditCheck(html, 'council').length === 0 && creditCheck(sbHtml, 'school-board').length === 0 &&
+      creditCheck(cut(html, CREDIT), 'council').some(function (x) { return /does not end with/.test(x); }) &&
+      creditCheck(cut(sbHtml, CREDIT), 'school-board').some(function (x) { return /does not end with/.test(x); }) &&
+      credMoved !== sbHtml && credMoved.split(CREDIT).length === 2 &&
+      creditCheck(credMoved, 'school-board').some(function (x) { return /does not end with/.test(x); }));
   })();
 
   // [SG/*] — PS-161 (rulings 74a, 76b as amended, 82a, 83a, 84a as amended): small gifts on the elections

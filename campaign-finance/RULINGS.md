@@ -2958,6 +2958,20 @@ decision. Cited by the checker's extension-point comment, which this commit repo
 
 *Provenance: refresh small-gifts ratification package, revision 1 (`refresh-small-gifts-register-package-rev1.md`), sha256 `3b2aac07fcc334c186154784257c2b60be6f9b3f21084caec666313820e2e863`, 5,364 B / 71 L, region R2 (its lines 25–70), transcribed verbatim in the form PS-157's provenance states: the heading bare, one bare empty line, then each line of the body with `> ` added and each empty line as `>`. Ratified by Ishan in chat 2026-10-20 19:04 EDT ("85 ratify"), on rulings 74a and 76b of 2026-10-18 and 76b as amended, 82a, 83a and 84a as amended of 2026-10-20. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-160`; `PS-161` occurring 0 times before this commit), never carried.*
 
+
+### PS-162 — each tool's methodology ends with who designed and built it
+
+> **Ruled by Ishan, 2026-10-23** (rulings 143a to 147a). The methodology on each of the four tool pages ends with one sentence, the same on every page:
+>
+> "Designed and constructed by Ishan Daya and the Institute for the Public Good."
+>
+> - **Where.** It is the methodology's last paragraph, after everything else the methodology says, and set apart from the text above it. It appears on `/school-board-elections` and `/city-council` (the elections tool's methodology, for each office), on `/alder-voting-history` (the council tool's Methodology tab) and on `/school-board-voting-history` (the school-board tool's Methodology tab).
+> - **Nowhere else.** It is not a link. It is not on the homepage, the mayoral report or `/mayor`, and the elections tool's mayoral methodology, which is not yet ruled, does not show it.
+> - **What it amends.** The elections tool's council methodology (R9 as applied, under `CNCL-DATA-1 P2 — R8 and R9 as applied`) and its school-board methodology (`SB-METH-1`) admit this paragraph after their ruled contents. Nothing else in either changes.
+> - **The council tool's byline.** The line under the council tool's methodology title loses its date. It reads "Chicago City Council Accountability Tool — Institute for the Public Good".
+
+*Provenance: design-credit register package, revision 1 (`design-credit-register-package-rev1.md`), sha256 `9813e49fcc0adeb9f308132583bed870cbcd67eac67df6b3c54b1046da83509b`, 2,935 B / 24 L, region R1 (its lines 7–16), transcribed verbatim in the form PS-157's provenance states: the heading bare, one bare empty line, then each line of the body with `> ` added and each empty line as `>`. Ratified by Ishan in chat 2026-10-23 12:58 CDT ("148 a"), on rulings 143a to 147a of the same day. Id allocated at this transcription against the id measured free at the moment of writing (highest allocated `PS-161`; `PS-162` occurring 0 times before this commit), never carried.*
+
 ---
 
 ## Rulings ratified without an id

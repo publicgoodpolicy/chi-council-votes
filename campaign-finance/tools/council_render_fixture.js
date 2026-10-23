@@ -631,6 +631,22 @@ function withSynthetic(base, opts) {
     xText.indexOf(itemEnd) >= 0 && xText.indexOf('In this dataset they account for $' + (fAmt / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })) < 0,
     sentence.trim() + ' | field ' + JSON.stringify(rd.other_receipts_excluded));
 
+  // PS-162 (rulings 143a to 148a, 146-i b): the methodology ends with the register's credit sentence,
+  // once, as its last paragraph, and the byline under the title carries no date.
+  var CREDIT = (function () {
+    var r = fs.readFileSync(path.join(REPO, 'campaign-finance/RULINGS.md'), 'utf8').split('\n');
+    var i = r.findIndex(function (l) { return /^### PS-\d+ — each tool's methodology ends with who designed and built it$/.test(l); });
+    if (i < 0) return null;
+    for (var j = i + 1; j < r.length && r[j].indexOf('### ') !== 0; j++) { var m = /^> "(Designed [^"]+)"$/.exec(r[j]); if (m) return m[1]; }
+    return null;
+  })();
+  var methEl = lb.doc.querySelector('.ipg-meth');
+  var lastP = methEl ? methEl.lastElementChild : null, byline = lb.doc.querySelector('.ipg-meth-updated');
+  T.ok('[CREDIT/ALDER] the methodology\u2019s last paragraph is PS-162\u2019s sentence, once; the byline has no date (146-i b)',
+    !!CREDIT && !!lastP && lastP.tagName === 'P' && lastP.className === 'ipg-meth-credit' && lastP.textContent === CREDIT && methText.split(CREDIT).length === 2 &&
+    !!byline && byline.textContent === 'Chicago City Council Accountability Tool \u2014 Institute for the Public Good',
+    JSON.stringify(CREDIT) + ' | byline ' + JSON.stringify(byline && byline.textContent));
+
   // ---- assert 4 (E1.4 / F3) — no-writes, measured last -------------------------------
   var postEmbed = sha(EMBED), postData = sha(DATA);
   var postTree = execFileSync('git', ['status', '--porcelain'], { cwd: REPO, encoding: 'utf8' });

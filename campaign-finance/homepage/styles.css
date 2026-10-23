@@ -51,7 +51,7 @@
 .hp-votes{list-style:none;padding:0;margin:0}
 .hp-vote{padding:14px 0;border-bottom:1px solid var(--line)}
 .hp-meta{font-size:13px;color:var(--ink-muted);margin:0}
-.hp-vtitle{margin:4px 0;font-weight:500;max-width:80ch}
+.hp-vtitle{margin:4px 0;font-weight:500}
 .hp-foot{margin-top:40px;border-top:1px solid var(--line);padding-top:12px}
 @media (max-width:640px){
   .hp-table > thead{display:none}

@@ -324,6 +324,19 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   // amendment block. The superseded text is asserted ABSENT at [C3].
   ok('[S4] the methodology surface carries string 4 verbatim, as amended',
      meth.text.indexOf(nestedRuns('SBVOTE-1 G1+G3 — display strings 1–5')[1]) >= 0);
+  // PS-162 (rulings 143a to 148a): the methodology card ends with the register's credit sentence, once.
+  var CREDIT = (function () {
+    var r = fs.readFileSync(path.join(REPO, 'campaign-finance/RULINGS.md'), 'utf8').split('\n');
+    var i = r.findIndex(function (l) { return /^### PS-\d+ — each tool's methodology ends with who designed and built it$/.test(l); });
+    if (i < 0) return null;
+    for (var j = i + 1; j < r.length && r[j].indexOf('### ') !== 0; j++) { var m = /^> "(Designed [^"]+)"$/.exec(r[j]); if (m) return m[1]; }
+    return null;
+  })();
+  ok('[CREDIT/SB] the methodology card\u2019s last paragraph is PS-162\u2019s sentence, once',
+     !!CREDIT && (function () {
+       var card = meth.doc.querySelector('.ipg-sb-meth'), last = card && card.lastElementChild;
+       return !!last && last.tagName === 'P' && last.className === 'ipg-sb-meth-credit' && last.textContent === CREDIT;
+     })() && meth.text.split(CREDIT).length === 2, JSON.stringify(CREDIT));
 
   // ---------- the render boundary: exactly one map, four pairs ------------
   var mapBlock = EMBED_HTML.split('var POSITION_DISPLAY = {')[1].split('};')[0];

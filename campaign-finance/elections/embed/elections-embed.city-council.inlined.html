@@ -1876,7 +1876,7 @@
         'background:var(--cream);color:var(--ink);font-family:var(--body);font-weight:400;line-height:1.55;-webkit-font-smoothing:antialiased;}' +
       '.ipg-elect *{box-sizing:border-box;}' +
       '.ipg-elect .wrap{max-width:none;margin:0;padding:0 var(--pad) 8px;}' +
-      '.ipg-elect .masthead{background:var(--teal);color:var(--cream);margin:0 calc(-1 * var(--pad));padding:38px var(--pad) 0;position:relative;overflow:hidden;}' +
+      '.ipg-elect .masthead{background:var(--teal);color:var(--cream);margin:0 calc((100% - 100vw) / 2);padding:38px calc((100vw - 100%) / 2) 0;position:relative;overflow:hidden;}' +
       '.ipg-elect .eyebrow{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:#cfe0dd;font-weight:600;margin:0 0 12px;display:flex;align-items:center;gap:10px;}' +
       '.ipg-elect .eyebrow .box{display:none;}' +
       '.ipg-elect .track{display:flex;align-items:center;gap:8px;margin:0 0 14px;font-family:Georgia,ui-serif,serif;font-size:18px;line-height:1;color:#F6EFE9;letter-spacing:0;text-transform:none;}' +
@@ -1884,9 +1884,9 @@
       '.ipg-elect .track svg{flex:none;width:22px;height:22px;}' +
       '.ipg-elect .eyebrow .box::after{content:none;}' +
       '.ipg-elect h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,4.6vw,46px);line-height:1.04;letter-spacing:-.01em;margin:0 0 14px;max-width:20ch;color:var(--cream);}' +
-      '.ipg-elect .lede{font-size:15.5px;color:#cfe0dd;max-width:60ch;margin:0 0 24px;}' +
-      '.ipg-elect .lede strong{color:var(--cream);font-weight:500;}.ipg-elect .data-through{font-size:13px;color:#cfe0dd;max-width:72ch;margin:-14px 0 24px;}' +
-      '.ipg-elect .topnav{display:flex;background:var(--tan);border-radius:0;padding:0 var(--pad);margin:0 calc(-1 * var(--pad));gap:0;border-bottom:1px solid var(--line);overflow-x:auto;}' +
+      '.ipg-elect .lede{font-size:15.5px;color:#cfe0dd;margin:0 0 24px;}' +
+      '.ipg-elect .lede strong{color:var(--cream);font-weight:500;}.ipg-elect .data-through{font-size:13px;color:#cfe0dd;margin:-14px 0 24px;}' +
+      '.ipg-elect .topnav{display:flex;background:var(--tan);border-radius:0;padding:0 calc((100vw - 100%) / 2);margin:0 calc((100% - 100vw) / 2);gap:0;border-bottom:1px solid var(--line);overflow-x:auto;}' +
       '.ipg-elect .topnav button{appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);font-size:12.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);padding:16px 22px;border-radius:0;border-bottom:3px solid transparent;flex:0 0 auto;}' +
       '.ipg-elect .topnav button[aria-selected="true"]{background:var(--cream);color:var(--teal);border-bottom-color:var(--sage);}' +
       '.ipg-elect .topnav button:focus-visible{outline:2px solid var(--sage);outline-offset:2px;}' +
@@ -2130,14 +2130,15 @@
       '.ipg-elect footer h3{font-family:var(--display);font-weight:600;color:var(--ink);font-size:15px;margin:0 0 8px;}' +
       '.ipg-elect footer p{margin:0 0 12px;}.ipg-elect footer .src{font-size:11.5px;}' +
       '@media (max-width:560px){.ipg-elect .smallgifts{margin-left:0;}.ipg-elect .sg-row{grid-template-columns:1fr 90px;}.ipg-elect .sg-row .sg-track{grid-column:1 / -1;grid-row:2;}.ipg-elect .barrow{grid-template-columns:1fr;gap:4px;}.ipg-elect .barval{text-align:left;}.ipg-elect .selfline{padding-left:0;}.ipg-elect .card .otherline{padding-left:0;}}' +
-      '.ipg-elect .methodology{max-width:70ch;line-height:1.6;}' +
+      '.ipg-elect .methodology{line-height:1.6;}' +
       '.ipg-elect .methodology h2{font-family:var(--display);font-size:26px;margin:8px 0 12px;}' +
       '.ipg-elect .methodology h3{font-size:15px;font-weight:600;margin:24px 0 6px;}' +
-      '.ipg-elect .methodology p{margin:0 0 12px;max-width:74ch;}' +
+      '.ipg-elect .methodology p{margin:0 0 12px;}' +
       '.ipg-elect .methodology ul{margin:0 0 12px;padding-left:20px;}' +
-      '.ipg-elect .methodology li{margin:0 0 8px;max-width:74ch;}' +
+      '.ipg-elect .methodology li{margin:0 0 8px;}' +
       '.ipg-elect .methodology a{color:var(--teal);}' +
       '.ipg-elect .methodology .mfield{font-weight:600;white-space:nowrap;}' +
+      '.ipg-elect .methodology .meth-credit{margin:28px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft);}' +
       '</style>';
   }
 
@@ -2987,6 +2988,7 @@
         paras.map(function (t) { return t == null ? '' : '<p>' + t + '</p>'; }).join('') +
         VERIFICATION_SECTION +
         ARTIFACT_LINKS +
+        METH_CREDIT_P +   // PS-162
         '</div>';
     }
 
@@ -3062,6 +3064,7 @@
       '<p>This tool shows who gave, who spent, and how officials and candidates are positioned — side by side. ' +
       'Proximity of money and outcomes is a starting point for questions, not an answer to them. Nothing here ' +
       'asserts that any contribution caused any decision.</p>' +
+      METH_CREDIT_P +   // PS-162
       '</div>';
   }
 
@@ -3407,6 +3410,12 @@
     'are reported as one total for each report, with no donor named. We count that total in what a candidate raised ' +
     'and show it as “Small gifts (unitemized),” never as a donor. Each report’s total belongs to the election whose ' +
     'window its reporting period ends in.';
+  // PS-162 (rulings 143a to 148a): the design credit, the register's sentence, the last paragraph of the
+  // methodology on both offices' branches. Defined once and used by both, so the two are identical by
+  // construction. It carries a class, so the positional <p> counts of [METH/REGISTER] do not see it;
+  // [METH/CREDIT] pins it.
+  var METH_CREDIT = 'Designed and constructed by Ishan Daya and the Institute for the Public Good.';
+  var METH_CREDIT_P = '<p class="meth-credit">' + METH_CREDIT + '</p>';
   var METH_S1 = 'Outside groups’ filings name the candidate they spent for or against in their own words, and we ' +
     'match each filing to a candidate in this tool. When a match needs a person’s check, the spending is marked “⚑ ' +
     'needs review” until IPG has confirmed it.';

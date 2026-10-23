@@ -139,7 +139,7 @@ const FEEDBACK_CONFIG = {
 #ipg-council-app h1.ipg-title{
   font-size:clamp(28px,4.6vw,46px); line-height:1.04; max-width:20ch; color:var(--cream);
 }
-#ipg-council-app .ipg-sub{margin-top:14px;max-width:60ch;font-size:15.5px;color:#cfe0dd;font-weight:400}
+#ipg-council-app .ipg-sub{margin-top:14px;font-size:15.5px;color:#cfe0dd;font-weight:400}
 
 /* TABS */
 #ipg-council-app .ipg-tabs{display:flex;background:var(--tan);border-bottom:1px solid var(--line);padding-inline:max(0px,calc((100% - var(--content))/2));overflow-x:auto}
@@ -185,7 +185,7 @@ const FEEDBACK_CONFIG = {
 #ipg-council-app .ipg-member-name{font-size:clamp(26px,4vw,38px);line-height:1.05;color:var(--teal)}
 #ipg-council-app .ipg-bio{
   background:var(--white);border:1px solid var(--line);border-left:5px solid var(--sage);
-  border-radius:10px;padding:16px 18px;margin:16px 0 8px;font-size:14.5px;color:#4a4038;max-width:74ch;
+  border-radius:10px;padding:16px 18px;margin:16px 0 8px;font-size:14.5px;color:#4a4038;
 }
 #ipg-council-app .ipg-pred{font-weight:700;margin-left:2px}
 #ipg-council-app .ipg-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
@@ -229,7 +229,7 @@ const FEEDBACK_CONFIG = {
 #ipg-council-app .ipg-vote-meta{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
 #ipg-council-app .ipg-vote-tag{font-weight:600;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#6a5d4e;background:var(--tan);padding:4px 9px;border-radius:20px}
 #ipg-council-app .ipg-vote-year{font-size:12px;color:#9a8e7e}
-#ipg-council-app .ipg-vote-desc{font-size:13.5px;color:#5a5048;margin-top:11px;line-height:1.6;max-width:80ch}
+#ipg-council-app .ipg-vote-desc{font-size:13.5px;color:#5a5048;margin-top:11px;line-height:1.6}
 #ipg-council-app .ipg-pill{
   font-weight:700;font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;
   padding:8px 13px;white-space:nowrap;border-radius:20px;border:1.5px solid;flex:none;
@@ -506,7 +506,7 @@ const FEEDBACK_CONFIG = {
   padding:8px 16px;border:none;background:none;cursor:pointer;color:#7d7264;border-radius:7px;
 }
 #ipg-council-app .ipg-rel-tab.active{background:var(--sage);color:var(--white)}
-#ipg-council-app .ipg-rel-caption{font-size:13.5px;color:#5a5048;line-height:1.55;margin:0 0 12px;max-width:80ch}
+#ipg-council-app .ipg-rel-caption{font-size:13.5px;color:#5a5048;line-height:1.55;margin:0 0 12px}
 #ipg-council-app .ipg-rel-caption strong{color:var(--teal)}
 #ipg-council-app .ipg-rel-svg-wrap{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:8px;overflow-x:auto}
 #ipg-council-app .ipg-rel-svg-wrap svg{display:block;width:100%;height:auto;min-width:320px}
@@ -734,10 +734,11 @@ const FEEDBACK_CONFIG = {
 #ipg-council-app .ipg-rank-pct{text-align:right;font-size:17px;color:var(--teal);font-weight:600;font-variant-numeric:tabular-nums}
 
 /* METHODOLOGY */
-#ipg-council-app .ipg-meth{max-width:768px;margin:0 auto;padding:4px 0 12px}
+#ipg-council-app .ipg-meth{padding:4px 0 12px}
 #ipg-council-app .ipg-meth-kicker{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin-bottom:10px}
 #ipg-council-app .ipg-meth h2.ipg-meth-doctitle{font-size:clamp(25px,3.6vw,33px);line-height:1.08;color:var(--teal);margin-bottom:8px}
 #ipg-council-app .ipg-meth-updated{font-size:12.5px;color:#8a7e70;margin-bottom:26px}
+#ipg-council-app .ipg-meth p.ipg-meth-credit{margin-top:32px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:#8a7e70}
 #ipg-council-app .ipg-meth-toc{background:var(--tan);border:1px solid var(--line);border-radius:12px;padding:15px 18px;margin-bottom:30px}
 #ipg-council-app .ipg-meth-toc .lbl{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#7d7264;margin-bottom:11px}
 #ipg-council-app .ipg-meth-toc .links{display:flex;flex-wrap:wrap;gap:8px}
@@ -2749,7 +2750,7 @@ function recTagChips(){
     return `<div class="ipg-meth">
       <div class="ipg-meth-kicker">Methodology &amp; data sources</div>
       <h2 class="ipg-meth-doctitle serif">How this tool is built</h2>
-      <div class="ipg-meth-updated">Chicago City Council Accountability Tool &mdash; Institute for the Public Good &middot; Last updated June 8, 2026</div>
+      <div class="ipg-meth-updated">Chicago City Council Accountability Tool &mdash; Institute for the Public Good</div>
 
       <div class="ipg-meth-toc">
         <div class="lbl">On this page</div>
@@ -2865,6 +2866,8 @@ function recTagChips(){
       <h3 class="ipg-meth-h" id="meth-corrections">Corrections, additions, and bug reports</h3>
       <p>We are committed to keeping this data as accurate as possible, and we rely on readers to help. If you spot an error in the data or a visualization, have something to add, or hit a bug, use the <button type="button" class="ipg-meth-fb">Report a correction or bug</button> button in the tool &mdash; it captures what you were viewing so we can act on it quickly. You can also email us directly at <a href="mailto:contact@i4pg.org">contact@i4pg.org</a>; if you have a screenshot, sending it to that address (mentioning what you reported) helps us a great deal.</p>
       <p>Every submission is reviewed.</p>
+
+      <p class="ipg-meth-credit">Designed and constructed by Ishan Daya and the Institute for the Public Good.</p>
     </div>`;
   }
 

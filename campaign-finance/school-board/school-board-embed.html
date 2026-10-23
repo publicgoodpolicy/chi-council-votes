@@ -143,7 +143,7 @@ const IPG_SB_FEEDBACK = {
 #ipg-sb-app h1.ipg-sb-title{
   font-size:clamp(28px,4.6vw,46px); line-height:1.04; max-width:20ch; color:var(--cream);
 }
-#ipg-sb-app .ipg-sb-sub{margin-top:14px;max-width:60ch;font-size:15.5px;color:#cfe0dd;font-weight:400}
+#ipg-sb-app .ipg-sb-sub{margin-top:14px;font-size:15.5px;color:#cfe0dd;font-weight:400}
 
 /* TABS */
 #ipg-sb-app .ipg-sb-tabs{display:flex;background:var(--tan);border-bottom:1px solid var(--line);
@@ -310,6 +310,7 @@ const IPG_SB_FEEDBACK = {
 #ipg-sb-app .ipg-sb-meth h3:first-child{margin-top:0}
 #ipg-sb-app .ipg-sb-meth p,#ipg-sb-app .ipg-sb-meth li{font-size:14.5px;margin-bottom:8px;color:var(--ink-mid);line-height:1.6}
 #ipg-sb-app .ipg-sb-meth ul{padding-left:20px}
+#ipg-sb-app .ipg-sb-meth p.ipg-sb-meth-credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-mid)}
 #ipg-sb-app .ipg-sb-fb-btn{display:inline-block;margin-top:12px;font-family:'Poppins',sans-serif;
   font-weight:600;font-size:12.5px;letter-spacing:.02em;color:var(--white);background:var(--sage);
   border:none;border-radius:8px;padding:9px 16px;cursor:pointer}
@@ -659,7 +660,9 @@ const IPG_SB_FEEDBACK = {
     president: 'The Board President votes only to break ties.',
     notRecorded: 'A position shown as Not recorded means no vote is recorded for that seat — the member may have been absent, not yet seated, or the seat may have been vacant at the time.',
     keyVotes1: 'Some votes carry a key vote designation. A key vote is one that drew significant public attention — through community or advocacy pressure, sustained media coverage, or because it was novel or precedent-setting.',
-    keyVotes2: 'The key-vote label is an editorial judgment about prominence, not a different way of counting the vote. A key vote is recorded with the exact same factual Yes / No / Present / Not recorded positions as every other vote; it is simply surfaced more prominently.'
+    keyVotes2: 'The key-vote label is an editorial judgment about prominence, not a different way of counting the vote. A key vote is recorded with the exact same factual Yes / No / Present / Not recorded positions as every other vote; it is simply surfaced more prominently.',
+    // PS-162: the design credit.
+    credit: 'Designed and constructed by Ishan Daya and the Institute for the Public Good.'
   };
 
   // Ratified display strings — the key-votes heading and its show-empty state,
@@ -2857,6 +2860,8 @@ const IPG_SB_FEEDBACK = {
     h += '<h3>Spotted something wrong?</h3>';
     h += '<p>We rely on readers to help us keep this accurate.<br>'
        + '<button type="button" class="ipg-sb-fb-btn">'+esc(FB.trigger)+'</button></p>';
+    // PS-162: the design credit, the register's sentence, the methodology's last paragraph.
+    h += '<p class="ipg-sb-meth-credit">'+esc(SV.credit)+'</p>';
     return h + '</div>';
   }
 
