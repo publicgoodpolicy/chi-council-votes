@@ -16,11 +16,19 @@
   // replaces GitHub's raw-file address, which is not built for site traffic: short
   // caching and per-IP throttling. Pages has no branch fragment, so D-5's tag-ambiguity
   // hazard, which refs/heads/main/ answered, does not arise; ruling 123 supersedes that form.
+  // F-1 (rulings 128-3, 132-2): each elections page loads its own office's file; the mayor
+  // bundle keeps the full file. The files are built by tools/build_office_data.js.
+  // Written out in full, so [ELECT/URL] finds each address as pasted.
   var DEFAULT_SRC = 'https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/election-data.json';
+  var OFFICE_SRC = {
+    school_board: 'https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/election-data.school-board.json',
+    city_council: 'https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/election-data.city-council.json',
+    mayor: DEFAULT_SRC };
+  var PAGES_BASE = 'https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/';
   // Verification artifacts, fetched at runtime from the same Pages base as the data, so
   // the methodology page's numbers can never drift from the artifacts it cites (they deploy
   // together on push, paste-free). URLs are baked; they don't drift.
-  var ART_BASE = DEFAULT_SRC.replace(/election-data\.json$/, 'elections/');
+  var ART_BASE = PAGES_BASE + 'elections/';
   var RECON_URL = ART_BASE + 'reconciliation-report.json';
   var GAPS_URL = ART_BASE + 'known-gaps.json';
   var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
@@ -312,6 +320,11 @@
       if (typeof location !== 'undefined' && typeof URLSearchParams !== 'undefined') {
         var pq = new URLSearchParams(location.search).get('person');
         if (pq) openPerson(pq);
+        // F-1 (131-1): a read-only ?donor= param opens that donor's pop-up in this page's
+        // election window, the link the other offices' pop-ups make. A donor with no giving on
+        // this page is a no-op; no history writes.
+        var dq = !pq && new URLSearchParams(location.search).get('donor');
+        if (dq && IDX && IDX.parentRollup.hasOwnProperty(dq)) openFunder(dq, ElectData.electionWindow(office, state.election));
       }
     } catch (e3) {}
   }
@@ -323,7 +336,7 @@
       notice(root, 'Election tool failed to load (scripts missing).', true); return;
     }
     var office = root.getAttribute('data-office') || (typeof window !== 'undefined' && window.IPG_OFFICE) || 'school_board';
-    var src = root.getAttribute('data-src') || (typeof window !== 'undefined' && window.IPG_DATA_URL) || DEFAULT_SRC;
+    var src = root.getAttribute('data-src') || (typeof window !== 'undefined' && window.IPG_DATA_URL) || OFFICE_SRC[office] || DEFAULT_SRC;
     root.className = 'ipg-elect';
     injectStyles();
     notice(root, 'Loading election data…');

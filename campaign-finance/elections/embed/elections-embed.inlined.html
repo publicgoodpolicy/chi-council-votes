@@ -397,7 +397,26 @@
       var _cl = donorClusters[ccid];
       if (_cl && _cl.canonical_id) clusterByParent[_cl.canonical_id] = _cl;
     }
+    // F-1 (rulings 128-3, 131-1): an office file (election-data.<office>.json) carries this
+    // office's committees and contributions only. Three fields keep the page what it was on
+    // the full file: parent_order (the full file's parent order, so equal totals keep their
+    // order), own_committee_givers (the "Candidate's other committee" chip reads every gift,
+    // M5, including gifts to another office), and other_office_giving (each donor's giving to
+    // the other offices, per election window, computed by donorFootprint on the full file).
+    // The full file carries none of them, and loads as before.
+    if (json.parent_order) {
+      var _po = {}, _seen = {};
+      for (var poi = 0; poi < json.parent_order.length; poi++) {
+        var _pk = json.parent_order[poi];
+        if (parentRollup.hasOwnProperty(_pk) && !_seen[_pk]) { _po[_pk] = parentRollup[_pk]; _seen[_pk] = 1; }
+      }
+      for (var _rk in parentRollup) if (parentRollup.hasOwnProperty(_rk) && !_seen[_rk]) _po[_rk] = parentRollup[_rk];
+      parentRollup = _po;
+    }
+    var ownGivers = null;
+    if (json.own_committee_givers) { ownGivers = {}; for (var ogi = 0; ogi < json.own_committee_givers.length; ogi++) ownGivers[json.own_committee_givers[ogi]] = 1; }
     return {
+      officeSlice: json.office_slice || null, ownGivers: ownGivers, otherOfficeGiving: json.other_office_giving || null,
       races: races, candidates: candidates, committees: committees, donors: donors,
       donorClusters: donorClusters, clusterByParent: clusterByParent,
       industryTags: json.industry_tags || {}, flagTypes: json.flag_types || {},
@@ -713,8 +732,31 @@
       industries: parent.industries || [], flags: parent.flags || [],
       committees: committees, total: round2(total), count: committees.length,
       contributionsCount: kept, cycles: sortCycles(Object.keys(cyc)), rollup: rollup,
-      industryTags: index.industryTags, office: index.office || null   // DESIGN-1c: the page office, for grouping
+      industryTags: index.industryTags, office: index.office || null,   // DESIGN-1c: the page office, for grouping
+      otherOffices: otherOfficeLines(index, parentId, win)              // F-1 (131-1): null on the full file
     };
+  }
+  // F-1 (131-1): the donor's giving to the other offices in this footprint's window, from the
+  // office file. The window is named by its election id in the page office's window table
+  // ('all' for a windowless footprint); a window the table does not hold returns null, which
+  // [OFFICE/SLICE] proves no page reaches. Order is fixed: city council, school board, mayor.
+  var OTHER_OFFICE_ORDER = ['city_council', 'school_board', 'mayor'];
+  function windowId(office, win) {
+    if (!win) return 'all';
+    var t = officeType(office), o = t && ELECTION_WINDOWS[t];
+    for (var id in o) if (o.hasOwnProperty(id) && o[id].start === (win.start || null) && o[id].end === (win.end || null)) return id;
+    return null;
+  }
+  function otherOfficeLines(index, parentId, win) {
+    if (!index.otherOfficeGiving) return null;
+    var wid = windowId(index.office, win);
+    if (wid == null) return null;
+    var g = (index.otherOfficeGiving[parentId] || {})[wid] || {}, out = [];
+    for (var i = 0; i < OTHER_OFFICE_ORDER.length; i++) {
+      var o = OTHER_OFFICE_ORDER[i];
+      if (g[o] > 0) out.push({ office: o, total: g[o], electionId: wid === 'all' ? null : wid });
+    }
+    return out;
   }
 
   // Committee profile (bidirectional with the donor footprint). For an IE
@@ -1327,7 +1369,7 @@
       var d = index.donors[pid] || {};
       if (!donorMatches(d, donorSearchNames(index, pid, d), f)) continue;     // E-1 donor filters (parent unit); PS-155: any name of the group
       var pr = index.parentRollup[pid], total = 0, viaIE = 0, selfAmt = 0, cmset = {}, entset = {}, ncontrib = 0;
-      var ownGiver = false;
+      var ownGiver = !!(index.ownGivers && index.ownGivers[pid]);   // F-1: gifts to another office, from the office file
       for (var i = 0; i < pr.rows.length; i++) {
         var c = pr.rows[i];
         // M5: the chip names what the donor IS, so it is read before any scope filter — a
@@ -1664,7 +1706,7 @@
     candidateContributors: candidateContributors,
     candidateIE: candidateIE,
     spenderFunders: spenderFunders,
-    donorFootprint: donorFootprint,
+    donorFootprint: donorFootprint, windowId: windowId, electionWindow: spendWin,   // F-1: the ?donor= deep link's window
     committeeProfile: committeeProfile, otherReceiptsOnPage: otherReceiptsOnPage,
     committeeMeta: committeeMeta,
     sunshineUrl: sunshineUrl,
@@ -1928,6 +1970,7 @@
       // committee button. Chips use neutral tokens only (tan/cream/teal) — IE for/against
       // colors (sage swatch / coral) never appear as a row-level stance signal here.
       '.ipg-elect .ipg-items{margin:0 0 6px 4px;border-left:2px solid var(--sage);padding:3px 0 3px 12px;}' +
+      '.ipg-elect .ipg-other-offices{margin:18px 0 6px;}.ipg-elect .ipg-other-office{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 14px;padding:8px 0;border-bottom:1px solid var(--tan);font-size:14px;}.ipg-elect .ipg-other-office a{color:var(--sage);font-weight:600;text-decoration:none;}.ipg-elect .ipg-other-office a:hover{text-decoration:underline;}' +   // F-1 (131-1)
       '.ipg-elect .ipg-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--line);font-size:12px;}' +
       '.ipg-elect .ipg-item:last-child{border-bottom:0;}' +
       '.ipg-elect .ipg-item .ileft{display:flex;flex-wrap:wrap;align-items:center;gap:6px;}' +
@@ -2316,17 +2359,38 @@
         '</div>';
     }
     var wA = fp.win ? (' data-win-start="' + esc(fp.win.start || '') + '" data-win-end="' + esc(fp.win.end || '') + '"') : '';
+    // F-1 (rulings 128-3, 131-1): on an office file the pop-up holds this office's giving only,
+    // and each other office the donor gave to in the same window is one line with its total and
+    // a link. The council and school-board lines open the donor on that office's page
+    // (?donor=); the mayoral line opens the published mayoral report (/mayor is a pointer
+    // page, 119a). fp.otherOffices is null on the full file, and the pop-up is unchanged there.
+    var sliced = Array.isArray(fp.otherOffices);
+    var OTHER = { city_council: { label: 'City Council candidates', href: '/city-council', page: 'the City Council page' },
+      school_board: { label: 'School Board candidates', href: '/school-board-elections', page: 'the School Board page' },
+      mayor: { label: 'Mayoral candidates', href: '/who-is-funding-the-27-mayoral-race', page: 'our mayoral report', report: true } };
+    var others = sliced ? fp.otherOffices.map(function (o) {
+      var t = OTHER[o.office]; if (!t) return '';
+      var href = t.report ? t.href : (t.href + '?donor=' + encodeURIComponent(fp.parent_id));
+      return '<div class="ipg-other-office"><span>Also gave <b>' + money(o.total) + '</b> to ' + esc(t.label) + '.</span> ' +
+        '<a href="' + esc(href) + '">' + (t.report ? 'See ' : 'Open on ') + esc(t.page) + ' →</a></div>';
+    }).join('') : '';
+    var othersBlock = others ? '<div class="ipg-other-offices"><div class="contrib-h"><span>Other offices, same election window</span></div>' + others + '</div>' : '';
+    var note = sliced
+      ? ('Everything <b>' + esc(fp.name) + '</b> has given within this election window to ' + esc(PAGE || 'this page\'s') +
+         ' candidates, and to independent-expenditure committees that have spent on this page\'s races' + (fp.win ? ' in this election' : '') +
+         '. Giving to other offices is listed below, by office.')
+      : ('Everything <b>' + esc(fp.name) + '</b> has given within this election window, across every office ' +
+      'these tools cover — direct contributions and money into independent-expenditure committees, grouped by the office ' +
+      'of the recipient — ' + (fp.win ? FOOTPRINT_SCOPE_ELECTION : FOOTPRINT_SCOPE_OFFICE));
     return '<div class="ipg-modal-overlay" data-modal-overlay' + wA + '><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Donor footprint">' +
       '<button class="ipg-modal-close" type="button" data-modal-close aria-label="Close">×</button>' +
       '<div class="modal-kicker">Donor footprint · this election only</div>' +
       '<div class="modal-name">' + esc(fp.name) + '</div>' +
       '<div class="modal-tags">' + tagsHtml(fp.industries, fp.flags, fp.industryTags) + '</div>' +
-      '<p class="modal-note">Everything <b>' + esc(fp.name) + '</b> has given within this election window, across every office ' +
-      'these tools cover — direct contributions and money into independent-expenditure committees, grouped by the office ' +
-      'of the recipient — ' + (fp.win ? FOOTPRINT_SCOPE_ELECTION : FOOTPRINT_SCOPE_OFFICE) + '</p>' +
+      '<p class="modal-note">' + note + '</p>' +
       statgrid + cycLine + rc +
       '<div class="modal-summary">' + money(fp.total) + ' across ' + plural(fp.count, 'recipient', 'recipients') + '</div>' +
-      rows +
+      rows + othersBlock +
       '<p class="contrib-note">Direct contributions only — independent spending isn\'t shown here.</p>' +
       '</div></div>';
   }
@@ -3408,11 +3472,19 @@
   // replaces GitHub's raw-file address, which is not built for site traffic: short
   // caching and per-IP throttling. Pages has no branch fragment, so D-5's tag-ambiguity
   // hazard, which refs/heads/main/ answered, does not arise; ruling 123 supersedes that form.
+  // F-1 (rulings 128-3, 132-2): each elections page loads its own office's file; the mayor
+  // bundle keeps the full file. The files are built by tools/build_office_data.js.
+  // Written out in full, so [ELECT/URL] finds each address as pasted.
   var DEFAULT_SRC = 'https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/election-data.json';
+  var OFFICE_SRC = {
+    school_board: 'https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/election-data.school-board.json',
+    city_council: 'https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/election-data.city-council.json',
+    mayor: DEFAULT_SRC };
+  var PAGES_BASE = 'https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/';
   // Verification artifacts, fetched at runtime from the same Pages base as the data, so
   // the methodology page's numbers can never drift from the artifacts it cites (they deploy
   // together on push, paste-free). URLs are baked; they don't drift.
-  var ART_BASE = DEFAULT_SRC.replace(/election-data\.json$/, 'elections/');
+  var ART_BASE = PAGES_BASE + 'elections/';
   var RECON_URL = ART_BASE + 'reconciliation-report.json';
   var GAPS_URL = ART_BASE + 'known-gaps.json';
   var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
@@ -3704,6 +3776,11 @@
       if (typeof location !== 'undefined' && typeof URLSearchParams !== 'undefined') {
         var pq = new URLSearchParams(location.search).get('person');
         if (pq) openPerson(pq);
+        // F-1 (131-1): a read-only ?donor= param opens that donor's pop-up in this page's
+        // election window, the link the other offices' pop-ups make. A donor with no giving on
+        // this page is a no-op; no history writes.
+        var dq = !pq && new URLSearchParams(location.search).get('donor');
+        if (dq && IDX && IDX.parentRollup.hasOwnProperty(dq)) openFunder(dq, ElectData.electionWindow(office, state.election));
       }
     } catch (e3) {}
   }
@@ -3715,7 +3792,7 @@
       notice(root, 'Election tool failed to load (scripts missing).', true); return;
     }
     var office = root.getAttribute('data-office') || (typeof window !== 'undefined' && window.IPG_OFFICE) || 'school_board';
-    var src = root.getAttribute('data-src') || (typeof window !== 'undefined' && window.IPG_DATA_URL) || DEFAULT_SRC;
+    var src = root.getAttribute('data-src') || (typeof window !== 'undefined' && window.IPG_DATA_URL) || OFFICE_SRC[office] || DEFAULT_SRC;
     root.className = 'ipg-elect';
     injectStyles();
     notice(root, 'Loading election data…');

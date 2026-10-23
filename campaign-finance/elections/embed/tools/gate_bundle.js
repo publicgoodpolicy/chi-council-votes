@@ -1915,6 +1915,11 @@ async function assertPersonSurface(T, ctx, fx) {
       if (!fs.existsSync(out)) { bad.push(office + ': emission missing'); return; }
       var html = fs.readFileSync(out, 'utf8');
       if (html.indexOf("'" + PAGES + "'") < 0) bad.push(office + ': the Pages election-data URL is absent (check went vacuous)');
+      // F-1 (128-3): the two office files, each by its full address, in every emission (the
+      // payload is one across the three bundles; data-office picks the address at runtime).
+      ['election-data.school-board.json', 'election-data.city-council.json'].forEach(function (f) {
+        if (html.indexOf("'" + PAGES.replace(/election-data\.json$/, f) + "'") < 0) bad.push(office + ': the Pages URL for ' + f + ' is absent');
+      });
       if (OLD.test(html)) bad.push(office + ': still carries a raw.githubusercontent URL');
     });
     var DEPLOY = path.join(__dirname, '..', 'DEPLOY.md');
@@ -1930,6 +1935,118 @@ async function assertPersonSurface(T, ctx, fx) {
       (bad.length ? bad.join('; ') : Object.keys(BUNDLE_MOD.OFFICES).length +
         ' emissions + DEPLOY.md clean'),
       bad.length === 0);
+  })();
+  // [OFFICE/SLICE] F-1 (rulings 128-3, 131-1, 132-2, 134-1): each elections page loads its own
+  // office's file (election-data.school-board.json, election-data.city-council.json), built by
+  // tools/build_office_data.js from the full file, which stays for the mayor bundle. The claim is
+  // that the page is the same on its office file as on the full file, but for the donor pop-up,
+  // which holds this office's giving only and lists the other offices' totals. Proved here by
+  // building every view the page builds from both files with the same data.js:
+  //   1. both committed office files are what the builder makes from the committed full file;
+  //   2. race browse, office races, every race view x cycle, every spend tab x election, every
+  //      candidate's figures, every committee profile x window and every person view are equal,
+  //      and the donor facets are equal but for industries no donor in the office file carries
+  //      (134-1: they had no giving on the page);
+  //   3. every donor pop-up, every parent x window: this office's rows equal the full pop-up's
+  //      rows for this office, and its total plus its other-office lines equal the full total;
+  //   4. every window the page draws (each race's, each selector option's) names a window id;
+  //   5. the pop-up renders each other-office line with its link (131-1);
+  //   6. a bite: one other-office total moved by a cent fails 3.
+  (function () {
+    var CF = path.join(__dirname, '..', '..', '..');
+    var ED = require(path.join(__dirname, '..', 'data.js'));
+    var ER = require(path.join(__dirname, '..', 'render.js'));
+    var BOD = require(path.join(__dirname, 'build_office_data.js'));
+    var full = JSON.parse(fs.readFileSync(path.join(CF, 'election-data.json'), 'utf8'));
+    var OFFNAME = { alderperson: 'city_council', mayor: 'mayor', school_board_president: 'school_board', school_board_member: 'school_board' };
+    var J = JSON.stringify;
+    var fresh = [];
+    BOD.OFFICES.forEach(function (o) {
+      var p = path.join(CF, o.file), cur = fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null;
+      if (cur !== J(BOD.build(full, o.office)) + '\n') fresh.push(o.file + (cur == null ? ' absent' : ' differs from its rebuild'));
+    });
+    T.ok('[OFFICE/SLICE] both office files are what build_office_data.js makes from election-data.json — ' +
+      (fresh.length ? fresh.join('; ') : BOD.OFFICES.map(function (o) { return o.file; }).join(' + ') + ' fresh'), fresh.length === 0);
+    BOD.OFFICES.forEach(function (o) {
+      var office = o.office, sl = JSON.parse(fs.readFileSync(path.join(CF, o.file), 'utf8'));
+      var A = ED.loadData(full, { office: office }), B = ED.loadData(sl, { office: office });
+      var EW = ED.ELECTION_WINDOWS[ED.OFFICE_TYPE[office]], ids = Object.keys(EW).sort();
+      var W = [null].concat(ids.map(function (k) { return EW[k]; })), sels = [null].concat(ids);
+      var n = 0, bad = [];
+      var eq = function (what, a, b) { n++; if (J(a) !== J(b) && bad.length < 4) bad.push(what); };
+      var cyc = ED.availableCycles(A); eq('cycles', cyc, ED.availableCycles(B));
+      [null].concat(cyc).forEach(function (c) {
+        eq('raceBrowse ' + c, ED.viewModels.raceBrowse(A, office, c), ED.viewModels.raceBrowse(B, office, c));
+        sl.races.forEach(function (r) { eq('raceView ' + r.id + ' ' + c, ED.viewModels.raceView(A, r.id, c), ED.viewModels.raceView(B, r.id, c)); });
+        sl.candidates.forEach(function (cd) { eq('candidateFigures ' + cd.id + ' ' + c, ED.candidateFigures(A, cd.id, c), ED.candidateFigures(B, cd.id, c)); });
+      });
+      var dropped = {};
+      sels.forEach(function (s) {
+        eq('officeRaces ' + s, ED.viewModels.officeRaces(A, office, s), ED.viewModels.officeRaces(B, office, s));
+        ['donors', 'candidates', 'industries', 'industry-candidate', 'flags'].forEach(function (tab) {
+          var a = ED.spendSubtab(A, office, tab, null, s), b = ED.spendSubtab(B, office, tab, null, s);
+          var fa = a.facets, fb = b.facets, a2 = Object.assign({}, a), b2 = Object.assign({}, b);
+          delete a2.facets; delete b2.facets; eq('spend ' + tab + ' ' + s, a2, b2);
+          if (fa || fb) {
+            eq('facet types ' + s, fa.types, fb.types); eq('facet flags ' + s, fa.flags, fb.flags);
+            var ib = {}; fb.industries.forEach(function (x) { ib[x.id] = 1; });
+            fb.industries.forEach(function (x) { n++; if (!fa.industries.some(function (y) { return J(y) === J(x); }) && bad.length < 4) bad.push('facet industry ' + x.id + ' not on the full file'); });
+            fa.industries.forEach(function (x) {
+              if (ib[x.id]) return; dropped[x.id] = 1; n++;
+              var carried = Object.keys(sl.donors).some(function (d) { return (sl.donors[d].industries || []).indexOf(x.id) >= 0; });
+              if (carried && bad.length < 4) bad.push('facet industry ' + x.id + ' dropped though a donor in the file carries it');
+            });
+          }
+        });
+      });
+      Object.keys(sl.committees).forEach(function (k) { W.forEach(function (w) { eq('committeeProfile ' + k, ED.committeeProfile(A, k, w), ED.committeeProfile(B, k, w)); }); });
+      Object.keys(sl.rollups.by_person).forEach(function (p) { eq('personView ' + p, ED.personView(A, p), ED.personView(B, p)); });
+      T.ok('[OFFICE/SLICE] ' + office + ': every view the page builds is the same on its office file as on the full file — ' +
+        (bad.length ? bad.join('; ') : n + ' comparisons equal' + (Object.keys(dropped).length ? '; industry filter drops ' + Object.keys(dropped).sort().join(', ') + ' (no donor in the file carries them, 134-1)' : '')),
+        bad.length === 0 && n > 0);
+      // 3 and 6: the pop-ups.
+      var parents = {}; Object.keys(sl.donors).forEach(function (d) { parents[sl.donors[d].parent_id || d] = 1; });
+      var fpCheck = function (index, perturb) {
+        var m = 0, fb2 = [];
+        Object.keys(parents).forEach(function (p) {
+          W.forEach(function (w) {
+            var fa = ED.donorFootprint(A, p, w), fb = ED.donorFootprint(index, p, w);
+            var keep = fa.committees.filter(function (x) { return !(x.kind === 'candidate' && (OFFNAME[x.office] || x.office) !== office); });
+            var oth = 0; (fb.otherOffices || []).forEach(function (l) { oth += l.total; });
+            m++;
+            var ok = fa.otherOffices === null && Array.isArray(fb.otherOffices) && J(keep) === J(fb.committees) &&
+              Math.abs(Math.round((fb.total + oth) * 100) / 100 - fa.total) < 0.005;
+            if (!ok && fb2.length < 3) fb2.push(p + ' @ ' + (w ? ED.windowId(office, w) : 'all'));
+          });
+        });
+        return { n: m, bad: fb2 };
+      };
+      var r = fpCheck(B);
+      T.ok('[OFFICE/SLICE] ' + office + ': every donor pop-up holds this office\'s rows as on the full file, and its total plus its other-office lines is the full total — ' +
+        (r.bad.length ? r.bad.join('; ') : r.n + ' parent x window pop-ups'), r.bad.length === 0 && r.n > 0);
+      // the bite: move one other-office total by a cent
+      var p0 = Object.keys(sl.other_office_giving)[0], w0 = Object.keys(sl.other_office_giving[p0])[0], o0 = Object.keys(sl.other_office_giving[p0][w0])[0];
+      var sl2 = JSON.parse(J(sl)); sl2.other_office_giving[p0][w0][o0] = Math.round((sl2.other_office_giving[p0][w0][o0] + 0.01) * 100) / 100;
+      var savedParents = parents; parents = {}; parents[p0] = 1;
+      var rb = fpCheck(ED.loadData(sl2, { office: office })); parents = savedParents;
+      T.ok('[OFFICE/SLICE:bite] ' + office + ': one other-office total moved by a cent fails the pop-up check', rb.bad.length > 0);
+      // 4: every drawn window has an id.
+      var miss = [];
+      sels.forEach(function (s) { var w = ED.electionWindow(office, s); if (s != null && ED.windowId(office, w) == null) miss.push('selector ' + s); });
+      sl.races.forEach(function (rr) { var w = ED.ELECTION_WINDOWS[ED.OFFICE_TYPE[rr.office]] && ED.ELECTION_WINDOWS[ED.OFFICE_TYPE[rr.office]][(/^(\d{4})/.exec(rr.election_id || '') || [])[1]]; if (w && ED.windowId(office, w) == null) miss.push('race ' + rr.id); });
+      T.ok('[OFFICE/SLICE] ' + office + ': every window the page draws names a window id in the office file — ' + (miss.length ? miss.slice(0, 4).join('; ') : sels.length - 1 + ' selector windows, ' + sl.races.length + ' races'), miss.length === 0);
+      // 5: the rendered lines.
+      var pr = Object.keys(sl.other_office_giving).filter(function (p) { return sl.other_office_giving[p].all; })[0];
+      var fpx = ED.donorFootprint(B, pr, null), html = ER.renderFunderModal(fpx), rbad = [];
+      var HREF = { city_council: '/city-council?donor=', school_board: '/school-board-elections?donor=', mayor: '/who-is-funding-the-27-mayoral-race' };
+      fpx.otherOffices.forEach(function (l) {
+        if (html.indexOf('href="' + HREF[l.office] + (l.office === 'mayor' ? '' : encodeURIComponent(pr))) < 0) rbad.push(l.office + ' link');
+      });
+      if (html.indexOf('across every office') >= 0) rbad.push('the full-file note');
+      if ((html.match(/class="ipg-other-office"/g) || []).length !== fpx.otherOffices.length) rbad.push('line count');
+      T.ok('[OFFICE/SLICE] ' + office + ': the pop-up renders one "Also gave" line per other office, each with its link (131-1) — ' +
+        (rbad.length ? rbad.join('; ') : pr + ': ' + fpx.otherOffices.map(function (l) { return l.office; }).join(', ')), rbad.length === 0 && fpx.otherOffices.length > 0);
+    });
   })();
   // [BRAND/MARK] rulings 120b and 121b (2026-10-22): the FinTrack mark above the masthead title, on
   // EVERY EMITTED FILE, exactly once each, decorative (aria-hidden) with the brand name as text.

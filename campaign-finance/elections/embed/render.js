@@ -245,6 +245,7 @@
       // committee button. Chips use neutral tokens only (tan/cream/teal) — IE for/against
       // colors (sage swatch / coral) never appear as a row-level stance signal here.
       '.ipg-elect .ipg-items{margin:0 0 6px 4px;border-left:2px solid var(--sage);padding:3px 0 3px 12px;}' +
+      '.ipg-elect .ipg-other-offices{margin:18px 0 6px;}.ipg-elect .ipg-other-office{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 14px;padding:8px 0;border-bottom:1px solid var(--tan);font-size:14px;}.ipg-elect .ipg-other-office a{color:var(--sage);font-weight:600;text-decoration:none;}.ipg-elect .ipg-other-office a:hover{text-decoration:underline;}' +   // F-1 (131-1)
       '.ipg-elect .ipg-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--line);font-size:12px;}' +
       '.ipg-elect .ipg-item:last-child{border-bottom:0;}' +
       '.ipg-elect .ipg-item .ileft{display:flex;flex-wrap:wrap;align-items:center;gap:6px;}' +
@@ -633,17 +634,38 @@
         '</div>';
     }
     var wA = fp.win ? (' data-win-start="' + esc(fp.win.start || '') + '" data-win-end="' + esc(fp.win.end || '') + '"') : '';
+    // F-1 (rulings 128-3, 131-1): on an office file the pop-up holds this office's giving only,
+    // and each other office the donor gave to in the same window is one line with its total and
+    // a link. The council and school-board lines open the donor on that office's page
+    // (?donor=); the mayoral line opens the published mayoral report (/mayor is a pointer
+    // page, 119a). fp.otherOffices is null on the full file, and the pop-up is unchanged there.
+    var sliced = Array.isArray(fp.otherOffices);
+    var OTHER = { city_council: { label: 'City Council candidates', href: '/city-council', page: 'the City Council page' },
+      school_board: { label: 'School Board candidates', href: '/school-board-elections', page: 'the School Board page' },
+      mayor: { label: 'Mayoral candidates', href: '/who-is-funding-the-27-mayoral-race', page: 'our mayoral report', report: true } };
+    var others = sliced ? fp.otherOffices.map(function (o) {
+      var t = OTHER[o.office]; if (!t) return '';
+      var href = t.report ? t.href : (t.href + '?donor=' + encodeURIComponent(fp.parent_id));
+      return '<div class="ipg-other-office"><span>Also gave <b>' + money(o.total) + '</b> to ' + esc(t.label) + '.</span> ' +
+        '<a href="' + esc(href) + '">' + (t.report ? 'See ' : 'Open on ') + esc(t.page) + ' →</a></div>';
+    }).join('') : '';
+    var othersBlock = others ? '<div class="ipg-other-offices"><div class="contrib-h"><span>Other offices, same election window</span></div>' + others + '</div>' : '';
+    var note = sliced
+      ? ('Everything <b>' + esc(fp.name) + '</b> has given within this election window to ' + esc(PAGE || 'this page\'s') +
+         ' candidates, and to independent-expenditure committees that have spent on this page\'s races' + (fp.win ? ' in this election' : '') +
+         '. Giving to other offices is listed below, by office.')
+      : ('Everything <b>' + esc(fp.name) + '</b> has given within this election window, across every office ' +
+      'these tools cover — direct contributions and money into independent-expenditure committees, grouped by the office ' +
+      'of the recipient — ' + (fp.win ? FOOTPRINT_SCOPE_ELECTION : FOOTPRINT_SCOPE_OFFICE));
     return '<div class="ipg-modal-overlay" data-modal-overlay' + wA + '><div class="ipg-modal" role="dialog" aria-modal="true" aria-label="Donor footprint">' +
       '<button class="ipg-modal-close" type="button" data-modal-close aria-label="Close">×</button>' +
       '<div class="modal-kicker">Donor footprint · this election only</div>' +
       '<div class="modal-name">' + esc(fp.name) + '</div>' +
       '<div class="modal-tags">' + tagsHtml(fp.industries, fp.flags, fp.industryTags) + '</div>' +
-      '<p class="modal-note">Everything <b>' + esc(fp.name) + '</b> has given within this election window, across every office ' +
-      'these tools cover — direct contributions and money into independent-expenditure committees, grouped by the office ' +
-      'of the recipient — ' + (fp.win ? FOOTPRINT_SCOPE_ELECTION : FOOTPRINT_SCOPE_OFFICE) + '</p>' +
+      '<p class="modal-note">' + note + '</p>' +
       statgrid + cycLine + rc +
       '<div class="modal-summary">' + money(fp.total) + ' across ' + plural(fp.count, 'recipient', 'recipients') + '</div>' +
-      rows +
+      rows + othersBlock +
       '<p class="contrib-note">Direct contributions only — independent spending isn\'t shown here.</p>' +
       '</div></div>';
   }

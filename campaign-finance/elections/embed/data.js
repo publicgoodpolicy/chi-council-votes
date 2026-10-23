@@ -379,7 +379,26 @@
       var _cl = donorClusters[ccid];
       if (_cl && _cl.canonical_id) clusterByParent[_cl.canonical_id] = _cl;
     }
+    // F-1 (rulings 128-3, 131-1): an office file (election-data.<office>.json) carries this
+    // office's committees and contributions only. Three fields keep the page what it was on
+    // the full file: parent_order (the full file's parent order, so equal totals keep their
+    // order), own_committee_givers (the "Candidate's other committee" chip reads every gift,
+    // M5, including gifts to another office), and other_office_giving (each donor's giving to
+    // the other offices, per election window, computed by donorFootprint on the full file).
+    // The full file carries none of them, and loads as before.
+    if (json.parent_order) {
+      var _po = {}, _seen = {};
+      for (var poi = 0; poi < json.parent_order.length; poi++) {
+        var _pk = json.parent_order[poi];
+        if (parentRollup.hasOwnProperty(_pk) && !_seen[_pk]) { _po[_pk] = parentRollup[_pk]; _seen[_pk] = 1; }
+      }
+      for (var _rk in parentRollup) if (parentRollup.hasOwnProperty(_rk) && !_seen[_rk]) _po[_rk] = parentRollup[_rk];
+      parentRollup = _po;
+    }
+    var ownGivers = null;
+    if (json.own_committee_givers) { ownGivers = {}; for (var ogi = 0; ogi < json.own_committee_givers.length; ogi++) ownGivers[json.own_committee_givers[ogi]] = 1; }
     return {
+      officeSlice: json.office_slice || null, ownGivers: ownGivers, otherOfficeGiving: json.other_office_giving || null,
       races: races, candidates: candidates, committees: committees, donors: donors,
       donorClusters: donorClusters, clusterByParent: clusterByParent,
       industryTags: json.industry_tags || {}, flagTypes: json.flag_types || {},
@@ -695,8 +714,31 @@
       industries: parent.industries || [], flags: parent.flags || [],
       committees: committees, total: round2(total), count: committees.length,
       contributionsCount: kept, cycles: sortCycles(Object.keys(cyc)), rollup: rollup,
-      industryTags: index.industryTags, office: index.office || null   // DESIGN-1c: the page office, for grouping
+      industryTags: index.industryTags, office: index.office || null,   // DESIGN-1c: the page office, for grouping
+      otherOffices: otherOfficeLines(index, parentId, win)              // F-1 (131-1): null on the full file
     };
+  }
+  // F-1 (131-1): the donor's giving to the other offices in this footprint's window, from the
+  // office file. The window is named by its election id in the page office's window table
+  // ('all' for a windowless footprint); a window the table does not hold returns null, which
+  // [OFFICE/SLICE] proves no page reaches. Order is fixed: city council, school board, mayor.
+  var OTHER_OFFICE_ORDER = ['city_council', 'school_board', 'mayor'];
+  function windowId(office, win) {
+    if (!win) return 'all';
+    var t = officeType(office), o = t && ELECTION_WINDOWS[t];
+    for (var id in o) if (o.hasOwnProperty(id) && o[id].start === (win.start || null) && o[id].end === (win.end || null)) return id;
+    return null;
+  }
+  function otherOfficeLines(index, parentId, win) {
+    if (!index.otherOfficeGiving) return null;
+    var wid = windowId(index.office, win);
+    if (wid == null) return null;
+    var g = (index.otherOfficeGiving[parentId] || {})[wid] || {}, out = [];
+    for (var i = 0; i < OTHER_OFFICE_ORDER.length; i++) {
+      var o = OTHER_OFFICE_ORDER[i];
+      if (g[o] > 0) out.push({ office: o, total: g[o], electionId: wid === 'all' ? null : wid });
+    }
+    return out;
   }
 
   // Committee profile (bidirectional with the donor footprint). For an IE
@@ -1309,7 +1351,7 @@
       var d = index.donors[pid] || {};
       if (!donorMatches(d, donorSearchNames(index, pid, d), f)) continue;     // E-1 donor filters (parent unit); PS-155: any name of the group
       var pr = index.parentRollup[pid], total = 0, viaIE = 0, selfAmt = 0, cmset = {}, entset = {}, ncontrib = 0;
-      var ownGiver = false;
+      var ownGiver = !!(index.ownGivers && index.ownGivers[pid]);   // F-1: gifts to another office, from the office file
       for (var i = 0; i < pr.rows.length; i++) {
         var c = pr.rows[i];
         // M5: the chip names what the donor IS, so it is read before any scope filter — a
@@ -1646,7 +1688,7 @@
     candidateContributors: candidateContributors,
     candidateIE: candidateIE,
     spenderFunders: spenderFunders,
-    donorFootprint: donorFootprint,
+    donorFootprint: donorFootprint, windowId: windowId, electionWindow: spendWin,   // F-1: the ?donor= deep link's window
     committeeProfile: committeeProfile, otherReceiptsOnPage: otherReceiptsOnPage,
     committeeMeta: committeeMeta,
     sunshineUrl: sunshineUrl,

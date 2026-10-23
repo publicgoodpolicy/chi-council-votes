@@ -86,16 +86,22 @@ fetching the served artifact and comparing its sha256 to HEAD's, never by elapse
 
 ## Data dependency (the CDN)
 
-The embed fetches `election-data.json` at runtime from GitHub Pages (ruling 123):
+Each page fetches its own office's file at runtime from GitHub Pages (ruling 123; F-1, rulings
+128-3 and 132-2): `/school-board-elections` and `/city-council` read their office files, and the
+mayor bundle reads the full file:
 
 ```
+https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/election-data.school-board.json
+https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/election-data.city-council.json
 https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/election-data.json
 ```
 
-That file **must be committed and pushed** (it is, as of the "publish" commit) for
-Pages to serve it (Pages redeploys main within a few minutes of a push). To refresh the data: re-run the election build (see
-`campaign-finance/elections/README.md` run order), commit + push `election-data.json`, and the live embeds
-pick it up on next load (no re-paste needed).
+The office files are built from the full file by `tools/build_office_data.js` (README step 7c).
+All three **must be committed and pushed** for Pages to serve them (Pages redeploys main within a
+few minutes of a push). To refresh the data: re-run the election build (see
+`campaign-finance/elections/README.md` run order, through 7c), commit + push the three files, and
+the live embeds pick them up on next load (no re-paste needed). `[OFFICE/SLICE]` in
+`tools/gate_bundle.js` fails while an office file is stale.
 
 Override the source for testing with `data-src="..."` on the mount div, or
 `window.IPG_DATA_URL`.
@@ -106,5 +112,6 @@ Override the source for testing with `data-src="..."` on the mount div, or
 cd campaign-finance/elections/embed
 node tools/prerender_b2.js                       # data+render assertions (pure layers)
 # live data reachable:
-curl -sI https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/election-data.json | head -1
+curl -sI https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/election-data.school-board.json | head -1
+curl -sI https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/election-data.city-council.json | head -1
 ```

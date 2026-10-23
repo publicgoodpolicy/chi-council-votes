@@ -129,6 +129,11 @@ governing rule below). Export `$REPO`; paths are relative to the repo root.
                                                             # canonical (MECHANISM_REFERENCE §1): rebuilds the
                                                             #   school-board finance artifact from the finished
                                                             #   election-data.json; requires ingest_sb_votes' data.
+7c. node campaign-finance/elections/embed/tools/build_office_data.js
+                                                            # F-1 (128-3): the two office files the elections
+                                                            #   pages load, election-data.school-board.json and
+                                                            #   election-data.city-council.json, from the finished
+                                                            #   full file. --check rebuilds and exits 1 if stale.
 8.  validate_council_data.py  campaign-finance/election-data.json   # shared gate (positional arg)
 9.  reconcile.py --data campaign-finance/election-data.json \
         --d2totals <SBE D2Totals> --fileddocs <SBE FiledDocs> --pulled <pull date, YYYY-MM-DD> \
