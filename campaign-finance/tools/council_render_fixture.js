@@ -281,6 +281,25 @@ function withSynthetic(base, opts) {
       .replace(/<div class="ipg-dollarbar-legend-item"><span class="ipg-dollarbar-legend-swatch" style="background:#D4A24C"><\/span><span class="ipg-dollarbar-legend-label">Small gifts \(unitemized\)<\/span>.*?<\/span><\/div>/g, '')
       .replace(/flex:[\d.e+-]+ 0 0/g, 'flex:W').replace(/\(\d+(\.\d)?%\)/g, '(P)').replace(/<span class="ipg-dollarbar-(?:legend-)?pct">[^<]*<\/span>/g, '');
   };
+  // Ruling 127-1 (2026-10-22): votes cast before a mid-term appointment are the former alder's and carry
+  // an asterisk; counts still include them. Ward 35 (Quezada, 2025-04-07) and Ward 27 (Burnett III,
+  // 2025-09-25), on real data; Ward 42 (the sampled ward, no seat change) carries none.
+  var seatOut = {};
+  for (var sw of [35, 27]) {
+    var sr = await boot(embedNow, JSON.parse(baseRaw), { ward: sw });
+    seatOut[sw] = { n: sr.doc.querySelectorAll('.ipg-vote .ipg-pred').length, text: sr.text };
+    sr.dom.window.close(); sr = null;
+  }
+  var seatBase = JSON.parse(baseRaw), seatDates = {};
+  (seatBase.rollcall.votes || []).forEach(function (v) { seatDates[v.id] = v.date; });
+  var seatExpect = function (since) { return seatBase.votemeta.filter(function (vm) { return seatDates[vm.vote_id] && seatDates[vm.vote_id] < since; }).length; };
+  var e35 = seatExpect('2025-04-07'), e27 = seatExpect('2025-09-25'), n42 = real.doc.querySelectorAll('.ipg-vote .ipg-pred').length;
+  seatBase = null;
+  T.ok('[SEAT/PRED] key votes before the appointment carry the asterisk and the note names the former alder (127-1)',
+    seatOut[35].n === e35 && seatOut[27].n === e27 && e35 > 0 && e27 > 0 && n42 === 0
+      && /former Ald\. Carlos Ramirez-Rosa, before Anthony Quezada took the seat on April 7, 2025/.test(seatOut[35].text)
+      && /former Ald\. Walter Burnett Jr\., before Walter Burnett III took the seat on September 25, 2025/.test(seatOut[27].text),
+    'ward 35 ' + seatOut[35].n + '/' + e35 + ' · ward 27 ' + seatOut[27].n + '/' + e27 + ' · ward 42 ' + n42);
   T.ok('[BRAND/MARK] the VoteTrack mark renders exactly once, above the title, decorative (120b, 121b)',
     (real.html.match(TRACK) || []).length === 1 && real.html.search(TRACK) < real.html.indexOf('ipg-title'),
     'marks ' + (real.html.match(TRACK) || []).length);

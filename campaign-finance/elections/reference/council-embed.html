@@ -28,8 +28,8 @@
   - Vote positions: factual roll-call record "yes" / "no" / "present" / "absent"
   - Some votes are reverse-coded (e.g. Cancel ShotSpotter, 1FW Repeal):
     Positions come from rollcall.votes[].positions, joined to key votes via votemeta.vote_id.
-  - Ward 27 voting record spans Walter Burnett Jr.'s tenure; the seat
-    is now held by Walter Burnett III (appointed Sept 2025).
+  - Wards 27 and 35 changed hands mid-term (Burnett III, Sept 25, 2025; Quezada, Apr 7, 2025);
+    votes cast before the appointment are marked as the former alder's (ruling 127-1).
   =================================================================== -->
 
 <div id="ipg-council-app"></div>
@@ -187,6 +187,9 @@ const FEEDBACK_CONFIG = {
   background:var(--white);border:1px solid var(--line);border-left:5px solid var(--sage);
   border-radius:10px;padding:16px 18px;margin:16px 0 8px;font-size:14.5px;color:#4a4038;max-width:74ch;
 }
+#ipg-council-app .ipg-pred{font-weight:700;margin-left:2px}
+#ipg-council-app .ipg-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+#ipg-council-app .ipg-pred-note{font-size:12.5px;color:#6a5d4e;margin:8px 0 0;line-height:1.45}
 #ipg-council-app .ipg-tenure-note{
   font-size:12.5px;color:#8a7d3f;background:var(--neu-bg);border-radius:7px;
   padding:8px 12px;margin-top:10px;display:inline-block;
@@ -973,6 +976,19 @@ const FEEDBACK_CONFIG = {
   // join a key vote (votemeta) to its factual roll-call positions
   function rollcallById(id){if(!id)return null;if(!_rcIndex){_rcIndex={};((((D||{}).rollcall)||{}).votes||[]).forEach(v=>{_rcIndex[v.id]=v;});}return _rcIndex[id]||null;}
   function keyVotePos(vm,ward){const rc=rollcallById(vm&&vm.vote_id);if(!rc||!rc.positions)return null;return rc.positions[String(ward)]||null;}
+  // Ruling 127-1 (2026-10-22): seats that changed hands mid-term. A ward's record is the ward's, so a
+  // vote dated before the appointment was cast by the former alder: it is marked with an asterisk
+  // wherever a ward's position is shown, and every count still includes it. On the appointment date
+  // itself the seat's votes are the appointee's: Ward 35 is vacant on its 2025-04-07 confirmation roll call and
+  // votes after it; Ward 27 votes on every roll call of 2025-09-25, the day Burnett III was confirmed unanimously.
+  const SEAT_CHANGES={
+    35:{since:'2025-04-07',sinceLabel:'April 7, 2025',former:'Carlos Ramirez-Rosa',current:'Anthony Quezada'},
+    27:{since:'2025-09-25',sinceLabel:'September 25, 2025',former:'Walter Burnett Jr.',current:'Walter Burnett III'}
+  };
+  function predCast(ward,date){const c=SEAT_CHANGES[+ward];return !!(c&&date&&date<c.since);}
+  function keyVoteDate(vm){const rc=rollcallById(vm&&vm.vote_id);return rc?rc.date:null;}
+  function predMark(ward){const c=SEAT_CHANGES[+ward];return c?'<span class="ipg-pred" aria-hidden="true">*</span><span class="ipg-sr"> (cast by former Ald. '+c.former+')</span>':'';}
+  function predNote(ward){const c=SEAT_CHANGES[+ward];return c?'* Vote cast by former Ald. '+c.former+', before '+c.current+' took the seat on '+c.sinceLabel+'.':'';}
   // factual Yes/No/Present/Absent counts across the key votes (optionally one issue tag)
   function memberVoteCounts(a,tag){const c={yes:0,no:0,present:0,absent:0};(D.votemeta||[]).forEach(vm=>{if(tag&&tag!=='All'&&!voteTags(vm).includes(tag))return;c[posKey(keyVotePos(vm,a.ward))]++;});return c;}
   const alderByWard=w=>D.alders.find(a=>a.ward===w);
@@ -1075,10 +1091,12 @@ const FEEDBACK_CONFIG = {
         +'<div><div class="ipg-vote-name">'+vm.full+'</div>'
         +'<div class="ipg-vote-meta">'+tagChips
         +'<span class="ipg-vote-year">'+vm.year+'</span>'+srcLink+'</div></div>'
-        +pill(keyVotePos(vm,a.ward))+'</div>'
+        +(predCast(a.ward,keyVoteDate(vm))?'<span>'+pill(keyVotePos(vm,a.ward))+predMark(a.ward)+'</span>':pill(keyVotePos(vm,a.ward)))+'</div>'
         +'<div class="ipg-vote-desc">'+(vm.desc||vm.description||'')+'</div></div>';
     });
 
+    {const np=rows.filter(vm=>predCast(a.ward,keyVoteDate(vm))).length;
+     if(np)h+='<p class="ipg-pred-note">'+predNote(a.ward)+' '+np+' of the '+rows.length+' key votes shown were cast before '+SEAT_CHANGES[a.ward].sinceLabel+'.</p>';}
     if(D.rollcall && D.rollcall.votes && D.rollcall.votes.length){
       h+='<div class="ipg-section-h">Complete Voting Record</div>';
       h+='<button class="rec-expand" id="ipg-rec-expand">'+(state.memberRecOpen?'Hide full record \u2191':'Show all '+D.rollcall.votes.length+' divided votes for this alder \u2193')+'</button>';
@@ -2679,14 +2697,15 @@ function recFilter(v,f){
 }
 function recDetail(v,ward,feat){
   const groups={yes:[],no:[],present:[],absent:[]},pos=v.positions||{};
-  Object.keys(pos).forEach(w=>{const k=recPosKey(pos[w]);const a=alderByWard(parseInt(w,10));groups[k].push({w:w,name:a?a.name:('Ward '+w)});});
+  Object.keys(pos).forEach(w=>{const k=recPosKey(pos[w]);const a=alderByWard(parseInt(w,10));const pc=predCast(w,v.date);groups[k].push({w:w,name:pc?SEAT_CHANGES[+w].former:(a?a.name:('Ward '+w)),pc:pc});});
   function col(k){const arr=groups[k].slice().sort((x,y)=>(+x.w)-(+y.w));if(!arr.length)return'';
     return '<div><h5><span class="rec-dot '+k+'"></span>'+RC_LBL[k]+' ('+arr.length+')</h5><ul>'
-      +arr.map(m=>{const me=ward&&String(m.w)===String(ward);return '<li class="'+(me?'me':'')+'">'+relEsc(m.name)+' \u00b7 W'+m.w+(me?' \u2190':'')+'</li>';}).join('')+'</ul></div>';}
+      +arr.map(m=>{const me=ward&&String(m.w)===String(ward);return '<li class="'+(me?'me':'')+'">'+relEsc(m.name)+(m.pc?predMark(m.w):'')+' \u00b7 W'+m.w+(me?' \u2190':'')+'</li>';}).join('')+'</ul></div>';}
   let lead='';
   if(feat)lead='<p class="full"><strong>'+relEsc(feat.full||feat.code)+'</strong>'+(feat.desc?' \u2014 '+relEsc(feat.desc):'')+'</p>';
   const src=v.source_url?'<p class="full">Source: <a href="'+relEscAttr(v.source_url)+'" target="_blank" rel="noopener">official record \u2192</a></p>':'';
-  return '<div class="rec-detail" onclick="event.stopPropagation()">'+lead+'<div class="rec-roll">'+col('yes')+col('no')+col('present')+col('absent')+'</div>'+src+'</div>';
+  const pn=Object.keys(SEAT_CHANGES).filter(w=>predCast(w,v.date)&&pos[w]!=null).map(w=>'<p class="ipg-pred-note">'+predNote(w)+'</p>').join('');
+  return '<div class="rec-detail" onclick="event.stopPropagation()">'+lead+'<div class="rec-roll">'+col('yes')+col('no')+col('present')+col('absent')+'</div>'+pn+src+'</div>';
 }
 function recVoteRows(ward,raw){
   const f=recFeatured();
@@ -2695,7 +2714,7 @@ function recVoteRows(ward,raw){
   return rows.map(v=>{
     const feat=f[v.id],tag=recVoteTag(v,f);
     let posHtml='';
-    if(ward){const p=(v.positions||{})[ward];posHtml='<span class="rec-pos '+recPosKey(p)+'">'+(RC_LBL[p]||'\u2014')+'</span>';}
+    if(ward){const p=(v.positions||{})[ward];posHtml='<span class="rec-pos '+recPosKey(p)+'">'+(RC_LBL[p]||'\u2014')+(predCast(ward,v.date)?predMark(ward):'')+'</span>';}
     const meta='<div class="rec-meta">'+(feat?'<span class="rec-star">\u2605 '+relEsc(feat.code||'Featured')+'</span>':'')
       +'<span>'+fmtDateLong(v.date)+'</span><span>'+relEsc(v.bill||'')+'</span>'
       +(v.type?'<span class="rec-vtype">'+relEsc(recTypeLabel(v.type))+'</span>':'')
@@ -2716,7 +2735,8 @@ function recSummary(raw){
     +'<span class="pill"><span class="rec-dot no"></span>'+c.no+' No</span>'
     +'<span class="pill"><span class="rec-dot present"></span>'+c.present+' Present</span>'
     +'<span class="pill"><span class="rec-dot absent"></span>'+c.absent+' Absent</span>'
-    +'<span>of <b>'+rows.length+'</b> votes</span></div>';
+    +'<span>of <b>'+rows.length+'</b> votes</span></div>'
+    +(function(){const n=rows.filter(v=>predCast(state.ward,v.date)&&(v.positions||{})[state.ward]!=null).length;return n?'<p class="ipg-pred-note">'+predNote(state.ward)+' '+n+' of these '+rows.length+' votes were cast before '+SEAT_CHANGES[state.ward].sinceLabel+'; the counts above include them.</p>':'';})();
 }
 function recTagChips(){
   const tags=recTags();if(!tags.length)return'';
@@ -2759,7 +2779,7 @@ function recTagChips(){
       <h4 class="ipg-meth-sub">Where the positions come from</h4>
       <p>Chicago's City Council does not record a per-member position on every item it passes. Most routine business &mdash; permits, honorifics, omnibus packages &mdash; passes by voice vote, with no individual record of who voted how. A member-by-member roll call exists <strong>only when a vote is divided</strong> (non-unanimous) and a roll call is taken.</p>
       <p>This tool therefore records <strong>every divided roll-call vote of the current (2023&ndash;2027) Council term</strong>. The positions are the factual roll-call record as published by the <strong>Chicago City Clerk</strong> (through the Council's Legistar system) and accessed via <strong>DataMade's Councilmatic</strong>, which mirrors the Clerk's data in the Open Civic Data standard. We refresh from that source on a regular automated schedule, so newly recorded divided votes appear here as the City Clerk's data is updated. Members' tenure, party, and neighborhood details come from public records, including the Chicago City Council roster.</p>
-      <p><strong>Seats that changed hands mid-term.</strong> A few wards changed representatives during the 2023&ndash;2027 term, and a ward's voting record reflects whoever held the seat at the time of each vote &mdash; we do not split it into a separate per-person record. In Ward 27, the record spans Walter Burnett Jr.'s tenure and continues under Walter Burnett III, who was appointed in September 2025; Ward 35 also saw a mid-term change.</p>
+      <p><strong>Seats that changed hands mid-term.</strong> A few wards changed representatives during the 2023&ndash;2027 term, and a ward's voting record reflects whoever held the seat at the time of each vote &mdash; we do not split it into a separate per-person record. In Ward 27, the record spans Walter Burnett Jr.'s tenure and continues under Walter Burnett III, who was appointed on September 25, 2025; in Ward 35 it spans Carlos Ramirez-Rosa's tenure and continues under Anthony Quezada, who was appointed on April 7, 2025. Wherever a ward's vote is shown, a vote cast before the appointment is marked with an asterisk and names the former alder, and every count still includes it.</p>
       <p>Because only divided votes generate a per-member record, this is a <strong>complete record of the contested votes</strong> &mdash; not of all Council activity. We think that's the right scope for an accountability tool: unanimous, uncontested business reveals little about how a member weighs a hard choice, while divided votes are exactly where members had to take a side.</p>
       <h4 class="ipg-meth-sub">How positions are labeled</h4>
       <p>We report the <strong>factual roll-call position</strong> for each member on each vote. We do not reinterpret, translate, or re-code votes &mdash; the label is simply what the Clerk's record shows, normalized into four plain values:</p>
@@ -2887,10 +2907,12 @@ function recordView(){
     h+='</tr></thead><tbody>';
     alders.forEach(a=>{const me=a.ward===state.ward;
       h+='<tr'+(me?' class="me-row"':'')+'><td class="alder-col">Ward '+a.ward+' \u00b7 '+relEsc(a.name)+'</td>';
-      votes.forEach(vm=>{const p=keyVotePos(vm,a.ward);const k=(p==='yes'||p==='no')?p:'na';
-        h+='<td class="mx-'+k+'">'+(k==='yes'?'Yes':k==='no'?'No':'\u2014')+'</td>';});
+      votes.forEach(vm=>{const p=keyVotePos(vm,a.ward);const k=(p==='yes'||p==='no')?p:'na';const pc=predCast(a.ward,keyVoteDate(vm));
+        h+='<td class="mx-'+k+'">'+(k==='yes'?'Yes':k==='no'?'No':'\u2014')+(pc?predMark(a.ward):'')+'</td>';});
       h+='</tr>';});
     h+='</tbody></table></div>';
+    {const pw=Object.keys(SEAT_CHANGES).filter(w=>votes.some(vm=>predCast(w,keyVoteDate(vm))));
+     if(pw.length)h+='<p class="ipg-pred-note">* Cast by the ward\u2019s former alder: '+pw.map(w=>'Ward '+w+', '+SEAT_CHANGES[w].former+', before '+SEAT_CHANGES[w].sinceLabel).join('; ')+'.</p>';}
     h+='<div class="ipg-mx-desc-h">What these votes were</div>';
     votes.forEach(vm=>{const src=vm.source_url?' \u00b7 <a href="'+vm.source_url+'" target="_blank" rel="noopener" style="color:var(--sage)">source \u2197</a>':'';
       h+='<div class="ipg-mx-desc"><strong>'+relEsc(vm.full||vm.code)+'</strong> <span class="mx-th-tally">'+mxTally(vm)+'</span>'+src
@@ -3437,10 +3459,10 @@ function recordView(){
         body+='<g class="ipg-rel-node" data-relward="'+sp.w+'">'
           +'<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+nr.toFixed(1)+'" fill="'+col+'"></circle>'
           +'<image href="'+relEscAttr(photo)+'" x="'+(x-nr+2).toFixed(1)+'" y="'+(y-nr+2).toFixed(1)+'" width="'+(2*(nr-2)).toFixed(1)+'" height="'+(2*(nr-2)).toFixed(1)+'" clip-path="url(#'+cid+')" preserveAspectRatio="xMidYMid slice"></image>'
-          +'<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+nr.toFixed(1)+'" fill="none" stroke="'+col+'" stroke-width="3.5"><title>'+relEscAttr(sp.a.name)+' \u2014 '+REL_POS_LABEL[sp.pos]+' \u00b7 '+fmtMoney(sp.amt)+'</title></circle>';
+          +'<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+nr.toFixed(1)+'" fill="none" stroke="'+col+'" stroke-width="3.5"><title>'+relEscAttr(sp.a.name)+' \u2014 '+REL_POS_LABEL[sp.pos]+(predCast(sp.w,keyVoteDate(vm))?' (cast by former Ald. '+SEAT_CHANGES[+sp.w].former+')':'')+' \u00b7 '+fmtMoney(sp.amt)+'</title></circle>';
       } else {
         body+='<g class="ipg-rel-node" data-relward="'+sp.w+'">'
-          +'<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+nr.toFixed(1)+'" fill="'+col+'" stroke="var(--white)" stroke-width="2"><title>'+relEscAttr(sp.a.name)+' \u2014 '+REL_POS_LABEL[sp.pos]+' \u00b7 '+fmtMoney(sp.amt)+'</title></circle>';
+          +'<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+nr.toFixed(1)+'" fill="'+col+'" stroke="var(--white)" stroke-width="2"><title>'+relEscAttr(sp.a.name)+' \u2014 '+REL_POS_LABEL[sp.pos]+(predCast(sp.w,keyVoteDate(vm))?' (cast by former Ald. '+SEAT_CHANGES[+sp.w].former+')':'')+' \u00b7 '+fmtMoney(sp.amt)+'</title></circle>';
       }
       const lr=p.rr+nr+(tier==='ward'?6:10), lx=cx+lr*p.co, ly=cy+lr*p.si;
       let anc; if(p.co>0.34)anc='start'; else if(p.co<-0.34)anc='end'; else anc='middle';
@@ -3519,7 +3541,7 @@ function recordView(){
       h+='<div class="ipg-section-h" style="margin-top:16px;color:'+REL_POS_FILL[p]+'">'+REL_POS_LABEL[p]+' \u2014 '+fmtMoney(sub)+' to '+g.length+' alder'+(g.length===1?'':'s')+'</div>';
       g.forEach(r=>{ h+='<div class="ipg-cf-row ipg-cf-clickable ipg-rel-recipient" data-ward="'+r.w+'">'
         +'<div><div class="name">Ward '+r.w+' \u2014 '+relEsc(r.a.name)+'</div>'
-        +'<div class="sub" style="margin-top:5px">'+pill(r.pos)+'</div></div>'
+        +'<div class="sub" style="margin-top:5px">'+pill(r.pos)+(predCast(r.w,keyVoteDate(vm))?' <span style="font-size:12px;color:#6a5d4e">* cast by former Ald. '+relEsc(SEAT_CHANGES[+r.w].former)+'</span>':'')+'</div></div>'
         +'<div class="amount">'+fmtMoney(r.amt)+'</div></div>'; });
     });
     h+='<div class="ipg-modal-foot">Press Esc, click outside, or use \u00d7 to close.</div></div></div>';
