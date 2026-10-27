@@ -6,6 +6,14 @@ SRC=sys.argv[1] if len(sys.argv)>1 else 'council-data.json'; OUT=sys.argv[2] if 
 os.makedirs(OUT,exist_ok=True)
 d=json.load(open(SRC))
 
+# --- votes file (F-1b, rulings 164a, 165-1a, P17-1a): what the votes views and the methodology need
+# for a first paint; the embed then loads the monolith unchanged. Taken before anything below pops or
+# slims a key. ---
+VOTES_KEYS=('schema_version','generated_at','alders','votemeta','rollcall','council_committees',
+            'dues_excluded','other_receipts_excluded')
+json.dump({k:d[k] for k in VOTES_KEYS}, open(f'{OUT}/council-votes.json','w'),
+          indent=2, ensure_ascii=True)
+
 # --- contributions shard (the biggest chunk; needed only for drill-down views) ---
 contribs=d.pop('contributions')
 json.dump({'contributions':contribs}, open(f'{OUT}/council-contributions.json','w'),
@@ -28,10 +36,12 @@ def sz(p):
     gz=len(gzip.compress(open(p,'rb').read()))
     return raw,gz
 print(f"{'file':34s}{'raw':>10s}{'gzip (wire)':>14s}")
-for f in ['council-index.json','council-contributions.json','council-by_parent_cycles.json']:
+for f in ['council-votes.json','council-index.json','council-contributions.json','council-by_parent_cycles.json']:
     raw,gz=sz(f'{OUT}/{f}')
     print(f'{f:34s}{raw/1e6:8.1f}MB{gz/1e6:11.2f}MB')
 mono_raw,mono_gz=sz(SRC)
 print(f'{"(monolith for comparison)":34s}{mono_raw/1e6:8.1f}MB{mono_gz/1e6:11.2f}MB')
-print(f'\nFirst-paint payload (index) gzipped: {sz(OUT+"/council-index.json")[1]/1e6:.2f}MB '
+print(f'\nVotes-first payload (council-votes.json, F-1b) gzipped: {sz(OUT+"/council-votes.json")[1]/1e6:.2f}MB; '
+      f'the embed then loads the monolith.')
+print(f'Sharded-mode payload (index) gzipped: {sz(OUT+"/council-index.json")[1]/1e6:.2f}MB '
       f'vs {mono_gz/1e6:.2f}MB monolith — contributions stream after.')

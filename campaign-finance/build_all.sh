@@ -90,7 +90,7 @@ python3 "$INGEST/build_shards.py"     "$DATA" "$SHARDS"
 # ---- 6. VALIDATION GATE — must pass or we abort with nothing committed -------
 say "VALIDATION GATE"
 python3 -c "import json;json.load(open('$DATA'));print('  council-data.json VALID')"
-for s in council-index.json council-contributions.json council-by_parent_cycles.json; do
+for s in council-votes.json council-index.json council-contributions.json council-by_parent_cycles.json; do
   python3 -c "import json;json.load(open('$SHARDS/$s'));print('  $s VALID')"
 done
 if grep -rlnE '^(<<<<<<<|=======|>>>>>>>)' "$DATA" "$SHARDS"/*.json; then

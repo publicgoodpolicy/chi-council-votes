@@ -57,6 +57,15 @@ var T = { n: 0, fail: 0, ok: function (name, cond, note) {
 
 function sha(p) { return crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex'); }
 function money(s) { var m = String(s).replace(/[^0-9.]/g, ''); return m ? Number(m) : null; }
+// F-1b: the page warns, by design, when the votes file or the full file fails; the fixture's boots
+// take those paths on purpose. Only those three warnings are dropped; any other warning still prints.
+function quietF1b(w) {
+  var warn = w.console.warn.bind(w.console);
+  w.console.warn = function (m) {
+    if (/^IPG: (votes file failed|campaign finance data failed|data failed to load)/.test(String(m))) return;
+    return warn.apply(null, arguments);
+  };
+}
 
 /* Boot an embed source string over an in-memory data object and drive to a ward profile.
  * The fetch shim is the whole isolation story: nothing is written, so nothing can leak
@@ -73,6 +82,7 @@ function boot(embedHtml, data, opts) {
             : Promise.resolve({ ok: false, status: 404, json: function () { return Promise.resolve({}); } });
         };
         w.scrollTo = function () {};
+        quietF1b(w);
       }
     });
     setTimeout(function () {
@@ -646,6 +656,138 @@ function withSynthetic(base, opts) {
     !!CREDIT && !!lastP && lastP.tagName === 'P' && lastP.className === 'ipg-meth-credit' && lastP.textContent === CREDIT && methText.split(CREDIT).length === 2 &&
     !!byline && byline.textContent === 'Chicago City Council Accountability Tool \u2014 Institute for the Public Good',
     JSON.stringify(CREDIT) + ' | byline ' + JSON.stringify(byline && byline.textContent));
+
+  // ---- [VOTES/SLICE] F-1b (rulings 164a, 165-1a to 165-4a): votes first, money after -----------
+  // The page fetches the small votes file (shards/council-votes.json) and council-data.json
+  // together, paints from the votes file, and lets the full file replace it whole. Proved here by
+  // equivalence against the same embed with votesUrl set to null (the monolith path): every view
+  // once both files are in; the votes views, and Your Alder outside its money block, while the full
+  // file is held back; the two failure paths. Each boot gets its own parsed copy of the data.
+  var VOTES = path.join(REPO, 'campaign-finance/shards/council-votes.json');
+  var votesRaw = fs.readFileSync(VOTES, 'utf8');
+  var VCFG = /\n  votesUrl: "https:\/\/publicgoodpolicy\.github\.io\/chi-council-votes\/campaign-finance\/shards\/council-votes\.json",\n/;
+  var monoSrc = embedNow.replace(VCFG, '\n  votesUrl: null,\n');
+  var LOADING = '<div class="ipg-cf-empty">Loading campaign finance data…</div>';
+  function bootVF(src, full, votes, mode) {   // mode: 'both' | 'hold' | 'full404' | 'votes404' | 'votesStall' | 'stall404'
+    var release; var gate = new Promise(function (r) { release = r; });
+    return new Promise(function (resolve) {
+      var dom = new JSDOM('<!doctype html><html><body>' + src + '</body></html>', {
+        runScripts: 'dangerously', pretendToBeVisual: true,
+        beforeParse: function (w) {
+          w.fetch = function (u) {
+            u = String(u);
+            if (u.indexOf('council-votes.json') >= 0)
+              return (mode === 'votesStall' || mode === 'stall404') ? new Promise(function () {}) : Promise.resolve(mode === 'votes404' ? { ok: false, status: 404, json: function () { return Promise.resolve({}); } }
+                : { ok: true, json: function () { return Promise.resolve(votes); } });
+            if (u.indexOf('council-data.json') >= 0) {
+              if (mode === 'full404' || mode === 'stall404') return Promise.resolve({ ok: false, status: 404, json: function () { return Promise.resolve({}); } });
+              var res = { ok: true, json: function () { return Promise.resolve(full); } };
+              return mode === 'hold' ? gate.then(function () { return res; }) : Promise.resolve(res);
+            }
+            return Promise.resolve({ ok: false, status: 404, json: function () { return Promise.resolve({}); } });
+          };
+          w.scrollTo = function () {};
+          quietF1b(w);
+        }
+      });
+      var doc = dom.window.document, n = 0;
+      (function poll() {
+        var app = doc.getElementById('ipg-council-app');
+        var ready = (mode === 'stall404' && app.textContent.indexOf('Could not load Council data') >= 0) || doc.querySelector('.ipg-member-name') &&
+          (mode === 'hold' || app.innerHTML.indexOf('Loading campaign finance data') < 0);
+        if (ready || ++n > 600) return resolve({ dom: dom, doc: doc, app: app, release: release });
+        dom.window.setTimeout(poll, 100);
+      })();
+    });
+  }
+  function walkVF(r) {   // every tab; Your Alder x every ward; the Political Spend and Follow the money sub-views; Voting Record x every alder
+    var out = {}, q = function (s) { return r.doc.querySelector(s); }, html = function () { return r.app.innerHTML; };
+    var tab = function (v) { q('.ipg-tab[data-v="' + v + '"]').onclick(); };
+    tab('member');
+    [].slice.call(r.doc.querySelectorAll('#ipg-ward-sel option')).map(function (o) { return o.value; }).forEach(function (w) {
+      var s = q('#ipg-ward-sel'); s.value = w; s.onchange(); out['member:' + w] = html(); });
+    tab('ranking'); out.ranking = html();
+    tab('lookup'); ['donors', 'alder-spend', 'industries', 'alder-mix'].forEach(function (s) { q('.ipg-sub-tab[data-sub="' + s + '"]').onclick(); out['lookup:' + s] = html(); });
+    tab('relationship'); ['donor', 'table'].forEach(function (s) { q('.ipg-rel-tab[data-relview="' + s + '"]').onclick(); out['relationship:' + s] = html(); });
+    tab('record'); out['record:'] = html();
+    [].slice.call(r.doc.querySelectorAll('#ipg-rec-alder option')).map(function (o) { return o.value; }).filter(Boolean).forEach(function (a) {
+      var s = q('#ipg-rec-alder'); s.value = a; s.onchange(); out['record:' + a] = html(); });
+    tab('methodology'); out.methodology = html();
+    return out;
+  }
+  function sameViews(a, b) { var ks = Object.keys(a), bad = ks.filter(function (k) { return a[k] !== b[k]; }); return { n: ks.length, bad: bad, extra: Object.keys(b).filter(function (k) { return !(k in a); }) }; }
+  var vfVotes = JSON.parse(votesRaw), vfFull = JSON.parse(baseRaw);
+  var vfKeys = ['schema_version', 'generated_at', 'alders', 'votemeta', 'rollcall', 'council_committees', 'dues_excluded', 'other_receipts_excluded'];
+  T.ok('[VOTES/SLICE] the votes file is exactly eight keys of council-data.json, each equal; the embed names it once and the monolith path is the same embed with votesUrl null',
+    JSON.stringify(Object.keys(vfVotes).sort()) === JSON.stringify(vfKeys.slice().sort()) &&
+    vfKeys.every(function (k) { return JSON.stringify(vfVotes[k]) === JSON.stringify(vfFull[k]); }) &&
+    (embedNow.match(new RegExp(VCFG.source, 'g')) || []).length === 1 && monoSrc !== embedNow && monoSrc.indexOf('council-votes.json"') < 0,
+    'keys ' + Object.keys(vfVotes).sort().join(',') + ' | votes file ' + votesRaw.length.toLocaleString('en-US') + ' B');
+
+  var vMono = await bootVF(monoSrc, JSON.parse(baseRaw), null, 'both'), wMono = walkVF(vMono);
+  var vBoth = await bootVF(embedNow, JSON.parse(baseRaw), JSON.parse(votesRaw), 'both'), wBoth = walkVF(vBoth);
+  var cmp = sameViews(wMono, wBoth);
+  T.ok('[VOTES/SLICE] with both files in, every view is the same as on the monolith path — ' + cmp.n + ' views',
+    cmp.n > 100 && cmp.bad.length === 0 && cmp.extra.length === 0, cmp.bad.length ? 'differ: ' + cmp.bad.slice(0, 5).join(', ') : '');
+
+  // While the full file is held back: compared against fresh monolith boots in the same state.
+  async function heldVsMono(votesObj) {
+    var res = { tabs: [], wards: 0, wardsOk: 0, money: [] };
+    var h = await bootVF(embedNow, JSON.parse(baseRaw), votesObj, 'hold'), m = await bootVF(monoSrc, JSON.parse(baseRaw), null, 'both');
+    ['ranking', 'record', 'methodology'].forEach(function (v) {
+      var hm = [h, m].map(function (r) { r.doc.querySelector('.ipg-tab[data-v="' + v + '"]').onclick(); return r.app.innerHTML; });
+      if (hm[0] === hm[1]) res.tabs.push(v); });
+    ['lookup', 'relationship'].forEach(function (v) { h.doc.querySelector('.ipg-tab[data-v="' + v + '"]').onclick(); if (h.app.innerHTML.indexOf(LOADING) >= 0) res.money.push(v); });
+    [h, m].forEach(function (r) { r.doc.querySelector('.ipg-tab[data-v="member"]').onclick(); });
+    [].slice.call(m.doc.querySelectorAll('#ipg-ward-sel option')).map(function (o) { return o.value; }).forEach(function (w) {
+      var hm = [h, m].map(function (r) { var s = r.doc.getElementById('ipg-ward-sel'); s.value = w; s.onchange(); return r.app.innerHTML; });
+      res.wards++;
+      var i = hm[0].indexOf(LOADING); if (i < 0) return;
+      var pre = hm[0].slice(0, i), post = hm[0].slice(i + LOADING.length);
+      if (hm[1].indexOf(pre) === 0 && hm[1].slice(-post.length) === post && hm[1].length > pre.length + post.length) res.wardsOk++;
+    });
+    h.release(); return res;
+  }
+  var held = await heldVsMono(JSON.parse(votesRaw));
+  T.ok('[VOTES/SLICE] before the full file lands: Compare by Issue, Voting Record and Methodology are the monolith’s; Your Alder is the monolith’s with only its money block reading “Loading campaign finance data…”, for every ward; Political Spend and Follow the money read the same line',
+    held.tabs.join() === 'ranking,record,methodology' && held.wards > 0 && held.wardsOk === held.wards && held.money.join() === 'lookup,relationship',
+    'tabs ' + held.tabs.join(',') + ' | wards ' + held.wardsOk + '/' + held.wards + ' | loading line on ' + held.money.join(','));
+  var biteVotes = JSON.parse(votesRaw); biteVotes.alders[0].name = biteVotes.alders[0].name + ' X';
+  var heldBite = await heldVsMono(biteVotes);
+  T.ok('[VOTES/SLICE:bite] a votes file with one alder’s name changed fails the before-the-full-file comparison',
+    heldBite.wardsOk < heldBite.wards || heldBite.tabs.join() !== 'ranking,record,methodology', 'wards ' + heldBite.wardsOk + '/' + heldBite.wards + ' | tabs ' + heldBite.tabs.join(','));
+  var biteFull = JSON.parse(baseRaw), bc = biteFull.contributions.find(function (c) { return c.committee_id === TARGET && c.cycle === biteFull.current_cycle; }) || biteFull.contributions[0];
+  bc.amount = Math.round(bc.amount * 100 + 1) / 100;
+  var wBite = walkVF(await bootVF(embedNow, biteFull, JSON.parse(votesRaw), 'both')), cmpBite = sameViews(wMono, wBite);
+  T.ok('[VOTES/SLICE:bite] a full file one cent off on one row fails the every-view comparison', cmpBite.bad.length > 0, cmpBite.bad.length + ' views differ');
+
+  var f404 = await bootVF(embedNow, null, JSON.parse(votesRaw), 'full404'), fMoney = [], fLink = '';
+  ['member', 'lookup', 'relationship'].forEach(function (v) {
+    f404.doc.querySelector('.ipg-tab[data-v="' + v + '"]').onclick();
+    if (f404.app.textContent.indexOf('Could not load campaign finance data (HTTP 404)') >= 0) fMoney.push(v);
+    if (v === 'member') { var a = [].slice.call(f404.app.querySelectorAll('a')).find(function (x) { return /directly/.test(x.textContent); }); fLink = a ? a.getAttribute('href') : ''; }
+  });
+  f404.doc.querySelector('.ipg-tab[data-v="member"]').onclick();
+  var v404 = await bootVF(embedNow, JSON.parse(baseRaw), null, 'votes404'), wV404 = walkVF(v404), cmp404 = sameViews(wMono, wV404);
+  var vStall = await bootVF(embedNow, JSON.parse(baseRaw), null, 'votesStall'), cmpStall = sameViews(wMono, walkVF(vStall));
+  var sf = await bootVF(embedNow, null, null, 'stall404'), sfText = sf.app.textContent;
+  T.ok('[VOTES/SLICE] if the full file fails, the votes stay and every money area says so, its link the data file; if the votes file fails, or never answers, every view is the monolith’s; if it never answers and the full file fails, the load error shows',
+    fMoney.join() === 'member,lookup,relationship' && fLink === 'https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/council-data.json' &&
+    !!f404.doc.querySelector('.ipg-member-name') && cmp404.bad.length === 0 && cmp404.n === cmp.n && cmpStall.bad.length === 0 && cmpStall.n === cmp.n &&
+    sfText.indexOf('Could not load Council data (HTTP 404)') >= 0 && !sf.doc.querySelector('.ipg-member-name'),
+    'full 404: ' + fMoney.join(',') + ' | link ' + fLink + ' | votes 404: ' + cmp404.n + ' views, ' + cmp404.bad.length + ' differ | votes never answer: ' + cmpStall.n + ' views, ' + cmpStall.bad.length + ' differ | votes never answer, full 404: ' + (sfText.indexOf('Could not load Council data (HTTP 404)') >= 0 ? 'load error shown' : 'NO load error'));
+
+  // Someone already typing when the full file lands keeps the address box (text, cursor, status line).
+  var ki = await bootVF(embedNow, JSON.parse(baseRaw), JSON.parse(votesRaw), 'hold');
+  var kAddr = ki.doc.getElementById('ipg-addr'); kAddr.value = '1763 N Milwaukee Ave'; kAddr.focus(); kAddr.setSelectionRange(4, 4);
+  ki.doc.getElementById('ipg-addr-status').textContent = 'Searching…';
+  var kNode = kAddr; ki.release();
+  for (var kw = 0; kw < 600 && ki.app.innerHTML.indexOf('Loading campaign finance data') >= 0; kw++) await wait(ki, 100);
+  var kNow = ki.doc.getElementById('ipg-addr');
+  T.ok('[VOTES/SLICE] when the full file lands, the address box keeps its text, its focus and cursor, and its status line',
+    ki.app.innerHTML.indexOf('Loading campaign finance data') < 0 && !!kNow && kNow !== kNode && kNow.value === '1763 N Milwaukee Ave' &&
+    ki.doc.activeElement === kNow && kNow.selectionStart === 4 && ki.doc.getElementById('ipg-addr-status').textContent === 'Searching…',
+    'value ' + JSON.stringify(kNow && kNow.value) + ' | focused ' + (ki.doc.activeElement === kNow) + ' | cursor ' + (kNow && kNow.selectionStart) + ' | status ' + JSON.stringify(ki.doc.getElementById('ipg-addr-status').textContent));
 
   // ---- assert 4 (E1.4 / F3) — no-writes, measured last -------------------------------
   var postEmbed = sha(EMBED), postData = sha(DATA);

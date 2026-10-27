@@ -481,6 +481,28 @@ def validate_shard_freshness(d, shards_dir):
         if len(d.get(key, {})) != len(idx.get(key, {})):
             errs.append(f"SHARD/STALE: {key} monolith {len(d.get(key, {})):,} != "
                         f"index {len(idx.get(key, {})):,}")
+    # [SHARD/VOTES] F-1b (rulings 164a, 165-1a, 165-4a, P17-1a): /alder-voting-history paints from the
+    # votes file before the monolith lands, so the votes file must be exactly these eight keys of the
+    # monolith, each equal. The key list is this validator's own, not build_shards.py's.
+    votes_keys = ('schema_version', 'generated_at', 'alders', 'votemeta', 'rollcall', 'council_committees',
+                  'dues_excluded', 'other_receipts_excluded')
+    vot_path = os.path.join(shards_dir, 'council-votes.json')
+    if not os.path.exists(vot_path):
+        errs.append(f"SHARD/VOTES: {vot_path} not found — re-run build_shards")
+    else:
+        try:
+            vot = json.load(open(vot_path))
+        except Exception as e:
+            vot = None
+            errs.append(f"SHARD/VOTES: could not parse the votes file: {type(e).__name__}: {e}")
+        if vot is not None:
+            if sorted(vot) != sorted(votes_keys):
+                errs.append(f"SHARD/VOTES: votes file keys {sorted(vot)} != {sorted(votes_keys)}")
+            for key in votes_keys:
+                if key not in d:
+                    errs.append(f"SHARD/VOTES: monolith has no {key!r}")
+                elif vot.get(key) != d[key]:
+                    errs.append(f"SHARD/VOTES: votes file {key!r} differs from the monolith's — re-run build_shards")
     return errs
 
 

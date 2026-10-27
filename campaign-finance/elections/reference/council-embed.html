@@ -52,6 +52,12 @@ const IPG_CONFIG = {
   //   contributionsUrl: '.../shards/council-contributions.json',
   indexUrl: null,
   contributionsUrl: null,
+  // F-1b (rulings 164a, 165, P17-1a, 2026-10-26): votes first, money after. The small votes file
+  // (alders, votemeta, rollcall, council_committees and the methodology's two exclusion figures;
+  // written by build_shards.py) paints Your Alder's bio and votes, Compare by Issue, Voting Record
+  // and Methodology at once; dataUrl then loads unchanged and replaces it whole, so every view reads
+  // exactly the monolith once it lands. Null = monolith only.
+  votesUrl: "https://publicgoodpolicy.github.io/chi-council-votes/campaign-finance/shards/council-votes.json",
 };
 
 // ============================================================
@@ -843,10 +849,65 @@ const FEEDBACK_CONFIG = {
       state.ward = j.alders.slice().sort((a,b)=>a.ward-b.ward)[0].ward;
     }
   }
+  // F-1b: when the full file lands under a page someone is already using, re-render without losing
+  // what they typed or where they were: the address box (its text, its status line and its cursor)
+  // and the Voting Record search keep their state, and focus returns to the control that had it when
+  // that control has an id (the selects and text boxes; a tab or a link loses it).
+  function renderKeepingInputs(){
+    const keep=['ipg-addr','ipg-rec-search'].map(id=>{const el=document.getElementById(id);
+      return el?{id,value:el.value,focus:document.activeElement===el,s:el.selectionStart,e:el.selectionEnd}:null;}).filter(Boolean);
+    const ae=document.activeElement, focusId=(ae&&ae.id&&app.contains(ae))?ae.id:null;
+    const st=document.getElementById('ipg-addr-status'), stText=st?st.textContent:'';
+    renderBody();
+    keep.forEach(k=>{const el=document.getElementById(k.id); if(!el) return; el.value=k.value;
+      if(k.focus){ el.focus(); try{ el.setSelectionRange(k.s,k.e); }catch(_){} }});
+    if(focusId && !keep.some(k=>k.focus)){ const el=document.getElementById(focusId); if(el) el.focus(); }
+    const st2=document.getElementById('ipg-addr-status'); if(st2&&stText) st2.textContent=stText;
+  }
   async function loadData(){
     const cfg=IPG_CONFIG||{};
     if(!cfg.dataUrl && !cfg.indexUrl){state.dataStatus='unconfigured'; state.cfStatus='unconfigured'; return}
     state.dataStatus='loading'; state.cfStatus='loading';
+    if(cfg.votesUrl && cfg.dataUrl && !cfg.indexUrl){
+      // F-1b (164a): votes first, money after. Both downloads start together; the small votes file
+      // paints first, and the full file replaces it whole when it lands. If the votes file fails,
+      // or the full file lands first, the page waits for the full file, exactly as without votesUrl.
+      let full=null;
+      const fullP=fetch(cfg.dataUrl,{cache:'no-cache'})
+        .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+        .then(j=>{ full=j; return j; });
+      fullP.catch(()=>{});   // handled below; this keeps an early failure from reading as unhandled
+      const votesP=fetch(cfg.votesUrl,{cache:'no-cache'})
+        .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); });
+      try{
+        // A votes file that stalls never holds back a full file that has landed. If the full file
+        // fails, the page waits up to 3 s more for the votes file, so the votes can show without the
+        // money; after that it shows the load error, as the monolith does.
+        const v=await Promise.race([votesP, fullP.then(()=>null,
+          ()=>Promise.race([votesP, new Promise(r=>setTimeout(()=>r(null),3000))]))]);
+        if(v && !full){ applyData(v); state.dataStatus='loaded'; state.cfStatus='loading'; state.contribStatus='loading'; }
+      }catch(e){ console.warn('IPG: votes file failed, waiting for the full file:',e); }
+      if(state.dataStatus==='loaded'){
+        fullP.then(j=>{
+            applyData(j);   // the full file replaces the votes file whole
+            state._cfDonorIndex=null; state._cfClusterIndex=null; state._cfIESpenders=null; state._cfOwn=null; state._cfLoans=null; state._relIndex=null;
+            state.cfStatus='loaded'; state.contribStatus='loaded'; renderKeepingInputs();
+          }, e=>{   // a load failure only: an error thrown while rendering is not reported as one
+            state.cfStatus='error'; state.contribStatus='error';
+            state.cfError=e.message||String(e); console.warn('IPG: campaign finance data failed to load:',e); renderKeepingInputs();
+          });
+        return;
+      }
+      try{
+        applyData(await fullP);
+        state.dataStatus='loaded'; state.cfStatus='loaded'; state.contribStatus='loaded';
+      }catch(e){
+        state.dataStatus='error'; state.cfStatus='error';
+        state.dataError=e.message||String(e); state.cfError=state.dataError;
+        console.warn('IPG: data failed to load:',e);
+      }
+      return;
+    }
     try{
       if(cfg.indexUrl){
         // Sharded: load the small index first (fast first paint), then stream contributions.
@@ -1163,7 +1224,7 @@ const FEEDBACK_CONFIG = {
         +'Data is pulled quarterly from the Illinois State Board of Elections.</div>';
     if(state.cfStatus==='error')
       return '<div class="ipg-cf-empty">Could not load campaign finance data ('+state.cfError+'). '
-        +'<a href="'+IPG_CONFIG.campaignFinanceUrl+'" target="_blank" rel="noopener">Try opening the data file directly ↗</a></div>';
+        +'<a href="'+IPG_CONFIG.dataUrl+'" target="_blank" rel="noopener">Try opening the data file directly ↗</a></div>';   // F-1b: was the retired campaignFinanceUrl
     if(state.contribStatus==='loading' && (!state.cf.contributions || !state.cf.contributions.length))
       return '<div class="ipg-cf-empty">Loading contribution details…</div>';
 
@@ -3314,11 +3375,12 @@ function recordView(){
       const st=document.getElementById('ipg-addr-status'),q=addr.value.trim();
       if(!q){st.textContent='';return}
       st.textContent='Searching…';
+      const stNow=()=>document.getElementById('ipg-addr-status')||st;   // F-1b: the page may have re-rendered meanwhile
       try{const w=await lookupWardByAddress(q);
-        if(alderByWard(w)){state.ward=w;state.cfShowAll=false;state.cfShowOther=false;state.cfCycle='current';state.cfAlderInd="All";st.textContent='\u2713 Ward '+w+' found.';renderBody();
+        if(alderByWard(w)){state.ward=w;state.cfShowAll=false;state.cfShowOther=false;state.cfCycle='current';state.cfAlderInd="All";stNow().textContent='\u2713 Ward '+w+' found.';renderBody();
           const ws2=document.getElementById('ipg-ward-sel');if(ws2)ws2.value=w;}
-        else st.textContent='Matched Ward '+w+', not in dataset.';
-      }catch(err){st.textContent=err.message||'Lookup failed — use the dropdown.'}
+        else stNow().textContent='Matched Ward '+w+', not in dataset.';
+      }catch(err){stNow().textContent=err.message||'Lookup failed — use the dropdown.'}
     });
   }
   /* ===================================================================
@@ -3367,6 +3429,8 @@ function recordView(){
   }
 
   function relationshipView(){
+    if(state.cfStatus==='loading') return '<div class="ipg-cf-empty">Loading campaign finance data…</div>';   // F-1b (164a)
+    if(state.cfStatus==='error') return '<div class="ipg-cf-empty">Could not load campaign finance data ('+state.cfError+').</div>';
     if(!state.cf||!state.cf.contributions) return '<div class="ipg-cf-empty">No data loaded.</div>';
     const idx=relBuildIndex();
     const multi=idx.multiByDollar;
