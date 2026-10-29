@@ -107,7 +107,7 @@ def build_matcher(comms):
         if not toks: continue
         alders.append({'ward':int(c['ward']),'key':k,'surname':toks[-1],'first':toks[0],'toks':set(toks)})
     return alders
-_COUNCIL=re.compile(r'alder|city council|\\bward\\b',re.I)
+_COUNCIL=re.compile(r'alder|city council|\bward\b',re.I)
 def match_target(cand,office,alders):
     # Require a council signal, then a surname match CORROBORATED by either the
     # alder's ward number or first name. Surname-alone is rejected -> prevents

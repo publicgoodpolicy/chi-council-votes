@@ -288,5 +288,23 @@ check("(C) written rows: a council row carries neither the field nor a flag (and
       [sorted(set(r)&{'filed_candidate_name','needs_review'}) for r in crow] if isinstance(crow,list) else crow, [[]])
 import shutil; shutil.rmtree(_TD)
 
+# ---- council matcher: the "ward" council signal (CRX-1) ------------------------
+# Council mode needs a council signal before any name match. "ward" is one of the
+# three signals; before CRX-1 the pattern held a literal backslash and never matched,
+# so a row filed only as "Ward 15" was dropped. The surname must still be
+# corroborated by the ward number or the first name.
+_AC={'w15':{'type':'candidate','ward':15,'alder_name':'Raymond A. Lopez'},
+     'w2':{'type':'candidate','ward':2,'alder_name':'Brian Hopkins'},
+     'w33':{'type':'candidate','ward':33,'alder_name':'Rossana Rodriguez Sanchez'},
+     'ie':{'type':'independent_expenditure','ward':None,'alder_name':None}}
+_AL=m.build_matcher(_AC); mt=m.match_target
+check("council: 'Ward 15' alone is a council signal", mt('Raymond A Lopez','Ward 15',_AL), ('15','w15'))
+check("council: 'Chicago Ward 2'", mt('Brian Hopkins','Chicago Ward 2',_AL), ('2','w2'))
+check("council: 'alderperson' signal unchanged", mt('Brian Hopkins','Alderperson',_AL), ('2','w2'))
+check("council: no signal -> no match", mt('Brian Hopkins','State Representative',_AL), (None,None))
+check("council: 'Howard' is not the word 'ward'", mt('Brian Hopkins','Howard County Board',_AL), (None,None))
+check("council: 'Ward 7' surname, wrong ward, no first name -> no match", mt('Jane Lopez','Ward 7',_AL), (None,None))
+check("council: other city's ward, no alder of that name", mt('Tom Suffredin','City of Evanston Ward 6',_AL), (None,None))
+
 print(f"\n{PASS} passed, {FAIL} failed")
 sys.exit(1 if FAIL else 0)

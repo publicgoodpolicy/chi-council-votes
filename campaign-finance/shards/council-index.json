@@ -1,6 +1,6 @@
 {
   "schema_version": "2.3",
-  "generated_at": "2026-10-21T05:19:29Z",
+  "generated_at": "2026-10-29T21:42:18Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "itemization_threshold": 150,
   "cycles": {
@@ -662036,11 +662036,12 @@
       "real-estate": {
         "all": {
           "direct": 14703742.32,
-          "independent": 644507.08
+          "independent": 707179.98
         },
         "by_cycle": {
           "2015": {
-            "direct": 1551846.37
+            "direct": 1551846.37,
+            "independent": 62672.9
           },
           "2019": {
             "direct": 3619902.79,
@@ -662801,11 +662802,12 @@
       "15": {
         "all": {
           "direct": 1869201.0,
-          "ie_support": 73153.0
+          "ie_support": 88081.0
         },
         "by_cycle": {
           "2015": {
-            "direct": 197150.64
+            "direct": 197150.64,
+            "ie_support": 14928.0
           },
           "2019": {
             "direct": 613637.26,
@@ -662904,13 +662906,13 @@
         "all": {
           "direct": 4050945.28,
           "ie_oppose": 23388.78,
-          "ie_support": 6446.0
+          "ie_support": 30833.9
         },
         "by_cycle": {
           "2015": {
             "direct": 718106.25,
             "ie_oppose": 23388.78,
-            "ie_support": 6446.0
+            "ie_support": 30833.9
           },
           "2019": {
             "direct": 1466545.46
@@ -663103,8 +663105,8 @@
       "16": {
         "all": {
           "direct": 1122721.38,
-          "ie_oppose": 75292.82,
-          "ie_support": 157898.93
+          "ie_support": 163263.93,
+          "ie_oppose": 75292.82
         },
         "by_cycle": {
           "2019": {
@@ -663120,8 +663122,8 @@
             "direct": 491231.9
           },
           "2015": {
-            "ie_oppose": 67349.5,
-            "ie_support": 2585.1
+            "ie_support": 7950.1,
+            "ie_oppose": 67349.5
           }
         }
       },
@@ -663279,7 +663281,7 @@
       "24": {
         "all": {
           "direct": 627456.68,
-          "ie_support": 233370.48
+          "ie_support": 251362.48
         },
         "by_cycle": {
           "2023": {
@@ -663288,6 +663290,9 @@
           },
           "2027": {
             "direct": 246478.23
+          },
+          "2015": {
+            "ie_support": 17992.0
           },
           "2019": {
             "ie_support": 18840.0
@@ -663647,7 +663652,46 @@
       "purpose": "Mailing to voters for February election"
     },
     {
-      "id": "ie-25782-571200-12",
+      "id": "ie-25064-570776-12",
+      "spender_committee_id": "ie-committee-25064",
+      "target_ward": "24",
+      "target_committee_id": "ward-24",
+      "stance": "support",
+      "amount": 17992.0,
+      "date": "2015-03-16",
+      "cycle": "2015",
+      "source_filing": "9B",
+      "filed_doc_id": "570776",
+      "purpose": "Direct Mail for Alderman Runoff - Chicago"
+    },
+    {
+      "id": "ie-25064-570776-13",
+      "spender_committee_id": "ie-committee-25064",
+      "target_ward": "15",
+      "target_committee_id": "ward-15",
+      "stance": "support",
+      "amount": 14928.0,
+      "date": "2015-03-16",
+      "cycle": "2015",
+      "source_filing": "9B",
+      "filed_doc_id": "570776",
+      "purpose": "Direct mail for Alderman Runoff - chicago"
+    },
+    {
+      "id": "ie-25064-570776-14",
+      "spender_committee_id": "ie-committee-25064",
+      "target_ward": "16",
+      "target_committee_id": "ward-16",
+      "stance": "support",
+      "amount": 5365.0,
+      "date": "2015-03-26",
+      "cycle": "2015",
+      "source_filing": "9B",
+      "filed_doc_id": "570776",
+      "purpose": "Mailer"
+    },
+    {
+      "id": "ie-25782-571200-15",
       "spender_committee_id": "ie-committee-25782",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -663660,7 +663704,7 @@
       "purpose": "Mailers"
     },
     {
-      "id": "ie-25901-573292-13",
+      "id": "ie-25901-573292-16",
       "spender_committee_id": "ie-committee-25901",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -663673,7 +663717,7 @@
       "purpose": "Digital Media"
     },
     {
-      "id": "ie-18574-573523-14",
+      "id": "ie-18574-573523-17",
       "spender_committee_id": "ie-committee-18574",
       "target_ward": "38",
       "target_committee_id": "ward-38",
@@ -663686,7 +663730,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-18574-573523-15",
+      "id": "ie-18574-573523-18",
       "spender_committee_id": "ie-committee-18574",
       "target_ward": "38",
       "target_committee_id": "ward-38",
@@ -663699,7 +663743,7 @@
       "purpose": "Polling"
     },
     {
-      "id": "ie-18574-573523-16",
+      "id": "ie-18574-573523-19",
       "spender_committee_id": "ie-committee-18574",
       "target_ward": "38",
       "target_committee_id": "ward-38",
@@ -663712,7 +663756,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-573574-17",
+      "id": "ie-26066-573574-20",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -663725,7 +663769,7 @@
       "purpose": "Phone bank"
     },
     {
-      "id": "ie-26066-573574-18",
+      "id": "ie-26066-573574-21",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -663738,7 +663782,7 @@
       "purpose": "DIRECT MAIL"
     },
     {
-      "id": "ie-26066-573574-19",
+      "id": "ie-26066-573574-22",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -663751,7 +663795,7 @@
       "purpose": "Direct Mail"
     },
     {
-      "id": "ie-26066-573574-20",
+      "id": "ie-26066-573574-23",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -663764,7 +663808,7 @@
       "purpose": "Phone bank"
     },
     {
-      "id": "ie-25960-578466-21",
+      "id": "ie-25960-578466-24",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -663777,7 +663821,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-22",
+      "id": "ie-25960-578466-25",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "50",
       "target_committee_id": "ward-50",
@@ -663790,7 +663834,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-23",
+      "id": "ie-25960-578466-26",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "9",
       "target_committee_id": "ward-9",
@@ -663803,7 +663847,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-24",
+      "id": "ie-25960-578466-27",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -663816,7 +663860,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-25",
+      "id": "ie-25960-578466-28",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -663829,7 +663873,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-26",
+      "id": "ie-25960-578466-29",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "32",
       "target_committee_id": "ward-32",
@@ -663842,7 +663886,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-27",
+      "id": "ie-25960-578466-30",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "32",
       "target_committee_id": "ward-32",
@@ -663855,7 +663899,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-28",
+      "id": "ie-25960-578466-31",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "9",
       "target_committee_id": "ward-9",
@@ -663868,7 +663912,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-29",
+      "id": "ie-25960-578466-32",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -663881,7 +663925,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-30",
+      "id": "ie-25960-578466-33",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "8",
       "target_committee_id": "ward-8",
@@ -663894,7 +663938,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-31",
+      "id": "ie-25960-578466-34",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "3",
       "target_committee_id": "ward-3",
@@ -663907,7 +663951,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-32",
+      "id": "ie-25960-578466-35",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "8",
       "target_committee_id": "ward-8",
@@ -663920,7 +663964,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-33",
+      "id": "ie-25960-578466-36",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "19",
       "target_committee_id": "ward-19",
@@ -663933,7 +663977,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-34",
+      "id": "ie-25960-578466-37",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -663946,7 +663990,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-35",
+      "id": "ie-25960-578466-38",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "50",
       "target_committee_id": "ward-50",
@@ -663959,7 +664003,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-36",
+      "id": "ie-25960-578466-39",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "9",
       "target_committee_id": "ward-9",
@@ -663972,7 +664016,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-37",
+      "id": "ie-25960-578466-40",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "27",
       "target_committee_id": "ward-27",
@@ -663985,7 +664029,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-38",
+      "id": "ie-25960-578466-41",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -663998,7 +664042,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-39",
+      "id": "ie-25960-578466-42",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -664011,7 +664055,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-40",
+      "id": "ie-25960-578466-43",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "9",
       "target_committee_id": "ward-9",
@@ -664024,7 +664068,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-41",
+      "id": "ie-25960-578466-44",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -664037,7 +664081,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-42",
+      "id": "ie-25960-578466-45",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -664050,7 +664094,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-43",
+      "id": "ie-25960-578466-46",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "9",
       "target_committee_id": "ward-9",
@@ -664063,7 +664107,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-578466-44",
+      "id": "ie-25960-578466-47",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "50",
       "target_committee_id": "ward-50",
@@ -664076,7 +664120,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-18574-580880-45",
+      "id": "ie-18574-580880-48",
       "spender_committee_id": "ie-committee-18574",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -664089,7 +664133,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-18574-580880-46",
+      "id": "ie-18574-580880-49",
       "spender_committee_id": "ie-committee-18574",
       "target_ward": "2",
       "target_committee_id": "ward-2-brian-hopkins",
@@ -664102,7 +664146,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-18574-580880-47",
+      "id": "ie-18574-580880-50",
       "spender_committee_id": "ie-committee-18574",
       "target_ward": "2",
       "target_committee_id": "ward-2-brian-hopkins",
@@ -664115,7 +664159,20 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-582656-48",
+      "id": "ie-25064-581562-51",
+      "spender_committee_id": "ie-committee-25064",
+      "target_ward": "2",
+      "target_committee_id": "ward-2-brian-hopkins",
+      "stance": "support",
+      "amount": 24387.9,
+      "date": "2015-04-08",
+      "cycle": "2015",
+      "source_filing": "9B",
+      "filed_doc_id": "581562",
+      "purpose": "Direct Mail, Postage, Production"
+    },
+    {
+      "id": "ie-26066-582656-52",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -664128,7 +664185,7 @@
       "purpose": "Direct Mail"
     },
     {
-      "id": "ie-26066-582656-49",
+      "id": "ie-26066-582656-53",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -664141,7 +664198,7 @@
       "purpose": "Phone bank"
     },
     {
-      "id": "ie-26066-582656-50",
+      "id": "ie-26066-582656-54",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -664154,7 +664211,7 @@
       "purpose": "Phone bank"
     },
     {
-      "id": "ie-26066-582656-51",
+      "id": "ie-26066-582656-55",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -664167,7 +664224,7 @@
       "purpose": "Phone bank"
     },
     {
-      "id": "ie-25960-583035-52",
+      "id": "ie-25960-583035-56",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "2",
       "target_committee_id": "ward-2-brian-hopkins",
@@ -664180,7 +664237,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-25960-583035-53",
+      "id": "ie-25960-583035-57",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "2",
       "target_committee_id": "ward-2-brian-hopkins",
@@ -664193,7 +664250,7 @@
       "purpose": "Political Communications"
     },
     {
-      "id": "ie-530-734347-54",
+      "id": "ie-530-734347-58",
       "spender_committee_id": "ie-committee-530",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -664206,65 +664263,13 @@
       "purpose": "Robo calls"
     },
     {
-      "id": "ie-25064-734759-55",
-      "spender_committee_id": "ie-committee-25064",
-      "target_ward": "7",
-      "target_committee_id": "ward-7",
-      "stance": "support",
-      "amount": 10167.0,
-      "date": "2019-02-07",
-      "cycle": "2019",
-      "source_filing": "9B",
-      "filed_doc_id": "734759",
-      "purpose": "Mailer"
-    },
-    {
-      "id": "ie-25064-734759-56",
-      "spender_committee_id": "ie-committee-25064",
-      "target_ward": "15",
-      "target_committee_id": "ward-15",
-      "stance": "support",
-      "amount": 6391.0,
-      "date": "2019-02-07",
-      "cycle": "2019",
-      "source_filing": "9B",
-      "filed_doc_id": "734759",
-      "purpose": "Mailer"
-    },
-    {
-      "id": "ie-25064-734759-57",
-      "spender_committee_id": "ie-committee-25064",
-      "target_ward": "16",
-      "target_committee_id": "ward-16",
-      "stance": "support",
-      "amount": 8131.0,
-      "date": "2019-02-07",
-      "cycle": "2019",
-      "source_filing": "9B",
-      "filed_doc_id": "734759",
-      "purpose": "Mailer"
-    },
-    {
-      "id": "ie-25064-734759-58",
-      "spender_committee_id": "ie-committee-25064",
-      "target_ward": "7",
-      "target_committee_id": "ward-7",
-      "stance": "support",
-      "amount": 10167.0,
-      "date": "2019-02-12",
-      "cycle": "2019",
-      "source_filing": "9B",
-      "filed_doc_id": "734759",
-      "purpose": "Mailer"
-    },
-    {
       "id": "ie-25064-734759-59",
       "spender_committee_id": "ie-committee-25064",
-      "target_ward": "15",
-      "target_committee_id": "ward-15",
+      "target_ward": "7",
+      "target_committee_id": "ward-7",
       "stance": "support",
-      "amount": 6391.0,
-      "date": "2019-02-12",
+      "amount": 10167.0,
+      "date": "2019-02-07",
       "cycle": "2019",
       "source_filing": "9B",
       "filed_doc_id": "734759",
@@ -664273,11 +664278,11 @@
     {
       "id": "ie-25064-734759-60",
       "spender_committee_id": "ie-committee-25064",
-      "target_ward": "16",
-      "target_committee_id": "ward-16",
+      "target_ward": "15",
+      "target_committee_id": "ward-15",
       "stance": "support",
-      "amount": 8131.0,
-      "date": "2019-02-12",
+      "amount": 6391.0,
+      "date": "2019-02-07",
       "cycle": "2019",
       "source_filing": "9B",
       "filed_doc_id": "734759",
@@ -664286,11 +664291,11 @@
     {
       "id": "ie-25064-734759-61",
       "spender_committee_id": "ie-committee-25064",
-      "target_ward": "7",
-      "target_committee_id": "ward-7",
+      "target_ward": "16",
+      "target_committee_id": "ward-16",
       "stance": "support",
-      "amount": 10167.0,
-      "date": "2019-02-19",
+      "amount": 8131.0,
+      "date": "2019-02-07",
       "cycle": "2019",
       "source_filing": "9B",
       "filed_doc_id": "734759",
@@ -664299,11 +664304,11 @@
     {
       "id": "ie-25064-734759-62",
       "spender_committee_id": "ie-committee-25064",
-      "target_ward": "16",
-      "target_committee_id": "ward-16",
+      "target_ward": "7",
+      "target_committee_id": "ward-7",
       "stance": "support",
-      "amount": 8131.0,
-      "date": "2019-02-19",
+      "amount": 10167.0,
+      "date": "2019-02-12",
       "cycle": "2019",
       "source_filing": "9B",
       "filed_doc_id": "734759",
@@ -664316,7 +664321,7 @@
       "target_committee_id": "ward-15",
       "stance": "support",
       "amount": 6391.0,
-      "date": "2019-02-19",
+      "date": "2019-02-12",
       "cycle": "2019",
       "source_filing": "9B",
       "filed_doc_id": "734759",
@@ -664325,11 +664330,11 @@
     {
       "id": "ie-25064-734759-64",
       "spender_committee_id": "ie-committee-25064",
-      "target_ward": "15",
-      "target_committee_id": "ward-15",
+      "target_ward": "16",
+      "target_committee_id": "ward-16",
       "stance": "support",
-      "amount": 8430.0,
-      "date": "2019-03-18",
+      "amount": 8131.0,
+      "date": "2019-02-12",
       "cycle": "2019",
       "source_filing": "9B",
       "filed_doc_id": "734759",
@@ -664338,11 +664343,11 @@
     {
       "id": "ie-25064-734759-65",
       "spender_committee_id": "ie-committee-25064",
-      "target_ward": "39",
-      "target_committee_id": "ward-39",
+      "target_ward": "7",
+      "target_committee_id": "ward-7",
       "stance": "support",
-      "amount": 10867.0,
-      "date": "2019-03-18",
+      "amount": 10167.0,
+      "date": "2019-02-19",
       "cycle": "2019",
       "source_filing": "9B",
       "filed_doc_id": "734759",
@@ -664354,8 +664359,8 @@
       "target_ward": "16",
       "target_committee_id": "ward-16",
       "stance": "support",
-      "amount": 9452.0,
-      "date": "2019-03-18",
+      "amount": 8131.0,
+      "date": "2019-02-19",
       "cycle": "2019",
       "source_filing": "9B",
       "filed_doc_id": "734759",
@@ -664367,34 +664372,34 @@
       "target_ward": "15",
       "target_committee_id": "ward-15",
       "stance": "support",
-      "amount": 5700.0,
-      "date": "2019-03-19",
+      "amount": 6391.0,
+      "date": "2019-02-19",
       "cycle": "2019",
       "source_filing": "9B",
       "filed_doc_id": "734759",
-      "purpose": "Online Ads"
+      "purpose": "Mailer"
     },
     {
       "id": "ie-25064-734759-68",
-      "spender_committee_id": "ie-committee-25064",
-      "target_ward": "16",
-      "target_committee_id": "ward-16",
-      "stance": "support",
-      "amount": 6900.0,
-      "date": "2019-03-19",
-      "cycle": "2019",
-      "source_filing": "9B",
-      "filed_doc_id": "734759",
-      "purpose": "Online Ads"
-    },
-    {
-      "id": "ie-25064-734759-69",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "15",
       "target_committee_id": "ward-15",
       "stance": "support",
       "amount": 8430.0,
-      "date": "2019-03-22",
+      "date": "2019-03-18",
+      "cycle": "2019",
+      "source_filing": "9B",
+      "filed_doc_id": "734759",
+      "purpose": "Mailer"
+    },
+    {
+      "id": "ie-25064-734759-69",
+      "spender_committee_id": "ie-committee-25064",
+      "target_ward": "39",
+      "target_committee_id": "ward-39",
+      "stance": "support",
+      "amount": 10867.0,
+      "date": "2019-03-18",
       "cycle": "2019",
       "source_filing": "9B",
       "filed_doc_id": "734759",
@@ -664407,7 +664412,7 @@
       "target_committee_id": "ward-16",
       "stance": "support",
       "amount": 9452.0,
-      "date": "2019-03-22",
+      "date": "2019-03-18",
       "cycle": "2019",
       "source_filing": "9B",
       "filed_doc_id": "734759",
@@ -664415,6 +664420,58 @@
     },
     {
       "id": "ie-25064-734759-71",
+      "spender_committee_id": "ie-committee-25064",
+      "target_ward": "15",
+      "target_committee_id": "ward-15",
+      "stance": "support",
+      "amount": 5700.0,
+      "date": "2019-03-19",
+      "cycle": "2019",
+      "source_filing": "9B",
+      "filed_doc_id": "734759",
+      "purpose": "Online Ads"
+    },
+    {
+      "id": "ie-25064-734759-72",
+      "spender_committee_id": "ie-committee-25064",
+      "target_ward": "16",
+      "target_committee_id": "ward-16",
+      "stance": "support",
+      "amount": 6900.0,
+      "date": "2019-03-19",
+      "cycle": "2019",
+      "source_filing": "9B",
+      "filed_doc_id": "734759",
+      "purpose": "Online Ads"
+    },
+    {
+      "id": "ie-25064-734759-73",
+      "spender_committee_id": "ie-committee-25064",
+      "target_ward": "15",
+      "target_committee_id": "ward-15",
+      "stance": "support",
+      "amount": 8430.0,
+      "date": "2019-03-22",
+      "cycle": "2019",
+      "source_filing": "9B",
+      "filed_doc_id": "734759",
+      "purpose": "Mailer"
+    },
+    {
+      "id": "ie-25064-734759-74",
+      "spender_committee_id": "ie-committee-25064",
+      "target_ward": "16",
+      "target_committee_id": "ward-16",
+      "stance": "support",
+      "amount": 9452.0,
+      "date": "2019-03-22",
+      "cycle": "2019",
+      "source_filing": "9B",
+      "filed_doc_id": "734759",
+      "purpose": "Mailer"
+    },
+    {
+      "id": "ie-25064-734759-75",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "39",
       "target_committee_id": "ward-39",
@@ -664427,7 +664484,7 @@
       "purpose": "Mailer"
     },
     {
-      "id": "ie-25960-737063-72",
+      "id": "ie-25960-737063-76",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "39",
       "target_committee_id": "ward-39",
@@ -664440,7 +664497,7 @@
       "purpose": "Digital Communications"
     },
     {
-      "id": "ie-25960-737063-73",
+      "id": "ie-25960-737063-77",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "47",
       "target_committee_id": "ward-47",
@@ -664453,7 +664510,7 @@
       "purpose": "Media - television"
     },
     {
-      "id": "ie-25960-737063-74",
+      "id": "ie-25960-737063-78",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -664466,7 +664523,7 @@
       "purpose": "Media - television"
     },
     {
-      "id": "ie-25960-737063-75",
+      "id": "ie-25960-737063-79",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -664479,7 +664536,7 @@
       "purpose": "Digital Communications"
     },
     {
-      "id": "ie-25960-737063-76",
+      "id": "ie-25960-737063-80",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "47",
       "target_committee_id": "ward-47",
@@ -664492,7 +664549,7 @@
       "purpose": "Digital Communications"
     },
     {
-      "id": "ie-25960-737063-77",
+      "id": "ie-25960-737063-81",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -664505,7 +664562,7 @@
       "purpose": "Digital Communications"
     },
     {
-      "id": "ie-25960-737063-78",
+      "id": "ie-25960-737063-82",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -664518,7 +664575,7 @@
       "purpose": "Media - production"
     },
     {
-      "id": "ie-25960-737063-79",
+      "id": "ie-25960-737063-83",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "47",
       "target_committee_id": "ward-47",
@@ -664531,7 +664588,7 @@
       "purpose": "Media - production"
     },
     {
-      "id": "ie-25960-737063-80",
+      "id": "ie-25960-737063-84",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -664544,7 +664601,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25960-737063-81",
+      "id": "ie-25960-737063-85",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -664557,7 +664614,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25960-737063-82",
+      "id": "ie-25960-737063-86",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "47",
       "target_committee_id": "ward-47",
@@ -664570,7 +664627,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25960-737063-83",
+      "id": "ie-25960-737063-87",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "47",
       "target_committee_id": "ward-47",
@@ -664583,7 +664640,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25960-737063-84",
+      "id": "ie-25960-737063-88",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -664596,7 +664653,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25960-737063-85",
+      "id": "ie-25960-737063-89",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -664609,7 +664666,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25960-737063-86",
+      "id": "ie-25960-737063-90",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "15",
       "target_committee_id": "ward-15",
@@ -664622,7 +664679,7 @@
       "purpose": "Digital Communications"
     },
     {
-      "id": "ie-25960-737063-87",
+      "id": "ie-25960-737063-91",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "47",
       "target_committee_id": "ward-47",
@@ -664635,7 +664692,7 @@
       "purpose": "Media - television"
     },
     {
-      "id": "ie-25960-737063-88",
+      "id": "ie-25960-737063-92",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -664648,7 +664705,7 @@
       "purpose": "Media - television"
     },
     {
-      "id": "ie-25960-737063-89",
+      "id": "ie-25960-737063-93",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "39",
       "target_committee_id": "ward-39",
@@ -664661,7 +664718,7 @@
       "purpose": "Digital Communications"
     },
     {
-      "id": "ie-25960-737063-90",
+      "id": "ie-25960-737063-94",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -664674,7 +664731,7 @@
       "purpose": "Digital Communications"
     },
     {
-      "id": "ie-25960-737063-91",
+      "id": "ie-25960-737063-95",
       "spender_committee_id": "ie-committee-25960",
       "target_ward": "47",
       "target_committee_id": "ward-47",
@@ -664687,7 +664744,7 @@
       "purpose": "Digital Communications"
     },
     {
-      "id": "ie-26066-760659-92",
+      "id": "ie-26066-760659-96",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "27",
       "target_committee_id": "ward-27",
@@ -664700,7 +664757,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-93",
+      "id": "ie-26066-760659-97",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -664713,7 +664770,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-94",
+      "id": "ie-26066-760659-98",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -664726,7 +664783,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-95",
+      "id": "ie-26066-760659-99",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -664739,7 +664796,7 @@
       "purpose": "Phone bank"
     },
     {
-      "id": "ie-26066-760659-96",
+      "id": "ie-26066-760659-100",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -664752,7 +664809,7 @@
       "purpose": "Phone bank"
     },
     {
-      "id": "ie-26066-760659-97",
+      "id": "ie-26066-760659-101",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -664765,7 +664822,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-98",
+      "id": "ie-26066-760659-102",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "49",
       "target_committee_id": "ward-49-maria-hadden",
@@ -664778,7 +664835,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-99",
+      "id": "ie-26066-760659-103",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -664791,7 +664848,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-100",
+      "id": "ie-26066-760659-104",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -664804,7 +664861,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-101",
+      "id": "ie-26066-760659-105",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "15",
       "target_committee_id": "ward-15",
@@ -664817,7 +664874,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-102",
+      "id": "ie-26066-760659-106",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "15",
       "target_committee_id": "ward-15",
@@ -664830,7 +664887,7 @@
       "purpose": "Text Communication"
     },
     {
-      "id": "ie-26066-760659-103",
+      "id": "ie-26066-760659-107",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -664843,7 +664900,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-104",
+      "id": "ie-26066-760659-108",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -664856,7 +664913,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-105",
+      "id": "ie-26066-760659-109",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -664869,7 +664926,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-106",
+      "id": "ie-26066-760659-110",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -664882,7 +664939,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-107",
+      "id": "ie-26066-760659-111",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -664895,7 +664952,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-108",
+      "id": "ie-26066-760659-112",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "49",
       "target_committee_id": "ward-49-maria-hadden",
@@ -664908,7 +664965,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-109",
+      "id": "ie-26066-760659-113",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "49",
       "target_committee_id": "ward-49-maria-hadden",
@@ -664921,7 +664978,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-110",
+      "id": "ie-26066-760659-114",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -664934,7 +664991,7 @@
       "purpose": "Phone bank"
     },
     {
-      "id": "ie-26066-760659-111",
+      "id": "ie-26066-760659-115",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -664947,7 +665004,7 @@
       "purpose": "Phone bank"
     },
     {
-      "id": "ie-26066-760659-112",
+      "id": "ie-26066-760659-116",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -664960,7 +665017,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-113",
+      "id": "ie-26066-760659-117",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -664973,7 +665030,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-114",
+      "id": "ie-26066-760659-118",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -664986,7 +665043,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-115",
+      "id": "ie-26066-760659-119",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "15",
       "target_committee_id": "ward-15",
@@ -664999,7 +665056,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-116",
+      "id": "ie-26066-760659-120",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -665012,7 +665069,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-117",
+      "id": "ie-26066-760659-121",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "15",
       "target_committee_id": "ward-15",
@@ -665025,7 +665082,7 @@
       "purpose": "Phone bank"
     },
     {
-      "id": "ie-26066-760659-118",
+      "id": "ie-26066-760659-122",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -665038,7 +665095,7 @@
       "purpose": "Phone bank"
     },
     {
-      "id": "ie-26066-760659-119",
+      "id": "ie-26066-760659-123",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -665051,7 +665108,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-120",
+      "id": "ie-26066-760659-124",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -665064,7 +665121,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-121",
+      "id": "ie-26066-760659-125",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "15",
       "target_committee_id": "ward-15",
@@ -665077,7 +665134,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-760659-122",
+      "id": "ie-26066-760659-126",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -665090,64 +665147,12 @@
       "purpose": "Campaign Work"
     },
     {
-      "id": "ie-26066-760659-123",
-      "spender_committee_id": "ie-committee-26066",
-      "target_ward": "37",
-      "target_committee_id": "ward-37",
-      "stance": "support",
-      "amount": 225.0,
-      "date": "2019-02-24",
-      "cycle": "2019",
-      "source_filing": "9B",
-      "filed_doc_id": "760659",
-      "purpose": "Campaign Work"
-    },
-    {
-      "id": "ie-26066-760659-124",
-      "spender_committee_id": "ie-committee-26066",
-      "target_ward": "37",
-      "target_committee_id": "ward-37",
-      "stance": "support",
-      "amount": 105.0,
-      "date": "2019-02-24",
-      "cycle": "2019",
-      "source_filing": "9B",
-      "filed_doc_id": "760659",
-      "purpose": "Campaign Work"
-    },
-    {
-      "id": "ie-26066-760659-125",
-      "spender_committee_id": "ie-committee-26066",
-      "target_ward": "37",
-      "target_committee_id": "ward-37",
-      "stance": "support",
-      "amount": 135.0,
-      "date": "2019-02-24",
-      "cycle": "2019",
-      "source_filing": "9B",
-      "filed_doc_id": "760659",
-      "purpose": "Campaign Work"
-    },
-    {
-      "id": "ie-26066-760659-126",
-      "spender_committee_id": "ie-committee-26066",
-      "target_ward": "37",
-      "target_committee_id": "ward-37",
-      "stance": "support",
-      "amount": 195.0,
-      "date": "2019-02-24",
-      "cycle": "2019",
-      "source_filing": "9B",
-      "filed_doc_id": "760659",
-      "purpose": "Campaign Work"
-    },
-    {
       "id": "ie-26066-760659-127",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 60.0,
+      "amount": 225.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665173,7 +665178,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 120.0,
+      "amount": 135.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665186,7 +665191,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 120.0,
+      "amount": 195.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665199,7 +665204,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 195.0,
+      "amount": 60.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665251,7 +665256,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 60.0,
+      "amount": 195.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665290,7 +665295,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 105.0,
+      "amount": 120.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665303,7 +665308,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 180.0,
+      "amount": 60.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665316,7 +665321,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 120.0,
+      "amount": 105.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665342,7 +665347,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 75.0,
+      "amount": 105.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665355,7 +665360,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 60.0,
+      "amount": 180.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665368,7 +665373,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 75.0,
+      "amount": 120.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665381,7 +665386,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 90.0,
+      "amount": 120.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665394,7 +665399,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 60.0,
+      "amount": 75.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665407,7 +665412,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 120.0,
+      "amount": 60.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665420,7 +665425,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 120.0,
+      "amount": 75.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665433,7 +665438,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 60.0,
+      "amount": 90.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665446,7 +665451,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 270.0,
+      "amount": 60.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665459,7 +665464,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 270.0,
+      "amount": 120.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665469,15 +665474,15 @@
     {
       "id": "ie-26066-760659-152",
       "spender_committee_id": "ie-committee-26066",
-      "target_ward": "24",
-      "target_committee_id": "ward-24",
+      "target_ward": "37",
+      "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 500.0,
-      "date": "2019-02-20",
+      "amount": 120.0,
+      "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
       "filed_doc_id": "760659",
-      "purpose": "Advertising - newspaper"
+      "purpose": "Campaign Work"
     },
     {
       "id": "ie-26066-760659-153",
@@ -665485,7 +665490,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 180.0,
+      "amount": 60.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665498,7 +665503,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 75.0,
+      "amount": 270.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665511,7 +665516,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 45.0,
+      "amount": 270.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665521,15 +665526,15 @@
     {
       "id": "ie-26066-760659-156",
       "spender_committee_id": "ie-committee-26066",
-      "target_ward": "37",
-      "target_committee_id": "ward-37",
+      "target_ward": "24",
+      "target_committee_id": "ward-24",
       "stance": "support",
-      "amount": 30.0,
-      "date": "2019-03-07",
+      "amount": 500.0,
+      "date": "2019-02-20",
       "cycle": "2019",
       "source_filing": "9B",
       "filed_doc_id": "760659",
-      "purpose": "Campaign Work"
+      "purpose": "Advertising - newspaper"
     },
     {
       "id": "ie-26066-760659-157",
@@ -665537,8 +665542,8 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 105.0,
-      "date": "2019-03-07",
+      "amount": 180.0,
+      "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
       "filed_doc_id": "760659",
@@ -665550,8 +665555,8 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 60.0,
-      "date": "2019-03-07",
+      "amount": 75.0,
+      "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
       "filed_doc_id": "760659",
@@ -665563,8 +665568,8 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 75.0,
-      "date": "2019-03-07",
+      "amount": 45.0,
+      "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
       "filed_doc_id": "760659",
@@ -665589,7 +665594,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 30.0,
+      "amount": 105.0,
       "date": "2019-03-07",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665602,7 +665607,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 75.0,
+      "amount": 60.0,
       "date": "2019-03-07",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665615,7 +665620,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 30.0,
+      "amount": 75.0,
       "date": "2019-03-07",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665628,7 +665633,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 75.0,
+      "amount": 30.0,
       "date": "2019-03-07",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665641,7 +665646,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 105.0,
+      "amount": 30.0,
       "date": "2019-03-07",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665654,7 +665659,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 105.0,
+      "amount": 75.0,
       "date": "2019-03-07",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665667,7 +665672,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 105.0,
+      "amount": 30.0,
       "date": "2019-03-07",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665680,6 +665685,58 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
+      "amount": 75.0,
+      "date": "2019-03-07",
+      "cycle": "2019",
+      "source_filing": "9B",
+      "filed_doc_id": "760659",
+      "purpose": "Campaign Work"
+    },
+    {
+      "id": "ie-26066-760659-169",
+      "spender_committee_id": "ie-committee-26066",
+      "target_ward": "37",
+      "target_committee_id": "ward-37",
+      "stance": "support",
+      "amount": 105.0,
+      "date": "2019-03-07",
+      "cycle": "2019",
+      "source_filing": "9B",
+      "filed_doc_id": "760659",
+      "purpose": "Campaign Work"
+    },
+    {
+      "id": "ie-26066-760659-170",
+      "spender_committee_id": "ie-committee-26066",
+      "target_ward": "37",
+      "target_committee_id": "ward-37",
+      "stance": "support",
+      "amount": 105.0,
+      "date": "2019-03-07",
+      "cycle": "2019",
+      "source_filing": "9B",
+      "filed_doc_id": "760659",
+      "purpose": "Campaign Work"
+    },
+    {
+      "id": "ie-26066-760659-171",
+      "spender_committee_id": "ie-committee-26066",
+      "target_ward": "37",
+      "target_committee_id": "ward-37",
+      "stance": "support",
+      "amount": 105.0,
+      "date": "2019-03-07",
+      "cycle": "2019",
+      "source_filing": "9B",
+      "filed_doc_id": "760659",
+      "purpose": "Campaign Work"
+    },
+    {
+      "id": "ie-26066-760659-172",
+      "spender_committee_id": "ie-committee-26066",
+      "target_ward": "37",
+      "target_committee_id": "ward-37",
+      "stance": "support",
       "amount": 496.0,
       "date": "2019-02-20",
       "cycle": "2019",
@@ -665688,7 +665745,7 @@
       "purpose": "Advertising - newspaper"
     },
     {
-      "id": "ie-26066-760659-169",
+      "id": "ie-26066-760659-173",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -665701,7 +665758,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-26066-760659-170",
+      "id": "ie-26066-760659-174",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -665714,7 +665771,7 @@
       "purpose": "Campaign Work"
     },
     {
-      "id": "ie-26066-760659-171",
+      "id": "ie-26066-760659-175",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -665727,7 +665784,7 @@
       "purpose": "Campaign Work"
     },
     {
-      "id": "ie-26066-760659-172",
+      "id": "ie-26066-760659-176",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -665740,7 +665797,7 @@
       "purpose": "Text Communication"
     },
     {
-      "id": "ie-26066-760659-173",
+      "id": "ie-26066-760659-177",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "15",
       "target_committee_id": "ward-15",
@@ -665753,7 +665810,7 @@
       "purpose": "Text Communication"
     },
     {
-      "id": "ie-26066-760659-174",
+      "id": "ie-26066-760659-178",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -665766,7 +665823,7 @@
       "purpose": "Text Communication"
     },
     {
-      "id": "ie-26066-760659-175",
+      "id": "ie-26066-760659-179",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -665777,58 +665834,6 @@
       "source_filing": "9B",
       "filed_doc_id": "760659",
       "purpose": "Mailing"
-    },
-    {
-      "id": "ie-26066-760659-176",
-      "spender_committee_id": "ie-committee-26066",
-      "target_ward": "37",
-      "target_committee_id": "ward-37",
-      "stance": "support",
-      "amount": 180.0,
-      "date": "2019-02-24",
-      "cycle": "2019",
-      "source_filing": "9B",
-      "filed_doc_id": "760659",
-      "purpose": "Campaign Work"
-    },
-    {
-      "id": "ie-26066-760659-177",
-      "spender_committee_id": "ie-committee-26066",
-      "target_ward": "37",
-      "target_committee_id": "ward-37",
-      "stance": "support",
-      "amount": 120.0,
-      "date": "2019-02-24",
-      "cycle": "2019",
-      "source_filing": "9B",
-      "filed_doc_id": "760659",
-      "purpose": "Campaign Work"
-    },
-    {
-      "id": "ie-26066-760659-178",
-      "spender_committee_id": "ie-committee-26066",
-      "target_ward": "37",
-      "target_committee_id": "ward-37",
-      "stance": "support",
-      "amount": 60.0,
-      "date": "2019-02-24",
-      "cycle": "2019",
-      "source_filing": "9B",
-      "filed_doc_id": "760659",
-      "purpose": "Campaign Work"
-    },
-    {
-      "id": "ie-26066-760659-179",
-      "spender_committee_id": "ie-committee-26066",
-      "target_ward": "37",
-      "target_committee_id": "ward-37",
-      "stance": "support",
-      "amount": 180.0,
-      "date": "2019-02-24",
-      "cycle": "2019",
-      "source_filing": "9B",
-      "filed_doc_id": "760659",
-      "purpose": "Campaign Work"
     },
     {
       "id": "ie-26066-760659-180",
@@ -665849,7 +665854,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 45.0,
+      "amount": 120.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665875,7 +665880,7 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
-      "amount": 60.0,
+      "amount": 180.0,
       "date": "2019-02-24",
       "cycle": "2019",
       "source_filing": "9B",
@@ -665888,6 +665893,58 @@
       "target_ward": "37",
       "target_committee_id": "ward-37",
       "stance": "support",
+      "amount": 180.0,
+      "date": "2019-02-24",
+      "cycle": "2019",
+      "source_filing": "9B",
+      "filed_doc_id": "760659",
+      "purpose": "Campaign Work"
+    },
+    {
+      "id": "ie-26066-760659-185",
+      "spender_committee_id": "ie-committee-26066",
+      "target_ward": "37",
+      "target_committee_id": "ward-37",
+      "stance": "support",
+      "amount": 45.0,
+      "date": "2019-02-24",
+      "cycle": "2019",
+      "source_filing": "9B",
+      "filed_doc_id": "760659",
+      "purpose": "Campaign Work"
+    },
+    {
+      "id": "ie-26066-760659-186",
+      "spender_committee_id": "ie-committee-26066",
+      "target_ward": "37",
+      "target_committee_id": "ward-37",
+      "stance": "support",
+      "amount": 60.0,
+      "date": "2019-02-24",
+      "cycle": "2019",
+      "source_filing": "9B",
+      "filed_doc_id": "760659",
+      "purpose": "Campaign Work"
+    },
+    {
+      "id": "ie-26066-760659-187",
+      "spender_committee_id": "ie-committee-26066",
+      "target_ward": "37",
+      "target_committee_id": "ward-37",
+      "stance": "support",
+      "amount": 60.0,
+      "date": "2019-02-24",
+      "cycle": "2019",
+      "source_filing": "9B",
+      "filed_doc_id": "760659",
+      "purpose": "Campaign Work"
+    },
+    {
+      "id": "ie-26066-760659-188",
+      "spender_committee_id": "ie-committee-26066",
+      "target_ward": "37",
+      "target_committee_id": "ward-37",
+      "stance": "support",
       "amount": 120.0,
       "date": "2019-02-24",
       "cycle": "2019",
@@ -665896,7 +665953,7 @@
       "purpose": "Campaign Work"
     },
     {
-      "id": "ie-25109-881552-185",
+      "id": "ie-25109-881552-189",
       "spender_committee_id": "ie-committee-25109",
       "target_ward": "10",
       "target_committee_id": "ward-10",
@@ -665909,7 +665966,7 @@
       "purpose": "Donation"
     },
     {
-      "id": "ie-25109-881552-186",
+      "id": "ie-25109-881552-190",
       "spender_committee_id": "ie-committee-25109",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -665922,7 +665979,7 @@
       "purpose": "Donation"
     },
     {
-      "id": "ie-25109-881552-187",
+      "id": "ie-25109-881552-191",
       "spender_committee_id": "ie-committee-25109",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -665935,7 +665992,7 @@
       "purpose": "Donation"
     },
     {
-      "id": "ie-25064-882990-188",
+      "id": "ie-25064-882990-192",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -665948,7 +666005,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-189",
+      "id": "ie-25064-882990-193",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -665961,7 +666018,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-190",
+      "id": "ie-25064-882990-194",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "50",
       "target_committee_id": "ward-50",
@@ -665974,7 +666031,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-191",
+      "id": "ie-25064-882990-195",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "23",
       "target_committee_id": "ward-23",
@@ -665987,7 +666044,7 @@
       "purpose": "Digital Ads"
     },
     {
-      "id": "ie-25064-882990-192",
+      "id": "ie-25064-882990-196",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "43",
       "target_committee_id": "ward-43",
@@ -666000,7 +666057,7 @@
       "purpose": "Digital Ads"
     },
     {
-      "id": "ie-25064-882990-193",
+      "id": "ie-25064-882990-197",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -666013,7 +666070,7 @@
       "purpose": "Field Organizing"
     },
     {
-      "id": "ie-25064-882990-194",
+      "id": "ie-25064-882990-198",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "23",
       "target_committee_id": "ward-23",
@@ -666026,7 +666083,7 @@
       "purpose": "Field Organizing"
     },
     {
-      "id": "ie-25064-882990-195",
+      "id": "ie-25064-882990-199",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -666039,7 +666096,7 @@
       "purpose": "Field Organizing"
     },
     {
-      "id": "ie-25064-882990-196",
+      "id": "ie-25064-882990-200",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "43",
       "target_committee_id": "ward-43",
@@ -666052,7 +666109,7 @@
       "purpose": "Field Organizing"
     },
     {
-      "id": "ie-25064-882990-197",
+      "id": "ie-25064-882990-201",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "50",
       "target_committee_id": "ward-50",
@@ -666065,7 +666122,7 @@
       "purpose": "Field Organizing"
     },
     {
-      "id": "ie-25064-882990-198",
+      "id": "ie-25064-882990-202",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "43",
       "target_committee_id": "ward-43",
@@ -666078,7 +666135,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-199",
+      "id": "ie-25064-882990-203",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -666091,7 +666148,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-200",
+      "id": "ie-25064-882990-204",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "8",
       "target_committee_id": "ward-8",
@@ -666104,7 +666161,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-201",
+      "id": "ie-25064-882990-205",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "15",
       "target_committee_id": "ward-15",
@@ -666117,7 +666174,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-202",
+      "id": "ie-25064-882990-206",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "23",
       "target_committee_id": "ward-23",
@@ -666130,7 +666187,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-203",
+      "id": "ie-25064-882990-207",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -666143,7 +666200,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-204",
+      "id": "ie-25064-882990-208",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "43",
       "target_committee_id": "ward-43",
@@ -666156,7 +666213,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-205",
+      "id": "ie-25064-882990-209",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "9",
       "target_committee_id": "ward-9",
@@ -666169,7 +666226,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-206",
+      "id": "ie-25064-882990-210",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "18",
       "target_committee_id": "ward-18",
@@ -666182,7 +666239,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-207",
+      "id": "ie-25064-882990-211",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "19",
       "target_committee_id": "ward-19",
@@ -666195,7 +666252,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-208",
+      "id": "ie-25064-882990-212",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "39",
       "target_committee_id": "ward-39",
@@ -666208,7 +666265,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-209",
+      "id": "ie-25064-882990-213",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -666221,7 +666278,7 @@
       "purpose": "Digital Ads"
     },
     {
-      "id": "ie-25064-882990-210",
+      "id": "ie-25064-882990-214",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "23",
       "target_committee_id": "ward-23",
@@ -666234,7 +666291,7 @@
       "purpose": "Digital Ads"
     },
     {
-      "id": "ie-25064-882990-211",
+      "id": "ie-25064-882990-215",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "43",
       "target_committee_id": "ward-43",
@@ -666247,7 +666304,7 @@
       "purpose": "Digital Ads"
     },
     {
-      "id": "ie-25064-882990-212",
+      "id": "ie-25064-882990-216",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "29",
       "target_committee_id": "ward-29",
@@ -666260,7 +666317,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-213",
+      "id": "ie-25064-882990-217",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -666273,7 +666330,7 @@
       "purpose": "Field Organizing"
     },
     {
-      "id": "ie-25064-882990-214",
+      "id": "ie-25064-882990-218",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -666286,7 +666343,7 @@
       "purpose": "Field Organizing"
     },
     {
-      "id": "ie-25064-882990-215",
+      "id": "ie-25064-882990-219",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "23",
       "target_committee_id": "ward-23",
@@ -666299,7 +666356,7 @@
       "purpose": "Field Organizing"
     },
     {
-      "id": "ie-25064-882990-216",
+      "id": "ie-25064-882990-220",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -666312,7 +666369,7 @@
       "purpose": "Field Organizing"
     },
     {
-      "id": "ie-25064-882990-217",
+      "id": "ie-25064-882990-221",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "43",
       "target_committee_id": "ward-43",
@@ -666325,7 +666382,7 @@
       "purpose": "Field Organizing"
     },
     {
-      "id": "ie-25064-882990-218",
+      "id": "ie-25064-882990-222",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "50",
       "target_committee_id": "ward-50",
@@ -666338,7 +666395,7 @@
       "purpose": "Field Organizing"
     },
     {
-      "id": "ie-25064-882990-219",
+      "id": "ie-25064-882990-223",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "29",
       "target_committee_id": "ward-29",
@@ -666351,7 +666408,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-220",
+      "id": "ie-25064-882990-224",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "50",
       "target_committee_id": "ward-50",
@@ -666364,7 +666421,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-221",
+      "id": "ie-25064-882990-225",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -666377,7 +666434,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-222",
+      "id": "ie-25064-882990-226",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "8",
       "target_committee_id": "ward-8",
@@ -666390,7 +666447,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-223",
+      "id": "ie-25064-882990-227",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -666403,7 +666460,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-224",
+      "id": "ie-25064-882990-228",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -666416,7 +666473,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-225",
+      "id": "ie-25064-882990-229",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "15",
       "target_committee_id": "ward-15",
@@ -666429,7 +666486,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-226",
+      "id": "ie-25064-882990-230",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "23",
       "target_committee_id": "ward-23",
@@ -666442,7 +666499,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-227",
+      "id": "ie-25064-882990-231",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -666455,7 +666512,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-228",
+      "id": "ie-25064-882990-232",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -666468,7 +666525,7 @@
       "purpose": "Digital Media"
     },
     {
-      "id": "ie-25064-882990-229",
+      "id": "ie-25064-882990-233",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "23",
       "target_committee_id": "ward-23",
@@ -666481,7 +666538,7 @@
       "purpose": "Digital Media"
     },
     {
-      "id": "ie-25064-882990-230",
+      "id": "ie-25064-882990-234",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -666494,7 +666551,7 @@
       "purpose": "Digital Media"
     },
     {
-      "id": "ie-25064-882990-231",
+      "id": "ie-25064-882990-235",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -666507,7 +666564,7 @@
       "purpose": "Digital Media"
     },
     {
-      "id": "ie-25064-882990-232",
+      "id": "ie-25064-882990-236",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "43",
       "target_committee_id": "ward-43",
@@ -666520,7 +666577,7 @@
       "purpose": "Digital Media"
     },
     {
-      "id": "ie-25064-882990-233",
+      "id": "ie-25064-882990-237",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "50",
       "target_committee_id": "ward-50",
@@ -666533,7 +666590,7 @@
       "purpose": "Digital Media"
     },
     {
-      "id": "ie-25064-882990-234",
+      "id": "ie-25064-882990-238",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "8",
       "target_committee_id": "ward-8",
@@ -666546,7 +666603,7 @@
       "purpose": "Digital Media"
     },
     {
-      "id": "ie-25064-882990-235",
+      "id": "ie-25064-882990-239",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -666559,7 +666616,7 @@
       "purpose": "Digital Media"
     },
     {
-      "id": "ie-25064-882990-236",
+      "id": "ie-25064-882990-240",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "39",
       "target_committee_id": "ward-39",
@@ -666572,7 +666629,7 @@
       "purpose": "Digital Media"
     },
     {
-      "id": "ie-25064-882990-237",
+      "id": "ie-25064-882990-241",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "15",
       "target_committee_id": "ward-15",
@@ -666585,7 +666642,7 @@
       "purpose": "Digital Media"
     },
     {
-      "id": "ie-25064-882990-238",
+      "id": "ie-25064-882990-242",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -666598,7 +666655,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-239",
+      "id": "ie-25064-882990-243",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -666611,7 +666668,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-240",
+      "id": "ie-25064-882990-244",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "43",
       "target_committee_id": "ward-43",
@@ -666624,7 +666681,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-241",
+      "id": "ie-25064-882990-245",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -666637,7 +666694,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-242",
+      "id": "ie-25064-882990-246",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "10",
       "target_committee_id": "ward-10",
@@ -666650,7 +666707,7 @@
       "purpose": "Programmatic Digital Ads"
     },
     {
-      "id": "ie-25064-882990-243",
+      "id": "ie-25064-882990-247",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -666663,7 +666720,7 @@
       "purpose": "Programmatic Digital Ads"
     },
     {
-      "id": "ie-25064-882990-244",
+      "id": "ie-25064-882990-248",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -666676,7 +666733,7 @@
       "purpose": "Programmatic Digital Ads"
     },
     {
-      "id": "ie-25064-882990-245",
+      "id": "ie-25064-882990-249",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -666689,7 +666746,7 @@
       "purpose": "Programmatic Digital Ads"
     },
     {
-      "id": "ie-25064-882990-246",
+      "id": "ie-25064-882990-250",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "43",
       "target_committee_id": "ward-43",
@@ -666702,7 +666759,7 @@
       "purpose": "Programmatic Digital Ads"
     },
     {
-      "id": "ie-25064-882990-247",
+      "id": "ie-25064-882990-251",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "29",
       "target_committee_id": "ward-29",
@@ -666715,7 +666772,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-248",
+      "id": "ie-25064-882990-252",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -666728,7 +666785,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-249",
+      "id": "ie-25064-882990-253",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -666741,7 +666798,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-250",
+      "id": "ie-25064-882990-254",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "10",
       "target_committee_id": "ward-10",
@@ -666754,7 +666811,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-251",
+      "id": "ie-25064-882990-255",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "10",
       "target_committee_id": "ward-10",
@@ -666767,7 +666824,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-252",
+      "id": "ie-25064-882990-256",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -666780,7 +666837,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-25064-882990-253",
+      "id": "ie-25064-882990-257",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -666793,7 +666850,7 @@
       "purpose": "Digital Ads"
     },
     {
-      "id": "ie-25064-882990-254",
+      "id": "ie-25064-882990-258",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -666806,7 +666863,7 @@
       "purpose": "Digital ads"
     },
     {
-      "id": "ie-25064-882990-255",
+      "id": "ie-25064-882990-259",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "43",
       "target_committee_id": "ward-43",
@@ -666819,7 +666876,7 @@
       "purpose": "Digital ads"
     },
     {
-      "id": "ie-25064-882990-256",
+      "id": "ie-25064-882990-260",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -666832,7 +666889,7 @@
       "purpose": "Digital ads"
     },
     {
-      "id": "ie-25064-882990-257",
+      "id": "ie-25064-882990-261",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "10",
       "target_committee_id": "ward-10",
@@ -666845,7 +666902,7 @@
       "purpose": "Digital ads"
     },
     {
-      "id": "ie-38979-884341-258",
+      "id": "ie-38979-884341-262",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -666858,7 +666915,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-259",
+      "id": "ie-38979-884341-263",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "39",
       "target_committee_id": "ward-39",
@@ -666871,7 +666928,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-260",
+      "id": "ie-38979-884341-264",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -666884,7 +666941,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-261",
+      "id": "ie-38979-884341-265",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "50",
       "target_committee_id": "ward-50",
@@ -666897,7 +666954,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-262",
+      "id": "ie-38979-884341-266",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -666910,7 +666967,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-263",
+      "id": "ie-38979-884341-267",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -666923,7 +666980,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-264",
+      "id": "ie-38979-884341-268",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -666936,7 +666993,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-265",
+      "id": "ie-38979-884341-269",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "8",
       "target_committee_id": "ward-8",
@@ -666949,7 +667006,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-266",
+      "id": "ie-38979-884341-270",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "29",
       "target_committee_id": "ward-29",
@@ -666962,7 +667019,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-267",
+      "id": "ie-38979-884341-271",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "9",
       "target_committee_id": "ward-9",
@@ -666975,7 +667032,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-268",
+      "id": "ie-38979-884341-272",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "39",
       "target_committee_id": "ward-39",
@@ -666988,7 +667045,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-269",
+      "id": "ie-38979-884341-273",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "50",
       "target_committee_id": "ward-50",
@@ -667001,7 +667058,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-270",
+      "id": "ie-38979-884341-274",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -667014,7 +667071,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-271",
+      "id": "ie-38979-884341-275",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "8",
       "target_committee_id": "ward-8",
@@ -667027,7 +667084,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-272",
+      "id": "ie-38979-884341-276",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "9",
       "target_committee_id": "ward-9",
@@ -667040,7 +667097,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-273",
+      "id": "ie-38979-884341-277",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -667053,7 +667110,7 @@
       "purpose": "Media buy"
     },
     {
-      "id": "ie-38979-884341-274",
+      "id": "ie-38979-884341-278",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "9",
       "target_committee_id": "ward-9",
@@ -667066,7 +667123,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-275",
+      "id": "ie-38979-884341-279",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "9",
       "target_committee_id": "ward-9",
@@ -667079,7 +667136,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-276",
+      "id": "ie-38979-884341-280",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "9",
       "target_committee_id": "ward-9",
@@ -667092,7 +667149,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-277",
+      "id": "ie-38979-884341-281",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "18",
       "target_committee_id": "ward-18",
@@ -667105,7 +667162,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-278",
+      "id": "ie-38979-884341-282",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "18",
       "target_committee_id": "ward-18",
@@ -667118,7 +667175,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-279",
+      "id": "ie-38979-884341-283",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "18",
       "target_committee_id": "ward-18",
@@ -667131,7 +667188,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-280",
+      "id": "ie-38979-884341-284",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -667144,7 +667201,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-281",
+      "id": "ie-38979-884341-285",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -667157,7 +667214,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-282",
+      "id": "ie-38979-884341-286",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "39",
       "target_committee_id": "ward-39",
@@ -667170,7 +667227,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-283",
+      "id": "ie-38979-884341-287",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "50",
       "target_committee_id": "ward-50",
@@ -667183,7 +667240,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-284",
+      "id": "ie-38979-884341-288",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "50",
       "target_committee_id": "ward-50",
@@ -667196,7 +667253,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-285",
+      "id": "ie-38979-884341-289",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "29",
       "target_committee_id": "ward-29",
@@ -667209,7 +667266,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-286",
+      "id": "ie-38979-884341-290",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "29",
       "target_committee_id": "ward-29",
@@ -667222,7 +667279,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-287",
+      "id": "ie-38979-884341-291",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "29",
       "target_committee_id": "ward-29",
@@ -667235,7 +667292,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-288",
+      "id": "ie-38979-884341-292",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -667248,7 +667305,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-289",
+      "id": "ie-38979-884341-293",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -667261,7 +667318,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-290",
+      "id": "ie-38979-884341-294",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -667274,7 +667331,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-884341-291",
+      "id": "ie-38979-884341-295",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -667287,7 +667344,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-292",
+      "id": "ie-38979-884341-296",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -667300,7 +667357,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-293",
+      "id": "ie-38979-884341-297",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -667313,7 +667370,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-294",
+      "id": "ie-38979-884341-298",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "29",
       "target_committee_id": "ward-29",
@@ -667326,7 +667383,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-295",
+      "id": "ie-38979-884341-299",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -667339,7 +667396,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-296",
+      "id": "ie-38979-884341-300",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "39",
       "target_committee_id": "ward-39",
@@ -667352,7 +667409,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-297",
+      "id": "ie-38979-884341-301",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "50",
       "target_committee_id": "ward-50",
@@ -667365,7 +667422,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-298",
+      "id": "ie-38979-884341-302",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "28",
       "target_committee_id": "ward-28",
@@ -667378,7 +667435,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-299",
+      "id": "ie-38979-884341-303",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -667391,7 +667448,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-300",
+      "id": "ie-38979-884341-304",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -667404,7 +667461,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-301",
+      "id": "ie-38979-884341-305",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "4",
       "target_committee_id": "ward-4",
@@ -667417,7 +667474,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-302",
+      "id": "ie-38979-884341-306",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -667430,7 +667487,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-303",
+      "id": "ie-38979-884341-307",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "46",
       "target_committee_id": "ward-46",
@@ -667443,7 +667500,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-304",
+      "id": "ie-38979-884341-308",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "29",
       "target_committee_id": "ward-29",
@@ -667456,7 +667513,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-305",
+      "id": "ie-38979-884341-309",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -667469,7 +667526,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-306",
+      "id": "ie-38979-884341-310",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -667482,7 +667539,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-307",
+      "id": "ie-38979-884341-311",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -667495,7 +667552,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-308",
+      "id": "ie-38979-884341-312",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -667508,7 +667565,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-309",
+      "id": "ie-38979-884341-313",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -667521,7 +667578,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-310",
+      "id": "ie-38979-884341-314",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -667534,7 +667591,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-311",
+      "id": "ie-38979-884341-315",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "39",
       "target_committee_id": "ward-39",
@@ -667547,7 +667604,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-312",
+      "id": "ie-38979-884341-316",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "50",
       "target_committee_id": "ward-50",
@@ -667560,7 +667617,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-313",
+      "id": "ie-38979-884341-317",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -667573,7 +667630,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-314",
+      "id": "ie-38979-884341-318",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "9",
       "target_committee_id": "ward-9",
@@ -667586,7 +667643,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-315",
+      "id": "ie-38979-884341-319",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "29",
       "target_committee_id": "ward-29",
@@ -667599,7 +667656,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-316",
+      "id": "ie-38979-884341-320",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "8",
       "target_committee_id": "ward-8",
@@ -667612,7 +667669,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-317",
+      "id": "ie-38979-884341-321",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -667625,7 +667682,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-318",
+      "id": "ie-38979-884341-322",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -667638,7 +667695,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-319",
+      "id": "ie-38979-884341-323",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "10",
       "target_committee_id": "ward-10",
@@ -667651,7 +667708,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38979-884341-320",
+      "id": "ie-38979-884341-324",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "29",
       "target_committee_id": "ward-29",
@@ -667664,7 +667721,7 @@
       "purpose": "Media Buy"
     },
     {
-      "id": "ie-38670-884607-321",
+      "id": "ie-38670-884607-325",
       "spender_committee_id": "ie-committee-38670",
       "target_ward": "49",
       "target_committee_id": "ward-49-maria-hadden",
@@ -667677,7 +667734,7 @@
       "purpose": "Flyer Distribution"
     },
     {
-      "id": "ie-38670-884607-322",
+      "id": "ie-38670-884607-326",
       "spender_committee_id": "ie-committee-38670",
       "target_ward": "49",
       "target_committee_id": "ward-49-maria-hadden",
@@ -667690,7 +667747,7 @@
       "purpose": "Flyer Distribution"
     },
     {
-      "id": "ie-26066-884942-323",
+      "id": "ie-26066-884942-327",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -667703,7 +667760,7 @@
       "purpose": "Digital"
     },
     {
-      "id": "ie-26066-884942-324",
+      "id": "ie-26066-884942-328",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -667716,7 +667773,7 @@
       "purpose": "Digital"
     },
     {
-      "id": "ie-26066-884942-325",
+      "id": "ie-26066-884942-329",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -667729,7 +667786,7 @@
       "purpose": "Digital"
     },
     {
-      "id": "ie-26066-884942-326",
+      "id": "ie-26066-884942-330",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -667742,7 +667799,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-884942-327",
+      "id": "ie-26066-884942-331",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -667755,7 +667812,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-884942-328",
+      "id": "ie-26066-884942-332",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -667768,7 +667825,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-884942-329",
+      "id": "ie-26066-884942-333",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -667781,7 +667838,7 @@
       "purpose": "Texting"
     },
     {
-      "id": "ie-26066-884942-330",
+      "id": "ie-26066-884942-334",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "37",
       "target_committee_id": "ward-37",
@@ -667794,7 +667851,7 @@
       "purpose": "Texting"
     },
     {
-      "id": "ie-26066-884942-331",
+      "id": "ie-26066-884942-335",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "16",
       "target_committee_id": "ward-16",
@@ -667807,7 +667864,7 @@
       "purpose": "Texting"
     },
     {
-      "id": "ie-26066-884942-332",
+      "id": "ie-26066-884942-336",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "4",
       "target_committee_id": "ward-4",
@@ -667820,7 +667877,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-884942-333",
+      "id": "ie-26066-884942-337",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -667833,7 +667890,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-884942-334",
+      "id": "ie-26066-884942-338",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -667846,7 +667903,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-884942-335",
+      "id": "ie-26066-884942-339",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "46",
       "target_committee_id": "ward-46",
@@ -667859,7 +667916,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-884942-336",
+      "id": "ie-26066-884942-340",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "5",
       "target_committee_id": "ward-5",
@@ -667872,7 +667929,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-26066-884942-337",
+      "id": "ie-26066-884942-341",
       "spender_committee_id": "ie-committee-26066",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -667885,7 +667942,7 @@
       "purpose": "Digital"
     },
     {
-      "id": "ie-39122-885214-338",
+      "id": "ie-39122-885214-342",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "4",
       "target_committee_id": "ward-4",
@@ -667898,7 +667955,7 @@
       "purpose": "Field Work"
     },
     {
-      "id": "ie-39122-885214-339",
+      "id": "ie-39122-885214-343",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "5",
       "target_committee_id": "ward-5",
@@ -667911,7 +667968,7 @@
       "purpose": "Field Work"
     },
     {
-      "id": "ie-39122-885214-340",
+      "id": "ie-39122-885214-344",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "6",
       "target_committee_id": "ward-6",
@@ -667924,7 +667981,7 @@
       "purpose": "Field Work"
     },
     {
-      "id": "ie-39122-885214-341",
+      "id": "ie-39122-885214-345",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "21",
       "target_committee_id": "ward-21",
@@ -667937,7 +667994,7 @@
       "purpose": "Field Work"
     },
     {
-      "id": "ie-39122-885214-342",
+      "id": "ie-39122-885214-346",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "1",
       "target_committee_id": "ward-1-daniel-la-spata",
@@ -667950,7 +668007,7 @@
       "purpose": "Digital ads"
     },
     {
-      "id": "ie-39122-885214-343",
+      "id": "ie-39122-885214-347",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "4",
       "target_committee_id": "ward-4",
@@ -667963,7 +668020,7 @@
       "purpose": "Digital ads"
     },
     {
-      "id": "ie-39122-885214-344",
+      "id": "ie-39122-885214-348",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "5",
       "target_committee_id": "ward-5",
@@ -667976,7 +668033,7 @@
       "purpose": "Digital ads"
     },
     {
-      "id": "ie-39122-885214-345",
+      "id": "ie-39122-885214-349",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "6",
       "target_committee_id": "ward-6",
@@ -667989,7 +668046,7 @@
       "purpose": "Digital ads"
     },
     {
-      "id": "ie-39122-885214-346",
+      "id": "ie-39122-885214-350",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -668002,7 +668059,7 @@
       "purpose": "Digital ads"
     },
     {
-      "id": "ie-39122-885214-347",
+      "id": "ie-39122-885214-351",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -668015,7 +668072,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-348",
+      "id": "ie-39122-885214-352",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -668028,7 +668085,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-349",
+      "id": "ie-39122-885214-353",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "1",
       "target_committee_id": "ward-1-daniel-la-spata",
@@ -668041,7 +668098,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-350",
+      "id": "ie-39122-885214-354",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "20",
       "target_committee_id": "ward-20",
@@ -668054,7 +668111,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-351",
+      "id": "ie-39122-885214-355",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "1",
       "target_committee_id": "ward-1-daniel-la-spata",
@@ -668067,7 +668124,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-352",
+      "id": "ie-39122-885214-356",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -668080,7 +668137,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-353",
+      "id": "ie-39122-885214-357",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -668093,7 +668150,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-354",
+      "id": "ie-39122-885214-358",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -668106,7 +668163,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-355",
+      "id": "ie-39122-885214-359",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -668119,7 +668176,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-356",
+      "id": "ie-39122-885214-360",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "5",
       "target_committee_id": "ward-5",
@@ -668132,7 +668189,7 @@
       "purpose": "Field Work"
     },
     {
-      "id": "ie-39122-885214-357",
+      "id": "ie-39122-885214-361",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "6",
       "target_committee_id": "ward-6",
@@ -668145,7 +668202,7 @@
       "purpose": "Field Work"
     },
     {
-      "id": "ie-39122-885214-358",
+      "id": "ie-39122-885214-362",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "4",
       "target_committee_id": "ward-4",
@@ -668158,7 +668215,7 @@
       "purpose": "Field Work"
     },
     {
-      "id": "ie-39122-885214-359",
+      "id": "ie-39122-885214-363",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "21",
       "target_committee_id": "ward-21",
@@ -668171,7 +668228,7 @@
       "purpose": "Field Work"
     },
     {
-      "id": "ie-39122-885214-360",
+      "id": "ie-39122-885214-364",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "1",
       "target_committee_id": "ward-1-daniel-la-spata",
@@ -668184,7 +668241,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-361",
+      "id": "ie-39122-885214-365",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "4",
       "target_committee_id": "ward-4",
@@ -668197,7 +668254,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-362",
+      "id": "ie-39122-885214-366",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "5",
       "target_committee_id": "ward-5",
@@ -668210,7 +668267,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-363",
+      "id": "ie-39122-885214-367",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "6",
       "target_committee_id": "ward-6",
@@ -668223,7 +668280,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-364",
+      "id": "ie-39122-885214-368",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -668236,7 +668293,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-365",
+      "id": "ie-39122-885214-369",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "14",
       "target_committee_id": "ward-14",
@@ -668249,7 +668306,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-366",
+      "id": "ie-39122-885214-370",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "20",
       "target_committee_id": "ward-20",
@@ -668262,7 +668319,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-367",
+      "id": "ie-39122-885214-371",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "21",
       "target_committee_id": "ward-21",
@@ -668275,7 +668332,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-368",
+      "id": "ie-39122-885214-372",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -668288,7 +668345,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-369",
+      "id": "ie-39122-885214-373",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -668301,7 +668358,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-370",
+      "id": "ie-39122-885214-374",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "4",
       "target_committee_id": "ward-4",
@@ -668314,7 +668371,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-371",
+      "id": "ie-39122-885214-375",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "20",
       "target_committee_id": "ward-20",
@@ -668327,7 +668384,7 @@
       "purpose": "Digital ads"
     },
     {
-      "id": "ie-39122-885214-372",
+      "id": "ie-39122-885214-376",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "21",
       "target_committee_id": "ward-21",
@@ -668340,7 +668397,7 @@
       "purpose": "Digital ads"
     },
     {
-      "id": "ie-39122-885214-373",
+      "id": "ie-39122-885214-377",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -668353,7 +668410,7 @@
       "purpose": "Digital ads"
     },
     {
-      "id": "ie-39122-885214-374",
+      "id": "ie-39122-885214-378",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -668366,7 +668423,7 @@
       "purpose": "Digital ads"
     },
     {
-      "id": "ie-39122-885214-375",
+      "id": "ie-39122-885214-379",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "1",
       "target_committee_id": "ward-1-daniel-la-spata",
@@ -668379,7 +668436,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-376",
+      "id": "ie-39122-885214-380",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "4",
       "target_committee_id": "ward-4",
@@ -668392,7 +668449,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-377",
+      "id": "ie-39122-885214-381",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "5",
       "target_committee_id": "ward-5",
@@ -668405,7 +668462,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-378",
+      "id": "ie-39122-885214-382",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "6",
       "target_committee_id": "ward-6",
@@ -668418,7 +668475,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-379",
+      "id": "ie-39122-885214-383",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "12",
       "target_committee_id": "ward-12",
@@ -668431,7 +668488,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-380",
+      "id": "ie-39122-885214-384",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "5",
       "target_committee_id": "ward-5",
@@ -668442,62 +668499,62 @@
       "source_filing": "9B",
       "filed_doc_id": "885214",
       "purpose": "Printing"
-    },
-    {
-      "id": "ie-39122-885214-381",
-      "spender_committee_id": "ie-committee-39122",
-      "target_ward": "4",
-      "target_committee_id": "ward-4",
-      "stance": "support",
-      "amount": 1656.0,
-      "date": "2023-02-22",
-      "cycle": "2023",
-      "source_filing": "9B",
-      "filed_doc_id": "885214",
-      "purpose": "Printing"
-    },
-    {
-      "id": "ie-39122-885214-382",
-      "spender_committee_id": "ie-committee-39122",
-      "target_ward": "6",
-      "target_committee_id": "ward-6",
-      "stance": "support",
-      "amount": 1656.0,
-      "date": "2023-02-22",
-      "cycle": "2023",
-      "source_filing": "9B",
-      "filed_doc_id": "885214",
-      "purpose": "Printing"
-    },
-    {
-      "id": "ie-39122-885214-383",
-      "spender_committee_id": "ie-committee-39122",
-      "target_ward": "4",
-      "target_committee_id": "ward-4",
-      "stance": "support",
-      "amount": 6250.0,
-      "date": "2023-02-17",
-      "cycle": "2023",
-      "source_filing": "9B",
-      "filed_doc_id": "885214",
-      "purpose": "Field Work"
-    },
-    {
-      "id": "ie-39122-885214-384",
-      "spender_committee_id": "ie-committee-39122",
-      "target_ward": "6",
-      "target_committee_id": "ward-6",
-      "stance": "support",
-      "amount": 6250.0,
-      "date": "2023-02-17",
-      "cycle": "2023",
-      "source_filing": "9B",
-      "filed_doc_id": "885214",
-      "purpose": "Field Work"
     },
     {
       "id": "ie-39122-885214-385",
       "spender_committee_id": "ie-committee-39122",
+      "target_ward": "4",
+      "target_committee_id": "ward-4",
+      "stance": "support",
+      "amount": 1656.0,
+      "date": "2023-02-22",
+      "cycle": "2023",
+      "source_filing": "9B",
+      "filed_doc_id": "885214",
+      "purpose": "Printing"
+    },
+    {
+      "id": "ie-39122-885214-386",
+      "spender_committee_id": "ie-committee-39122",
+      "target_ward": "6",
+      "target_committee_id": "ward-6",
+      "stance": "support",
+      "amount": 1656.0,
+      "date": "2023-02-22",
+      "cycle": "2023",
+      "source_filing": "9B",
+      "filed_doc_id": "885214",
+      "purpose": "Printing"
+    },
+    {
+      "id": "ie-39122-885214-387",
+      "spender_committee_id": "ie-committee-39122",
+      "target_ward": "4",
+      "target_committee_id": "ward-4",
+      "stance": "support",
+      "amount": 6250.0,
+      "date": "2023-02-17",
+      "cycle": "2023",
+      "source_filing": "9B",
+      "filed_doc_id": "885214",
+      "purpose": "Field Work"
+    },
+    {
+      "id": "ie-39122-885214-388",
+      "spender_committee_id": "ie-committee-39122",
+      "target_ward": "6",
+      "target_committee_id": "ward-6",
+      "stance": "support",
+      "amount": 6250.0,
+      "date": "2023-02-17",
+      "cycle": "2023",
+      "source_filing": "9B",
+      "filed_doc_id": "885214",
+      "purpose": "Field Work"
+    },
+    {
+      "id": "ie-39122-885214-389",
+      "spender_committee_id": "ie-committee-39122",
       "target_ward": "5",
       "target_committee_id": "ward-5",
       "stance": "support",
@@ -668509,7 +668566,7 @@
       "purpose": "Field Work"
     },
     {
-      "id": "ie-39122-885214-386",
+      "id": "ie-39122-885214-390",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -668522,7 +668579,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-387",
+      "id": "ie-39122-885214-391",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "14",
       "target_committee_id": "ward-14",
@@ -668535,7 +668592,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-388",
+      "id": "ie-39122-885214-392",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -668548,7 +668605,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-389",
+      "id": "ie-39122-885214-393",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "1",
       "target_committee_id": "ward-1-daniel-la-spata",
@@ -668561,7 +668618,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-390",
+      "id": "ie-39122-885214-394",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "4",
       "target_committee_id": "ward-4",
@@ -668574,7 +668631,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-391",
+      "id": "ie-39122-885214-395",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "5",
       "target_committee_id": "ward-5",
@@ -668587,7 +668644,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-392",
+      "id": "ie-39122-885214-396",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "6",
       "target_committee_id": "ward-6",
@@ -668600,7 +668657,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-393",
+      "id": "ie-39122-885214-397",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -668613,7 +668670,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-394",
+      "id": "ie-39122-885214-398",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "14",
       "target_committee_id": "ward-14",
@@ -668626,7 +668683,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-395",
+      "id": "ie-39122-885214-399",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "20",
       "target_committee_id": "ward-20",
@@ -668639,7 +668696,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-396",
+      "id": "ie-39122-885214-400",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "20",
       "target_committee_id": "ward-20",
@@ -668652,7 +668709,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-397",
+      "id": "ie-39122-885214-401",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -668665,7 +668722,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-398",
+      "id": "ie-39122-885214-402",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -668678,7 +668735,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-399",
+      "id": "ie-39122-885214-403",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "40",
       "target_committee_id": "ward-40-andre-vasquez",
@@ -668691,7 +668748,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-400",
+      "id": "ie-39122-885214-404",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "21",
       "target_committee_id": "ward-21",
@@ -668704,7 +668761,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-401",
+      "id": "ie-39122-885214-405",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "21",
       "target_committee_id": "ward-21",
@@ -668717,7 +668774,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-402",
+      "id": "ie-39122-885214-406",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "1",
       "target_committee_id": "ward-1-daniel-la-spata",
@@ -668730,7 +668787,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-403",
+      "id": "ie-39122-885214-407",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "4",
       "target_committee_id": "ward-4",
@@ -668743,7 +668800,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-404",
+      "id": "ie-39122-885214-408",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "5",
       "target_committee_id": "ward-5",
@@ -668756,7 +668813,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-405",
+      "id": "ie-39122-885214-409",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "6",
       "target_committee_id": "ward-6",
@@ -668769,7 +668826,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-406",
+      "id": "ie-39122-885214-410",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "21",
       "target_committee_id": "ward-21",
@@ -668782,7 +668839,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-407",
+      "id": "ie-39122-885214-411",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "1",
       "target_committee_id": "ward-1-daniel-la-spata",
@@ -668795,7 +668852,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-408",
+      "id": "ie-39122-885214-412",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "4",
       "target_committee_id": "ward-4",
@@ -668808,7 +668865,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-409",
+      "id": "ie-39122-885214-413",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "5",
       "target_committee_id": "ward-5",
@@ -668821,7 +668878,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-410",
+      "id": "ie-39122-885214-414",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "6",
       "target_committee_id": "ward-6",
@@ -668834,7 +668891,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-411",
+      "id": "ie-39122-885214-415",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -668847,7 +668904,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-412",
+      "id": "ie-39122-885214-416",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "14",
       "target_committee_id": "ward-14",
@@ -668860,7 +668917,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-413",
+      "id": "ie-39122-885214-417",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "20",
       "target_committee_id": "ward-20",
@@ -668873,7 +668930,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-414",
+      "id": "ie-39122-885214-418",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "21",
       "target_committee_id": "ward-21",
@@ -668886,7 +668943,7 @@
       "purpose": "Printing"
     },
     {
-      "id": "ie-39122-885214-415",
+      "id": "ie-39122-885214-419",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "25",
       "target_committee_id": "ward-25-byron-sigcho-lopez",
@@ -668897,58 +668954,6 @@
       "source_filing": "9B",
       "filed_doc_id": "885214",
       "purpose": "Printing"
-    },
-    {
-      "id": "ie-39122-885214-416",
-      "spender_committee_id": "ie-committee-39122",
-      "target_ward": "11",
-      "target_committee_id": "ward-11",
-      "stance": "support",
-      "amount": 1656.48,
-      "date": "2023-02-23",
-      "cycle": "2023",
-      "source_filing": "9B",
-      "filed_doc_id": "885214",
-      "purpose": "Postage"
-    },
-    {
-      "id": "ie-39122-885214-417",
-      "spender_committee_id": "ie-committee-39122",
-      "target_ward": "20",
-      "target_committee_id": "ward-20",
-      "stance": "support",
-      "amount": 1475.49,
-      "date": "2023-02-23",
-      "cycle": "2023",
-      "source_filing": "9B",
-      "filed_doc_id": "885214",
-      "purpose": "Postage"
-    },
-    {
-      "id": "ie-39122-885214-418",
-      "spender_committee_id": "ie-committee-39122",
-      "target_ward": "5",
-      "target_committee_id": "ward-5",
-      "stance": "support",
-      "amount": 2362.11,
-      "date": "2023-02-23",
-      "cycle": "2023",
-      "source_filing": "9B",
-      "filed_doc_id": "885214",
-      "purpose": "Postage"
-    },
-    {
-      "id": "ie-39122-885214-419",
-      "spender_committee_id": "ie-committee-39122",
-      "target_ward": "6",
-      "target_committee_id": "ward-6",
-      "stance": "support",
-      "amount": 2300.88,
-      "date": "2023-02-23",
-      "cycle": "2023",
-      "source_filing": "9B",
-      "filed_doc_id": "885214",
-      "purpose": "Postage"
     },
     {
       "id": "ie-39122-885214-420",
@@ -668979,6 +668984,58 @@
     {
       "id": "ie-39122-885214-422",
       "spender_committee_id": "ie-committee-39122",
+      "target_ward": "5",
+      "target_committee_id": "ward-5",
+      "stance": "support",
+      "amount": 2362.11,
+      "date": "2023-02-23",
+      "cycle": "2023",
+      "source_filing": "9B",
+      "filed_doc_id": "885214",
+      "purpose": "Postage"
+    },
+    {
+      "id": "ie-39122-885214-423",
+      "spender_committee_id": "ie-committee-39122",
+      "target_ward": "6",
+      "target_committee_id": "ward-6",
+      "stance": "support",
+      "amount": 2300.88,
+      "date": "2023-02-23",
+      "cycle": "2023",
+      "source_filing": "9B",
+      "filed_doc_id": "885214",
+      "purpose": "Postage"
+    },
+    {
+      "id": "ie-39122-885214-424",
+      "spender_committee_id": "ie-committee-39122",
+      "target_ward": "11",
+      "target_committee_id": "ward-11",
+      "stance": "support",
+      "amount": 1656.48,
+      "date": "2023-02-23",
+      "cycle": "2023",
+      "source_filing": "9B",
+      "filed_doc_id": "885214",
+      "purpose": "Postage"
+    },
+    {
+      "id": "ie-39122-885214-425",
+      "spender_committee_id": "ie-committee-39122",
+      "target_ward": "20",
+      "target_committee_id": "ward-20",
+      "stance": "support",
+      "amount": 1475.49,
+      "date": "2023-02-23",
+      "cycle": "2023",
+      "source_filing": "9B",
+      "filed_doc_id": "885214",
+      "purpose": "Postage"
+    },
+    {
+      "id": "ie-39122-885214-426",
+      "spender_committee_id": "ie-committee-39122",
       "target_ward": "21",
       "target_committee_id": "ward-21",
       "stance": "support",
@@ -668990,7 +669047,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-423",
+      "id": "ie-39122-885214-427",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "14",
       "target_committee_id": "ward-14",
@@ -669003,7 +669060,7 @@
       "purpose": "Postage"
     },
     {
-      "id": "ie-39122-885214-424",
+      "id": "ie-39122-885214-428",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "4",
       "target_committee_id": "ward-4",
@@ -669016,7 +669073,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-39122-885214-425",
+      "id": "ie-39122-885214-429",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "5",
       "target_committee_id": "ward-5",
@@ -669029,7 +669086,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-39122-885214-426",
+      "id": "ie-39122-885214-430",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "6",
       "target_committee_id": "ward-6",
@@ -669042,7 +669099,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-39122-885214-427",
+      "id": "ie-39122-885214-431",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -669055,7 +669112,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-39122-885214-428",
+      "id": "ie-39122-885214-432",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "21",
       "target_committee_id": "ward-21",
@@ -669068,7 +669125,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-39122-885214-429",
+      "id": "ie-39122-885214-433",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "10",
       "target_committee_id": "ward-10",
@@ -669081,7 +669138,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-39122-885214-430",
+      "id": "ie-39122-885214-434",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "12",
       "target_committee_id": "ward-12",
@@ -669094,7 +669151,7 @@
       "purpose": "Digital ads"
     },
     {
-      "id": "ie-25064-890540-431",
+      "id": "ie-25064-890540-435",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "10",
       "target_committee_id": "ward-10",
@@ -669107,7 +669164,7 @@
       "purpose": "Field Work"
     },
     {
-      "id": "ie-25064-890540-432",
+      "id": "ie-25064-890540-436",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -669120,7 +669177,7 @@
       "purpose": "Field Work"
     },
     {
-      "id": "ie-25064-890540-433",
+      "id": "ie-25064-890540-437",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -669133,7 +669190,7 @@
       "purpose": "Field Work"
     },
     {
-      "id": "ie-25064-890540-434",
+      "id": "ie-25064-890540-438",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "43",
       "target_committee_id": "ward-43",
@@ -669146,7 +669203,7 @@
       "purpose": "Field Work"
     },
     {
-      "id": "ie-25064-890540-435",
+      "id": "ie-25064-890540-439",
       "spender_committee_id": "ie-committee-25064",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -669159,7 +669216,7 @@
       "purpose": "Field Work"
     },
     {
-      "id": "ie-38979-892073-436",
+      "id": "ie-38979-892073-440",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "36",
       "target_committee_id": "ward-36",
@@ -669172,7 +669229,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-892073-437",
+      "id": "ie-38979-892073-441",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "24",
       "target_committee_id": "ward-24",
@@ -669185,7 +669242,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-892073-438",
+      "id": "ie-38979-892073-442",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "4",
       "target_committee_id": "ward-4",
@@ -669198,7 +669255,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-38979-892073-439",
+      "id": "ie-38979-892073-443",
       "spender_committee_id": "ie-committee-38979",
       "target_ward": "11",
       "target_committee_id": "ward-11",
@@ -669211,7 +669268,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-39122-892356-440",
+      "id": "ie-39122-892356-444",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "4",
       "target_committee_id": "ward-4",
@@ -669224,7 +669281,7 @@
       "purpose": "Mailing"
     },
     {
-      "id": "ie-39122-892356-441",
+      "id": "ie-39122-892356-445",
       "spender_committee_id": "ie-committee-39122",
       "target_ward": "10",
       "target_committee_id": "ward-10",
