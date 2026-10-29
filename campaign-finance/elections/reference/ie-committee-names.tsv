@@ -1,9 +1,11 @@
-# IE committee SBE id -> name, 24 rows: 12 from council-data.json; 4 added since (530, 38670, 41012, 41327); 3 (539, 36936, 39901)
+# IE committee SBE id -> name, 25 rows: 12 from council-data.json; 4 added since (530, 38670, 41012, 41327); 3 (539, 36936, 39901)
 # pulled from Illinois Sunshine (illinoissunshine.org/committees/<id>/) since they are
 # school-board-only spenders absent from the council artifact; 5 (35268, 36220, 38631, 38861, 39315)
 # added at MAYOR-1 (ruled 2026-10-13), each the Name column of the sealed vintage bulk-2026-09-13's
 # Committees export, as spenders on the mayor race absent from both artifacts. Feed to
 # enrich_committee_names.py (header ID<TAB>Name) so election IE names are reproducible.
+# 1 (37052) added at IEA-1 (ruled 2026-10-28, IEA-3-2a): the Name column of the sealed vintage bulk-2026-10-20's
+# Committees export, as a spender on a council race absent from the lists above.
 ID	Name
 539	Illinois Farm Bureau ACTIVATOR
 18574	SEIU Illinois Council PAC
@@ -29,3 +31,4 @@ ID	Name
 38631	Noonan for 19
 38861	The 77 Committee
 39315	Priorities Chicago PAC
+37052	39th Ward Neighbors United

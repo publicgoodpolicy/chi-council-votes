@@ -111,13 +111,20 @@ governing rule below). Export `$REPO`; paths are relative to the repo root.
                                                             #   cannot be trusted stops the run (PS-154).
                                                             #   A mayoral candidacy is matched only by a row
                                                             #   whose filed Office names the mayor (PS-157).
+                                                            #   It tries the ruled alias list
+                                                            #   reference/ie-target-aliases.tsv before every
+                                                            #   other rung, and an in-scope row that still
+                                                            #   matches no one must be in
+                                                            #   reference/ie-unmatched-dispositions.tsv: else
+                                                            #   it writes ie-unmatched-report.json and stops
+                                                            #   before writing anything (IEA-1 to IEA-3).
 5b. enrich_committee_names.py --council campaign-finance/election-data.json \
         --committees campaign-finance/elections/reference/ie-committee-names.tsv --out campaign-finance/election-data.json
                                                             # resolve IE spender ids -> real names
                                                             #   (ingest_ie only knows the id). Same step
                                                             #   council runs. The curated map's header states
                                                             #   how many names it holds and where each came
-                                                            #   from (24 at MAYOR-1). NEVER pass the SBE
+                                                            #   from (25 at IEA-1). NEVER pass the SBE
                                                             #   Committees bulk here (SBE-RERUN-1's defect).
 6.  sync_overrides.py    --data-file campaign-finance/election-data.json \
         --sheet-id <ID> --creds-file <path>                  # shared classification + clusters

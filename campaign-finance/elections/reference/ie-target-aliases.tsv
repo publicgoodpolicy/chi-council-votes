@@ -1,0 +1,10 @@
+# IE target aliases (IEA-1-1a): (spender SBE id, candidate name as filed, through norm()) -> candidacy.
+# A pair enters only by Ishan's ruling, named in the ruling column. Read by ingest_ie (election run) before its own rungs.
+spender_sbe_id	filed_name	candidate_id	ruled	ruling	seen_as
+26066	ellen sherrat	sherratt-sb-d07	2026-10-28	IEA-1-2a	Ellen Sherrat
+26066	erika diaz	cand-diaz-chavez-sb-d14	2026-10-28	IEA-1-2a	Erika Diaz
+26066	pete gonzales	gonzales-sb-d05	2026-10-28	IEA-1-2a	Pete Gonzales
+26066	theresa boyle	boyle-sb-d18	2026-10-28	IEA-1-2a	Theresa Boyle
+37052	rossana rodr guez s nchez	inc-ward-33	2026-10-28	IEA-3-2a	Rossana Rodríguez Sánchez
+37052	rossana rodriguez	inc-ward-33	2026-10-28	IEA-3-2a	Rossana Rodriguez
+41012	pete gonzales	gonzales-sb-d05	2026-10-28	IEA-1-2a	Pete Gonzales

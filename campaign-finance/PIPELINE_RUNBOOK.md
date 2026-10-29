@@ -137,6 +137,7 @@ The order in the chain below is load-bearing. These are the ways it has actually
 | a Donor Merges row is added | the mechanism is **deprecated (PS-97)** and destructive | the sync **stops** on any row |
 | a legacy vote code reappears | vocabularies fork silently, as they did before | **VOTES-5** |
 | shards published stale | readers get an older dataset than the monolith | **`--shards`**, wired into the gate |
+| outside spending filed under a name the matcher cannot read (a nickname, a misspelling, part of a hyphenated surname) | before IEA-1 the row was counted and dropped, unseen: $459,192 of school-board spending at the 2026-10-20 pull | the elections run of **`ingest_ie`** writes `elections/ie-unmatched-report.json` and **stops before writing** while any in-scope row has no ruled alias or disposition (IEA-2); **`[IE/UNMATCHED]`** in the gate reads the committed report against the current lists |
 
 **A re-ingest does NOT strip the IE layer.** `ingest.py` never touches
 `independent_expenditures`, and its contribution replacement is per-committee, so IE rows are
@@ -392,6 +393,10 @@ ingest_ie.py              --council … --expenditures <seal>/expenditures_*.txt
                           # independent_expenditures; a direct re-ingest does NOT strip it (see above)
                           # (the elections run of this same script also reads
                           # campaign-finance/elections/reference/ie-target-confirmations.tsv; the council run does not: PS-154)
+                          # (the elections run also reads the ruled alias list ie-target-aliases.tsv, tried before
+                          # every other rung, and ie-unmatched-dispositions.tsv; it writes elections/ie-unmatched-report.json
+                          # and stops before writing anything while an in-scope unmatched row has no ruled answer: IEA-1 to IEA-3.
+                          # Add an alias or a disposition only by ruling, then re-run; commit the report the run writes)
 enrich_committee_names.py --council … --committees campaign-finance/elections/reference/ie-committee-names.tsv
                           # the curated map of record (ENRICH-1); NEVER the SBE Committees bulk — that substitution is SBE-RERUN-1's live defect
 a7_precheck.py            --sheet-id <sheet id> --creds-file <creds> --ids-file campaign-finance/sheets-sync/a7_ids_harris-1.txt --ids-sha256 <fixture sha256 at HEAD> --out <log>

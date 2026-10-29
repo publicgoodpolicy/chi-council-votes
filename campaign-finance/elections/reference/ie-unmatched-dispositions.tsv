@@ -1,0 +1,24 @@
+# Ruled dispositions for in-scope outside spending that matches no candidacy (IEA-2, IEA-3).
+# not_ours: another jurisdiction's race or a candidate's own committee. joint: a row naming several candidates, never split.
+spender_sbe_id	filed_name	filed_office	disposition	ruled	ruling
+25064	clare kelly	city of evanston ward 1	not_ours	2026-10-28	IEA-3-4a
+25064	parielle davis	city of evanston ward 7	not_ours	2026-10-28	IEA-3-4a
+25064	tom suffredin	city of evanston ward 6	not_ours	2026-10-28	IEA-3-4a
+26066	thaddeus jones	mayor	not_ours	2026-10-28	IEA-3-4a
+34024	anna hurlbut morgen marlene flahaven roger glass and monica perez	river grove school board district 85 5	not_ours	2026-10-28	IEA-3-4a
+34492	john laesch	mayor	not_ours	2026-10-28	IEA-3-4a
+34492	ketih larson	alderman at large	not_ours	2026-10-28	IEA-3-4a
+35146	jb pritzker	jp il boe	not_ours	2026-10-28	IEA-3-4a
+35146	nathaniel booker	mayor	not_ours	2026-10-28	IEA-3-4a
+36336	tracy welch	mayor	not_ours	2026-10-28	IEA-3-4a
+39573	greg fletcher	alderman	not_ours	2026-10-28	IEA-3-4a
+40109	jessica biggs kate doyle carlos rivas karin norington reaves michelle n pierre	chicago school board	joint	2026-10-28	IEA-3-3a
+40109	karin norington reaves michelle n pierre kate doyle carlos rivas	school board	joint	2026-10-28	IEA-3-3a
+40109	karin norington reaves michelle pierre carlos rivas	chicago school board	joint	2026-10-28	IEA-3-3a
+40109	michelle n pierre kate doyle	chicago school board	joint	2026-10-28	IEA-3-3a
+40227	wresinski krista	city council district 2	not_ours	2026-10-28	IEA-3-4a
+40362	maloney cartwright rapisand cline loise rankin kuempel jaime foersterling heneghan hartwig	mayor alderpersons school districts 64 and 207 boards	not_ours	2026-10-28	IEA-3-4a
+40511	brian johnson	brian johnson for mayor	not_ours	2026-10-28	IEA-3-4a
+497	andrew catton	hinsdale school district 86 board of education	not_ours	2026-10-28	IEA-3-4a
+497	tom chavez	elmhurst school district 205 board of education	not_ours	2026-10-28	IEA-3-4a
+9174	bourbonnais citizens party	mayor and trustees	not_ours	2026-10-28	IEA-3-4a

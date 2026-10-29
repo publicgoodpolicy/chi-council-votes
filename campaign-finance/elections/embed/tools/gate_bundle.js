@@ -332,7 +332,7 @@ var FIXTURES = {
     // P1-E (PS-140) re-pin: INCS's 42 of the 87 rows recovered on 2024-only candidacies join its
     // 2024 figures (support +$1,033,846.57, oppose +$153,107.00), measured on the planner's simulation of the
     // 2026-09-13 vintage under PS-140 routing; still union == 2024, its 2026 leg 0 by absence.
-    parity: { support: 2854877.35, oppose: 1093652 },   // re-pinned on the 2026-10-20 pull
+    parity: { support: 3237734.35, oppose: 1093652 },   // re-pinned on the 2026-10-20 pull; support re-pinned at IEA-1 (+382,857: INCS's four aliased groups)
     // self-funding negative case (relational is_self, 8f148b2): a funder who self-funds
     // their OWN race must NOT be flagged self in another candidate's drill.
     // ownRace anchor made specific (HALT-Q2R): after Q2, the bare 'Leon' substring also
@@ -1622,6 +1622,39 @@ async function assertPersonSurface(T, ctx, fx) {
       { encoding: 'utf8' });
     var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
     T.ok('[IE/DIST] ingest_ie district-collision, date-routing and confirmation-file cases green — ' + tail, res.status === 0);
+  })();
+
+  // [IE/UNMATCHED] (IEA-1, IEA-2, IEA-3): the alias rung and the unmatched-spending gate. Three
+  // parts: the biting cases (constructed rows and lists; they fire the gate, the alias rung and
+  // each scope rule); the two tracked lists load against the candidacies in election-data.json
+  // (an alias to a candidacy that no longer exists is a stop, not a silent no-op); and the
+  // tracked report the last election run wrote shows no undisposed in-scope group.
+  (function () {
+    var ing = path.join(__dirname, '..', '..', '..', 'ingestion');
+    var res = require('child_process').spawnSync('python3', [path.join(ing, 'test_ie_unmatched.py')], { encoding: 'utf8' });
+    var tail = ((res.stdout || '') + (res.stderr || '')).trim().split('\n').pop();
+    T.ok('[IE/UNMATCHED] alias-rung and unmatched-gate cases green — ' + tail, res.status === 0);
+    var py = 'import sys,json; sys.path.insert(0,sys.argv[1]); import ie_unmatched as U; ' +
+      'd=json.load(open(sys.argv[2])); a=U.load_aliases({c["id"] for c in d["candidates"]}); b=U.load_dispositions(); ' +
+      'print(len(a),len(b))';
+    var ld = require('child_process').spawnSync('python3', ['-c', py, ing,
+      path.join(__dirname, '..', '..', '..', 'election-data.json')], { encoding: 'utf8' });
+    T.ok('[IE/UNMATCHED] the tracked alias and disposition lists load against election-data.json (' +
+      ((ld.stdout || '').trim() || (ld.stderr || '').trim().split('\n').pop()) + ')', ld.status === 0);
+    // The report is the last election run's; it is read against the CURRENT lists, so a report
+    // left behind by an older list (a disposition since struck or changed) is not a green.
+    var rp = path.join(__dirname, '..', '..', 'ie-unmatched-report.json');
+    var py2 = 'import sys,json; sys.path.insert(0,sys.argv[1]); import ie_unmatched as U; ' +
+      'r=json.load(open(sys.argv[2])); b=U.load_dispositions(); g=r["groups"]; ' +
+      'bad=[x["key"] for x in g if not x["disposition"] or b.get(tuple(x["key"]))!=x["disposition"]]; ' +
+      'used={tuple(x["key"]) for x in g}; unused=[k for k in b if k not in used]; ' +
+      'print(r["undisposed"],len(g),len(bad),len(unused)); sys.exit(0 if (r["undisposed"]==0 and not bad and not unused) else 1)';
+    var rr = require('child_process').spawnSync('python3', ['-c', py2, ing, rp], { encoding: 'utf8' });
+    var f4 = (rr.stdout || '').trim().split(' ');
+    T.ok('[IE/UNMATCHED] the tracked report shows no undisposed in-scope outside spending, and every group\'s ' +
+      'disposition is the current list\'s, none unused (' + (rr.status === 0 || f4.length === 4
+        ? f4[0] + ' undisposed, ' + f4[1] + ' groups, ' + f4[2] + ' out of step, ' + f4[3] + ' unused'
+        : 'report missing or unreadable: ' + (rr.stderr || '').trim().split('\n').pop()) + ')', rr.status === 0);
   })();
 
   // [VOTES/SELF] the votes-family self-test (SBVOTE-1/A.4), third invoker of the same

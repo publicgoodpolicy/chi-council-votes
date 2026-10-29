@@ -164,6 +164,7 @@ export REPO=~/chi-council-votes
 python3 campaign-finance/ingestion/ingest.py --data-file campaign-finance/election-data.json --raw-dir raw/receipts-elections --dry-run
 python3 campaign-finance/ingestion/ingest.py --data-file campaign-finance/election-data.json --raw-dir raw/receipts-elections
 python3 campaign-finance/ingestion/ingest_ie.py --council campaign-finance/election-data.json --expenditures <SBE Expenditures file> --receipts <SBE Receipts file> --out campaign-finance/election-data.json --dry-run
+# (since IEA-2 the dry run also stops, listing the groups, while an in-scope unmatched row has no ruled answer; it writes no report)
 python3 campaign-finance/ingestion/ingest_ie.py --council campaign-finance/election-data.json --expenditures <SBE Expenditures file> --receipts <SBE Receipts file> --out campaign-finance/election-data.json
 python3 campaign-finance/ingestion/build_rollups.py campaign-finance/election-data.json
 python3 campaign-finance/sheets-sync/sync_overrides.py --data-file campaign-finance/election-data.json --sheet-id <ID> --creds-file <path>

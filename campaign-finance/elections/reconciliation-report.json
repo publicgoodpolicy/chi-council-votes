@@ -9,7 +9,7 @@
     "scope": "elections candidate committees (v2): school_board, city_council and mayor; a committee listed in receipt-floors.tsv is compared from its floor; IE committees out of reconciliation scope",
     "inputs": {
       "election-data.json": {
-        "sha256": "d5b2f713e085d3f9ce9046689af9e1dbae3db9be13a717f7a2848f764d008e0b",
+        "sha256": "29fe299ee79289e86c304fa09c6fb50d4a0df7ed774053d98d82304b7fec58dd",
         "path": "campaign-finance/election-data.json"
       },
       "d2totals": {

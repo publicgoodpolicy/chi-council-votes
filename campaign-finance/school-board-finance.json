@@ -1,15 +1,15 @@
 {
   "schema_version": 1.5,
-  "generated_at": "2026-10-22T12:33:02Z",
+  "generated_at": "2026-10-29T13:00:44Z",
   "source": "derived: school-board-data.json (bridge) x election-data.json (rollups)",
   "_sync": {
-    "generated_at": "2026-10-22T12:33:02Z",
+    "generated_at": "2026-10-29T13:00:44Z",
     "inputs": {
       "school-board-data.json": {
         "sha256": "0145259348f690225699ecfc8c826f425c73ec5ae9a4a2fd135490f23ec6a4ee"
       },
       "election-data.json": {
-        "sha256": "d5b2f713e085d3f9ce9046689af9e1dbae3db9be13a717f7a2848f764d008e0b"
+        "sha256": "29fe299ee79289e86c304fa09c6fb50d4a0df7ed774053d98d82304b7fec58dd"
       }
     },
     "convention": "figures are election-labeled and sourced from rollups.by_candidate_election; by_candidate is resolution-only; the four streams are never summed in this artifact"
@@ -5418,14 +5418,58 @@
           "charter-schools"
         ],
         "support": {
-          "amount": 208338.0,
-          "count": 6
+          "amount": 355609.0,
+          "count": 10
         },
         "oppose": {
           "amount": 89328.0,
           "count": 2
         },
         "targets": [
+          {
+            "seat": "9B",
+            "member_id": "therese-boyle",
+            "name": "Therese Boyle",
+            "candidacy_id": "boyle-sb-d18",
+            "support": {
+              "amount": 147271.0,
+              "count": 4
+            },
+            "oppose": {
+              "amount": 0.0,
+              "count": 0
+            },
+            "rows": [
+              {
+                "date": "2026-09-28",
+                "amount": 40000.0,
+                "stance": "support",
+                "match_method": "alias",
+                "needs_review": false
+              },
+              {
+                "date": "2026-09-28",
+                "amount": 35757.0,
+                "stance": "support",
+                "match_method": "alias",
+                "needs_review": false
+              },
+              {
+                "date": "2026-10-02",
+                "amount": 35757.0,
+                "stance": "support",
+                "match_method": "alias",
+                "needs_review": false
+              },
+              {
+                "date": "2026-10-09",
+                "amount": 35757.0,
+                "stance": "support",
+                "match_method": "alias",
+                "needs_review": false
+              }
+            ]
+          },
           {
             "seat": "3B",
             "member_id": "carlos-rivas-jr",
@@ -36653,8 +36697,8 @@
             "count": 1
           },
           "ie_support": {
-            "amount": 84824.75,
-            "count": 5
+            "amount": 232095.75,
+            "count": 9
           },
           "ie_oppose": {
             "amount": 0.0,

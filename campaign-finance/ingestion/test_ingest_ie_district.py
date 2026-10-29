@@ -224,14 +224,23 @@ def exp(*rows,name='exp.txt'):
             f.write('\t'.join(['900','100.00',dt+' 00:00:00',nm,(off or ['Board of Education'])[0],'True','False','1','9B','Mail','Payee','','False'])+'\r\n')
     return p
 EXP=exp(('Karen A. Zaccor','2024-10-02'),('Karen A. Zaccor','2026-02-02'),('Karen Zaccor','2024-10-03'))
+# IEA-1/2/3: the alias list and the dispositions are the registry's, so every case here reads
+# its own (empty unless a case says otherwise) and writes its report into the temp folder.
+import ie_unmatched as U
+def iea_lists(aliases=(),dispositions=()):
+    a=os.path.join(_TD,'aliases.tsv'); b=os.path.join(_TD,'dispositions.tsv')
+    with open(a,'w',encoding='utf-8') as f: f.write('\t'.join(U.ALIASES_HEADER)+'\n'+''.join(l+'\n' for l in aliases))
+    with open(b,'w',encoding='utf-8') as f: f.write('\t'.join(U.DISPOSITIONS_HEADER)+'\n'+''.join(l+'\n' for l in dispositions))
+    return a,b
 def run(d,path,exp_path=None,rec=None,dry_run=True):
     # the stats (dry run) or the written document; the SystemExit message if the run stopped
-    keep=m.CONFIRMATIONS_PATH; m.CONFIRMATIONS_PATH=path
+    keep=(m.CONFIRMATIONS_PATH,U.ALIASES_PATH,U.DISPOSITIONS_PATH,U.REPORT_PATH); m.CONFIRMATIONS_PATH=path
+    U.ALIASES_PATH,U.DISPOSITIONS_PATH=iea_lists(); U.REPORT_PATH=os.path.join(_TD,'report.json')
     d=dict(json.loads(json.dumps(d)),cycles={'2027':{'start':'2023-05-16','end':'2027-05-15'}},donors={},contributions=[])
     d.setdefault('committees',{})
     try: s=m.ingest(d,exp_path or EXP,rec,dry_run=dry_run,progress=False)
     except SystemExit as e: return str(e)
-    finally: m.CONFIRMATIONS_PATH=keep
+    finally: m.CONFIRMATIONS_PATH,U.ALIASES_PATH,U.DISPOSITIONS_PATH,U.REPORT_PATH=keep
     return s if dry_run else d
 def dry(d,path,exp_path=None): return run(d,path,exp_path)
 s=dry(D,conf(*GOOD))

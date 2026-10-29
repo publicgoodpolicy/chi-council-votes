@@ -1,0 +1,407 @@
+{
+ "_doc": "IE rows in scope that matched no candidacy (IEA-2). A row with no disposition stops the election run of ingest_ie before it writes; suggestions are hints, never matches.",
+ "undisposed": 0,
+ "undisposed_amount": 0,
+ "disposed": 21,
+ "groups": [
+  {
+   "spender_sbe_id": "40109",
+   "filed_name": "Michelle N. Pierre; Kate Doyle",
+   "filed_office": "Chicago School Board",
+   "key": [
+    "40109",
+    "michelle n pierre kate doyle",
+    "chicago school board"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 1,
+   "amount": 23940.9,
+   "first": "2024-10-28",
+   "last": "2024-10-28",
+   "disposition": "joint",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "40109",
+   "filed_name": "Karin Norington-Reaves, Michelle Pierre, Carlos Rivas",
+   "filed_office": "Chicago School Board",
+   "key": [
+    "40109",
+    "karin norington reaves michelle pierre carlos rivas",
+    "chicago school board"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 1,
+   "amount": 18950.13,
+   "first": "2024-10-21",
+   "last": "2024-10-21",
+   "disposition": "joint",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "40109",
+   "filed_name": "Jessica Biggs, Kate Doyle, Carlos Rivas, Karin Norington-Reaves, Michelle N. Pierre",
+   "filed_office": "Chicago School Board",
+   "key": [
+    "40109",
+    "jessica biggs kate doyle carlos rivas karin norington reaves michelle n pierre",
+    "chicago school board"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 1,
+   "amount": 15600.0,
+   "first": "2024-11-04",
+   "last": "2024-11-04",
+   "disposition": "joint",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "497",
+   "filed_name": "Andrew Catton",
+   "filed_office": "Hinsdale School District 86 Board of Education",
+   "key": [
+    "497",
+    "andrew catton",
+    "hinsdale school district 86 board of education"
+   ],
+   "stance": [
+    "oppose"
+   ],
+   "rows": 1,
+   "amount": 9410.52,
+   "first": "2025-04-05",
+   "last": "2025-04-05",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "25064",
+   "filed_name": "Tom Suffredin",
+   "filed_office": "City of Evanston Ward 6",
+   "key": [
+    "25064",
+    "tom suffredin",
+    "city of evanston ward 6"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 2,
+   "amount": 8653.29,
+   "first": "2025-03-10",
+   "last": "2025-03-10",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "25064",
+   "filed_name": "Parielle Davis",
+   "filed_office": "City of Evanston Ward 7",
+   "key": [
+    "25064",
+    "parielle davis",
+    "city of evanston ward 7"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 2,
+   "amount": 8450.86,
+   "first": "2025-03-10",
+   "last": "2025-03-10",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "25064",
+   "filed_name": "Clare Kelly",
+   "filed_office": "City of Evanston Ward 1",
+   "key": [
+    "25064",
+    "clare kelly",
+    "city of evanston ward 1"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 2,
+   "amount": 7677.95,
+   "first": "2025-03-10",
+   "last": "2025-03-10",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "26066",
+   "filed_name": "Thaddeus Jones",
+   "filed_office": "Mayor",
+   "key": [
+    "26066",
+    "thaddeus jones",
+    "mayor"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 1,
+   "amount": 4950.0,
+   "first": "2025-02-24",
+   "last": "2025-02-24",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "40109",
+   "filed_name": "Karin Norington-Reaves, Michelle N. Pierre, Kate Doyle, Carlos Rivas",
+   "filed_office": "School Board",
+   "key": [
+    "40109",
+    "karin norington reaves michelle n pierre kate doyle carlos rivas",
+    "school board"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 1,
+   "amount": 4871.86,
+   "first": "2024-11-06",
+   "last": "2024-11-06",
+   "disposition": "joint",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "497",
+   "filed_name": "Tom Chavez",
+   "filed_office": "Elmhurst School District 205 Board of Education",
+   "key": [
+    "497",
+    "tom chavez",
+    "elmhurst school district 205 board of education"
+   ],
+   "stance": [
+    "oppose"
+   ],
+   "rows": 1,
+   "amount": 4851.6,
+   "first": "2025-04-05",
+   "last": "2025-04-05",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "9174",
+   "filed_name": "Bourbonnais Citizens Party",
+   "filed_office": "Mayor and trustees",
+   "key": [
+    "9174",
+    "bourbonnais citizens party",
+    "mayor and trustees"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 4,
+   "amount": 3432.65,
+   "first": "2024-09-28",
+   "last": "2024-12-30",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "40227",
+   "filed_name": "Wresinski, Krista",
+   "filed_office": "City Council, District 2",
+   "key": [
+    "40227",
+    "wresinski krista",
+    "city council district 2"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 4,
+   "amount": 2666.3,
+   "first": "2024-11-25",
+   "last": "2025-01-13",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "40362",
+   "filed_name": "Maloney, Cartwright, Rapisand, Cline, Loise, Rankin, Kuempel, Jaime, Foersterling, Heneghan, Hartwig",
+   "filed_office": "Mayor, Alderpersons, School Districts 64 and 207 Boards",
+   "key": [
+    "40362",
+    "maloney cartwright rapisand cline loise rankin kuempel jaime foersterling heneghan hartwig",
+    "mayor alderpersons school districts 64 and 207 boards"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 1,
+   "amount": 2134.52,
+   "first": "2025-02-04",
+   "last": "2025-02-04",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "36336",
+   "filed_name": "Tracy Welch",
+   "filed_office": "Mayor",
+   "key": [
+    "36336",
+    "tracy welch",
+    "mayor"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 4,
+   "amount": 1385.3,
+   "first": "2025-01-17",
+   "last": "2025-02-26",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "34024",
+   "filed_name": "Anna Hurlbut Morgen, Marlene Flahaven, Roger Glass and Monica Perez",
+   "filed_office": "River Grove School Board District 85.5",
+   "key": [
+    "34024",
+    "anna hurlbut morgen marlene flahaven roger glass and monica perez",
+    "river grove school board district 85 5"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 1,
+   "amount": 1366.2,
+   "first": "2025-03-03",
+   "last": "2025-03-03",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "35146",
+   "filed_name": "JB Pritzker",
+   "filed_office": "JP IL BOE",
+   "key": [
+    "35146",
+    "jb pritzker",
+    "jp il boe"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 1,
+   "amount": 980.5,
+   "first": "2024-07-25",
+   "last": "2024-07-25",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "40511",
+   "filed_name": "Brian Johnson",
+   "filed_office": "Brian Johnson for Mayor",
+   "key": [
+    "40511",
+    "brian johnson",
+    "brian johnson for mayor"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 4,
+   "amount": 945.4,
+   "first": "2025-03-05",
+   "last": "2025-04-04",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "39573",
+   "filed_name": "Greg Fletcher",
+   "filed_office": "Alderman",
+   "key": [
+    "39573",
+    "greg fletcher",
+    "alderman"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 1,
+   "amount": 500.0,
+   "first": "2025-02-27",
+   "last": "2025-02-27",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "34492",
+   "filed_name": "Ketih Larson",
+   "filed_office": "Alderman At Large",
+   "key": [
+    "34492",
+    "ketih larson",
+    "alderman at large"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 1,
+   "amount": 250.0,
+   "first": "2025-01-23",
+   "last": "2025-01-23",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "34492",
+   "filed_name": "John Laesch",
+   "filed_office": "Mayor",
+   "key": [
+    "34492",
+    "john laesch",
+    "mayor"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 1,
+   "amount": 250.0,
+   "first": "2025-01-23",
+   "last": "2025-01-23",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "35146",
+   "filed_name": "Nathaniel Booker",
+   "filed_office": "Mayor",
+   "key": [
+    "35146",
+    "nathaniel booker",
+    "mayor"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 1,
+   "amount": 250.0,
+   "first": "2024-12-12",
+   "last": "2024-12-12",
+   "disposition": "not_ours",
+   "suggestions": []
+  }
+ ]
+}

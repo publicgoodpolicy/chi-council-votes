@@ -329,7 +329,8 @@ ok('unscoped index keeps all IEs incl. council (' + ieCount(indexAll) + ' = ' + 
 // P1-E (PS-140) re-pin: 145 + the 87 rows now matched to 2024-only candidacies = 232; council 219, unchanged.
 // MAYOR-1 (PS-157) re-pin: the dropped set gains the 17 mayoral rows (filed Office names the mayor): 219 + 17 = 236.
 // Re-pinned on the 2026-10-20 pull: the school-board scope holds 439 rows; the dropped set is unchanged.
-ok('school-board scope keeps ONLY school-board IEs (439), drops council and mayor (236 = 219 + 17)', ieCount(index) === 439 && ieCount(indexAll) - ieCount(index) === 236);
+// IEA-1 re-pin: the ruled aliases add 17 school-board rows (439 + 17 = 456) and 2 council rows (219 + 2 = 221).
+ok('school-board scope keeps ONLY school-board IEs (456), drops council and mayor (238 = 221 + 17)', ieCount(index) === 456 && ieCount(indexAll) - ieCount(index) === 238);
 var councilTarget = false;
 for (var cc in index.ieByCandidate) { var r5 = index.raceById[(index.candidateById[cc] || {}).race_id] || {}; if (r5.office === 'alderperson' || r5.office === 'mayor') councilTarget = true; }
 ok('no council/municipal IE target survives school-board scope', !councilTarget);

@@ -7,12 +7,16 @@ Scoping decisions baked in (flag to change):
   * Council run: targets are matched by CANDIDATE NAME to the current 50 alders (ward
     disambiguates; a *former* alder is out of scope). Election run: to the candidate registry;
     a doubtful match is flagged needs_review until the confirmation file holds its pair (PS-154).
+  * Election run: a ruled alias list is tried first (IEA-1); a row in scope that still matches
+    nobody must carry a ruled disposition, or the run stops before writing (IEA-2, IEA-3;
+    ie_unmatched.py). Out of scope, an unmatched row is only counted, as before.
   * Exact-duplicate rows (same committee+payee+candidate+amount+date+purpose) are
     collapsed once -> handles the 8x-dupe artifact and B-1/quarterly re-reports.
 """
 import json, re, csv, sys, os, argparse, unicodedata
 from collections import defaultdict
 import build_rollups
+import ie_unmatched   # IEA-1/2/3: the closed alias list, the ruled dispositions and the unmatched gate
 from ingest import slug  # shared donor-id slug ([:80] cap) — keeps election donor_ids
                          # identical to council so one Sheet classification feeds both.
 from convert_bulk_receipts import _contributed_by  # the receipts path's OWN name
@@ -291,6 +295,13 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
     if election_mode:
         by_committee,by_name,by_folded,by_surname=build_target_index(d)
         confirmed_pairs=load_confirmations()   # PS-154: election run only; stops here, before any row
+        # IEA-1-1a: every registry entry by candidacy id (all offices), for the alias rung; the
+        # lists load before any row, like the confirmations, and refuse a line they cannot trust.
+        entry_by_id={e['candidate_id']:e for es in list(by_name.values())+list(by_committee.values()) for e in es}
+        aliases=ie_unmatched.load_aliases(set(entry_by_id))
+        dispositions=ie_unmatched.load_dispositions()
+        all_windows=build_rollups.load_windows()
+        unmatched_groups={}; unmatched_seen=set(); alias_n=0; out_of_scope_unmatched=0
         sb_races={r['id'] for r in d.get('races',[]) if (r.get('office') or '').startswith('school_board')}
     else:
         alders=build_matcher(comms)
@@ -338,8 +349,40 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
         raw+=1
         if election_mode:
             _date=(row.get(F['date']) or '')[:10]
-            tgt=match_target_registry(row,by_committee,by_name,by_folded,by_surname,date=_date)
+            tgt=None
+            # IEA-1-1a: the alias rung, before every other: (spender, name as filed) on the closed
+            # list -> that candidacy, still only for a row its window admits (PS-140) and, for the
+            # mayor race, only for a row filed against that office (MAYOR-1), as every rung.
+            _ak=(str(row.get(F['committee_id']) or ''),norm(row.get(F['candidate'])))
+            if _ak in aliases:
+                _ae=_office_scope(_eligible([entry_by_id[c] for c in aliases[_ak]],_date),row.get(F['office']))
+                if len(_ae)>1:
+                    raise SystemExit(f"FATAL [IEA-1] the alias {_ak!r} names {len(_ae)} candidacies eligible for a row "
+                                     f"dated {_date}: {[e['candidate_id'] for e in _ae]}; an alias must pick one. Nothing written.")
+                if _ae: tgt=_tgt(_ae[0],'alias',False); alias_n+=1
             if tgt is None:
+                tgt=match_target_registry(row,by_committee,by_name,by_folded,by_surname,date=_date)
+            if tgt is None:
+                # IEA-2/IEA-3: an in-scope row nobody matched is grouped for the report and must be
+                # disposed of. Out of scope: a candidate committee's own spend (the skip below),
+                # an office naming none of the three races, a date outside every window shown.
+                _sbe=row.get(F['committee_id']); _spk=sbe_idx.get(_sbe); _cm=comms.get(_spk) if _spk else None
+                _kind=ie_unmatched.office_kind(row.get(F['office']))
+                if (_cm is None or _cm.get('type')=='independent_expenditure') and _kind \
+                        and ie_unmatched.in_window(_kind,_date,all_windows):
+                    _amt=float(row.get(F['amount']) or 0)
+                    _payee=norm((row.get(F['payee_first']) or '')+' '+(row.get(F['payee_last']) or ''))
+                    _dk=(_sbe,_payee,norm(row.get(F['candidate'])),round(_amt,2),_date,norm(row.get(F['purpose'])))
+                    if _dk not in unmatched_seen:   # the same exact-duplicate collapse the matched rows get
+                        unmatched_seen.add(_dk)
+                        _gk=(str(_sbe),norm(row.get(F['candidate'])),norm(row.get(F['office'])))
+                        g=unmatched_groups.setdefault(_gk,{'filed_name':(row.get(F['candidate']) or '').strip(),
+                            'filed_office':(row.get(F['office']) or '').strip(),'stances':set(),'rows':0,'amount':0.0,
+                            'first':_date,'last':_date,'disposition':dispositions.get(_gk)})
+                        g['rows']+=1; g['amount']+=_amt; g['first']=min(g['first'],_date); g['last']=max(g['last'],_date)
+                        g['stances'].add('support' if sup else 'oppose')
+                else:
+                    out_of_scope_unmatched+=1
                 # PS-140's report: a row that matches a school-board candidacy only with the window
                 # lifted stays unmatched and is COUNTED (here, before de-duplication and the skip).
                 t2=match_target_registry(row,by_committee,by_name,by_folded,by_surname,date=None)
@@ -400,6 +443,24 @@ def ingest(d, exp_path, rec_path, dry_run=False, progress=True):
             'matched_by_name_fallback':method_counts.get('name_fallback',0),
             'confirmed_by_file':confirmed_n,'flagged_needs_review':review_n,
             'sb_outside_window':sb_outside,'sb_outside_window_total':round(sb_outside_amt,2)})
+        # IEA-2: the report, then the gate. A run with an undisposed in-scope group writes the
+        # report (so the hold can show it) and stops BEFORE anything else is written (IEA-2-3a).
+        reg=[{'id':c.get('id'),'name':c.get('name')} for c in d.get('candidates',[])]
+        _groups=[g for g in unmatched_groups.values()]
+        stats.update({'matched_by_alias':alias_n,'unmatched_out_of_scope':out_of_scope_unmatched,
+            'unmatched_in_scope_groups':len(_groups),
+            'unmatched_in_scope_disposed':sum(1 for g in _groups if g['disposition']),
+            'unmatched_in_scope_undisposed':sum(1 for g in _groups if not g['disposition']),
+            'unmatched_in_scope_undisposed_total':round(sum(g['amount'] for g in _groups if not g['disposition']),2)})
+        undisposed=ie_unmatched.report(unmatched_groups,reg,path=(os.devnull if dry_run else None))
+        if undisposed:
+            sys.stderr.write('[ingest_ie] UNMATCHED IN SCOPE, no disposition:\n'+''.join(
+                f"  {u['spender_sbe_id']}\t{u['filed_name']}\t{u['filed_office']}\t${u['amount']:,.2f}\t{u['first']}..{u['last']}\t"
+                f"{[x['candidate_id'] for x in u['suggestions']]}\n" for u in undisposed))
+            raise SystemExit(f"FATAL [IEA-2] {len(undisposed)} in-scope outside-spending group(s), "
+                             f"${stats['unmatched_in_scope_undisposed_total']:,.2f}, matched no candidacy and carry "
+                             f"no ruled disposition ({'dry run: the report is not written; the groups are listed above' if dry_run else 'see '+ie_unmatched.REPORT_PATH}). "
+                             f"Add each to the alias list or the dispositions by ruling; nothing has been written.")
     if dry_run: return stats
 
     # IDEMPOTENCY: drop any IE-committee receipt rows from a previous run before
