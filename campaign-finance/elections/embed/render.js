@@ -183,6 +183,12 @@
       '.ipg-elect .field-note b{color:var(--ink);font-weight:500;}' +
       '.ipg-elect .vacating-note{font-size:13px;color:var(--ink-soft);background:#E5EFE9;border-radius:10px;padding:10px 14px;margin:10px 0 18px;}' +
       '.ipg-elect .vacating-note b{color:var(--ink);font-weight:500;}' +
+      '.ipg-elect .offballot{margin:26px 0 0;border-top:1px solid var(--line, #E3D9CE);padding-top:14px;}' +
+      '.ipg-elect .offballot>summary{cursor:pointer;font-size:14px;font-weight:600;color:var(--ink-soft);list-style:none;padding:6px 0;}' +
+      '.ipg-elect .offballot>summary::-webkit-details-marker{display:none;}' +
+      '.ipg-elect .offballot>summary::before{content:"▸ ";color:var(--sage);}' +
+      '.ipg-elect .offballot[open]>summary::before{content:"▾ ";}' +
+      '.ipg-elect .offballot-note{font-size:13px;color:var(--ink-soft);margin:6px 0 16px;}' +
       '.ipg-elect .goto-link{appearance:none;border:0;background:none;cursor:pointer;font-family:var(--body);font-size:13px;font-weight:500;color:var(--teal);padding:0;text-decoration:underline;}' +
       '.ipg-elect .goto-link:focus-visible{outline:2px solid var(--sage);outline-offset:2px;}' +
       '.ipg-elect .legend{display:flex;flex-wrap:wrap;gap:14px 20px;margin:6px 0 0;font-size:12px;color:var(--ink-soft);}' +
@@ -832,7 +838,10 @@
   // filing-lifecycle status), with a write-in marker carried BESIDE the base result, never
   // fused. Copy lives here (presentation) keyed by the data-side enum (data carries semantics).
   var RESULT_LABEL = { elected: 'Elected', defeated: 'Defeated', withdrawn: 'Withdrawn', removed: 'Removed', challenged: 'Challenged' };
-  var BALLOT_LABEL = { withdrawn: 'Withdrawn', removed: 'Removed from ballot' };  // DESIGN-1b: the 2026 ballot-lifecycle axis (ballot_status, HALT-Q2R); challenged renders nothing (Ishan, 2026-09-26)
+  var BALLOT_LABEL = { withdrawn: 'Withdrawn', removed: 'Removed from ballot', not_filed: 'Did not file' };   // 168-1a/2a: not_filed  // DESIGN-1b: the 2026 ballot-lifecycle axis (ballot_status, HALT-Q2R); challenged renders nothing (Ishan, 2026-09-26)
+  // 168-3a (ratified 2026-10-26): the note inside the "Not on the ballot" section.
+  var OFF_BALLOT_NOTE = 'These candidates are not on the February 23, 2027 ballot: they did not file nominating papers ' +
+    'with the Chicago Board of Election Commissioners, or were removed after filing. Their committees’ money stays on the record.';
   var CHALLENGED_TITLE = 'Ballot petitions challenged; objection sustained before certification';
   function statusPill(c) {
     var k = c.result ? c.result : ((c.ballotStatus && BALLOT_LABEL[c.ballotStatus]) ? c.ballotStatus : null);
@@ -855,7 +864,10 @@
   // is live — its card carries the person affordance instead (see pendingCard).
   var FINANCE_FACET = {
     committee_no_itemized: 'No itemized contributions reported.',
-    no_committee: 'No campaign committee on file with the Illinois State Board of Elections.'
+    no_committee: 'No campaign committee on file with the Illinois State Board of Elections.',
+    // BAL-174a (ratified as written, 2026-10-29): a 2027 filer whose committee carries an earlier
+    // candidacy's receipts and stays on that candidacy (Andre Smith, 39705, 2024 D6).
+    committee_elsewhere: 'This candidate’s committee is shown with their 2024 school board candidacy.'
   };
   function facetLine(c) {
     var s = FINANCE_FACET[c.financeFacet];
@@ -992,18 +1004,53 @@
     // and the meta label names that election ("all years" survives only as the defensive
     // no-election fallback, which no current race reaches).
     var metaYr = (/^(\d{4})-/.exec(vm.race.election_id || '') || [])[1];
+    // 166-2c / 168-2a: off-ballot candidates leave the race's count, cards and scale, and render
+    // in a collapsed "Not on the ballot" section at the foot of the race.
+    // Council only (BAL-166 scope): the school board's 2026 removed candidates keep their in-line chip.
+    var offOn = vm.race.office === 'alderperson';
+    var off = offOn ? vm.candidates.filter(function (c) { return c.offBallot; }) : [];
+    var allCands = vm.candidates;
+    if (off.length) vm = { race: vm.race, cycle: vm.cycle, win: vm.win, candidates: vm.candidates.filter(function (c) { return !c.offBallot; }) };
+    // BAL-169-1a: off-ballot cards draw on the filers' scale (set only by filers), and bar()
+    // caps a fill at full width, so a larger off-ballot figure never stretches the filers' bars.
+    function offHtmlAt(sc) {
+      return off.length
+        ? '<details class="offballot"><summary>Not on the ballot (' + off.length + ')</summary>' +
+          '<p class="offballot-note">' + OFF_BALLOT_NOTE + '</p>' +
+          off.map(function (c) { return c.hasFinance ? card(c, sc, 'x-') : pendingCard(c); }).join('') + '</details>'
+        : '';
+    }
     var meta = plural(vm.candidates.length, 'candidate', 'candidates') +
       (vm.cycle ? ' · cycle ' + esc(vm.cycle)
                 : (!metaYr ? ' · all years' : ' · ' + esc(metaYr) + ' election'));
     var head = '<div class="race-head"><h2>' + esc(vm.race.label) + '</h2>' +
       '<span class="race-meta">' + meta + '</span></div>' + vac;
 
-    if (!vm.candidates.length) {
+    if (!allCands.length) {
       return head + '<div class="soon"><h2>Field forming</h2>' +
         '<p>No candidate committees are processed for this race yet. Check back as the field fills in.</p></div>';
     }
     var live = vm.candidates.filter(function (c) { return c.hasFinance; });
-    if (!live.length) return head + vm.candidates.map(pendingCard).join('');
+    var offLive = off.filter(function (c) { return c.hasFinance; });
+    var winAttrs = vm.win ? (' data-win-start="' + esc(vm.win.start || '') + '" data-win-end="' + esc(vm.win.end || '') + '"') : '';
+    // Legend tests read every card drawn on the view, the section's included.
+    var shown = live.concat(offLive);
+    function legendFor() {
+      return legend(shown.some(function (c) {
+        return !!(c.figures && c.figures.contributions && c.figures.contributions.ownCommittee > 0);
+      }), shown.some(function (c) { return !!(c.figures && c.figures.smallGifts && c.figures.smallGifts.total > 0); }));
+    }
+    // BAL-170-4a (ratified 2026-10-29): a ward whose every candidate is off the ballot says so,
+    // above the Not on the ballot list.
+    var allOff = off.length && !vm.candidates.length
+      ? '<p class="field-note">No candidate in this ward is on the February 23, 2027 ballot.</p>' : '';
+    if (!live.length && !offLive.length) return head + allOff + vm.candidates.map(pendingCard).join('') + offHtmlAt(1);
+    if (!live.length) {
+      // No filer has money but an off-ballot card does (ward 22 before ingest): keep the race's
+      // window container, so pop-ups from that card stay scoped (F-3), and the legend for its bars.
+      return '<div class="race-scope"' + winAttrs + '>' + head + allOff + legendFor() + '<div style="height:18px"></div>' +
+        vm.candidates.map(pendingCard).join('') + offHtmlAt(1) + '</div>';
+    }
 
     var scale = 1;
     for (var i = 0; i < vm.candidates.length; i++) {
@@ -1015,19 +1062,17 @@
     // SCOPE-UI (F-3 ruled): the race's election window rides the container, so funder /
     // committee modals opened from these cards stay scoped (winFromEl reads the nearest
     // [data-win-end] ancestor — the base path previously stamped nothing).
-    var winAttrs = vm.win ? (' data-win-start="' + esc(vm.win.start || '') + '" data-win-end="' + esc(vm.win.end || '') + '"') : '';
     return '<div class="race-scope"' + winAttrs + '>' + head +
       // The "field still being added" note describes a filling-in current race. A certified
       // 2024 race is a complete past field (every candidacy authored in one commit, each with
       // an explicit finance facet), so the note is suppressed there.
-      (anyPending && vm.race.election_id !== '2024-school-board'
+      // 168-5a: the 2027 council field is final (Ishan, 2026-10-26: people can only be removed now).
+      (anyPending && vm.race.election_id !== '2024-school-board' && vm.race.office !== 'alderperson'
         ? '<p class="field-note">▸ <span><b>Field still being added.</b> Candidates with registered ' +
           'committees are shown; others appear as they file and finance is processed.</span></p>' : '') +
       smallGiftsCompare(live) +
-      legend(vm.candidates.some(function (c) {
-        return !!(c.figures && c.figures.contributions && c.figures.contributions.ownCommittee > 0);
-      }), live.some(function (c) { return !!(c.figures && c.figures.smallGifts && c.figures.smallGifts.total > 0); })) +
-      '<div style="height:18px"></div>' + cards + '</div>';
+      legendFor() +
+      '<div style="height:18px"></div>' + cards + offHtmlAt(scale) + '</div>';
   }
 
   // Ruling 76b (3), as amended, and 84a (amended): within one contest only — the candidates on this
@@ -1081,7 +1126,9 @@
         'aria-pressed="' + (r.slug === activeSlug) + '">' + esc(r.code) + (r.hasFinance ? '' : ' · soon') + '</button>';
     }).join('');
     return nav + '<div class="districts" role="group" aria-label="Race">' + chips + '</div>' +
-      '<p class="picker-note">Races with processed campaign-finance data are live; the rest fill in as candidates file.</p>';
+      // BAL-169-2a: the council field is final, so the "fill in as candidates file" note is dropped there.
+      (active.races.length && active.races.every(function (r) { return r.office === 'alderperson'; }) ? '' :
+      '<p class="picker-note">Races with processed campaign-finance data are live; the rest fill in as candidates file.</p>');
   }
 
   // Global election selector (SCOPE-UI): the ratified `{year} {body}` pills. Rendered
@@ -1258,7 +1305,11 @@
         'such as a fund for a state or federal office. We count it in the total raised and label it ' +
         '“From the candidate’s other committee.” It is not the candidate’s personal money, and it is not a ' +
         'contribution from an outside donor. We mark only committees we have confirmed belong to the same person.';
-      var paras = [C1, C2, C5, C3, C4, C6, C7, C8, METH_C11, METH_C9, METH_C10];   // 74a/76b: C11 after C8   // M2: C7 and C8, plain <p>s after C6; AUDIT-2 (R4): C9 and C10 after C8
+      // 168-6a (ratified 2026-10-26): who the page lists. Register text on transcription.
+      var C12 = 'Candidates are those who filed nominating papers for the February 23, 2027 election, as listed by the ' +
+        'Chicago Board of Election Commissioners; candidates who formed committees but did not file, or were later removed, ' +
+        'are kept under ‘Not on the ballot.’';
+      var paras = [C1, C12, C2, C5, C3, C4, C6, C7, C8, METH_C11, METH_C9, METH_C10];   // 74a/76b: C11 after C8   // M2: C7 and C8, plain <p>s after C6; AUDIT-2 (R4): C9 and C10 after C8
       return METH_FRAME_OPEN +
         paras.map(function (t) { return t == null ? '' : '<p>' + t + '</p>'; }).join('') +
         VERIFICATION_SECTION +
@@ -1526,7 +1577,10 @@
               // Inline card is a SIBLING AFTER the .srow (never a child of the affordance) — the
               // structural collision guarantee from Stage 2's trace. Rendered VERBATIM via card()
               // with the 'g-' prefix; no bar/panel markup is reproduced here.
-              var cardHtml = isExpanded ? '<div class="srow-card">' + card(c, g.scale, 'g-') + '</div>' : '';
+              // BAL-170-2a: a no-itemized committee expands to the ratified line (pendingCard), not $0 bars.
+              var cardHtml = isExpanded ? '<div class="srow-card">' + (c.noItemized
+                ? pendingCard({ name: c.name, incumbent: c.incumbent, financeFacet: 'committee_no_itemized' })
+                : card(c, g.scale, 'g-')) + '</div>' : '';
               return '<div class="srow">' + head + '</div>' + cardHtml;
             }).join('');
           } else {

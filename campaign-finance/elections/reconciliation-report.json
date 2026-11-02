@@ -9,7 +9,7 @@
     "scope": "elections candidate committees (v2): school_board, city_council and mayor; a committee listed in receipt-floors.tsv is compared from its floor; IE committees out of reconciliation scope",
     "inputs": {
       "election-data.json": {
-        "sha256": "29fe299ee79289e86c304fa09c6fb50d4a0df7ed774053d98d82304b7fec58dd",
+        "sha256": "6734173f40ba2f08100876bcd486d524be77e7a9607ccd2775bed6a12b724cdb",
         "path": "campaign-finance/election-data.json"
       },
       "d2totals": {
@@ -23,7 +23,7 @@
         "vintage_manifest_sha256": "2f52feb199fe66873b43b9af0dfb2ee774cf6817834667e7116d75a250252e92"
       },
       "known-gaps.json": {
-        "sha256": "77ef586fecf689870626fb12a62935d8612976a0d77d703824234182427792d8",
+        "sha256": "17ee056d7a9127dd4e05e2bab404352622d7b6a086815b7de365ccc2be2d1f09",
         "path": "campaign-finance/elections/known-gaps.json"
       },
       "receipt-floors.tsv": {
@@ -33,27 +33,27 @@
     }
   },
   "headline": {
-    "d2_itemized_total": 167311637.37,
-    "ours_itemized_total": 167226665.62,
-    "residual": -84971.75,
-    "dollar_weighted_match_pct": 99.95,
-    "committees_candidate": 157,
-    "committees_with_sbe_id": 157,
+    "d2_itemized_total": 167690201.21,
+    "ours_itemized_total": 167593818.46,
+    "residual": -96382.75,
+    "dollar_weighted_match_pct": 99.94,
+    "committees_candidate": 168,
+    "committees_with_sbe_id": 168,
     "committees_no_sbe_id": 0,
-    "committees_with_periods": 157,
-    "reconciled": 145,
-    "residual_state": 12,
+    "committees_with_periods": 168,
+    "reconciled": 153,
+    "residual_state": 15,
     "too_new": 0,
-    "pending_a1_total": 2201699.4,
+    "pending_a1_total": 2218199.4,
     "aggregate_total": 0.0,
-    "inkind_d2_total": 8493074.75,
-    "inkind_ours_total": 8532111.0,
+    "inkind_d2_total": 8519773.44,
+    "inkind_ours_total": 8550834.69,
     "over_threshold": [],
     "coverage_miss_committees": [],
     "join_failures": 0,
     "filings_missing_totals": 6,
-    "overlap_superseded": 71,
-    "disclosed": 11,
+    "overlap_superseded": 72,
+    "disclosed": 13,
     "stale_annotations": 0,
     "before_floor_committees": 4
   },
@@ -261,6 +261,25 @@
       ]
     },
     {
+      "committee": "cand-morton-ward-49",
+      "periods": [
+        {
+          "beg": "2019-01-01",
+          "end": "2019-03-31",
+          "residual": -5175.0,
+          "reason": "SBE-side: the committee's Quarterly D-2 (filing 737746, received 2019-04-19; it amends 735518) swears IndivContribI $175.00 and LoanRcvI $5,000.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The period is the committee's 2019 run, before its 2027 candidacy. Our itemized total for the period is $0.00.",
+          "annotated": "2026-10-29"
+        },
+        {
+          "beg": "2019-07-01",
+          "end": "2019-09-30",
+          "residual": -4536.0,
+          "reason": "SBE-side: the committee's Quarterly D-2 (filing 750283, received 2019-10-09) swears IndivContribI $400.00 and LoanRcvI $4,136.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The period is the committee's 2019 run, before its 2027 candidacy. Our itemized total for the period is $0.00.",
+          "annotated": "2026-10-29"
+        }
+      ]
+    },
+    {
       "committee": "cand-olas-ward-27",
       "periods": [
         {
@@ -269,6 +288,18 @@
           "residual": -850.0,
           "reason": "SBE-side: the committee's Q3 2026 Quarterly D-2 (filing 1024906, received 2026-10-13) swears IndivContribI $850.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The committee's only itemized row is the $500.00 receipt on its Q1 filing 1007397.",
           "annotated": "2026-10-20"
+        }
+      ]
+    },
+    {
+      "committee": "cand-ray-ward-37",
+      "periods": [
+        {
+          "beg": "2022-07-01",
+          "end": "2022-09-30",
+          "residual": -1700.0,
+          "reason": "SBE-side: the committee's Quarterly D-2 (filing 863641, received 2022-10-20) swears IndivContribI $1,700.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The period is the committee's 2022 run, before its 2027 candidacy. Our itemized total for the period is $0.00.",
+          "annotated": "2026-10-29"
         }
       ]
     },
@@ -467,6 +498,192 @@
           "residual": 0.0,
           "d2_inkind": 6033.23,
           "ours_inkind": 6033.23,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-bahena-ward-22": {
+      "committee_name": "Friends of Elianne Bahena",
+      "sbe_committee_id": "39065",
+      "superseded_filings": 0,
+      "overlap_superseded": [
+        {
+          "superseded_doc": "884326",
+          "superseded_period": [
+            "2023-01-01",
+            "2023-03-31"
+          ],
+          "superseding_doc": "884557",
+          "superseding_period": [
+            "2023-01-11",
+            "2023-03-31"
+          ],
+          "superseding_rcvd": "2023-04-17 13:02:44",
+          "superseded_itemized": 12000.0
+        }
+      ],
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 15,
+      "d2_itemized": 58400.0,
+      "ours_itemized": 58400.0,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2023-01-11",
+          "end": "2023-03-31",
+          "d2_itemized": 12000.0,
+          "ours_itemized": 12000.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-04-01",
+          "end": "2023-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-07-01",
+          "end": "2023-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-10-01",
+          "end": "2023-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-01-01",
+          "end": "2024-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-07-01",
+          "end": "2026-09-30",
+          "d2_itemized": 46400.0,
+          "ours_itemized": 46400.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
           "coverage_miss": false
         }
       ]
@@ -2599,6 +2816,668 @@
         }
       ]
     },
+    "cand-earls-ward-37": {
+      "committee_name": "Citizens to Elect Carmelita P Earls",
+      "sbe_committee_id": "23100",
+      "superseded_filings": 3,
+      "state": "RESIDUAL",
+      "flags": [
+        "PENDING-A1"
+      ],
+      "periods_count": 64,
+      "d2_itemized": 33479.74,
+      "ours_itemized": 33479.74,
+      "residual": 0.0,
+      "d2_inkind": 7800.0,
+      "ours_inkind": 0,
+      "inkind_delta": -7800.0,
+      "aggregate": 0.0,
+      "pending": 2000.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2010-07-01",
+          "end": "2010-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 7800.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2011-01-01",
+          "end": "2011-03-31",
+          "d2_itemized": 19000.0,
+          "ours_itemized": 19000.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2011-04-01",
+          "end": "2011-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2011-07-01",
+          "end": "2011-09-30",
+          "d2_itemized": 4500.0,
+          "ours_itemized": 4500.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2011-10-01",
+          "end": "2011-12-31",
+          "d2_itemized": 6550.0,
+          "ours_itemized": 6550.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2012-01-01",
+          "end": "2012-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2012-04-01",
+          "end": "2012-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2012-07-01",
+          "end": "2012-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2012-10-01",
+          "end": "2012-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2013-01-01",
+          "end": "2013-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2013-04-01",
+          "end": "2013-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2013-07-01",
+          "end": "2013-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2013-10-01",
+          "end": "2013-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2014-01-01",
+          "end": "2014-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2014-04-01",
+          "end": "2014-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2014-07-01",
+          "end": "2014-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2014-10-01",
+          "end": "2014-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2015-01-01",
+          "end": "2015-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2015-04-01",
+          "end": "2015-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2015-07-01",
+          "end": "2015-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2015-10-01",
+          "end": "2015-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2016-01-01",
+          "end": "2016-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2016-04-01",
+          "end": "2016-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2016-07-01",
+          "end": "2016-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2016-10-01",
+          "end": "2016-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2017-01-01",
+          "end": "2017-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2017-04-01",
+          "end": "2017-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2017-07-01",
+          "end": "2017-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2017-10-01",
+          "end": "2017-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2018-01-01",
+          "end": "2018-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2018-04-01",
+          "end": "2018-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2018-07-01",
+          "end": "2018-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2018-10-01",
+          "end": "2018-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-01-01",
+          "end": "2019-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-04-01",
+          "end": "2019-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-07-01",
+          "end": "2019-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-10-01",
+          "end": "2019-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-01-01",
+          "end": "2020-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-04-01",
+          "end": "2020-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-07-01",
+          "end": "2020-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-10-01",
+          "end": "2020-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2021-01-01",
+          "end": "2021-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2021-04-01",
+          "end": "2021-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2021-07-01",
+          "end": "2021-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2021-10-01",
+          "end": "2021-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-01-01",
+          "end": "2022-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-04-01",
+          "end": "2022-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-07-01",
+          "end": "2022-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-10-01",
+          "end": "2022-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-01-01",
+          "end": "2023-03-31",
+          "d2_itemized": 3429.74,
+          "ours_itemized": 3429.74,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-04-01",
+          "end": "2023-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-07-01",
+          "end": "2023-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-10-01",
+          "end": "2023-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-01-01",
+          "end": "2024-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-07-01",
+          "end": "2026-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
     "cand-egeston-ward-20": {
       "committee_name": "Friends of Jarquetta Egeston",
       "sbe_committee_id": "41382",
@@ -3530,6 +4409,36 @@
           "residual": -250.0,
           "reason": "SBE-side: committee's sworn itemized total for 1/1/2026\u20133/31/2026 includes a $250 Schedule A receipt (paper-filed D-2, received 4/1/2026) that does not appear in any SBE electronic receipts source.",
           "annotated": "2026-07-20"
+        }
+      ]
+    },
+    "cand-harrison-ward-09": {
+      "committee_name": "Friends of Cecelia Harrison",
+      "sbe_committee_id": "41329",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 1,
+      "d2_itemized": 1250.0,
+      "ours_itemized": 1250.0,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-07-23",
+          "end": "2026-09-30",
+          "d2_itemized": 1250.0,
+          "ours_itemized": 1250.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
         }
       ]
     },
@@ -25552,6 +26461,456 @@
         }
       ]
     },
+    "cand-johnson-ward-16": {
+      "committee_name": "Friends of Eddie Johnson III",
+      "sbe_committee_id": "31950",
+      "superseded_filings": 16,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 43,
+      "d2_itemized": 8597.0,
+      "ours_itemized": 8597.0,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2016-01-01",
+          "end": "2016-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2016-04-01",
+          "end": "2016-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2016-07-01",
+          "end": "2016-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2016-10-01",
+          "end": "2016-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2017-01-01",
+          "end": "2017-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2017-04-01",
+          "end": "2017-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2017-07-01",
+          "end": "2017-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2017-10-01",
+          "end": "2017-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2018-01-01",
+          "end": "2018-03-31",
+          "d2_itemized": 2000.0,
+          "ours_itemized": 2000.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2018-04-01",
+          "end": "2018-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2018-07-01",
+          "end": "2018-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2018-10-01",
+          "end": "2018-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-01-01",
+          "end": "2019-03-31",
+          "d2_itemized": 700.0,
+          "ours_itemized": 700.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-04-01",
+          "end": "2019-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-07-01",
+          "end": "2019-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-10-01",
+          "end": "2019-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-01-01",
+          "end": "2020-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-04-01",
+          "end": "2020-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-07-01",
+          "end": "2020-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-10-01",
+          "end": "2020-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2021-01-01",
+          "end": "2021-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2021-04-01",
+          "end": "2021-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2021-07-01",
+          "end": "2021-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2021-10-01",
+          "end": "2021-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-01-01",
+          "end": "2022-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-04-01",
+          "end": "2022-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-07-01",
+          "end": "2022-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-10-01",
+          "end": "2022-12-31",
+          "d2_itemized": 5547.0,
+          "ours_itemized": 5547.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-01-01",
+          "end": "2023-03-31",
+          "d2_itemized": 350.0,
+          "ours_itemized": 350.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-04-01",
+          "end": "2023-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-07-01",
+          "end": "2023-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-10-01",
+          "end": "2023-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-01-01",
+          "end": "2024-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-07-01",
+          "end": "2026-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
     "cand-jones-sb-2024-d10": {
       "committee_name": "Committee to Elect Rev. Robert Jones",
       "sbe_committee_id": "39838",
@@ -25680,6 +27039,38 @@
           "residual": 0.0,
           "d2_inkind": 1189.0,
           "ours_inkind": 1189.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-lane-ward-42": {
+      "committee_name": "Friends For Deborah Lane",
+      "sbe_committee_id": "41411",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [
+        "PENDING-A1"
+      ],
+      "periods_count": 1,
+      "d2_itemized": 7500.0,
+      "ours_itemized": 7500.0,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 14500.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-08-28",
+          "end": "2026-09-30",
+          "d2_itemized": 7500.0,
+          "ours_itemized": 7500.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
           "coverage_miss": false
         }
       ]
@@ -26234,6 +27625,276 @@
           "residual": 0.0,
           "d2_inkind": 2043.08,
           "ours_inkind": 2043.08,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-maddox-ward-20": {
+      "committee_name": "Friends To Elect Jennifer Maddox",
+      "sbe_committee_id": "35047",
+      "superseded_filings": 5,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 25,
+      "d2_itemized": 25164.1,
+      "ours_itemized": 25164.1,
+      "residual": 0.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2018-10-30",
+          "end": "2018-12-31",
+          "d2_itemized": 4450.0,
+          "ours_itemized": 4450.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-01-01",
+          "end": "2019-03-31",
+          "d2_itemized": 6170.0,
+          "ours_itemized": 6170.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-04-01",
+          "end": "2019-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-07-01",
+          "end": "2019-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-10-01",
+          "end": "2019-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-01-01",
+          "end": "2020-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-04-01",
+          "end": "2020-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-07-01",
+          "end": "2020-08-12",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-08-29",
+          "end": "2022-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-10-01",
+          "end": "2022-12-31",
+          "d2_itemized": 2625.2,
+          "ours_itemized": 2625.2,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-01-01",
+          "end": "2023-03-31",
+          "d2_itemized": 11523.9,
+          "ours_itemized": 11523.9,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-04-01",
+          "end": "2023-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-07-01",
+          "end": "2023-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-10-01",
+          "end": "2023-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-01-01",
+          "end": "2024-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 395.0,
+          "ours_itemized": 395.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-07-01",
+          "end": "2026-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
           "coverage_miss": false
         }
       ]
@@ -31300,6 +32961,377 @@
         }
       ]
     },
+    "cand-morton-ward-49": {
+      "committee_name": "Friends of Bill Morton",
+      "sbe_committee_id": "34862",
+      "superseded_filings": 11,
+      "state": "RESIDUAL",
+      "flags": [
+        "OVER-THRESHOLD",
+        "COVERAGE-MISS",
+        "DISCLOSED"
+      ],
+      "periods_count": 32,
+      "d2_itemized": 92716.0,
+      "ours_itemized": 83005.0,
+      "residual": -9711.0,
+      "d2_inkind": 1255.0,
+      "ours_inkind": 1080.0,
+      "inkind_delta": -175.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [
+        {
+          "beg": "2019-01-01",
+          "end": "2019-03-31",
+          "d2_itemized": 5175.0
+        },
+        {
+          "beg": "2019-07-01",
+          "end": "2019-09-30",
+          "d2_itemized": 4536.0
+        }
+      ],
+      "per_period": [
+        {
+          "beg": "2018-10-01",
+          "end": "2018-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-01-01",
+          "end": "2019-03-31",
+          "d2_itemized": 5175.0,
+          "ours_itemized": 0.0,
+          "residual": -5175.0,
+          "d2_inkind": 175.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": true
+        },
+        {
+          "beg": "2019-04-01",
+          "end": "2019-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-07-01",
+          "end": "2019-09-30",
+          "d2_itemized": 4536.0,
+          "ours_itemized": 0.0,
+          "residual": -4536.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": true
+        },
+        {
+          "beg": "2019-10-01",
+          "end": "2019-12-31",
+          "d2_itemized": 15000.0,
+          "ours_itemized": 15000.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-01-01",
+          "end": "2020-03-31",
+          "d2_itemized": 16159.85,
+          "ours_itemized": 16159.85,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-04-01",
+          "end": "2020-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-07-01",
+          "end": "2020-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-10-01",
+          "end": "2020-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2021-01-01",
+          "end": "2021-03-31",
+          "d2_itemized": 275.35,
+          "ours_itemized": 275.35,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2021-04-01",
+          "end": "2021-06-30",
+          "d2_itemized": 16456.8,
+          "ours_itemized": 16456.8,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2021-07-01",
+          "end": "2021-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2021-10-01",
+          "end": "2021-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-01-01",
+          "end": "2022-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-04-01",
+          "end": "2022-06-30",
+          "d2_itemized": 1500.0,
+          "ours_itemized": 1500.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-07-01",
+          "end": "2022-09-30",
+          "d2_itemized": 7500.0,
+          "ours_itemized": 7500.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-10-01",
+          "end": "2022-12-31",
+          "d2_itemized": 1308.0,
+          "ours_itemized": 1308.0,
+          "residual": 0.0,
+          "d2_inkind": 730.0,
+          "ours_inkind": 730.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-01-01",
+          "end": "2023-03-31",
+          "d2_itemized": 15160.0,
+          "ours_itemized": 15160.0,
+          "residual": 0.0,
+          "d2_inkind": 350.0,
+          "ours_inkind": 350.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-04-01",
+          "end": "2023-06-30",
+          "d2_itemized": 2800.0,
+          "ours_itemized": 2800.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-07-01",
+          "end": "2023-09-30",
+          "d2_itemized": 3365.0,
+          "ours_itemized": 3365.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-10-01",
+          "end": "2023-12-31",
+          "d2_itemized": 3480.0,
+          "ours_itemized": 3480.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-01-01",
+          "end": "2024-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-07-01",
+          "end": "2026-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ],
+      "disclosed": [
+        {
+          "beg": "2019-01-01",
+          "end": "2019-03-31",
+          "residual": -5175.0,
+          "reason": "SBE-side: the committee's Quarterly D-2 (filing 737746, received 2019-04-19; it amends 735518) swears IndivContribI $175.00 and LoanRcvI $5,000.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The period is the committee's 2019 run, before its 2027 candidacy. Our itemized total for the period is $0.00.",
+          "annotated": "2026-10-29"
+        },
+        {
+          "beg": "2019-07-01",
+          "end": "2019-09-30",
+          "residual": -4536.0,
+          "reason": "SBE-side: the committee's Quarterly D-2 (filing 750283, received 2019-10-09) swears IndivContribI $400.00 and LoanRcvI $4,136.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The period is the committee's 2019 run, before its 2027 candidacy. Our itemized total for the period is $0.00.",
+          "annotated": "2026-10-29"
+        }
+      ]
+    },
     "cand-norington-reaves-sb-2024-d10": {
       "committee_name": "Karin for Kids",
       "sbe_committee_id": "39876",
@@ -31343,6 +33375,196 @@
           "end": "2024-12-31",
           "d2_itemized": 93615.0,
           "ours_itemized": 93615.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-07-01",
+          "end": "2026-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-normand-ward-49": {
+      "committee_name": "Friends of Peter J Normand",
+      "sbe_committee_id": "38791",
+      "superseded_filings": 8,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 17,
+      "d2_itemized": 0.0,
+      "ours_itemized": 0,
+      "residual": 0.0,
+      "d2_inkind": 1099.48,
+      "ours_inkind": 1099.48,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2022-09-02",
+          "end": "2022-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-10-01",
+          "end": "2022-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 300.84,
+          "ours_inkind": 300.84,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-01-01",
+          "end": "2023-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-04-01",
+          "end": "2023-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-07-01",
+          "end": "2023-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 399.32,
+          "ours_inkind": 399.32,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-10-01",
+          "end": "2023-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-01-01",
+          "end": "2024-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 399.32,
+          "ours_inkind": 399.32,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
           "residual": 0.0,
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
@@ -32161,6 +34383,95 @@
         }
       ]
     },
+    "cand-ray-ward-37": {
+      "committee_name": "Howard Ray for 37th Ward",
+      "sbe_committee_id": "38671",
+      "superseded_filings": 2,
+      "state": "RESIDUAL",
+      "flags": [
+        "OVER-THRESHOLD",
+        "COVERAGE-MISS",
+        "DISCLOSED"
+      ],
+      "periods_count": 5,
+      "d2_itemized": 14287.0,
+      "ours_itemized": 12587.0,
+      "residual": -1700.0,
+      "d2_inkind": 0.0,
+      "ours_inkind": 0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2023-07-24",
+      "coverage_miss_periods": [
+        {
+          "beg": "2022-07-01",
+          "end": "2022-09-30",
+          "d2_itemized": 1700.0
+        }
+      ],
+      "per_period": [
+        {
+          "beg": "2022-07-01",
+          "end": "2022-09-30",
+          "d2_itemized": 1700.0,
+          "ours_itemized": 0.0,
+          "residual": -1700.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": true
+        },
+        {
+          "beg": "2022-10-01",
+          "end": "2022-12-31",
+          "d2_itemized": 1450.0,
+          "ours_itemized": 1450.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-01-01",
+          "end": "2023-03-31",
+          "d2_itemized": 11137.0,
+          "ours_itemized": 11137.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-04-01",
+          "end": "2023-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-07-01",
+          "end": "2023-07-24",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ],
+      "disclosed": [
+        {
+          "beg": "2022-07-01",
+          "end": "2022-09-30",
+          "residual": -1700.0,
+          "reason": "SBE-side: the committee's Quarterly D-2 (filing 863641, received 2022-10-20) swears IndivContribI $1,700.00, and no Schedule A row of any status exists for that filing in the SBE bulk receipts. The period is the committee's 2022 run, before its 2027 candidacy. Our itemized total for the period is $0.00.",
+          "annotated": "2026-10-29"
+        }
+      ]
+    },
     "cand-revuluri-sb-president": {
       "committee_name": "Friends of Sendhil Revuluri",
       "sbe_committee_id": "40912",
@@ -32214,6 +34525,516 @@
           "end": "2026-09-30",
           "d2_itemized": 458199.0,
           "ours_itemized": 458199.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-reyes-ward-14": {
+      "committee_name": "Friends of Raul Reyes",
+      "sbe_committee_id": "26000",
+      "superseded_filings": 43,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 49,
+      "d2_itemized": 119000.0,
+      "ours_itemized": 119000.0,
+      "residual": 0.0,
+      "d2_inkind": 14039.21,
+      "ours_inkind": 14039.21,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2014-07-30",
+          "end": "2014-09-30",
+          "d2_itemized": 8000.0,
+          "ours_itemized": 8000.0,
+          "residual": 0.0,
+          "d2_inkind": 1800.0,
+          "ours_inkind": 1800.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2014-10-01",
+          "end": "2014-12-31",
+          "d2_itemized": 400.0,
+          "ours_itemized": 400.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2015-01-01",
+          "end": "2015-03-31",
+          "d2_itemized": 13650.0,
+          "ours_itemized": 13650.0,
+          "residual": 0.0,
+          "d2_inkind": 223.21,
+          "ours_inkind": 223.21,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2015-04-01",
+          "end": "2015-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2015-07-01",
+          "end": "2015-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2015-10-01",
+          "end": "2015-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2016-01-01",
+          "end": "2016-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2016-04-01",
+          "end": "2016-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2016-07-01",
+          "end": "2016-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2016-10-01",
+          "end": "2016-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2017-01-01",
+          "end": "2017-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2017-04-01",
+          "end": "2017-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2017-07-01",
+          "end": "2017-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2017-10-01",
+          "end": "2017-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2018-01-01",
+          "end": "2018-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2018-04-01",
+          "end": "2018-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2018-07-01",
+          "end": "2018-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2018-10-01",
+          "end": "2018-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-01-01",
+          "end": "2019-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-04-01",
+          "end": "2019-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-07-01",
+          "end": "2019-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2019-10-01",
+          "end": "2019-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-01-01",
+          "end": "2020-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-04-01",
+          "end": "2020-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-07-01",
+          "end": "2020-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2020-10-01",
+          "end": "2020-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2021-01-01",
+          "end": "2021-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2021-04-01",
+          "end": "2021-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2021-07-01",
+          "end": "2021-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2021-10-01",
+          "end": "2021-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-01-01",
+          "end": "2022-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-04-01",
+          "end": "2022-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-07-01",
+          "end": "2022-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2022-10-01",
+          "end": "2022-12-31",
+          "d2_itemized": 52950.0,
+          "ours_itemized": 52950.0,
+          "residual": 0.0,
+          "d2_inkind": 1750.0,
+          "ours_inkind": 1750.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-01-01",
+          "end": "2023-03-31",
+          "d2_itemized": 43500.0,
+          "ours_itemized": 43500.0,
+          "residual": 0.0,
+          "d2_inkind": 8156.0,
+          "ours_inkind": 8156.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-04-01",
+          "end": "2023-06-30",
+          "d2_itemized": 500.0,
+          "ours_itemized": 500.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-07-01",
+          "end": "2023-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2023-10-01",
+          "end": "2023-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 2110.0,
+          "ours_inkind": 2110.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-01-01",
+          "end": "2024-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-04-01",
+          "end": "2024-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-07-01",
+          "end": "2024-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2024-10-01",
+          "end": "2024-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-01-01",
+          "end": "2025-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-04-01",
+          "end": "2025-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-07-01",
+          "end": "2025-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2025-10-01",
+          "end": "2025-12-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-01-01",
+          "end": "2026-03-31",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-04-01",
+          "end": "2026-06-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-07-01",
+          "end": "2026-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
           "residual": 0.0,
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
@@ -32555,6 +35376,36 @@
           "residual": 0.0,
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-scrutchens-ward-06": {
+      "committee_name": "Friends of Allyson",
+      "sbe_committee_id": "41290",
+      "superseded_filings": 1,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 1,
+      "d2_itemized": 18170.0,
+      "ours_itemized": 18170.0,
+      "residual": 0.0,
+      "d2_inkind": 2505.0,
+      "ours_inkind": 2505.0,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-07-21",
+          "end": "2026-09-30",
+          "d2_itemized": 18170.0,
+          "ours_itemized": 18170.0,
+          "residual": 0.0,
+          "d2_inkind": 2505.0,
+          "ours_inkind": 2505.0,
           "coverage_miss": false
         }
       ]

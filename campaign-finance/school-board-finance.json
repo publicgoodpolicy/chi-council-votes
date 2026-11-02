@@ -1,15 +1,15 @@
 {
   "schema_version": 1.5,
-  "generated_at": "2026-10-29T13:00:44Z",
+  "generated_at": "2026-11-01T17:30:47Z",
   "source": "derived: school-board-data.json (bridge) x election-data.json (rollups)",
   "_sync": {
-    "generated_at": "2026-10-29T13:00:44Z",
+    "generated_at": "2026-11-01T17:30:47Z",
     "inputs": {
       "school-board-data.json": {
         "sha256": "0145259348f690225699ecfc8c826f425c73ec5ae9a4a2fd135490f23ec6a4ee"
       },
       "election-data.json": {
-        "sha256": "29fe299ee79289e86c304fa09c6fb50d4a0df7ed774053d98d82304b7fec58dd"
+        "sha256": "6734173f40ba2f08100876bcd486d524be77e7a9607ccd2775bed6a12b724cdb"
       }
     },
     "convention": "figures are election-labeled and sourced from rollups.by_candidate_election; by_candidate is resolution-only; the four streams are never summed in this artifact"
@@ -2978,7 +2978,7 @@
         },
         {
           "donor_id": "chicagoland-operators-joint-labor-management-pac",
-          "name": "Chicagoland Operators Joint Labor-Management PAC",
+          "name": "Chicagoland Operators Joint Labor Management PAC",
           "role": "affiliated-pac"
         },
         {
@@ -3602,7 +3602,7 @@
         },
         {
           "donor_id": "unite-here",
-          "name": "Unite Here",
+          "name": "UNITE HERE!",
           "role": "alt-name"
         },
         {
@@ -5741,7 +5741,7 @@
           "name": "Friends of Ed Bannon",
           "sbe_committee_id": "38810",
           "data_quality": "REAL",
-          "last_updated": "2026-10-21"
+          "last_updated": "2026-11-01"
         }
       ],
       "finance_state": "totals_only",
@@ -5984,8 +5984,8 @@
           },
           {
             "donor_id": "chicagoland-operators-joint-labor-management-pac",
-            "name": "Chicagoland Operators Joint Labor-Management PAC",
-            "type": "PAC",
+            "name": "Chicagoland Operators Joint Labor Management PAC",
+            "type": "Other",
             "amount": 21574.0,
             "count": 6,
             "industries": [
@@ -7664,8 +7664,8 @@
         "2026": [
           {
             "donor_id": "chicagoland-operators-joint-labor-management-pac",
-            "name": "Chicagoland Operators Joint Labor-Management PAC",
-            "type": "PAC",
+            "name": "Chicagoland Operators Joint Labor Management PAC",
+            "type": "Other",
             "amount": 18500.0,
             "count": 5,
             "industries": [
@@ -9200,7 +9200,7 @@
           "name": "Friends of Jennifer Custer",
           "sbe_committee_id": "39805",
           "data_quality": "REAL",
-          "last_updated": "2026-10-21"
+          "last_updated": "2026-11-01"
         }
       ],
       "finance_state": "full",
@@ -11593,7 +11593,7 @@
           "name": "Ebony DeBerry for School Board",
           "sbe_committee_id": "39821",
           "data_quality": "REAL",
-          "last_updated": "2026-10-21"
+          "last_updated": "2026-11-01"
         }
       ],
       "finance_state": "full",
@@ -11675,7 +11675,7 @@
           "name": "Debby For District 2B",
           "sbe_committee_id": "39834",
           "data_quality": "REAL",
-          "last_updated": "2026-10-21"
+          "last_updated": "2026-11-01"
         }
       ],
       "finance_state": "totals_only",
@@ -11730,7 +11730,7 @@
           "name": "Friends of Norma Rios Sierra",
           "sbe_committee_id": "41082",
           "data_quality": "REAL",
-          "last_updated": "2026-10-21"
+          "last_updated": "2026-11-01"
         }
       ],
       "finance_state": "totals_only",
@@ -14119,7 +14119,7 @@
           "name": "Community for Carlos Rivas",
           "sbe_committee_id": "39786",
           "data_quality": "REAL",
-          "last_updated": "2026-10-21"
+          "last_updated": "2026-11-01"
         }
       ],
       "finance_state": "full",
@@ -17547,7 +17547,7 @@
           "name": "Neighbors for Karen Zaccor for ERSB",
           "sbe_committee_id": "39866",
           "data_quality": "REAL",
-          "last_updated": "2026-10-21"
+          "last_updated": "2026-11-01"
         }
       ],
       "finance_state": "full",
@@ -22429,7 +22429,7 @@
           "name": "Ellen for Education",
           "sbe_committee_id": "39858",
           "data_quality": "REAL",
-          "last_updated": "2026-10-21"
+          "last_updated": "2026-11-01"
         }
       ],
       "finance_state": "full",
@@ -24513,7 +24513,7 @@
           "name": "Friends of Jitu Brown",
           "sbe_committee_id": "39853",
           "data_quality": "REAL",
-          "last_updated": "2026-10-21"
+          "last_updated": "2026-11-01"
         }
       ],
       "finance_state": "full",
@@ -25804,7 +25804,7 @@
           "name": "Committee to Elect Michilla Blaise",
           "sbe_committee_id": "37001",
           "data_quality": "REAL",
-          "last_updated": "2026-10-21"
+          "last_updated": "2026-11-01"
         }
       ],
       "finance_state": "full",
@@ -28199,7 +28199,7 @@
           "name": "Neighbors for Anusha",
           "sbe_committee_id": "39855",
           "data_quality": "REAL",
-          "last_updated": "2026-10-21"
+          "last_updated": "2026-11-01"
         }
       ],
       "finance_state": "full",
@@ -33283,7 +33283,7 @@
           "name": "Citizens for Biggs",
           "sbe_committee_id": "39881",
           "data_quality": "REAL",
-          "last_updated": "2026-10-21"
+          "last_updated": "2026-11-01"
         }
       ],
       "finance_state": "full",
@@ -35011,7 +35011,7 @@
           "name": "Friends of Yesenia Lopez",
           "sbe_committee_id": "39844",
           "data_quality": "REAL",
-          "last_updated": "2026-10-21"
+          "last_updated": "2026-11-01"
         }
       ],
       "finance_state": "full",
@@ -36609,7 +36609,7 @@
           "name": "Friends for Angel Gutierrez",
           "sbe_committee_id": "39873",
           "data_quality": "REAL",
-          "last_updated": "2026-10-21"
+          "last_updated": "2026-11-01"
         }
       ],
       "finance_state": "full",
@@ -38164,7 +38164,7 @@
           "name": "Therese Boyle for District 9 CPS BOE",
           "sbe_committee_id": "39843",
           "data_quality": "REAL",
-          "last_updated": "2026-10-21"
+          "last_updated": "2026-11-01"
         }
       ],
       "finance_state": "full",
@@ -40310,7 +40310,7 @@
           "name": "Citizens for Che \"Rhymefest\" Smith",
           "sbe_committee_id": "39788",
           "data_quality": "REAL",
-          "last_updated": "2026-10-21"
+          "last_updated": "2026-11-01"
         }
       ],
       "finance_state": "full",

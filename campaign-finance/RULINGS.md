@@ -3870,6 +3870,17 @@ The mechanism that materializes C5's `{DATA_THROUGH}` and the exact composition 
 
 *Provenance, amendment (small gifts; C11): refresh small-gifts ratification package, revision 1 (`refresh-small-gifts-register-package-rev1.md`), sha256 `3b2aac07fcc334c186154784257c2b60be6f9b3f21084caec666313820e2e863`, 5,364 B / 71 L, region R1 (its lines 11–21), transcribed verbatim from the marked ruling region; the `> ` markers are the source’s own. Ratified by Ishan in chat 2026-10-20 19:04 EDT ("85 ratify"). Recorded under the PS-93 pattern: no id is allocated, and the text above stands unaltered. The gate’s `[METH/REGISTER]` reads C11 and the section heading from this block and compares the rendered pages with them.*
 
+> **Amendment (who the page lists; C12).** Ruling BAL-168-6a. On the council branch, C12 is a
+> plain paragraph after C1 and before C2. The school-board branch does not carry it. The
+> composition is otherwise as it stands.
+> C12 reads:
+>
+> Candidates are those who filed nominating papers for the February 23, 2027 election, as listed
+> by the Chicago Board of Election Commissioners; candidates who formed committees but did not
+> file, or were later removed, are kept under ‘Not on the ballot.’
+
+*Provenance, amendment (who the page lists; C12): ruling BAL-168-6a, ratified by Ishan in chat 2026-10-26 22:56 CDT (“168-6 yes”), recorded in the Project as `claude/rulings-2026-10-26-168.md`; the sentence is transcribed verbatim from that record, and the placement is the one the ratified page renders. Transcription ratified by Ishan as ruling BAL-178. Recorded under the PS-93 pattern: no id is allocated, and the text above stands unaltered. The gate’s `[METH/REGISTER]` reads C12 from this block and compares the rendered council page with it.*
+
 ### CNCL-DATA-1 P2 — display decisions
 
 The P2 display decisions ratified as a set, transcribed verbatim from addendum A1:

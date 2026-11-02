@@ -374,6 +374,11 @@ def build_candidates(race_map, race_ids, rid_to_elec, rid_to_ward=None, ward_to_
         for rec in cands:
             if rec.get("committee_id") is not None:
                 continue
+            # BAL: the linkage is the SITTING alder's committee, so it reaches only the
+            # incumbent's record. A challenger with no committee of their own (the 2027 filers
+            # with none found, BAL-171) stays null; before BAL every challenger had one.
+            if not rec.get("incumbent"):
+                continue
             w = rid_to_ward.get(rec.get("race_id"))
             if w is None:
                 continue

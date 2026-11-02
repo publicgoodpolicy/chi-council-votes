@@ -2380,12 +2380,29 @@ async function assertPersonSurface(T, ctx, fx) {
     function walk(json) {
       var idx = D.loadData(json, { office: 'city_council' });
       var om = D.viewModels.officeRaces(idx, 'city_council', null);
-      var seen = 0, resolved = 0, largest = 0;
+      // BAL (168-4a, 167-6a/171-3a, BAL-174a): a candidacy resolves a figure exactly when a committee
+      // record in the artifact names it (the record's own candidate_id, read here from json.committees,
+      // never from data.js or from the candidacy's committee_id, so a candidacy that loses its linkage
+      // fires whatever its money); every other candidacy states its ratified line instead of $0 bars —
+      // the no-itemized line when it names a committee, else the no-committee line, or the
+      // committee-elsewhere line when it names one only by reference.
+      var hasRec = {};
+      Object.keys(json.committees || {}).forEach(function (k) {
+        var rec = json.committees[k]; if (rec && rec.candidate_id && rec.type !== 'independent_expenditure') hasRec[rec.candidate_id] = 1;
+      });
+      var candById = {}; (json.candidates || []).forEach(function (c) { candById[c.id] = c; });
+      var seen = 0, resolved = 0, expected = 0, largest = 0, wrongLine = [];
       om.groups.forEach(function (g) { g.races.forEach(function (r) {
         var rv = D.viewModels.raceView(idx, idx.raceBySlug[r.slug], null);
         (rv && rv.candidates || []).forEach(function (c) {
           seen++;
+          var jc = candById[c.id] || {}, rec = !!hasRec[c.id];
+          if (rec) expected++;
           if (c.figures && c.figures.contributions) resolved++;
+          else {
+            var line = jc.committee_id != null ? 'committee_no_itemized' : (jc.committee_sbe_ref ? 'committee_elsewhere' : 'no_committee');
+            if (rec || c.financeFacet !== line) wrongLine.push(c.id);
+          }
           var t = (c.figures && c.figures.contributions && c.figures.contributions.total) || 0;
           if (t > largest) largest = t;
         });
@@ -2410,38 +2427,69 @@ async function assertPersonSurface(T, ctx, fx) {
         if (!c.date || c.date < WIN.start || c.date > WIN.end) return;
         rows++; sum += c.amount || 0;
       });
-      return { seen: seen, resolved: resolved, largest: largest,
-               sum: Math.round(sum * 100) / 100, rows: rows };
+      // per committee, for the bite's victim (the candidacy whose committee carries the most money)
+      var byCmte = {};
+      (json.contributions || []).forEach(function (c) {
+        var s0 = sbeOf[c.committee_id]; if (!muniCmte[s0]) return;
+        if (String(c.contribution_type || '').indexOf('IE Committee') === 0 || (c.contribution_type === 'Other Receipt' && !c.is_own_committee)) return;
+        if (!c.date || c.date < WIN.start || c.date > WIN.end) return;
+        byCmte[s0] = (byCmte[s0] || 0) + (c.amount || 0);
+      });
+      return { seen: seen, resolved: resolved, expected: expected, wrongLine: wrongLine, largest: largest,
+               sum: Math.round(sum * 100) / 100, rows: rows, byCmte: byCmte };
+    }
+    function passes(m) {
+      return m.seen > 0 && m.resolved === m.expected && m.expected > 0 && m.wrongLine.length === 0 && m.largest > 0 && m.sum >= FLOOR;
     }
 
     var m = walk(JSON.parse(raw));
-    var ok = m.seen > 0 && m.resolved === m.seen && m.largest > 0 && m.sum >= FLOOR;
-    T.ok('[COUNCIL/CAND] every council candidacy resolves a figure and the windowed sum holds the ' +
-      'floor — ' + m.resolved + ' of ' + m.seen + ' resolve, largest ' + m.largest + ', ' +
+    var ok = passes(m);
+    T.ok('[COUNCIL/CAND] every council candidacy whose committee has a record resolves a figure, every other one ' +
+      'states its ratified line, and the windowed sum holds the floor — ' + m.resolved + ' of ' + m.seen +
+      ' resolve (' + m.expected + ' with a committee record), ' + (m.seen - m.resolved) + ' state their line' +
+      (m.wrongLine.length ? ' — WRONG LINE: ' + m.wrongLine.slice(0, 6).join(', ') : '') + ', largest ' + m.largest + ', ' +
       m.rows + ' rows summing ' + m.sum + ' >= ' + FLOOR, ok);
 
     // BITE AT BIRTH — apply and restore inside ONE command boundary, on an in-memory copy so no
     // file is touched at all. Breaking one candidacy's committee linkage drops that committee's
     // money from the independent sum while the view models still list the candidacy: the two
     // paths then disagree, which is the disagreement D-25 requires a real check to be capable of.
-    var bit = JSON.parse(raw);
-    var victim = null;
-    for (var i = 0; i < bit.candidates.length && !victim; i++) {
-      var rc = bit.races.filter(function (r) { return r.id === bit.candidates[i].race_id; })[0];
-      if (rc && rc.office === 'alderperson' && bit.candidates[i].committee_id != null) victim = bit.candidates[i];
-    }
+    // BAL: the bite breaks the linkage of the candidacy whose committee carries the most windowed
+    // money: its committee record still names it, so it must resolve and does not, and the money it
+    // took with it also sinks the floor. A second
+    // bite keeps the linkage and strips the line — a committee-less card reading $0 — which must fire.
     var before = walk(JSON.parse(raw));
+    var bit = JSON.parse(raw), victim = null, best = -1;
+    var raceOff = {}; bit.races.forEach(function (r) { raceOff[r.id] = r.office; });
+    bit.candidates.forEach(function (c) {
+      if (raceOff[c.race_id] === 'alderperson' && c.committee_id != null && (before.byCmte[String(c.committee_id)] || 0) > best) {
+        best = before.byCmte[String(c.committee_id)] || 0; victim = c;
+      }
+    });
     victim.committee_id = null;
     var after = walk(bit);
-    T.ok('[COUNCIL/CAND:bite] breaking one candidacy\'s committee linkage makes the check fire — ' +
+    T.ok('[COUNCIL/CAND:bite] breaking the linkage of the candidacy with the most money (' + victim.id + ') makes the check fire — ' +
       'resolved ' + before.resolved + '/' + before.seen + ' -> ' + after.resolved + '/' + after.seen +
-      ', sum ' + before.sum + ' -> ' + after.sum,
-      !(after.seen > 0 && after.resolved === after.seen && after.largest > 0 && after.sum >= FLOOR));
+      ', sum ' + before.sum + ' -> ' + after.sum, !passes(after));
+    var lone = null;
+    JSON.parse(raw).candidates.forEach(function (c) { if (!lone && raceOff[c.race_id] === 'alderperson' && c.committee_id == null) lone = c; });
+    // the line is stripped on the view-model side: the walk is re-run with the facet removed from one card
+    var stripped = null;
+    if (lone) {
+      var keep = D.viewModels.raceView;
+      D.viewModels.raceView = function () {
+        var rv = keep.apply(this, arguments);
+        (rv && rv.candidates || []).forEach(function (c) { if (c.id === lone.id) c.financeFacet = null; });
+        return rv;
+      };
+      try { stripped = walk(JSON.parse(raw)); } finally { D.viewModels.raceView = keep; }
+    }
+    T.ok('[COUNCIL/CAND:bite] a committee-less candidacy whose card loses its ratified line makes the check fire (' +
+      (lone ? lone.id : 'none found') + ')', !!lone && passes(before) && !passes(stripped));
     // restore verified against the pin: the untouched parse must still pass
     var restored = walk(JSON.parse(raw));
     T.ok('[COUNCIL/CAND:bite] restore verified — the unmutated artifact passes again (' +
-      restored.resolved + '/' + restored.seen + ', ' + restored.sum + ')',
-      restored.seen > 0 && restored.resolved === restored.seen && restored.sum >= FLOOR);
+      restored.resolved + '/' + restored.seen + ', ' + restored.sum + ')', passes(restored));
   })();
 
   // [COUNCIL/DONOR] the council donor surface excludes what the exclusions say it excludes.
@@ -2615,6 +2663,8 @@ async function assertPersonSurface(T, ctx, fx) {
     // The fifth amendment (small gifts; rulings 74a, 76b, 82a, ratified 2026-10-20 as ruling 85): C11 in
     // C6's form, and the school-board section's heading, the bold phrase after "a section headed".
     var C11 = readsAfter('C11');
+    // BAL-168-6a (transcribed as BAL-178): C12, who the council page lists, in C6's form.
+    var C12 = readsAfter('C12');
     var sgHead = (/a section headed \*\*([^*]+)\*\*/.exec(r4) || [])[1] || null;
 
     var bad = [];
@@ -2627,6 +2677,7 @@ async function assertPersonSurface(T, ctx, fx) {
     if (!C8) bad.push('C8 not found in the R8/R9 composition entry\'s third amendment');
     if (!sbHead) bad.push('the school-board section\'s heading not found in the third amendment');
     if (!C11) bad.push('C11 not found in the R8/R9 composition entry\'s fifth amendment');
+    if (!C12) bad.push('C12 not found in the R8/R9 composition entry\'s sixth amendment');
     if (!sgHead) bad.push('the small-gifts section\'s heading not found in the fifth amendment');
     [['C9', C9], ['C10', C10], ['S1', S1], ['S2', S2], ['the reworded heading', newHead], ['the heading it replaces', oldHead],
      ['the sentence C10 follows', c10After], ['the words S2 replaces', oldPending]].forEach(function (x) {
@@ -2730,12 +2781,13 @@ async function assertPersonSurface(T, ctx, fx) {
     }
     function check(html) {
       var p = paras(html), fails = [];
-      var want = [bind(C[1]), bind(C[2]), bind(C[5]), bind(C[3]), bind(C[4]), C6, bindOther(C7, 'city_council'), C8, C11, C9, C10];   // fifth amendment: C11 after C8   // M5 (R3): C6 after C4; M2: C7 and C8 after C6; AUDIT-2 (R4): C9 and C10 after C8
+      var want = [bind(C[1]), C12, bind(C[2]), bind(C[5]), bind(C[3]), bind(C[4]), C6, bindOther(C7, 'city_council'), C8, C11, C9, C10];   // sixth amendment (BAL): C12 after C1   // fifth amendment: C11 after C8   // M5 (R3): C6 after C4; M2: C7 and C8 after C6; AUDIT-2 (R4): C9 and C10 after C8
       // --- premise 3: the page rendered the ten C-paragraphs (C6 added at M5, C7 and C8 at M2, C9 and C10 at R4), the verification
       // paragraph, and the artifact-links paragraph (D3). The count is asserted, not assumed, because every
       // comparison below is positional: a page one paragraph short would otherwise compare C4
       // against the verification text and report a difference that is really a shape change.
-      if (p.length !== 13) { fails.push('rendered ' + p.length + ' <p>, expected 13'); return fails; }
+      // Sixth amendment (BAL): C12 after C1, so fourteen <p> and every later index moves by one.
+      if (p.length !== 14) { fails.push('rendered ' + p.length + ' <p>, expected 14'); return fails; }
       want.forEach(function (w, i) {
         if (p[i] !== w) fails.push('C-paragraph ' + (i + 1) + ' differs from the register');
       });
@@ -2744,7 +2796,7 @@ async function assertPersonSurface(T, ctx, fx) {
       var block = rEntry.split('\n**Bindings**')[0].split('\n');
       var start = block.findIndex(function (l) { return l.indexOf('Every data update') === 0; });
       var sentence = block.slice(start).join(' ').replace(/\s+/g, ' ').trim();
-      if (p[11] !== bindR11(sentence)) fails.push('the verify paragraph differs from the register');
+      if (p[12] !== bindR11(sentence)) fails.push('the verify paragraph differs from the register');
       return fails;
     }
 
@@ -2788,6 +2840,7 @@ async function assertPersonSurface(T, ctx, fx) {
       if (!S2 || sp[13].slice(-(S2.length + 2)) !== '. ' + S2 || h.indexOf(S2 + '</p><h3>') < 0) f.push('the paragraph under the reworded heading does not end with S2');
       if (!oldHead || h.indexOf(oldHead) >= 0) f.push('the heading the register replaced is still rendered');
       if (!oldPending || h.indexOf(oldPending) >= 0) f.push('the sentence S2 replaced is still rendered');
+      if (C12 && h.indexOf(C12) >= 0) f.push('C12 is rendered on the school-board branch');
       [C9, C10, S1, S2, C11].forEach(function (x, i) {
         if (x && h.split(x).length !== 2) f.push(['C9', 'C10', 'S1', 'S2', 'C11'][i] + ' is not rendered exactly once on the school-board branch');
       });
@@ -2802,7 +2855,7 @@ async function assertPersonSurface(T, ctx, fx) {
     }
     T.ok('[METH/REGISTER] every rendered council methodology paragraph equals the register\'s ' +
       'ratified text — ' + (bad.length ? bad.join('; ')
-        : '11 C-strings + R11 on the council branch; SB-METH-1\'s C5, C9, the section "' + sbHead +
+        : '12 C-strings + R11 on the council branch; SB-METH-1\'s C5, C9, the section "' + sbHead +
           '" (C7, C8), the section "' + sgHead + '" (C11), C10, S1 and, under "' + newHead + '", S2 on the school-board branch; extracted by heading from RULINGS.md, ' +
           'character-identical, C7 bound per page to ' + R._moneyCents(otherFor('city_council').amount) + ' / ' +
           otherFor('city_council').count + ' and ' + R._moneyCents(otherFor('school_board').amount) + ' / ' +
@@ -2828,6 +2881,11 @@ async function assertPersonSurface(T, ctx, fx) {
     var mutC11s = C11 ? sbHtml.split(C11).join(C11.slice(0, -1)) : sbHtml;
     T.ok('[METH/REGISTER:bite] C11 with its last character removed makes the check fire, on the council branch and on the school-board branch',
       !!C11 && mutC11c !== html && check(mutC11c).length > 0 && mutC11s !== sbHtml && sbCheck(mutC11s).length > 0 && sbCheck(sbHtml).length === 0);
+    // Sixth amendment (BAL): the same bite on C12, on the council branch; and C12 put on the school-board branch.
+    var mutC12 = C12 ? html.split(C12).join(C12.slice(0, -1)) : html;
+    var sbC12 = C12 ? sbHtml.replace('</p>', '</p><p>' + C12 + '</p>') : sbHtml;
+    T.ok('[METH/REGISTER:bite] C12 with its last character removed makes the check fire on the council branch, and C12 put on the school-board branch makes it fire there',
+      !!C12 && mutC12 !== html && check(mutC12).length > 0 && check(html).length === 0 && sbC12 !== sbHtml && sbCheck(sbC12).length > 0);
     // M5 (R3): the same bite on C6, the paragraph the amendment added.
     var mutC6 = html.replace('We mark only committees', 'We mark only committee');
     T.ok('[METH/REGISTER:bite] a one-character edit to the rendered C6 makes the check fire',
@@ -2851,9 +2909,9 @@ async function assertPersonSurface(T, ctx, fx) {
       return h1 !== h0 && fn(h0).length === 0 && fn(h1).some(function (x) { return re.test(x); });
     };
     T.ok('[METH/REGISTER:bite] C9 with its last character removed makes the check fire, on the council branch and on the school-board branch',
-      fires(check, html, cut(html, C9), /C-paragraph 10 /) && fires(sbCheck, sbHtml, cut(sbHtml, C9), /C9 differs/));   // fifth amendment: C11 before C9
+      fires(check, html, cut(html, C9), /C-paragraph 11 /) && fires(sbCheck, sbHtml, cut(sbHtml, C9), /C9 differs/));   // fifth amendment: C11 before C9; sixth (BAL): C12 after C1
     T.ok('[METH/REGISTER:bite] C10 with its last character removed makes the check fire, on the council branch and on the school-board branch',
-      fires(check, html, cut(html, C10), /C-paragraph 11 /) && fires(sbCheck, sbHtml, cut(sbHtml, C10), /one space and C10/));
+      fires(check, html, cut(html, C10), /C-paragraph 12 /) && fires(sbCheck, sbHtml, cut(sbHtml, C10), /one space and C10/));
     T.ok('[METH/REGISTER:bite] S1 with its last character removed makes the school-board check fire',
       fires(sbCheck, sbHtml, cut(sbHtml, S1), /S1 is not the last paragraph/));
     T.ok('[METH/REGISTER:bite] S2 with its last character removed makes the school-board check fire',
@@ -2927,10 +2985,14 @@ async function assertPersonSurface(T, ctx, fx) {
         var w = (D.ELECTION_WINDOWS[o[1]] || {})[opt.id];
         (D.viewModels.officeRaces(ix, o[0], opt.id).groups || []).forEach(function (g) { (g.races || []).forEach(function (r) {
           var rv = D.viewModels.raceView(ix, ix.raceBySlug[r.slug], null); if (!rv) return;
-          var live = (rv.candidates || []).filter(function (c) { return c.hasFinance; });
+          // BAL (168-2a, 169-1a): on a council ward the off-ballot cards render after the filers', in
+          // the "Not on the ballot" section, and the small-gifts comparison is the filers' own.
+          var isOff = function (c) { return rv.race.office === 'alderperson' && c.offBallot; };
+          var live = (rv.candidates || []).filter(function (c) { return c.hasFinance && !isOff(c); });
+          var drawn = live.concat((rv.candidates || []).filter(function (c) { return c.hasFinance && isOff(c); }));
           var html = R.renderRaceView(rv);
-          var arts = html.match(/<article class="card" id="cand-[^"]*">[\s\S]*?<\/article>/g) || [];   // live cards, in the view model's order
-          live.forEach(function (c, li) {
+          var arts = html.match(/<article class="card" id="cand-[^"]*">[\s\S]*?<\/article>/g) || [];   // live cards, in the order drawn
+          drawn.forEach(function (c, li) {
             cards++;
             var f = c.figures, want = oracle(c.fundingId, rv.win);
             if (Math.abs((f.smallGifts.total || 0) - want) > 0.005) bad.push(o[0] + ' ' + c.id + ': small gifts ' + f.smallGifts.total + ' vs recount ' + want);
@@ -4028,7 +4090,9 @@ async function assertPersonSurface(T, ctx, fx) {
       // and the spending aimed at it by a committee that is no candidate's own.
       var offs = D.OFFICE_RACE_OFFICES[off], ro = {}, on = {}, own = {}, rows = { direct: 0, support: 0, oppose: 0 };
       json.races.forEach(function (r) { ro[r.id] = r.office; });
-      json.candidates.forEach(function (c) { if (offs.indexOf(ro[c.race_id]) >= 0 && !c.vacating_for) on[c.id] = 1; });
+      // BAL-177a: on the council page, a candidate off the ballot (did not file, or removed) is not one of the page's candidates here.
+      json.candidates.forEach(function (c) { if (offs.indexOf(ro[c.race_id]) >= 0 && !c.vacating_for &&
+        !(off === 'city_council' && (c.ballot_status === 'not_filed' || c.ballot_status === 'removed'))) on[c.id] = 1; });
       Object.keys(json.committees).forEach(function (k) { if (json.committees[k].candidate_id) own[k] = json.committees[k].candidate_id; });
       var inW = function (d) { return !!d && (win.start == null || d >= win.start) && (win.end == null || d <= win.end); };
       var cyc = function (c) { return c.cycle !== 'pre-2011' && c.cycle !== 'undated'; };
@@ -4165,7 +4229,9 @@ async function assertPersonSurface(T, ctx, fx) {
         var rv = vm.races[slug], doc = parse(R.renderRaceView(rv));
         (rv.candidates || []).forEach(function (c) {
           if (!c.hasFinance) return;
-          var panel = byId(doc, 'd-' + c.slug + '-c'), lines = c.contributors.lines;
+          // BAL (168-2a): an off-ballot council card renders in the "Not on the ballot" section under the 'x-' prefix.
+          var pre = rv.race && rv.race.office === 'alderperson' && c.offBallot ? 'x-' : 'd-';
+          var panel = byId(doc, pre + c.slug + '-c'), lines = c.contributors.lines;
           var clickable = lines.filter(function (l) { return !l.isSelf && !l.isAggregate; }), plain = lines.filter(function (l) { return l.isSelf || l.isAggregate; });
           var got = panel ? all(panel, 'button.crow[data-funder]') : [], gotPlain = panel ? all(panel, '.crow.plain:not(.smallgift)') : [];   // 74a: the small-gifts line is not a contributor line (PS-96)
           if (got.length !== clickable.length || gotPlain.length !== plain.length) { say(tag + ' ' + c.id + ': the card does not render one row per contributor line'); return; }
@@ -4180,7 +4246,7 @@ async function assertPersonSurface(T, ctx, fx) {
           nStat.own += plain.filter(function (l) { return l.isSelf; }).length;
           [['s', c.ieSupportDetail], ['o', c.ieOpposeDetail]].forEach(function (d) {
             ((d[1] || {}).spenders || []).forEach(function (sp, n) {
-              var t2 = byId(doc, 'd-' + c.slug + '-' + d[0] + '-' + n), lead = t2 && t2.querySelector('.ie-lead'), want = primarilyOf(sp.funders);
+              var t2 = byId(doc, pre + c.slug + '-' + d[0] + '-' + n), lead = t2 && t2.querySelector('.ie-lead'), want = primarilyOf(sp.funders);
               if (!t2) { say(tag + ' ' + c.id + ': no funder list for ' + sp.spender_committee_id); return; }
               if (want.length && (!lead || lead.textContent !== 'Funded primarily by ' + want.join(', ') + '.')) say(tag + ' ' + c.id + ': ' + sp.spender_committee_id + ' reads ' + JSON.stringify(lead && lead.textContent));
               var fr = all(t2, 'button.crow[data-funder]');

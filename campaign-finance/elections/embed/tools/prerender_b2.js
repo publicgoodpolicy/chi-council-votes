@@ -523,9 +523,20 @@ var alderWithId = alderCands.filter(function (c) { return c.committee_id != null
 // ABSOLUTELY (every alder candidacy carries an id, whatever the population), with 50 kept as
 // a FLOOR so a ward losing its incumbent linkage still fires. This accommodates a population,
 // never the money — S1(i) below is untouched.
-ok('S1(ii): every alderperson candidacy carries a derived committee id (' +
-   alderWithId + ' of ' + alderCands.length + ', full coverage absolute; floor 50)',
-  alderWithId === alderCands.length && alderCands.length >= 50);
+// BAL (167-6a, 171-3a, BAL-174a, 2026-10-29): the 2027 field is the filed field, and 33 filers
+// have no committee of their own on file (one names his 2024 committee by reference only). The
+// derivation's substance is kept at full strength where it is defined: every INCUMBENT candidacy
+// carries its ward's derived id (floor 50, so a ward losing its incumbent linkage still fires),
+// and the derived id reaches no challenger — a challenger carries only a committee of its own,
+// never another candidacy's. This accommodates a population, never the money — S1(i) is untouched.
+var alderInc = alderCands.filter(function (c) { return c.incumbent; });
+var alderIncWithId = alderInc.filter(function (c) { return c.committee_id != null; }).length;
+var cidSeen = {}, cidShared = 0;
+alderCands.forEach(function (c) { if (c.committee_id == null) return; if (cidSeen[c.committee_id]) cidShared++; cidSeen[c.committee_id] = 1; });
+ok('S1(ii): every incumbent alderperson candidacy carries its derived committee id, and no committee id is carried by two ' +
+   'alderperson candidacies (' + alderIncWithId + ' of ' + alderInc.length + ' incumbents; ' + alderWithId + ' of ' +
+   alderCands.length + ' candidacies carry one; ' + cidShared + ' shared; floor 50)',
+  alderIncWithId === alderInc.length && alderInc.length >= 50 && cidShared === 0);
 
 // S1 (ii) — the boundary, revisited by the lane that landed mayoral rows (MAYOR-1, PS-157).
 // The alderperson derivation is unchanged. Mayoral candidacies carry the committee id the race
@@ -601,18 +612,30 @@ ok('S1(i) FLOOR: windowed municipal direct money >= $23,769,132.31 (' +
   // kept `worst` at 0, so the assertion could only ever pass — it passed while the surfaces it
   // describes carried up to $10.9M. Ruling 6 also turns it from ZERO-valued to live-shaped AND
   // VALUED, now that the money has landed.
-  var worst = 0, resolved = 0, seen = 0;
+  // BAL (168-4a, 171-3a, BAL-174a): a surface is live-shaped and valued exactly when a committee
+  // record in the artifact names its candidacy (the record's candidate_id, not the candidacy's own
+  // committee_id); every other surface states its ratified line, never $0 bars.
+  var recCand = {};
+  Object.keys(json.committees).forEach(function (k) { var cm = json.committees[k];
+    if (cm.candidate_id && cm.type !== 'independent_expenditure') recCand[cm.candidate_id] = 1; });
+  var jById = {}; json.candidates.forEach(function (c) { jById[c.id] = c; });
+  var worst = 0, resolved = 0, seen = 0, expect = 0, lined = 0, wrong = [];
   om.groups.forEach(function (g) { g.races.forEach(function (r) {
     var rv = D.viewModels.raceView(oi, oi.raceBySlug[r.slug], null);
     (rv && rv.candidates || []).forEach(function (c) {
       seen++;
-      if (c.figures && c.figures.contributions) resolved++;
+      var jc = jById[c.id] || {}, rec = !!recCand[c.id];
+      if (rec) expect++;
+      if (c.figures && c.figures.contributions) { resolved++; if (!rec) wrong.push(c.id); }
+      else if (!rec && c.financeFacet === (jc.committee_id != null ? 'committee_no_itemized' : (jc.committee_sbe_ref ? 'committee_elsewhere' : 'no_committee'))) lined++;
+      else wrong.push(c.id);
       var t = (c.figures && c.figures.contributions && c.figures.contributions.total) || 0;
       if (t > worst) worst = t; });
   }); });
-  ok('S1(i): every city_council candidate surface is live-shaped AND VALUED (' + resolved +
-   ' of ' + seen + ' resolve; largest candidate total ' + worst + ')',
-  seen > 0 && resolved === seen && worst > 0);
+  ok('S1(i): every city_council candidate surface whose committee has a record is live-shaped AND VALUED, and every other one states its ratified line (' + resolved +
+   ' of ' + seen + ' resolve, ' + expect + ' with a record; ' + lined + ' state their line; largest candidate total ' + worst + ')' +
+   (wrong.length ? ' — WRONG: ' + wrong.slice(0, 6).join(', ') : ''),
+  seen > 0 && resolved === expect && expect > 0 && resolved + lined === seen && wrong.length === 0 && worst > 0);
 })();
 
 // S1 (i) — mayor: readiness TRUE since MAYOR-1 (PS-157) landed the money; the by-race listing

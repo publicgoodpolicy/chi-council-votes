@@ -784,7 +784,9 @@
         "email": "Ward13@cityofchicago.org",
         "links": {},
         "source": "ipg-rep-finder REPS.ward (current officeholder; candidacy not confirmed)"
-      }
+      },
+      "ballot_status": "not_filed",
+      "ballot_status_as_of": "2026-10-26"
     },
     "inc-ward-14": {
       "candidate_id": "inc-ward-14",
@@ -898,7 +900,9 @@
           "office": "http://the19thward.com/"
         },
         "source": "ipg-rep-finder REPS.ward (current officeholder; candidacy not confirmed)"
-      }
+      },
+      "ballot_status": "not_filed",
+      "ballot_status_as_of": "2026-10-26"
     },
     "inc-ward-20": {
       "candidate_id": "inc-ward-20",
@@ -952,7 +956,9 @@
         "email": "Ward22@cityofchicago.org",
         "links": {},
         "source": "ipg-rep-finder REPS.ward (current officeholder; candidacy not confirmed)"
-      }
+      },
+      "ballot_status": "not_filed",
+      "ballot_status_as_of": "2026-10-26"
     },
     "inc-ward-23": {
       "candidate_id": "inc-ward-23",
@@ -2753,7 +2759,9 @@
       "status": "declared",
       "bio": {
         "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
-      }
+      },
+      "ballot_status": "not_filed",
+      "ballot_status_as_of": "2026-10-26"
     },
     "cand-mcmillian-ward-48": {
       "candidate_id": "cand-mcmillian-ward-48",
@@ -2907,7 +2915,9 @@
       "status": "declared",
       "bio": {
         "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
-      }
+      },
+      "ballot_status": "not_filed",
+      "ballot_status_as_of": "2026-10-26"
     },
     "cand-phillips-ward-07": {
       "candidate_id": "cand-phillips-ward-07",
@@ -2940,7 +2950,9 @@
       "status": "declared",
       "bio": {
         "source": "SBE committee on the CNCL-DATA-1 selection artifact (2026-08-30); candidacy not confirmed"
-      }
+      },
+      "ballot_status": "not_filed",
+      "ballot_status_as_of": "2026-10-26"
     },
     "cand-gordils-ward-33": {
       "candidate_id": "cand-gordils-ward-33",
@@ -3061,7 +3073,9 @@
       "status": "declared",
       "bio": {
         "source": "SBE committee added on Ishan's attestation of the ward (ruling 101-1, 2026-10-21); candidacy not confirmed"
-      }
+      },
+      "ballot_status": "not_filed",
+      "ballot_status_as_of": "2026-10-26"
     },
     "cand-mack-ward-08": {
       "candidate_id": "cand-mack-ward-08",
@@ -3105,6 +3119,590 @@
       "status": "declared",
       "bio": {
         "source": "SBE committee added on Ishan's attestation of the ward (ruling 101-1, 2026-10-21); candidacy not confirmed"
+      }
+    },
+    "cand-greenlaw-ward-05": {
+      "candidate_id": "cand-greenlaw-ward-05",
+      "name": "Ryan Greenlaw",
+      "race_id": "ward-05",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'RYAN GREENLAW'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-scrutchens-ward-06": {
+      "candidate_id": "cand-scrutchens-ward-06",
+      "name": "Allyson Renee Scrutchens",
+      "race_id": "ward-06",
+      "committee_id": "41290",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'ALLYSON RENEE SCRUTCHENS'; BAL-166, display name BAL-169-4a); SBE committee 41290 'Friends of Allyson' attested by Ishan (167-1a)"
+      }
+    },
+    "cand-llongbey-ward-06": {
+      "candidate_id": "cand-llongbey-ward-06",
+      "name": "Curtiss S. Llong Bey",
+      "race_id": "ward-06",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'CURTISS S. LLONG BEY'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-franc-ward-07": {
+      "candidate_id": "cand-franc-ward-07",
+      "name": "Radyn Franc",
+      "race_id": "ward-07",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'RADYN FRANC'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-gault-ward-08": {
+      "candidate_id": "cand-gault-ward-08",
+      "name": "Brittney Bee Gault",
+      "race_id": "ward-08",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'BRITTNEY BEE GAULT'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-harrison-ward-09": {
+      "candidate_id": "cand-harrison-ward-09",
+      "name": "Cecelia Z. Harrison",
+      "race_id": "ward-09",
+      "committee_id": "41329",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'CECELIA Z. HARRISON'; BAL-166, display name BAL-169-4a); SBE committee 41329 'Friends of Cecelia Harrison' attested by Ishan (167-1a)"
+      }
+    },
+    "cand-williams-ward-09": {
+      "candidate_id": "cand-williams-ward-09",
+      "name": "Kenny Williams",
+      "race_id": "ward-09",
+      "committee_id": "41021",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'KENNY WILLIAMS'; BAL-166, display name BAL-169-4a); SBE committee 41021 'People 4 Kenny' attested by Ishan (167-3a)"
+      }
+    },
+    "cand-sanchez-ward-12": {
+      "candidate_id": "cand-sanchez-ward-12",
+      "name": "Carlos Sanchez",
+      "race_id": "ward-12",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'CARLOS SANCHEZ'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-judge-ward-13": {
+      "candidate_id": "cand-judge-ward-13",
+      "name": "Keith M. Judge",
+      "race_id": "ward-13",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'KEITH M JUDGE'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-cepek-ward-13": {
+      "candidate_id": "cand-cepek-ward-13",
+      "name": "Skyler Cepek",
+      "race_id": "ward-13",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'SKYLER CEPEK'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-reyes-ward-14": {
+      "candidate_id": "cand-reyes-ward-14",
+      "name": "Raul Reyes",
+      "race_id": "ward-14",
+      "committee_id": "26000",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'RAUL REYES'; BAL-166, display name BAL-169-4a); SBE committee 26000 'Friends of Raul Reyes' attested by Ishan (BAL-176a)"
+      }
+    },
+    "cand-blackmond-ward-16": {
+      "candidate_id": "cand-blackmond-ward-16",
+      "name": "Cheryl Blackmond",
+      "race_id": "ward-16",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'CHERYL BLACKMOND'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-johnson-ward-16": {
+      "candidate_id": "cand-johnson-ward-16",
+      "name": "Eddie Johnson III",
+      "race_id": "ward-16",
+      "committee_id": "31950",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'EDDIE JOHNSON III'; BAL-166, display name BAL-169-4a); SBE committee 31950 'Friends of Eddie Johnson III' attested by Ishan (167-1a)"
+      }
+    },
+    "cand-fletcher-ward-16": {
+      "candidate_id": "cand-fletcher-ward-16",
+      "name": "Shenina Fletcher",
+      "race_id": "ward-16",
+      "committee_id": "41499",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'SHENINA FLETCHER'; BAL-166, display name BAL-169-4a); SBE committee 41499 'Friends for Fletcher' attested by Ishan (167-1a)"
+      }
+    },
+    "cand-steward-ward-17": {
+      "candidate_id": "cand-steward-ward-17",
+      "name": "James \"Baldie\" Steward",
+      "race_id": "ward-17",
+      "committee_id": "41422",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'JAMES \"BALDIE\" STEWARD'; BAL-166, display name BAL-169-4a); SBE committee 41422 'Friends of James Steward' attested by Ishan (167-1a)"
+      }
+    },
+    "cand-thompson-ward-17": {
+      "candidate_id": "cand-thompson-ward-17",
+      "name": "Theodore Fulton Thompson",
+      "race_id": "ward-17",
+      "committee_id": "41409",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'THEODORE FULTON THOMPSON'; BAL-166, display name BAL-169-4a); SBE committee 41409 'Theo For Change' attested by Ishan (167-2a)"
+      }
+    },
+    "cand-thomas-ward-17": {
+      "candidate_id": "cand-thomas-ward-17",
+      "name": "Timothy \"Tim\" Thomas Jr.",
+      "race_id": "ward-17",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'TIMOTHY \"TIM\" THOMAS JR.'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-flowers-ward-18": {
+      "candidate_id": "cand-flowers-ward-18",
+      "name": "Glenford Flowers Jr.",
+      "race_id": "ward-18",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'GLENFORD FLOWERS JR.'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-barksdale-ward-18": {
+      "candidate_id": "cand-barksdale-ward-18",
+      "name": "Joshua Barksdale",
+      "race_id": "ward-18",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'JOSHUA BARKSDALE'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-chavez-ward-18": {
+      "candidate_id": "cand-chavez-ward-18",
+      "name": "M. Artemiza \"Tammy\" Chavez",
+      "race_id": "ward-18",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'M. ARTEMIZA \"TAMMY\" CHAVEZ'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-allison-ward-18": {
+      "candidate_id": "cand-allison-ward-18",
+      "name": "Nicole Allison",
+      "race_id": "ward-18",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'NICOLE ALLISON'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-galloway-ward-18": {
+      "candidate_id": "cand-galloway-ward-18",
+      "name": "Toni C. Galloway",
+      "race_id": "ward-18",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'TONI C. GALLOWAY'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-murphy-ward-19": {
+      "candidate_id": "cand-murphy-ward-19",
+      "name": "Bob Murphy",
+      "race_id": "ward-19",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'BOB MURPHY'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-robinson-ward-19": {
+      "candidate_id": "cand-robinson-ward-19",
+      "name": "Jillian Robinson",
+      "race_id": "ward-19",
+      "committee_id": "41467",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'JILLIAN ROBINSON'; BAL-166, display name BAL-169-4a); SBE committee 41467 'Forward Bound with Jillian Robinson' attested by Ishan (167-1a)"
+      }
+    },
+    "cand-smith-ward-20": {
+      "candidate_id": "cand-smith-ward-20",
+      "name": "Andre Smith",
+      "race_id": "ward-20",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "committee_sbe_ref": "39705",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'ANDRE SMITH'; BAL-166, display name BAL-169-4a); SBE committee 39705 'Friends of Andre Smith' (167-1a) carries his 2024 school board receipts and stays on that candidacy (BAL-174a)"
+      }
+    },
+    "cand-maddox-ward-20": {
+      "candidate_id": "cand-maddox-ward-20",
+      "name": "Jennifer O. Maddox",
+      "race_id": "ward-20",
+      "committee_id": "35047",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'JENNIFER O. MADDOX'; BAL-166, display name BAL-169-4a); SBE committee 35047 'Friends To Elect Jennifer Maddox' attested by Ishan (BAL-176a)"
+      }
+    },
+    "cand-bahena-ward-22": {
+      "candidate_id": "cand-bahena-ward-22",
+      "name": "Elianne \"Ely\" Bahena",
+      "race_id": "ward-22",
+      "committee_id": "39065",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'ELIANNE \"ELY\" BAHENA'; BAL-166, display name BAL-169-4a); SBE committee 39065 'Friends of Elianne Bahena' attested by Ishan (167-1a)"
+      }
+    },
+    "cand-anderson-ward-24": {
+      "candidate_id": "cand-anderson-ward-24",
+      "name": "Jamesenna Anderson",
+      "race_id": "ward-24",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'JAMESENNA ANDERSON'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-smith-ward-24": {
+      "candidate_id": "cand-smith-ward-24",
+      "name": "Kiisha Smith",
+      "race_id": "ward-24",
+      "committee_id": "41335",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'KIISHA SMITH'; BAL-166, display name BAL-169-4a); SBE committee 41335 'Kiisha Smith for 24th Ward Alder' attested by Ishan (167-1a)"
+      }
+    },
+    "cand-ortiz-ward-25": {
+      "candidate_id": "cand-ortiz-ward-25",
+      "name": "Chula C. Ortiz",
+      "race_id": "ward-25",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'CHULA C ORTIZ'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-gonzalezrodriguez-ward-26": {
+      "candidate_id": "cand-gonzalezrodriguez-ward-26",
+      "name": "Angee Gonzalez Rodriguez",
+      "race_id": "ward-26",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'ANGEE GONZALEZ RODRIGUEZ'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-eason-ward-27": {
+      "candidate_id": "cand-eason-ward-27",
+      "name": "Mary Eason",
+      "race_id": "ward-27",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'MARY EASON'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-haynes-ward-27": {
+      "candidate_id": "cand-haynes-ward-27",
+      "name": "Tyhesha C. Haynes",
+      "race_id": "ward-27",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'TYHESHA C HAYNES'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-frasier-ward-28": {
+      "candidate_id": "cand-frasier-ward-28",
+      "name": "Precious Joy Frasier",
+      "race_id": "ward-28",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'PRECIOUS JOY FRASIER'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-morgan-ward-29": {
+      "candidate_id": "cand-morgan-ward-29",
+      "name": "James Morgan",
+      "race_id": "ward-29",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'JAMES MORGAN'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-mckinnie-ward-29": {
+      "candidate_id": "cand-mckinnie-ward-29",
+      "name": "Yvette L. McKinnie",
+      "race_id": "ward-29",
+      "committee_id": "41465",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'YVETTE L MCKINNIE'; BAL-166, display name BAL-169-4a); SBE committee 41465 'Friends and Families fo Yvette Mckinnie for the 29th Ward' attested by Ishan (167-1a)"
+      }
+    },
+    "cand-bonillaanaiel-ward-31": {
+      "candidate_id": "cand-bonillaanaiel-ward-31",
+      "name": "Ramona T. Bonilla-Anaiel",
+      "race_id": "ward-31",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'RAMONA T. BONILLAANAIEL'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-riley-ward-32": {
+      "candidate_id": "cand-riley-ward-32",
+      "name": "Don Riley",
+      "race_id": "ward-32",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'DON RILEY'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-stevanovich-ward-32": {
+      "candidate_id": "cand-stevanovich-ward-32",
+      "name": "Jonathan Stevanovich",
+      "race_id": "ward-32",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'JONATHAN STEVANOVICH'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-mogan-ward-33": {
+      "candidate_id": "cand-mogan-ward-33",
+      "name": "Michael Mogan",
+      "race_id": "ward-33",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'MICHAEL MOGAN'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-gomez-ward-36": {
+      "candidate_id": "cand-gomez-ward-36",
+      "name": "Luis M. Gomez Jr.",
+      "race_id": "ward-36",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'LUIS M. GOMEZ JR.'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-earls-ward-37": {
+      "candidate_id": "cand-earls-ward-37",
+      "name": "Carmelita P. Earls",
+      "race_id": "ward-37",
+      "committee_id": "23100",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'CARMELITA P. EARLS'; BAL-166, display name BAL-169-4a); SBE committee 23100 'Citizens to Elect Carmelita P Earls' attested by Ishan (BAL-176a)"
+      }
+    },
+    "cand-ray-ward-37": {
+      "candidate_id": "cand-ray-ward-37",
+      "name": "Howard Ray",
+      "race_id": "ward-37",
+      "committee_id": "38671",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'HOWARD RAY'; BAL-166, display name BAL-169-4a); SBE committee 38671 'Howard Ray for 37th Ward' attested by Ishan (167-1a)"
+      }
+    },
+    "cand-murphy-ward-37": {
+      "candidate_id": "cand-murphy-ward-37",
+      "name": "Michael Patrick Murphy",
+      "race_id": "ward-37",
+      "committee_id": "40838",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'MICHAEL PATRICK MURPHY'; BAL-166, display name BAL-169-4a); SBE committee 40838 'Friends of Michael Murphy' attested by Ishan (167-4a)"
+      }
+    },
+    "cand-kozielska-ward-38": {
+      "candidate_id": "cand-kozielska-ward-38",
+      "name": "Agnieszka Kozielska",
+      "race_id": "ward-38",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'AGNIESZKA KOZIELSKA'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-lane-ward-42": {
+      "candidate_id": "cand-lane-ward-42",
+      "name": "Deborah Lane",
+      "race_id": "ward-42",
+      "committee_id": "41411",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'DEBORAH LANE'; BAL-166, display name BAL-169-4a); SBE committee 41411 'Friends For Deborah Lane' attested by Ishan (167-1a)"
+      }
+    },
+    "cand-keating-ward-43": {
+      "candidate_id": "cand-keating-ward-43",
+      "name": "Michael Keating",
+      "race_id": "ward-43",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'MICHAEL KEATING'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-alkodah-ward-46": {
+      "candidate_id": "cand-alkodah-ward-46",
+      "name": "Abdallah J. Alkodah",
+      "race_id": "ward-46",
+      "committee_id": "41501",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'ABDALLAH J. ALKODAH'; BAL-166, display name BAL-169-4a); SBE committee 41501 'Neighbors for Abdallah' attested by Ishan (167-5a)"
+      }
+    },
+    "cand-edelman-ward-46": {
+      "candidate_id": "cand-edelman-ward-46",
+      "name": "Nicole A. Edelman",
+      "race_id": "ward-46",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'NICOLE A. EDELMAN'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-mack-ward-46": {
+      "candidate_id": "cand-mack-ward-46",
+      "name": "Onita Patricia Ann Mack",
+      "race_id": "ward-46",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'ONITA PATRICIAS ANN MACK'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-su-ward-49": {
+      "candidate_id": "cand-su-ward-49",
+      "name": "Dongbo Mark Su",
+      "race_id": "ward-49",
+      "committee_id": null,
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'DONGBO MARK SU'; BAL-166, display name BAL-169-4a); no SBE committee found in the 2026-10-20 committees export (167-6a)"
+      }
+    },
+    "cand-normand-ward-49": {
+      "candidate_id": "cand-normand-ward-49",
+      "name": "Peter Normand",
+      "race_id": "ward-49",
+      "committee_id": "38791",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'PETER NORMAND'; BAL-166, display name BAL-169-4a); SBE committee 38791 'Friends of Peter J Normand' attested by Ishan (167-1a)"
+      }
+    },
+    "cand-morton-ward-49": {
+      "candidate_id": "cand-morton-ward-49",
+      "name": "William \"Bill\" Morton",
+      "race_id": "ward-49",
+      "committee_id": "34862",
+      "incumbent": false,
+      "status": "filed",
+      "bio": {
+        "source": "CBOE Candidate Filing Report, 2027 municipal general election, printed 2026-10-26 (filed as 'WILLIAM \"BILL\" MORTON'; BAL-166, display name BAL-169-4a); SBE committee 34862 'Friends of Bill Morton' attested by Ishan (167-1a)"
       }
     }
   }

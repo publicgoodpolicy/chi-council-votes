@@ -935,7 +935,8 @@
   }
   function hasAnyFinance(index, raceId) {
     var cs = index.candidatesByRace[raceId] || [];
-    for (var i = 0; i < cs.length; i++) if (fundingCandidacy(index, cs[i])) return true;
+    var council = (index.raceById[raceId] || {}).office === 'alderperson';   // 168-4a is the council's rule
+    for (var i = 0; i < cs.length; i++) { var f = fundingCandidacy(index, cs[i]); if (f && (!council || index.committeeKeyByCandidate[f])) return true; }   // 168-4a
     return false;
   }
 
@@ -996,11 +997,18 @@
         // c itself, or (on_current_record) the person's owning candidacy. borrowed marks the
         // second case: contributions read through fid, IE through c, both in THIS race's window.
         var fid = fundingCandidacy(index, c), borrowed = !!fid && fid !== c.id;
+        // 168-4a: a committee on file with no itemized receipt rows has no committee record in
+        // the data; its card states the ratified no-itemized line instead of $0 bars, and the
+        // line lifts by itself the first time a receipt row arrives.
+        var noItemized = race.office === 'alderperson' && !!fid && !index.committeeKeyByCandidate[fid];   // council only (168-4a)
+        if (noItemized) fid = null;
         var hasFinance = !!fid;
         // A1+B1 (PS-79 / HALT-F2): the race's own election window scopes every figure
         // below. Resolution (and B1's loud failure) live INSIDE this hasFinance guard:
         // a window-less race with no money still renders its pending/coming-soon state.
-        var win = hasFinance ? requireWin(race) : null;
+        // BAL (168-4a): a committee on file resolves the race's window as before, money or not, so
+        // B1's loud failure still covers it; the no-itemized card reads no figure from it.
+        var win = (hasFinance || noItemized) ? requireWin(race) : null;
         var fOwn = hasFinance ? candidateFigures(index, c.id, cycle, win) : null;
         var fFund = borrowed ? candidateFigures(index, fid, cycle, win) : fOwn;
         return {
@@ -1009,7 +1017,14 @@
           // HALT-P1-B: 2024 CBOE-native result axis + write-in marker + finance_facet enum
           // (+ empty-committee sbe ref) pass through to render; null/absent for 2026 records.
           result: c.result || null, ballotStatus: c.ballot_status || null, writeIn: !!c.write_in,  // DESIGN-1b: ballot_status rides the VM
-          financeFacet: c.finance_facet || null, committeeSbeRef: c.committee_sbe_ref || null,
+          // BAL-173b: on the council page a candidate with no committee at all states the ratified
+          // no-committee line (171-3a); finance_facet itself stays fenced to 2024 (INV-ELECT-3).
+          financeFacet: c.finance_facet || (noItemized ? 'committee_no_itemized'
+            : (race.office === 'alderperson' && !c.committee_id && !fid
+              ? (c.committee_sbe_ref ? 'committee_elsewhere' : 'no_committee') : null)), committeeSbeRef: c.committee_sbe_ref || null,
+          // 166-2c / 168-2a: off the ballot (did not file, or removed after filing). Render
+          // moves these cards into the race's "Not on the ballot" section.
+          offBallot: c.ballot_status === 'not_filed' || c.ballot_status === 'removed',
           hasFinance: hasFinance, stillPopulating: !hasFinance,
           // SCOPE-UI (F-1 ruled): the prior-run carriage re-homed verbatim from the
           // retired toggle path — label + qualifier TEXT only, never dollars.
@@ -1089,6 +1104,7 @@
             return {
               id: r.id, slug: raceSlug(r), code: raceCode(r), label: r.label,
               status: r.status, hasFinance: hasAnyFinance(index, r.id),
+              office: r.office,   // BAL-169-2a: lets the picker tell the council's wards
               candidateCount: (index.candidatesByRace[r.id] || []).length
             };
           })
@@ -1472,11 +1488,17 @@
       .map(function (r) {
         var cands = (index.candidatesByRace[r.id] || [])
           .filter(function (c) { return !c.vacating_for; })
+          // BAL-169-3b: candidates off the ballot (did not file, or removed) leave this ranking.
+          .filter(function (c) { return office !== 'city_council' || (c.ballot_status !== 'not_filed' && c.ballot_status !== 'removed'); })
           .map(function (c) {
             var entry = { id: c.id, name: c.name, incumbent: !!c.incumbent, hasCommittee: !!c.committee_id,
+              // BAL-170-2a: a committee on file with no itemized receipt rows has no committee
+              // record; its expanded row shows the ratified no-itemized card, not $0 bars.
+              noItemized: office === 'city_council' && !!c.committee_id && !index.committeeKeyByCandidate[c.id],   // council only (168-4a)
               figures: candidateFigures(index, c.id, cycle, win) };
             // Lazy enrichment: ONLY the expanded candidate gets the five fields card reads.
-            if (expandedId && c.id === expandedId && c.committee_id) {
+            if (expandedId && c.id === expandedId && c.committee_id && entry.noItemized) entry.slug = candidateSlug(c, r);
+            if (expandedId && c.id === expandedId && c.committee_id && !entry.noItemized) {
               entry.slug = candidateSlug(c, r);
               entry.committee = committeeMeta(index, c.id);
               entry.contributors = withInKind(index, c.id, win, candidateContributors(index, c.id, cycle, win));
@@ -1518,6 +1540,10 @@
     for (var i = 0; i < index.candidates.length; i++) {
       var cand = index.candidates[i], race = index.raceById[cand.race_id] || {};
       if (offs.indexOf(race.office) < 0 || cand.vacating_for) continue;
+      // BAL-177a: on the council page, Election spend covers the candidates on the ballot only —
+      // Industry totals, its streams line and the flags, as Candidates (169-3b) and Industries by
+      // candidate (170-1a) do. An off-ballot candidate's money stays on their own card.
+      if (office === 'city_council' && (cand.ballot_status === 'not_filed' || cand.ballot_status === 'removed')) continue;
       var cid = cand.id;
       var dr = index.directByCandidate[cid] || [];
       for (var d = 0; d < dr.length; d++) {
@@ -1565,6 +1591,9 @@
   function industriesByCandidate(index, office, cycle, win) {
     var byCand = spendAgg(index, office, cycle, win).byCand, cands = spendByCandidate(index, office, cycle, win), out = [];
     for (var i = 0; i < cands.length; i++) {
+      // BAL-170-1a: on the council page, candidates off the ballot leave Industries by candidate too.
+      var cr = index.candidateById[cands[i].id] || {};
+      if (office === 'city_council' && (cr.ballot_status === 'not_filed' || cr.ballot_status === 'removed')) continue;
       var inds = byCand[cands[i].id]; if (!inds) continue;
       var arr = [];
       for (var tag in inds) { if (inds[tag].direct <= 0) continue;   // FW-1: per-candidate view is direct-only

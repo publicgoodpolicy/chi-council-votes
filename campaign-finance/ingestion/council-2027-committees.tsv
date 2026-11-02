@@ -14,6 +14,7 @@ committee_id	name	type	office_scope	status	provenance	evidence	added
 38925	Friends of Desmon Yancy	Candidate	ward-5	A	incumbent-roster	To support the candidacy of Desmon C. Yancy	2026-08-24
 38991	Friends of William Hall	Candidate	ward-6	A	text-pass+incumbent-roster	To elect William Hall as Alderperson for the 6th Ward in Chicago.	2026-08-24
 41271	Friends of Adrienne McFarland	Candidate	ward-6	A	r2-table+text-pass	To support the nomination and election of Adrienne McFarland for Alderperson of Chicago's 6th Ward and to recieve contributions and make expenditures in support of that campaign.	2026-08-24
+41290	Friends of Allyson	Candidate	ward-6	A	ishan-attested	ishan-attested: add ward 6; To raise funds that will support the election of Allyson Renee Scrutchens	2026-10-29
 22816	Friends of Greg Mitchell	Candidate	ward-7	A	text-pass+incumbent-roster	To support the candidacy of Greg Mitchell for Alderman of the 7th Ward in Chicago, Illinois	2026-08-24
 41219	Sheila for the 7th Ward	Candidate	ward-7	A	r2-table+text-pass	To support the election of Sheila Gunn-Ward to the Chicago, IL 7th Ward Alderman Seat	2026-08-24
 41234	Friends of Samuel	Candidate	ward-7	A	r2-table	To support the candidacy of Samuel C. Sparks	2026-08-24
@@ -24,29 +25,40 @@ committee_id	name	type	office_scope	status	provenance	evidence	added
 41338	Friends of Ruthie Moore	Candidate	ward-8	A	ishan-attested	ishan-attested: add ward 8; To support the nomination and election of Ruthie Moore to public office and to engage in lawful political activities permitted under Article 9 of the Illinois Election Code.	2026-10-21
 41348	Friends of Yolonda Mack 8th Ward	Candidate	ward-8	A	ishan-attested	ishan-attested: add ward 8; To support the candidacy of Yolonda Mack for Alderwoman, Ward 8, City of Chicago	2026-10-21
 14556	Citizens to Elect Anthony Beale	Candidate	ward-9	A	incumbent-roster	To support the candidacy of Anthony Beale for such office as determined by the committee.	2026-08-24
+41021	People 4 Kenny	Candidate	ward-9	F	ishan-attested	ishan-attested: add ward 9; .	2026-10-29
 41179	Ernest Dawson for 9th Ward Alderman	Candidate	ward-9	A	r2-table+text-pass	To support the election of Ernest Dawson for Alderman for Chicago's 9th Ward.	2026-08-24
+41329	Friends of Cecelia Harrison	Candidate	ward-9	A	ishan-attested	ishan-attested: add ward 9; The purpose of the committee is to support the candidacy and election of Cecelia Harrison for Alderperson of the 9th Ward of the City of Chicago and to conduct lawful campaign activities related to that candidacy.	2026-10-29
 38819	Friends of Peter Chico for Alderman	Candidate	ward-10	A	text-pass+incumbent-roster	Support Peter Chico for the office of Chicago 10th ward Alderperson	2026-08-24
 37399	Friends of Nicole Lee	Candidate	ward-11	A	incumbent-roster	To elect Nicole Lee and like minded candidates	2026-08-24
 38809	Ramirez for 12	Candidate	ward-12	A	text-pass+incumbent-roster	To elect Julia Ramirez to public office	2026-08-24
 41126	Friends of Claudia Zuno	Candidate	ward-12	A	r2-table+text-pass	Elect Claudia Zuno for the 12th Ward Alderman	2026-08-24
 23282	Citizens for Marty Quinn	Candidate	ward-13	A	text-pass+incumbent-roster	To elect Marty Quinn Alderman, 13th Ward.	2026-08-24
 41309	Citizens for Al Cacciottolo	Candidate	ward-13	A	r2-table+text-pass	To elect Al Cacciottolo Alderman, 13th Ward	2026-08-24
+26000	Friends of Raul Reyes	Candidate	ward-14	A	ishan-attested	ishan-attested: add ward 14; To support the candidacy of Raul Reyes for election to public office.	2026-10-30
 38729	Friends of Jeylu Gutierrez	Candidate	ward-14	A	incumbent-roster	Support the candidacy of Jeylu B. Gutierrez	2026-08-24
 23079	Friends of Raymond A Lopez	Candidate	ward-15	A	incumbent-roster	To support the candidacy of Raymond A Lopez for election to public office.	2026-08-24
+31950	Friends of Eddie Johnson III	Candidate	ward-16	A	ishan-attested	ishan-attested: add ward 16; Support the election of Eddie Johnson III for Alderman in Chicago's 16th Ward.	2026-10-29
 34374	Friends of Stephanie Coleman	Candidate	ward-16	A	text-pass+incumbent-roster	To support Stephanie Coleman for Alderman 16th Ward city of Chicago	2026-08-24
+41499	Friends for Fletcher	Candidate	ward-16	A	ishan-attested	ishan-attested: add ward 16; To support the candidacy of Shenina Fletcher for 16th Ward Alderperson	2026-10-29
 23127	Citizens to Elect David Moore	Candidate	ward-17	A	text-pass+incumbent-roster	To support the candidacy of David Moore, alderman of the 17th Ward	2026-08-24
 35006	Raynetta Greenleaf For  Alderma 17th Ward	Candidate	ward-17	A	ishan-attested	ishan-attested: add ward 17; To better the community	2026-10-21
+41409	Theo For Change	Candidate	ward-17	A	ishan-attested	ishan-attested: add ward 17; To elect Theodore Thompson to public office.	2026-10-29
+41422	Friends of James Steward	Candidate	ward-17	A	ishan-attested	ishan-attested: add ward 17; To support the election of James Steward as Alderman of Chicago's 17th Ward and to promote initiatives that improve the economic,social, and civic well-being of the 17th Ward.	2026-10-29
 26217	Citizens to Elect Derrick G Curtis	Candidate	ward-18	A	text-pass+incumbent-roster	Candidate for Alderman	2026-08-24
 22919	Friends of Matt O'Shea	Candidate	ward-19	A	incumbent-roster	To support candidates for public office	2026-08-24
 41425	Friends of Erin Ross	Candidate	ward-19	A	ishan-attested	ishan-attested: add ward 19; To support the candidacy of Erin Ross for Alderman.	2026-10-21
+41467	Forward Bound with Jillian Robinson	Candidate	ward-19	A	ishan-attested	ishan-attested: add ward 19; To support the election of Forward bound with Jillian Robinson to the office of Alderman, 19th Ward, City of Chicago	2026-10-29
 34336	Friends for Jeanette B Taylor	Candidate	ward-20	A	text-pass+incumbent-roster	To elect Jeanette B.Taylor to alderman of the 20th ward.	2026-08-24
+35047	Friends To Elect Jennifer Maddox	Candidate	ward-20	A	ishan-attested	ishan-attested: add ward 20; This committee will primarily support candidates for local/state office	2026-10-30
 41212	Neighbors to Elect Tshey Gebre	Candidate	ward-20	A	r2-table	Elect Tshey Gebre to office	2026-08-24
 41382	Friends of Jarquetta Egeston	Candidate	ward-20	A	ishan-attested	ishan-attested: add ward 20; To support the candidacy of Jarquetta Egeston for Alderman of the 20th Ward of the City of Chicago.	2026-10-21
 38748	Friends of Ronnie Mosley	Candidate	ward-21	A	incumbent-roster	The purpose of the committee is to elect candidates for public office enorsed by the committee and to support or oppose questions of public policy endorsed by the committee	2026-08-24
 31905	Friends of Michael D Rodriguez	Candidate	ward-22	A	text-pass+incumbent-roster	To elect Michael D. Rodriguez as Alderman	2026-08-24
+39065	Friends of Elianne Bahena	Candidate	ward-22	A	ishan-attested	ishan-attested: add ward 22; Support Elianne Bahena for candidacy for elected office	2026-10-29
 23775	Friends of Tabares	Candidate	ward-23	A	incumbent-roster	To support the election of Silvana Tabares	2026-08-24
 41359	Friends of Leonardo Rojas-Banda	Candidate	ward-23	A	ishan-attested	ishan-attested: add ward 23; To elect Leonardo Rojas-Banda as Alderman of the 23rd Ward, City of Chicago	2026-10-21
 38561	Citizens for Monique Scott	Candidate	ward-24	A	incumbent-roster	Support Monique for candidacy for elected office	2026-08-24
+41335	Kiisha Smith for 24th Ward Alder	Candidate	ward-24	A	ishan-attested	ishan-attested: add ward 24; Support public office	2026-10-29
 25956	Friends of Byron Sigcho Lopez	Candidate	ward-25	A	text-pass+incumbent-roster	To support the candidacy of Byron Sigcho Lopez for the Office of Alderman for the 25th Ward of the City of Chicago.	2026-08-24
 34777	Community For Aida Flores	Candidate	ward-25	A	text-pass	Elect Aida Flores for the 25th Ward	2026-08-24
 41174	The 25th Ward for Ian Watkins	Candidate	ward-25	A	r2-table+text-pass	To elect Ian Watkins as Alderman of the 25th Ward of Chicago, Illinois. This effort includes supporting staff and hosting fundraisers.	2026-08-24
@@ -59,6 +71,7 @@ committee_id	name	type	office_scope	status	provenance	evidence	added
 41269	Citizens for Nathan F Cornell	Candidate	ward-27	A	r2-table+text-pass	To elect Nathan F Cornell as Alderman of Chicago's 27th Ward	2026-08-24
 23112	Citizens for Ervin	Candidate	ward-28	A	incumbent-roster	To support the political efforts of Jason C Ervin	2026-08-24
 25937	Friends of Chris Taliaferro	Candidate	ward-29	A	incumbent-roster	To elect Chris Taliaferro to public office	2026-08-24
+41465	Friends and Families fo Yvette Mckinnie for the 29th Ward	Political Action	ward-29	A	ishan-attested	ishan-attested: add ward 29; I have seen the change. I have experienced the change. Now, it's time for a solution.	2026-10-29
 38706	Friends of Ruth Cruz	Candidate	ward-30	A	text-pass+incumbent-roster	To Elect Ruth Cruz to 30th Ward Alderperson	2026-08-24
 41241	Friends of Judy Velez	Candidate	ward-30	A	r2-table	To support the nomination and election of Juritzy "Judy" Velez by raising and exending funds for campaign activity,voter outreach, communications, advertising, events and all other lawful activities permitted by the Illinois Election Code.	2026-08-24
 34692	Citizens to Elect Felix Cardona Jr	Candidate	ward-31	A	text-pass+incumbent-roster	Help to elect Alderman for 31st Ward	2026-08-24
@@ -73,12 +86,16 @@ committee_id	name	type	office_scope	status	provenance	evidence	added
 41254	Neighbors for Omari	Candidate	ward-35	A	r2-table+text-pass	To elect Omari Bektemba as Alderman of the City of Chicago's 35th Ward	2026-08-24
 26023	Friends of Gilbert Villegas for Alderman	Candidate	ward-36	A	text-pass+incumbent-roster	To support the Election of Gilbert Villegas as Alderman of the 36th Ward of the City of Chicago.	2026-08-24
 15622	Citizens to Elect Emma Mitts	Candidate	ward-37	A	incumbent-roster	Fundraising	2026-08-24
+23100	Citizens to Elect Carmelita P Earls	Candidate	ward-37	A	ishan-attested	ishan-attested: add ward 37; To participate in upcoming 2027 General Election	2026-10-30
+38671	Howard Ray for 37th Ward	Candidate	ward-37	A	ishan-attested	ishan-attested: add ward 37; Elect Howard Ray to the Office of Alderman of the 37th Ward.	2026-10-29
+40838	Friends of Michael Murphy	Candidate	ward-37	A	ishan-attested	ishan-attested: add ward 37; Support the campaign of Michael Murphy for Cook County Board President	2026-10-29
 41039	Friends of Kobey Lofton	Candidate	ward-37	A	r2-table+text-pass	To support the nomination and election of Kobey Lofton for Alderman of the 37th Ward, City of Chicago, including engaging in lawful campaign activities such as voter outreach, community engagement, fundraising, communications, and compliance w/ IL. Electi	2026-08-24
 19830	Friends of Nicholas Sposato	Candidate	ward-38	A	text-pass+incumbent-roster	To support the candidacy of  Nicholas Sposato for 36th Ward Alderman, City of Chicago	2026-08-24
 34569	Friends of Samantha Nugent	Candidate	ward-39	A	text-pass+incumbent-roster	Elect Samantha Nugent 39th Ward Alderman, City of Chicago	2026-08-24
 34524	Neighbors for Andre	Candidate	ward-40	A	incumbent-roster	Elect Andre Vasquez to office	2026-08-24
 26028	Friends of Anthony Napolitano	Candidate	ward-41	A	text-pass+incumbent-roster	To elect Anthony V Napolitano Alderman	2026-08-24
 19263	Citizens for Reilly	Candidate	ward-42	A	incumbent-roster	To support the candidacy of Brendan Reilly.	2026-08-24
+41411	Friends For Deborah Lane	Candidate	ward-42	A	ishan-attested	ishan-attested: add ward 42; To elect Deborah Lane to Public Office	2026-10-29
 38596	Friends of Timmy Knudsen	Candidate	ward-43	A	incumbent-roster	To elect Timothy "Timmy" Knudsen.	2026-08-24
 38699	Friends of Bennett Lawson	Candidate	ward-44	A	text-pass+incumbent-roster	Elect Bennett Lawson as 44th Ward Alderperson Chicago	2026-08-24
 41191	Friends of DJ	Candidate	ward-44	A	r2-table+text-pass	Elect DJ Doran as Alderman of 44th Ward	2026-08-24
@@ -87,10 +104,13 @@ committee_id	name	type	office_scope	status	provenance	evidence	added
 41149	Neighbors for Leah	Candidate	ward-45	A	r2-table	To elect Leah Cunningham Pouw to public office	2026-08-24
 41157	SGD for 45	Candidate	ward-45	A	r2-table+text-pass	To support the candidacy of S "SGD" Gronkiewicz-Doran	2026-08-24
 35096	Neighbors for Angela Clay	Candidate	ward-46	A	text-pass+incumbent-roster	To elect Angela Clay and maintain an inclusive, thriving community in the 46th Ward.	2026-08-24
+41501	Neighbors for Abdallah	Candidate	ward-46	A	ishan-attested	ishan-attested: add ward 46; To elect Abdallah J. Alkodah as Alderperson, 46th Ward, city of Chicago	2026-10-29
 34345	Friends of Matt Martin	Candidate	ward-47	A	text-pass+incumbent-roster	To support the candidacy of Matt Martin for Alderman	2026-08-24
 38605	Friends of Leni Manaa-Hoppenworth	Candidate	ward-48	A	incumbent-roster	To Elect Leni Manaa-Hoppenworth to Public Office	2026-08-24
 41170	Justin Carmien for 48th Ward Alderman	Candidate	ward-48	A	r2-table+text-pass	To support the nomination and election of Justin Carmien to the office of Alderperson, City of Chicago (48th Ward)	2026-08-24
 41188	Friends of Troy	Candidate	ward-48	A	r2-table	To elect Troy McMillan to public office.	2026-08-24
 34202	Maria For The 49th Ward	Candidate	ward-49	A	text-pass+incumbent-roster	Elect Maria Hadden	2026-08-24
+34862	Friends of Bill Morton	Candidate	ward-49	A	ishan-attested	ishan-attested: add ward 49; To elect Bill Morton as 49th Ward Alderman	2026-10-29
+38791	Friends of Peter J Normand	Candidate	ward-49	A	ishan-attested	ishan-attested: add ward 49; Elect Peter J Normand 49th Ward Alderman	2026-10-29
 22982	Friends for Debra Silverstein	Candidate	ward-50	A	text-pass+incumbent-roster	To support Debra Silverstein for Alderman for the 50th Ward of the City of Chicago, IL.	2026-08-24
 41217	Friends of Paul Jacobs	Candidate	council-unspecified	A	r2-table+text-pass	To elect Paul Jacobs for alderman, City of Chicago, if and only if the race is open	2026-08-24
