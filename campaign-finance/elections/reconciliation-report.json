@@ -1,26 +1,26 @@
 {
   "run": {
     "data_file": "campaign-finance/election-data.json",
-    "d2totals_file": "d2totals_639280769856560778.txt",
-    "fileddocs_file": "fileddocs_639280802059206833.txt",
-    "pulled": "2026-10-20",
-    "data_through": "2026-10-18",
+    "d2totals_file": "d2totals_639291651897314456.txt",
+    "fileddocs_file": "fileddocs_639291668712495303.txt",
+    "pulled": "2026-11-01",
+    "data_through": "2026-10-29",
     "threshold": 500.0,
     "scope": "elections candidate committees (v2): school_board, city_council and mayor; a committee listed in receipt-floors.tsv is compared from its floor; IE committees out of reconciliation scope",
     "inputs": {
       "election-data.json": {
-        "sha256": "6734173f40ba2f08100876bcd486d524be77e7a9607ccd2775bed6a12b724cdb",
+        "sha256": "8102ec320004d873b0f9a02be2515e7346afeaf0fcd5a3a9f80368dbeb9df537",
         "path": "campaign-finance/election-data.json"
       },
       "d2totals": {
-        "sha256": "ec29bd70a825659905a58d0576bf7a02e9f86db96bf931074ee3e596121c34a5",
-        "path": "bulk-2026-10-20/d2totals_639280769856560778.txt",
-        "vintage_manifest_sha256": "2f52feb199fe66873b43b9af0dfb2ee774cf6817834667e7116d75a250252e92"
+        "sha256": "50e98b2fdfbfa386cdc48c2355b5513700dd2f7db790de38f1c69a280bac2694",
+        "path": "bulk-2026-11-01/d2totals_639291651897314456.txt",
+        "vintage_manifest_sha256": "3f8bc55829a32e6a88b43565b4ed0b42e6d4e3546258273964c5bdf2d9468e5a"
       },
       "fileddocs": {
-        "sha256": "416d99a3e1a45ac66b1326100b1cba0a4ce25a04939c997c5c88e81999791403",
-        "path": "bulk-2026-10-20/fileddocs_639280802059206833.txt",
-        "vintage_manifest_sha256": "2f52feb199fe66873b43b9af0dfb2ee774cf6817834667e7116d75a250252e92"
+        "sha256": "e553e25d8ec7e1b1a108989efefc20e9fb91c35020461daa78d5b27c1a68f1c7",
+        "path": "bulk-2026-11-01/fileddocs_639291668712495303.txt",
+        "vintage_manifest_sha256": "3f8bc55829a32e6a88b43565b4ed0b42e6d4e3546258273964c5bdf2d9468e5a"
       },
       "known-gaps.json": {
         "sha256": "17ee056d7a9127dd4e05e2bab404352622d7b6a086815b7de365ccc2be2d1f09",
@@ -44,14 +44,14 @@
     "reconciled": 153,
     "residual_state": 15,
     "too_new": 0,
-    "pending_a1_total": 2218199.4,
+    "pending_a1_total": 4501764.9,
     "aggregate_total": 0.0,
     "inkind_d2_total": 8519773.44,
     "inkind_ours_total": 8550834.69,
     "over_threshold": [],
     "coverage_miss_committees": [],
     "join_failures": 0,
-    "filings_missing_totals": 6,
+    "filings_missing_totals": 7,
     "overlap_superseded": 72,
     "disclosed": 13,
     "stale_annotations": 0,
@@ -107,6 +107,14 @@
         "2026-09-30"
       ],
       "filed_doc_id": "1027494"
+    },
+    {
+      "sbe_committee_id": "41112",
+      "period": [
+        "2026-07-01",
+        "2026-09-30"
+      ],
+      "filed_doc_id": "1027779"
     }
   ],
   "disclosed": [
@@ -334,7 +342,7 @@
       "ours_inkind": 4822.0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 1000.0,
+      "pending": 16000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -386,7 +394,7 @@
       "ours_inkind": 17640.69,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 18000.0,
+      "pending": 36100.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -523,7 +531,9 @@
         }
       ],
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 15,
       "d2_itemized": 58400.0,
       "ours_itemized": 58400.0,
@@ -532,7 +542,7 @@
       "ours_inkind": 0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 10000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -704,7 +714,7 @@
       "ours_inkind": 11298.99,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 1000.0,
+      "pending": 31000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -926,6 +936,7 @@
       "superseded_filings": 0,
       "state": "RESIDUAL",
       "flags": [
+        "PENDING-A1",
         "OVER-THRESHOLD",
         "COVERAGE-MISS",
         "DISCLOSED"
@@ -938,7 +949,7 @@
       "ours_inkind": 0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 3000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [
         {
@@ -1085,7 +1096,7 @@
       "ours_inkind": 10448.5,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 620500.0,
+      "pending": 1420501.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -1207,7 +1218,7 @@
       "ours_inkind": 15077.76,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 1000.0,
+      "pending": 3500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -1429,7 +1440,7 @@
       "ours_inkind": 26614.67,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 3000.0,
+      "pending": 10500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -2225,7 +2236,7 @@
       "ours_inkind": 448932.8,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 2000.0,
+      "pending": 37000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -2347,7 +2358,7 @@
       "ours_inkind": 3571.08,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 10500.0,
+      "pending": 18500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -2389,7 +2400,7 @@
       "ours_inkind": 563196.7,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 303000.0,
+      "pending": 660500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -2523,7 +2534,7 @@
       "ours_inkind": 170923.5,
       "inkind_delta": -1750.0,
       "aggregate": 0.0,
-      "pending": 31000.0,
+      "pending": 41000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [
         {
@@ -2649,7 +2660,9 @@
       "sbe_committee_id": "41191",
       "superseded_filings": 0,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 2,
       "d2_itemized": 8610.0,
       "ours_itemized": 8610.0,
@@ -2658,7 +2671,7 @@
       "ours_inkind": 5000.0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 2050.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -2790,7 +2803,7 @@
       "ours_inkind": 38838.14,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 3000.0,
+      "pending": 5000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -2832,7 +2845,7 @@
       "ours_inkind": 0,
       "inkind_delta": -7800.0,
       "aggregate": 0.0,
-      "pending": 2000.0,
+      "pending": 4000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -4035,7 +4048,7 @@
       "ours_inkind": 3177.88,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 22100.0,
+      "pending": 45700.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -4074,9 +4087,11 @@
     "cand-gonzalez-sb-d16": {
       "committee_name": "Juan Ignacio Gonzalez for Chicago Schools",
       "sbe_committee_id": "41111",
-      "superseded_filings": 2,
+      "superseded_filings": 3,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 3,
       "d2_itemized": 17300.0,
       "ours_itemized": 17300.0,
@@ -4085,7 +4100,7 @@
       "ours_inkind": 12540.06,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 2000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -4207,7 +4222,7 @@
       "ours_inkind": 15568.32,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 1000.0,
+      "pending": 7500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -4331,7 +4346,7 @@
       "ours_inkind": 3176.75,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 36600.0,
+      "pending": 60100.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [
         {
@@ -4450,7 +4465,7 @@
       "flags": [
         "PENDING-A1"
       ],
-      "periods_count": 2,
+      "periods_count": 3,
       "d2_itemized": 656550.0,
       "ours_itemized": 656550.0,
       "residual": 0.0,
@@ -4458,8 +4473,8 @@
       "ours_inkind": 0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 13000.0,
-      "last_period_end": "2026-06-30",
+      "pending": 43500.0,
+      "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
         {
@@ -4477,6 +4492,16 @@
           "end": "2026-06-30",
           "d2_itemized": 656550.0,
           "ours_itemized": 656550.0,
+          "residual": 0.0,
+          "d2_inkind": 0.0,
+          "ours_inkind": 0.0,
+          "coverage_miss": false
+        },
+        {
+          "beg": "2026-07-01",
+          "end": "2026-09-30",
+          "d2_itemized": 0.0,
+          "ours_itemized": 0.0,
           "residual": 0.0,
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
@@ -5602,7 +5627,7 @@
       "ours_inkind": 528414.66,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 3000.0,
+      "pending": 8500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -6413,7 +6438,9 @@
       "sbe_committee_id": "38916",
       "superseded_filings": 8,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 16,
       "d2_itemized": 1174655.67,
       "ours_itemized": 1174655.67,
@@ -6422,7 +6449,7 @@
       "ours_inkind": 26583.45,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 55000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -6966,7 +6993,7 @@
       "ours_inkind": 1635.44,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 5000.0,
+      "pending": 16500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -9671,7 +9698,9 @@
       "sbe_committee_id": "37399",
       "superseded_filings": 10,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 18,
       "d2_itemized": 1363875.07,
       "ours_itemized": 1363875.07,
@@ -9680,7 +9709,7 @@
       "ours_inkind": 34998.58,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 1500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -13701,7 +13730,7 @@
       "ours_inkind": 146689.73,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 1000.0,
+      "pending": 2000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -16007,7 +16036,7 @@
       "ours_inkind": 22597.37,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 12500.0,
+      "pending": 14500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -16189,7 +16218,7 @@
       "ours_inkind": 8150.8,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 13500.0,
+      "pending": 29500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -16937,7 +16966,7 @@
       "ours_inkind": 7843.08,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 5000.0,
+      "pending": 6000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -17459,7 +17488,7 @@
       "ours_inkind": 16439.47,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 11000.0,
+      "pending": 15500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -20203,7 +20232,7 @@
       "ours_inkind": 4321.47,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 10000.0,
+      "pending": 15000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -22514,7 +22543,7 @@
       "ours_inkind": 17938.7,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 1500.0,
+      "pending": 2500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -23791,7 +23820,9 @@
       "sbe_committee_id": "38596",
       "superseded_filings": 2,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 17,
       "d2_itemized": 1299222.35,
       "ours_itemized": 1299222.35,
@@ -23800,7 +23831,7 @@
       "ours_inkind": 64540.01,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 2500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -23992,7 +24023,7 @@
       "ours_inkind": 0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 7500.0,
+      "pending": 12000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -24524,7 +24555,7 @@
       "ours_inkind": 39505.97,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 2500.0,
+      "pending": 9500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -24845,7 +24876,9 @@
       "sbe_committee_id": "34345",
       "superseded_filings": 0,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 35,
       "d2_itemized": 1081174.85,
       "ours_itemized": 1081174.85,
@@ -24854,7 +24887,7 @@
       "ours_inkind": 24542.12,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 4798.95,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -25215,7 +25248,9 @@
       "sbe_committee_id": "38605",
       "superseded_filings": 5,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 17,
       "d2_itemized": 334115.24,
       "ours_itemized": 334115.24,
@@ -25224,7 +25259,7 @@
       "ours_inkind": 35216.05,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 12000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -25406,6 +25441,7 @@
       "superseded_filings": 5,
       "state": "RESIDUAL",
       "flags": [
+        "PENDING-A1",
         "OVER-THRESHOLD",
         "COVERAGE-MISS",
         "DISCLOSED"
@@ -25418,7 +25454,7 @@
       "ours_inkind": 56214.58,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 1000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [
         {
@@ -25815,7 +25851,7 @@
       "ours_inkind": 149848.34,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 1000.0,
+      "pending": 2500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -27007,7 +27043,7 @@
       "ours_inkind": 11837.27,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 5000.0,
+      "pending": 7500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -27080,7 +27116,9 @@
       "sbe_committee_id": "41203",
       "superseded_filings": 1,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 2,
       "d2_itemized": 31830.0,
       "ours_itemized": 31830.0,
@@ -27089,7 +27127,7 @@
       "ours_inkind": 7952.46,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 1000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -27401,7 +27439,7 @@
       "ours_inkind": 141230.53,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 7000.0,
+      "pending": 18000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -27562,7 +27600,9 @@
       "sbe_committee_id": "41257",
       "superseded_filings": 0,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 1,
       "d2_itemized": 13633.0,
       "ours_itemized": 13633.0,
@@ -27571,7 +27611,7 @@
       "ours_inkind": 1827.75,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 2000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -27590,7 +27630,7 @@
     "cand-luczak-sb-d01": {
       "committee_name": "Friends of Margie Luczak",
       "sbe_committee_id": "41233",
-      "superseded_filings": 0,
+      "superseded_filings": 1,
       "state": "RECONCILED",
       "flags": [
         "PENDING-A1"
@@ -27603,7 +27643,7 @@
       "ours_inkind": 2043.08,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 10500.0,
+      "pending": 15500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -27915,7 +27955,7 @@
       "ours_inkind": 0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 18616.5,
+      "pending": 21684.25,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -29115,7 +29155,7 @@
       "ours_inkind": 284896.27,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 61000.0,
+      "pending": 167500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -29817,7 +29857,7 @@
       "ours_inkind": 1541750.74,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 47000.0,
+      "pending": 83100.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -30199,7 +30239,7 @@
       "ours_inkind": 9579.97,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 28500.0,
+      "pending": 110500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -30486,7 +30526,7 @@
       "ours_inkind": 190163.37,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 154875.6,
+      "pending": 168773.4,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -32513,7 +32553,7 @@
       "ours_inkind": 153766.22,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 39500.0,
+      "pending": 83500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -32865,7 +32905,7 @@
       "ours_inkind": 0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 100000.0,
+      "pending": 200000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -32896,7 +32936,9 @@
       "sbe_committee_id": "41188",
       "superseded_filings": 0,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 2,
       "d2_itemized": 24025.0,
       "ours_itemized": 24025.0,
@@ -32905,7 +32947,7 @@
       "ours_inkind": 0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 4000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -33645,7 +33687,7 @@
     "cand-olas-ward-27": {
       "committee_name": "Friends of Dan Olas",
       "sbe_committee_id": "41065",
-      "superseded_filings": 0,
+      "superseded_filings": 2,
       "state": "RESIDUAL",
       "flags": [
         "OVER-THRESHOLD",
@@ -33897,7 +33939,7 @@
       "ours_inkind": 19318.09,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 38500.0,
+      "pending": 82000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -33979,7 +34021,7 @@
       "ours_inkind": 7465.99,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 9000.0,
+      "pending": 31600.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -34216,7 +34258,9 @@
         }
       ],
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 8,
       "d2_itemized": 16228.32,
       "ours_itemized": 16228.32,
@@ -34225,7 +34269,7 @@
       "ours_inkind": 35546.5,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 33000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -34327,7 +34371,7 @@
       "ours_inkind": 2288.9,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 1000.0,
+      "pending": 3000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -34537,7 +34581,9 @@
       "sbe_committee_id": "26000",
       "superseded_filings": 43,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 49,
       "d2_itemized": 119000.0,
       "ours_itemized": 119000.0,
@@ -34546,7 +34592,7 @@
       "ours_inkind": 14039.21,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 50000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -35058,7 +35104,7 @@
       "ours_inkind": 1681.83,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 32000.0,
+      "pending": 42000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -35364,7 +35410,7 @@
       "ours_inkind": 0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 6000.0,
+      "pending": 18000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -35385,7 +35431,9 @@
       "sbe_committee_id": "41290",
       "superseded_filings": 1,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 1,
       "d2_itemized": 18170.0,
       "ours_itemized": 18170.0,
@@ -35394,7 +35442,7 @@
       "ours_inkind": 2505.0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 1000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -35426,7 +35474,7 @@
       "ours_inkind": 4556.74,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 9300.0,
+      "pending": 80500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -35608,7 +35656,7 @@
       "ours_inkind": 2229.3,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 6400.0,
+      "pending": 8900.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -35740,7 +35788,7 @@
       "ours_inkind": 900.0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 2500.0,
+      "pending": 3500.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -35912,7 +35960,7 @@
       "ours_inkind": 385643.13,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 22807.3,
+      "pending": 42807.3,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -36135,7 +36183,9 @@
       "sbe_committee_id": "41241",
       "superseded_filings": 0,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 2,
       "d2_itemized": 6925.0,
       "ours_itemized": 6925.0,
@@ -36144,7 +36194,7 @@
       "ours_inkind": 3000.0,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 21000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -36475,7 +36525,7 @@
       "ours_inkind": 7766.34,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 17300.0,
+      "pending": 42400.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -36757,7 +36807,7 @@
       "ours_inkind": 5622.6,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 10000.0,
+      "pending": 35800.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -36840,7 +36890,9 @@
       "sbe_committee_id": "39590",
       "superseded_filings": 1,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 12,
       "d2_itemized": 234166.8,
       "ours_itemized": 234166.8,
@@ -36849,7 +36901,7 @@
       "ours_inkind": 10029.63,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 3750.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [
@@ -36980,7 +37032,9 @@
       "sbe_committee_id": "39866",
       "superseded_filings": 5,
       "state": "RECONCILED",
-      "flags": [],
+      "flags": [
+        "PENDING-A1"
+      ],
       "periods_count": 10,
       "d2_itemized": 169285.0,
       "ours_itemized": 169285.0,
@@ -36989,7 +37043,7 @@
       "ours_inkind": 377769.8,
       "inkind_delta": 0.0,
       "aggregate": 0.0,
-      "pending": 0.0,
+      "pending": 2000.0,
       "last_period_end": "2026-09-30",
       "coverage_miss_periods": [],
       "per_period": [

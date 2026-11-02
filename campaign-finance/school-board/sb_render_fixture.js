@@ -564,10 +564,10 @@ function around(tpl, marker) { return String(tpl).split(marker); }
      pVac.html.indexOf('ipg-sb-fin') < 0 && pVac.text.indexOf('Vacant') >= 0);
 
   // ---- both threshold branches ------------------------------------------
-  // 4A is measured above threshold and 2A below, on the REAL artifact — so both
+  // 4A is measured above threshold and 4B below, on the REAL artifact — so both
   // branches are exercised by real data. The below case re-seated 6B -> 2A at the
   // 09-13 vintage (R42): 6B's 2026 substantive share crossed 0.5 (8.0% -> 55.6%) on
-  // $200,000 of filed labor-PAC receipts, so 6B now renders the bar. The synthetic
+  // $200,000 of filed labor-PAC receipts, so 6B now renders the bar. Re-seated 2A -> 4B on the 2026-11-01 pull, as R42 did: 2A's 2026 share crossed 0.5 (26.9% -> 89.2%) on October's itemized receipts, so 2A now renders the bar. The synthetic
   // boot below then flips one member, proving the branch follows the artifact's
   // precomputed flag and is not keyed to a member id or to a recomputation in the embed.
   ok('[SBF/BAR] above threshold: the bar renders with the disclosure line',
@@ -578,13 +578,13 @@ function around(tpl, marker) { return String(tpl).split(marker); }
   // state.finElection persists across seat changes (pre-existing behaviour, and now
   // load-bearing because coverage is per-election), so the scope is set EXPLICITLY here
   // rather than inherited from whichever selector a previous check happened to drive.
-  var pBelow = setSel(pick(mv, '2A'), 'ipg-sb-fin-el', defaultElection(finBy('2A')));
+  var pBelow = setSel(pick(mv, '4B'), 'ipg-sb-fin-el', defaultElection(finBy('4B')));
   ok('[SBF/BAR] below threshold: NO bar, and string 4 renders as the primary state',
      pBelow.html.indexOf('ipg-sb-bar-seg') < 0
        && !!F4 && pBelow.text.indexOf(around(F4, '{N}')[0]) >= 0);
   ok('[SBF/BAR] below-threshold copy carries the member’s own measured share',
      pBelow.text.indexOf(String(Math.round(
-       finBy('2A').coverage_by_election[defaultElection(finBy('2A'))].substantive_share * 1000) / 10)
+       finBy('4B').coverage_by_election[defaultElection(finBy('4B'))].substantive_share * 1000) / 10)
        + '% of donor dollars') >= 0);
 
   // ======================================================================

@@ -1040,14 +1040,14 @@ that catch defect classes the existing gates structurally cannot see.
 | S-eapp | `campaign-finance/elections/embed/app.js` | `cee83a15a39dc46b313d421e050a721e5e99d44a29e5eb10d875cc65795173c5` |
 | S-srv | `campaign-finance/editor/serve.py` | `3adcdf6dca88b969f0a62de7fd696d26def569abe2bd613f60b74ec122720e2b` |
 | S-rec | `campaign-finance/ingestion/reconcile.py` | `9a6052259db0a6e61a30ae9159dd3755ab5d2fdfca46a9d243327c238dc63e2a` |
-| S-egate | `campaign-finance/elections/embed/tools/gate_bundle.js` | `2f566db2de431e6e835a6d9ff7a1d314f1d014fb33fa602d70d78188ea915ae0` |
+| S-egate | `campaign-finance/elections/embed/tools/gate_bundle.js` | `dd759c4935b74e5b37e2f2ac2013a9eb30ca895bd41e339afb50119282bbdb57` |
 | S-chk | `campaign-finance/tools/check_sheet_scopes.py` | `9c980fd7362351a7df8a889ba60dc1a38d4fcee397200903a4f7d1b7bc620e94` |
 | S-sbf | `campaign-finance/ingestion/build_sb_finance.py` | `c28aea6da753f6b2c53f9f104ed177b909d16f5d9a439aef73a6fcd0ae9ffbf2` |
 | S-a7 | `campaign-finance/sheets-sync/a7_precheck.py` | `a9d7e4669a4dc7b614d5d85939432a3317e3718d9a91cc9a9f0d50ca9ef73374` |
 | S-iv | `campaign-finance/ingest_votes.py` | `167757809a654effaddaf79f62e3ea82881dfe85e555b9acaa90532eb63b0ef1` |
 | S-bios | `campaign-finance/sheets-sync/sync_bios.py` | `0bce2d545e884fedd07fa814f69381582f7487cc12734c1b8c4152a83d89722a` |
 | S-bemit | `campaign-finance/elections/embed/tools/build_embed.js` | `6c164195f1ab25368e126d21d90a24169048569d4bfe668cacde66bebc943841` |
-| S-b2 | `campaign-finance/elections/embed/tools/prerender_b2.js` | `742ba0cc522d4142d88cd4ef2799e2e758dec97ac44b0905cf6d3324e5f3bf94` |
+| S-b2 | `campaign-finance/elections/embed/tools/prerender_b2.js` | `a8aef932b88224975711f98e74200a6d3d78b35b38747063a4819c3facda4e62` |
 | S-unit | `campaign-finance/ingestion/apply_unitemized.py` | `74070bc0bc53c36d48d1d59abf35ef59eb1571eebe38c3c2201f8c42059fa7bb` |
 | S-coh | `campaign-finance/ingestion/apply_cash_on_hand.py` | `fc6593ad330c80f611ba6af54fb371aef17324eb8815b850e1f23e34e0e7fc73` |
 | A-probe | `~/probe-sync-2026-07-24/probe-report.md` | `4c678cf0c14dd370f8b52744bf473000340ce16449a5365841b6ac92d8e5f9bb` |

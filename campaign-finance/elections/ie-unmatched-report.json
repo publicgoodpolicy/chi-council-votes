@@ -2,7 +2,7 @@
  "_doc": "IE rows in scope that matched no candidacy (IEA-2). A row with no disposition stops the election run of ingest_ie before it writes; suggestions are hints, never matches.",
  "undisposed": 0,
  "undisposed_amount": 0,
- "disposed": 21,
+ "disposed": 22,
  "groups": [
   {
    "spender_sbe_id": "40109",
@@ -191,6 +191,25 @@
    "amount": 4851.6,
    "first": "2025-04-05",
    "last": "2025-04-05",
+   "disposition": "not_ours",
+   "suggestions": []
+  },
+  {
+   "spender_sbe_id": "41476",
+   "filed_name": "Jerry Cook",
+   "filed_office": "Regional Superintendent of Schools",
+   "key": [
+    "41476",
+    "jerry cook",
+    "regional superintendent of schools"
+   ],
+   "stance": [
+    "support"
+   ],
+   "rows": 3,
+   "amount": 3798.55,
+   "first": "2026-10-02",
+   "last": "2026-10-29",
    "disposition": "not_ours",
    "suggestions": []
   },

@@ -332,7 +332,7 @@ var FIXTURES = {
     // P1-E (PS-140) re-pin: INCS's 42 of the 87 rows recovered on 2024-only candidacies join its
     // 2024 figures (support +$1,033,846.57, oppose +$153,107.00), measured on the planner's simulation of the
     // 2026-09-13 vintage under PS-140 routing; still union == 2024, its 2026 leg 0 by absence.
-    parity: { support: 3237734.35, oppose: 1093652 },   // re-pinned on the 2026-10-20 pull; support re-pinned at IEA-1 (+382,857: INCS's four aliased groups)
+    parity: { support: 4416621.35, oppose: 1682736 },   // re-pinned on the 2026-11-01 pull (refresh-2: INCS's October 2026 spending, support +1,178,887, oppose +589,084); was 3237734.35 / 1093652 (the 2026-10-20 pull, support re-pinned at IEA-1)
     // self-funding negative case (relational is_self, 8f148b2): a funder who self-funds
     // their OWN race must NOT be flagged self in another candidate's drill.
     // ownRace anchor made specific (HALT-Q2R): after Q2, the bare 'Leon' substring also

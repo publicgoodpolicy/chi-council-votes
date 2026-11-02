@@ -55,9 +55,9 @@ var wil = all.filter(function (r) { return r.d.id === 'wilson-willie'; })[0];
 check(!!wil, 'Wilson is in the data');
 if (wil) {
   var wrow = R.page(data, { cycle: 'all', shown: 25, q: 'wilson, willie', open: null });
-  // Re-pinned on the 2026-10-20 pull (Q3 2026 loans and own money): was $10.20M / $10.07M.
-  check(text(wrow).indexOf('Own money $10.30M') >= 0 && text(wrow).indexOf('of which $10.17M loans to their own committee') >= 0,
-    'Wilson marked: own money $10.30M, of which $10.17M loans (25a)');
+  // Re-pinned on the 2026-11-01 pull (a further $100,000 of own money, a loan): was $10.30M / $10.17M; on the 2026-10-20 pull (Q3 2026 loans and own money) it was re-pinned from $10.20M / $10.07M.
+  check(text(wrow).indexOf('Own money $10.40M') >= 0 && text(wrow).indexOf('of which $10.27M loans to their own committee') >= 0,
+    'Wilson marked: own money $10.40M, of which $10.27M loans (25a)');
 }
 
 // "show more" steps and stops at the cap
