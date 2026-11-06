@@ -71,8 +71,12 @@ that changes a name or a key vote. `node campaign-finance/tools/build_seo.js --c
 same `NODE_PATH`) checks them read-only: code that no longer matches its source is a FAIL; a
 summary that no longer matches the data is a WARN, because it carries no figure and is only
 missing a name, and the rebuilt file goes live at the next paste. A data refresh alone still
-needs no paste. The page's SEO title, SEO description, social image and Search Console settings
-are set in Squarespace, not here.
+needs no paste. Each summary shows only its title and introduction, with the rest in one closed
+"Read the full summary" section (SEO-18a): Squarespace's editor shows the summary without the
+script and sizes the Code Block to it, so a summary shown whole leaves empty space below the
+tool on the live page. Now that the summary is short, the block can be dragged short in the
+editor after a paste. The page's SEO title, SEO description, social image and Search Console
+settings are set in Squarespace, not here.
 
 ## Paste record
 

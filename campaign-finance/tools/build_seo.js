@@ -20,13 +20,18 @@
  * Refresh-moving figures are left out (SEO-2a, SEO-9a); fixed facts in ratified or editorial
  * text stay as written (SEO-14a). No data-through date is baked.
  *
+ * Only the title and introduction show; everything after them sits in one closed <details>
+ * (SEO-18a). Squarespace's editor shows the summary without running the script and sizes the
+ * block to it, so a summary shown whole left the live page a band of empty space below the tool.
+ *
  * Usage, from the repository root:
  *   NODE_PATH=/tmp/domtest/node_modules node campaign-finance/tools/build_seo.js          (write)
  *   NODE_PATH=/tmp/domtest/node_modules node campaign-finance/tools/build_seo.js --check  (read-only)
  * --check builds in memory, writes nothing, and checks each committed paste file: equal to the
- * fresh build; equal to its source off the root line; one H1; the credit on the four tools; no
- * percentage and no dollar figure outside the allow-list of fixed facts; one JSON-LD block that
- * parses and names the Institute and Ishan Daya. One PASS, WARN or FAIL line each; exit 1 on any FAIL.
+ * fresh build; equal to its source off the root line; one H1, before one closed <details> that
+ * holds the rest of the summary; the credit on the four tools; no percentage and no dollar
+ * figure outside the allow-list of fixed facts; one JSON-LD block that parses and names the
+ * Institute and Ishan Daya. One PASS, WARN or FAIL line each; exit 1 on any FAIL.
  * A summary that differs from a fresh build while the code matches its source is a WARN (SEO-16a).
  */
 'use strict';
@@ -43,6 +48,7 @@ var PAGES_BASE = 'https://publicgoodpolicy.github.io/chi-council-votes/campaign-
 var ORG = { '@type': 'Organization', name: 'Institute for the Public Good', url: SITE };
 var PERSON = { '@type': 'Person', name: 'Ishan Daya', url: 'https://ishandaya.com' };   // SEO-13a
 var CREDIT = 'Designed and constructed by Ishan Daya and the Institute for the Public Good.';   // PS-162
+var MORE = 'Read the full summary';   // SEO-18a: the label of the closed section that holds all but the title and introduction
 // SEO-6: the descriptions Ishan enters in Squarespace, reused as each block's description.
 var DESC = {
   'chi-civic-tools': 'Nonpartisan tools from the Institute for the Public Good that track who funds Chicago elections and how the City Council and Board of Education vote.',
@@ -68,6 +74,7 @@ function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '
 function unesc(s) { return String(s).replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&'); }
 function ldTag(obj) { return '<script type="application/ld+json">' + JSON.stringify(obj).replace(/</g, '\\u003c') + '</script>'; }
 function read(p) { return fs.readFileSync(path.join(CF, p), 'utf8'); }
+function collapse(head, rest) { return head + '<details><summary>' + esc(MORE) + '</summary>' + rest + '</details>'; }   // SEO-18a
 function txt(el) { return el ? el.textContent.replace(/\s+/g, ' ').trim() : ''; }
 
 function toolLD(page, name, files) {
@@ -84,12 +91,12 @@ function toolLD(page, name, files) {
 // ---- the homepage ----
 function hub() {
   var R = require(path.join(CF, 'homepage', 'homepage-render.js'));
-  var h = '<div class="hp-head"><h1>' + esc(R.STR.title) + '</h1><p class="hp-lede">' + esc(R.STR.intro) + '</p></div>';
+  var head = '<div class="hp-head"><h1>' + esc(R.STR.title) + '</h1><p class="hp-lede">' + esc(R.STR.intro) + '</p></div>', h = '';
   R.GROUPS.forEach(function (g) {
     h += '<h2>' + esc(g.brand) + ': ' + esc(g.tag) + '</h2><ul>' + R.TOOLS.filter(function (t) { return t.group === g.key; })
       .map(function (t) { return '<li><a href="' + esc(t.href) + '">' + esc(t.name) + '</a> ' + esc(t.text) + '</li>'; }).join('') + '</ul>';
   });
-  return { html: h, ld: { '@context': 'https://schema.org', '@type': 'CollectionPage', name: R.STR.title, description: DESC['chi-civic-tools'],
+  return { html: collapse(head, h), ld: { '@context': 'https://schema.org', '@type': 'CollectionPage', name: R.STR.title, description: DESC['chi-civic-tools'],
     url: SITE + '/chi-civic-tools', publisher: ORG, creator: [ORG, PERSON],
     hasPart: R.TOOLS.map(function (t) { return { '@type': 'WebPage', name: t.name, url: SITE + t.href }; }) } };
 }
@@ -108,7 +115,7 @@ function finance(office, page, dataFile) {
   var om = D.viewModels.officeRaces(index, office);
   var head = R.masthead(office, 'byrace', null).replace(/<div class="topnav"[\s\S]*?<\/div>/, '');   // the tab buttons need the script
   var h1 = unesc((head.match(/<h1>([\s\S]*?)<\/h1>/) || [])[1] || '');
-  var h = '<div class="wrap">' + head + '<section>';
+  var h = '<section>';
   // The race lists follow renderRaceView: on the council page, off-ballot candidates leave the race's list
   // and go under "Not on the ballot", with its ratified note (166-2c, 168-2a, 168-3a; no count is baked);
   // on the school-board page, removed candidates stay in line with their ballot-status label, as their chip.
@@ -128,8 +135,8 @@ function finance(office, page, dataFile) {
         (off.length ? '<h4>Not on the ballot</h4><p>' + esc(OFF_BALLOT_NOTE) + '</p><ul>' + off.map(li).join('') + '</ul>' : '');
     });
   });
-  h += '</section>' + R.footer() + '<section>' + R.methodologyView({ reconUrl: RECON, gapsUrl: GAPS }, office, null, null) + '</section></div>';
-  return { html: h, ld: toolLD(page, h1, [dataFile]) };
+  h += '</section>' + R.footer() + '<section>' + R.methodologyView({ reconUrl: RECON, gapsUrl: GAPS }, office, null, null) + '</section>';
+  return { html: '<div class="wrap">' + collapse(head, h) + '</div>', ld: toolLD(page, h1, [dataFile]) };
 }
 
 // ---- the two voting pages (jsdom) ----
@@ -166,8 +173,8 @@ async function council() {
   var dom = await boot(src, function (u) { return u.indexOf('council-votes.json') >= 0 ? votes : (u.indexOf('council-data.json') >= 0 ? 'hold' : null); },
     function (d) { return d.querySelector('.ipg-member-name'); });
   var d = dom.window.document, title = txt(d.querySelector('.ipg-title'));
-  var h = '<div class="ipg-head"><h1 class="ipg-title">' + esc(title) + '</h1><p class="ipg-sub">' + esc(txt(d.querySelector('.ipg-sub'))) + '</p></div>';
-  h += '<h2>Alderpersons, by ward</h2><ul>' + [].slice.call(d.querySelectorAll('#ipg-ward-sel option')).filter(function (o) { return o.value; })
+  var head = '<div class="ipg-head"><h1 class="ipg-title">' + esc(title) + '</h1><p class="ipg-sub">' + esc(txt(d.querySelector('.ipg-sub'))) + '</p></div>';
+  var h = '<h2>Alderpersons, by ward</h2><ul>' + [].slice.call(d.querySelectorAll('#ipg-ward-sel option')).filter(function (o) { return o.value; })
     .map(function (o) { return '<li>' + esc(txt(o)) + '</li>'; }).join('') + '</ul><h2>Key votes</h2>';
   [].slice.call(d.querySelectorAll('.ipg-vote')).forEach(function (v) {   // the key votes; the member's recorded position is left out
     var name = txt(v.querySelector('.ipg-vote-name')); if (!name) return;
@@ -178,7 +185,7 @@ async function council() {
   d.querySelector('.ipg-tab[data-v="methodology"]').onclick(); await tick(dom, 150);
   h += methodologyFrom(d.getElementById('ipg-council-app'));
   dom.window.close();
-  return { html: h, ld: toolLD('alder-voting-history', title, ['shards/council-votes.json', 'council-data.json']) };
+  return { html: collapse(head, h), ld: toolLD('alder-voting-history', title, ['shards/council-votes.json', 'council-data.json']) };
 }
 
 async function sbVotes() {
@@ -187,7 +194,7 @@ async function sbVotes() {
   var dom = await boot(src, function (u) { return u.indexOf('school-board-data.json') >= 0 ? data : (u.indexOf('school-board-finance.json') >= 0 ? fin : null); },
     function (d) { var a = d.getElementById('ipg-sb-app'); return a && a.querySelector('.ipg-sb-verified'); });
   var d = dom.window.document, title = txt(d.querySelector('.ipg-sb-title'));
-  var h = '<div class="ipg-sb-head"><h1 class="ipg-sb-title serif">' + esc(title) + '</h1><p class="ipg-sb-sub">' + esc(txt(d.querySelector('.ipg-sb-sub'))) + '</p></div>';
+  var head = '<div class="ipg-sb-head"><h1 class="ipg-sb-title serif">' + esc(title) + '</h1><p class="ipg-sb-sub">' + esc(txt(d.querySelector('.ipg-sb-sub'))) + '</p></div>', h = '';
   var seatSel = [].slice.call(d.querySelectorAll('select')).filter(function (s) { return [].some.call(s.options, function (o) { return /^1A — /.test(txt(o)); }); })[0];
   if (!seatSel) throw new Error('school-board seat selector not found');
   h += '<h2>Board members, by seat</h2><ul>' + [].slice.call(seatSel.options).filter(function (o) { return / — /.test(txt(o)); })
@@ -210,7 +217,7 @@ async function sbVotes() {
   if (!duesP.test(m) || !otherS.test(m)) throw new Error('school-board methodology: a SEO-15a sentence was not found');
   m = m.replace(duesP, '').replace(otherS, '');
   dom.window.close();
-  return { html: h + m, ld: toolLD('school-board-voting-history', title, ['school-board-data.json', 'school-board-finance.json']) };
+  return { html: collapse(head, h + m), ld: toolLD('school-board-voting-history', title, ['school-board-data.json', 'school-board-finance.json']) };
 }
 
 (async function () {
@@ -256,6 +263,11 @@ async function sbVotes() {
     var cHtml = shaped ? m[2].slice(open.length, -'</div>'.length) : '';
     var cText = textOf(cHtml);
     check((cHtml.match(/<h1[ >]/g) || []).length === 1, p[0] + ': one H1');
+    var di = cHtml.indexOf('<details>'), hi = cHtml.search(/<h1[ >]/);
+    check((cHtml.match(/<details[ >]/g) || []).length === 1 && (cHtml.match(/<summary[ >]/g) || []).length === 1 && di > hi && hi >= 0 &&
+      cHtml.indexOf('<details><summary>' + esc(MORE) + '</summary>') === di && cHtml.slice(0, di).replace(/<[^>]+>/g, '').length < 1000 &&
+      cHtml.lastIndexOf('</details>') === cHtml.length - '</details>'.length - (p[0] === 'city-council' || p[0] === 'school-board-elections' ? '</div>'.length : 0),
+      p[0] + ': the title and introduction, then one closed section ("' + MORE + '") holding the rest (SEO-18a)');
     if (p[4]) check(cText.indexOf(CREDIT) >= 0, p[0] + ': PS-162\u2019s sentence is in the summary');
     text = cText;
     var dollars = (text.match(/\$[0-9][0-9,.]*(?:Bn|M\b| million)?/g) || []).filter(function (x) { return DOLLARS_ALLOWED.indexOf(x) < 0; });
