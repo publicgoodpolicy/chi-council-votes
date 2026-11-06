@@ -1036,7 +1036,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-sbemb | `campaign-finance/school-board/school-board-embed.html` | `a6ee72ea7f478915352c025d43ce3d28a6984368ecb611e0eaa65795ae4650f7` |
 | S-eemb | `campaign-finance/elections/embed/elections-embed.html` | `308513501948ebeeeabd54aa503e7e745c3b03722f09cf1fe7681e159288a5e4` |
 | S-edat | `campaign-finance/elections/embed/data.js` | `38b8452190ade83f63a69c303284e3258c34d3d7fca1f63156676b8174cc3a04` |
-| S-eren | `campaign-finance/elections/embed/render.js` | `9b1b9d15e1421dca9a8c5ca8b641946bbadfabb2e32c57366fc6c247081e3fbf` |
+| S-eren | `campaign-finance/elections/embed/render.js` | `15d2824f580508c9bb547358e35b9d05b63f432e8c1135983a442f4397ea07b2` |
 | S-eapp | `campaign-finance/elections/embed/app.js` | `cee83a15a39dc46b313d421e050a721e5e99d44a29e5eb10d875cc65795173c5` |
 | S-srv | `campaign-finance/editor/serve.py` | `3adcdf6dca88b969f0a62de7fd696d26def569abe2bd613f60b74ec122720e2b` |
 | S-rec | `campaign-finance/ingestion/reconcile.py` | `9a6052259db0a6e61a30ae9159dd3755ab5d2fdfca46a9d243327c238dc63e2a` |

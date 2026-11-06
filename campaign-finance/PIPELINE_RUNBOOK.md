@@ -137,6 +137,7 @@ The order in the chain below is load-bearing. These are the ways it has actually
 | a Donor Merges row is added | the mechanism is **deprecated (PS-97)** and destructive | the sync **stops** on any row |
 | a legacy vote code reappears | vocabularies fork silently, as they did before | **VOTES-5** |
 | shards published stale | readers get an older dataset than the monolith | **`--shards`**, wired into the gate |
+| a refresh or Sheet sync changes a name (a candidate files or leaves the ballot, a key vote changes) | the pasted pages' baked summaries (PS-163) lack the change until rebuilt and re-pasted; they carry no figure, so nothing shown is wrong, only missing | **`campaign-finance/tools/build_seo.js --check`** reports a WARN (SEO-16a). Remedy: run `campaign-finance/tools/build_seo.js` in the refresh commit; the rebuilt files go live at the next paste lane, and a refresh alone needs no paste |
 | outside spending filed under a name the matcher cannot read (a nickname, a misspelling, part of a hyphenated surname) | before IEA-1 the row was counted and dropped, unseen: $459,192 of school-board spending at the 2026-10-20 pull | the elections run of **`ingest_ie`** writes `elections/ie-unmatched-report.json` and **stops before writing** while any in-scope row has no ruled alias or disposition (IEA-2); **`[IE/UNMATCHED]`** in the gate reads the committed report against the current lists |
 
 **A re-ingest does NOT strip the IE layer.** `ingest.py` never touches

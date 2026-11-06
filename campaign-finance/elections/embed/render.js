@@ -95,11 +95,11 @@
 
   // Editorial masthead copy per office page.
   var MAST = {
-    school_board: { kicker: 'Chicago School Board · November 3, 2026', election: '2026 Chicago Board of Education',
+    school_board: { h1: 'Candidates for the Chicago Board of Education, and the funding behind them', kicker: 'Chicago School Board · November 3, 2026', election: '2026 Chicago Board of Education',
       lede: 'A nonpartisan guide to the money behind the 2026 Chicago Board of Education election. We show what campaigns raise and what outside groups spend — <strong>not who to vote for.</strong>' },
-    city_council: { kicker: 'Chicago City Council · February 23, 2027', election: '2027 Chicago Municipal',
+    city_council: { h1: 'Candidates for Chicago City Council, and the funding behind them', kicker: 'Chicago City Council · February 23, 2027', election: '2027 Chicago Municipal',
       lede: 'A nonpartisan guide to the money in Chicago’s 2027 aldermanic races — what campaigns raise and what outside groups spend, <strong>not who to vote for.</strong>' },
-    mayor: { kicker: 'Chicago Mayor · February 23, 2027', election: '2027 Chicago Municipal',
+    mayor: { h1: 'Who’s running, and who’s funding them', kicker: 'Chicago Mayor · February 23, 2027', election: '2027 Chicago Municipal',
       lede: 'A nonpartisan guide to the money in Chicago’s 2027 mayoral race — what the campaign raises and what outside groups spend, <strong>not who to vote for.</strong>' }
   };
   function pageLabel(o) { return ({ school_board: 'School Board', city_council: 'City Council', mayor: 'Mayor' })[o] || o; }
@@ -1146,7 +1146,7 @@
     var isByrace = topView !== 'spend' && topView !== 'methodology';
     // 120b, 121b (2026-10-22): the FinTrack mark above the title, drawn for the teal masthead.
     return '<header class="masthead"><p class="track"><svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" focusable="false"><circle cx="16" cy="16" r="10.5" fill="none" stroke="#EBDAC6" stroke-width="3.2"/><path d="M8.5 21.5 L12.5 16.5 L16.5 19.5 L27 6" fill="none" stroke="#044147" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 21.5 L12.5 16.5 L16.5 19.5 L27 6" fill="none" stroke="#F6EFE9" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Fin</b>Track</span></p><p class="eyebrow"><span class="box" aria-hidden="true"></span>' + esc(m.kicker) + '</p>' +
-      '<h1>Who’s running, and who’s funding them</h1><p class="lede">' + m.lede + '</p>' + dataThroughLine(office, dataThrough) +
+      '<h1>' + esc(m.h1) + '</h1><p class="lede">' + m.lede + '</p>' + dataThroughLine(office, dataThrough) +
       '<div class="topnav" role="tablist" aria-label="View">' +
       '<button role="tab" data-view="byrace" aria-selected="' + isByrace + '">By race</button>' +
       '<button role="tab" data-view="spend" aria-selected="' + (topView === 'spend') + '">Election spend</button>' +

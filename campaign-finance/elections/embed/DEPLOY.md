@@ -12,13 +12,20 @@ web font is loaded for it). Regenerate all three after any source change:
 ```
 cd campaign-finance/elections/embed
 node tools/build_embed.js        # -> all three files below
+cd ../../..
+NODE_PATH=/tmp/domtest/node_modules node campaign-finance/tools/build_seo.js   # -> the .seo.html paste files (PS-163)
 ```
 
-| Page          | File                                        |
-|---------------|---------------------------------------------|
-| /school-board-elections | `elections-embed.inlined.html`    |
-| /city-council | `elections-embed.city-council.inlined.html` |
-| /mayor        | `elections-embed.mayor.inlined.html`        |
+| Page          | Built file                                  | Paste file (PS-163)                          |
+|---------------|---------------------------------------------|----------------------------------------------|
+| /school-board-elections | `elections-embed.inlined.html`    | `elections-embed.seo.html`                   |
+| /city-council | `elections-embed.city-council.inlined.html` | `elections-embed.city-council.seo.html`      |
+| /mayor        | `elections-embed.mayor.inlined.html`        | none: not pasted                             |
+
+**Paste the file in the third column, not the built file** (PS-163). It is the built file with the
+page's summary baked inside its root container, and one schema.org block before it, both on
+the container's own line; every other byte is the built file's. See "What a reader without
+JavaScript sees" below.
 
 Host: `https://www.publicgoodpolicy.org`.
 
@@ -45,6 +52,27 @@ attribute the paster edited per page; that step is retired.
 `mayor` renders a clean "coming soon — finance processing as candidates file"
 state (not an error) until its candidate committees are mapped in `race-map.json`.
 `city_council` is mapped and live.
+
+## What a reader without JavaScript sees (PS-163)
+
+All five pages paste a file whose name ends in .seo.html, written beside its source by
+`campaign-finance/tools/build_seo.js`:
+
+| Page                          | Source                                              | Paste file                                         |
+|-------------------------------|-----------------------------------------------------|----------------------------------------------------|
+| /chi-civic-tools              | `campaign-finance/homepage/homepage-embed.inlined.html` | `campaign-finance/homepage/homepage-embed.seo.html` |
+| /city-council                 | `elections-embed.city-council.inlined.html`         | `elections-embed.city-council.seo.html`            |
+| /school-board-elections       | `elections-embed.inlined.html`                      | `elections-embed.seo.html`                         |
+| /alder-voting-history         | `campaign-finance/elections/reference/council-embed.html` | `campaign-finance/elections/reference/council-embed.seo.html` |
+| /school-board-voting-history  | `campaign-finance/school-board/school-board-embed.html` | `campaign-finance/school-board/school-board-embed.seo.html` |
+
+Rebuild them after any change to a source paste file, and after a data refresh or Sheet sync
+that changes a name or a key vote. `node campaign-finance/tools/build_seo.js --check` (with the
+same `NODE_PATH`) checks them read-only: code that no longer matches its source is a FAIL; a
+summary that no longer matches the data is a WARN, because it carries no figure and is only
+missing a name, and the rebuilt file goes live at the next paste. A data refresh alone still
+needs no paste. The page's SEO title, SEO description, social image and Search Console settings
+are set in Squarespace, not here.
 
 ## Paste record
 
