@@ -456,8 +456,8 @@ def validate(art, ed=None):
         # 26066 re-pinned at IEA-1 (IEA-5-1a, 2026-10-28): its four "Theresa Boyle" rows, $147,271,
         # reach Therese Boyle by the ruled alias list; nothing else moved.
         "26066": {"support": 919677.78, "oppose": 632976.00, "rows": 49},
-        "39901": {"support": 389033.90, "oppose": 65779.05, "rows": 62},
-        "41012": {"support": 1152596.43, "oppose": 761263.01, "rows": 60},
+        "39901": {"support": 390530.84, "oppose": 65779.05, "rows": 63},
+        "41012": {"support": 1303277.77, "oppose": 761263.01, "rows": 62},
         "41327": {"support": 860210.82, "oppose": 0.00, "rows": 34},
     }
     if ie:
@@ -482,8 +482,8 @@ def validate(art, ed=None):
                  got["rows"] == want["rows"], f"got={got['rows']} ratified={want['rows']}")
         grand = round(sum(v["support"] + v["oppose"] for v in seen_ie.values()), 2)
         grows = sum(v["rows"] for v in seen_ie.values())
-        r.ok("SBF-17e the whole IE slice equals the ratified $4,781,536.99 over 205 rows",
-             abs(grand - 4781536.99) < CENT and grows == 205,
+        r.ok("SBF-17e the whole IE slice equals the ratified $4,933,715.27 over 208 rows",
+             abs(grand - 4933715.27) < CENT and grows == 208,
              f"got ${grand} over {grows} rows")
 
     # SBF-18 — the election-wide label (A.3) and the bug it fixes.

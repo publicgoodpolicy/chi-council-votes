@@ -1,6 +1,6 @@
 {
   "schema_version": "2.3",
-  "generated_at": "2026-11-02T13:25:41Z",
+  "generated_at": "2026-11-08T21:24:03Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "itemization_threshold": 150,
   "cycles": {
@@ -352616,6 +352616,73 @@
       "city": "Chicago, IL",
       "parent_id": "kruschka-karyn",
       "committee_id": null
+    },
+    "trust-bradley": {
+      "id": "trust-bradley",
+      "name": "Trust, Bradley",
+      "type": "Individual",
+      "industries": [
+        "individual"
+      ],
+      "flags": [],
+      "notes": null,
+      "occupation": "CEO",
+      "employer": "p33",
+      "city": "Chicago, IL",
+      "parent_id": "trust-bradley",
+      "committee_id": null
+    },
+    "prime-healthcare-services-inc": {
+      "id": "prime-healthcare-services-inc",
+      "name": "Prime Healthcare Services Inc",
+      "type": "Individual",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": "Ontario, CA",
+      "parent_id": "prime-healthcare-services-inc",
+      "committee_id": null
+    },
+    "agman": {
+      "id": "agman",
+      "name": "Agman",
+      "type": "Individual",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": "Chicago, IL",
+      "parent_id": "agman",
+      "committee_id": null
+    },
+    "sun-fresh-market-dba-cermak-produce-4": {
+      "id": "sun-fresh-market-dba-cermak-produce-4",
+      "name": "Sun Fresh Market (DBA Cermak Produce #4)",
+      "type": "Individual",
+      "industries": [
+        "unclassified"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": "Chicago, IL",
+      "parent_id": "sun-fresh-market-dba-cermak-produce-4",
+      "committee_id": null
+    },
+    "belz-chris": {
+      "id": "belz-chris",
+      "name": "Belz, Chris",
+      "type": "Other",
+      "industries": [
+        "individual"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": "Chicago, IL",
+      "parent_id": "belz-chris",
+      "committee_id": null
     }
   },
   "committees": {
@@ -352628,7 +352695,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34616/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 136709.07,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -352856,7 +352923,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/25653/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 544319.7,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -353138,7 +353205,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/25956/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 8133.94,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -353366,7 +353433,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34611/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 102825.78,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -353594,7 +353661,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/37143/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 38880.33,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -353732,7 +353799,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34524/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 187216.69,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -353960,7 +354027,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/19263/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 366996.93,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -354368,7 +354435,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34202/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 15159.5,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -354608,7 +354675,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/16892/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 44927.25,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -355046,7 +355113,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38916/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 33092.64,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -355136,7 +355203,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38925/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 58195.68,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -355250,7 +355317,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38991/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 921.52,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -355358,7 +355425,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/22816/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 178495.71,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -355526,7 +355593,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/20016/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 355038.41,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -355760,7 +355827,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/14556/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 128271.11,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -356090,7 +356157,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38819/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 469409.4,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -356210,7 +356277,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/37399/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 311789.45,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -356336,7 +356403,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38809/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 76648.87,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -356456,7 +356523,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/23282/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 205558.52,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -356479,7 +356546,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38729/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 168491.89,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -356599,7 +356666,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/23079/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 169768.31,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -356857,7 +356924,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34374/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 251323.02,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -357007,7 +357074,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/23127/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 130101.25,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -357271,7 +357338,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/26217/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 38505.76,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -357391,7 +357458,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/22919/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 55582.21,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -357727,7 +357794,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34336/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 5370.06,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -357937,7 +358004,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38748/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 65730.05,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -358033,7 +358100,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/31905/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 213711.52,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -358273,7 +358340,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/23775/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 228019.37,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -358477,7 +358544,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38561/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 159554.12,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -358585,7 +358652,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38831/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 131704.52,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -358705,7 +358772,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/40747/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 22139.73,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -358759,7 +358826,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/23112/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 326941.86,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -359041,7 +359108,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/25937/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 45574.28,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -359263,7 +359330,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38706/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 120606.97,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -359383,7 +359450,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34692/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 69680.97,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -359551,7 +359618,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/19898/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 343332.44,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -359881,7 +359948,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38623/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 1091967.38,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -360007,7 +360074,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/26023/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 267332.97,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -360169,7 +360236,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/15622/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 58458.59,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -360433,7 +360500,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/19830/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 85948.33,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -360763,7 +360830,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34569/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 335591.02,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -360967,7 +361034,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/26028/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 121391.48,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -361225,7 +361292,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38596/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 376339.96,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -361345,7 +361412,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38699/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 190008.42,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -361453,7 +361520,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34894/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 93101.59,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -361603,7 +361670,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/35096/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 1022.6,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -361747,7 +361814,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/34345/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 361597.32,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -361981,7 +362048,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/38605/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 62433.41,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -362107,7 +362174,7 @@
       "il_sunshine_url": "https://illinoissunshine.org/committees/22982/",
       "founded": null,
       "data_quality": "REAL",
-      "last_updated": "2026-11-02",
+      "last_updated": "2026-11-08",
       "cash_on_hand": 619106.31,
       "cash_on_hand_as_of": "2026-09-30",
       "notes": null,
@@ -390175,6 +390242,16 @@
       "source_filing": "Quarterly"
     },
     {
+      "id": "c-14556-02753",
+      "donor_id": "jb-for-governor",
+      "committee_id": "ward-9",
+      "amount": 5000.0,
+      "date": "2026-10-30",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-15622-00002",
       "donor_id": "solidarity-food",
       "committee_id": "ward-37",
@@ -406881,6 +406958,26 @@
       "committee_id": "ward-37",
       "amount": 2500.0,
       "date": "2026-10-15",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-15622-01672",
+      "donor_id": "local-134-state-municipal-pac",
+      "committee_id": "ward-37",
+      "amount": 2500.0,
+      "date": "2026-11-04",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-15622-01673",
+      "donor_id": "garces-contractors-llc",
+      "committee_id": "ward-37",
+      "amount": 1000.0,
+      "date": "2026-11-04",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "A-1"
@@ -459562,6 +459659,16 @@
       "committee_id": "ward-3",
       "amount": 1000.0,
       "date": "2026-10-27",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-16892-05230",
+      "donor_id": "united-airline",
+      "committee_id": "ward-3",
+      "amount": 1500.0,
+      "date": "2026-10-31",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "A-1"
@@ -591978,6 +592085,16 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-22816-00423",
+      "donor_id": "trust-bradley",
+      "committee_id": "ward-7",
+      "amount": 2500.0,
+      "date": "2026-11-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-22919-00002",
       "donor_id": "michael-f-clancy-ltd",
       "committee_id": "ward-19",
@@ -688329,6 +688446,46 @@
       "cycle": "2027",
       "contribution_type": "Other Receipt",
       "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-23112-01908",
+      "donor_id": "jos-cacciatore-co-real-estate",
+      "committee_id": "ward-28",
+      "amount": 1500.0,
+      "date": "2026-11-03",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-23112-01909",
+      "donor_id": "united-airlines",
+      "committee_id": "ward-28",
+      "amount": 1500.0,
+      "date": "2026-11-03",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-23112-01910",
+      "donor_id": "singh-ajit",
+      "committee_id": "ward-28",
+      "amount": 1000.0,
+      "date": "2026-11-03",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-23112-01911",
+      "donor_id": "chicago-land-operators-joint-labor-management-pac",
+      "committee_id": "ward-28",
+      "amount": 2500.0,
+      "date": "2026-11-03",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
     },
     {
       "id": "c-23127-00002",
@@ -808441,6 +808598,16 @@
       "in_kind_description": "Campaign work"
     },
     {
+      "id": "c-26217-00190",
+      "donor_id": "beran-cristina",
+      "committee_id": "ward-18",
+      "amount": 5000.0,
+      "date": "2026-10-31",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-31905-00002",
       "donor_id": "medaglia-guy-a",
       "committee_id": "ward-22",
@@ -827455,6 +827622,26 @@
       "committee_id": "ward-22",
       "amount": 1000.0,
       "date": "2026-10-16",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-31905-01900",
+      "donor_id": "teamsters-volunteers-in-politics",
+      "committee_id": "ward-22",
+      "amount": 1000.0,
+      "date": "2026-10-21",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-31905-01901",
+      "donor_id": "friends-for-celina-villanueva",
+      "committee_id": "ward-22",
+      "amount": 16000.0,
+      "date": "2026-11-02",
       "cycle": "2027",
       "contribution_type": "Transfer In",
       "source_filing": "A-1"
@@ -848145,6 +848332,16 @@
       "committee_id": "ward-20",
       "amount": 1000.0,
       "date": "2026-10-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34336-00557",
+      "donor_id": "hass-debra",
+      "committee_id": "ward-20",
+      "amount": 1000.0,
+      "date": "2026-11-05",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "A-1"
@@ -871930,6 +872127,26 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-34345-02367",
+      "donor_id": "swaminathan-anand",
+      "committee_id": "ward-47",
+      "amount": 1032.7,
+      "date": "2026-10-28",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34345-02368",
+      "donor_id": "hamer-charlton",
+      "committee_id": "ward-47",
+      "amount": 1500.0,
+      "date": "2026-11-01",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-34374-00002",
       "donor_id": "jb-for-governor-exploratory-committee",
       "committee_id": "ward-16",
@@ -883141,6 +883358,26 @@
       "cycle": "2027",
       "contribution_type": "Transfer In",
       "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-34374-01122",
+      "donor_id": "lyft-inc",
+      "committee_id": "ward-16",
+      "amount": 1500.0,
+      "date": "2026-10-28",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34374-01123",
+      "donor_id": "committee-to-expand-the-middle-class-candidate",
+      "committee_id": "ward-16",
+      "amount": 1500.0,
+      "date": "2026-10-28",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
     },
     {
       "id": "c-34524-00002",
@@ -945931,6 +946168,46 @@
       "in_kind_description": "Food for event"
     },
     {
+      "id": "c-34616-01168",
+      "donor_id": "committee-to-elect-will-guzzardi",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 2500.0,
+      "date": "2026-11-04",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34616-01169",
+      "donor_id": "pmj2445-llc",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 2500.0,
+      "date": "2026-11-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34616-01170",
+      "donor_id": "prime-healthcare-services-inc",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 1500.0,
+      "date": "2026-11-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-34616-01171",
+      "donor_id": "smith-leo",
+      "committee_id": "ward-1-daniel-la-spata",
+      "amount": 1000.0,
+      "date": "2026-11-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-34692-00002",
       "donor_id": "mayas-carol",
       "committee_id": "ward-31",
@@ -996535,6 +996812,46 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-37399-01491",
+      "donor_id": "chicago-fire-fighters-union-local-2",
+      "committee_id": "ward-11",
+      "amount": 1500.0,
+      "date": "2026-10-26",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01492",
+      "donor_id": "teamsters-volunteers-in-politics",
+      "committee_id": "ward-11",
+      "amount": 1000.0,
+      "date": "2026-10-26",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01493",
+      "donor_id": "teamsters-volunteers-in-politics",
+      "committee_id": "ward-11",
+      "amount": 2500.0,
+      "date": "2026-10-26",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-37399-01494",
+      "donor_id": "samuel-v-p-banks",
+      "committee_id": "ward-11",
+      "amount": 1500.0,
+      "date": "2026-10-28",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-38561-00002",
       "donor_id": "lebed-fred-g",
       "committee_id": "ward-24",
@@ -1022092,6 +1022409,16 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-38605-00816",
+      "donor_id": "raines-thomas",
+      "committee_id": "ward-48",
+      "amount": 1000.0,
+      "date": "2026-11-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-38623-00002",
       "donor_id": "abramson-ronald",
       "committee_id": "ward-34",
@@ -1030739,6 +1031066,36 @@
       "cycle": "2027",
       "contribution_type": "Other Receipt",
       "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-38623-00866",
+      "donor_id": "krehbiel-liam",
+      "committee_id": "ward-34",
+      "amount": 2500.0,
+      "date": "2026-10-30",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38623-00867",
+      "donor_id": "agman",
+      "committee_id": "ward-34",
+      "amount": 5000.0,
+      "date": "2026-11-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38623-00868",
+      "donor_id": "mcgowan-christopher",
+      "committee_id": "ward-34",
+      "amount": 5000.0,
+      "date": "2026-11-06",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
     },
     {
       "id": "c-38699-00002",
@@ -1079147,6 +1079504,46 @@
       "source_filing": "A-1"
     },
     {
+      "id": "c-38831-00830",
+      "donor_id": "sun-fresh-market-dba-cermak-produce-4",
+      "committee_id": "ward-26",
+      "amount": 2500.0,
+      "date": "2026-10-31",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38831-00831",
+      "donor_id": "belz-chris",
+      "committee_id": "ward-26",
+      "amount": 6585.0,
+      "date": "2026-11-04",
+      "cycle": "2027",
+      "contribution_type": "Other Receipt",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38831-00832",
+      "donor_id": "chicago-latino-public-affairs-committee",
+      "committee_id": "ward-26",
+      "amount": 2500.0,
+      "date": "2026-11-04",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
+      "id": "c-38831-00833",
+      "donor_id": "chicago-latino-public-affairs-committee",
+      "committee_id": "ward-26",
+      "amount": 5000.0,
+      "date": "2026-11-04",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1"
+    },
+    {
       "id": "c-38916-00002",
       "donor_id": "watson-darien",
       "committee_id": "ward-4",
@@ -1093275,6 +1093672,16 @@
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "Quarterly"
+    },
+    {
+      "id": "c-38925-00562",
+      "donor_id": "lyft",
+      "committee_id": "ward-5",
+      "amount": 1000.0,
+      "date": "2026-11-04",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1"
     },
     {
       "id": "c-38991-00002",
@@ -1114892,6 +1115299,16 @@
       "committee_id": "ie-committee-18574",
       "amount": 50000.0,
       "date": "2026-10-27",
+      "cycle": "2027",
+      "contribution_type": "IE Committee Dues Transfer",
+      "source_filing": "Receipts"
+    },
+    {
+      "id": "ie-rec-18574-1533",
+      "donor_id": "seiu-il-council-dues",
+      "committee_id": "ie-committee-18574",
+      "amount": 72800.0,
+      "date": "2026-10-30",
       "cycle": "2027",
       "contribution_type": "IE Committee Dues Transfer",
       "source_filing": "Receipts"
@@ -1138823,10 +1139240,10 @@
         "friends-of-celina-villanueva": "alt-name"
       },
       "member_totals": {
-        "friends-for-celina-villanueva": 11587.5,
+        "friends-for-celina-villanueva": 27587.5,
         "friends-of-celina-villanueva": 5000.0
       },
-      "total": 16587.5
+      "total": 32587.5
     },
     "rollup-327": {
       "name": "Walnut Street Properties Inc",
@@ -1140861,7 +1141278,7 @@
         "chicago-firefighters-union-local-2-pcf": 1000.0,
         "chicago-firefighters-union-local-2-pac": 2000.0,
         "chicago-fire-department-local-2-pac": 94200.0,
-        "chicago-fire-fighters-union-local-2": 46300.0,
+        "chicago-fire-fighters-union-local-2": 47800.0,
         "chicago-fire-fighters-union-local-2-political-committee-fund": 30770.0,
         "chicago-fire-fighters-union-local-2-pcf": 3500.0,
         "chicago-fire-fighters-local-2": 2750.0,
@@ -1140869,7 +1141286,7 @@
         "chicago-firefighters-union-2": 5000.0,
         "chicago-firefighters-local-2": 1500.0
       },
-      "total": 447771.2
+      "total": 449271.2
     },
     "rollup-422": {
       "name": "Illinois Healthcare Associates PAC",
@@ -1141232,7 +1141649,7 @@
         "teamsters-local-union-700-pac": "affiliated-pac"
       },
       "member_totals": {
-        "teamsters-volunteers-in-politics": 189196.68,
+        "teamsters-volunteers-in-politics": 193696.68,
         "international-brotherhood-of-teamsters-local-705-pac": 4000.0,
         "international-brotherhood-of-teamsters-local-705": 2500.0,
         "teamsters-local-705-pac": 2500.0,
@@ -1141265,7 +1141682,7 @@
         "local-781-teamsters": 2400.0,
         "teamsters-local-union-700-pac": 2500.0
       },
-      "total": 337585.58
+      "total": 342085.58
     },
     "rollup-548": {
       "name": "Plumbers & Pipefitters (UA)",
@@ -1141913,10 +1142330,10 @@
         "lyft-inc": "alt-name"
       },
       "member_totals": {
-        "lyft": 13250.0,
-        "lyft-inc": 52250.0
+        "lyft": 14250.0,
+        "lyft-inc": 53750.0
       },
-      "total": 65500.0
+      "total": 68000.0
     },
     "rollup-510": {
       "name": "IBEW (Electrical Workers)",
@@ -1142006,7 +1142423,7 @@
         "local-134-pac": 37750.0,
         "local-134": 5000.0,
         "local-134-ibew": 13500.0,
-        "local-134-state-municipal-pac": 20000.0,
+        "local-134-state-municipal-pac": 22500.0,
         "local-134-pac-i-b-e-w": 350.0,
         "local-134-state-and-municipal-pac": 12000.0,
         "local-134-state-municipal-pac-ibew": 5000.0,
@@ -1142024,7 +1142441,7 @@
         "ibew-local-701-pac": 1250.0,
         "ibew-local-21": 1000.0
       },
-      "total": 635200.0
+      "total": 637700.0
     },
     "rollup-454": {
       "name": "JPMorgan Chase & Co. PAC",
@@ -1142103,12 +1142520,12 @@
         "chicago-latino-100-pac": "affiliated-pac"
       },
       "member_totals": {
-        "chicago-latino-public-affairs-committee": 71322.0,
+        "chicago-latino-public-affairs-committee": 78822.0,
         "chicago-latin-public-affairs": 500.0,
         "chicago-latino-pac": 39700.0,
         "chicago-latino-100-pac": 10000.0
       },
-      "total": 121522.0
+      "total": 129022.0
     },
     "rollup-457": {
       "name": "The Habitat Company, LLC",
@@ -1142874,7 +1143291,7 @@
         "international-union-of-operating-engineers-local-143": "affiliated-pac"
       },
       "member_totals": {
-        "chicago-land-operators-joint-labor-management-pac": 871800.5,
+        "chicago-land-operators-joint-labor-management-pac": 874300.5,
         "chicago-land-operators-joint-labor-mgt-pac": 40590.0,
         "chicago-land-operators": 22000.0,
         "chicago-land-operators-pac": 14450.0,
@@ -1142927,7 +1143344,7 @@
         "iuoe-pac": 1100.0,
         "international-union-of-operating-engineers-local-143": 1000.0
       },
-      "total": 2223780.75
+      "total": 2226280.75
     },
     "rollup-477": {
       "name": "Chicago Teachers Union",
@@ -1143052,14 +1143469,14 @@
         "jb-for-governor-exploratory-committee": "related"
       },
       "member_totals": {
-        "jb-for-governor": 301400.0,
+        "jb-for-governor": 306400.0,
         "jb-for-governor-exploration-committee": 2500.0,
         "jb-for-govenor-exploratory-committee": 5000.0,
         "jb-for-governor-exploratory-comm": 10000.0,
         "jb-for-gov": 16500.0,
         "jb-for-governor-exploratory-committee": 70000.0
       },
-      "total": 405400.0
+      "total": 410400.0
     },
     "rollup-483": {
       "name": "AFSCME",
@@ -1143990,7 +1144407,7 @@
       "member_totals": {
         "committee-to-expand-the-middle-class": 11500.0,
         "committee-to-expand-the-middle-class-candidate-committee": 38000.0,
-        "committee-to-expand-the-middle-class-candidate": 6000.0,
+        "committee-to-expand-the-middle-class-candidate": 7500.0,
         "the-committee-to-expand-the-middle-class-candidate-committee": 1500.0,
         "committee-to-expand-middle-clase-airbnb-inc": 500.0,
         "committee-to-expand-middle-class-candidate-committee-fppc": 1500.0,
@@ -1143998,7 +1144415,7 @@
         "committee-to-expand-the-middle-class-pac": 3000.0,
         "committee-to-expand-the-middle-class-candiidate-committee": 1500.0
       },
-      "total": 64500.0
+      "total": 66000.0
     },
     "rollup-524": {
       "name": "La Ciudad de los Vientos",
@@ -1144221,12 +1144638,12 @@
         "united-airlines-inc-pac": 22475.0,
         "united-airlines-political-action-committee": 3225.0,
         "united-airlines-inc-political-action-committee": 3000.0,
-        "united-airlines": 12533.0,
-        "united-airline": 3500.0,
+        "united-airlines": 14033.0,
+        "united-airline": 5000.0,
         "united-airlines-pac": 33000.0,
         "continental-airlines-inc-empl-fund-for-a-better-america-pac": 3750.0
       },
-      "total": 84733.0
+      "total": 87733.0
     },
     "rollup-533": {
       "name": "American Airlines",
@@ -1145315,10 +1145732,10 @@
         "industries": [
           "labor-trades"
         ],
-        "direct": 603550.0,
+        "direct": 606050.0,
         "independent": 25000.0,
-        "total": 628550.0,
-        "count": 312,
+        "total": 631050.0,
+        "count": 313,
         "committees": 40,
         "members": 32,
         "by_cycle": {
@@ -1145335,10 +1145752,10 @@
             "count": 97
           },
           "2027": {
-            "direct": 184350.0,
+            "direct": 186850.0,
             "independent": 0.0,
-            "total": 184350.0,
-            "count": 69
+            "total": 186850.0,
+            "count": 70
           },
           "2023": {
             "direct": 209800.0,
@@ -1150265,10 +1150682,10 @@
         "industries": [
           "labor-trades"
         ],
-        "direct": 2186080.75,
+        "direct": 2188580.75,
         "independent": 30000.0,
-        "total": 2216080.75,
-        "count": 682,
+        "total": 2218580.75,
+        "count": 683,
         "committees": 46,
         "members": 52,
         "by_cycle": {
@@ -1150291,10 +1150708,10 @@
             "count": 224
           },
           "2027": {
-            "direct": 727560.0,
+            "direct": 730060.0,
             "independent": 0.0,
-            "total": 727560.0,
-            "count": 226
+            "total": 730060.0,
+            "count": 227
           }
         }
       },
@@ -1154405,10 +1154822,10 @@
         "industries": [
           "corporate"
         ],
-        "direct": 77950.0,
+        "direct": 80950.0,
         "independent": 0.0,
-        "total": 77950.0,
-        "count": 120,
+        "total": 80950.0,
+        "count": 122,
         "committees": 32,
         "members": 8,
         "by_cycle": {
@@ -1154419,10 +1154836,10 @@
             "count": 36
           },
           "2027": {
-            "direct": 28200.0,
+            "direct": 31200.0,
             "independent": 0.0,
-            "total": 28200.0,
-            "count": 41
+            "total": 31200.0,
+            "count": 43
           },
           "2015": {
             "direct": 2250.0,
@@ -1155533,10 +1155950,10 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 405400.0,
+        "direct": 410400.0,
         "independent": 0.0,
-        "total": 405400.0,
-        "count": 63,
+        "total": 410400.0,
+        "count": 64,
         "committees": 22,
         "members": 6,
         "by_cycle": {
@@ -1155553,10 +1155970,10 @@
             "count": 26
           },
           "2027": {
-            "direct": 37500.0,
+            "direct": 42500.0,
             "independent": 0.0,
-            "total": 37500.0,
-            "count": 4
+            "total": 42500.0,
+            "count": 5
           }
         }
       },
@@ -1157387,10 +1157804,10 @@
         "industries": [
           "labor-trades"
         ],
-        "direct": 429771.2,
+        "direct": 431271.2,
         "independent": 0.0,
-        "total": 429771.2,
-        "count": 219,
+        "total": 431271.2,
+        "count": 220,
         "committees": 31,
         "members": 21,
         "by_cycle": {
@@ -1157413,10 +1157830,10 @@
             "count": 60
           },
           "2027": {
-            "direct": 98520.0,
+            "direct": 100020.0,
             "independent": 0.0,
-            "total": 98520.0,
-            "count": 42
+            "total": 100020.0,
+            "count": 43
           }
         }
       },
@@ -1157540,11 +1157957,11 @@
         "industries": [
           "individual"
         ],
-        "direct": 59000.0,
+        "direct": 60000.0,
         "independent": 0.0,
-        "total": 59000.0,
-        "count": 31,
-        "committees": 13,
+        "total": 60000.0,
+        "count": 32,
+        "committees": 14,
         "members": 1,
         "by_cycle": {
           "2023": {
@@ -1157554,10 +1157971,10 @@
             "count": 16
           },
           "2027": {
-            "direct": 36500.0,
+            "direct": 37500.0,
             "independent": 0.0,
-            "total": 36500.0,
-            "count": 15
+            "total": 37500.0,
+            "count": 16
           }
         }
       },
@@ -1160200,18 +1160617,18 @@
         "industries": [
           "individual"
         ],
-        "direct": 49500.0,
+        "direct": 50500.0,
         "independent": 0.0,
-        "total": 49500.0,
-        "count": 36,
-        "committees": 20,
+        "total": 50500.0,
+        "count": 37,
+        "committees": 21,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 26500.0,
+            "direct": 27500.0,
             "independent": 0.0,
-            "total": 26500.0,
-            "count": 19
+            "total": 27500.0,
+            "count": 20
           },
           "2023": {
             "direct": 20000.0,
@@ -1167529,10 +1167946,10 @@
         "industries": [
           "lobby-general"
         ],
-        "direct": 111522.0,
+        "direct": 119022.0,
         "independent": 0.0,
-        "total": 111522.0,
-        "count": 78,
+        "total": 119022.0,
+        "count": 80,
         "committees": 24,
         "members": 4,
         "by_cycle": {
@@ -1167543,10 +1167960,10 @@
             "count": 28
           },
           "2027": {
-            "direct": 26300.0,
+            "direct": 33800.0,
             "independent": 0.0,
-            "total": 26300.0,
-            "count": 24
+            "total": 33800.0,
+            "count": 26
           },
           "2015": {
             "direct": 20600.0,
@@ -1167952,11 +1168369,11 @@
         "industries": [
           "corporate"
         ],
-        "direct": 65500.0,
+        "direct": 68000.0,
         "independent": 0.0,
-        "total": 65500.0,
-        "count": 62,
-        "committees": 27,
+        "total": 68000.0,
+        "count": 64,
+        "committees": 28,
         "members": 2,
         "by_cycle": {
           "2023": {
@@ -1167966,10 +1168383,10 @@
             "count": 25
           },
           "2027": {
-            "direct": 33500.0,
+            "direct": 36000.0,
             "independent": 0.0,
-            "total": 33500.0,
-            "count": 31
+            "total": 36000.0,
+            "count": 33
           },
           "2019": {
             "direct": 3250.0,
@@ -1170023,18 +1170440,18 @@
         "industries": [
           "labor-trades"
         ],
-        "direct": 288742.0,
+        "direct": 293242.0,
         "independent": 0.0,
-        "total": 288742.0,
-        "count": 223,
+        "total": 293242.0,
+        "count": 226,
         "committees": 44,
         "members": 32,
         "by_cycle": {
           "2027": {
-            "direct": 105150.0,
+            "direct": 109650.0,
             "independent": 0.0,
-            "total": 105150.0,
-            "count": 102
+            "total": 109650.0,
+            "count": 105
           },
           "2015": {
             "direct": 18250.0,
@@ -1171072,6 +1171489,27 @@
         "type": "PAC",
         "industries": [
           "labor-trades"
+        ],
+        "direct": 1000.0,
+        "independent": 0.0,
+        "total": 1000.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 1000.0,
+            "independent": 0.0,
+            "total": 1000.0,
+            "count": 1
+          }
+        }
+      },
+      "garces-contractors-llc": {
+        "name": "Garces Contractors LLC",
+        "type": "Individual",
+        "industries": [
+          "unclassified"
         ],
         "direct": 1000.0,
         "independent": 0.0,
@@ -1191756,10 +1192194,10 @@
         "industries": [
           "corporate"
         ],
-        "direct": 64500.0,
+        "direct": 66000.0,
         "independent": 0.0,
-        "total": 64500.0,
-        "count": 52,
+        "total": 66000.0,
+        "count": 53,
         "committees": 32,
         "members": 9,
         "by_cycle": {
@@ -1191770,10 +1192208,10 @@
             "count": 1
           },
           "2027": {
-            "direct": 63500.0,
+            "direct": 65000.0,
             "independent": 0.0,
-            "total": 63500.0,
-            "count": 50
+            "total": 65000.0,
+            "count": 51
           },
           "2023": {
             "direct": 500.0,
@@ -1194457,10 +1194895,10 @@
         "industries": [
           "individual"
         ],
-        "direct": 4348.95,
+        "direct": 5848.95,
         "independent": 0.0,
-        "total": 4348.95,
-        "count": 5,
+        "total": 5848.95,
+        "count": 6,
         "committees": 3,
         "members": 1,
         "by_cycle": {
@@ -1194471,10 +1194909,10 @@
             "count": 1
           },
           "2027": {
-            "direct": 4048.95,
+            "direct": 5548.95,
             "independent": 0.0,
-            "total": 4048.95,
-            "count": 4
+            "total": 5548.95,
+            "count": 5
           }
         }
       },
@@ -1253513,18 +1253951,18 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 52500.0,
+        "direct": 55000.0,
         "independent": 10000.0,
-        "total": 62500.0,
-        "count": 9,
+        "total": 65000.0,
+        "count": 10,
         "committees": 4,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 46500.0,
+            "direct": 49000.0,
             "independent": 10000.0,
-            "total": 56500.0,
-            "count": 8
+            "total": 59000.0,
+            "count": 9
           },
           "2023": {
             "direct": 6000.0,
@@ -1295805,6 +1296243,27 @@
             "independent": 0.0,
             "total": 4000.0,
             "count": 2
+          }
+        }
+      },
+      "trust-bradley": {
+        "name": "Trust, Bradley",
+        "type": "Individual",
+        "industries": [
+          "individual"
+        ],
+        "direct": 2500.0,
+        "independent": 0.0,
+        "total": 2500.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 2500.0,
+            "independent": 0.0,
+            "total": 2500.0,
+            "count": 1
           }
         }
       },
@@ -1358351,18 +1358810,18 @@
         "industries": [
           "real-estate"
         ],
-        "direct": 850.0,
+        "direct": 2350.0,
         "independent": 0.0,
-        "total": 850.0,
-        "count": 2,
+        "total": 2350.0,
+        "count": 3,
         "committees": 2,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 850.0,
+            "direct": 2350.0,
             "independent": 0.0,
-            "total": 850.0,
-            "count": 2
+            "total": 2350.0,
+            "count": 3
           }
         }
       },
@@ -1358819,18 +1359278,18 @@
         "industries": [
           "individual"
         ],
-        "direct": 32000.0,
+        "direct": 37000.0,
         "independent": 0.0,
-        "total": 32000.0,
-        "count": 17,
-        "committees": 8,
+        "total": 37000.0,
+        "count": 18,
+        "committees": 9,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 32000.0,
+            "direct": 37000.0,
             "independent": 0.0,
-            "total": 32000.0,
-            "count": 17
+            "total": 37000.0,
+            "count": 18
           }
         }
       },
@@ -1359110,18 +1359569,18 @@
         "industries": [
           "individual"
         ],
-        "direct": 1000.0,
+        "direct": 2000.0,
         "independent": 0.0,
-        "total": 1000.0,
-        "count": 1,
+        "total": 2000.0,
+        "count": 2,
         "committees": 1,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 1000.0,
+            "direct": 2000.0,
             "independent": 0.0,
-            "total": 1000.0,
-            "count": 1
+            "total": 2000.0,
+            "count": 2
           }
         }
       },
@@ -1429119,18 +1429578,18 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 4750.0,
+        "direct": 6250.0,
         "independent": 0.0,
-        "total": 4750.0,
-        "count": 3,
+        "total": 6250.0,
+        "count": 4,
         "committees": 2,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 4750.0,
+            "direct": 6250.0,
             "independent": 0.0,
-            "total": 4750.0,
-            "count": 3
+            "total": 6250.0,
+            "count": 4
           }
         }
       },
@@ -1443942,10 +1444401,10 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 16150.0,
+        "direct": 32150.0,
         "independent": 0.0,
-        "total": 16150.0,
-        "count": 8,
+        "total": 32150.0,
+        "count": 9,
         "committees": 3,
         "members": 2,
         "by_cycle": {
@@ -1443960,6 +1444419,12 @@
             "independent": 0.0,
             "total": 13650.0,
             "count": 7
+          },
+          "2027": {
+            "direct": 16000.0,
+            "independent": 0.0,
+            "total": 16000.0,
+            "count": 1
           }
         }
       },
@@ -1459531,10 +1459996,10 @@
         "industries": [
           "individual"
         ],
-        "direct": 9190.0,
+        "direct": 10190.0,
         "independent": 0.0,
-        "total": 9190.0,
-        "count": 22,
+        "total": 10190.0,
+        "count": 23,
         "committees": 1,
         "members": 1,
         "by_cycle": {
@@ -1459551,10 +1460016,10 @@
             "count": 15
           },
           "2027": {
-            "direct": 2005.0,
+            "direct": 3005.0,
             "independent": 0.0,
-            "total": 2005.0,
-            "count": 3
+            "total": 3005.0,
+            "count": 4
           }
         }
       },
@@ -1471723,10 +1472188,10 @@
         "industries": [
           "individual"
         ],
-        "direct": 4669.05,
+        "direct": 5701.75,
         "independent": 0.0,
-        "total": 4669.05,
-        "count": 8,
+        "total": 5701.75,
+        "count": 9,
         "committees": 1,
         "members": 1,
         "by_cycle": {
@@ -1471743,10 +1472208,10 @@
             "count": 4
           },
           "2027": {
-            "direct": 1136.15,
+            "direct": 2168.85,
             "independent": 0.0,
-            "total": 1136.15,
-            "count": 2
+            "total": 2168.85,
+            "count": 3
           }
         }
       },
@@ -1472035,10 +1472500,10 @@
         "industries": [
           "candidate-account"
         ],
-        "direct": 14700.0,
+        "direct": 17200.0,
         "independent": 0.0,
-        "total": 14700.0,
-        "count": 11,
+        "total": 17200.0,
+        "count": 12,
         "committees": 6,
         "members": 1,
         "by_cycle": {
@@ -1472049,10 +1472514,10 @@
             "count": 2
           },
           "2027": {
-            "direct": 5500.0,
+            "direct": 8000.0,
             "independent": 0.0,
-            "total": 5500.0,
-            "count": 4
+            "total": 8000.0,
+            "count": 5
           },
           "2023": {
             "direct": 8200.0,
@@ -1520269,18 +1520734,18 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 4500.0,
+        "direct": 7000.0,
         "independent": 0.0,
-        "total": 4500.0,
-        "count": 2,
+        "total": 7000.0,
+        "count": 3,
         "committees": 1,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 4500.0,
+            "direct": 7000.0,
             "independent": 0.0,
-            "total": 4500.0,
-            "count": 2
+            "total": 7000.0,
+            "count": 3
           }
         }
       },
@@ -1521039,6 +1521504,27 @@
             "direct": 240.88,
             "independent": 0.0,
             "total": 240.88,
+            "count": 1
+          }
+        }
+      },
+      "prime-healthcare-services-inc": {
+        "name": "Prime Healthcare Services Inc",
+        "type": "Individual",
+        "industries": [
+          "unclassified"
+        ],
+        "direct": 1500.0,
+        "independent": 0.0,
+        "total": 1500.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 1500.0,
+            "independent": 0.0,
+            "total": 1500.0,
             "count": 1
           }
         }
@@ -1572827,10 +1573313,10 @@
         "industries": [
           "individual"
         ],
-        "direct": 11000.0,
+        "direct": 16000.0,
         "independent": 0.0,
-        "total": 11000.0,
-        "count": 3,
+        "total": 16000.0,
+        "count": 4,
         "committees": 1,
         "members": 1,
         "by_cycle": {
@@ -1572841,10 +1573327,10 @@
             "count": 1
           },
           "2027": {
-            "direct": 10000.0,
+            "direct": 15000.0,
             "independent": 0.0,
-            "total": 10000.0,
-            "count": 2
+            "total": 15000.0,
+            "count": 3
           }
         }
       },
@@ -1576096,6 +1576582,27 @@
             "direct": 1000.0,
             "independent": 0.0,
             "total": 1000.0,
+            "count": 1
+          }
+        }
+      },
+      "agman": {
+        "name": "Agman",
+        "type": "Individual",
+        "industries": [
+          "unclassified"
+        ],
+        "direct": 5000.0,
+        "independent": 0.0,
+        "total": 5000.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 5000.0,
+            "independent": 0.0,
+            "total": 5000.0,
             "count": 1
           }
         }
@@ -1607033,6 +1607540,27 @@
           }
         }
       },
+      "sun-fresh-market-dba-cermak-produce-4": {
+        "name": "Sun Fresh Market (DBA Cermak Produce #4)",
+        "type": "Individual",
+        "industries": [
+          "unclassified"
+        ],
+        "direct": 2500.0,
+        "independent": 0.0,
+        "total": 2500.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 2500.0,
+            "independent": 0.0,
+            "total": 2500.0,
+            "count": 1
+          }
+        }
+      },
       "watson-darien": {
         "name": "Watson, Darien",
         "type": "Individual",
@@ -1626640,7 +1627168,7 @@
     "by_industry": {
       "candidate-account": {
         "all": {
-          "direct": 3608290.09
+          "direct": 3631790.09
         },
         "by_cycle": {
           "2015": {
@@ -1626653,13 +1627181,13 @@
             "direct": 1395342.14
           },
           "2027": {
-            "direct": 777665.95
+            "direct": 801165.95
           }
         }
       },
       "real-estate": {
         "all": {
-          "direct": 14706242.32,
+          "direct": 14707742.32,
           "independent": 707179.98
         },
         "by_cycle": {
@@ -1626676,7 +1627204,7 @@
             "independent": 500342.08
           },
           "2027": {
-            "direct": 3720444.73
+            "direct": 3721944.73
           }
         }
       },
@@ -1626701,7 +1627229,7 @@
       },
       "unclassified": {
         "all": {
-          "direct": 8152040.79
+          "direct": 8170040.79
         },
         "by_cycle": {
           "2015": {
@@ -1626714,7 +1627242,7 @@
             "direct": 2168577.41
           },
           "2027": {
-            "direct": 2837314.36
+            "direct": 2855314.36
           }
         }
       },
@@ -1626758,7 +1627286,7 @@
       },
       "individual": {
         "all": {
-          "direct": 25018266.73
+          "direct": 25038799.43
         },
         "by_cycle": {
           "2015": {
@@ -1626771,13 +1627299,13 @@
             "direct": 7179174.72
           },
           "2027": {
-            "direct": 11873968.38
+            "direct": 11894501.08
           }
         }
       },
       "corporate": {
         "all": {
-          "direct": 23280028.98,
+          "direct": 23282528.98,
           "independent": 878073.49
         },
         "by_cycle": {
@@ -1626792,13 +1627320,13 @@
             "independent": 878073.49
           },
           "2027": {
-            "direct": 8198631.06
+            "direct": 8201131.06
           }
         }
       },
       "labor-trades": {
         "all": {
-          "direct": 7232211.74
+          "direct": 7243211.74
         },
         "by_cycle": {
           "2015": {
@@ -1626811,7 +1627339,7 @@
             "direct": 2904285.92
           },
           "2027": {
-            "direct": 2096310.0
+            "direct": 2107310.0
           }
         }
       },
@@ -1626896,7 +1627424,7 @@
       },
       "lobby-general": {
         "all": {
-          "direct": 669203.79
+          "direct": 676703.79
         },
         "by_cycle": {
           "2015": {
@@ -1626909,7 +1627437,7 @@
             "direct": 81505.31
           },
           "2027": {
-            "direct": 75750.0
+            "direct": 83250.0
           }
         }
       },
@@ -1627156,11 +1627684,11 @@
       },
       "corporate-tech": {
         "all": {
-          "direct": 315750.0
+          "direct": 317250.0
         },
         "by_cycle": {
           "2027": {
-            "direct": 148000.0
+            "direct": 149500.0
           },
           "2019": {
             "direct": 1750.0
@@ -1627209,7 +1627737,7 @@
     "by_alder": {
       "9": {
         "all": {
-          "direct": 1377720.72,
+          "direct": 1382720.72,
           "ie_support": 96337.36
         },
         "by_cycle": {
@@ -1627225,13 +1627753,13 @@
             "ie_support": 67342.74
           },
           "2027": {
-            "direct": 267681.16
+            "direct": 272681.16
           }
         }
       },
       "37": {
         "all": {
-          "direct": 906395.87,
+          "direct": 909895.87,
           "ie_oppose": 31499.88,
           "ie_support": 170592.01
         },
@@ -1627250,13 +1627778,13 @@
             "ie_support": 62652.02
           },
           "2027": {
-            "direct": 172135.0
+            "direct": 175635.0
           }
         }
       },
       "3": {
         "all": {
-          "direct": 3204613.09,
+          "direct": 3206113.09,
           "ie_support": 2930.0
         },
         "by_cycle": {
@@ -1627271,7 +1627799,7 @@
             "direct": 1083009.9
           },
           "2027": {
-            "direct": 720352.5
+            "direct": 721852.5
           }
         }
       },
@@ -1627360,7 +1627888,7 @@
       },
       "7": {
         "all": {
-          "direct": 372177.93,
+          "direct": 374677.93,
           "ie_support": 30501.0
         },
         "by_cycle": {
@@ -1627375,7 +1627903,7 @@
             "direct": 73850.0
           },
           "2027": {
-            "direct": 104004.0
+            "direct": 106504.0
           }
         }
       },
@@ -1627448,7 +1627976,7 @@
       },
       "28": {
         "all": {
-          "direct": 1683429.58,
+          "direct": 1689929.58,
           "ie_support": 10000.0
         },
         "by_cycle": {
@@ -1627463,7 +1627991,7 @@
             "ie_support": 10000.0
           },
           "2027": {
-            "direct": 513982.0
+            "direct": 520482.0
           }
         }
       },
@@ -1627636,7 +1628164,7 @@
       },
       "18": {
         "all": {
-          "direct": 300774.96,
+          "direct": 305774.96,
           "ie_support": 46158.39
         },
         "by_cycle": {
@@ -1627651,13 +1628179,13 @@
             "ie_support": 46158.39
           },
           "2027": {
-            "direct": 70075.0
+            "direct": 75075.0
           }
         }
       },
       "22": {
         "all": {
-          "direct": 1298614.06
+          "direct": 1315614.06
         },
         "by_cycle": {
           "2019": {
@@ -1627667,7 +1628195,7 @@
             "direct": 548039.5
           },
           "2027": {
-            "direct": 546761.8
+            "direct": 563761.8
           }
         }
       },
@@ -1627692,7 +1628220,7 @@
       },
       "20": {
         "all": {
-          "direct": 678974.99,
+          "direct": 679974.99,
           "ie_support": 21266.3
         },
         "by_cycle": {
@@ -1627704,13 +1628232,13 @@
             "ie_support": 21266.3
           },
           "2027": {
-            "direct": 71382.69
+            "direct": 72382.69
           }
         }
       },
       "47": {
         "all": {
-          "direct": 1079706.3,
+          "direct": 1082239.0,
           "ie_oppose": 85235.08
         },
         "by_cycle": {
@@ -1627722,13 +1628250,13 @@
             "direct": 351470.44
           },
           "2027": {
-            "direct": 429758.07
+            "direct": 432290.77
           }
         }
       },
       "16": {
         "all": {
-          "direct": 1122721.38,
+          "direct": 1125721.38,
           "ie_support": 163263.93,
           "ie_oppose": 75292.82
         },
@@ -1627743,7 +1628271,7 @@
             "ie_support": 73421.01
           },
           "2027": {
-            "direct": 491231.9
+            "direct": 494231.9
           },
           "2015": {
             "ie_support": 7950.1,
@@ -1627808,7 +1628336,7 @@
       },
       "1": {
         "all": {
-          "direct": 719119.36,
+          "direct": 726619.36,
           "ie_support": 31155.02
         },
         "by_cycle": {
@@ -1627820,7 +1628348,7 @@
             "ie_support": 31155.02
           },
           "2027": {
-            "direct": 237300.88
+            "direct": 244800.88
           }
         }
       },
@@ -1627889,7 +1628417,7 @@
       },
       "11": {
         "all": {
-          "direct": 1396709.46,
+          "direct": 1403209.46,
           "ie_support": 235584.41
         },
         "by_cycle": {
@@ -1627898,7 +1628426,7 @@
             "ie_support": 235584.41
           },
           "2027": {
-            "direct": 891744.83
+            "direct": 898244.83
           }
         }
       },
@@ -1627940,27 +1628468,27 @@
       },
       "48": {
         "all": {
-          "direct": 378966.65
+          "direct": 379966.65
         },
         "by_cycle": {
           "2023": {
             "direct": 148079.73
           },
           "2027": {
-            "direct": 230886.92
+            "direct": 231886.92
           }
         }
       },
       "34": {
         "all": {
-          "direct": 2500380.74
+          "direct": 2512880.74
         },
         "by_cycle": {
           "2023": {
             "direct": 636830.82
           },
           "2027": {
-            "direct": 1863549.92
+            "direct": 1876049.92
           }
         }
       },
@@ -1628054,14 +1628582,14 @@
       },
       "26": {
         "all": {
-          "direct": 575955.37
+          "direct": 585955.37
         },
         "by_cycle": {
           "2023": {
             "direct": 196207.37
           },
           "2027": {
-            "direct": 379748.0
+            "direct": 389748.0
           }
         }
       },
@@ -1628082,7 +1628610,7 @@
       },
       "5": {
         "all": {
-          "direct": 612474.19,
+          "direct": 613474.19,
           "ie_oppose": 30568.32,
           "ie_support": 57113.29
         },
@@ -1628093,7 +1628621,7 @@
             "ie_support": 57113.29
           },
           "2027": {
-            "direct": 257249.41
+            "direct": 258249.41
           }
         }
       },
@@ -1633919,11 +1634447,11 @@
     }
   ],
   "dues_excluded": {
-    "amount": 37396256.16,
-    "count": 259
+    "amount": 37469056.16,
+    "count": 260
   },
   "other_receipts_excluded": {
-    "amount": 1169663.45,
-    "count": 474
+    "amount": 1176248.45,
+    "count": 475
   }
 }

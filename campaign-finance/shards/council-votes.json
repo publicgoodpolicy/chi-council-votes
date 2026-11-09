@@ -1,6 +1,6 @@
 {
   "schema_version": "2.3",
-  "generated_at": "2026-11-02T13:25:41Z",
+  "generated_at": "2026-11-08T21:24:03Z",
   "alders": [
     {
       "ward": 1,
@@ -17867,11 +17867,11 @@
     }
   },
   "dues_excluded": {
-    "amount": 37396256.16,
-    "count": 259
+    "amount": 37469056.16,
+    "count": 260
   },
   "other_receipts_excluded": {
-    "amount": 1169663.45,
-    "count": 474
+    "amount": 1176248.45,
+    "count": 475
   }
 }
