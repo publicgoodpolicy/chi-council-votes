@@ -86,9 +86,7 @@
       "race_id": "sb-d14",
       "incumbent": true,
       "status": "filed",
-      "bio": {},
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "bio": {}
     },
     "39873": {
       "candidate_id": "gutierrez-sb-d15",
@@ -152,9 +150,7 @@
       "race_id": "sb-president",
       "incumbent": false,
       "status": "filed",
-      "bio": {},
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "bio": {}
     },
     "38810": {
       "candidate_id": "bannon-sb-d01",
@@ -162,9 +158,7 @@
       "race_id": "sb-d01",
       "incumbent": true,
       "status": "filed",
-      "bio": {},
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "bio": {}
     },
     "41087": {
       "candidate_id": "peralta-sb-d02",
@@ -172,9 +166,7 @@
       "race_id": "sb-d02",
       "incumbent": false,
       "status": "filed",
-      "bio": {},
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "bio": {}
     },
     "39783": {
       "candidate_id": "pierre-sb-d02",
@@ -234,9 +226,7 @@
       "race_id": "sb-d05",
       "incumbent": true,
       "status": "filed",
-      "bio": {},
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "bio": {}
     },
     "39820": {
       "candidate_id": "dones-sb-d06",
@@ -244,9 +234,7 @@
       "race_id": "sb-d06",
       "incumbent": false,
       "status": "filed",
-      "bio": {},
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "bio": {}
     },
     "39786": {
       "candidate_id": "rivas-sb-d06",
@@ -270,9 +258,7 @@
       "race_id": "sb-d07",
       "incumbent": true,
       "status": "filed",
-      "bio": {},
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "bio": {}
     },
     "39858": {
       "candidate_id": "rosenfeld-sb-d08",
@@ -296,9 +282,7 @@
       "race_id": "sb-d10",
       "incumbent": true,
       "status": "filed",
-      "bio": {},
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "bio": {}
     },
     "39855": {
       "candidate_id": "thotakura-sb-d11",
@@ -306,9 +290,7 @@
       "race_id": "sb-d11",
       "incumbent": true,
       "status": "filed",
-      "bio": {},
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "bio": {}
     },
     "41131": {
       "candidate_id": "anderson-sb-d11",
@@ -316,9 +298,7 @@
       "race_id": "sb-d11",
       "incumbent": false,
       "status": "filed",
-      "bio": {},
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "bio": {}
     },
     "41134": {
       "candidate_id": "kimble-sb-d12",
@@ -1879,11 +1859,11 @@
       "candidate_id": "cand-preston-sb-d17",
       "name": "Brittany Bailey Preston",
       "race_id": "sb-d17",
-      "committee_id": null,
+      "committee_id": "39894",
       "incumbent": false,
       "status": "filed",
       "bio": {
-        "source": "filed candidate; SBE committee 39894 'Friends of Brittany Preston' identified (SBE committee search; Ishan, 2026-09-26) and not yet linked. Committee registered; no itemized receipts at the 2026-09-13 vintage (SB-ROSTER-1 rev 3 hold, 2026-09-26) - linked when receipts appear, so the card does not read $0."
+        "source": "filed candidate; SBE committee 39894 'Friends of Brittany Preston' identified (SBE committee search; Ishan, 2026-09-26) and linked at the 2026-11-08 vintage, where its receipts appear (SB5-1a, 2026-11-08)."
       }
     },
     "cand-alston-sb-d19": {
@@ -1916,14 +1896,12 @@
       "candidate_id": "cand-anderson-sb-d20",
       "name": "Connie Anderson",
       "race_id": "sb-d20",
-      "committee_id": null,
+      "committee_id": "41251",
       "incumbent": false,
       "status": "filed",
       "bio": {
-        "source": "filed candidate; SBE committee 41251 'Friends of Connie' identified (SBE committee search; Ishan, 2026-09-26) and not yet linked. Committee registered; no itemized receipts at the 2026-09-13 vintage (SB-ROSTER-1 rev 3 hold, 2026-09-26) - linked when receipts appear, so the card does not read $0."
-      },
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+        "source": "filed candidate; SBE committee 41251 'Friends of Connie' identified (SBE committee search; Ishan, 2026-09-26) and linked at the 2026-11-08 vintage, where its receipts appear (SB5-1a, 2026-11-08)."
+      }
     },
     "cand-chatonda-sb-d20": {
       "candidate_id": "cand-chatonda-sb-d20",
@@ -1942,11 +1920,11 @@
       "candidate_id": "cand-watson-sb-d20",
       "name": "Patrick Watson",
       "race_id": "sb-d20",
-      "committee_id": null,
+      "committee_id": "41261",
       "incumbent": false,
       "status": "filed",
       "bio": {
-        "source": "filed candidate; SBE committee 34446 'Friends of Patrick Watson' identified (SBE committee search; Ishan, 2026-09-26) and deliberately not linked: every one of its 191 receipts is dated 2018-03-06..2022-06-23 and the school_board 2024 window is open into the past, so a link would bucket $167,270 of it as 2024 school-board money (BR-7 F-1/F-3, 2026-09-26). Link when that window is bounded."
+        "source": "filed candidate; SBE committee 41261 'Friends of Patrick C. Watson' (Ishan, 2026-11-03) linked at the 2026-11-08 vintage, where its receipts appear (SB5-1a, SB5-2a, 2026-11-08). SBE 34446 'Friends of Patrick Watson' (Lisle; its 191 receipts dated 2018-03-06..2022-06-23), identified 2026-09-26, is not his 2026 committee and is not linked (SB5-2a)."
       }
     },
     "cand-alvarez-sb-d07": {
@@ -1957,7 +1935,7 @@
       "incumbent": false,
       "status": "filed",
       "bio": {
-        "source": "filed candidate; SBE committee 41178 'Angel For CPS' identified (SBE committee search; Ishan, 2026-09-26) and not yet linked. Committee registered; no itemized receipts at the 2026-09-13 vintage (SB-ROSTER-1 rev 3 hold, 2026-09-26) - linked when receipts appear, so the card does not read $0."
+        "source": "filed candidate; SBE committee 41178 'Angel For CPS' identified (SBE committee search; Ishan, 2026-09-26) and not yet linked. Committee registered; the SBE receipts export carries no rows for it at the 2026-11-08 vintage (SB5-3a, 2026-11-08) - linked when receipts appear, so the card does not read $0."
       }
     },
     "cand-neal-sb-d12": {
@@ -1968,10 +1946,8 @@
       "incumbent": false,
       "status": "filed",
       "bio": {
-        "source": "filed candidate; SBE committee 41321 'Friends of Michael Neal' identified (SBE committee search; Ishan, 2026-09-26) and not yet linked. Committee registered; no itemized receipts at the 2026-09-13 vintage (SB-ROSTER-1 rev 3 hold, 2026-09-26) - linked when receipts appear, so the card does not read $0."
-      },
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+        "source": "filed candidate; SBE committee 41321 'Friends of Michael Neal' identified (SBE committee search; Ishan, 2026-09-26) and not yet linked. Committee registered; its Q3 D-2 reports receipts, but the SBE receipts export carries no rows for it at the 2026-11-08 vintage (SB5-3a, 2026-11-08) - linked when receipts appear, so the card does not read $0."
+      }
     },
     "custer-sb-2024-d1": {
       "candidate_id": "custer-sb-2024-d1",
@@ -2601,9 +2577,7 @@
       "status": "filed",
       "bio": {
         "source": "filed candidate; SBE committee 41210 'Friends of Hilario Dominguez' (SBE committee search; Ishan, 2026-09-26). SBE 34651 'Neighbors for Hilario Dominguez' is his 2019 aldermanic committee, closed by a Final filing 2019-04-15, and is not linked (BR-7 F-2, 2026-09-26)"
-      },
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      }
     },
     "cand-morales-sb-d03": {
       "candidate_id": "cand-morales-sb-d03",
@@ -2613,10 +2587,8 @@
       "incumbent": false,
       "status": "filed",
       "bio": {
-        "source": "filed candidate; SBE committee 41337 'Committee to Elect Hector Morales' identified (SBE committee search; Ishan, 2026-09-26) and not yet linked. Committee registered; no itemized receipts at the 2026-09-13 vintage (SB-ROSTER-1 rev 3 hold, 2026-09-26) - linked when receipts appear, so the card does not read $0. Created 2026-08-01 (BR-7)."
-      },
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+        "source": "filed candidate; SBE committee 41337 'Committee to Elect Hector Morales' identified (SBE committee search; Ishan, 2026-09-26) and not yet linked. Committee registered; the SBE receipts export carries no rows for it at the 2026-11-08 vintage (SB5-3a, 2026-11-08) - linked when receipts appear, so the card does not read $0. Created 2026-08-01 (BR-7)."
+      }
     },
     "cand-flores-ward-25": {
       "candidate_id": "cand-flores-ward-25",

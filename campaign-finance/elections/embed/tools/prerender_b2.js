@@ -111,7 +111,7 @@ ok('exact disclaimer copy (footer)', /separately and never added together/.test(
 ok('SCOPE-UI: global selector renders (no per-race toggle control)', /data-election="2026"/.test(page) && page.indexOf('data-electionview') < 0);
 ok('scoped base card id: cand-bruce-leon-district-2a (combined blocks retired)', /id="cand-bruce-leon-district-2a"/.test(page));
 ok('District 2A chip is active', /data-slug="district-2a" aria-pressed="true"/.test(page));
-ok('coming-soon races marked (· soon)', /· soon/.test(page));
+// SB5-4b (2026-11-08): the coming-soon assert is dropped. With every school-board race's committee linked at the 2026-11-08 vintage, no race is marked soon.
 ok('President + districts in ONE selector (no office sub-tabs)',
   /data-slug="school-board-president"/.test(page) && /data-slug="district-2a"/.test(page) && page.indexOf('aria-label="Office section"') < 0);
 ok('figures NOT summed (no grand-total markup)', page.indexOf('Total raised') < 0 && page.indexOf('grand total') < 0);

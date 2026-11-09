@@ -1047,7 +1047,7 @@ that catch defect classes the existing gates structurally cannot see.
 | S-iv | `campaign-finance/ingest_votes.py` | `167757809a654effaddaf79f62e3ea82881dfe85e555b9acaa90532eb63b0ef1` |
 | S-bios | `campaign-finance/sheets-sync/sync_bios.py` | `0bce2d545e884fedd07fa814f69381582f7487cc12734c1b8c4152a83d89722a` |
 | S-bemit | `campaign-finance/elections/embed/tools/build_embed.js` | `6c164195f1ab25368e126d21d90a24169048569d4bfe668cacde66bebc943841` |
-| S-b2 | `campaign-finance/elections/embed/tools/prerender_b2.js` | `33bafa5f7368ad008789030d5e30fce307d8e65ae3e141c5746f5c73bcec822d` |
+| S-b2 | `campaign-finance/elections/embed/tools/prerender_b2.js` | `4e74716ee3c20ac593696a4e824b45bc6a1234c85fe591e9bde429967caee178` |
 | S-unit | `campaign-finance/ingestion/apply_unitemized.py` | `74070bc0bc53c36d48d1d59abf35ef59eb1571eebe38c3c2201f8c42059fa7bb` |
 | S-coh | `campaign-finance/ingestion/apply_cash_on_hand.py` | `fc6593ad330c80f611ba6af54fb371aef17324eb8815b850e1f23e34e0e7fc73` |
 | A-probe | `~/probe-sync-2026-07-24/probe-report.md` | `4c678cf0c14dd370f8b52744bf473000340ce16449a5365841b6ac92d8e5f9bb` |
@@ -1188,7 +1188,7 @@ that catch defect classes the existing gates structurally cannot see.
 | C5.9 | S-eren | 473-514 (the labeled, non-clickable pinned aggregate line; rows sum to the headline), 586 (the aggregate-of-N row chip) |
 | C5.9 | S-cemb | 1336-1344 (alder-profile headline counts the tail into totals and stats), 1419-1438 (the restored disclosure line and its superseded HALT-MIG-1 comment of record), 3420 (correlation-index donor-type skip) |
 | P1 | A-fw1 | 60-62 (proposed fused-per-candidate detector, not built) |
-| C5.14 | S-b2 | 2-24 (the header: pure layers, gated as [RENDER/B2], writes nothing), 114, 151 (the coming-soon states), 209 (the footprint modal's kicker, grouping sentence and office groups), 348-349 (the scoped footprint drops an IE committee that never spent in the page's office), 734-735 (the display face) |
+| C5.14 | S-b2 | 2-24 (the header: pure layers, gated as [RENDER/B2], writes nothing), 151 (the coming-soon state: the spend view's placeholder), 209 (the footprint modal's kicker, grouping sentence and office groups), 348-349 (the scoped footprint drops an IE committee that never spent in the page's office), 734-735 (the display face) |
 | C5.14 | S-egate | 1877-1892 ([RENDER/B2] — the harness run whole) |
 | C2.12 | S-coh | 77-110 (compute — the ward committees, the registry's finals, the latest period, the D2Totals join and its refusal), 113-117 (apply — the four fields replaced), 137-218 (self_test) |
 | C2.12 | S-rec | 75-131 (build_filing_registry — the resolution of the final report the step imports) |

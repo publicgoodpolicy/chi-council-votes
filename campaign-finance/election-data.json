@@ -982,9 +982,7 @@
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
-      "positions": null,
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "positions": null
     },
     {
       "id": "gutierrez-sb-d15",
@@ -1080,9 +1078,7 @@
       "incumbent": false,
       "vacating_for": null,
       "bio": {},
-      "positions": null,
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "positions": null
     },
     {
       "id": "bannon-sb-d01",
@@ -1094,9 +1090,7 @@
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
-      "positions": null,
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "positions": null
     },
     {
       "id": "peralta-sb-d02",
@@ -1108,9 +1102,7 @@
       "incumbent": false,
       "vacating_for": null,
       "bio": {},
-      "positions": null,
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "positions": null
     },
     {
       "id": "pierre-sb-d02",
@@ -1198,9 +1190,7 @@
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
-      "positions": null,
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "positions": null
     },
     {
       "id": "dones-sb-d06",
@@ -1212,9 +1202,7 @@
       "incumbent": false,
       "vacating_for": null,
       "bio": {},
-      "positions": null,
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "positions": null
     },
     {
       "id": "rivas-sb-d06",
@@ -1250,9 +1238,7 @@
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
-      "positions": null,
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "positions": null
     },
     {
       "id": "rosenfeld-sb-d08",
@@ -1288,9 +1274,7 @@
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
-      "positions": null,
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "positions": null
     },
     {
       "id": "thotakura-sb-d11",
@@ -1302,9 +1286,7 @@
       "incumbent": true,
       "vacating_for": null,
       "bio": {},
-      "positions": null,
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "positions": null
     },
     {
       "id": "anderson-sb-d11",
@@ -1316,9 +1298,7 @@
       "incumbent": false,
       "vacating_for": null,
       "bio": {},
-      "positions": null,
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "positions": null
     },
     {
       "id": "kimble-sb-d12",
@@ -2824,12 +2804,12 @@
       "race_id": "sb-d17",
       "election_id": "2026-school-board",
       "name": "Brittany Bailey Preston",
-      "committee_id": null,
+      "committee_id": "39894",
       "status": "filed",
       "incumbent": false,
       "vacating_for": null,
       "bio": {
-        "source": "filed candidate; SBE committee 39894 'Friends of Brittany Preston' identified (SBE committee search; Ishan, 2026-09-26) and not yet linked. Committee registered; no itemized receipts at the 2026-09-13 vintage (SB-ROSTER-1 rev 3 hold, 2026-09-26) - linked when receipts appear, so the card does not read $0."
+        "source": "filed candidate; SBE committee 39894 'Friends of Brittany Preston' identified (SBE committee search; Ishan, 2026-09-26) and linked at the 2026-11-08 vintage, where its receipts appear (SB5-1a, 2026-11-08)."
       },
       "positions": null
     },
@@ -2870,16 +2850,14 @@
       "race_id": "sb-d20",
       "election_id": "2026-school-board",
       "name": "Connie Anderson",
-      "committee_id": null,
+      "committee_id": "41251",
       "status": "filed",
       "incumbent": false,
       "vacating_for": null,
       "bio": {
-        "source": "filed candidate; SBE committee 41251 'Friends of Connie' identified (SBE committee search; Ishan, 2026-09-26) and not yet linked. Committee registered; no itemized receipts at the 2026-09-13 vintage (SB-ROSTER-1 rev 3 hold, 2026-09-26) - linked when receipts appear, so the card does not read $0."
+        "source": "filed candidate; SBE committee 41251 'Friends of Connie' identified (SBE committee search; Ishan, 2026-09-26) and linked at the 2026-11-08 vintage, where its receipts appear (SB5-1a, 2026-11-08)."
       },
-      "positions": null,
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "positions": null
     },
     {
       "id": "cand-chatonda-sb-d20",
@@ -2902,12 +2880,12 @@
       "race_id": "sb-d20",
       "election_id": "2026-school-board",
       "name": "Patrick Watson",
-      "committee_id": null,
+      "committee_id": "41261",
       "status": "filed",
       "incumbent": false,
       "vacating_for": null,
       "bio": {
-        "source": "filed candidate; SBE committee 34446 'Friends of Patrick Watson' identified (SBE committee search; Ishan, 2026-09-26) and deliberately not linked: every one of its 191 receipts is dated 2018-03-06..2022-06-23 and the school_board 2024 window is open into the past, so a link would bucket $167,270 of it as 2024 school-board money (BR-7 F-1/F-3, 2026-09-26). Link when that window is bounded."
+        "source": "filed candidate; SBE committee 41261 'Friends of Patrick C. Watson' (Ishan, 2026-11-03) linked at the 2026-11-08 vintage, where its receipts appear (SB5-1a, SB5-2a, 2026-11-08). SBE 34446 'Friends of Patrick Watson' (Lisle; its 191 receipts dated 2018-03-06..2022-06-23), identified 2026-09-26, is not his 2026 committee and is not linked (SB5-2a)."
       },
       "positions": null
     },
@@ -2921,7 +2899,7 @@
       "incumbent": false,
       "vacating_for": null,
       "bio": {
-        "source": "filed candidate; SBE committee 41178 'Angel For CPS' identified (SBE committee search; Ishan, 2026-09-26) and not yet linked. Committee registered; no itemized receipts at the 2026-09-13 vintage (SB-ROSTER-1 rev 3 hold, 2026-09-26) - linked when receipts appear, so the card does not read $0."
+        "source": "filed candidate; SBE committee 41178 'Angel For CPS' identified (SBE committee search; Ishan, 2026-09-26) and not yet linked. Committee registered; the SBE receipts export carries no rows for it at the 2026-11-08 vintage (SB5-3a, 2026-11-08) - linked when receipts appear, so the card does not read $0."
       },
       "positions": null
     },
@@ -2935,11 +2913,9 @@
       "incumbent": false,
       "vacating_for": null,
       "bio": {
-        "source": "filed candidate; SBE committee 41321 'Friends of Michael Neal' identified (SBE committee search; Ishan, 2026-09-26) and not yet linked. Committee registered; no itemized receipts at the 2026-09-13 vintage (SB-ROSTER-1 rev 3 hold, 2026-09-26) - linked when receipts appear, so the card does not read $0."
+        "source": "filed candidate; SBE committee 41321 'Friends of Michael Neal' identified (SBE committee search; Ishan, 2026-09-26) and not yet linked. Committee registered; its Q3 D-2 reports receipts, but the SBE receipts export carries no rows for it at the 2026-11-08 vintage (SB5-3a, 2026-11-08) - linked when receipts appear, so the card does not read $0."
       },
-      "positions": null,
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "positions": null
     },
     {
       "id": "custer-sb-2024-d1",
@@ -3713,9 +3689,7 @@
       "bio": {
         "source": "filed candidate; SBE committee 41210 'Friends of Hilario Dominguez' (SBE committee search; Ishan, 2026-09-26). SBE 34651 'Neighbors for Hilario Dominguez' is his 2019 aldermanic committee, closed by a Final filing 2019-04-15, and is not linked (BR-7 F-2, 2026-09-26)"
       },
-      "positions": null,
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "positions": null
     },
     {
       "id": "cand-morales-sb-d03",
@@ -3727,11 +3701,9 @@
       "incumbent": false,
       "vacating_for": null,
       "bio": {
-        "source": "filed candidate; SBE committee 41337 'Committee to Elect Hector Morales' identified (SBE committee search; Ishan, 2026-09-26) and not yet linked. Committee registered; no itemized receipts at the 2026-09-13 vintage (SB-ROSTER-1 rev 3 hold, 2026-09-26) - linked when receipts appear, so the card does not read $0. Created 2026-08-01 (BR-7)."
+        "source": "filed candidate; SBE committee 41337 'Committee to Elect Hector Morales' identified (SBE committee search; Ishan, 2026-09-26) and not yet linked. Committee registered; the SBE receipts export carries no rows for it at the 2026-11-08 vintage (SB5-3a, 2026-11-08) - linked when receipts appear, so the card does not read $0. Created 2026-08-01 (BR-7)."
       },
-      "positions": null,
-      "ballot_status": "challenged",
-      "ballot_status_as_of": "2026-07-14"
+      "positions": null
     },
     {
       "id": "cand-flores-ward-25",
@@ -21431,6 +21403,89 @@
       "donor_id": null,
       "unitemized_periods": [],
       "unitemized_total": 0.0
+    },
+    "cand-preston-sb-d17": {
+      "id": "cand-preston-sb-d17",
+      "ward": null,
+      "alder_name": null,
+      "committee_name": "Friends of Brittany Preston",
+      "sbe_committee_id": "39894",
+      "il_sunshine_url": "https://illinoissunshine.org/committees/39894/",
+      "founded": null,
+      "data_quality": "REAL",
+      "last_updated": "2026-11-08",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "Ingested from SBE on 2026-11-08.",
+      "candidate_id": "cand-preston-sb-d17",
+      "race_id": "sb-d17",
+      "office": "school_board_member",
+      "district": "District 9A",
+      "type": "candidate",
+      "industry_tags": [],
+      "donor_id": null,
+      "unitemized_periods": [],
+      "unitemized_total": 0.0
+    },
+    "cand-anderson-sb-d20": {
+      "id": "cand-anderson-sb-d20",
+      "ward": null,
+      "alder_name": null,
+      "committee_name": "Friends of Connie",
+      "sbe_committee_id": "41251",
+      "il_sunshine_url": "https://illinoissunshine.org/committees/41251/",
+      "founded": null,
+      "data_quality": "REAL",
+      "last_updated": "2026-11-08",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "Ingested from SBE on 2026-11-08.",
+      "candidate_id": "cand-anderson-sb-d20",
+      "race_id": "sb-d20",
+      "office": "school_board_member",
+      "district": "District 10B",
+      "type": "candidate",
+      "industry_tags": [],
+      "donor_id": null,
+      "unitemized_periods": [
+        {
+          "beg": "2026-07-03",
+          "end": "2026-09-30",
+          "amount": 1000.0,
+          "d2_doc": "1027426"
+        }
+      ],
+      "unitemized_total": 1000.0
+    },
+    "cand-watson-sb-d20": {
+      "id": "cand-watson-sb-d20",
+      "ward": null,
+      "alder_name": null,
+      "committee_name": "Friends of Patrick C. Watson",
+      "sbe_committee_id": "41261",
+      "il_sunshine_url": "https://illinoissunshine.org/committees/41261/",
+      "founded": null,
+      "data_quality": "REAL",
+      "last_updated": "2026-11-08",
+      "cash_on_hand": null,
+      "cash_on_hand_as_of": null,
+      "notes": "Ingested from SBE on 2026-11-08.",
+      "candidate_id": "cand-watson-sb-d20",
+      "race_id": "sb-d20",
+      "office": "school_board_member",
+      "district": "District 10B",
+      "type": "candidate",
+      "industry_tags": [],
+      "donor_id": null,
+      "unitemized_periods": [
+        {
+          "beg": "2026-07-07",
+          "end": "2026-09-30",
+          "amount": 635.0,
+          "d2_doc": "1027289"
+        }
+      ],
+      "unitemized_total": 635.0
     }
   },
   "donors": {
@@ -22112,15 +22167,16 @@
     },
     "erlinger-linda": {
       "id": "erlinger-linda",
-      "name": "Erlinger, Linda",
+      "name": "ERLINGER, linda",
       "type": "Individual",
       "industries": [
         "individual"
       ],
       "flags": [],
       "notes": null,
-      "occupation": "Retired",
-      "city": "Chicago, IL",
+      "occupation": "retired",
+      "employer": "retired",
+      "city": "chicago, IL",
       "parent_id": "erlinger-linda",
       "committee_id": null
     },
@@ -22322,14 +22378,14 @@
     },
     "incs-action-pac": {
       "id": "incs-action-pac",
-      "name": "INCS Action PAC",
-      "type": "Other",
+      "name": "INCS ACTION PAC",
+      "type": "PAC",
       "industries": [
         "establishment-pol"
       ],
       "flags": [],
       "notes": null,
-      "city": "Chicago, IL",
+      "city": "chicago, IL",
       "parent_id": "incs-action-pac",
       "committee_id": null,
       "cluster_id": "rollup-458",
@@ -23557,31 +23613,31 @@
     },
     "finnegan-mary": {
       "id": "finnegan-mary",
-      "name": "Finnegan, Mary",
+      "name": "FINNEGAN, Mary",
       "type": "Individual",
       "industries": [
         "individual"
       ],
       "flags": [],
       "notes": null,
-      "occupation": "Executive",
-      "employer": "Madison Dearborn Partners",
+      "occupation": "retired",
+      "employer": "retired",
       "city": "Evanston, IL",
       "parent_id": "finnegan-mary",
       "committee_id": null
     },
     "finnegan-paul": {
       "id": "finnegan-paul",
-      "name": "Finnegan, Paul",
+      "name": "FINNEGAN, Paul",
       "type": "Individual",
       "industries": [
         "finance"
       ],
       "flags": [],
       "notes": "auto: Paul Vallas \u2014 establishment/conservative Democrat",
-      "occupation": "Executive",
-      "employer": "Madison Dearborn Partners",
-      "city": "Evanston, IL",
+      "occupation": "chairman",
+      "employer": "MADISON DEARBORN PARTNERS",
+      "city": "evanston, IL",
       "parent_id": "finnegan-paul",
       "committee_id": null,
       "_last_edited_by": "auto-suggest"
@@ -62716,8 +62772,8 @@
       ],
       "flags": [],
       "notes": null,
-      "occupation": "Self",
-      "employer": "Self",
+      "occupation": "CEO",
+      "employer": "DRW",
       "city": "Chicago, IL",
       "parent_id": "wilson-donald",
       "committee_id": null
@@ -65773,7 +65829,7 @@
       ],
       "flags": [],
       "notes": null,
-      "city": "Chicago, IL",
+      "city": "chicago, IL",
       "parent_id": "urban-center-nfp",
       "committee_id": null
     },
@@ -82748,16 +82804,14 @@
     },
     "mcmahon-thomas": {
       "id": "mcmahon-thomas",
-      "name": "McMahon, Thomas",
+      "name": "MCMAHON, thomas",
       "type": "Individual",
       "industries": [
         "individual"
       ],
       "flags": [],
       "notes": null,
-      "occupation": "Software Engineer",
-      "employer": "Citadel Securities",
-      "city": "Chicago, IL",
+      "city": "chicago, IL",
       "parent_id": "mcmahon-thomas",
       "committee_id": null
     },
@@ -84648,14 +84702,14 @@
     },
     "badali-james": {
       "id": "badali-james",
-      "name": "BADALI, JAMES",
+      "name": "BADALI, James",
       "type": "Individual",
       "industries": [
         "individual"
       ],
       "flags": [],
       "notes": null,
-      "city": "CHGO, IL",
+      "city": "chicago, IL",
       "parent_id": "badali-james",
       "committee_id": null
     },
@@ -214774,16 +214828,16 @@
     },
     "silverstein-william": {
       "id": "silverstein-william",
-      "name": "Silverstein, William",
+      "name": "SILVERSTEIN, william",
       "type": "Individual",
       "industries": [
         "real-estate"
       ],
       "flags": [],
       "notes": null,
-      "occupation": "Real estate investor",
-      "employer": "Beal",
-      "city": "Highland Park, IL",
+      "occupation": "REAL ESTATE INVESTOR",
+      "employer": "BEAL PROPERTIES",
+      "city": "Highland park, IL",
       "parent_id": "silverstein-william",
       "committee_id": null,
       "_last_edited_by": "worklist-2026-10-15"
@@ -237215,7 +237269,7 @@
     },
     "citizens-to-elect-anthony-beale": {
       "id": "citizens-to-elect-anthony-beale",
-      "name": "Citizens to Elect Anthony Beale",
+      "name": "CITIZENS TO ELECT ANTHONY BEALE",
       "type": "PAC",
       "industries": [
         "unclassified"
@@ -371230,7 +371284,6 @@
       ],
       "flags": [],
       "notes": null,
-      "city": "Chicago, IL",
       "parent_id": "sanchez-oscar",
       "committee_id": null
     },
@@ -391901,8 +391954,8 @@
     },
     "ctu-pac-illinois-federation-of-teachers": {
       "id": "ctu-pac-illinois-federation-of-teachers",
-      "name": "CTU PAC (Illinois Federation of Teachers)",
-      "type": "PAC",
+      "name": "CTU PAC (Illinois Federation of Teachers",
+      "type": "Other",
       "industries": [
         "labor-teachers"
       ],
@@ -428642,7 +428695,7 @@
     },
     "aaron-jonathan": {
       "id": "aaron-jonathan",
-      "name": "Aaron, Jonathan",
+      "name": "AARON, JONATHAN",
       "type": "Individual",
       "industries": [
         "individual"
@@ -428650,8 +428703,8 @@
       "flags": [],
       "notes": null,
       "occupation": "CEO",
-      "employer": "Citadel Healthcare",
-      "city": "Northbrook, IL",
+      "employer": "CITADEL HEALTHCARE",
+      "city": "NORTHBROOK, IL",
       "parent_id": "aaron-jonathan",
       "committee_id": null
     },
@@ -504167,14 +504220,14 @@
     },
     "bright-futures-chicago-pac": {
       "id": "bright-futures-chicago-pac",
-      "name": "Bright Futures Chicago PAC",
-      "type": "PAC",
+      "name": "BRIGHT FUTURES CHICAGO PAC",
+      "type": "Individual",
       "industries": [
         "establishment-pol"
       ],
       "flags": [],
       "notes": null,
-      "city": "Chicago, IL",
+      "city": "CHICAGO, IL",
       "parent_id": "bright-futures-chicago-pac",
       "committee_id": null
     },
@@ -504498,14 +504551,16 @@
     },
     "johnson-kate": {
       "id": "johnson-kate",
-      "name": "Johnson, Kate",
+      "name": "johnson, kate",
       "type": "Individual",
       "industries": [
         "individual"
       ],
       "flags": [],
       "notes": null,
-      "city": "Chicago, IL",
+      "occupation": "real estate agent",
+      "employer": "@PROPERTIES",
+      "city": "chicago, IL",
       "parent_id": "johnson-kate",
       "committee_id": null
     },
@@ -521295,14 +521350,14 @@
     },
     "chicagoland-chamber-pac": {
       "id": "chicagoland-chamber-pac",
-      "name": "Chicagoland Chamber PAC",
+      "name": "chicagoland chamber pac",
       "type": "Individual",
       "industries": [
         "establishment-pol"
       ],
       "flags": [],
       "notes": null,
-      "city": "Chicago, IL",
+      "city": "chicago, IL",
       "parent_id": "chicagoland-chamber-pac",
       "committee_id": null
     },
@@ -521429,6 +521484,93 @@
       "notes": null,
       "city": "Chicago, IL",
       "parent_id": "friends-of-paul-jacobs",
+      "committee_id": null
+    },
+    "anderson-connie": {
+      "id": "anderson-connie",
+      "name": "Anderson, Connie",
+      "type": "Individual",
+      "industries": [
+        "individual"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": "Chicago, IL",
+      "parent_id": "anderson-connie",
+      "committee_id": null
+    },
+    "vick-anglea": {
+      "id": "vick-anglea",
+      "name": "Vick, Anglea",
+      "type": "Individual",
+      "industries": [
+        "individual"
+      ],
+      "flags": [],
+      "notes": null,
+      "parent_id": "vick-anglea",
+      "committee_id": null
+    },
+    "salone-latessa": {
+      "id": "salone-latessa",
+      "name": "Salone, Latessa",
+      "type": "Individual",
+      "industries": [
+        "individual"
+      ],
+      "flags": [],
+      "notes": null,
+      "parent_id": "salone-latessa",
+      "committee_id": null
+    },
+    "sisson-shante": {
+      "id": "sisson-shante",
+      "name": "Sisson, Shante",
+      "type": "Individual",
+      "industries": [
+        "individual"
+      ],
+      "flags": [],
+      "notes": null,
+      "parent_id": "sisson-shante",
+      "committee_id": null
+    },
+    "hurlock-angela": {
+      "id": "hurlock-angela",
+      "name": "Hurlock, Angela",
+      "type": "Individual",
+      "industries": [
+        "individual"
+      ],
+      "flags": [],
+      "notes": null,
+      "parent_id": "hurlock-angela",
+      "committee_id": null
+    },
+    "luina-chicago-laborers-district-council-pac": {
+      "id": "luina-chicago-laborers-district-council-pac",
+      "name": "LUINA CHICAGO LABORERS DISTRICT COUNCIL PAC",
+      "type": "Individual",
+      "industries": [
+        "labor-trades"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": "BURR RIDGE, IL",
+      "parent_id": "luina-chicago-laborers-district-council-pac",
+      "committee_id": null
+    },
+    "local-134-state-muncipal-pac": {
+      "id": "local-134-state-muncipal-pac",
+      "name": "LOCAL 134 STATE & MUNCIPAL PAC",
+      "type": "Individual",
+      "industries": [
+        "labor-trades"
+      ],
+      "flags": [],
+      "notes": null,
+      "city": "CHICAGO, IL",
+      "parent_id": "local-134-state-muncipal-pac",
       "committee_id": null
     }
   },
@@ -1571657,6 +1571799,80 @@
       "is_self": false
     },
     {
+      "id": "c-39894-00002",
+      "donor_id": "incs-action-pac",
+      "committee_id": "cand-preston-sb-d17",
+      "amount": 500.0,
+      "date": "2026-08-12",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-39894-00003",
+      "donor_id": "the-urban-center-nfp",
+      "committee_id": "cand-preston-sb-d17",
+      "amount": 657.53,
+      "date": "2026-08-14",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Signature Verification",
+      "is_self": false
+    },
+    {
+      "id": "c-39894-00004",
+      "donor_id": "common-ground-collective-pac",
+      "committee_id": "cand-preston-sb-d17",
+      "amount": 166.67,
+      "date": "2026-08-19",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Ballot Access",
+      "is_self": false
+    },
+    {
+      "id": "c-39894-00005",
+      "donor_id": "common-ground-collective-pac",
+      "committee_id": "cand-preston-sb-d17",
+      "amount": 1301.27,
+      "date": "2026-08-26",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Petition Consulting",
+      "is_self": false
+    },
+    {
+      "id": "c-39894-00006",
+      "donor_id": "the-urban-center-nfp",
+      "committee_id": "cand-preston-sb-d17",
+      "amount": 312.5,
+      "date": "2026-09-09",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Consulting",
+      "is_self": false
+    },
+    {
+      "id": "c-39894-00007",
+      "donor_id": "seiu-il-council-pac-fund",
+      "committee_id": "cand-preston-sb-d17",
+      "amount": 10000.0,
+      "date": "2026-10-12",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "A-1",
+      "is_self": false
+    },
+    {
       "id": "c-39903-00002",
       "donor_id": "leon-bruce",
       "committee_id": "cand-leon-sb-d03",
@@ -1617982,6 +1618198,176 @@
       "is_self": false
     },
     {
+      "id": "c-41251-00002",
+      "donor_id": "anderson-connie",
+      "committee_id": "cand-anderson-sb-d20",
+      "amount": 500.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly",
+      "is_self": true
+    },
+    {
+      "id": "c-41251-00003",
+      "donor_id": "vick-anglea",
+      "committee_id": "cand-anderson-sb-d20",
+      "amount": 500.0,
+      "date": "2026-08-16",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-41251-00004",
+      "donor_id": "sanchez-oscar",
+      "committee_id": "cand-anderson-sb-d20",
+      "amount": 500.0,
+      "date": "2026-08-25",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-41251-00005",
+      "donor_id": "salone-latessa",
+      "committee_id": "cand-anderson-sb-d20",
+      "amount": 200.0,
+      "date": "2026-09-05",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-41251-00006",
+      "donor_id": "sisson-shante",
+      "committee_id": "cand-anderson-sb-d20",
+      "amount": 200.0,
+      "date": "2026-09-11",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-41251-00007",
+      "donor_id": "hurlock-angela",
+      "committee_id": "cand-anderson-sb-d20",
+      "amount": 200.0,
+      "date": "2026-09-21",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-41251-00008",
+      "donor_id": "ctu-pac-illinois-federation-of-teachers",
+      "committee_id": "cand-anderson-sb-d20",
+      "amount": 7200.0,
+      "date": "2026-07-17",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Petition Circulation",
+      "is_self": false
+    },
+    {
+      "id": "c-41251-00009",
+      "donor_id": "ctu-pac-illinois-federation-of-teachers",
+      "committee_id": "cand-anderson-sb-d20",
+      "amount": 2317.5,
+      "date": "2026-07-18",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Petition Review",
+      "is_self": false
+    },
+    {
+      "id": "c-41251-00010",
+      "donor_id": "ctu-pac-illinois-federation-of-teachers",
+      "committee_id": "cand-anderson-sb-d20",
+      "amount": 3740.0,
+      "date": "2026-07-18",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "School Board",
+      "is_self": false
+    },
+    {
+      "id": "c-41251-00011",
+      "donor_id": "ctu-pac-illinois-federation-of-teachers",
+      "committee_id": "cand-anderson-sb-d20",
+      "amount": 4590.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Legal fees",
+      "is_self": false
+    },
+    {
+      "id": "c-41251-00012",
+      "donor_id": "ctu-pac-illinois-federation-of-teachers",
+      "committee_id": "cand-anderson-sb-d20",
+      "amount": 2775.0,
+      "date": "2026-08-13",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Legal fees",
+      "is_self": false
+    },
+    {
+      "id": "c-41251-00013",
+      "donor_id": "ctu-pac-illinois-federation-of-teachers",
+      "committee_id": "cand-anderson-sb-d20",
+      "amount": 610.0,
+      "date": "2026-09-05",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Consulting - Campaign Work",
+      "is_self": false
+    },
+    {
+      "id": "c-41251-00014",
+      "donor_id": "our-schools-pac",
+      "committee_id": "cand-anderson-sb-d20",
+      "amount": 1375.0,
+      "date": "2026-09-07",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Contractual",
+      "is_self": false
+    },
+    {
+      "id": "c-41251-00015",
+      "donor_id": "our-schools-pac",
+      "committee_id": "cand-anderson-sb-d20",
+      "amount": 23515.86,
+      "date": "2026-09-28",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Mailing",
+      "is_self": false
+    },
+    {
       "id": "c-41254-00002",
       "donor_id": "brenner-alexander",
       "committee_id": "cand-bektemba-ward-35",
@@ -1618991,6 +1619377,332 @@
       "committee_id": "cand-luciano-ward-44",
       "amount": 2000.0,
       "date": "2026-10-27",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00002",
+      "donor_id": "luina-chicago-laborers-district-council-pac",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 2500.0,
+      "date": "2026-10-14",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00003",
+      "donor_id": "local-134-state-muncipal-pac",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 1000.0,
+      "date": "2026-10-14",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00004",
+      "donor_id": "mcmahon-thomas",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 500.0,
+      "date": "2026-09-13",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00005",
+      "donor_id": "silverstein-william",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 2000.0,
+      "date": "2026-09-16",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00006",
+      "donor_id": "johnson-kate",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 2000.0,
+      "date": "2026-09-17",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00007",
+      "donor_id": "boyle-therese",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 250.0,
+      "date": "2026-09-18",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00008",
+      "donor_id": "erlinger-linda",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 1000.0,
+      "date": "2026-09-19",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00009",
+      "donor_id": "incs-action-pac",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 8000.0,
+      "date": "2026-09-23",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00010",
+      "donor_id": "badali-james",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 300.0,
+      "date": "2026-09-25",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00011",
+      "donor_id": "citizens-to-elect-anthony-beale",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 5000.0,
+      "date": "2026-09-25",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00012",
+      "donor_id": "urban-center-pac",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 2000.0,
+      "date": "2026-09-25",
+      "cycle": "2027",
+      "contribution_type": "Transfer In",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00013",
+      "donor_id": "finnegan-paul",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 7300.0,
+      "date": "2026-09-28",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00014",
+      "donor_id": "finnegan-mary",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 7300.0,
+      "date": "2026-09-28",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "Quarterly",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00015",
+      "donor_id": "urban-center-nfp",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 2400.0,
+      "date": "2026-07-10",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Consulting",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00016",
+      "donor_id": "urban-center-nfp",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 535.0,
+      "date": "2026-07-10",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Consulting",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00017",
+      "donor_id": "urban-center-nfp",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 2975.0,
+      "date": "2026-07-10",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Consulting",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00018",
+      "donor_id": "incs-action-pac",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 1371.6,
+      "date": "2026-07-10",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Consulting",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00019",
+      "donor_id": "common-ground-collective-pac",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 1391.97,
+      "date": "2026-08-08",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Consulting",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00020",
+      "donor_id": "urban-center-nfp",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 312.5,
+      "date": "2026-08-14",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Consulting",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00021",
+      "donor_id": "urban-center-nfp",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 657.63,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Consulting",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00022",
+      "donor_id": "common-ground-collective-pac",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 166.67,
+      "date": "2026-08-21",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Legal fees",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00023",
+      "donor_id": "incs-action-pac",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 166.67,
+      "date": "2026-09-16",
+      "cycle": "2027",
+      "contribution_type": "In-kind Contribution",
+      "source_filing": "Quarterly",
+      "is_in_kind": true,
+      "in_kind_description": "Consulting",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00024",
+      "donor_id": "wilson-donald",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 7300.0,
+      "date": "2026-10-16",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00025",
+      "donor_id": "urban-center-pac",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 4000.0,
+      "date": "2026-10-23",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00026",
+      "donor_id": "bright-futures-chicago-pac",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 1000.0,
+      "date": "2026-10-22",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00027",
+      "donor_id": "mid-america-carpenters-regional-council-pac",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 1000.0,
+      "date": "2026-10-31",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00028",
+      "donor_id": "aaron-jonathan",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 2500.0,
+      "date": "2026-10-29",
+      "cycle": "2027",
+      "contribution_type": "Individual Contribution",
+      "source_filing": "A-1",
+      "is_self": false
+    },
+    {
+      "id": "c-41261-00029",
+      "donor_id": "chicagoland-chamber-pac",
+      "committee_id": "cand-watson-sb-d20",
+      "amount": 1000.0,
+      "date": "2026-10-30",
       "cycle": "2027",
       "contribution_type": "Individual Contribution",
       "source_filing": "A-1",
@@ -1671230,7 +1671942,7 @@
     {
       "id": "ie-39901-1022790-446",
       "spender_committee_id": "ie-committee-39901",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1671518,7 +1672230,7 @@
     {
       "id": "ie-41012-1023463-462",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1671536,7 +1672248,7 @@
     {
       "id": "ie-41012-1023463-463",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41251",
       "target_candidate_id": "cand-anderson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1671986,7 +1672698,7 @@
     {
       "id": "ie-41012-1023463-488",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1672004,7 +1672716,7 @@
     {
       "id": "ie-41012-1023463-489",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41251",
       "target_candidate_id": "cand-anderson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1672454,7 +1673166,7 @@
     {
       "id": "ie-39901-1025099-514",
       "spender_committee_id": "ie-committee-39901",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1672652,7 +1673364,7 @@
     {
       "id": "ie-39901-1025099-525",
       "spender_committee_id": "ie-committee-39901",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1672850,7 +1673562,7 @@
     {
       "id": "ie-39901-1025099-536",
       "spender_committee_id": "ie-committee-39901",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1673156,7 +1673868,7 @@
     {
       "id": "ie-26066-1025163-553",
       "spender_committee_id": "ie-committee-26066",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1673480,7 +1674192,7 @@
     {
       "id": "ie-26066-1025614-571",
       "spender_committee_id": "ie-committee-26066",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1673678,7 +1674390,7 @@
     {
       "id": "ie-26066-1025614-582",
       "spender_committee_id": "ie-committee-26066",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1674182,7 +1674894,7 @@
     {
       "id": "ie-41012-1026773-610",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1674200,7 +1674912,7 @@
     {
       "id": "ie-41012-1026773-611",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41251",
       "target_candidate_id": "cand-anderson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1674524,7 +1675236,7 @@
     {
       "id": "ie-41012-1026773-629",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1674542,7 +1675254,7 @@
     {
       "id": "ie-41012-1026773-630",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41251",
       "target_candidate_id": "cand-anderson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1674776,7 +1675488,7 @@
     {
       "id": "ie-41012-1026773-643",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1674794,7 +1675506,7 @@
     {
       "id": "ie-41012-1026773-644",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41251",
       "target_candidate_id": "cand-anderson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1675244,7 +1675956,7 @@
     {
       "id": "ie-41012-1026773-669",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1675262,7 +1675974,7 @@
     {
       "id": "ie-41012-1026773-670",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41251",
       "target_candidate_id": "cand-anderson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1675460,7 +1676172,7 @@
     {
       "id": "ie-41012-1026774-681",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1675946,7 +1676658,7 @@
     {
       "id": "ie-26066-1028086-708",
       "spender_committee_id": "ie-committee-26066",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1676054,7 +1676766,7 @@
     {
       "id": "ie-41012-1028263-714",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1676414,7 +1677126,7 @@
     {
       "id": "ie-39901-1028278-734",
       "spender_committee_id": "ie-committee-39901",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1676756,7 +1677468,7 @@
     {
       "id": "ie-41012-1028393-753",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1677044,7 +1677756,7 @@
     {
       "id": "ie-39901-1028541-769",
       "spender_committee_id": "ie-committee-39901",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1677278,7 +1677990,7 @@
     {
       "id": "ie-26066-1028556-782",
       "spender_committee_id": "ie-committee-26066",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1677368,7 +1678080,7 @@
     {
       "id": "ie-26066-1028556-787",
       "spender_committee_id": "ie-committee-26066",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1677566,7 +1678278,7 @@
     {
       "id": "ie-41012-1028738-798",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1677584,7 +1678296,7 @@
     {
       "id": "ie-41012-1028738-799",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41251",
       "target_candidate_id": "cand-anderson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1677980,7 +1678692,7 @@
     {
       "id": "ie-39901-1028846-821",
       "spender_committee_id": "ie-committee-39901",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1678178,7 +1678890,7 @@
     {
       "id": "ie-26066-1028960-832",
       "spender_committee_id": "ie-committee-26066",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1678538,7 +1679250,7 @@
     {
       "id": "ie-41012-1028965-852",
       "spender_committee_id": "ie-committee-41012",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1678916,7 +1679628,7 @@
     {
       "id": "ie-26066-1029505-873",
       "spender_committee_id": "ie-committee-26066",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1679258,7 +1679970,7 @@
     {
       "id": "ie-39901-1029531-892",
       "spender_committee_id": "ie-committee-39901",
-      "target_committee_id": null,
+      "target_committee_id": "41261",
       "target_candidate_id": "cand-watson-sb-d20",
       "target_race_id": "sb-d20",
       "target_ward": null,
@@ -1679432,11 +1680144,11 @@
         "industries": [
           "self-funding"
         ],
-        "direct": 15283.57,
+        "direct": 20283.57,
         "independent": 0.0,
-        "total": 15283.57,
-        "count": 9,
-        "committees": 4,
+        "total": 20283.57,
+        "count": 10,
+        "committees": 5,
         "members": 3,
         "by_cycle": {
           "2015": {
@@ -1679456,6 +1680168,12 @@
             "independent": 0.0,
             "total": 6483.57,
             "count": 5
+          },
+          "2027": {
+            "direct": 5000.0,
+            "independent": 0.0,
+            "total": 5000.0,
+            "count": 1
           }
         }
       },
@@ -1686219,16 +1686937,16 @@
         }
       },
       "mcmahon-thomas": {
-        "name": "McMahon, Thomas",
+        "name": "MCMAHON, thomas",
         "type": "Individual",
         "industries": [
           "individual"
         ],
-        "direct": 3000.0,
+        "direct": 3500.0,
         "independent": 0.0,
-        "total": 3000.0,
-        "count": 6,
-        "committees": 2,
+        "total": 3500.0,
+        "count": 7,
+        "committees": 3,
         "members": 1,
         "by_cycle": {
           "2015": {
@@ -1686250,10 +1686968,10 @@
             "count": 2
           },
           "2027": {
-            "direct": 1250.0,
+            "direct": 1750.0,
             "independent": 0.0,
-            "total": 1250.0,
-            "count": 2
+            "total": 1750.0,
+            "count": 3
           }
         }
       },
@@ -1688855,11 +1689573,11 @@
         "industries": [
           "establishment-pol"
         ],
-        "direct": 2542317.0,
+        "direct": 2543317.0,
         "independent": 0.0,
-        "total": 2542317.0,
-        "count": 428,
-        "committees": 76,
+        "total": 2543317.0,
+        "count": 429,
+        "committees": 77,
         "members": 32,
         "by_cycle": {
           "2019": {
@@ -1688875,10 +1689593,10 @@
             "count": 142
           },
           "2027": {
-            "direct": 1621600.0,
+            "direct": 1622600.0,
             "independent": 0.0,
-            "total": 1621600.0,
-            "count": 169
+            "total": 1622600.0,
+            "count": 170
           },
           "2015": {
             "direct": 16700.0,
@@ -1690695,16 +1691413,16 @@
         }
       },
       "badali-james": {
-        "name": "BADALI, JAMES",
+        "name": "BADALI, James",
         "type": "Individual",
         "industries": [
           "individual"
         ],
-        "direct": 2450.0,
+        "direct": 2750.0,
         "independent": 0.0,
-        "total": 2450.0,
-        "count": 7,
-        "committees": 1,
+        "total": 2750.0,
+        "count": 8,
+        "committees": 2,
         "members": 1,
         "by_cycle": {
           "2019": {
@@ -1690720,10 +1691438,10 @@
             "count": 4
           },
           "2027": {
-            "direct": 1000.0,
+            "direct": 1300.0,
             "independent": 0.0,
-            "total": 1000.0,
-            "count": 2
+            "total": 1300.0,
+            "count": 3
           }
         }
       },
@@ -1693663,11 +1694381,11 @@
           "labor-service",
           "labor"
         ],
-        "direct": 8643951.31,
+        "direct": 8653951.31,
         "independent": 2065137.25,
-        "total": 10709088.56,
-        "count": 929,
-        "committees": 72,
+        "total": 10719088.56,
+        "count": 930,
+        "committees": 73,
         "members": 62,
         "by_cycle": {
           "2023": {
@@ -1693689,10 +1694407,10 @@
             "count": 35
           },
           "2027": {
-            "direct": 961520.0,
+            "direct": 971520.0,
             "independent": 1250000.0,
-            "total": 2211520.0,
-            "count": 167
+            "total": 2221520.0,
+            "count": 168
           }
         }
       },
@@ -1698267,15 +1698985,15 @@
       },
       "incs-action-pac": {
         "name": "INCS Action",
-        "type": "Other",
+        "type": "PAC",
         "industries": [
           "establishment-pol"
         ],
-        "direct": 288319.26,
+        "direct": 298357.53,
         "independent": 28660.35,
-        "total": 316979.61,
-        "count": 97,
-        "committees": 39,
+        "total": 327017.88,
+        "count": 101,
+        "committees": 41,
         "members": 3,
         "by_cycle": {
           "2015": {
@@ -1698297,10 +1699015,10 @@
             "count": 16
           },
           "2027": {
-            "direct": 232569.26,
+            "direct": 242607.53,
             "independent": 0.0,
-            "total": 232569.26,
-            "count": 69
+            "total": 242607.53,
+            "count": 73
           }
         }
       },
@@ -1709322,11 +1710040,11 @@
           "labor-teachers",
           "labor"
         ],
-        "direct": 6997940.77,
+        "direct": 7019173.27,
         "independent": 733322.0,
-        "total": 7731262.77,
-        "count": 705,
-        "committees": 55,
+        "total": 7752495.27,
+        "count": 711,
+        "committees": 56,
         "members": 19,
         "by_cycle": {
           "2015": {
@@ -1709348,10 +1710066,10 @@
             "count": 95
           },
           "2027": {
-            "direct": 3651484.82,
+            "direct": 3672717.32,
             "independent": 0.0,
-            "total": 3651484.82,
-            "count": 526
+            "total": 3672717.32,
+            "count": 532
           }
         }
       },
@@ -1778528,18 +1779246,18 @@
         "industries": [
           "establishment-pol"
         ],
-        "direct": 41557.53,
+        "direct": 47557.53,
         "independent": 0.0,
-        "total": 41557.53,
-        "count": 26,
-        "committees": 14,
+        "total": 47557.53,
+        "count": 28,
+        "committees": 15,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 41557.53,
+            "direct": 47557.53,
             "independent": 0.0,
-            "total": 41557.53,
-            "count": 26
+            "total": 47557.53,
+            "count": 28
           }
         }
       },
@@ -1818064,23 +1818782,23 @@
         }
       },
       "aaron-jonathan": {
-        "name": "Aaron, Jonathan",
+        "name": "AARON, JONATHAN",
         "type": "Individual",
         "industries": [
           "individual"
         ],
-        "direct": 19800.0,
+        "direct": 22300.0,
         "independent": 0.0,
-        "total": 19800.0,
-        "count": 3,
-        "committees": 3,
+        "total": 22300.0,
+        "count": 4,
+        "committees": 4,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 19800.0,
+            "direct": 22300.0,
             "independent": 0.0,
-            "total": 19800.0,
-            "count": 3
+            "total": 22300.0,
+            "count": 4
           }
         }
       },
@@ -1818925,23 +1819643,23 @@
         }
       },
       "silverstein-william": {
-        "name": "Silverstein, William",
+        "name": "SILVERSTEIN, william",
         "type": "Individual",
         "industries": [
           "real-estate"
         ],
-        "direct": 136400.0,
+        "direct": 138400.0,
         "independent": 25000.0,
-        "total": 161400.0,
-        "count": 10,
-        "committees": 7,
+        "total": 163400.0,
+        "count": 11,
+        "committees": 8,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 136400.0,
+            "direct": 138400.0,
             "independent": 0.0,
-            "total": 136400.0,
-            "count": 9
+            "total": 138400.0,
+            "count": 10
           },
           "2023": {
             "direct": 0.0,
@@ -1904102,23 +1904820,23 @@
         }
       },
       "finnegan-paul": {
-        "name": "Finnegan, Paul",
+        "name": "FINNEGAN, Paul",
         "type": "Individual",
         "industries": [
           "finance"
         ],
-        "direct": 282400.0,
+        "direct": 289700.0,
         "independent": 1039400.0,
-        "total": 1321800.0,
-        "count": 28,
-        "committees": 23,
+        "total": 1329100.0,
+        "count": 29,
+        "committees": 24,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 276400.0,
+            "direct": 283700.0,
             "independent": 939400.0,
-            "total": 1215800.0,
-            "count": 26
+            "total": 1223100.0,
+            "count": 27
           },
           "2023": {
             "direct": 6000.0,
@@ -2074289,11 +2075007,11 @@
         "industries": [
           "individual"
         ],
-        "direct": 57300.0,
+        "direct": 64600.0,
         "independent": 11600.0,
-        "total": 68900.0,
-        "count": 10,
-        "committees": 6,
+        "total": 76200.0,
+        "count": 11,
+        "committees": 7,
         "members": 1,
         "by_cycle": {
           "2023": {
@@ -2074303,10 +2075021,10 @@
             "count": 5
           },
           "2027": {
-            "direct": 27500.0,
+            "direct": 34800.0,
             "independent": 0.0,
-            "total": 27500.0,
-            "count": 5
+            "total": 34800.0,
+            "count": 6
           }
         }
       },
@@ -2230824,18 +2231542,18 @@
         "industries": [
           "establishment-pol"
         ],
-        "direct": 1160920.59,
+        "direct": 1185811.45,
         "independent": 0.0,
-        "total": 1160920.59,
-        "count": 89,
-        "committees": 13,
+        "total": 1185811.45,
+        "count": 91,
+        "committees": 14,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 1160920.59,
+            "direct": 1185811.45,
             "independent": 0.0,
-            "total": 1160920.59,
-            "count": 89
+            "total": 1185811.45,
+            "count": 91
           }
         }
       },
@@ -2269463,23 +2270181,23 @@
         }
       },
       "erlinger-linda": {
-        "name": "Erlinger, Linda",
+        "name": "ERLINGER, linda",
         "type": "Individual",
         "industries": [
           "individual"
         ],
-        "direct": 52711.35,
+        "direct": 53711.35,
         "independent": 0.0,
-        "total": 52711.35,
-        "count": 30,
-        "committees": 18,
+        "total": 53711.35,
+        "count": 31,
+        "committees": 19,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 52711.35,
+            "direct": 53711.35,
             "independent": 0.0,
-            "total": 52711.35,
-            "count": 30
+            "total": 53711.35,
+            "count": 31
           }
         }
       },
@@ -2278909,18 +2279627,18 @@
         "industries": [
           "individual"
         ],
-        "direct": 36943.18,
+        "direct": 37193.18,
         "independent": 0.0,
-        "total": 36943.18,
-        "count": 19,
-        "committees": 12,
+        "total": 37193.18,
+        "count": 20,
+        "committees": 13,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 36943.18,
+            "direct": 37193.18,
             "independent": 0.0,
-            "total": 36943.18,
-            "count": 19
+            "total": 37193.18,
+            "count": 20
           }
         }
       },
@@ -2281309,18 +2282027,18 @@
         "industries": [
           "individual"
         ],
-        "direct": 500.0,
+        "direct": 1000.0,
         "independent": 0.0,
-        "total": 500.0,
-        "count": 1,
-        "committees": 1,
+        "total": 1000.0,
+        "count": 2,
+        "committees": 2,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 500.0,
+            "direct": 1000.0,
             "independent": 0.0,
-            "total": 500.0,
-            "count": 1
+            "total": 1000.0,
+            "count": 2
           }
         }
       },
@@ -2307899,23 +2308617,23 @@
         }
       },
       "bright-futures-chicago-pac": {
-        "name": "Bright Futures Chicago PAC",
-        "type": "PAC",
+        "name": "BRIGHT FUTURES CHICAGO PAC",
+        "type": "Individual",
         "industries": [
           "establishment-pol"
         ],
-        "direct": 54000.0,
+        "direct": 55000.0,
         "independent": 0.0,
-        "total": 54000.0,
-        "count": 17,
-        "committees": 8,
+        "total": 55000.0,
+        "count": 18,
+        "committees": 9,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 54000.0,
+            "direct": 55000.0,
             "independent": 0.0,
-            "total": 54000.0,
-            "count": 17
+            "total": 55000.0,
+            "count": 18
           }
         }
       },
@@ -2309432,23 +2310150,23 @@
         }
       },
       "finnegan-mary": {
-        "name": "Finnegan, Mary",
+        "name": "FINNEGAN, Mary",
         "type": "Individual",
         "industries": [
           "individual"
         ],
-        "direct": 124100.0,
+        "direct": 131400.0,
         "independent": 0.0,
-        "total": 124100.0,
-        "count": 17,
-        "committees": 17,
+        "total": 131400.0,
+        "count": 18,
+        "committees": 18,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 124100.0,
+            "direct": 131400.0,
             "independent": 0.0,
-            "total": 124100.0,
-            "count": 17
+            "total": 131400.0,
+            "count": 18
           }
         }
       },
@@ -2309458,18 +2310176,18 @@
         "industries": [
           "establishment-pol"
         ],
-        "direct": 33447.3,
+        "direct": 36473.88,
         "independent": 0.0,
-        "total": 33447.3,
-        "count": 30,
-        "committees": 12,
+        "total": 36473.88,
+        "count": 34,
+        "committees": 14,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 33447.3,
+            "direct": 36473.88,
             "independent": 0.0,
-            "total": 33447.3,
-            "count": 30
+            "total": 36473.88,
+            "count": 34
           }
         }
       },
@@ -2310319,18 +2311037,18 @@
         "industries": [
           "charter-schools"
         ],
-        "direct": 19188.09,
+        "direct": 20158.12,
         "independent": 0.0,
-        "total": 19188.09,
-        "count": 21,
-        "committees": 8,
+        "total": 20158.12,
+        "count": 23,
+        "committees": 9,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 19188.09,
+            "direct": 20158.12,
             "independent": 0.0,
-            "total": 19188.09,
-            "count": 21
+            "total": 20158.12,
+            "count": 23
           }
         }
       },
@@ -2318003,23 +2318721,23 @@
         }
       },
       "johnson-kate": {
-        "name": "Johnson, Kate",
+        "name": "johnson, kate",
         "type": "Individual",
         "industries": [
           "individual"
         ],
-        "direct": 2250.0,
+        "direct": 4250.0,
         "independent": 0.0,
-        "total": 2250.0,
-        "count": 3,
-        "committees": 2,
+        "total": 4250.0,
+        "count": 4,
+        "committees": 3,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 2250.0,
+            "direct": 4250.0,
             "independent": 0.0,
-            "total": 2250.0,
-            "count": 3
+            "total": 4250.0,
+            "count": 4
           }
         }
       },
@@ -2319452,23 +2320170,23 @@
         }
       },
       "chicagoland-chamber-pac": {
-        "name": "Chicagoland Chamber PAC",
+        "name": "chicagoland chamber pac",
         "type": "Individual",
         "industries": [
           "establishment-pol"
         ],
-        "direct": 1000.0,
+        "direct": 2000.0,
         "independent": 0.0,
-        "total": 1000.0,
-        "count": 1,
-        "committees": 1,
+        "total": 2000.0,
+        "count": 2,
+        "committees": 2,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 1000.0,
+            "direct": 2000.0,
             "independent": 0.0,
-            "total": 1000.0,
-            "count": 1
+            "total": 2000.0,
+            "count": 2
           }
         }
       },
@@ -2329507,18 +2330225,18 @@
         "industries": [
           "unclassified"
         ],
-        "direct": 1282.53,
+        "direct": 8162.66,
         "independent": 0.0,
-        "total": 1282.53,
-        "count": 3,
-        "committees": 1,
+        "total": 8162.66,
+        "count": 8,
+        "committees": 2,
         "members": 1,
         "by_cycle": {
           "2027": {
-            "direct": 1282.53,
+            "direct": 8162.66,
             "independent": 0.0,
-            "total": 1282.53,
-            "count": 3
+            "total": 8162.66,
+            "count": 8
           }
         }
       },
@@ -2373858,6 +2374576,111 @@
           }
         }
       },
+      "anderson-connie": {
+        "name": "Anderson, Connie",
+        "type": "Individual",
+        "industries": [
+          "individual"
+        ],
+        "direct": 500.0,
+        "independent": 0.0,
+        "total": 500.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 500.0,
+            "independent": 0.0,
+            "total": 500.0,
+            "count": 1
+          }
+        }
+      },
+      "vick-anglea": {
+        "name": "Vick, Anglea",
+        "type": "Individual",
+        "industries": [
+          "individual"
+        ],
+        "direct": 500.0,
+        "independent": 0.0,
+        "total": 500.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 500.0,
+            "independent": 0.0,
+            "total": 500.0,
+            "count": 1
+          }
+        }
+      },
+      "salone-latessa": {
+        "name": "Salone, Latessa",
+        "type": "Individual",
+        "industries": [
+          "individual"
+        ],
+        "direct": 200.0,
+        "independent": 0.0,
+        "total": 200.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 200.0,
+            "independent": 0.0,
+            "total": 200.0,
+            "count": 1
+          }
+        }
+      },
+      "sisson-shante": {
+        "name": "Sisson, Shante",
+        "type": "Individual",
+        "industries": [
+          "individual"
+        ],
+        "direct": 200.0,
+        "independent": 0.0,
+        "total": 200.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 200.0,
+            "independent": 0.0,
+            "total": 200.0,
+            "count": 1
+          }
+        }
+      },
+      "hurlock-angela": {
+        "name": "Hurlock, Angela",
+        "type": "Individual",
+        "industries": [
+          "individual"
+        ],
+        "direct": 200.0,
+        "independent": 0.0,
+        "total": 200.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 200.0,
+            "independent": 0.0,
+            "total": 200.0,
+            "count": 1
+          }
+        }
+      },
       "brenner-alexander": {
         "name": "Brenner, Alexander",
         "type": "Individual",
@@ -2374590,6 +2375413,48 @@
             "independent": 0.0,
             "total": 2300.0,
             "count": 6
+          }
+        }
+      },
+      "luina-chicago-laborers-district-council-pac": {
+        "name": "LUINA CHICAGO LABORERS DISTRICT COUNCIL PAC",
+        "type": "Individual",
+        "industries": [
+          "labor-trades"
+        ],
+        "direct": 2500.0,
+        "independent": 0.0,
+        "total": 2500.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 2500.0,
+            "independent": 0.0,
+            "total": 2500.0,
+            "count": 1
+          }
+        }
+      },
+      "local-134-state-muncipal-pac": {
+        "name": "LOCAL 134 STATE & MUNCIPAL PAC",
+        "type": "Individual",
+        "industries": [
+          "labor-trades"
+        ],
+        "direct": 1000.0,
+        "independent": 0.0,
+        "total": 1000.0,
+        "count": 1,
+        "committees": 1,
+        "members": 1,
+        "by_cycle": {
+          "2027": {
+            "direct": 1000.0,
+            "independent": 0.0,
+            "total": 1000.0,
+            "count": 1
           }
         }
       },
@@ -2405958,7 +2406823,7 @@
       },
       "real-estate": {
         "all": {
-          "direct": 17316552.21,
+          "direct": 17318552.21,
           "independent": 213685.02
         },
         "by_cycle": {
@@ -2405975,7 +2406840,7 @@
             "independent": 152635.12
           },
           "2027": {
-            "direct": 5543627.49
+            "direct": 5545627.49
           }
         }
       },
@@ -2406000,7 +2406865,7 @@
       },
       "unclassified": {
         "all": {
-          "direct": 19315930.49
+          "direct": 19327810.62
         },
         "by_cycle": {
           "2015": {
@@ -2406013,7 +2406878,7 @@
             "direct": 4632033.52
           },
           "2027": {
-            "direct": 8179716.39
+            "direct": 8191596.52
           }
         }
       },
@@ -2406057,7 +2406922,7 @@
       },
       "individual": {
         "all": {
-          "direct": 64708651.78
+          "direct": 64731901.78
         },
         "by_cycle": {
           "2015": {
@@ -2406070,7 +2406935,7 @@
             "direct": 19054281.12
           },
           "2027": {
-            "direct": 32910378.74
+            "direct": 32933628.74
           }
         }
       },
@@ -2406098,7 +2406963,7 @@
       },
       "labor-trades": {
         "all": {
-          "direct": 21453155.67
+          "direct": 21457655.67
         },
         "by_cycle": {
           "2015": {
@@ -2406111,7 +2406976,7 @@
             "direct": 6141751.28
           },
           "2027": {
-            "direct": 9735892.63
+            "direct": 9740392.63
           }
         }
       },
@@ -2406138,7 +2407003,7 @@
       },
       "establishment-pol": {
         "all": {
-          "direct": 8892014.45,
+          "direct": 8937970.16,
           "independent": 120943.54
         },
         "by_cycle": {
@@ -2406154,7 +2407019,7 @@
             "direct": 2253250.35
           },
           "2027": {
-            "direct": 4224576.54
+            "direct": 4270532.25
           }
         }
       },
@@ -2406179,7 +2407044,7 @@
       },
       "finance": {
         "all": {
-          "direct": 20190426.67
+          "direct": 20197726.67
         },
         "by_cycle": {
           "2015": {
@@ -2406192,7 +2407057,7 @@
             "direct": 2364504.07
           },
           "2027": {
-            "direct": 13010898.71
+            "direct": 13018198.71
           }
         }
       },
@@ -2406333,7 +2407198,7 @@
       },
       "labor-service": {
         "all": {
-          "direct": 10487440.28,
+          "direct": 10497440.28,
           "independent": 1329475.02
         },
         "by_cycle": {
@@ -2406349,7 +2407214,7 @@
             "independent": 232706.12
           },
           "2027": {
-            "direct": 2134770.0,
+            "direct": 2144770.0,
             "independent": 1020416.97
           }
         }
@@ -2406375,7 +2407240,7 @@
       },
       "charter-schools": {
         "all": {
-          "direct": 15578705.04,
+          "direct": 15579675.07,
           "independent": 8337333.75
         },
         "by_cycle": {
@@ -2406388,7 +2407253,7 @@
             "independent": 896583.72
           },
           "2027": {
-            "direct": 6371301.89,
+            "direct": 6372271.92,
             "independent": 7351127.9
           },
           "2015": {
@@ -2406418,7 +2407283,7 @@
       },
       "labor-teachers": {
         "all": {
-          "direct": 12007390.55,
+          "direct": 12028623.05,
           "independent": 31499.88
         },
         "by_cycle": {
@@ -2406433,7 +2407298,7 @@
             "direct": 6547805.2
           },
           "2027": {
-            "direct": 3755815.89
+            "direct": 3777048.39
           }
         }
       },
@@ -2408880,6 +2409745,16 @@
           }
         }
       },
+      "cand-preston-sb-d17": {
+        "all": {
+          "direct": 12937.97
+        },
+        "by_cycle": {
+          "2027": {
+            "direct": 12937.97
+          }
+        }
+      },
       "leon-sb-d03": {
         "all": {
           "direct": 620025.0
@@ -2409376,6 +2410251,18 @@
           }
         }
       },
+      "cand-anderson-sb-d20": {
+        "all": {
+          "direct": 48223.36,
+          "ie_oppose": 97687.94
+        },
+        "by_cycle": {
+          "2027": {
+            "direct": 48223.36,
+            "ie_oppose": 97687.94
+          }
+        }
+      },
       "cand-bektemba-ward-35": {
         "all": {
           "direct": 20085.0
@@ -2409393,6 +2410280,18 @@
         "by_cycle": {
           "2027": {
             "direct": 17460.75
+          }
+        }
+      },
+      "cand-watson-sb-d20": {
+        "all": {
+          "direct": 65927.04,
+          "ie_support": 449868.63
+        },
+        "by_cycle": {
+          "2027": {
+            "direct": 65927.04,
+            "ie_support": 449868.63
           }
         }
       },
@@ -2409682,26 +2410581,6 @@
         "by_cycle": {
           "2027": {
             "ie_oppose": 41537.0
-          }
-        }
-      },
-      "cand-watson-sb-d20": {
-        "all": {
-          "ie_support": 449868.63
-        },
-        "by_cycle": {
-          "2027": {
-            "ie_support": 449868.63
-          }
-        }
-      },
-      "cand-anderson-sb-d20": {
-        "all": {
-          "ie_oppose": 97687.94
-        },
-        "by_cycle": {
-          "2027": {
-            "ie_oppose": 97687.94
           }
         }
       }
@@ -2410892,6 +2411771,16 @@
           }
         }
       },
+      "sb-d17": {
+        "all": {
+          "direct": 12937.97
+        },
+        "by_cycle": {
+          "2027": {
+            "direct": 12937.97
+          }
+        }
+      },
       "sb-2024-d8": {
         "all": {
           "direct": 394045.93,
@@ -2410952,6 +2411841,20 @@
           }
         }
       },
+      "sb-d20": {
+        "all": {
+          "direct": 114150.4,
+          "ie_support": 449868.63,
+          "ie_oppose": 97687.94
+        },
+        "by_cycle": {
+          "2027": {
+            "direct": 114150.4,
+            "ie_support": 449868.63,
+            "ie_oppose": 97687.94
+          }
+        }
+      },
       "sb-2024-d3": {
         "all": {
           "ie_support": 340740.08,
@@ -2410961,18 +2411864,6 @@
           "2027": {
             "ie_support": 340740.08,
             "ie_oppose": 35153.0
-          }
-        }
-      },
-      "sb-d20": {
-        "all": {
-          "ie_support": 449868.63,
-          "ie_oppose": 97687.94
-        },
-        "by_cycle": {
-          "2027": {
-            "ie_support": 449868.63,
-            "ie_oppose": 97687.94
           }
         }
       }
@@ -2413372,6 +2414263,27 @@
           }
         }
       },
+      "cand-preston-sb-d17": {
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 12937.97,
+            "count": 6
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
       "leon-sb-d03": {
         "2024": {
           "label": "2024: District 2",
@@ -2414359,6 +2415271,27 @@
           }
         }
       },
+      "cand-anderson-sb-d20": {
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 47723.36,
+            "count": 13
+          },
+          "self_funding": {
+            "amount": 500.0,
+            "count": 1
+          },
+          "ie_support": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_oppose": {
+            "amount": 97687.94,
+            "count": 7
+          }
+        }
+      },
       "cand-bektemba-ward-35": {
         "2027": {
           "label": "2027",
@@ -2414394,6 +2415327,27 @@
           "ie_support": {
             "amount": 0.0,
             "count": 0
+          },
+          "ie_oppose": {
+            "amount": 0.0,
+            "count": 0
+          }
+        }
+      },
+      "cand-watson-sb-d20": {
+        "2026": {
+          "label": "2026",
+          "contributions": {
+            "amount": 65927.04,
+            "count": 28
+          },
+          "self_funding": {
+            "amount": 0.0,
+            "count": 0
+          },
+          "ie_support": {
+            "amount": 449868.63,
+            "count": 27
           },
           "ie_oppose": {
             "amount": 0.0,
@@ -2414986,48 +2415940,6 @@
           "ie_oppose": {
             "amount": 41537.0,
             "count": 1
-          }
-        }
-      },
-      "cand-watson-sb-d20": {
-        "2026": {
-          "label": "2026",
-          "contributions": {
-            "amount": 0.0,
-            "count": 0
-          },
-          "self_funding": {
-            "amount": 0.0,
-            "count": 0
-          },
-          "ie_support": {
-            "amount": 449868.63,
-            "count": 27
-          },
-          "ie_oppose": {
-            "amount": 0.0,
-            "count": 0
-          }
-        }
-      },
-      "cand-anderson-sb-d20": {
-        "2026": {
-          "label": "2026",
-          "contributions": {
-            "amount": 0.0,
-            "count": 0
-          },
-          "self_funding": {
-            "amount": 0.0,
-            "count": 0
-          },
-          "ie_support": {
-            "amount": 0.0,
-            "count": 0
-          },
-          "ie_oppose": {
-            "amount": 97687.94,
-            "count": 7
           }
         }
       }
@@ -2437528,7 +2438440,7 @@
       "color": "#5a6a7a"
     }
   },
-  "seed_generated_at": "2026-11-08T15:24:52",
+  "seed_generated_at": "2026-11-08T21:50:30",
   "cycles": {
     "2015": {
       "label": "2011 \u2013 2015 cycle",
@@ -2437555,7 +2438467,7 @@
       "election_date": "2027-02-23"
     }
   },
-  "generated_at": "2026-11-08T21:30:53Z",
+  "generated_at": "2026-11-09T03:56:47Z",
   "source": "Ingested from Illinois State Board of Elections bulk data. Editorial tags/flags applied via Google Sheet sync.",
   "current_cycle": "2027",
   "default_cycle": "all",
@@ -2440087,7 +2440999,7 @@
         "united-brotherhood-of-carpenters-and-joiners": 200.0,
         "united-brotherhood-of-carpenters-joiners-of-amer": 200.0,
         "united-brotherhood-of-carpenters": 200.0,
-        "mid-america-carpenters-regional-council-pac": 246000.0,
+        "mid-america-carpenters-regional-council-pac": 247000.0,
         "mid-america-carpenters-regional-council-political-action-committee": 41500.0,
         "mid-america-carpenters-reg-coun-pac": 3500.0,
         "mid-american-carpenters-regional-council-pac": 11000.0,
@@ -2440110,7 +2441022,7 @@
         "mid-america-regional-council-of-carpenters-pac": 1500.0,
         "carpenters-local-union": 1000.0
       },
-      "total": 2553117.0
+      "total": 2554117.0
     },
     "rollup-137": {
       "name": "First Elysian Hotel Company, LLC",
@@ -2444580,7 +2445492,7 @@
         "seiu-il-council": 5795844.29,
         "seiu-il-council-dues": 0.0,
         "seiu-illinois-council-pac": 1641514.03,
-        "seiu-il-council-pac-fund": 750756.15,
+        "seiu-il-council-pac-fund": 760756.15,
         "local-seiu-illinois-counc-pac-fund": 1000.0,
         "seiu-illinois-council-pac-fund": 1418972.74,
         "seiu-cope-pac": 4967.16,
@@ -2444640,7 +2445552,7 @@
         "seiu-local-1-il-pac": 1000.0,
         "service-employees-local-1-illinois": 1000.0
       },
-      "total": 22644044.11
+      "total": 22654044.11
     },
     "rollup-373": {
       "name": "Foley & Lardner LLP",
@@ -2445357,10 +2446269,10 @@
       },
       "member_totals": {
         "beale-anthony": 107071.26,
-        "citizens-to-elect-anthony-beale": 5900.0,
+        "citizens-to-elect-anthony-beale": 10900.0,
         "citizen-to-elect-anthony-beale": 282.31
       },
-      "total": 113253.57
+      "total": 118253.57
     },
     "rollup-410": {
       "name": "Magellan Development Group LLC",
@@ -2447111,11 +2448023,11 @@
         "incs-action": "related"
       },
       "member_totals": {
-        "incs-action-pac": 202506.27000000002,
+        "incs-action-pac": 212544.54000000004,
         "incs-actions-pac": 3500.0,
         "incs-action": 110973.34
       },
-      "total": 316979.61
+      "total": 327017.88
     },
     "rollup-459": {
       "name": "Friends of Gilbert Villegas for Alderman",
@@ -2448053,11 +2448965,11 @@
         "chicago-teachers-union-pac-illinois-federation-of-teachers-id-444": 105511.04000000002,
         "ctu-illinois-federation-of-teachers": 101251.83,
         "chicago-teacher-s-union-pac-illinois-federation-of-teachers": 14436.19,
-        "ctu-pac-illinois-federation-of-teachers": 1007110.8300000001,
+        "ctu-pac-illinois-federation-of-teachers": 1028343.3300000001,
         "chicago-teachersunion-pac-illinois-federation-of-teachers": 100000.0,
         "the-chicago-teachers-union-cope": 10000.0
       },
-      "total": 7746762.77
+      "total": 7767995.27
     },
     "rollup-480": {
       "name": "Fraternal Order of Police",

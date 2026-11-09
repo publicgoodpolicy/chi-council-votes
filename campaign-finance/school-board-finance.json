@@ -1,15 +1,15 @@
 {
   "schema_version": 1.5,
-  "generated_at": "2026-11-08T21:31:14Z",
+  "generated_at": "2026-11-09T03:57:11Z",
   "source": "derived: school-board-data.json (bridge) x election-data.json (rollups)",
   "_sync": {
-    "generated_at": "2026-11-08T21:31:14Z",
+    "generated_at": "2026-11-09T03:57:11Z",
     "inputs": {
       "school-board-data.json": {
         "sha256": "0145259348f690225699ecfc8c826f425c73ec5ae9a4a2fd135490f23ec6a4ee"
       },
       "election-data.json": {
-        "sha256": "1653fcf41ddd0e0d54f35b4895a2bed28e348fd4f64ce6a3a5b5c2e63522044c"
+        "sha256": "60bd86c8d9f16cc78184cb614c79ad19458eccc4d2577728bdb2058318b8be09"
       }
     },
     "convention": "figures are election-labeled and sourced from rollups.by_candidate_election; by_candidate is resolution-only; the four streams are never summed in this artifact"
@@ -2396,7 +2396,7 @@
       "members": [
         {
           "donor_id": "incs-action-pac",
-          "name": "INCS Action PAC",
+          "name": "INCS ACTION PAC",
           "role": "parent"
         },
         {
@@ -3320,7 +3320,7 @@
         },
         {
           "donor_id": "ctu-pac-illinois-federation-of-teachers",
-          "name": "CTU PAC (Illinois Federation of Teachers)",
+          "name": "CTU PAC (Illinois Federation of Teachers",
           "role": "affiliated-pac"
         },
         {
@@ -8206,7 +8206,7 @@
           },
           {
             "donor_id": "finnegan-mary",
-            "name": "Finnegan, Mary",
+            "name": "FINNEGAN, Mary",
             "type": "Individual",
             "amount": 7300.0,
             "count": 1,
@@ -8224,7 +8224,7 @@
           },
           {
             "donor_id": "finnegan-paul",
-            "name": "Finnegan, Paul",
+            "name": "FINNEGAN, Paul",
             "type": "Individual",
             "amount": 7300.0,
             "count": 1,
@@ -8590,8 +8590,8 @@
           },
           {
             "donor_id": "incs-action-pac",
-            "name": "INCS Action PAC",
-            "type": "Other",
+            "name": "INCS ACTION PAC",
+            "type": "PAC",
             "amount": 1000.0,
             "count": 1,
             "industries": [
@@ -12343,7 +12343,7 @@
           "unitemized": {
             "amount": 8034.36,
             "reports": 6,
-            "individual_itemized": 143228.34
+            "individual_itemized": 150728.34
           }
         }
       },
@@ -12375,8 +12375,8 @@
           },
           {
             "donor_id": "incs-action-pac",
-            "name": "INCS Action PAC",
-            "type": "Other",
+            "name": "INCS ACTION PAC",
+            "type": "PAC",
             "amount": 13000.0,
             "count": 2,
             "industries": [
@@ -13076,7 +13076,7 @@
         "2026": [
           {
             "donor_id": "finnegan-paul",
-            "name": "Finnegan, Paul",
+            "name": "FINNEGAN, Paul",
             "type": "Individual",
             "amount": 32300.0,
             "count": 2,
@@ -13148,8 +13148,8 @@
           },
           {
             "donor_id": "incs-action-pac",
-            "name": "INCS Action PAC",
-            "type": "Other",
+            "name": "INCS ACTION PAC",
+            "type": "PAC",
             "amount": 15976.6,
             "count": 7,
             "industries": [
@@ -13245,8 +13245,8 @@
           },
           {
             "donor_id": "bright-futures-chicago-pac",
-            "name": "Bright Futures Chicago PAC",
-            "type": "PAC",
+            "name": "BRIGHT FUTURES CHICAGO PAC",
+            "type": "Individual",
             "amount": 7500.0,
             "count": 1,
             "industries": [
@@ -13263,7 +13263,7 @@
           },
           {
             "donor_id": "finnegan-mary",
-            "name": "Finnegan, Mary",
+            "name": "FINNEGAN, Mary",
             "type": "Individual",
             "amount": 7300.0,
             "count": 1,
@@ -13343,7 +13343,7 @@
           },
           {
             "donor_id": "erlinger-linda",
-            "name": "Erlinger, Linda",
+            "name": "ERLINGER, linda",
             "type": "Individual",
             "amount": 5000.0,
             "count": 2,
@@ -21323,7 +21323,7 @@
           },
           {
             "donor_id": "finnegan-mary",
-            "name": "Finnegan, Mary",
+            "name": "FINNEGAN, Mary",
             "type": "Individual",
             "amount": 7300.0,
             "count": 1,
@@ -21341,7 +21341,7 @@
           },
           {
             "donor_id": "finnegan-paul",
-            "name": "Finnegan, Paul",
+            "name": "FINNEGAN, Paul",
             "type": "Individual",
             "amount": 7300.0,
             "count": 1,
@@ -21457,8 +21457,8 @@
           },
           {
             "donor_id": "incs-action-pac",
-            "name": "INCS Action PAC",
-            "type": "Other",
+            "name": "INCS ACTION PAC",
+            "type": "PAC",
             "amount": 5000.0,
             "count": 3,
             "industries": [
@@ -21883,7 +21883,7 @@
           },
           {
             "donor_id": "erlinger-linda",
-            "name": "Erlinger, Linda",
+            "name": "ERLINGER, linda",
             "type": "Individual",
             "amount": 1000.0,
             "count": 1,
@@ -28443,8 +28443,8 @@
           },
           {
             "donor_id": "ctu-pac-illinois-federation-of-teachers",
-            "name": "CTU PAC (Illinois Federation of Teachers)",
-            "type": "PAC",
+            "name": "CTU PAC (Illinois Federation of Teachers",
+            "type": "Other",
             "amount": 1710.0,
             "count": 1,
             "industries": [
@@ -30163,7 +30163,7 @@
           },
           {
             "donor_id": "finnegan-paul",
-            "name": "Finnegan, Paul",
+            "name": "FINNEGAN, Paul",
             "type": "Individual",
             "amount": 107300.0,
             "count": 2,
@@ -30298,7 +30298,7 @@
           },
           {
             "donor_id": "erlinger-linda",
-            "name": "Erlinger, Linda",
+            "name": "ERLINGER, linda",
             "type": "Individual",
             "amount": 11000.0,
             "count": 2,
@@ -30439,7 +30439,7 @@
           },
           {
             "donor_id": "finnegan-mary",
-            "name": "Finnegan, Mary",
+            "name": "FINNEGAN, Mary",
             "type": "Individual",
             "amount": 7300.0,
             "count": 1,
@@ -36441,8 +36441,8 @@
           },
           {
             "donor_id": "incs-action-pac",
-            "name": "INCS Action PAC",
-            "type": "Other",
+            "name": "INCS ACTION PAC",
+            "type": "PAC",
             "amount": 5000.0,
             "count": 1,
             "industries": [
@@ -37310,7 +37310,7 @@
         "2026": [
           {
             "donor_id": "finnegan-mary",
-            "name": "Finnegan, Mary",
+            "name": "FINNEGAN, Mary",
             "type": "Individual",
             "amount": 7300.0,
             "count": 1,
@@ -37328,7 +37328,7 @@
           },
           {
             "donor_id": "finnegan-paul",
-            "name": "Finnegan, Paul",
+            "name": "FINNEGAN, Paul",
             "type": "Individual",
             "amount": 7300.0,
             "count": 1,
@@ -37420,8 +37420,8 @@
           },
           {
             "donor_id": "incs-action-pac",
-            "name": "INCS Action PAC",
-            "type": "Other",
+            "name": "INCS ACTION PAC",
+            "type": "PAC",
             "amount": 5000.0,
             "count": 2,
             "industries": [
@@ -37520,7 +37520,7 @@
           },
           {
             "donor_id": "erlinger-linda",
-            "name": "Erlinger, Linda",
+            "name": "ERLINGER, linda",
             "type": "Individual",
             "amount": 1000.0,
             "count": 1,
@@ -38591,7 +38591,7 @@
           },
           {
             "donor_id": "finnegan-mary",
-            "name": "Finnegan, Mary",
+            "name": "FINNEGAN, Mary",
             "type": "Individual",
             "amount": 7300.0,
             "count": 1,
@@ -38609,7 +38609,7 @@
           },
           {
             "donor_id": "finnegan-paul",
-            "name": "Finnegan, Paul",
+            "name": "FINNEGAN, Paul",
             "type": "Individual",
             "amount": 7300.0,
             "count": 1,
@@ -38767,7 +38767,7 @@
           },
           {
             "donor_id": "erlinger-linda",
-            "name": "Erlinger, Linda",
+            "name": "ERLINGER, linda",
             "type": "Individual",
             "amount": 2000.0,
             "count": 2,
@@ -38864,7 +38864,7 @@
           },
           {
             "donor_id": "chicagoland-chamber-pac",
-            "name": "Chicagoland Chamber PAC",
+            "name": "chicagoland chamber pac",
             "type": "Individual",
             "amount": 1000.0,
             "count": 1,
@@ -38937,8 +38937,8 @@
           },
           {
             "donor_id": "incs-action-pac",
-            "name": "INCS Action PAC",
-            "type": "Other",
+            "name": "INCS ACTION PAC",
+            "type": "PAC",
             "amount": 1000.0,
             "count": 1,
             "industries": [
@@ -40674,7 +40674,7 @@
           },
           {
             "donor_id": "finnegan-mary",
-            "name": "Finnegan, Mary",
+            "name": "FINNEGAN, Mary",
             "type": "Individual",
             "amount": 7300.0,
             "count": 1,
@@ -40692,7 +40692,7 @@
           },
           {
             "donor_id": "finnegan-paul",
-            "name": "Finnegan, Paul",
+            "name": "FINNEGAN, Paul",
             "type": "Individual",
             "amount": 7300.0,
             "count": 1,
@@ -40842,7 +40842,7 @@
           },
           {
             "donor_id": "erlinger-linda",
-            "name": "Erlinger, Linda",
+            "name": "ERLINGER, linda",
             "type": "Individual",
             "amount": 3400.0,
             "count": 2,

@@ -9,7 +9,7 @@
     "scope": "elections candidate committees (v2): school_board, city_council and mayor; a committee listed in receipt-floors.tsv is compared from its floor; IE committees out of reconciliation scope",
     "inputs": {
       "election-data.json": {
-        "sha256": "1653fcf41ddd0e0d54f35b4895a2bed28e348fd4f64ce6a3a5b5c2e63522044c",
+        "sha256": "60bd86c8d9f16cc78184cb614c79ad19458eccc4d2577728bdb2058318b8be09",
         "path": "campaign-finance/election-data.json"
       },
       "d2totals": {
@@ -33,21 +33,21 @@
     }
   },
   "headline": {
-    "d2_itemized_total": 167690201.21,
-    "ours_itemized_total": 167593818.46,
+    "d2_itemized_total": 167728451.21,
+    "ours_itemized_total": 167632068.46,
     "residual": -96382.75,
     "dollar_weighted_match_pct": 99.94,
-    "committees_candidate": 169,
-    "committees_with_sbe_id": 169,
+    "committees_candidate": 172,
+    "committees_with_sbe_id": 172,
     "committees_no_sbe_id": 0,
-    "committees_with_periods": 169,
-    "reconciled": 154,
+    "committees_with_periods": 172,
+    "reconciled": 157,
     "residual_state": 15,
     "too_new": 0,
-    "pending_a1_total": 5098020.4,
+    "pending_a1_total": 5128320.4,
     "aggregate_total": 0.0,
-    "inkind_d2_total": 8519773.44,
-    "inkind_ours_total": 8550834.69,
+    "inkind_d2_total": 8578311.81,
+    "inkind_ours_total": 8609373.06,
     "over_threshold": [],
     "coverage_miss_committees": [],
     "join_failures": 0,
@@ -382,6 +382,36 @@
           "residual": 0.0,
           "d2_inkind": 4072.0,
           "ours_inkind": 4072.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-anderson-sb-d20": {
+      "committee_name": "Friends of Connie",
+      "sbe_committee_id": "41251",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [],
+      "periods_count": 1,
+      "d2_itemized": 2100.0,
+      "ours_itemized": 2100.0,
+      "residual": 0.0,
+      "d2_inkind": 46123.36,
+      "ours_inkind": 46123.36,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 0.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-07-03",
+          "end": "2026-09-30",
+          "d2_itemized": 2100.0,
+          "ours_itemized": 2100.0,
+          "residual": 0.0,
+          "d2_inkind": 46123.36,
+          "ours_inkind": 46123.36,
           "coverage_miss": false
         }
       ]
@@ -34418,6 +34448,38 @@
         }
       ]
     },
+    "cand-preston-sb-d17": {
+      "committee_name": "Friends of Brittany Preston",
+      "sbe_committee_id": "39894",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [
+        "PENDING-A1"
+      ],
+      "periods_count": 1,
+      "d2_itemized": 500.0,
+      "ours_itemized": 500.0,
+      "residual": 0.0,
+      "d2_inkind": 2437.97,
+      "ours_inkind": 2437.97,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 10000.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-08-07",
+          "end": "2026-09-30",
+          "d2_itemized": 500.0,
+          "ours_itemized": 500.0,
+          "residual": 0.0,
+          "d2_inkind": 2437.97,
+          "ours_inkind": 2437.97,
+          "coverage_miss": false
+        }
+      ]
+    },
     "cand-quintero-ward-25": {
       "committee_name": "Leo for 25",
       "sbe_committee_id": "41282",
@@ -36584,6 +36646,38 @@
           "residual": 0.0,
           "d2_inkind": 0.0,
           "ours_inkind": 0.0,
+          "coverage_miss": false
+        }
+      ]
+    },
+    "cand-watson-sb-d20": {
+      "committee_name": "Friends of Patrick C. Watson",
+      "sbe_committee_id": "41261",
+      "superseded_filings": 0,
+      "state": "RECONCILED",
+      "flags": [
+        "PENDING-A1"
+      ],
+      "periods_count": 1,
+      "d2_itemized": 35650.0,
+      "ours_itemized": 35650.0,
+      "residual": 0.0,
+      "d2_inkind": 9977.04,
+      "ours_inkind": 9977.04,
+      "inkind_delta": 0.0,
+      "aggregate": 0.0,
+      "pending": 20300.0,
+      "last_period_end": "2026-09-30",
+      "coverage_miss_periods": [],
+      "per_period": [
+        {
+          "beg": "2026-07-07",
+          "end": "2026-09-30",
+          "d2_itemized": 35650.0,
+          "ours_itemized": 35650.0,
+          "residual": 0.0,
+          "d2_inkind": 9977.04,
+          "ours_inkind": 9977.04,
           "coverage_miss": false
         }
       ]
